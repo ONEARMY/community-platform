@@ -18,6 +18,8 @@ export const users: Users = {
     coverImages: [
       {
         id: '',
+        path: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
+        fullPath: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
         publicUrl: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
       },
     ],
@@ -37,6 +39,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     lastActive: new Date('2022-01-30T18:51:57.719Z'),
@@ -52,6 +56,8 @@ export const users: Users = {
     about: 'admin',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',
@@ -66,6 +72,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',
@@ -80,6 +88,8 @@ export const users: Users = {
     about: 'howto_creator stuff',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',
@@ -94,6 +104,8 @@ export const users: Users = {
     about: 'research_creator research_creator',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',
@@ -117,6 +129,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'machine-builder',
@@ -141,6 +155,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',
@@ -164,6 +180,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'workspace',
@@ -219,6 +237,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'workspace',
@@ -243,6 +263,8 @@ export const users: Users = {
     about: '',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',
@@ -258,6 +280,8 @@ export const users: Users = {
     coverImages: [
       {
         id: '',
+        path: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
+        fullPath: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
         publicUrl: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
       },
     ],
@@ -266,6 +290,8 @@ export const users: Users = {
     country: 'nl',
     photo: {
       id: 'string',
+      path: 'string',
+      fullPath: 'string',
       publicUrl: 'string',
     },
     profileType: 'member',

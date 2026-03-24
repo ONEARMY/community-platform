@@ -1,14 +1,13 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, DBResearchUpdate, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { validateImages } from 'src/utils/storage';
+import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -22,16 +21,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     const formData = await request.formData();
-    const imagesToKeepIds = formData.getAll('existingImages');
-    const filesToKeepIds = formData.getAll('existingFiles');
 
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       videoUrl: formData.get('videoUrl') as string,
-      fileUrl: formData.get('fileUrl') as string,
-      isDraft: formData.get('draft') === 'true',
-    };
+      images: formData.has('images')
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
+        : null,
+      files: formData.has('files')
+        ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
+        : null,
+      fileLink: formData.get('fileLink') as string,
+      isDraft: formData.get('isDraft') === 'true',
+    } satisfies ResearchUpdateDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -39,17 +42,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    validateRequest(request, data);
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    if (!researchServiceServer.isAllowedToEditUpdate(profile, researchId, updateId, client)) {
-      return Response.json({}, { status: 403, headers });
+    if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, researchId, updateId)) {
+      throw forbiddenError();
     }
 
     const researchUpdateResult = await client
@@ -59,43 +58,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .single();
 
     const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate;
-
-    const uploadedImages = formData.getAll('images') as File[];
-    const uploadedFiles = formData.getAll('files') as File[];
-    const imageValidation = validateImages(uploadedImages);
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      );
-    }
-
-    const uploadPath = `research/${researchId}/updates/${oldResearchUpdate.id}`;
-    const images = await updateOrReplaceImage(
-      imagesToKeepIds as string[],
-      uploadedImages,
-      updateId,
-      uploadPath,
-      client,
-    );
-
-    const files = await updateOrReplaceFile(
-      filesToKeepIds as string[],
-      uploadedFiles,
-      updateId,
-      uploadPath,
-      client,
-    );
-
     const isFirstPublish =
       oldResearchUpdate.is_draft && !data.isDraft && !oldResearchUpdate.published_at;
-
-    const now = new Date();
 
     const researchUpdateAfterUpdating = await client
       .from('research_updates')
@@ -103,11 +67,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         is_draft: data.isDraft,
-        images,
-        modified_at: now,
+        images: data.images,
+        modified_at: new Date(),
         video_url: data.videoUrl,
-        files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
-        ...(isFirstPublish && { published_at: now }),
+        files: data.files,
+        ...(isFirstPublish && { published_at: new Date() }),
       })
       .eq('id', oldResearchUpdate.id)
       .select('*,research:research(id,title,slug,is_draft)')
@@ -133,84 +97,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
 };
 
-async function updateOrReplaceImage(
-  idsToKeep: string[],
-  newUploads: File[],
-  updateId: number,
-  path: string,
-  client: SupabaseClient,
-) {
-  let media: DBMedia[] = [];
-
-  if (idsToKeep.length > 0) {
-    const existingMedia = await client
-      .from('research_updates')
-      .select('images')
-      .eq('id', updateId)
-      .single();
-
-    if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id));
-    }
-  }
-
-  if (newUploads.length > 0) {
-    // TODO:remove unused images from storage
-    const result = await storageServiceServer.uploadImage(newUploads, path, client);
-
-    if (result) {
-      media = [...media, ...result.media];
-    }
-  }
-
-  return media;
-}
-
-async function updateOrReplaceFile(
-  idsToKeep: string[],
-  newUploads: File[],
-  updateId: number,
-  path: string,
-  client: SupabaseClient,
-) {
-  const existingMedia = await client
-    .from('research_updates')
-    .select('files')
-    .eq('id', updateId)
-    .single();
-
-  let media: MediaFile[] = [];
-  let mediaToRemove: MediaFile[] = [];
-
-  if (existingMedia.data && existingMedia.data.files?.length > 0) {
-    media = existingMedia.data.files.filter((x) => idsToKeep.includes(x.id));
-    mediaToRemove = existingMedia.data.files.filter((x) => !idsToKeep.includes(x.id));
-  }
-
-  if (mediaToRemove.length > 0) {
-    await storageServiceServer.removeFiles(
-      mediaToRemove.map((x) => `${path}/${x.name}`),
-      client,
-    );
-  }
-
-  if (newUploads.length > 0) {
-    const result = await storageServiceServer.uploadFile(newUploads, path, client);
-
-    if (result) {
-      media = [...media, ...result.media];
-    }
-  }
-
-  return media;
-}
-
-async function deleteResearchUpdate(request, id: number, updateId: number) {
+async function deleteResearchUpdate(request: Request, id: number, updateId: number) {
   const { client, headers } = createSupabaseServerClient(request);
 
   const claims = await client.auth.getClaims();
@@ -222,7 +117,7 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
   const profileService = new ProfileServiceServer(client);
   const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-  if (!researchServiceServer.isAllowedToEditUpdate(profile, id, updateId, client)) {
+  if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, id, updateId)) {
     return Response.json({}, { status: 403, headers });
   }
 
@@ -237,18 +132,20 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
   return Response.json({}, { status: 200, headers });
 }
 
-async function validateRequest(request: Request, data: any) {
+function validateRequest(request: Request, data: ResearchUpdateDTO) {
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('description is required', 'description');
   }
 
-  return { valid: true };
+  if (!data.images && !data.videoUrl) {
+    throw validationError('images or video URL are required', 'images');
+  }
 }

@@ -1,5 +1,5 @@
 import arrayMutators from 'final-form-arrays';
-import type { MediaFile, Project, ProjectFormData } from 'oa-shared';
+import type { ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
@@ -22,54 +22,39 @@ import { LibraryTimeField } from './LibraryTime.field';
 import { LibraryTitleField } from './LibraryTitle.field';
 
 interface LibraryFormProps {
-  project?: Project;
-  files?: MediaFile[];
-  fileLink?: string;
+  id: number | null;
+  formData: ProjectFormData | null;
 }
 
-export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
+export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
 
-  const formValues = useMemo<ProjectFormData>(
-    () => ({
-      title: project?.title || '',
-      description: project?.description || '',
-      category: project?.category
-        ? {
-            value: project.category.id?.toString(),
-            label: project.category.name,
-          }
-        : undefined,
-      tags: project?.tagIds || [],
-      time: project?.time,
-      difficultyLevel: project?.difficultyLevel,
-      existingImage: project?.coverImage || null,
-      existingFiles: files,
-      fileLink: fileLink,
-      steps: project?.steps
-        ?.slice()
-        .sort((a, b) => a.order - b.order)
-        .map((x) => ({
-          id: x.id,
-          title: x.title,
-          description: x.description,
-          videoUrl: x.videoUrl || undefined,
-          images: [],
-          existingImages: x.images,
-        })) ?? [
-        { title: '', description: '', images: [], existingImages: [] },
-        { title: '', description: '', images: [], existingImages: [] },
-        { title: '', description: '', images: [], existingImages: [] },
-      ],
-    }),
-    [project],
+  const initialValues = useMemo<ProjectFormData>(
+    () =>
+      ({
+        title: formData?.title || '',
+        description: formData?.description || '',
+        category: formData?.category || null,
+        tags: formData?.tags || [],
+        time: formData?.time || null,
+        difficultyLevel: formData?.difficultyLevel || null,
+        coverImage: formData?.coverImage || null,
+        files: formData?.files || null,
+        fileLink: formData?.fileLink || null,
+        steps: formData?.steps ?? [
+          { id: null, title: '', description: '', images: [], videoUrl: null },
+          { id: null, title: '', description: '', images: [], videoUrl: null },
+          { id: null, title: '', description: '', images: [], videoUrl: null },
+        ],
+      }) satisfies ProjectFormData,
+    [],
   );
 
-  const headingText = project ? headings.edit : headings.create;
+  const headingText = id ? headings.edit : headings.create;
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
     setIntentionalNavigation(true);
@@ -83,14 +68,14 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           const error = 'Category is required';
           setSaveErrorMessage(error);
           throw new Error(error);
-        } else if (!values.image && !values.existingImage?.id) {
-          const error = 'An image is required';
+        } else if (!values.coverImage?.id) {
+          const error = 'The Cover Image is required';
           setSaveErrorMessage(error);
           throw new Error(error);
         }
       }
 
-      const result = await libraryService.upsert(project?.id || null, values, isDraft);
+      const result = await libraryService.upsert(id || null, values, isDraft);
 
       setTimeout(() => {
         navigate(`/library/${result.project.slug}`);
@@ -109,11 +94,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   return (
     <Form<ProjectFormData>
       onSubmit={(values) => onSubmit(values, false)}
-      initialValues={formValues}
+      initialValues={initialValues}
       mutators={{
         ...arrayMutators,
       }}
-      validateOnBlur
       enableReinitialize={true}
       validate={(values) => {
         const errors = {};
@@ -122,9 +106,8 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           errors['category'] = 'Category is required.';
         }
 
-        if (!values.image && !values.existingImage) {
-          errors['existingImage'] = 'An image is required (either new or existing).';
-          errors['image'] = 'An image is required (either new or existing).';
+        if (!values.coverImage?.id) {
+          errors['coverImage'] = 'The Cover Image is required (either new or existing).';
         }
 
         return errors;
@@ -141,7 +124,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       }) => {
         const belowBody = (
           <Flex sx={{ flexDirection: 'column' }}>
-            <LibraryStepsContainerField />
+            <LibraryStepsContainerField contentType="projects" contentId={id ?? null} />
           </Flex>
         );
 
@@ -157,43 +140,41 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         );
 
         return (
-          <>
-            <FormWrapper
-              belowBody={belowBody}
-              buttonLabel={buttons.publish}
-              contentType="research"
-              errorsClientSide={errorsClientSide}
-              errorSubmitting={saveErrorMessage}
-              guidelines={<LibraryPostingGuidelines />}
-              handleSubmit={handleSubmit}
-              handleSubmitDraft={handleSubmitDraft}
-              hasValidationErrors={hasValidationErrors}
-              heading={headingText}
-              submitFailed={submitFailed}
-              submitting={submitting || isSubmitting}
-              unsavedChangesDialog={unsavedChangesDialog}
+          <FormWrapper
+            belowBody={belowBody}
+            buttonLabel={buttons.publish}
+            contentType="research"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
+            guidelines={<LibraryPostingGuidelines />}
+            handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
+            hasValidationErrors={hasValidationErrors}
+            heading={headingText}
+            submitFailed={submitFailed}
+            submitting={submitting || isSubmitting}
+            unsavedChangesDialog={unsavedChangesDialog}
+          >
+            <Flex
+              sx={{
+                gap: 4,
+                flexDirection: ['column', 'row'],
+              }}
             >
-              <Flex
-                sx={{
-                  gap: 4,
-                  flexDirection: ['column', 'row'],
-                }}
-              >
-                <Flex sx={{ flexDirection: 'column', gap: 2, flex: 1 }}>
-                  <LibraryTitleField />
-                  <LibraryDescriptionField />
-                  <LibraryCategoryField />
-                  <TagsField title={intro.tags.title} />
-                  <LibraryTimeField />
-                  <LibraryDifficultyField />
-                  <FilesFields />
-                </Flex>
-                <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
-                  <ImageField title="Cover Image" />
-                </Flex>
+              <Flex sx={{ flexDirection: 'column', gap: 2, flex: 1 }}>
+                <LibraryTitleField />
+                <LibraryDescriptionField />
+                <LibraryCategoryField />
+                <TagsField title={intro.tags.title} />
+                <LibraryTimeField />
+                <LibraryDifficultyField />
+                <FilesFields contentType="projects" contentId={id ?? null} />
               </Flex>
-            </FormWrapper>
-          </>
+              <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
+                <ImageField title="Cover Image" contentType="projects" contentId={id ?? null} />
+              </Flex>
+            </Flex>
+          </FormWrapper>
         );
       }}
     />

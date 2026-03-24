@@ -1,5 +1,16 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type {
+  DBMedia,
+  DBProfile,
+  DBProject,
+  DBProjectStep,
+  DifficultyLevel,
+  IMediaFile,
+  Moderation,
+  ProjectDTO,
+  ProjectStepDTO,
+} from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -8,11 +19,11 @@ import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImage } from 'src/utils/storage';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -51,7 +62,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const dbItems = data as DBProject[];
   const items = dbItems.map((x) => {
     const images = x.cover_image
-      ? storageServiceServer.getPublicUrls(client, [x.cover_image], IMAGE_SIZES.LIST)
+      ? new StorageServiceServer(client).getPublicUrls([x.cover_image], IMAGE_SIZES.LIST)
       : [];
     return Project.fromDB(x, [], images);
   });
@@ -85,68 +96,53 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const formData = await request.formData();
-    const isDraft = formData.get('draft') === 'true';
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      isDraft,
       time: formData.get('time') as string,
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       fileLink: formData.has('fileLink') ? (formData.get('fileLink') as string) : null,
       difficultyLevel: formData.has('difficultyLevel')
-        ? (formData.get('difficultyLevel') as string)
+        ? (formData.get('difficultyLevel') as DifficultyLevel)
         : null,
-      moderation: isDraft ? undefined : ('awaiting-moderation' as Moderation),
+      isDraft: formData.get('isDraft') === 'true',
       stepCount: parseInt(formData.get('stepCount') as string),
-      slug: convertToSlug((formData.get('title') as string) || ''),
-      uploadedCoverImage: formData.get('coverImage') as File | null,
-      uploadedFiles: formData.getAll('files') as File[] | null,
-    };
+      coverImage: formData.has('coverImage')
+        ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
+        : null,
+      files: formData.has('files')
+        ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
+        : null,
+    } satisfies ProjectDTO;
 
+    const slug = convertToSlug((formData.get('title') as string) || '');
+    let moderation = data.isDraft ? null : ('awaiting-moderation' as Moderation);
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, data, client);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, data, slug, client);
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    if (!isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
-      data.moderation = 'accepted';
+    if (!data.isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
+      moderation = 'accepted';
     }
 
     if (!profile) {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
-    const projectDb = await createProject(client, data, profile);
+    const projectDb = await createProject(client, data, slug, moderation, profile);
     const project = Project.fromDB(projectDb, []);
 
-    if (data.uploadedCoverImage) {
-      const images = await uploadAndUpdateImage(
-        [data.uploadedCoverImage],
-        `projects/${project.id}`,
-        'projects',
-        'cover_image',
-        project.id,
-        client,
-      );
-      if (images && images[0]) {
-        project.coverImage = images[0];
-      }
-    }
-
-    if (data.uploadedFiles) {
-      await uploadAndUpdateFiles(data.uploadedFiles, `projects/${project.id}`, project, client);
-    }
+    project.coverImage = projectDb.cover_image
+      ? new StorageServiceServer(client).getPublicUrls([projectDb.cover_image])?.at(0) || null
+      : null;
 
     project.steps = await uploadSteps(data, formData, projectDb, client);
     subscribersServiceServer.add('projects', project.id, profile.id, client, headers);
@@ -155,33 +151,38 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating project' });
+    return Response.json({ error: 'Error creating project', status: 500 }, { status: 500 });
   }
 };
 
-async function uploadSteps(data, formData, projectDb, client) {
+async function uploadSteps(data, formData: FormData, projectDb: DBProject, client: SupabaseClient) {
   const steps: ProjectStep[] = [];
+  const storage = new StorageServiceServer(client);
+
   for (let i = 0; i < data.stepCount; i++) {
-    const images = formData.getAll(`steps.[${i}].images`) as File[];
+    const stepImages = formData.has(`steps.[${i}].images`)
+      ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as DBMedia)
+      : null;
 
-    const stepDb = await createStep(client, {
-      title: formData.get(`steps.[${i}].title`) as string,
-      description: formData.get(`steps.[${i}].description`) as string,
-      videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
-      projectId: projectDb.id,
-      order: i + 1,
-    });
-    const step = ProjectStep.fromDB(stepDb);
-
-    step.images = await uploadAndUpdateImage(
-      images,
-      `projects/${projectDb.id}`,
-      'project_steps',
-      'images',
-      step.id,
+    const stepDb = await createStep(
       client,
+      projectDb.id,
+      {
+        title: formData.get(`steps.[${i}].title`) as string,
+        description: formData.get(`steps.[${i}].description`) as string,
+        videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
+        images: stepImages,
+      },
+      i + 1,
     );
+
+    const publicImages = stepImages ? storage.getPublicUrls(stepImages) : undefined;
+    const step = ProjectStep.fromDB(stepDb, publicImages);
 
     steps.push(step);
   }
@@ -189,56 +190,42 @@ async function uploadSteps(data, formData, projectDb, client) {
   return steps;
 }
 
-async function validateRequest(request: Request, data: any, client: SupabaseClient) {
+async function validateRequest(
+  request: Request,
+  data: ProjectDTO,
+  slug: string,
+  client: SupabaseClient,
+): Promise<void> {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   } else if (data.title.length < 5) {
-    return { status: 400, statusText: 'title is too short' };
+    throw validationError('Title is too short', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
 
   if (!data.isDraft && (!data.stepCount || data.stepCount < 3)) {
-    return { status: 400, statusText: '3 steps are required' };
+    throw validationError('3 steps are required', 'stepCount');
   }
 
-  if (await contentServiceServer.isDuplicateNewSlug(data.slug, client, 'projects')) {
-    return { status: 409, statusText: 'This project already exists' };
+  if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects')) {
+    throw conflictError('A project with this name already exists');
   }
 
-  const imageValidation = validateImage(data.uploadedCoverImage);
-
-  if (!imageValidation.valid) {
-    return {
-      value: false,
-      status: 400,
-      statusText: imageValidation.error?.message,
-    };
-  }
-
-  return { valid: true };
+  // No need to validate cover image since it's uploaded immediately via /api/images
 }
 
 async function createProject(
   client: SupabaseClient,
-  data: {
-    title: string;
-    description: string;
-    isDraft: boolean;
-    category: string | null;
-    tags: number[] | null;
-    fileLink: string | null;
-    difficultyLevel: string | null;
-    time: string | null;
-    moderation?: Moderation;
-    slug: string;
-  },
+  data: ProjectDTO,
+  slug: string,
+  moderation: Moderation | null,
   profile: DBProfile,
 ) {
   const projectResult = await client
@@ -247,7 +234,7 @@ async function createProject(
       created_by: profile.id,
       title: data.title,
       description: data.description,
-      slug: data.slug,
+      slug: slug,
       category: data.category,
       tags: data.tags,
       is_draft: data.isDraft,
@@ -255,7 +242,9 @@ async function createProject(
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,
-      moderation: data.moderation,
+      files: data.files,
+      cover_image: data.coverImage,
+      moderation: moderation,
       tenant_id: process.env.TENANT_ID,
     })
     .select();
@@ -269,22 +258,19 @@ async function createProject(
 
 async function createStep(
   client: SupabaseClient,
-  values: {
-    title: string;
-    description: string;
-    projectId: number;
-    videoUrl: string | null;
-    order: number;
-  },
+  projectId: number,
+  values: ProjectStepDTO,
+  order: number,
 ) {
   const { data, error } = await client
     .from('project_steps')
     .insert({
       title: values.title,
       description: values.description,
-      project_id: values.projectId,
+      project_id: projectId,
       video_url: values.videoUrl,
-      order: values.order,
+      images: values.images,
+      order: order,
       tenant_id: process.env.TENANT_ID,
     })
     .select();
@@ -294,52 +280,4 @@ async function createStep(
   }
 
   return data[0] as unknown as DBProjectStep;
-}
-
-async function uploadAndUpdateImage(
-  files: File[],
-  path: string,
-  tableName: 'projects' | 'project_steps',
-  fieldName: string,
-  id: number,
-  client: SupabaseClient,
-) {
-  const mediaResult = await storageServiceServer.uploadImage(files, path, client);
-
-  if (mediaResult?.media && mediaResult.media.length > 0) {
-    const result = await client
-      .from(tableName)
-      .update({
-        [fieldName]: fieldName === 'cover_image' ? mediaResult.media[0] : mediaResult.media,
-      })
-      .eq('id', id)
-      .select();
-
-    if (result.data) {
-      return result.data[0][fieldName];
-    }
-  }
-}
-
-async function uploadAndUpdateFiles(
-  files: File[],
-  path: string,
-  project: Project,
-  client: SupabaseClient,
-) {
-  const mediaResult = await storageServiceServer.uploadFile(files, path, client);
-
-  if (mediaResult?.media && mediaResult.media.length > 0) {
-    const result = await client
-      .from('projects')
-      .update({
-        files: mediaResult.media,
-      })
-      .eq('id', project.id)
-      .select();
-
-    if (result.data) {
-      project.files = result.data[0].files;
-    }
-  }
 }

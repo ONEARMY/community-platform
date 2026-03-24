@@ -1,13 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
-// Mock ResizeObserver for Uppy Dashboard (not available in jsdom)
-globalThis.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 // Mock HTMLDialogElement methods (not available in jsdom)
 HTMLDialogElement.prototype.showModal = function () {
   this.open = true;

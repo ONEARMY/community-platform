@@ -3,10 +3,10 @@ import { createRoutesStub } from 'react-router';
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
-import { FactoryLibraryItem } from 'src/test/factories/Library';
+import { FactoryProjectFormData } from 'src/test/factories/Library';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LibraryForm } from './Library.form';
-import type { MediaFile, Project } from 'oa-shared';
+import { LibraryForm } from './LibraryForm';
+import type { ProjectFormData, IMediaFile } from 'oa-shared';
 import { theme } from 'oa-themes';
 
 // Mock timers to prevent async operations from running after tests
@@ -25,7 +25,7 @@ describe('Library form', () => {
   describe('Provides user information', () => {
     it('shows maximum file size', () => {
       // Arrange
-      const project = FactoryLibraryItem();
+      const project = FactoryProjectFormData();
       // Act
       let wrapper;
       act(() => {
@@ -45,11 +45,14 @@ describe('Library form', () => {
   describe('Invalid file warning', () => {
     it('Does not appear when submitting only fileLink', () => {
       // Arrange
-      const project = FactoryLibraryItem();
+      const project = FactoryProjectFormData({
+        fileLink: 'www.test.com',
+        files: null,
+      });
       // Act
       let wrapper;
       act(() => {
-        wrapper = Wrapper(project, [], 'www.test.com');
+        wrapper = Wrapper(project);
       });
 
       // Assert
@@ -63,18 +66,21 @@ describe('Library form', () => {
 
     it('Does not appear when submitting only files', () => {
       // Arrange
-      const project = FactoryLibraryItem();
-
-      // Act
-      let wrapper;
-      act(() => {
-        wrapper = Wrapper(project, [
+      const project = FactoryProjectFormData({
+        files: [
           {
             id: '123',
             name: 'test-file.pdf',
             size: 12345,
           },
-        ]);
+        ],
+        fileLink: null,
+      });
+
+      // Act
+      let wrapper;
+      act(() => {
+        wrapper = Wrapper(project);
       });
 
       // Assert
@@ -88,20 +94,21 @@ describe('Library form', () => {
 
     it('Appears when submitting 2 file types', () => {
       // Arrange
-      const project = FactoryLibraryItem();
-
-      const files = [
-        {
-          id: '123',
-          name: 'test-file.pdf',
-          size: 12345,
-        },
-      ];
+      const project = FactoryProjectFormData({
+        files: [
+          {
+            id: '123',
+            name: 'test-file.pdf',
+            size: 12345,
+          },
+        ],
+        fileLink: 'www.test.com',
+      });
 
       // Act
       let wrapper;
       act(() => {
-        wrapper = Wrapper(project, files, 'www.test.com');
+        wrapper = Wrapper(project);
       });
 
       // Assert
@@ -115,19 +122,21 @@ describe('Library form', () => {
 
     it('Does not appear when files are removed and filelink added', async () => {
       // Arrange
-      const project = FactoryLibraryItem();
-      const files = [
-        {
-          id: '123',
-          name: 'test-file.pdf',
-          size: 12345,
-        },
-      ];
+      const project = FactoryProjectFormData({
+        files: [
+          {
+            id: '123',
+            name: 'test-file.pdf',
+            size: 12345,
+          },
+        ],
+        fileLink: null,
+      });
 
       // Act
       let wrapper;
       act(() => {
-        wrapper = Wrapper(project, files);
+        wrapper = Wrapper(project);
       });
 
       // clear files
@@ -153,7 +162,7 @@ describe('Library form', () => {
   });
 });
 
-const Wrapper = (project: Project, files?: MediaFile[], fileLink?: string) => {
+const Wrapper = (project: ProjectFormData) => {
   const ReactStub = createRoutesStub(
     [
       {
@@ -161,7 +170,7 @@ const Wrapper = (project: Project, files?: MediaFile[], fileLink?: string) => {
         Component: () => (
           <ProfileStoreProvider>
             <ThemeProvider theme={theme}>
-              <LibraryForm project={project} files={files} fileLink={fileLink} />
+              <LibraryForm formData={project} id={null} />
             </ThemeProvider>
           </ProfileStoreProvider>
         ),

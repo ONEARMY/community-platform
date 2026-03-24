@@ -29,12 +29,12 @@ export const CommentBody = ({ body }: IProps) => {
         data-testid="commentText"
         sx={{
           fontFamily: 'body',
-          lineHeight: 1.3,
+          lineHeight: 1.4,
           maxHeight,
           overflow: 'hidden',
           wordBreak: 'break-word',
           whiteSpace: 'pre-wrap',
-          fontSize: [2, 3],
+          fontSize: [3],
         }}
       >
         <LinkifyText>{body.trim()}</LinkifyText>
@@ -46,7 +46,7 @@ export const CommentBody = ({ body }: IProps) => {
           sx={{
             color: 'gray',
             cursor: 'pointer',
-            fontSize: [2, 3],
+            fontSize: [3],
           }}
         >
           {isShowMore ? 'Show less' : 'Show more'}

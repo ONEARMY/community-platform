@@ -29,6 +29,8 @@ export const factoryTriggeredBy = (triggeredByOverloads = {}): BasicAuthorDetail
     username: 'daveTheHakkens',
     photo: {
       id: '',
+      path: 'https://url.com/image.png',
+      fullPath: 'https://url.com/image.png',
       publicUrl: 'https://url.com/image.png',
     },
     ...triggeredByOverloads,

@@ -7,7 +7,7 @@ import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { NewsPage } from 'src/pages/News/NewsPage';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { newsServiceServer } from 'src/services/newsService.server';
+import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -17,7 +17,7 @@ import { contentServiceServer } from '../services/contentService.server';
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await newsServiceServer.getBySlug(client, params.slug!);
+  const result = await new NewsServiceServer(client).getBySlug(params.slug!);
   const tenantSettings = await new TenantSettingsService(client).get();
 
   if (result.error || !result.data) {
@@ -63,7 +63,7 @@ async function loadNews(client: SupabaseClient, dbNews: DBNews) {
     dbNews.tags,
   );
 
-  const heroImage = await newsServiceServer.getHeroImage(client, dbNews.hero_image);
+  const heroImage = await new NewsServiceServer(client).getHeroImage(dbNews.hero_image);
 
   const news = News.fromDB(dbNews, tags, heroImage);
   news.usefulCount = usefulVotes.count || 0;

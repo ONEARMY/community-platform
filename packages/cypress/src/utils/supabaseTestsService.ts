@@ -448,6 +448,13 @@ export class SupabaseTestsService {
     profileTypes: DBProfileType[],
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
+    // STEP 1: Clean up any existing users for this tenant (from previous failed runs)
+    console.log(`Cleaning up existing users for tenant ${this.tenantId}...`);
+    await this.deleteAccounts();
+    
+    // Wait a moment for cleanup to propagate
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
       ...user,
       // Make email unique per tenant using + addressing (e.g., admin+ABC123@test.com)
@@ -456,17 +463,13 @@ export class SupabaseTestsService {
       password: user['password'],
     }));
 
-    const existingUsers = await this.adminClient.auth.admin.listUsers({
-      perPage: 10000,
-    });
-
+    // STEP 2: Create fresh users (should all succeed now)
     const profiles = await Promise.all(
       accounts.map(async (account) => {
         const profileType = profileTypes.find((type) => type.name === account.profileType) || profileTypes[0];
 
         return await this.createAuthAndProfile(
           account,
-          existingUsers.data.users,
           profileBadges[0].id,
           [profileTags[0].id, profileTags[1].id],
           profileType.id,
@@ -480,7 +483,6 @@ export class SupabaseTestsService {
 
   async createAuthAndProfile(
     user: any,
-    existingUsers: User[],
     profileBadgeId: number,
     profilTagIds: number[],
     profileTypeId: number,
@@ -495,30 +497,15 @@ export class SupabaseTestsService {
       },
     });
 
-    let authId: string;
-
-    if (authUser.error?.code === 'email_exists') {
-      // Try to find in cached list first
-      let existingUser = existingUsers.find((existingUser) => existingUser.email === user.email);
-      
-      // If not in cached list, fetch directly (user might have been created after cache)
-      if (!existingUser) {
-        const { data } = await this.adminClient.auth.admin.listUsers();
-        existingUser = data.users.find(u => u.email === user.email);
-      }
-
-      if (!existingUser) {
-        throw new Error(`User with email ${user.email} exists but could not be found`);
-      }
-
-      authId = existingUser.id;
-    } else if (authUser.data?.user?.id) {
-      authId = authUser.data.user.id;
-    } else {
-      throw new Error(`Failed to create or find user: ${user.email}`);
+    if (authUser.error) {
+      throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
     }
 
-    return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
+    if (!authUser.data?.user?.id) {
+      throw new Error(`No user ID returned when creating ${user.email}`);
+    }
+
+    return await this.createProfile(user, authUser.data.user.id, profileBadgeId, profilTagIds, profileTypeId, profileImages);
   }
 
   async createProfile(

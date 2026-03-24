@@ -15,11 +15,11 @@ export class SupabaseTestsService {
   private tenantId: string;
 
   constructor(apiUrl: string, secretKey: string, tenantId: string) {
-    this.tenantId = tenantId;
+    this.tenantId = tenantId.toLowerCase();
     this.client = createClient(apiUrl, secretKey, {
       global: {
         headers: {
-          'x-tenant-id': tenantId,
+          'x-tenant-id': this.tenantId,
         },
       },
     });
@@ -27,7 +27,7 @@ export class SupabaseTestsService {
     this.adminClient = createClient(apiUrl, secretKey, {
       global: {
         headers: {
-          'x-tenant-id': tenantId,
+          'x-tenant-id': this.tenantId,
         },
       },
       auth: {
@@ -38,14 +38,27 @@ export class SupabaseTestsService {
   }
 
   async deleteAccounts() {
-    const result = await this.adminClient.auth.admin.listUsers({ perPage: 1000 });
+    let page = 1;
+    const toDelete: string[] = [];
 
-    for (const user of result.data.users) {
-      // tenantId already includes the CI_NODE (e.g., "ABC-node-1")
-      // so this correctly scopes to only this node's users
-      if (user.email?.includes(`+${this.tenantId}@`)) {
-        await this.adminClient.auth.admin.deleteUser(user.id);
+    while (true) {
+      const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
+      if (error) throw new Error(`listUsers failed: ${error.message}`);
+      if (!data.users.length) break;
+
+      for (const user of data.users) {
+        if (user.email?.includes(`+${this.tenantId}@`)) {
+          toDelete.push(user.id);
+        }
       }
+
+      if (data.users.length < 1000) break;
+      page++;
+    }
+
+    console.log(`Deleting ${toDelete.length} auth users for tenant ${this.tenantId}`);
+    for (const id of toDelete) {
+      await this.adminClient.auth.admin.deleteUser(id);
     }
   }
 
@@ -439,77 +452,70 @@ export class SupabaseTestsService {
     return [image1Data, image2Data];
   }
 
-async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
-  const accounts = Object.values(MOCK_DATA.users).map((user) => ({
-    ...user,
-    email: user['email'].replace('@', `+${this.tenantId}@`),
-    password: user['password'],
-  }));
+  async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
+    await this.deleteAccounts();
 
-  const profiles: DBProfile[] = [];
+    const accounts = Object.values(MOCK_DATA.users).map((user) => ({
+      ...user,
+      email: user['email'].replace('@', `+${this.tenantId}@`),
+      password: user['password'],
+    }));
 
-  for (const account of accounts) {
-    const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
-    const profile = await this.createAuthAndProfile(
-      account,
-      profileBadges[0].id,
-      [profileTags[0].id, profileTags[1].id],
-      profileType.id,
-      profileImages,
-    );
-    profiles.push(profile);
-  }
+    const profiles: DBProfile[] = [];
 
-  return { profiles };
-}
-
-async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt = 0) {
-  let authId: string;
-
-  const authUser = await this.adminClient.auth.admin.createUser({
-    email: user.email,
-    password: user.password,
-    email_confirm: true,
-    user_metadata: { username: user.username },
-  });
-
-  if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
-    console.log(`User ${user.email} already exists (attempt ${attempt}), scanning...`);
-
-    // Paginate through ALL users to find by email
-    let found: { id: string } | undefined;
-    let page = 1;
-
-    while (!found) {
-      const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
-      if (error) throw new Error(`listUsers failed: ${error.message}`);
-      if (!data.users.length) break;
-      found = data.users.find(u => u.email === user.email);
-      if (data.users.length < 1000) break;
-      page++;
+    for (const account of accounts) {
+      const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
+      const profile = await this.createAuthAndProfile(
+        account,
+        profileBadges[0].id,
+        [profileTags[0].id, profileTags[1].id],
+        profileType.id,
+        profileImages,
+      );
+      profiles.push(profile);
     }
 
-    if (!found) {
-      // User is in a transient deletion state - wait and retry the whole create
-      if (attempt >= 5) {
-        throw new Error(`User ${user.email} stuck in transient state after ${attempt} attempts`);
+    return { profiles };
+  }
+
+  async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages) {
+    const authUser = await this.adminClient.auth.admin.createUser({
+      email: user.email,
+      password: user.password,
+      email_confirm: true,
+      user_metadata: { username: user.username },
+    });
+
+    let authId: string;
+
+    if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
+      // Shouldn't happen after deleteAccounts, but handle it gracefully
+      // Supabase lowercases emails on storage, so compare case-insensitively
+      console.warn(`User ${user.email} already exists after deleteAccounts - looking up...`);
+
+      let found: { id: string } | undefined;
+      let page = 1;
+
+      while (!found) {
+        const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
+        if (error) throw new Error(`listUsers failed: ${error.message}`);
+        if (!data.users.length) break;
+        found = data.users.find(u => u.email?.toLowerCase() === user.email.toLowerCase());
+        if (data.users.length < 1000) break;
+        page++;
       }
-      const waitMs = 2000 * (attempt + 1);
-      console.log(`User ${user.email} not found in list (transient deletion?), waiting ${waitMs}ms then retrying create...`);
-      await new Promise(r => setTimeout(r, waitMs));
-      return this.createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt + 1);
+
+      if (!found) throw new Error(`User ${user.email} not found after email_exists error`);
+      authId = found.id;
+
+    } else if (authUser.error) {
+      throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
+    } else {
+      authId = authUser.data.user.id;
     }
 
-    authId = found.id;
-
-  } else if (authUser.error) {
-    throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
-  } else {
-    authId = authUser.data.user.id;
+    return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
   }
-
-  return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
-}
 
   async createProfile(
     user: Partial<Profile>,

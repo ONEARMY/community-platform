@@ -66,10 +66,9 @@ main()
 
 async function main() {
   // copy endpoints for use in testing
-
   const tenantId = process.env.CI_NODE
-    ? `${generateAlphaNumeric(8)}-node-${process.env.CI_NODE}`
-    : generateAlphaNumeric(8);
+  ? `${generateAlphaNumeric(8).toLowerCase()}-node-${process.env.CI_NODE}`
+  : generateAlphaNumeric(8).toLowerCase();
 
   fs.writeFileSync(
     'cypress.env.json',

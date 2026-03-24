@@ -439,80 +439,71 @@ export class SupabaseTestsService {
     return [image1Data, image2Data];
   }
 
-  // Creates user accounts and respective profiles
-  async seedAccounts(
-    profileBadges: DBProfileBadge[],
-    profileTags: DBProfileTag[],
-    profileTypes: DBProfileType[],
-    profileImages: { id: string; path: string; fullPath: string }[],
-  ) {
-    const accounts = Object.values(MOCK_DATA.users).map((user) => ({
-      ...user,
-      // Make email unique per tenant using + addressing (e.g., admin+ABC123@test.com)
-      // Must come after ...user to override the original email
-      email: user['email'].replace('@', `+${this.tenantId}@`),
-      password: user['password'],
-    }));
+  async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
+  // Clean up first, wait for propagation
+  await this.deleteAccounts();
+  await new Promise(resolve => setTimeout(resolve, 3000)); // give auth service time
 
-    // STEP 2: Create fresh users (should all succeed now)
-    const profiles: DBProfile[] = [];
+  const accounts = Object.values(MOCK_DATA.users).map((user) => ({
+    ...user,
+    email: user['email'].replace('@', `+${this.tenantId}@`),
+    password: user['password'],
+  }));
 
-    for (const account of accounts) {
-      const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
-      const profile = await this.createAuthAndProfile(
-        account,
-        profileBadges[0].id,
-        [profileTags[0].id, profileTags[1].id],
-        profileType.id,
-        profileImages,
-      );
-      profiles.push(profile);
-    }
+  const profiles: DBProfile[] = [];
 
-    return { profiles };
+  for (const account of accounts) {
+    const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
+
+    // After deleteAccounts + wait, createUser should ALWAYS succeed fresh
+    // The "already exists" path should now only trigger if two nodes share a tenant (they don't)
+    const profile = await this.createAuthAndProfile(
+      account,
+      profileBadges[0].id,
+      [profileTags[0].id, profileTags[1].id],
+      profileType.id,
+      profileImages,
+    );
+    profiles.push(profile);
   }
 
-  async createAuthAndProfile(
-    user: any,
-    profileBadgeId: number,
-    profilTagIds: number[],
-    profileTypeId: number,
-    profileImages: { id: string; path: string; fullPath: string }[],
-  ) {
-    const authUser = await this.adminClient.auth.admin.createUser({
-      email: user.email,
-      password: user.password,
-      email_confirm: true,
-      user_metadata: {
-        username: user.username,
-      },
-    });
+  return { profiles };
+}
 
-    let authId: string;
+  async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt = 0) {
+  const authUser = await this.adminClient.auth.admin.createUser({
+    email: user.email,
+    password: user.password,
+    email_confirm: true,
+    user_metadata: { username: user.username },
+  });
 
-    if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
-      // User already exists from a previous spec in this same test run - that's fine!
-      // Just find and reuse it via RPC function
-      console.log(`User ${user.email} already exists, reusing...`);
-      const { data, error } = await this.client
-        .rpc('get_user_id_by_email', { email: user.email });
+  let authId: string;
 
-      if (error || !data || data.length === 0) {
-        throw new Error(`User ${user.email} reported as existing but not found: ${error?.message}`);
+  if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
+    // Shouldn't happen after deleteAccounts, but handle it
+    const { data, error } = await this.adminClient.rpc('get_user_id_by_email', { email: user.email });
+
+    if (error || !data || data.length === 0) {
+      if (attempt >= 3) {
+        throw new Error(`Exhausted retries for ${user.email}. RPC error: ${error?.message}`);
       }
-      
-      authId = data[0].id;
-      console.log({things: data[0]})
-    } else if (authUser.error) {
-      throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
-    } else if (authUser.data?.user?.id) {
-      authId = authUser.data.user.id;
-    } else {
-      throw new Error(`No user ID returned when creating ${user.email}`);
+      // User is in a transient state (being deleted?) - wait and retry the whole flow
+      console.warn(`User ${user.email} in transient state, retrying (attempt ${attempt + 1})...`);
+      await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
+      return this.createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt + 1);
     }
 
-    return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
+    authId = data[0].id;
+
+  } else if (authUser.error) {
+    throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
+  } else {
+    authId = authUser.data.user.id;
   }
+
+  return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
+}
 
   async createProfile(
     user: Partial<Profile>,

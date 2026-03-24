@@ -463,7 +463,7 @@ async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
   return { profiles };
 }
 
-async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages) {
+async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt = 0) {
   let authId: string;
 
   const authUser = await this.adminClient.auth.admin.createUser({
@@ -474,28 +474,30 @@ async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, pr
   });
 
   if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
-    console.log(`User ${user.email} already exists, looking up via admin list...`);
+    console.log(`User ${user.email} already exists (attempt ${attempt}), scanning...`);
 
     // Paginate through ALL users to find by email
     let found: { id: string } | undefined;
     let page = 1;
 
     while (!found) {
-      const { data, error } = await this.adminClient.auth.admin.listUsers({ 
-        perPage: 1000, 
-        page 
-      });
-
+      const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
       if (error) throw new Error(`listUsers failed: ${error.message}`);
       if (!data.users.length) break;
-
       found = data.users.find(u => u.email === user.email);
-      if (data.users.length < 1000) break; // last page
+      if (data.users.length < 1000) break;
       page++;
     }
 
     if (!found) {
-      throw new Error(`User ${user.email} reported as existing but could not be found after full scan`);
+      // User is in a transient deletion state - wait and retry the whole create
+      if (attempt >= 5) {
+        throw new Error(`User ${user.email} stuck in transient state after ${attempt} attempts`);
+      }
+      const waitMs = 2000 * (attempt + 1);
+      console.log(`User ${user.email} not found in list (transient deletion?), waiting ${waitMs}ms then retrying create...`);
+      await new Promise(r => setTimeout(r, waitMs));
+      return this.createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt + 1);
     }
 
     authId = found.id;

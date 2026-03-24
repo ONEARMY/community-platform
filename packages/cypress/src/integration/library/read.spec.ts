@@ -1,6 +1,5 @@
 import { DifficultyLevelRecord } from 'oa-shared';
 import { users } from 'oa-shared/mocks/data';
-
 import { MOCK_DATA } from '../../data';
 import { getTenantUser } from '../../utils/TestUtils';
 
@@ -9,6 +8,7 @@ const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items';
 
 describe('[Library]', () => {
   const demoAdmin = getTenantUser(users.admin);
+  const demoUser = getTenantUser(users.subscriber);
 
   beforeEach(() => {
     cy.visit('/library');
@@ -204,7 +204,7 @@ describe('[Library]', () => {
       cy.get('[data-cy="moderationFeedback"]').should('not.exist');
 
       cy.step('Feedback is visible to content owner');
-      cy.signIn('demo_user@example.com', 'demo_user');
+      cy.signIn(demoUser.email, demoUser.password);
       cy.visit('/library/rubbish-title');
       cy.get('[data-cy="moderationFeedback"]');
 

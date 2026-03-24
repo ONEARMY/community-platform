@@ -439,11 +439,7 @@ export class SupabaseTestsService {
     return [image1Data, image2Data];
   }
 
-  async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
-  // Clean up first, wait for propagation
-  await this.deleteAccounts();
-  await new Promise(resolve => setTimeout(resolve, 3000)); // give auth service time
-
+async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
   const accounts = Object.values(MOCK_DATA.users).map((user) => ({
     ...user,
     email: user['email'].replace('@', `+${this.tenantId}@`),
@@ -454,9 +450,6 @@ export class SupabaseTestsService {
 
   for (const account of accounts) {
     const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
-
-    // After deleteAccounts + wait, createUser should ALWAYS succeed fresh
-    // The "already exists" path should now only trigger if two nodes share a tenant (they don't)
     const profile = await this.createAuthAndProfile(
       account,
       profileBadges[0].id,
@@ -470,7 +463,9 @@ export class SupabaseTestsService {
   return { profiles };
 }
 
-  async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt = 0) {
+async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages) {
+  let authId: string;
+
   const authUser = await this.adminClient.auth.admin.createUser({
     email: user.email,
     password: user.password,
@@ -478,23 +473,32 @@ export class SupabaseTestsService {
     user_metadata: { username: user.username },
   });
 
-  let authId: string;
-
   if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
-    // Shouldn't happen after deleteAccounts, but handle it
-    const { data, error } = await this.adminClient.rpc('get_user_id_by_email', { email: user.email });
+    console.log(`User ${user.email} already exists, looking up via admin list...`);
 
-    if (error || !data || data.length === 0) {
-      if (attempt >= 3) {
-        throw new Error(`Exhausted retries for ${user.email}. RPC error: ${error?.message}`);
-      }
-      // User is in a transient state (being deleted?) - wait and retry the whole flow
-      console.warn(`User ${user.email} in transient state, retrying (attempt ${attempt + 1})...`);
-      await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
-      return this.createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages, attempt + 1);
+    // Paginate through ALL users to find by email
+    let found: { id: string } | undefined;
+    let page = 1;
+
+    while (!found) {
+      const { data, error } = await this.adminClient.auth.admin.listUsers({ 
+        perPage: 1000, 
+        page 
+      });
+
+      if (error) throw new Error(`listUsers failed: ${error.message}`);
+      if (!data.users.length) break;
+
+      found = data.users.find(u => u.email === user.email);
+      if (data.users.length < 1000) break; // last page
+      page++;
     }
 
-    authId = data[0].id;
+    if (!found) {
+      throw new Error(`User ${user.email} reported as existing but could not be found after full scan`);
+    }
+
+    authId = found.id;
 
   } else if (authUser.error) {
     throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);

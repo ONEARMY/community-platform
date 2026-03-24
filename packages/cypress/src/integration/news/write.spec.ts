@@ -1,5 +1,6 @@
 import { users } from 'oa-shared/mocks/data';
 
+import { MOCK_DATA } from '../../data';
 import { generateAlphaNumeric } from '../../utils/TestUtils';
 
 let initialRandomId;
@@ -198,8 +199,32 @@ describe('[News.Write]', () => {
       cy.url().should('contain', '/sign-in?returnUrl=%2Fnews%2Fcreate');
     });
 
-    // it('[Admin]', () => {
-    // Should check an admin can edit other's content
-    // })
+    it('[By Admin]', () => {
+      const newsItem = MOCK_DATA.news[0];
+
+      cy.signIn('demo_admin@example.com', 'demo_admin');
+
+      cy.step('News is not authored by the admin');
+      cy.visit(`/news/${newsItem.slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
+
+      cy.step("Admin can see the edit button on another user's news");
+      cy.get('[data-cy=edit]').should('be.visible');
+
+      cy.step('Admin can access the edit page');
+      cy.get('[data-cy=edit]').click();
+      cy.url().should('include', `/news/${newsItem.slug}/edit`);
+
+      cy.step('Admin can edit the news title');
+      cy.get('[data-cy=field-title]').should('be.visible');
+
+      const adminEdit = ' [edited by admin]';
+      cy.get('[data-cy=field-title]').type(adminEdit, { delay: 5 });
+      cy.get('[data-cy=submit]').click();
+
+      cy.step('Updated content is visible');
+      cy.url().should('include', `/news/${newsItem.slug}`);
+      cy.contains(adminEdit);
+    });
   });
 });

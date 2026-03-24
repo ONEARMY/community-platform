@@ -345,6 +345,34 @@ describe('[Research]', () => {
       });
     });
 
+    it('[By Admin]', () => {
+      const researchItem = MOCK_DATA.research[0];
+
+      cy.signIn('demo_admin@example.com', 'demo_admin');
+
+      cy.step('Research is not authored by the admin');
+      cy.visit(`/research/${researchItem.slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
+
+      cy.step("Admin can see the edit button on another user's research");
+      cy.get('[data-cy=edit]').should('be.visible');
+
+      cy.step('Admin can access the edit page');
+      cy.get('[data-cy=edit]').click();
+      cy.url().should('include', `/research/${researchItem.slug}/edit`);
+
+      cy.step('Admin can edit the research description');
+      cy.get('[data-cy=intro-description]').should('be.visible');
+
+      const adminEdit = ' [edited by admin]';
+      cy.get('[data-cy=intro-description]').type(adminEdit, { delay: 5 });
+      cy.get('[data-cy=submit]').click();
+
+      cy.step('Updated content is visible');
+      cy.url().should('include', `/research/${researchItem.slug}`);
+      cy.contains(adminEdit);
+    });
+    
     it('[Edit published update - Replace images and files]', () => {
       const randomId = generateAlphaNumeric(8).toLowerCase();
       const researchTitle = `${randomId} Research with update`;
@@ -410,9 +438,5 @@ describe('[Research]', () => {
       cy.contains(updatedDescription);
       cy.get('[data-cy=downloadButton]').should('be.visible');
     });
-
-    // it('[By Admin]', () => {
-    // Should check an admin can edit other's content
-    // })
   });
 });

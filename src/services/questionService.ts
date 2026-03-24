@@ -40,7 +40,9 @@ const deleteQuestion = async (id: number) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error deleting question', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting question' }));
+    const errorMessage = errorData.error || 'Error deleting question';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 

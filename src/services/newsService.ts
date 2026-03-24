@@ -42,7 +42,9 @@ const deleteNews = async (id: number) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error deleting news', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting news' }));
+    const errorMessage = errorData.error || 'Error deleting news';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 

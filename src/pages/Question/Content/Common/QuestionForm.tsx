@@ -41,8 +41,12 @@ export const QuestionForm = (props: IProps) => {
       return;
     }
     setShowDeleteModal(false);
-    await questionService.deleteQuestion(id);
-    window.location.assign('/questions');
+    try {
+      await questionService.deleteQuestion(id);
+      window.location.assign('/questions');
+    } catch (e) {
+      setSaveErrorMessage(e.message || 'Error deleting question');
+    }
   };
 
   const initialValues = useMemo<QuestionFormData>(

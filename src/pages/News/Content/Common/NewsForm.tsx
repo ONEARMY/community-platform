@@ -42,8 +42,12 @@ export const NewsForm = (props: IProps) => {
       return;
     }
     setShowDeleteModal(false);
-    await newsService.deleteNews(id);
-    window.location.assign('/news');
+    try {
+      await newsService.deleteNews(id);
+      window.location.assign('/news');
+    } catch (e) {
+      setSaveErrorMessage(e.message || 'Error deleting news');
+    }
   };
   const initialValues = useMemo<NewsFormData>(
     () =>

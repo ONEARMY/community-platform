@@ -497,15 +497,29 @@ export class SupabaseTestsService {
       },
     });
 
-    if (authUser.error) {
-      throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
-    }
+    let authId: string;
 
-    if (!authUser.data?.user?.id) {
+    if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
+      // User already exists from a previous spec in this same test run - that's fine!
+      // Just find and reuse it
+      console.log(`User ${user.email} already exists, reusing...`);
+      const { data } = await this.adminClient.auth.admin.listUsers({ perPage: 10000 });
+      const existingUser = data.users.find(u => u.email === user.email);
+      
+      if (!existingUser) {
+        throw new Error(`User ${user.email} reported as existing but not found`);
+      }
+      
+      authId = existingUser.id;
+    } else if (authUser.error) {
+      throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
+    } else if (authUser.data?.user?.id) {
+      authId = authUser.data.user.id;
+    } else {
       throw new Error(`No user ID returned when creating ${user.email}`);
     }
 
-    return await this.createProfile(user, authUser.data.user.id, profileBadgeId, profilTagIds, profileTypeId, profileImages);
+    return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
   }
 
   async createProfile(

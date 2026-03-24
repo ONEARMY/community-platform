@@ -38,16 +38,12 @@ export class SupabaseTestsService {
   }
 
   async deleteAccounts() {
-    const mockUsers = new Set(
-      Object.values(MOCK_DATA.users)
-        .filter((x) => !!x['email'])
-        .map((x) => x['email']),
-    );
     const result = await this.adminClient.auth.admin.listUsers();
 
     for (const user of result.data.users) {
-      // only delete mock users and test users
-      if (mockUsers.has(user.email) || user.email!.endsWith('@resend.dev')) {
+      // Delete users belonging to this tenant (identified by +tenantId in email)
+      // or test users from @resend.dev
+      if (user.email?.includes(`+${this.tenantId}@`) || user.email?.endsWith('@resend.dev')) {
         await this.adminClient.auth.admin.deleteUser(user.id);
       }
     }
@@ -451,7 +447,8 @@ export class SupabaseTestsService {
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
-      email: user['email'],
+      // Make email unique per tenant using + addressing (e.g., admin+ABC123@test.com)
+      email: user['email'].replace('@', `+${this.tenantId}@`),
       password: user['password'],
       ...user,
     }));

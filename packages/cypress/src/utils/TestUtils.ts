@@ -27,9 +27,10 @@ export enum DbCollectionName {
 
 export const generateNewUserDetails = (): IUserSignUpDetails => {
   const username = `CI_${generateAlphaNumeric(9)}`.toLocaleLowerCase();
+  const tenantId = Cypress.env('TENANT_ID');
   return {
     username,
-    email: `delivered+${username}@resend.dev`.toLocaleLowerCase(),
+    email: `delivered+${username}+${tenantId}@resend.dev`.toLocaleLowerCase(),
     password: 'test1234',
   };
 };

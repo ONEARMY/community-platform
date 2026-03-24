@@ -41,9 +41,11 @@ export class SupabaseTestsService {
     const result = await this.adminClient.auth.admin.listUsers();
 
     for (const user of result.data.users) {
-      // Delete users belonging to this tenant (identified by +tenantId in email)
-      // or test users from @resend.dev
-      if (user.email?.includes(`+${this.tenantId}@`) || user.email?.endsWith('@resend.dev')) {
+      // Delete ALL users belonging to this tenant (identified by +tenantId in email)
+      // This includes:
+      // - Seeded users: admin+ABC-node-1@test.com
+      // - Dynamic users: delivered+ci_abc123+ABC-node-1@resend.dev
+      if (user.email?.includes(`+${this.tenantId}@`)) {
         await this.adminClient.auth.admin.deleteUser(user.id);
       }
     }
@@ -447,10 +449,11 @@ export class SupabaseTestsService {
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
+      ...user,
       // Make email unique per tenant using + addressing (e.g., admin+ABC123@test.com)
+      // Must come after ...user to override the original email
       email: user['email'].replace('@', `+${this.tenantId}@`),
       password: user['password'],
-      ...user,
     }));
 
     const existingUsers = await this.adminClient.auth.admin.listUsers({

@@ -140,6 +140,6 @@ async function validateRequest(
   const isCreator = currentNews.created_by === profile.id;
 
   if (!isCreator && !hasAdminRights(profile)) {
-    throw forbiddenError('Unauthorized');
+    throw forbiddenError();
   }
 }

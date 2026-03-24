@@ -149,6 +149,6 @@ async function validateRequest(
   const isCreator = currentQuestion.created_by === profile.id;
 
   if (!isCreator && !hasAdminRights(profile)) {
-    throw forbiddenError('Forbidden');
+    throw forbiddenError();
   }
 }

@@ -503,11 +503,14 @@ export class SupabaseTestsService {
       // User already exists from a previous spec in this same test run - that's fine!
       // Just find and reuse it
       console.log(`User ${user.email} already exists, reusing...`);
-      const { data } = await this.adminClient.auth.admin.listUsers({ perPage: 10000 });
-      const existingUser = data.users.find(u => (u as any).email === user.email);
-      
-      if (!existingUser) {
-        throw new Error(`User ${user.email} reported as existing but not found`);
+      const { data: existingUser, error } = await this.adminClient
+        .from('auth.users')
+        .select('id')
+        .eq('email', user.email)
+        .single();
+
+      if (error || !existingUser) {
+        throw new Error(`User ${user.email} reported as existing but not found in auth.users table: ${error?.message}`);
       }
       
       authId = existingUser.id;

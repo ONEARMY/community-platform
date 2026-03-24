@@ -2,12 +2,13 @@ import { DifficultyLevelRecord } from 'oa-shared';
 import { users } from 'oa-shared/mocks/data';
 
 import { MOCK_DATA } from '../../data';
+import { getTenantUser } from '../../utils/TestUtils';
 
 const library = MOCK_DATA.projects;
 const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items';
 
 describe('[Library]', () => {
-  const demoAdmin = users.admin;
+  const demoAdmin = getTenantUser(users.admin);
 
   beforeEach(() => {
     cy.visit('/library');
@@ -164,7 +165,7 @@ describe('[Library]', () => {
     });
 
     describe('[By Owner]', () => {
-      const owner = users.settings_workplace_new;
+      const owner = getTenantUser(users.settings_workplace_new);
 
       beforeEach(() => {
         cy.signIn(owner.email, owner.password);

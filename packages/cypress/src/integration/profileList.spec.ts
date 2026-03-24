@@ -1,7 +1,7 @@
 import { MOCK_DATA } from '../data';
-import { generateNewUserDetails } from '../utils/TestUtils';
+import { generateNewUserDetails, getTenantUser } from '../utils/TestUtils';
 
-const subscriber = MOCK_DATA.users.subscriber;
+const subscriber = getTenantUser(MOCK_DATA.users.subscriber);
 
 describe('[ProfileList Modal]', () => {
   const question = MOCK_DATA.questions[0];

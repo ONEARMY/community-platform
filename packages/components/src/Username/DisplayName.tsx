@@ -1,7 +1,9 @@
+import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Text } from 'theme-ui';
+import { FlagIcon } from '../FlagIcon/FlagIcon';
 import { InternalLink } from '../InternalLink/InternalLink';
 import { UserBadge } from './UserBadge';
 
@@ -14,6 +16,7 @@ export interface DisplayNameProps {
 
 export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProps) => {
   const { username, displayName, country, badges } = user;
+  const countryCode = country ? countryToAlpha2(country) : null;
 
   const DisplayNameBody = (
     <Flex
@@ -37,18 +40,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
           return <UserBadge key={badge.id} badge={badge} />;
         })}
 
-      {country && (
-        <Text
-          sx={{
-            color: 'grey',
-            fontSize: 1,
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-          }}
-        >
-          {country}
-        </Text>
-      )}
+      {countryCode && <FlagIcon countryCode={countryCode} />}
     </Flex>
   );
 

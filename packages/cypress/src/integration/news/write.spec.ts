@@ -1,6 +1,6 @@
 import { users } from 'oa-shared/mocks/data';
 
-import { generateAlphaNumeric } from '../../utils/TestUtils';
+import { generateAlphaNumeric, getTenantUser } from '../../utils/TestUtils';
 
 let initialRandomId;
 
@@ -26,7 +26,7 @@ describe('[News.Write]', () => {
       const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`;
 
       cy.visit('/news');
-      const user = users.admin;
+      const user = getTenantUser(users.admin);
       cy.signIn(user.email, user.password);
 
       cy.step("Can't add news from main page");
@@ -149,7 +149,7 @@ describe('[News.Write]', () => {
       const newsBody = 'only news';
 
       cy.visit('/news');
-      const user = users.admin;
+      const user = getTenantUser(users.admin);
       cy.signIn(user.email, user.password);
 
       cy.step('Create a news item');

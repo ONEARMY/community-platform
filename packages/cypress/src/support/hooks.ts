@@ -31,8 +31,9 @@ afterEach(() => {
 after(async () => {
   Cypress.log({
     displayName: 'Clearing database for tenant',
-    message: process.env.TENANT_ID,
+    message: Cypress.env('TENANT_ID'),
   });
 
+  // Safe to always cleanup - each tenant has isolated data by tenant_id + ci_node and auth users with unique emails
   cy.task('clear database');
 });

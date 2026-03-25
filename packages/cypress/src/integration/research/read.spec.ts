@@ -1,4 +1,6 @@
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
+import { getTenantUser } from '../../utils/TestUtils';
 
 const article = Object.values(MOCK_DATA.research)[0];
 const label = MOCK_DATA.research.length === 1 ? 'item' : 'items';
@@ -12,6 +14,9 @@ describe('[Research]', () => {
   const researchArticleUrl = `/research/${slug}`;
 
   describe('[Read a research article]', () => {
+    const demoAdmin = getTenantUser(users.admin);
+    const demoUser = getTenantUser(users.subscriber);
+
     describe('[By Everyone]', () => {
       it('[List View]', () => {
         cy.visit('/research');
@@ -127,7 +132,7 @@ describe('[Research]', () => {
 
     describe('[By Author]', () => {
       beforeEach(() => {
-        cy.signIn('demo_user@example.com', 'demo_user');
+        cy.signIn(demoUser.email, demoUser.password);
         cy.visit(authoredResearchArticleUrl);
       });
 
@@ -142,7 +147,7 @@ describe('[Research]', () => {
       beforeEach(() => {});
 
       it('[Delete button is visible]', () => {
-        cy.signIn('demo_admin@example.com', 'demo_admin');
+        cy.signIn(demoAdmin.email, demoAdmin.password);
         cy.visit(researchArticleUrl);
         cy.wait(1000);
 

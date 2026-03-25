@@ -1,9 +1,13 @@
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
+import { getTenantUser } from '../../utils/TestUtils';
 
 const question = MOCK_DATA.questions[0];
 const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items';
 
 describe('[Questions]', () => {
+  const howtoCreator = getTenantUser(users.howto_creator);
+
   describe('[List questions]', () => {
     it('[By Everyone]', () => {
       cy.visit(`/questions/`);
@@ -66,7 +70,7 @@ describe('[Questions]', () => {
       cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', title);
 
       cy.step('Logged in users can complete actions');
-      cy.signIn('howto_creator@test.com', 'test1234');
+      cy.signIn(howtoCreator.email, howtoCreator.password);
       cy.visit(`/questions/${slug}`); // Page doesn't reload after login
     });
   });

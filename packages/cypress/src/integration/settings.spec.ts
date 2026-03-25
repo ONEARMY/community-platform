@@ -1,7 +1,7 @@
 import { MOCK_DATA } from '../data';
 import { SingaporeStubResponse } from '../fixtures/searchResults';
 import { UserMenuItem } from '../support/commandsUi';
-import { generateNewUserDetails } from '../utils/TestUtils';
+import { generateNewUserDetails, getTenantUser } from '../utils/TestUtils';
 
 const locationStub = {
   administrative: '',
@@ -17,7 +17,7 @@ const mapDetails = {
   locationName: locationStub.value,
 };
 
-const settings_member_new = MOCK_DATA.users.settings_member_new;
+const settings_member_new = getTenantUser(MOCK_DATA.users.settings_member_new);
 
 describe('[Settings]', () => {
   beforeEach(() => {

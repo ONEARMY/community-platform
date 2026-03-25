@@ -27,9 +27,29 @@ export enum DbCollectionName {
 
 export const generateNewUserDetails = (): IUserSignUpDetails => {
   const username = `CI_${generateAlphaNumeric(9)}`.toLocaleLowerCase();
+  const tenantId = Cypress.env('TENANT_ID');
   return {
     username,
-    email: `delivered+${username}@resend.dev`.toLocaleLowerCase(),
+    email: `delivered+${username}+${tenantId}@resend.dev`.toLocaleLowerCase(),
     password: 'test1234',
+  };
+};
+
+/**
+ * Transforms a mock user to include the tenant ID in their email
+ * Use this when you need to reference user data that matches what's in the database
+ * @example
+ * const user = getTenantUser(users.admin)
+ * cy.signIn(user.email, user.password)
+ */
+export const getTenantUser = <T extends { email: string }>(user: T): T => {
+  const tenantId = Cypress.env('TENANT_ID');
+  const tenantAwareEmail = user.email.includes(`+${tenantId}@`)
+    ? user.email
+    : user.email.replace('@', `+${tenantId}@`);
+  
+  return {
+    ...user,
+    email: tenantAwareEmail,
   };
 };

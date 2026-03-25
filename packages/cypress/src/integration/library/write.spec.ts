@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { DifficultyLevelRecord } from 'oa-shared';
 
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
+import { generateAlphaNumeric, generateNewUserDetails, getTenantUser } from '../../utils/TestUtils';
 
 import type { DifficultyLevel } from 'oa-shared';
 
@@ -79,7 +79,7 @@ describe('[Library]', () => {
   };
 
   describe('[Create a project]', () => {
-    const creator = MOCK_DATA.users.howto_creator;
+    const creator = getTenantUser(MOCK_DATA.users.howto_creator);
 
     const expected = {
       _createdBy: creator.username,

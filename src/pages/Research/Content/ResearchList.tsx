@@ -77,7 +77,15 @@ const ResearchList = () => {
   const researchItemList = showDrafts ? drafts : researchItems;
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        gap: [2, 3],
+        maxWidth: ['639px', '791px', '1000px'],
+        width: '100%',
+        mx: 'auto',
+      }}
+    >
       <ResearchFilterHeader
         itemCount={isFetching ? undefined : total}
         draftCount={isFetchingDrafts ? undefined : draftCount}

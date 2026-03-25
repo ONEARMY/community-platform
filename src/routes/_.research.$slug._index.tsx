@@ -1,4 +1,3 @@
-import type { ResearchUpdate } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, useLoaderData } from 'react-router';
@@ -8,14 +7,15 @@ import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticleP
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await researchServiceServer.getBySlug(client, params.slug as string);
+  const researchClient = new ResearchServiceServer(client);
+  const result = await researchClient.getBySlug(params.slug as string);
   const tenantSettings = await new TenantSettingsService(client).get();
 
   if (result.error || !result.item) {
@@ -28,14 +28,30 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbResearch = result.item;
 
   if (dbResearch.id) {
-    await contentServiceServer.incrementViewCount(client, 'research', dbResearch.total_views, dbResearch.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'research',
+      dbResearch.total_views,
+      dbResearch.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbResearch.id, 'research', dbResearch.tags);
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbResearch.id,
+    'research',
+    dbResearch.tags,
+  );
 
-  const images = researchServiceServer.getResearchPublicMedia(dbResearch, client);
+  const images = researchClient.getResearchPublicMedia(dbResearch);
 
-  const research = ResearchItem.fromDB(dbResearch, tags, images, result.collaborators, currentUsername);
+  const research = ResearchItem.fromDB(
+    dbResearch,
+    tags,
+    images,
+    result.collaborators,
+    currentUsername,
+  );
   research.usefulCount = usefulVotes.count || 0;
   research.subscriberCount = subscribers.count || 0;
 
@@ -59,7 +75,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
   const research = loaderData?.research as ResearchItem;
-  const publicUpdates = loaderData?.research?.updates as ResearchUpdate[];
 
   if (!research) {
     return [];
@@ -67,16 +82,15 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 
   const title = `${research.title} - Research - ${loaderData?.tenantSettings.siteName}`;
 
-  return generateTags(title, research.description, (publicUpdates?.at(0)?.images?.[0] as any)?.downloadUrl, { type: 'article' });
+  return generateTags(title, research.description, research.image?.publicUrl, { type: 'article' });
 });
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const research = data.research as ResearchItem;
+  const data = useLoaderData<typeof loader>();
 
-  if (!research) {
+  if (!data.research) {
     return <NotFoundPage />;
   }
 
-  return <ResearchArticlePage research={research} />;
+  return <ResearchArticlePage research={data.research} />;
 }

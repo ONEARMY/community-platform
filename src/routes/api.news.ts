@@ -1,21 +1,20 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { AuthError } from '@supabase/supabase-js';
-import type { DBNews, DBProfile, Moderation } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { newsServiceServer } from 'src/services/newsService.server';
+import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImage } from 'src/utils/storage';
 import { contentServiceServer } from '../services/contentService.server';
 
 export const loader = async ({ request }) => {
@@ -43,6 +42,7 @@ export const loader = async ({ request }) => {
       created_at,
       created_by,
       modified_at,
+      published_at,
       is_draft,
       comment_count,
       body,
@@ -79,7 +79,7 @@ export const loader = async ({ request }) => {
   }
 
   if (sort === 'Newest') {
-    query = query.order('created_at', { ascending: false });
+    query = query.order('published_at', { ascending: false });
   } else if (sort === 'Comments') {
     query = query.order('comment_count', { ascending: false });
   } else if (sort === 'LeastComments') {
@@ -109,8 +109,7 @@ export const loader = async ({ request }) => {
         if (votesByContentId.has(item.id)) {
           item.usefulCount = votesByContentId.get(item.id)!;
         }
-        item.heroImage = await newsServiceServer.getHeroImage(
-          client,
+        item.heroImage = await new NewsServiceServer(client).getHeroImage(
           data.find((x) => x.id === item.id)?.hero_image || null,
         );
       }
@@ -127,12 +126,15 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const formData = await request.formData();
     const data = {
       body: formData.get('body') as string,
-      category: formData.has('category') ? (formData.get('category') as string) : null,
-      isDraft: formData.get('is_draft') === 'true',
-      profileBadge: formData.has('profileBadge') ? (formData.get('profileBadge') as string) : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
+      isDraft: formData.get('isDraft') === 'true',
+      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
-    };
+      heroImage: formData.has('heroImage')
+        ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
+        : null,
+    } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -140,37 +142,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, data, claims.error);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
     if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'news')) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 409,
-          statusText: 'This news already exists',
-        },
-      );
-    }
-
-    const uploadedHeroImageFile = formData.get('heroImage') as File | null;
-    const imageValidation = validateImage(uploadedHeroImageFile);
-
-    if (!imageValidation.valid && imageValidation.error) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.error.message || 'Error uploading image',
-        },
-      );
+      throw conflictError('This news already exists');
     }
 
     const profileRequest = await client
@@ -181,7 +158,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error);
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
     const profile = profileRequest.data[0] as DBProfile;
@@ -195,9 +172,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
         profile_badge: data.profileBadge,
+        published_at: data.isDraft ? null : new Date(),
         slug,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
+        hero_image: data.heroImage,
         tenant_id: process.env.TENANT_ID,
         title: data.title,
       })
@@ -214,33 +193,16 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       notifyDiscord(news, profile, new URL(request.url).origin.replace('http:', 'https:'));
     }
 
-    if (uploadedHeroImageFile) {
-      const mediaFiles = await storageServiceServer.uploadImage(
-        [uploadedHeroImageFile],
-        `news/${news.id}`,
-        client,
-      );
-
-      if (mediaFiles?.media?.length) {
-        await client
-          .from('news')
-          .update({
-            hero_image: mediaFiles.media.at(0),
-          })
-          .eq('id', news.id);
-
-        const [image] = storageServiceServer.getPublicUrls(client, mediaFiles.media);
-
-        news.heroImage = image;
-      }
-    }
-
     updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating news' });
+    return Response.json({ error: 'Error creating news', status: 500 }, { status: 500 });
   }
 };
 
@@ -253,25 +215,20 @@ function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
   );
 }
 
-async function validateRequest(request: Request, data: any, authError: AuthError | null) {
-  if (authError) {
-    return {
-      status: authError?.status,
-      statusText: authError?.message || 'Unknown authentication error',
-    };
-  }
-
+async function validateRequest(request: Request, data: NewsDTO): Promise<void> {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.body) {
-    return { status: 400, statusText: 'body is required' };
+    throw validationError('Body is required', 'body');
   }
 
-  return { valid: true };
+  if (!data.heroImage) {
+    throw validationError('Hero image is required', 'body');
+  }
 }

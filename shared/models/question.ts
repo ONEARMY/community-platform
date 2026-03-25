@@ -2,9 +2,8 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
-import type { DBMedia, Image } from './media';
+import type { DBMedia, Image, MediaWithPublicUrl } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -13,6 +12,7 @@ export class DBQuestion implements IDBContentDoc {
   is_draft: boolean;
   readonly created_at: Date;
   readonly modified_at: Date | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly comment_count?: number;
   readonly category: DBCategory | null;
@@ -33,6 +33,26 @@ export class DBQuestion implements IDBContentDoc {
   constructor(question: DBQuestion) {
     Object.assign(this, question);
   }
+
+  static toFormData(obj: DBQuestion, images: Image[]) {
+    return {
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => !!img)
+        : null,
+      isDraft: obj.is_draft || false,
+      tags: obj.tags,
+      title: obj.title,
+    } satisfies QuestionFormData;
+  }
 }
 
 export class Question implements IContentDoc {
@@ -45,6 +65,7 @@ export class Question implements IContentDoc {
   isDraft: boolean;
   modifiedAt: Date | null;
   previousSlugs: string[];
+  publishedAt: Date | null;
   slug: string;
   subscriberCount: number;
   tags: Tag[];
@@ -73,6 +94,7 @@ export class Question implements IContentDoc {
       isDraft: obj.is_draft || false,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       previousSlugs: obj.previous_slugs,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       slug: obj.slug,
       subscriberCount: obj.subscriber_count || 0,
       tagIds: obj.tags,
@@ -87,9 +109,17 @@ export class Question implements IContentDoc {
 export type QuestionFormData = {
   category: SelectValue | null;
   description: string;
-  existingImages: Image[] | null;
-  images: IConvertedFileMeta[] | null;
-  isDraft: boolean;
-  tags?: number[];
+  images: MediaWithPublicUrl[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
   title: string;
+};
+
+export type QuestionDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  images: DBMedia[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
 };

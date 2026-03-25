@@ -1,12 +1,22 @@
 import debounce from 'debounce';
-import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import {
+  ButtonIcon,
+  CategoryHorizonalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+  Tooltip,
+} from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { UserAction } from 'src/common/UserAction';
+import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
+import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { categoryService } from 'src/services/categoryService';
-import { Button, Flex } from 'theme-ui';
+import { Box, Button, Flex } from 'theme-ui';
 import DraftButton from '../common/Drafts/DraftButton';
 import { ListHeader } from '../common/Layout/ListHeader';
 import { headings, listing } from './labels';
@@ -21,6 +31,8 @@ interface IProps {
   showDrafts: boolean;
 }
 
+const DEFAULT_SORT: QuestionSortOption = 'Newest';
+
 export const QuestionListHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
 
@@ -29,9 +41,28 @@ export const QuestionListHeader = (props: IProps) => {
   const q = searchParams.get(QuestionSearchParams.q);
   const [searchString, setSearchString] = useState<string>(() => q ?? '');
 
-  const categoryParam = searchParams.get(QuestionSearchParams.category);
-  const category = (categoryParam && categories?.find((x) => x.id === +categoryParam)) ?? null;
+  const categoryParam = Number(searchParams.get(QuestionSearchParams.category));
+  const category: Category | null = categoryParam
+    ? (categories?.find((x) => x.id === +categoryParam) ?? null)
+    : null;
   const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption;
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+  const [pendingSort, setPendingSort] = useState<QuestionSortOption>(sort || DEFAULT_SORT);
+
+  const handleOpenSortModal = () => {
+    setPendingSort(sort || DEFAULT_SORT);
+    setIsSortModalOpen(true);
+  };
+
+  const handleCloseSortModal = () => {
+    setIsSortModalOpen(false);
+  };
+
+  const handleToggleSearchOpen = () => {
+    setIsSearchOpen((x) => !x);
+  };
 
   useEffect(() => {
     const initCategories = async () => {
@@ -83,6 +114,41 @@ export const QuestionListHeader = (props: IProps) => {
     setSearchParams(params);
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    searchValue(searchString);
+    setIsSearchOpen(false);
+  };
+
+  const sortOptions = QuestionSortOptions.toArray(!!q);
+
+  const effectiveDefaultSort = q ? 'MostRelevant' : DEFAULT_SORT;
+  const activeFilterCount =
+    (sort && sort !== effectiveDefaultSort ? 1 : 0) + (categoryParam > 0 ? 1 : 0);
+
+  const handleApplySort = () => {
+    updateFilter(QuestionSearchParams.sort, pendingSort);
+    handleCloseSortModal();
+  };
+
+  const handleResetSort = () => {
+    updateFilter(QuestionSearchParams.sort, DEFAULT_SORT);
+    setPendingSort(DEFAULT_SORT);
+  };
+
+  const sortSections: FilterSection[] = [
+    {
+      title: 'Sort',
+      options: sortOptions,
+      selectedValue: pendingSort,
+      onSelect: (value) => setPendingSort(value as QuestionSortOption),
+    },
+  ];
+
+  const formRef = useClickOutside(() => {
+    setIsSearchOpen(false);
+  });
+
   const actionComponents = (
     <UserAction
       incompleteProfile={
@@ -126,7 +192,7 @@ export const QuestionListHeader = (props: IProps) => {
   const categoryComponent = (
     <CategoryHorizonalList
       allCategories={categories}
-      activeCategory={category !== '' ? category : null}
+      activeCategory={category}
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           QuestionSearchParams.category,
@@ -142,6 +208,7 @@ export const QuestionListHeader = (props: IProps) => {
         gap: 2,
         flexDirection: ['column', 'column', 'row'],
         flexWrap: 'wrap',
+        display: ['none', 'flex', 'flex'],
       }}
     >
       <Flex sx={{ width: ['100%', '100%', '230px'] }}>
@@ -163,7 +230,7 @@ export const QuestionListHeader = (props: IProps) => {
             setSearchString(value);
             onSearchInputChange(value);
           }}
-          onClickDelete={() => {
+          onClear={() => {
             setSearchString('');
             searchValue('');
           }}
@@ -173,14 +240,104 @@ export const QuestionListHeader = (props: IProps) => {
     </Flex>
   );
 
+  const mobileFilteringComponents = (
+    <Flex sx={{ display: ['flex', 'none', 'none'], gap: '5px' }}>
+      <Flex sx={{ position: 'relative' }}>
+        <ButtonIcon
+          onClick={handleOpenSortModal}
+          icon="sliders"
+          sx={{
+            borderRadius: 1,
+            padding: '9px',
+            '&:hover': {
+              backgroundColor: 'background',
+            },
+          }}
+        />
+        {activeFilterCount > 0 && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '-4px',
+              right: '-4px',
+              minWidth: '18px',
+              height: '18px',
+              borderRadius: '50%',
+              backgroundColor: 'red',
+              color: 'background',
+              fontSize: 0,
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {activeFilterCount}
+          </Box>
+        )}
+      </Flex>
+      <ButtonIcon
+        onClick={handleToggleSearchOpen}
+        icon="search"
+        sx={{
+          border: 'none',
+          background: 'transparent',
+          '&:hover': {
+            backgroundColor: 'background',
+          },
+        }}
+      />
+    </Flex>
+  );
+
+  const mobileSearchBar = (
+    <Flex sx={{ display: ['flex', 'none', 'none'], width: '100%' }}>
+      <div ref={formRef} style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <SearchField
+            isExpanded
+            autoFocus
+            dataCy="questions-search-box"
+            placeHolder={listing.search}
+            value={searchString}
+            onChange={(value) => {
+              setSearchString(value);
+              onSearchInputChange(value);
+            }}
+            onClear={() => {
+              setSearchString('');
+              searchValue('');
+            }}
+            onClickSearch={() => searchValue(searchString)}
+            onBack={() => {
+              setIsSearchOpen(false);
+            }}
+          />
+        </form>
+      </div>
+    </Flex>
+  );
+
   return (
-    <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount}
-      actionComponents={actionComponents}
-      showDrafts={false}
-      headingTitle={headings.list}
-      categoryComponent={categoryComponent}
-      filteringComponents={filteringComponents}
-    />
+    <>
+      <ListHeader
+        itemCount={(showDrafts ? draftCount : itemCount) || 0}
+        actionComponents={isSearchOpen ? null : actionComponents}
+        showDrafts={false}
+        headingTitle={headings.list || ''}
+        categoryComponent={categoryComponent}
+        filteringComponents={filteringComponents}
+        mobileFilteringComponents={isSearchOpen ? mobileSearchBar : mobileFilteringComponents}
+        searchString={q || undefined}
+      />
+      <MobileSortModal
+        isOpen={isSortModalOpen}
+        onDismiss={handleCloseSortModal}
+        title="Sort"
+        sections={sortSections}
+        onApply={handleApplySort}
+        onReset={handleResetSort}
+      />
+    </>
   );
 };

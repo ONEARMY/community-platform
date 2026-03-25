@@ -1,6 +1,6 @@
 import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
-import type { MediaFile, ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
-import { useEffect, useState } from 'react';
+import type { ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -17,45 +17,30 @@ import { TitleField } from '../CreateResearch/Form/TitleField';
 import VideoUrlField from '../CreateResearch/Form/VideoUrlField';
 
 interface IProps {
+  id: number | null;
+  formData: ResearchUpdateFormData | null;
   research: ResearchItem;
-  researchUpdate?: ResearchUpdate;
-  files?: MediaFile[];
-  fileLink?: string;
 }
 
-export const ResearchUpdateForm = (props: IProps) => {
-  const { research, researchUpdate, files, fileLink } = props;
+export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
   const navigate = useNavigate();
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const id = researchUpdate?.id || null;
-  const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
-    title: '',
-    description: '',
-    existingImages: [],
-    existingFiles: [],
-    fileLink: '',
-    videoUrl: '',
-    files: [],
-    images: [],
-  });
 
-  useEffect(() => {
-    if (researchUpdate) {
-      setInitialValues({
-        title: researchUpdate?.title,
-        description: researchUpdate?.description,
-        existingImages: researchUpdate?.images || [],
-        existingFiles: files,
-        fileLink: fileLink,
-        videoUrl: researchUpdate?.videoUrl || '',
-        files: [],
-        images: [],
-      });
-    }
-  }, [researchUpdate]);
+  const initialValues = useMemo<ResearchUpdateFormData>(
+    () =>
+      ({
+        title: formData?.title || '',
+        description: formData?.description || '',
+        images: formData?.images || null,
+        files: formData?.files || null,
+        fileLink: formData?.fileLink || null,
+        videoUrl: formData?.videoUrl || '',
+      }) satisfies ResearchUpdateFormData,
+    [],
+  );
 
   const onSubmit = async (formData: ResearchUpdateFormData, isDraft = false) => {
     if (isSaving) {
@@ -85,42 +70,41 @@ export const ResearchUpdateForm = (props: IProps) => {
   };
 
   const handleDelete = async () => {
-    if (!researchUpdate) {
+    if (!id) {
       return;
     }
     setShowDeleteModal(false);
-    await researchService.deleteUpdate(props.research.id, researchUpdate.id);
-    window.location.assign('/research/' + props.research.slug);
+    await researchService.deleteUpdate(research.id, id);
+    window.location.assign('/research/' + research.slug);
   };
 
-  const isEdit = !!researchUpdate;
+  const isEdit = !!id;
   const heading = isEdit ? headings.update.edit : headings.update.create;
-
-  const removeExistingImage = (index: number) => {
-    setInitialValues((prevState: ResearchUpdateFormData) => {
-      return {
-        ...prevState,
-        existingImages: prevState.existingImages?.filter((_, i) => i !== index) ?? null,
-      };
-    });
-  };
 
   return (
     <>
       <Form<ResearchUpdateFormData>
         onSubmit={async (values) => await onSubmit(values)}
         initialValues={initialValues}
-        validateOnBlur
-        render={({ dirty, handleSubmit, hasValidationErrors, errors, submitFailed, submitSucceeded, submitting, values }) => {
+        render={({
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          errors,
+          submitFailed,
+          submitSucceeded,
+          submitting,
+          values,
+        }) => {
           const errorsClientSide = [errorSet(errors, update)];
 
           const handleSubmitDraft = () => onSubmit(values, true);
 
-          const numberOfImageInputsAvailable = (values as any)?.images
-            ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
-            : 1;
-
-          const unsavedChangesDialog = <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />;
+          const unsavedChangesDialog = (
+            <UnsavedChangesDialog
+              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+            />
+          );
 
           const sidebar = (
             <>
@@ -140,10 +124,10 @@ export const ResearchUpdateForm = (props: IProps) => {
                 </Button>
               ) : null}
 
-              {props.research && (
+              {research && (
                 <ResearchEditorOverview
-                  updates={getResearchUpdates(props.research.updates || [], !isEdit, values.title)}
-                  researchSlug={props.research?.slug}
+                  updates={getResearchUpdates(research.updates || [], !isEdit, values.title)}
+                  researchSlug={research?.slug}
                   showCreateUpdateButton={isEdit}
                   showBackToResearchButton={true}
                 />
@@ -168,13 +152,9 @@ export const ResearchUpdateForm = (props: IProps) => {
             >
               <TitleField />
               <DescriptionField />
-              <ResearchImagesField
-                inputsAvailable={numberOfImageInputsAvailable}
-                existingImages={initialValues.existingImages}
-                removeExistingImage={removeExistingImage}
-              />
+              <ResearchImagesField contentId={research.id} />
               <VideoUrlField />
-              <FilesFields />
+              <FilesFields contentType="research" contentId={research.id} />
             </FormWrapper>
           );
         }}
@@ -191,7 +171,11 @@ export const ResearchUpdateForm = (props: IProps) => {
   );
 };
 
-const getResearchUpdates = (updates: ResearchUpdate[], isCreating: boolean, researchTitle: string): any[] =>
+const getResearchUpdates = (
+  updates: ResearchUpdate[],
+  isCreating: boolean,
+  researchTitle: string,
+): any[] =>
   [
     ...updates
       .filter((u) => !u.deleted)

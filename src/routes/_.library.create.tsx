@@ -1,7 +1,7 @@
 import { data } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { UserAction } from 'src/common/UserAction';
-import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form';
+import { LibraryForm } from 'src/pages/Library/Content/Common/LibraryForm';
 import { listing } from 'src/pages/Library/labels';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
@@ -29,7 +29,7 @@ export default function Index() {
               {listing.incompleteProfile}
             </Box>
           }
-          loggedIn={<LibraryForm />}
+          loggedIn={<LibraryForm formData={null} id={null} />}
           loggedOut={<></>}
         />
       )}

@@ -1,9 +1,11 @@
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
+import { generateAlphaNumeric, generateNewUserDetails, getTenantUser } from '../../utils/TestUtils';
 
 let initialRandomId;
 
 describe('[Question]', () => {
+  const demoAdmin = getTenantUser(users.admin);
   beforeEach(() => {
     initialRandomId = generateAlphaNumeric(8).toLowerCase();
   });
@@ -48,7 +50,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=errors-container]');
 
       cy.step('Add image');
-      cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
       cy.step('Add title field');
       cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
@@ -90,9 +92,6 @@ describe('[Question]', () => {
       cy.contains(initialTitle);
       cy.contains(initialQuestionDescription);
       cy.contains(category);
-      // cy.contains(tag1)
-      // cy.contains(tag2)
-      // contains images
 
       cy.step('All ready for a discussion');
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
@@ -103,11 +102,6 @@ describe('[Question]', () => {
 
       cy.step('Add title description');
       cy.get('[data-cy=field-description]').clear().type(updatedQuestionDescription, { delay: 5 });
-
-      // cy.step('Update images by removing one')
-      // cy.get('[data-cy=image-upload-0]')
-      //   .get('[data-cy=delete-image]:first')
-      //   .click({ force: true })
 
       cy.step('Updated question details shown');
       cy.get('[data-cy=submit]').click().url().should('include', `/questions/${initialExpectedSlug}`);
@@ -151,7 +145,7 @@ describe('[Question]', () => {
     it('[By Admin]', () => {
       const question = MOCK_DATA.questions[0];
 
-      cy.signIn('demo_admin@example.com', 'demo_admin');
+      cy.signIn(demoAdmin.email, demoAdmin.password);
 
       cy.step('Question is not authored by the admin');
       cy.visit(`/questions/${question.slug}`);

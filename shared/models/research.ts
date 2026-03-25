@@ -2,11 +2,10 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { DBMedia, IMediaFile, Image, MediaFile } from './media';
+import type { DBMedia, IMediaFile, Image, MediaWithPublicUrl } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -20,6 +19,7 @@ export class DBResearchItem implements IDBContentDoc {
   readonly id: number;
   readonly created_at: Date;
   readonly deleted: boolean | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
@@ -45,6 +45,19 @@ export class DBResearchItem implements IDBContentDoc {
   constructor(obj: Omit<DBResearchItem, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBResearchItem, publicImage: Image | null) {
+    return {
+      title: obj.title,
+      description: obj.description,
+      coverImage: obj.image && publicImage ? { ...obj.image, ...publicImage } : null,
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      tags: obj.tags,
+      collaborators: obj.collaborators || [],
+    } satisfies ResearchFormData;
+  }
 }
 
 export class ResearchItem implements IContentDoc {
@@ -52,6 +65,7 @@ export class ResearchItem implements IContentDoc {
   createdAt: Date;
   author: Author | null;
   modifiedAt: Date | null;
+  publishedAt: Date | null;
   title: string;
   slug: string;
   previousSlugs: string[];
@@ -77,7 +91,13 @@ export class ResearchItem implements IContentDoc {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBResearchItem, tags: Tag[], images: Image[] = [], collaborators: Author[] = [], currentUsername?: string) {
+  static fromDB(
+    obj: DBResearchItem,
+    tags: Tag[],
+    images: Image[] = [],
+    collaborators: Author[] = [],
+    currentUsername?: string,
+  ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
         return false;
@@ -107,6 +127,7 @@ export class ResearchItem implements IContentDoc {
       createdAt: new Date(obj.created_at),
       author: obj.author ? Author.fromDB(obj.author) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       title: obj.title,
       slug: obj.slug,
       previousSlugs: obj.previous_slugs || [],
@@ -138,6 +159,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly created_at: Date;
   readonly deleted: boolean | null;
   readonly is_draft: boolean | null;
+  readonly published_at: Date | null;
   readonly comment_count?: number;
   readonly file_download_count?: number;
   readonly update_author?: DBAuthor;
@@ -152,6 +174,24 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
 
   constructor(obj: Omit<DBResearchUpdate, 'id'>) {
     Object.assign(this, obj);
+  }
+
+  static toFormData(obj: DBResearchUpdate, images: Image[]) {
+    return {
+      title: obj.title,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => !!img)
+        : null,
+      files: obj.files,
+      fileLink: obj.file_link,
+      videoUrl: obj.video_url,
+    } satisfies ResearchUpdateFormData;
   }
 }
 
@@ -168,6 +208,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   isDraft: boolean;
   hasFileLink: boolean;
   modifiedAt: Date | null;
+  publishedAt: Date | null;
   researchId: number;
   title: string;
   videoUrl: string | null;
@@ -182,6 +223,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       id: obj.id,
       createdAt: new Date(obj.created_at),
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       author: obj.update_author ? Author.fromDB(obj.update_author) : null,
       title: obj.title,
       description: obj.description,
@@ -204,26 +246,43 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
     return research.comment_count;
   }
 
-  return research.updates?.filter((x) => x.deleted !== true && x.is_draft !== true).reduce((acc, x) => acc + (x.comment_count || 0), 0);
+  return research.updates
+    ?.filter((x) => x.deleted !== true && x.is_draft !== true)
+    .reduce((acc, x) => acc + (x.comment_count || 0), 0);
 }
 
 export type ResearchFormData = {
   title: string;
   description: string;
-  category?: SelectValue;
-  tags?: number[];
-  collaborators?: string[];
-  image?: IConvertedFileMeta;
-  existingImage: Image | null;
+  category: SelectValue | null;
+  tags: number[] | null;
+  collaborators: string[] | null;
+  coverImage: MediaWithPublicUrl | null;
 };
 
 export interface ResearchUpdateFormData extends IFilesForm {
   title: string;
   description: string;
-  images?: File[];
-  existingImages: Image[] | null;
-  files?: File[];
-  existingFiles?: MediaFile[] | null;
-  fileLink?: string;
-  videoUrl?: string;
+  images: MediaWithPublicUrl[] | null;
+  videoUrl: string | null;
 }
+
+export type ResearchDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  tags: number[] | null;
+  collaborators: string[] | null;
+  coverImage: DBMedia | null;
+  isDraft: boolean;
+};
+
+export type ResearchUpdateDTO = {
+  title: string;
+  description: string;
+  images: DBMedia[] | null;
+  videoUrl: string | null;
+  files: IMediaFile[] | null;
+  fileLink: string | null;
+  isDraft: boolean;
+};

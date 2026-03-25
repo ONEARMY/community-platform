@@ -1,9 +1,11 @@
 import { faker } from '@faker-js/faker';
 
-import type { Image, Profile } from 'oa-shared';
+import type { MediaWithPublicUrl, Profile } from 'oa-shared';
 
-export const factoryImage: Image = {
+export const factoryImage: MediaWithPublicUrl = {
   id: '123',
+  path: '',
+  fullPath: '',
   publicUrl:
     'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2FBope-brick-5.jpg?alt=media&token=b29153ce-58fd-4c28-ac87-82f0b2f7c54c',
 };

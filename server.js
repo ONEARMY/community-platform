@@ -1,7 +1,9 @@
 import { Hono } from 'hono';
+import { bodyLimit } from 'hono/body-limit';
 import { serveStatic } from 'hono/bun';
+import { compress } from 'hono/compress';
+import { HTTPException } from 'hono/http-exception';
 import { secureHeaders } from 'hono/secure-headers';
-import { compress } from 'hono-compress';
 import { createRequestHandler } from 'react-router';
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -16,8 +18,40 @@ const viteDevServer = isProd
 
 const app = new Hono();
 
+app.onError((err, c) => {
+  // React Router handles all route actions internally and we're now catching HTTPException within the actions themselves, app.onError won't catch those errors.
+  // However, it's still a good safety net for:
+  // - Errors in Hono middleware (compression, secure headers)
+  // - Errors in static file serving
+  // - Any unexpected errors at the Hono layer
+
+  // Handle HTTPException (from hono/http-exception)
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+
+  // Log unexpected errors
+  console.error('Unexpected error:', err);
+
+  // Return generic error response
+  return c.json(
+    {
+      error: 'Internal Server Error',
+      status: 500,
+    },
+    500,
+  );
+});
+
 // Compression
 app.use(compress());
+
+app.use('*', async (c, next) => {
+  if (c.req.path.startsWith('/api/documents')) {
+    return next(); // Skip limit — Bun's 300MB cap is the backstop
+  }
+  return bodyLimit({ maxSize: 10 * 1024 * 1024 })(c, next);
+});
 
 // Security headers (replaces helmet)
 const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim()) ?? [];
@@ -142,6 +176,7 @@ if (isProd) {
     port,
     hostname: '0.0.0.0',
     fetch: app.fetch,
+    maxRequestBodySize: 300 * 1024 * 1024, // Must accommodate /api/documents - protected by Hono middleware
   });
 
   console.log(`Hono server started on http://0.0.0.0:${port}`);

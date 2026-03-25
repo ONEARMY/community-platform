@@ -55,6 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 async function validateRequest(request: Request, data: any) {
+  // TODO: Create ImpactDTO
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' };
   }

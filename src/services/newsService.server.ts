@@ -1,22 +1,26 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMedia, DBNews } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import { storageServiceServer } from './storageService.server';
+import { StorageServiceServer } from './storageService.server';
 
-async function getById(id: number, client: SupabaseClient) {
-  const result = await client.from('news').select().eq('id', id).single();
-  return result.data as DBNews;
-}
+export class NewsServiceServer {
+  constructor(private client: SupabaseClient) {}
 
-const getBySlug = (client: SupabaseClient, slug: string) => {
-  return client
-    .from('news')
-    .select(
-      `
+  async getById(id: number) {
+    const result = await this.client.from('news').select().eq('id', id).single();
+    return result.data as DBNews;
+  }
+
+  getBySlug(slug: string) {
+    return this.client
+      .from('news')
+      .select(
+        `
        id,
        created_at,
        created_by,
        modified_at,
+       published_at,
        comment_count,
        body,
        is_draft,
@@ -40,24 +44,22 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
           )
         ))
      `,
-    )
-    .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
-    .or('deleted.eq.false,deleted.is.null')
-    .single();
-};
-
-const getHeroImage = async (client: SupabaseClient, dbImage: DBMedia | null) => {
-  if (!dbImage) {
-    return null;
+      )
+      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or('deleted.eq.false,deleted.is.null')
+      .single();
   }
 
-  const images = storageServiceServer.getPublicUrls(client, [dbImage], IMAGE_SIZES.GALLERY);
+  async getHeroImage(dbImage: DBMedia | null) {
+    if (!dbImage) {
+      return null;
+    }
 
-  return images[0];
-};
+    const images = new StorageServiceServer(this.client).getPublicUrls(
+      [dbImage],
+      IMAGE_SIZES.GALLERY,
+    );
 
-export const newsServiceServer = {
-  getById,
-  getBySlug,
-  getHeroImage,
-};
+    return images[0];
+  }
+}

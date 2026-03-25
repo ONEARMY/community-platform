@@ -1,7 +1,7 @@
 import { MOCK_DATA } from '../data';
 import { SingaporeStubResponse } from '../fixtures/searchResults';
 import { UserMenuItem } from '../support/commandsUi';
-import { generateNewUserDetails } from '../utils/TestUtils';
+import { generateNewUserDetails, getTenantUser } from '../utils/TestUtils';
 
 const locationStub = {
   administrative: '',
@@ -17,7 +17,7 @@ const mapDetails = {
   locationName: locationStub.value,
 };
 
-const settings_member_new = MOCK_DATA.users.settings_member_new;
+const settings_member_new = getTenantUser(MOCK_DATA.users.settings_member_new);
 
 describe('[Settings]', () => {
   beforeEach(() => {
@@ -91,9 +91,8 @@ describe('[Settings]', () => {
     cy.get(`[data-cy="country:${countryCode}"]`);
 
     cy.step('Errors if trying to upload invalid image');
-    cy.get(`[data-cy=userImage]`).find(':file').selectFile(`src/fixtures/images/file.random`, { force: true });
-    cy.get('[data-cy=ImageUploadError]').should('be.visible');
-    cy.get('[data-cy=ImageUploadError-Button]').click();
+    cy.get(`[data-cy=userImage]`).find(':file').selectFile(`src/fixtures/files/Example.pdf`, { force: true });
+    cy.get('[data-cy=photo-error]').should('be.visible');
 
     cy.step('Can add avatar');
     cy.setSettingImage(userImage, 'userImage');

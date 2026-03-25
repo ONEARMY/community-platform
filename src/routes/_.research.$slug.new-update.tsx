@@ -1,11 +1,10 @@
-import type { DBResearchItem } from 'oa-shared';
-import { ResearchItem } from 'oa-shared';
+import { DBResearchItem, ResearchItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -16,7 +15,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/research/${params.slug}/new-update`, headers);
   }
 
-  const result = await researchServiceServer.getBySlug(client, params.slug as string);
+  const researchService = new ResearchServiceServer(client);
+
+  const result = await researchService.getBySlug(params.slug as string);
 
   if (result.error || !result.item) {
     return redirect('/research', { headers });
@@ -26,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const researchDb = result.item as unknown as DBResearchItem;
   const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators);
 
-  if (!(await researchServiceServer.isAllowedToEditResearch(client, research, username))) {
+  if (!(await researchService.isAllowedToEditResearch(researchDb, username))) {
     return redirect('/forbidden?page=research-edit-create', { headers });
   }
 
@@ -36,5 +37,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function Index() {
   const data = useLoaderData<typeof loader>();
 
-  return <ResearchUpdateForm research={data.research} />;
+  return <ResearchUpdateForm id={null} formData={null} research={data.research} />;
 }

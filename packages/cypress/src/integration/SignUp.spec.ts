@@ -71,7 +71,8 @@ describe('[User sign-up]', () => {
       const { email, username, password } = user;
       cy.signUpNewUser(user);
 
-      const newEmail = `delivered+${username}-super_cool@resend.dev`;
+      const tenantId = Cypress.env('TENANT_ID');
+      const newEmail = `delivered+${username}-super_cool+${tenantId}@resend.dev`;
       const newPassword = '<dfbss73DF';
 
       cy.step('Go to settings page');

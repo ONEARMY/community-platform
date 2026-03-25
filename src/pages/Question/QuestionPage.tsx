@@ -32,7 +32,11 @@ interface IProps {
 
 export const QuestionPage = observer(({ question }: IProps) => {
   const { profile: activeUser } = useProfileStore();
-  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('questions', question.id, question.usefulCount);
+  const {
+    hasVoted,
+    usefulCount,
+    toggle: toggleVote,
+  } = useUsefulVote('questions', question.id, question.usefulCount);
   const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
 
   const isEditable = useMemo(() => {
@@ -127,7 +131,13 @@ export const QuestionPage = observer(({ question }: IProps) => {
         >
           <Box>
             <ClientOnly fallback={<></>}>
-              {() => <UsefulStatsButton hasUserVotedUseful={hasVoted} isLoggedIn={!!activeUser} onUsefulClick={toggleVote} />}
+              {() => (
+                <UsefulStatsButton
+                  hasUserVotedUseful={hasVoted}
+                  isLoggedIn={!!activeUser}
+                  onUsefulClick={toggleVote}
+                />
+              )}
             </ClientOnly>
           </Box>
 

@@ -48,7 +48,7 @@ export const SettingsPageUserProfile = observer(() => {
     } catch (error) {
       logger.error(error, 'SettingsPage.saveProfile.error');
       setNotification({
-        message: `Save Failed - ${error}`,
+        message: error.toString(),
         icon: 'close',
         show: true,
         variant: 'failure',
@@ -56,45 +56,60 @@ export const SettingsPageUserProfile = observer(() => {
     }
   };
 
-  const existingCoverImages = profile.coverImages ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image)) : [];
-  const coverImages = new Array(4 - (existingCoverImages?.length || 0));
+  const coverImages = profile.coverImages
+    ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
+    : [];
 
   const initialValues = useMemo<ProfileFormData>(
-    () => ({
-      type: profile.type?.name || 'member',
-      displayName: profile.displayName || '',
-      userName: profile.username,
-      about: profile.about || '',
-      isContactable: isContactable(profile.isContactable),
-      coverImages: coverImages,
-      existingCoverImages: existingCoverImages,
-      existingPhoto: profile.photo ? toJS(profile.photo) : undefined,
-      country: profile.country,
-      showVisitorPolicy: !!profile.visitorPolicy,
-      visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
-      visitorPreferenceDetails: profile.visitorPolicy?.details,
-      website: profile.website || '',
-      tagIds: profile.tags?.map((x) => x.id) || null,
-    }),
+    () =>
+      ({
+        type: profile.type?.name || 'member',
+        displayName: profile.displayName || '',
+        about: profile.about || '',
+        isContactable: isContactable(profile.isContactable),
+        coverImages,
+        photo: profile.photo ? toJS(profile.photo) : undefined,
+        country: profile.country,
+        showVisitorPolicy: !!profile.visitorPolicy,
+        visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
+        visitorPreferenceDetails: profile.visitorPolicy?.details,
+        website: profile.website || '',
+        tagIds: profile.tags?.map((x) => x.id) || null,
+      }) satisfies ProfileFormData,
     [],
   );
+
   const formId = 'userProfileForm';
 
   return (
     <Form
       id={formId}
       onSubmit={async (values) => await saveProfile(values)}
-      initialValues={initialValues}
+      initialValues={{ ...initialValues, username: profile.username }}
       mutators={{ ...arrayMutators }}
       validateOnBlur
-      render={({ dirty, submitFailed, submitting, submitSucceeded, values, handleSubmit, invalid, errors, form }) => {
+      render={({
+        dirty,
+        submitFailed,
+        submitting,
+        submitSucceeded,
+        values,
+        handleSubmit,
+        invalid,
+        errors,
+        form,
+      }) => {
         const isMember = !profileTypes?.find((x) => x.name === values.type)?.isSpace;
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
             {submitting && <Loader sx={{ alignSelf: 'center' }} />}
-            <SettingsFormNotifications errors={errors} notification={notification} submitFailed={submitFailed} />
+            <SettingsFormNotifications
+              errors={errors}
+              notification={notification}
+              submitFailed={submitFailed}
+            />
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
@@ -115,7 +130,9 @@ export const SettingsPageUserProfile = observer(() => {
                   />
                 )}
 
-                {!tenantContext?.noMessaging && <PublicContactSection isContactable={values.isContactable} />}
+                {!tenantContext?.noMessaging && (
+                  <PublicContactSection isContactable={values.isContactable} />
+                )}
               </Flex>
             </form>
 

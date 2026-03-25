@@ -180,7 +180,7 @@ function addSubscriptions(
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  data: any,
+  data: any, // TODO create a CommentDTO
   sourceType: string,
 ) {
   if (!params.sourceId) {

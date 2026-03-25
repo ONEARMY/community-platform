@@ -1,7 +1,7 @@
 // Basic check using the filereader api to see whether we can create a displayable image
 // If this fails then there is a problem with the file
 
-export const imageValid = (file: File): Promise<void> => {
+export const isImageValid = (file: File): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (!file) {
       reject();

@@ -1,6 +1,7 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { DBProfile, DBQuestion, Moderation } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, DBProfile, DBQuestion, Moderation, QuestionDTO } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
@@ -8,11 +9,10 @@ import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImages } from 'src/utils/storage';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -84,48 +84,27 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      is_draft: formData.get('is_draft') === 'true',
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      isDraft: formData.get('isDraft') === 'true',
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
-    };
+      images: formData.has('images')
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
+        : null,
+    } satisfies QuestionDTO;
 
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
     if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'questions')) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 409,
-          statusText: 'This question already exists',
-        },
-      );
+      throw conflictError('This question already exists');
     }
 
-    const uploadedImages = formData.getAll('images') as File[];
-    const imageValidation = validateImages(uploadedImages);
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      );
-    }
     const profileRequest = await client
       .from('profiles')
       .select('id,username')
@@ -134,7 +113,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error);
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
     const profile = profileRequest.data[0] as DBProfile;
@@ -145,9 +124,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         title: data.title,
         description: data.description,
-        is_draft: data.is_draft,
+        is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
-        published_at: data.is_draft ? null : new Date(),
+        images: data.images,
+        published_at: data.isDraft ? null : new Date(),
         slug,
         category: data.category,
         tags: data.tags,
@@ -156,33 +136,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .select();
 
     if (questionResult.error || !questionResult.data) {
-      return Response.json({}, { headers, status: 400, statusText: questionResult.error.details });
+      throw new Error(questionResult.error?.details || 'Error creating question');
     }
 
     const question = Question.fromDB(questionResult.data[0], []);
     subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
-
-    if (uploadedImages.length > 0) {
-      const questionId = Number(questionResult.data[0].id);
-
-      const imageResult = await storageServiceServer.uploadImage(
-        uploadedImages,
-        `questions/${questionId}`,
-        client,
-      );
-
-      if (imageResult?.media && imageResult.media.length > 0) {
-        const updateResult = await client
-          .from('questions')
-          .update({ images: imageResult.media })
-          .eq('id', questionId)
-          .select();
-
-        if (updateResult.data) {
-          question.images = updateResult.data[0].images;
-        }
-      }
-    }
 
     if (!question.isDraft) {
       notifyDiscord(question, profile, new URL(request.url).origin.replace('http:', 'https:'));
@@ -192,8 +150,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     return Response.json({ question }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating question' });
+
+    return Response.json({ error: 'Error creating question' }, { headers, status: 500 });
   }
 };
 
@@ -206,18 +169,16 @@ function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) 
   );
 }
 
-async function validateRequest(request: Request, data: any) {
+async function validateRequest(request: Request, data: QuestionDTO) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
-
-  return { valid: true };
 }

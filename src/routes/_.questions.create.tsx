@@ -26,7 +26,12 @@ export default function Index() {
         </Box>
       }
       loggedIn={
-        <QuestionForm data-testid="question-create-form" parentType="create" question={null} />
+        <QuestionForm
+          data-testid="question-create-form"
+          formAction="create"
+          formData={null}
+          id={null}
+        />
       }
       loggedOut={<></>}
     />

@@ -1,18 +1,17 @@
 import { HTTPException } from 'hono/http-exception';
-import type { ContentType, MediaWithPublicUrl } from 'oa-shared';
-import { type ActionFunctionArgs } from 'react-router';
+import type { ContentType, IMediaFile } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
-import { validateImage } from 'src/utils/storage';
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
     const formData = await request.formData();
     const contentType = formData.get('contentType') as ContentType;
-    const imageFile = formData.get('imageFile') as File;
+    const file = formData.get('file') as File;
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
 
     const claims = await client.auth.getClaims();
@@ -21,24 +20,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    await validateRequest(request, imageFile);
+    await validateRequest(request);
 
-    const storage = new StorageServiceServer(client);
-
-    const uploadResult = await storage.uploadImage(
-      [imageFile],
+    const uploadResult = await new StorageServiceServer(client).uploadFile(
+      [file],
       `${id ? contentType : 'users'}/${id ?? claims.data.claims.sub}`,
     );
 
     if (uploadResult?.errors && uploadResult?.errors.length > 0) {
-      throw validationError(uploadResult.errors.join(', '));
+      throw validationError(uploadResult?.errors.join(', '));
     }
 
-    const [publicMedia] = storage.getPublicUrls([uploadResult.media[0]]);
+    const document: IMediaFile = {
+      id: uploadResult!.media[0].id,
+      name: uploadResult!.media[0].name,
+      size: uploadResult!.media[0].size,
+    };
 
-    const image: MediaWithPublicUrl = { ...uploadResult.media[0], ...publicMedia };
-
-    return Response.json({ image }, { headers });
+    return Response.json({ document }, { headers });
   } catch (error) {
     if (error instanceof HTTPException) {
       return error.getResponse();
@@ -49,14 +48,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-async function validateRequest(request: Request, imageFile: File) {
+async function validateRequest(request: Request) {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
-  }
-
-  const { error } = validateImage(imageFile);
-
-  if (error) {
-    throw validationError(error.message);
   }
 }

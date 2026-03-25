@@ -94,7 +94,18 @@ const ResearchList = () => {
       />
 
       {((researchItems && researchItems.length !== 0) || showDrafts) && (
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }} data-cy="ResearchList">
+        <Box
+          as="ul"
+          data-cy="ResearchList"
+          sx={{
+            listStyle: 'none',
+            p: 0,
+            m: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: [0, 1],
+          }}
+        >
           {researchItemList.map((item) => (
             <ResearchListItem
               key={item.id}
@@ -102,7 +113,7 @@ const ResearchList = () => {
               showWeeklyVotes={sort === 'MostUsefulLastWeek'}
             />
           ))}
-        </ul>
+        </Box>
       )}
 
       {!isFetching && researchItems?.length === 0 && (

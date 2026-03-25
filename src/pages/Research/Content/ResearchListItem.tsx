@@ -42,7 +42,23 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
       as="li"
       data-cy="ResearchListItem"
       data-id={item.id}
-      sx={{ position: 'relative', mb: 3, p: [3, 4] }}
+      sx={{
+        position: 'relative',
+        p: [3, 4],
+        // Mobile: top border on every card (first card gets its top line, each card's
+        // top border IS the shared divider with the card above). Bottom border only on
+        // the last card so the list is fully enclosed. No side borders on mobile.
+        // Tablet+: full-outline card (all 4 sides + border-radius) via responsive variant.
+        borderTop: '2px solid',
+        borderLeft: ['none', '2px solid'],
+        borderRight: ['none', '2px solid'],
+        borderBottom: ['none', '2px solid'],
+        borderColor: 'black',
+        borderRadius: [0, 2],
+        '&:last-of-type': {
+          borderBottom: '2px solid',
+        },
+      }}
       variant="responsive"
     >
       <Flex sx={{ width: '100%', position: 'relative' }}>

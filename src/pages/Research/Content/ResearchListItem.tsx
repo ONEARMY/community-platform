@@ -45,10 +45,6 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
       sx={{
         position: 'relative',
         p: [3, 4],
-        // Mobile: top border on every card (first card gets its top line, each card's
-        // top border IS the shared divider with the card above). Bottom border only on
-        // the last card so the list is fully enclosed. No side borders on mobile.
-        // Tablet+: full-outline card (all 4 sides + border-radius) via responsive variant.
         borderTop: '2px solid',
         borderLeft: ['none', '2px solid'],
         borderRight: ['none', '2px solid'],
@@ -64,9 +60,11 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
       <Flex sx={{ width: '100%', position: 'relative' }}>
         <Grid
           columns={['120px 1fr', '175px 1fr', '263px 1fr']}
-          gap={[3, 8]}
+          gap={[3, 4, 8]}
           sx={{
             width: '100%',
+            gridTemplateRows: ['minmax(120px, auto)', 'minmax(175px, auto)', 'minmax(175px, auto)'],
+            alignItems: 'start',
           }}
         >
           <Box sx={{ position: 'relative' }}>
@@ -104,12 +102,22 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
             sx={{
               flexDirection: 'column',
               alignItems: 'flex-start',
-              justifyContent: 'space-evenly',
-              gap: 1,
+              justifyContent: 'flex-start',
+              minWidth: 0,
             }}
           >
-            <Flex>
-              <Heading sx={{ fontSize: [3, 5] }}>
+            <Flex sx={{ pb: 1 }}>
+              <Heading
+                sx={{
+                  fontSize: [3, 4],
+                  lineHeight: '1.2',
+                  display: '-webkit-box',
+                  WebkitLineClamp: [2, 2, 2],
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  wordBreak: 'break-word',
+                }}
+              >
                 <InternalLink
                   to={`/research/${encodeURIComponent(item.slug)}`}
                   sx={{
@@ -137,13 +145,15 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
               sx={{
                 width: '100%',
                 alignItems: 'center',
+                pb: 2,
               }}
             >
               <Flex
                 sx={{
                   alignItems: ['flex-start', 'flex-start', 'center'],
-                  flexDirection: ['column', 'column', 'row'],
-                  gap: [0, 1],
+                  flexDirection: ['column', 'row'],
+                  flexWrap: ['nowrap', 'wrap'],
+                  gap: 1,
                 }}
               >
                 {item.author && (
@@ -187,9 +197,13 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
             <Text
               sx={{
                 display: ['none', '-webkit-box'],
+                fontFamily: 'body',
+                lineHeight: '1.4',
                 fontSize: 3,
                 color: 'darkGrey',
                 width: '100%',
+                minHeight: 0,
+                flexShrink: 1,
                 WebkitLineClamp: [2, 2, 3],
                 WebkitBoxOrient: 'vertical',
                 textOverflow: 'ellipsis',
@@ -203,6 +217,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
               sx={{
                 justifyContent: 'space-between',
                 width: '100%',
+                pt: [0, 3],
               }}
             >
               <Flex

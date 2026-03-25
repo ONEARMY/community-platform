@@ -103,7 +103,7 @@ const ResearchList = () => {
             m: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: [0, 1],
+            gap: [0, 2],
           }}
         >
           {researchItemList.map((item) => (

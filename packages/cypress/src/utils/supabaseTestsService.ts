@@ -453,8 +453,6 @@ export class SupabaseTestsService {
   }
 
   async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
-    await this.deleteAccounts();
-
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
       ...user,
       email: user['email'].replace('@', `+${this.tenantId}@`),

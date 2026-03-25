@@ -4,9 +4,58 @@ import type {
   DifficultyLevel,
   Moderation,
   Project,
-  // ProjectFormData,
+  ProjectFormData,
   ProjectStep,
+  ProjectStepFormData,
 } from 'oa-shared';
+
+export const FactoryProjectFormData = (
+  overloads: Partial<ProjectFormData> = {},
+): ProjectFormData => ({
+  title: faker.lorem.words(4),
+  description: faker.lorem.paragraph(),
+  category: {
+    label: faker.lorem.word(),
+    value: faker.number.int().toString(),
+  },
+  tags: [faker.number.int(), faker.number.int()],
+  difficultyLevel: faker.helpers.arrayElement<DifficultyLevel>([
+    'easy',
+    'medium',
+    'hard',
+    'very-hard',
+  ]),
+  time: '< 1 hour',
+  coverImage: {
+    id: faker.string.uuid(),
+    path: faker.image.url(),
+    fullPath: faker.image.url(),
+    publicUrl: faker.image.url(),
+  },
+  files: [],
+  fileLink: null,
+  steps: [
+    {
+      id: null,
+      title: faker.lorem.text(),
+      description: faker.lorem.paragraphs(2),
+      images: [],
+      videoUrl: null,
+    },
+  ],
+  ...overloads,
+});
+
+export const FactoryProjectStepFormData = (
+  overloads: Partial<ProjectStepFormData> = {},
+): ProjectStepFormData => ({
+  id: null,
+  title: faker.lorem.text(),
+  description: faker.lorem.paragraphs(2),
+  images: [],
+  videoUrl: null,
+  ...overloads,
+});
 
 export const FactoryLibraryItem = (itemOverloads: Partial<Project> = {}): Project => ({
   files: [],
@@ -119,24 +168,3 @@ export const FactoryLibraryItemDraft = (itemOverloads: Partial<Project> = {}): P
   publishedAt: faker.date.past(),
   ...itemOverloads,
 });
-
-// export const FactoryLibraryForm = (
-//   itemOverloads: Partial<ProjectFormData> = {},
-// ): ProjectFormData => ({
-//   files: [],
-//   fileLink: faker.internet.url(),
-//   difficultyLevel: faker.helpers.arrayElement<DifficultyLevel>([
-//     'easy',
-//     'medium',
-//     'hard',
-//     'very-hard',
-//   ]),
-//   time: '< 1 hour',
-//   title: faker.lorem.words(4),
-//   description: faker.lorem.paragraph(),
-//   category: { value: faker.number.int().toString(), label: faker.lorem.word() },
-//   tags: [],
-//   existingCoverImage: null,
-//   steps: [],
-//   ...itemOverloads,
-// })

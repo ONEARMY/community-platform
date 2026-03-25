@@ -1,6 +1,10 @@
+import { users } from "oa-shared/mocks/data";
+import { getTenantUser } from "../../utils/TestUtils";
+
 describe('[Research]', () => {
   const researchArticleUrl = '/research/qwerty';
   const researchListUrl = '/research';
+  const demoBetaTester = getTenantUser(users['beta-tester']);
 
   describe('[By Everyone]', () => {
     it('[Follow button]', () => {
@@ -26,7 +30,7 @@ describe('[Research]', () => {
   describe('[By Authenticated]', () => {
     it('[Follow button]', () => {
       cy.step('Should exist');
-      cy.signIn('demo_beta_tester@example.com', 'demo_beta_tester');
+      cy.signIn(demoBetaTester.email, demoBetaTester.password);
       cy.visit(researchArticleUrl);
       cy.wait(1000);
       cy.get('[data-cy="follow-redirect"]').should('not.exist');
@@ -48,7 +52,7 @@ describe('[Research]', () => {
 
     it('[Follow icon on list view]', () => {
       cy.step('Should show follow icon when user is following');
-      cy.signIn('demo_beta_tester@example.com', 'demo_beta_tester');
+      cy.signIn(demoBetaTester.email, demoBetaTester.password);
 
       cy.step('Follow the item from article view first');
       cy.visit(researchArticleUrl);

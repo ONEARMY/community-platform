@@ -1,13 +1,15 @@
-import type {
-  IImpactDataField,
-  IUserImpact,
-  MapPin,
-  MapPinFormData,
-  Profile,
-  ProfileFormData,
+import {
+  DBMedia,
+  type IImpactDataField,
+  type IUserImpact,
+  type MapPin,
+  type MapPinFormData,
+  type Profile,
+  type ProfileDTO,
+  type ProfileFormData,
 } from 'oa-shared';
 import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
+import { createFormData } from './formDataHelper';
 
 const get = async (): Promise<Profile | undefined> => {
   try {
@@ -23,80 +25,54 @@ const get = async (): Promise<Profile | undefined> => {
 
 const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin);
-  const data = new FormData();
-
-  data.append('displayName', value.displayName);
-  data.append('about', value.about);
-  data.append('country', value.country);
-  data.append('type', value.type.toString());
-  data.append('isContactable', value.isContactable ? 'true' : 'false');
-  data.append('website', value.website);
-
-  if (value.existingCoverImages && value.existingCoverImages?.length > 0) {
-    for (const image of value.existingCoverImages) {
-      if (image) {
-        data.append('existingCoverImageIds', image.id);
-      }
-    }
-  }
-
-  data.append('showVisitorPolicy', value.showVisitorPolicy ? 'true' : 'false');
-
-  if (value.showVisitorPolicy) {
-    if (value.visitorPreferenceDetails) {
-      data.append('visitorPreferenceDetails', value.visitorPreferenceDetails);
-    }
-    if (value.visitorPreferencePolicy) {
-      data.append('visitorPreferencePolicy', value.visitorPreferencePolicy);
-    }
-  }
-
-  if (value.tagIds && value.tagIds?.length > 0) {
-    for (const tagId of value.tagIds) {
-      if (tagId) {
-        data.append('tagIds', tagId.toString());
-      }
-    }
-  }
-
-  if (value.existingPhoto) {
-    data.append('existingPhoto', JSON.stringify(value.existingPhoto));
-  }
-
-  if (value.photo) {
-    data.append('photo', value.photo, getCleanFileName(value.photo.name));
-  }
-
-  if (value.coverImages?.length) {
-    for (let i = 0; i < value.coverImages.length; i++) {
-      data.append('coverImages', value.coverImages[i], getCleanFileName(value.coverImages[i].name));
-    }
-  }
+  const data = createFormData<ProfileDTO>({
+    displayName: value.displayName,
+    about: value.about,
+    country: value.country,
+    type: value.type.toString(),
+    isContactable: value.isContactable,
+    website: value.website,
+    showVisitorPolicy: value.showVisitorPolicy,
+    visitorPreferenceDetails: value.showVisitorPolicy ? value.visitorPreferenceDetails : undefined,
+    visitorPreferencePolicy: value.showVisitorPolicy ? value.visitorPreferencePolicy || null : null,
+    tagIds: value.tagIds && value.tagIds.length > 0 ? value.tagIds : null,
+    photo: value.photo ? DBMedia.fromPublicMedia(value.photo) : null,
+    coverImages:
+      value.coverImages && value.coverImages.length > 0
+        ? value.coverImages.map(DBMedia.fromPublicMedia)
+        : null,
+  });
 
   const response = await fetch(url, {
     body: data,
     method: 'POST',
   });
 
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to update profile' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update profile';
+    throw new Error(errorMessage);
+  }
+
   const result = (await response.json()) as Profile | null;
 
-  if (!response.ok || !result) {
-    throw new Error(response.statusText || 'Failed to update profile');
+  if (!result) {
+    throw new Error('Failed to update profile');
   }
 
   return result;
 };
 
 const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
-  const data = new FormData();
-
-  data.append('name', pin.name);
-  data.append('country', pin.country);
-  data.append('countryCode', pin.countryCode);
-  data.append('administrative', pin.administrative || '');
-  data.append('postCode', pin.postCode || '');
-  data.append('lat', pin.lat.toString());
-  data.append('lng', pin.lng.toString());
+  const data = createFormData<MapPinFormData>({
+    name: pin.name,
+    country: pin.country,
+    countryCode: pin.countryCode,
+    administrative: pin.administrative || '',
+    postCode: pin.postCode || '',
+    lat: pin.lat,
+    lng: pin.lng,
+  });
 
   const response = await fetch(`/api/settings/map`, {
     method: 'POST',
@@ -104,7 +80,9 @@ const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorData = await response.json().catch(() => ({ error: 'Failed to save map pin' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to save map pin';
+    throw new Error(errorMessage);
   }
 
   const { mapPin } = await response.json();
@@ -118,7 +96,9 @@ const deletePin = async () => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorData = await response.json().catch(() => ({ error: 'Failed to delete map pin' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to delete map pin';
+    throw new Error(errorMessage);
   }
 
   return;
@@ -136,7 +116,11 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Failed to update impact data' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update impact data';
+    throw new Error(errorMessage);
   }
   const { impact } = await response.json();
 

@@ -41,7 +41,7 @@ export const FormFieldWrapper = (props: IProps) => {
         </Text>
       )}
 
-      {children}
+      <Flex sx={{ gap: '1rem' }}>{children}</Flex>
     </Flex>
   );
 };

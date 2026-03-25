@@ -53,13 +53,21 @@ export class ProfileFactory {
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
-      photo: photo || null,
+      photo: dbProfile.photo && photo ? { ...dbProfile.photo, ...photo } : null,
       roles: dbProfile.roles || null,
       type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
       visitorPolicy,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
-      coverImages: coverImages,
+      coverImages:
+        dbProfile.cover_images && coverImages
+          ? dbProfile.cover_images
+              .map((dbImage) => {
+                const publicImage = coverImages.find((img) => img.id === dbImage.id);
+                return publicImage ? { ...dbImage, ...publicImage } : null;
+              })
+              .filter((img) => img !== null)
+          : null,
       impact,
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,

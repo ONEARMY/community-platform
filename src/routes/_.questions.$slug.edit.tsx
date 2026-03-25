@@ -1,14 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBQuestion, Image } from 'oa-shared';
-import { Question, UserRole } from 'oa-shared';
+import { DBQuestion, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
-import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -20,13 +18,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!params.slug) {
-    return data({ question: null }, { headers });
+    return data({ formData: null, id: null }, { headers });
   }
 
   const result = await questionServiceServer.getBySlug(client, params.slug!);
 
   if (result.error || !result.data) {
-    return data({ question: null }, { headers });
+    return data({ formData: null, id: null }, { headers });
   }
 
   const dbQuestion = result.data as unknown as DBQuestion;
@@ -35,14 +33,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/forbidden?page=question-edit', { headers });
   }
 
-  let images: Image[] = [];
-  if (dbQuestion.images) {
-    images = storageServiceServer.getPublicUrls(client, dbQuestion.images, IMAGE_SIZES.GALLERY);
-  }
+  const publicImages = dbQuestion?.images
+    ? new StorageServiceServer(client).getPublicUrls(dbQuestion?.images)
+    : [];
 
-  const question = Question.fromDB(dbQuestion, [], images);
+  const formData = DBQuestion.toFormData(dbQuestion, publicImages);
 
-  return data({ question }, { headers });
+  return data({ formData, id: dbQuestion.id }, { headers });
 }
 
 async function isUserAllowedToEdit(
@@ -66,6 +63,11 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <QuestionForm data-testid="question-create-form" parentType="edit" question={data.question} />
+    <QuestionForm
+      data-testid="question-create-form"
+      formAction="edit"
+      formData={data.formData}
+      id={data.id}
+    />
   );
 }

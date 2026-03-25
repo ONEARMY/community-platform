@@ -43,7 +43,9 @@ export default function Index() {
           {listing.incompleteProfile}
         </Box>
       }
-      loggedIn={<NewsForm data-testid="news-create-form" parentType="create" news={null} />}
+      loggedIn={
+        <NewsForm data-testid="news-create-form" formAction="create" formData={null} id={null} />
+      }
       loggedOut={<></>}
     />
   );

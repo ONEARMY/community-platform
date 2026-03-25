@@ -8,14 +8,14 @@ import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
-import { libraryServiceServer } from 'src/services/libraryService.server';
+import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await libraryServiceServer.getBySlug(client, params.slug as string);
+  const result = await new LibraryServiceServer(client).getBySlug(params.slug as string);
 
   if (result.error || !result.data) {
     return data({ project: null }, { headers });
@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     dbProject.tags,
   );
 
-  const images = libraryServiceServer.getProjectPublicMedia(dbProject, client);
+  const images = new LibraryServiceServer(client).getProjectPublicMedia(dbProject);
 
   const project = Project.fromDB(dbProject, tags, images);
   project.usefulCount = usefulVotes.count || 0;

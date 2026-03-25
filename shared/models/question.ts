@@ -2,9 +2,8 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
-import type { DBMedia, Image } from './media';
+import type { DBMedia, Image, MediaWithPublicUrl } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -33,6 +32,26 @@ export class DBQuestion implements IDBContentDoc {
 
   constructor(question: DBQuestion) {
     Object.assign(this, question);
+  }
+
+  static toFormData(obj: DBQuestion, images: Image[]) {
+    return {
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => !!img)
+        : null,
+      isDraft: obj.is_draft || false,
+      tags: obj.tags,
+      title: obj.title,
+    } satisfies QuestionFormData;
   }
 }
 
@@ -90,9 +109,17 @@ export class Question implements IContentDoc {
 export type QuestionFormData = {
   category: SelectValue | null;
   description: string;
-  existingImages: Image[] | null;
-  images: IConvertedFileMeta[] | null;
-  isDraft: boolean;
-  tags?: number[];
+  images: MediaWithPublicUrl[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
   title: string;
+};
+
+export type QuestionDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  images: DBMedia[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
 };

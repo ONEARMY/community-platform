@@ -31,5 +31,5 @@ export async function loader({ request }) {
 }
 
 export default function Index() {
-  return <ResearchForm />;
+  return <ResearchForm formData={null} id={null} research={null} />;
 }

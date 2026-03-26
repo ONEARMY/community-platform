@@ -63,6 +63,7 @@ export const SettingsPageUserProfile = observer(() => {
   const initialValues = useMemo<ProfileFormData>(
     () =>
       ({
+        username: profile.username || '',
         type: profile.type?.name || 'member',
         displayName: profile.displayName || '',
         about: profile.about || '',
@@ -85,7 +86,7 @@ export const SettingsPageUserProfile = observer(() => {
     <Form
       id={formId}
       onSubmit={async (values) => await saveProfile(values)}
-      initialValues={{ ...initialValues, username: profile.username }}
+      initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       validateOnBlur
       render={({

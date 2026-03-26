@@ -210,7 +210,7 @@ function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
   const slug = news.slug;
 
   discordServiceServer.postWebhookRequest(
-    `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,
+    `📰 ${profile.username || 'Someone'} has news: ${title}\n<${siteUrl}/news/${slug}>`,
   );
 }
 

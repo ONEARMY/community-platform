@@ -117,7 +117,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
                   trackEvent({
                     action: 'donationModalOpened',
                     category: 'profiles',
-                    label: profile.username,
+                    label: profile.username || undefined,
                   });
                   setIsDonationModalOpen(true);
                 }}

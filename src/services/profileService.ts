@@ -26,6 +26,7 @@ const get = async (): Promise<Profile | undefined> => {
 const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin);
   const data = createFormData<ProfileDTO>({
+    username: value.username,
     displayName: value.displayName,
     about: value.about,
     country: value.country,

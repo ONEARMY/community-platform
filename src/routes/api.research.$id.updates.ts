@@ -125,7 +125,7 @@ function validateRequest(
 
   if (
     profile.id !== research.author?.id &&
-    !research.collaborators?.includes(profile.username) &&
+    !(profile.username && research.collaborators?.includes(profile.username)) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
     throw forbiddenError('You do not have permission to add updates to this research');

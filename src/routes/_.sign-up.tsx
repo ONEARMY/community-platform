@@ -9,7 +9,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
-import { composeValidators, noSpecialCharacters, required } from 'src/utils/validators';
+import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 import { bool, object, ref, string } from 'yup';
 
@@ -37,12 +37,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
   const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
-  const authServiceServer = new AuthServiceServer(client);
-  const username = formData.get('username') as string;
 
-  if (!(await authServiceServer.isUsernameAvailable(username))) {
-    return data({ error: FRIENDLY_MESSAGES['sign-up/username-taken'] }, { headers });
-  }
+  const authServiceServer = new AuthServiceServer(client);
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -51,7 +47,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     email,
     password,
     options: {
-      data: { username },
       emailRedirectTo,
     },
   });
@@ -65,10 +60,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
-    const response = await authServiceServer.createUserProfile({
-      user: signupResult.data.user,
-      username,
-    });
+    const response = await authServiceServer.createUserProfile(
+      { user: signupResult.data.user },
+      client,
+    );
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
@@ -158,22 +153,6 @@ export default function Index() {
                         </TextNotification>
                       )}
 
-                      <Flex
-                        sx={{
-                          width: rowWidth,
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <Label htmlFor="username">Username</Label>
-                        <Field
-                          data-cy="username"
-                          name="username"
-                          type="userName"
-                          placeholder="yourusername"
-                          component={FieldInput}
-                          validate={composeValidators(required, noSpecialCharacters)}
-                        />
-                      </Flex>
                       <Flex
                         sx={{
                           flexDirection: 'column',

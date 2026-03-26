@@ -191,6 +191,7 @@ export class ProfileServiceServer {
     const { data, error } = await this.client
       .from('profiles')
       .update({
+        username: values.username,
         about: values.about,
         country: values.country,
         display_name: values.displayName,
@@ -289,11 +290,7 @@ export class ProfileServiceServer {
       return;
     }
 
-    if (!user.user_metadata.username) {
-      console.error('Cannot create profile without username in user metadata');
-    }
-
-    // Doesn't exist - create it
+    // Doesn't exist - create it (without username; user sets it in settings)
     const profileType = await this.client
       .from('profile_types')
       .select('id')
@@ -301,8 +298,8 @@ export class ProfileServiceServer {
       .limit(1);
     const { error } = await this.client.from('profiles').insert({
       auth_id: user.id,
-      display_name: user.user_metadata.username,
-      username: user.user_metadata.username,
+      display_name: '',
+      is_contactable: true,
       profile_type: profileType.data?.at(0)?.id || null,
       tenant_id: process.env.TENANT_ID,
     });

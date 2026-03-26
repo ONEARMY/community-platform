@@ -164,8 +164,12 @@ function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) 
   const title = question.title;
   const slug = question.slug;
 
+  if (!profile?.username) {
+    console.error('No username found for profile');
+  }
+
   discordServiceServer.postWebhookRequest(
-    `❓ ${profile.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,
+    `❓ ${profile?.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,
   );
 }
 

@@ -53,6 +53,11 @@ Deno.serve(async (req) => {
       ...email_data,
     } as any;
 
+    if (!user['user_metadata']?.username) {
+      console.error('No username found for email');
+      return;
+    }
+
     switch (email_data.email_action_type) {
       case 'moderation_notification': {
         if (email_data.notification) {

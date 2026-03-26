@@ -34,8 +34,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const userProfile = await client
       .from('profiles')
-      .select('id,username')
-      .eq('username', claims.data.claims.user_metadata?.username);
+      .select('id,username,display_name')
+      .eq('auth_id', claims.data.claims.sub);
 
     const recipientProfile = await client
       .from('profiles')
@@ -105,7 +105,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const sendResult = await sendEmail({
       from: settings.emailFrom,
       to: receiver.email,
-      subject: `${messenger.username} sent you a message via ${settings.siteName}!`,
+      subject: `${messenger.username || messenger.display_name || 'Someone'} sent you a message via ${settings.siteName}!`,
       emailTemplate,
     });
 

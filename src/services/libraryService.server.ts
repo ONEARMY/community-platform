@@ -116,35 +116,30 @@ export class LibraryServiceServer {
     return [...allImages, ...publicStepImages.filter((x) => !!x)];
   }
 
-  async isAllowedToEditProject(authorUsername: string, currentUsername: string) {
-    if (!currentUsername) {
-      return false;
-    }
-
-    if (currentUsername === authorUsername) {
+  async isAllowedToEditProject(
+    project: DBProject,
+    profile: { id: number; username: string | null; roles: string[] | null },
+  ) {
+    if (profile.id === project.author?.id) {
       return true;
     }
 
-    const { data } = await this.client
-      .from('profiles')
-      .select('roles')
-      .eq('username', currentUsername);
-
-    return data?.at(0)?.roles?.includes(UserRole.ADMIN);
+    return profile.roles?.includes(UserRole.ADMIN);
   }
 
-  async isAllowedToEditProjectById(id: number, currentUsername: string) {
+  async isAllowedToEditProjectById(
+    id: number,
+    profile: { id: number; username: string | null; roles: string[] | null },
+  ) {
     const projectResult = await this.client
       .from('projects')
-      .select('id,created_by')
+      .select('id,created_by,author:profiles(id,username)')
       .eq('id', id)
       .single();
 
     const project = projectResult.data as unknown as DBProject;
 
-    const item = Project.fromDB(project, []);
-
-    return this.isAllowedToEditProject(item.author?.username || '', currentUsername);
+    return this.isAllowedToEditProject(project, profile);
   }
 
   async getById(id: number) {

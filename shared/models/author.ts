@@ -7,7 +7,7 @@ import { ProfileType } from './profileType';
 // TODO: derive from DBProfile - not doing because was causing circular dependencies
 export type DBAuthor = {
   readonly id: number;
-  readonly username: string;
+  readonly username: string | null;
   readonly country: string;
   readonly display_name: string;
   readonly photo: DBMedia | null;
@@ -22,7 +22,7 @@ export class Author {
   displayName: string;
   badges?: ProfileBadge[];
   photo: Image | null;
-  username: string;
+  username: string | null;
   donationsEnabled?: boolean;
   profileType?: ProfileType;
 

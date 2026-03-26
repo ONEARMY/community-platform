@@ -6,7 +6,12 @@ import { Field } from 'react-final-form';
 import { SelectField } from 'src/common/Form/Select.field';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { required, validateUrl } from 'src/utils/validators';
+import {
+  composeValidators,
+  noSpecialCharacters,
+  required,
+  validateUrl,
+} from 'src/utils/validators';
 import { Flex, Heading, Text } from 'theme-ui';
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
@@ -45,9 +50,9 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
             data-cy="username"
             name="username"
             component={FieldInput}
-            validate={required}
+            placeholder="your username"
+            validate={composeValidators(required, noSpecialCharacters)}
             validateFields={[]}
-            disabled
           />
         </Flex>
 
@@ -105,10 +110,11 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
             <Text sx={{ fontSize: 1 }} variant="quiet">
               Preview:
             </Text>
-            {profile?.username && (
+            {formValues.username && (
               <Username
                 user={{
                   ...profile,
+                  username: formValues.username,
                   country: formValues.country,
                 }}
               />

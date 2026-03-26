@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "country" "text",
     "about" "text",
     "tenant_id" "text" NOT NULL,
-    "username" "text" DEFAULT ''::"text" NOT NULL,
+    "username" "text",
     "roles" "text"[],
     "impact" "json",
     "is_blocked_from_messaging" boolean,
@@ -102,6 +102,7 @@ CREATE INDEX "profile_badges_relations_profile_tenant_idx" ON "public"."profile_
 CREATE INDEX "profile_tags_relations_profile_tenant_idx" ON "public"."profile_tags_relations" USING "btree" ("profile_id", "tenant_id");
 CREATE INDEX "profiles_firebase_auth_id_idx" ON "public"."profiles" USING "btree" ("firebase_auth_id");
 CREATE INDEX "profiles_tenant_created_at_idx" ON "public"."profiles" USING "btree" ("tenant_id", "created_at" DESC);
+CREATE UNIQUE INDEX "profiles_username_tenant_id_key" ON "public"."profiles" ("username", "tenant_id") WHERE ("username" IS NOT NULL);
 
 ALTER TABLE ONLY "public"."profile_badges_relations"
     ADD CONSTRAINT "profile_badges_relations_profile_badge_id_fkey" FOREIGN KEY ("profile_badge_id") REFERENCES "public"."profile_badges"("id") ON UPDATE CASCADE ON DELETE CASCADE;
@@ -140,9 +141,16 @@ CREATE POLICY "tenant_isolation" ON "public"."profile_types" USING (("tenant_id"
 CREATE POLICY "tenant_isolation" ON "public"."profiles" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 CREATE POLICY "tenant_isolation" ON "public"."upgrade_badge" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 
-CREATE OR REPLACE FUNCTION "public"."is_username_available"("username" "text") RETURNS boolean
+CREATE OR REPLACE FUNCTION "public"."is_username_available"("username" "text", "exclude_profile_id" integer DEFAULT NULL)
+    RETURNS boolean
     LANGUAGE "sql" STABLE SECURITY DEFINER
     SET search_path = public, pg_temp
     AS $_$
-  SELECT NOT EXISTS (SELECT 1 FROM profiles WHERE username = $1);
+  SELECT CASE WHEN $1 IS NULL THEN false
+  ELSE NOT EXISTS (
+    SELECT 1 FROM profiles
+    WHERE profiles.username = $1
+      AND ($2 IS NULL OR profiles.id != $2)
+      AND tenant_id = ((SELECT current_setting('request.headers', true))::json ->> 'x-tenant-id')
+  ) END;
 $_$;

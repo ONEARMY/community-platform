@@ -67,13 +67,14 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
             alignItems: 'start',
           }}
         >
-          <Box sx={{ position: 'relative' }}>
+          <Box sx={{ position: 'relative', lineHeight: 0 }}>
             <Image
               sx={{
                 width: ['120px', '175px', '263px'],
                 height: ['120px', '175px', '175px'],
                 objectFit: 'cover',
                 borderRadius: 1,
+                display: 'block',
               }}
               loading="lazy"
               src={item.image?.publicUrl || defaultResearchThumbnail}

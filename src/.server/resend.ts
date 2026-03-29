@@ -59,10 +59,6 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
       if (batchResult.error) {
         console.error('Error sending batch emails:', batchResult.error);
       }
-
-      if (batchResult.data) {
-        console.trace({ successBatch: batchResult.data });
-      }
     } catch (error) {
       console.error('Error sending batch emails:', error);
     }

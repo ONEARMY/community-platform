@@ -69,7 +69,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
         </Box>
       </>
 
-      {pageNumber === totalPages && (
+      {pageNumber !== totalPages && (
         <>
           <Input
             type="number"

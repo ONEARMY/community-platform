@@ -39,6 +39,14 @@ const sendInstantNotificationEmails = async (
         return false;
       }
 
+      if (
+        result.email.endsWith('@example.com') ||
+        result.email.endsWith('@test.com') ||
+        result.email.endsWith('@resend.dev')
+      ) {
+        return false;
+      }
+
       return true;
     });
 

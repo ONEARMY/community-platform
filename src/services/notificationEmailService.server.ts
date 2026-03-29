@@ -74,7 +74,7 @@ const sendInstantNotificationEmails = async (
       };
     });
 
-    await sendBatchEmails({
+    sendBatchEmails({
       from: tenantSettings.emailFrom,
       subject: fullNotification.email.subject,
       emails,

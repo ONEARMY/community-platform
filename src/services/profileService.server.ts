@@ -182,10 +182,7 @@ export class ProfileServiceServer {
 
   async updateProfile(id: number, values: ProfileDTO) {
     const types = await new ProfileTypesServiceServer(this.client).get();
-    console.log({ types });
-    console.log({ values });
     const typeId = types.find((x) => x.name === values.type)!.id;
-    console.log({ typeId });
     const existingProfile = await this.getById(id);
     const pinModeration = this.determinePinModeration(types, existingProfile!, values.type);
 

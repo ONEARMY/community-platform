@@ -39,6 +39,14 @@ const sendInstantNotificationEmails = async (
         return false;
       }
 
+      if (
+        result.email.endsWith('@example.com') ||
+        result.email.endsWith('@test.com') ||
+        result.email.endsWith('@resend.dev')
+      ) {
+        return false;
+      }
+
       return true;
     });
 
@@ -55,19 +63,21 @@ const sendInstantNotificationEmails = async (
 
     const tenantSettings = await new TenantSettingsService(client).get();
 
+    const emails = codes.map(({ code, email }) => {
+      return {
+        to: email,
+        template: createElement(InstantNotificationEmail, {
+          notification: fullNotification,
+          userCode: code,
+          settings: tenantSettings,
+        }),
+      };
+    });
+
     sendBatchEmails({
       from: tenantSettings.emailFrom,
       subject: fullNotification.email.subject,
-      emails: codes.map(({ code, email }) => {
-        return {
-          to: email,
-          template: createElement(InstantNotificationEmail, {
-            notification: fullNotification,
-            userCode: code,
-            settings: tenantSettings,
-          }),
-        };
-      }),
+      emails,
     });
   } catch (error) {
     console.error('Error creating email notification:', error);

@@ -42,6 +42,8 @@ const sendInstantNotificationEmails = async (
       return true;
     });
 
+    console.trace({ emailsToSend });
+
     if (emailsToSend.length === 0) {
       throw new Error('No emails to send');
     }

@@ -1,7 +1,6 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBMedia, DBProfile, ProfileFormData, ProfileType } from 'oa-shared';
+import type { DBAuthorVotes, DBProfile, ProfileDTO, ProfileType } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
-import { ImageServiceServer } from './imageService.server';
 import { ProfileTypesServiceServer } from './profileTypesService.server';
 
 export class ProfileServiceServer {
@@ -181,83 +180,35 @@ export class ProfileServiceServer {
     return data as DBAuthorVotes[];
   }
 
-  async updateProfile(id: number, values: ProfileFormData) {
-    const imageService = new ImageServiceServer(this.client);
+  async updateProfile(id: number, values: ProfileDTO) {
     const types = await new ProfileTypesServiceServer(this.client).get();
+    console.log({ types });
+    console.log({ values });
     const typeId = types.find((x) => x.name === values.type)!.id;
+    console.log({ typeId });
     const existingProfile = await this.getById(id);
     const pinModeration = this.determinePinModeration(types, existingProfile!, values.type);
 
-    const valuesToUpdate = {
-      about: values.about,
-      country: values.country,
-      display_name: values.displayName,
-      website: values.website,
-      is_contactable: values.isContactable,
-      profile_type: typeId,
-      visitor_policy: values.visitorPreferencePolicy
-        ? JSON.stringify({
-            policy: values.visitorPreferencePolicy,
-            details: values.visitorPreferenceDetails,
-          })
-        : null,
-    } as Partial<DBProfile>;
-
-    if (values.photo) {
-      const currentImagePath = existingProfile!.photo?.path;
-
-      // remove current photo first
-      if (currentImagePath) {
-        await imageService.removeImages([currentImagePath]);
-      }
-
-      const newPhoto = await imageService.uploadImage([values.photo], `profiles/${id}`);
-
-      if (!newPhoto || newPhoto?.errors?.length) {
-        console.error(newPhoto?.errors);
-        throw new Error('Error uploading profile photo');
-      }
-
-      valuesToUpdate['photo'] = newPhoto?.media[0];
-    }
-
     await this.updateTags(id, values.tagIds || []);
-
-    let imagesToRemove = existingProfile?.cover_images;
-    let imagesToKeep: DBMedia[] = [];
-
-    if (values.existingCoverImageIds?.length) {
-      imagesToRemove = imagesToRemove?.filter((x) => !values.existingCoverImageIds?.includes(x.id));
-      imagesToKeep =
-        existingProfile?.cover_images?.filter((x) =>
-          values.existingCoverImageIds?.includes(x.id),
-        ) || [];
-    }
-
-    if (imagesToRemove?.length) {
-      await imageService.removeImages(imagesToRemove?.map((x) => x.path));
-    }
-
-    let updatedCoverImages = imagesToKeep || [];
-
-    if (values.coverImages?.length) {
-      const newCoverImages = await imageService.uploadImage(values.coverImages, `profiles/${id}`);
-
-      if (!newCoverImages || newCoverImages?.errors?.length) {
-        console.error(newCoverImages?.errors);
-        throw new Error('Error uploading cover images');
-      }
-
-      // Add the newly uploaded images to the existing ones
-      updatedCoverImages = [...updatedCoverImages, ...(newCoverImages?.media || [])];
-    }
-
-    // Add the updated cover images to valuesToUpdate
-    valuesToUpdate['cover_images'] = updatedCoverImages;
 
     const { data, error } = await this.client
       .from('profiles')
-      .update(valuesToUpdate)
+      .update({
+        about: values.about,
+        country: values.country,
+        display_name: values.displayName,
+        website: values.website,
+        is_contactable: values.isContactable,
+        profile_type: typeId,
+        photo: values.photo,
+        cover_images: values.coverImages,
+        visitor_policy: values.visitorPreferencePolicy
+          ? JSON.stringify({
+              policy: values.visitorPreferencePolicy,
+              details: values.visitorPreferenceDetails,
+            })
+          : null,
+      })
       .eq('id', id)
       .select(
         `*,
@@ -284,7 +235,6 @@ export class ProfileServiceServer {
     }
 
     if (pinModeration) {
-      //
       await this.client.from('map_pins').update({ moderation: pinModeration }).eq('profile_id', id);
     }
 

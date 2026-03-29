@@ -9,7 +9,7 @@ import { QuestionPage } from 'src/pages/Question/QuestionPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { contentServiceServer } from '../services/contentService.server';
@@ -28,12 +28,25 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion;
 
   if (dbQuestion.id) {
-    await contentServiceServer.incrementViewCount(client, 'questions', dbQuestion.total_views, dbQuestion.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'questions',
+      dbQuestion.total_views,
+      dbQuestion.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbQuestion.id, 'questions', dbQuestion.tags);
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbQuestion.id,
+    'questions',
+    dbQuestion.tags,
+  );
 
-  const images = storageServiceServer.getPublicUrls(client, dbQuestion.images!, IMAGE_SIZES.GALLERY);
+  const images = new StorageServiceServer(client).getPublicUrls(
+    dbQuestion.images!,
+    IMAGE_SIZES.GALLERY,
+  );
 
   const question = Question.fromDB(dbQuestion, tags, images);
   question.usefulCount = usefulVotes.count || 0;
@@ -61,12 +74,11 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const question = data.question as Question;
+  const data = useLoaderData<typeof loader>();
 
-  if (!question) {
+  if (!data.question) {
     return <NotFoundPage />;
   }
 
-  return <QuestionPage question={question} />;
+  return <QuestionPage question={data.question} />;
 }

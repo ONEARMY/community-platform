@@ -1,7 +1,7 @@
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
-import type { DBMedia, Image } from './media';
+import type { DBMedia, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { News } from './news';
 import type { IPatreonUser } from './patreon';
@@ -55,7 +55,7 @@ export class Profile {
   about: string | null;
   type: ProfileType | null;
   impact: IUserImpact | null;
-  photo: Image | null;
+  photo: MediaWithPublicUrl | null;
   isContactable: boolean | null;
   isBlockedFromMessaging: boolean;
   visitorPolicy: UserVisitorPreference | null;
@@ -65,7 +65,7 @@ export class Profile {
   totalViews: number;
   roles: string[] | null;
   lastActive: Date | null;
-  coverImages: Image[] | null;
+  coverImages: MediaWithPublicUrl[] | null;
   patreon: IPatreonUser | null;
   authorUsefulVotes?: AuthorVotes[];
   donationsEnabled: boolean;
@@ -76,8 +76,8 @@ export class Profile {
 
   static fromDB(
     dbProfile: DBProfile,
-    photo: Image | null = null,
-    coverImages: Image[] | null = null,
+    photo: MediaWithPublicUrl | null = null,
+    coverImages: MediaWithPublicUrl[] | null = null,
     authorVotes?: AuthorVotes[],
   ) {
     let impact = null;
@@ -375,14 +375,26 @@ export type ProfileFormData = {
   website: string;
   isContactable: boolean;
   type: string;
-  photo?: File;
-  existingPhoto?: Image;
-  existingCoverImages?: Image[];
-  existingCoverImageIds?: string[];
-  coverImages?: File[];
+  photo?: MediaWithPublicUrl;
+  coverImages?: MediaWithPublicUrl[];
   showVisitorPolicy: boolean;
   visitorPreferencePolicy?: UserVisitorPreference['policy'];
   visitorPreferenceDetails?: UserVisitorPreference['details'];
+};
+
+export type ProfileDTO = {
+  displayName: string;
+  about: string;
+  isContactable: boolean;
+  type: string;
+  country: string | null;
+  website: string | null;
+  photo: DBMedia | null;
+  coverImages: DBMedia[] | null;
+  tagIds: number[] | null;
+  showVisitorPolicy: boolean;
+  visitorPreferencePolicy: UserVisitorPreference['policy'] | null;
+  visitorPreferenceDetails: UserVisitorPreference['details'] | null;
 };
 
 export class DBMapPin implements IDBModeration {

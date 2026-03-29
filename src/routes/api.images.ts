@@ -1,10 +1,12 @@
-import type { ContentType } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
+import { HTTPException } from 'hono/http-exception';
+import type { ContentType, MediaWithPublicUrl } from 'oa-shared';
+import { type ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { validateImage } from 'src/utils/storage';
 
-export const action = async ({ request }: LoaderFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
@@ -19,43 +21,42 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, imageFile);
+    await validateRequest(request, imageFile);
 
-    if (!valid) {
-      return Response.json({}, { status, statusText, headers });
-    }
+    const storage = new StorageServiceServer(client);
 
-    const uploadedImage = await storageServiceServer.uploadImage(
+    const uploadResult = await storage.uploadImage(
       [imageFile],
       `${id ? contentType : 'users'}/${id ?? claims.data.claims.sub}`,
-      client,
     );
 
-    if (uploadedImage?.errors && uploadedImage?.errors.length > 0) {
-      throw uploadedImage?.errors;
+    if (uploadResult?.errors && uploadResult?.errors.length > 0) {
+      throw validationError(uploadResult.errors.join(', '));
     }
 
-    const [image] = storageServiceServer.getPublicUrls(client, uploadedImage!.media);
+    const [publicMedia] = storage.getPublicUrls([uploadResult.media[0]]);
+
+    const image: MediaWithPublicUrl = { ...uploadResult.media[0], ...publicMedia };
 
     return Response.json({ image }, { headers });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error uploading image' });
+    return Response.json({}, { headers, status: 500 });
   }
 };
 
 async function validateRequest(request: Request, imageFile: File) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'Method not allowed' };
+    throw methodNotAllowedError();
   }
 
-  const { valid, error } = validateImage(imageFile);
-  if (!valid && error) {
-    return {
-      status: 400,
-      statusText: error.message,
-    };
-  }
+  const { error } = validateImage(imageFile);
 
-  return { valid: true };
+  if (error) {
+    throw validationError(error.message);
+  }
 }

@@ -4,12 +4,13 @@ import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants';
 import { contact } from '../../../../src/pages/User/labels';
 import { MOCK_DATA } from '../data';
 import { UserMenuItem } from '../support/commandsUi';
-import { generateNewUserDetails } from '../utils/TestUtils';
+import { generateNewUserDetails, getTenantUser } from '../utils/TestUtils';
 
-const { profile_views, subscriber } = MOCK_DATA.users;
-const eventReader = MOCK_DATA.users.event_reader;
-const workspacePopulated = MOCK_DATA.users.settings_workplace_new;
-const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty;
+const profile_views = getTenantUser(MOCK_DATA.users.profile_views);
+const subscriber = getTenantUser(MOCK_DATA.users.subscriber);
+const eventReader = getTenantUser(MOCK_DATA.users.event_reader);
+const workspacePopulated = getTenantUser(MOCK_DATA.users.settings_workplace_new);
+const workspaceEmpty = getTenantUser(MOCK_DATA.users.settings_workplace_empty);
 
 describe('[Profile]', () => {
   beforeEach(() => {

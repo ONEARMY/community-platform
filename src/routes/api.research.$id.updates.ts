@@ -1,14 +1,13 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBResearchItem } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, DBProfile, DBResearchItem, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { validateImages } from 'src/utils/storage';
+import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -20,9 +19,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       videoUrl: formData.get('videoUrl') as string,
-      fileUrl: formData.get('fileUrl') as string,
-      isDraft: formData.get('draft') === 'true',
-    };
+      images: formData.has('images')
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
+        : null,
+      files: formData.has('files')
+        ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
+        : null,
+      fileLink: formData.get('fileLink') as string,
+      isDraft: formData.get('isDraft') === 'true',
+    } satisfies ResearchUpdateDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -43,26 +48,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
-    const { valid, status, statusText } = validateRequest(request, data, research, profile);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
-
-    const uploadedImages = formData.getAll('images') as File[];
-    const uploadedFiles = formData.getAll('files') as File[];
-    const imageValidation = validateImages(uploadedImages);
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      );
-    }
+    validateRequest(request, data, research, profile);
 
     const updateResult = await client
       .from('research_updates')
@@ -70,7 +56,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         video_url: data.videoUrl,
+        images: data.images,
+        files: data.files,
         is_draft: data.isDraft,
+        published_at: data.isDraft ? null : new Date(),
         research_id: researchId,
         created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
@@ -85,20 +74,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const dbResearchUpdate = updateResult.data;
     const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, []);
     researchUpdate.research = updateResult.data.research;
-
-    await uploadAndUpdateImages(
-      uploadedImages,
-      `research/${researchId}/updates/${researchUpdate.id}`,
-      researchUpdate,
-      client,
-    );
-
-    await uploadAndUpdateFiles(
-      uploadedFiles,
-      `research/${researchId}/updates/${researchUpdate.id}`,
-      researchUpdate,
-      client,
-    );
 
     await subscribersServiceServer.addResearchUpdateSubscribers(
       researchUpdate,
@@ -119,85 +94,43 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
 };
 
-async function uploadAndUpdateImages(
-  files: File[],
-  path: string,
-  researchUpdate: ResearchUpdate,
-  client: SupabaseClient,
-) {
-  if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadImage(files, path, client);
-
-    if (mediaResult?.media && mediaResult.media.length > 0) {
-      const result = await client
-        .from('research_updates')
-        .update({
-          images: mediaResult.media,
-        })
-        .eq('id', researchUpdate.id)
-        .select();
-
-      if (result.data) {
-        researchUpdate.images = result.data[0].images;
-      }
-    }
-  }
-}
-
-async function uploadAndUpdateFiles(
-  files: File[],
-  path: string,
-  researchUpdate: ResearchUpdate,
-  client: SupabaseClient,
-) {
-  if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadFile(files, path, client);
-
-    if (mediaResult?.media && mediaResult.media.length > 0) {
-      const result = await client
-        .from('research_updates')
-        .update({
-          files: mediaResult.media,
-        })
-        .eq('id', researchUpdate.id)
-        .select();
-
-      if (result.data) {
-        researchUpdate.files = result.data[0].files;
-      }
-    }
-  }
-}
-
 function validateRequest(
   request: Request,
-  data: any,
+  data: ResearchUpdateDTO,
   research: DBResearchItem | null,
   profile: DBProfile | null,
 ) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('description is required', 'description');
+  }
+
+  if (!data.images && !data.videoUrl) {
+    throw validationError('images or video URL are required', 'images');
   }
 
   if (!research) {
-    return { status: 400, statusText: 'Research not found' };
+    throw validationError('Research not found', 'research');
   }
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' };
+    throw validationError('User not found', 'profile');
   }
 
   if (
@@ -205,8 +138,6 @@ function validateRequest(
     !research.collaborators?.includes(profile.username) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
-    return { status: 403, statusText: 'Forbidden' };
+    throw forbiddenError('You do not have permission to add updates to this research');
   }
-
-  return { valid: true };
 }

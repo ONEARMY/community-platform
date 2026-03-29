@@ -29,9 +29,19 @@ interface IProps {
   onUsefulClick: () => Promise<void>;
 }
 
-export const LibraryDescription = ({ commentsCount, hasUserVotedUseful, item, loggedInUser, onUsefulClick, votedUsefulCount }: IProps) => {
+export const LibraryDescription = ({
+  commentsCount,
+  hasUserVotedUseful,
+  item,
+  loggedInUser,
+  onUsefulClick,
+  votedUsefulCount,
+}: IProps) => {
   const isEditable = useMemo(() => {
-    return !!loggedInUser && (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username);
+    return (
+      !!loggedInUser &&
+      (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username)
+    );
   }, [loggedInUser, item.author]);
 
   const showFeedback = item.moderationFeedback && item.moderation !== 'accepted' && isEditable;
@@ -86,7 +96,12 @@ export const LibraryDescription = ({ commentsCount, hasUserVotedUseful, item, lo
             <AuthorDisplay author={item.author} />
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={item.createdAt} modifiedAt={item.modifiedAt} action="Published" />
+              <DisplayDate
+                createdAt={item.createdAt}
+                publishedAt={item.publishedAt}
+                modifiedAt={item.modifiedAt}
+                publishedAction="Published"
+              />
             </Text>
 
             {item.isDraft && (
@@ -187,7 +202,10 @@ export const LibraryDescription = ({ commentsCount, hasUserVotedUseful, item, lo
           </Box>
 
           {!item.isDraft && item.moderation !== 'accepted' && (
-            <ModerationStatus status={item.moderation} sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }} />
+            <ModerationStatus
+              status={item.moderation}
+              sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }}
+            />
           )}
         </Box>
       </Flex>
@@ -226,7 +244,12 @@ export const LibraryDescription = ({ commentsCount, hasUserVotedUseful, item, lo
               }),
               stat: item.totalViews,
             },
-            createUsefulStatistic('projects', item.id, votedUsefulCount || 0, userHasPremiumTier(loggedInUser, PremiumTier.ONE)),
+            createUsefulStatistic(
+              'projects',
+              item.id,
+              votedUsefulCount || 0,
+              userHasPremiumTier(loggedInUser, PremiumTier.ONE),
+            ),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

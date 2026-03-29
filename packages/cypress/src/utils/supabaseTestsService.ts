@@ -15,11 +15,11 @@ export class SupabaseTestsService {
   private tenantId: string;
 
   constructor(apiUrl: string, secretKey: string, tenantId: string) {
-    this.tenantId = tenantId;
+    this.tenantId = tenantId.toLowerCase();
     this.client = createClient(apiUrl, secretKey, {
       global: {
         headers: {
-          'x-tenant-id': tenantId,
+          'x-tenant-id': this.tenantId,
         },
       },
     });
@@ -27,7 +27,7 @@ export class SupabaseTestsService {
     this.adminClient = createClient(apiUrl, secretKey, {
       global: {
         headers: {
-          'x-tenant-id': tenantId,
+          'x-tenant-id': this.tenantId,
         },
       },
       auth: {
@@ -38,18 +38,27 @@ export class SupabaseTestsService {
   }
 
   async deleteAccounts() {
-    const mockUsers = new Set(
-      Object.values(MOCK_DATA.users)
-        .filter((x) => !!x['email'])
-        .map((x) => x['email']),
-    );
-    const result = await this.adminClient.auth.admin.listUsers();
+    let page = 1;
+    const toDelete: string[] = [];
 
-    for (const user of result.data.users) {
-      // only delete mock users and test users
-      if (mockUsers.has(user.email) || user.email!.endsWith('@resend.dev')) {
-        await this.adminClient.auth.admin.deleteUser(user.id);
+    while (true) {
+      const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
+      if (error) throw new Error(`listUsers failed: ${error.message}`);
+      if (!data.users.length) break;
+
+      for (const user of data.users) {
+        if (user.email?.includes(`+${this.tenantId}@`)) {
+          toDelete.push(user.id);
+        }
       }
+
+      if (data.users.length < 1000) break;
+      page++;
+    }
+
+    console.log(`Deleting ${toDelete.length} auth users for tenant ${this.tenantId}`);
+    for (const id of toDelete) {
+      await this.adminClient.auth.admin.deleteUser(id);
     }
   }
 
@@ -64,7 +73,7 @@ export class SupabaseTestsService {
         continue;
       }
 
-      results[table] = await this.client.from(table).select();
+      results[table] = result;
     }
 
     return results;
@@ -123,7 +132,7 @@ export class SupabaseTestsService {
   };
 
   async getUserProfileByUsername(username: string) {
-    const { data, error } = await this.client.from('profiles').select().eq('username', username).single();
+    const { data, error } = await this.client.from('profiles').select().eq('username', username).maybeSingle();
 
     if (error || !data) {
       return error;
@@ -152,6 +161,7 @@ export class SupabaseTestsService {
         status: item.status,
         created_by: createdBy,
         is_draft: item.is_draft,
+        published_at: item.is_draft ? null : item.created_at,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[i % 2].id,
         tenant_id: this.tenantId,
@@ -176,6 +186,7 @@ export class SupabaseTestsService {
             title: item.title,
             research_id: research.data[i].id,
             created_by: createdBy,
+            published_at: item.created_at,
             tenant_id: this.tenantId,
           })),
         });
@@ -260,6 +271,7 @@ export class SupabaseTestsService {
         tenant_id: this.tenantId,
         created_by: profiles[0].id,
         category: categories.data[0].id,
+        published_at: question.created_at,
       })),
     });
 
@@ -325,6 +337,7 @@ export class SupabaseTestsService {
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[0].id,
         tenant_id: this.tenantId,
+        published_at: news.created_at,
       })),
     });
 
@@ -366,6 +379,7 @@ export class SupabaseTestsService {
         deleted: item.deleted,
         moderation: item.moderation,
         tenant_id: this.tenantId,
+        published_at: item.createdAt,
         ...(item.moderationFeedback ? { moderation_feedback: item.moderationFeedback } : {}),
       });
     }
@@ -438,65 +452,65 @@ export class SupabaseTestsService {
     return [image1Data, image2Data];
   }
 
-  // Creates user accounts and respective profiles
-  async seedAccounts(
-    profileBadges: DBProfileBadge[],
-    profileTags: DBProfileTag[],
-    profileTypes: DBProfileType[],
-    profileImages: { id: string; path: string; fullPath: string }[],
-  ) {
+  async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
+    await this.deleteAccounts();
+
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
-      email: user['email'],
-      password: user['password'],
       ...user,
+      email: user['email'].replace('@', `+${this.tenantId}@`),
+      password: user['password'],
     }));
 
-    const existingUsers = await this.adminClient.auth.admin.listUsers({
-      perPage: 10000,
-    });
+    const profiles: DBProfile[] = [];
 
-    const profiles = await Promise.all(
-      accounts.map(async (account) => {
-        const profileType = profileTypes.find((type) => type.name === account.profileType) || profileTypes[0];
-
-        return await this.createAuthAndProfile(
-          account,
-          existingUsers.data.users,
-          profileBadges[0].id,
-          [profileTags[0].id, profileTags[1].id],
-          profileType.id,
-          profileImages,
-        );
-      }),
-    );
+    for (const account of accounts) {
+      const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
+      const profile = await this.createAuthAndProfile(
+        account,
+        profileBadges[0].id,
+        [profileTags[0].id, profileTags[1].id],
+        profileType.id,
+        profileImages,
+      );
+      profiles.push(profile);
+    }
 
     return { profiles };
   }
 
-  async createAuthAndProfile(
-    user: any,
-    existingUsers: User[],
-    profileBadgeId: number,
-    profilTagIds: number[],
-    profileTypeId: number,
-    profileImages: { id: string; path: string; fullPath: string }[],
-  ) {
+  async createAuthAndProfile(user, profileBadgeId, profilTagIds, profileTypeId, profileImages) {
     const authUser = await this.adminClient.auth.admin.createUser({
       email: user.email,
       password: user.password,
       email_confirm: true,
-      user_metadata: {
-        username: user.username,
-      },
+      user_metadata: { username: user.username },
     });
 
     let authId: string;
 
-    if (authUser.error?.code === 'email_exists') {
-      const existingUser = existingUsers.find((existingUser) => existingUser.email === user.email);
+    if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
+      // Shouldn't happen after deleteAccounts, but handle it gracefully
+      // Supabase lowercases emails on storage, so compare case-insensitively
+      console.warn(`User ${user.email} already exists after deleteAccounts - looking up...`);
 
-      authId = existingUser.id;
-    } else if (authUser.data?.user?.id) {
+      let found: { id: string } | undefined;
+      let page = 1;
+
+      while (!found) {
+        const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
+        if (error) throw new Error(`listUsers failed: ${error.message}`);
+        if (!data.users.length) break;
+        found = data.users.find(u => u.email?.toLowerCase() === user.email.toLowerCase());
+        if (data.users.length < 1000) break;
+        page++;
+      }
+
+      if (!found) throw new Error(`User ${user.email} not found after email_exists error`);
+      authId = found.id;
+
+    } else if (authUser.error) {
+      throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
+    } else {
       authId = authUser.data.user.id;
     }
 
@@ -511,11 +525,14 @@ export class SupabaseTestsService {
     profileTypeId: number,
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
-    const { data } = await this.adminClient.from('profiles').select('*').eq('auth_id', authId).eq('tenant_id', this.tenantId).single();
+    const { data } = await this.adminClient.from('profiles').select('*').eq('auth_id', authId).eq('tenant_id', this.tenantId).maybeSingle();
 
     if (data) {
+      console.log(`Profile already exists for ${user.username}, reusing...`);
       return data;
     }
+
+    console.log(`Creating profile for ${user.username} with auth_id ${authId} and roles:`, user.roles);
 
     const profileDB: Partial<DBProfile> & { tenant_id: string } = {
       created_at: user.createdAt,
@@ -538,8 +555,12 @@ export class SupabaseTestsService {
 
     const profileResult = await this.adminClient.from('profiles').insert(profileDB).select('*');
 
+    if (profileResult.error) {
+      throw new Error(`Failed to create profile for ${user.username}: ${profileResult.error.message}`);
+    }
+
     if (!profileResult.data || profileResult.data.length === 0) {
-      console.error('Failed to create profile');
+      throw new Error(`Profile creation returned no data for ${user.username}`);
     }
 
     if (profileResult.data[0].username === 'demo_user') {
@@ -554,7 +575,7 @@ export class SupabaseTestsService {
       });
     }
 
-    Promise.all(
+    await Promise.all(
       profilTagIds.map(async (profileTag) => {
         return this.seedDatabase({
           profile_tags_relations: [

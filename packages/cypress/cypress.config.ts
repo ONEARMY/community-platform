@@ -98,6 +98,7 @@ export default defineConfig({
           );
 
           await supabaseService.clearStorage(tenantId);
+          await supabaseService.deleteAccounts();
 
           return null;
         },

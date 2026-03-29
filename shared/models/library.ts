@@ -2,12 +2,10 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDownloadable, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { IImageForm } from './imageForm';
-import type { DBMedia, IMediaFile, Image } from './media';
+import type { DBMedia, IMediaFile, Image, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
@@ -24,6 +22,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   readonly id: number;
   readonly created_at: Date;
   readonly deleted: boolean | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
@@ -54,6 +53,30 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   constructor(obj: Omit<DBProject, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBProject, images: Image[]) {
+    const publicCoverImage = images?.find((x) => x.id === obj.cover_image?.id);
+
+    return {
+      title: obj.title,
+      description: obj.description,
+      coverImage:
+        obj.cover_image && publicCoverImage ? { ...obj.cover_image, ...publicCoverImage } : null,
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      tags: obj.tags,
+      difficultyLevel: obj.difficulty_level,
+      files: obj.files,
+      fileLink: obj.file_link,
+      time: obj.time ?? null,
+      steps: obj.steps
+        ? obj.steps
+            .sort((a, b) => a.order - b.order)
+            .map((x) => DBProjectStep.toFormData(x, images))
+        : [],
+    } satisfies ProjectFormData;
+  }
 }
 
 export class Project implements IContentDoc, IDownloadable, IModeration {
@@ -61,6 +84,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   createdAt: Date;
   author: Author | null;
   modifiedAt: Date | null;
+  publishedAt: Date | null;
   title: string;
   slug: string;
   previousSlugs: string[];
@@ -97,6 +121,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       createdAt: new Date(obj.created_at),
       author: obj.author ? Author.fromDB(obj.author) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       title: obj.title,
       slug: obj.slug,
       previousSlugs: obj.previous_slugs || [],
@@ -137,6 +162,23 @@ export class DBProjectStep {
   constructor(obj: Omit<DBProjectStep, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBProjectStep, images: Image[]) {
+    return {
+      id: obj.id,
+      title: obj.title,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => img !== null)
+        : null,
+      videoUrl: obj.video_url,
+    } satisfies ProjectStepFormData;
+  }
 }
 
 export class ProjectStep {
@@ -153,33 +195,60 @@ export class ProjectStep {
   }
 
   static fromDB(obj: DBProjectStep, images?: Image[]) {
+    const imageIds = obj.images?.map((x) => x.id) || [];
+    const filteredImages = images?.filter((x) => imageIds.includes(x.id)) || [];
+    // Deduplicate by id
+    const uniqueImagesMap = new Map(filteredImages.map((img) => [img.id, img]));
+    const uniqueImages = Array.from(uniqueImagesMap.values());
+
     return new ProjectStep({
       id: obj.id,
       projectId: obj.project_id,
       title: obj.title,
       description: obj.description,
-      images: images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) || [],
+      images: uniqueImages,
       videoUrl: obj.video_url,
       order: obj.order,
     });
   }
 }
 
-export interface ProjectFormData extends IFilesForm, IImageForm {
+export interface ProjectFormData extends IFilesForm {
   title: string;
   description: string;
-  category?: SelectValue;
-  tags?: number[];
-  difficultyLevel?: DifficultyLevel;
-  time?: string;
+  category: SelectValue | null;
+  tags: number[] | null;
+  difficultyLevel: DifficultyLevel | null;
+  time: string | null;
+  coverImage: MediaWithPublicUrl | null;
   steps: ProjectStepFormData[];
 }
 
 export type ProjectStepFormData = {
-  id?: number;
+  id: number | null;
   title: string;
   description: string;
-  images?: IConvertedFileMeta[];
-  existingImages?: Image[] | null;
-  videoUrl?: string;
+  images: MediaWithPublicUrl[] | null;
+  videoUrl: string | null;
+};
+
+export type ProjectDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  tags: number[] | null;
+  difficultyLevel: DifficultyLevel | null;
+  time: string | null;
+  coverImage: DBMedia | null;
+  isDraft: boolean;
+  stepCount: number;
+  files: IMediaFile[] | null;
+  fileLink: string | null;
+};
+
+export type ProjectStepDTO = {
+  title: string;
+  description: string;
+  images: DBMedia[] | null;
+  videoUrl: string | null;
 };

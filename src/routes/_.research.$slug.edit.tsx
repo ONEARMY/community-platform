@@ -1,11 +1,11 @@
-import type { DBResearchItem } from 'oa-shared';
-import { ResearchItem } from 'oa-shared';
+import { DBResearchItem, ResearchItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -16,7 +16,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/research/${params.slug}/edit`, headers);
   }
 
-  const result = await researchServiceServer.getBySlug(client, params.slug as string);
+  const researchService = new ResearchServiceServer(client);
+  const result = await researchService.getBySlug(params.slug as string);
 
   if (result.error || !result.item) {
     return redirect('/research', { headers });
@@ -24,19 +25,23 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const currentUsername = claims.data.claims.user_metadata?.username;
   const researchDb = result.item as unknown as DBResearchItem;
-  const images = researchServiceServer.getResearchPublicMedia(researchDb, client);
 
-  const research = ResearchItem.fromDB(researchDb, [], images, currentUsername);
+  const image = researchDb?.image
+    ? new StorageServiceServer(client).getPublicUrl(researchDb?.image)
+    : null;
 
-  if (!(await researchServiceServer.isAllowedToEditResearch(client, research, currentUsername))) {
+  const formData = DBResearchItem.toFormData(researchDb, image);
+  const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators, currentUsername);
+
+  if (!(await researchService.isAllowedToEditResearch(researchDb, currentUsername))) {
     return redirect('/forbidden?page=research-edit', { headers });
   }
 
-  return data({ research }, { headers });
+  return data({ formData, id: researchDb.id, research }, { headers });
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>();
+  const { id, formData, research } = useLoaderData<typeof loader>();
 
-  return <ResearchForm research={data.research} />;
+  return <ResearchForm id={id} formData={formData} research={research} />;
 }

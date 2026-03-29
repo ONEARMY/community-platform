@@ -1,8 +1,9 @@
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
-import { Form } from 'react-final-form';
+import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
+import { FieldTiptap } from 'src/common/Form/TextEditor';
 import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
@@ -11,13 +12,13 @@ import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
 import { TitleField } from 'src/pages/common/FormFields/Title.field';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
-import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPostingGuidelines';
+import { NewsPostingGuidelines } from 'src/pages/News/Form/NewsPostingGuidelines';
 import * as LABELS from 'src/pages/News/labels';
 import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
 import { composeValidators, minValue, required } from 'src/utils/validators';
-import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
-import { NewsBodyField, NewsImageField } from './FormFields';
+import { NEWS_MIN_TITLE_LENGTH } from '../constants';
+import { NewsImageField } from './NewsImageField';
 
 interface IProps {
   'data-testid'?: string;
@@ -172,7 +173,11 @@ export const NewsForm = (props: IProps) => {
               placeholder={LABELS.fields.profileBadge.placeholder as string}
               title={LABELS.fields.profileBadge.title}
             />
-            <NewsBodyField imageUpload={imageUpload} />
+            <Field name="body">
+              {({ input, meta }) => (
+                <FieldTiptap imageUploadHandler={imageUpload} input={input} meta={meta} />
+              )}
+            </Field>
           </FormWrapper>
         );
       }}

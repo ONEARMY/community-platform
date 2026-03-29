@@ -2,7 +2,7 @@ import { UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import { UserAction } from 'src/common/UserAction';
-import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
+import { NewsForm } from 'src/pages/News/Form/NewsForm';
 import { listing } from 'src/pages/News/labels';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';

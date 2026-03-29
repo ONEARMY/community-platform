@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { DBNews, NewsFormData, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
-import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
+import { NewsForm } from 'src/pages/News/Form/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';

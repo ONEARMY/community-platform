@@ -51,6 +51,8 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
+    console.trace({ count: emailsToSend.length });
+
     await resend.batch
       .send(emailsToSend, {
         idempotencyKey: crypto.randomUUID(),

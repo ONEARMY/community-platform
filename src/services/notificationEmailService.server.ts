@@ -63,21 +63,30 @@ const sendInstantNotificationEmails = async (
       code: tokens.generate(p.profile_id, p.profile_created_at),
     }));
 
+    console.trace({ codes });
+
     const tenantSettings = await new TenantSettingsService(client).get();
+    console.trace({ tenantSettings });
+    console.trace({ fullNotification });
+    console.trace({ email: fullNotification.email });
+
+    const emails = codes.map(({ code, email }) => {
+      return {
+        to: email,
+        template: createElement(InstantNotificationEmail, {
+          notification: fullNotification,
+          userCode: code,
+          settings: tenantSettings,
+        }),
+      };
+    });
+
+    console.trace({ emails });
 
     sendBatchEmails({
       from: tenantSettings.emailFrom,
       subject: fullNotification.email.subject,
-      emails: codes.map(({ code, email }) => {
-        return {
-          to: email,
-          template: createElement(InstantNotificationEmail, {
-            notification: fullNotification,
-            userCode: code,
-            settings: tenantSettings,
-          }),
-        };
-      }),
+      emails,
     });
   } catch (error) {
     console.error('Error creating email notification:', error);

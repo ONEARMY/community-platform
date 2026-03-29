@@ -107,8 +107,6 @@ const createNotificationsNewComment = async (
       content_type: 'comments',
     });
 
-    console.trace({ subscribers, notification });
-
     await createNotifications(client, notification, subscribers);
 
     await notificationEmailService.sendInstantNotificationEmails(

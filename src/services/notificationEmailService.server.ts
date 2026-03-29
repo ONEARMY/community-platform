@@ -50,8 +50,6 @@ const sendInstantNotificationEmails = async (
       return true;
     });
 
-    console.trace({ emailsToSend });
-
     if (emailsToSend.length === 0) {
       throw new Error('No emails to send');
     }
@@ -63,12 +61,7 @@ const sendInstantNotificationEmails = async (
       code: tokens.generate(p.profile_id, p.profile_created_at),
     }));
 
-    console.trace({ codes });
-
     const tenantSettings = await new TenantSettingsService(client).get();
-    console.trace({ tenantSettings });
-    console.trace({ fullNotification });
-    console.trace({ email: fullNotification.email });
 
     const emails = codes.map(({ code, email }) => {
       return {
@@ -81,9 +74,7 @@ const sendInstantNotificationEmails = async (
       };
     });
 
-    console.trace({ emails });
-
-    sendBatchEmails({
+    await sendBatchEmails({
       from: tenantSettings.emailFrom,
       subject: fullNotification.email.subject,
       emails,

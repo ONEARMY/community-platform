@@ -51,15 +51,21 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
-    console.trace({ count: emailsToSend.length });
-
-    await resend.batch
-      .send(emailsToSend, {
+    try {
+      const batchResult = await resend.batch.send(emailsToSend, {
         idempotencyKey: crypto.randomUUID(),
-      })
-      .catch((error: any) => {
-        console.error(error?.message || error);
       });
+
+      if (batchResult.error) {
+        console.error('Error sending batch emails:', batchResult.error);
+      }
+
+      if (batchResult.data) {
+        console.trace({ successBatch: batchResult.data });
+      }
+    } catch (error) {
+      console.error('Error sending batch emails:', error);
+    }
   }
 
   return;

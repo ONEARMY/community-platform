@@ -69,46 +69,53 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
         </Box>
       </>
 
-      <Input
-        type="number"
-        inputMode="numeric"
-        min={1}
-        max={totalPages}
-        value={pageNumber}
-        onChange={(ev) => {
-          const value = parseInt(ev.target.value);
-          if (!isNaN(value)) {
-            setPageNumber(value);
-            handlePageChange(value);
-          } else {
-            handlePageChange();
-            setPageNumber(undefined);
-          }
-        }}
-        aria-label="Enter page number"
-        sx={{
-          border: '2px solid black',
-          maxWidth: '44px',
-          maxHeight: '44px',
-          appearance: 'textfield',
-          MozAppearance: 'textfield',
-          '&::-webkit-outer-spin-button': {
-            WebkitAppearance: 'none',
-          },
-          '&::-webkit-inner-spin-button': {
-            WebkitAppearance: 'none',
-          },
-          justifyItems: 'center',
-        }}
-      />
-      <Flex
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text>{`of ${totalPages}`}</Text>
-      </Flex>
+      {pageNumber === totalPages && (
+        <>
+          <Input
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={totalPages}
+            value={pageNumber}
+            onChange={(ev) => {
+              const value = parseInt(ev.target.value);
+              if (!isNaN(value)) {
+                setPageNumber(value);
+                handlePageChange(value);
+              } else {
+                handlePageChange();
+                setPageNumber(undefined);
+              }
+            }}
+            aria-label="Enter page number"
+            sx={{
+              border: '2px solid black',
+              maxWidth: '44px',
+              maxHeight: '44px',
+              appearance: 'textfield',
+              MozAppearance: 'textfield',
+              '&::-webkit-outer-spin-button': {
+                WebkitAppearance: 'none',
+              },
+              '&::-webkit-inner-spin-button': {
+                WebkitAppearance: 'none',
+              },
+              justifyItems: 'center',
+              backgroundColor: 'white',
+              fontSize: 3,
+            }}
+          />
+          <Flex
+            sx={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text>{`of ${totalPages}`}</Text>
+          </Flex>
+        </>
+      )}
+
       <>
         <Box sx={{ display: ['none', 'flex'] }}>
           <PaginationIcons
@@ -134,7 +141,6 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
           </Text>
         )}
       </>
-
       <PaginationIcons
         directionIcon="double-arrow-right"
         onClick={() => onPageChange(totalPages - 1)}

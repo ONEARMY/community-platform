@@ -1,3 +1,4 @@
+import React from 'react';
 import accountSVG from '../../assets/icons/account.svg';
 import approvedSVG from '../../assets/icons/approved.svg';
 import attentionSVG from '../../assets/icons/attention.svg';
@@ -85,10 +86,11 @@ const imgStyle = {
 };
 interface IProps {
   src: string;
+  style?: React.CSSProperties;
 }
 
 const ImageIcon = (props: IProps) => {
-  return <img alt="icon" style={imgStyle} {...props} />;
+  return <img alt="icon" {...props} style={{ ...imgStyle, ...props.style }} />;
 };
 
 export const iconMap = {
@@ -100,8 +102,22 @@ export const iconMap = {
   bazar: <ImageIcon src={bazarSVG} />,
   category: <ImageIcon src={categorySVG} data-testid="category-icon" />,
   chevronDown: <ImageIcon src={chevronDownSVG} />,
-  chevronLeft: <ImageIcon src={chevronLeftSVG} />,
-  chevronRight: <ImageIcon src={chevronRightSVG} />,
+  chevronLeft: (
+    <ImageIcon
+      src={chevronLeftSVG}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
+  chevronRight: (
+    <ImageIcon
+      src={chevronRightSVG}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
   chevronUp: <ImageIcon src={chevronUpSVG} />,
   collaborator: <ImageIcon src={collaboratorSVG} />,
   close: <ImageIcon src={closeSVG} data-cy="close" />,
@@ -116,8 +132,22 @@ export const iconMap = {
   discord: <ImageIcon src={discordSVG} />,
   discussion: <ImageIcon src={discussionSVG} />,
   doubleTick: <ImageIcon src={doubleTickSVG} />,
-  doubleArrowLeft: <ImageIcon src={doubleArrowLeft} />,
-  doubleArrowRight: <ImageIcon src={doubleArrowRight} />,
+  doubleArrowLeft: (
+    <ImageIcon
+      src={doubleArrowLeft}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
+  doubleArrowRight: (
+    <ImageIcon
+      src={doubleArrowRight}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
   edit: <ImageIcon src={editSVG} />,
   email: <ImageIcon src={emailSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,

@@ -313,7 +313,7 @@ export class ProfileServiceServer {
   }
 
   async updateUserActivity(userId: string) {
-    return this.client
+    return await this.client
       .from('profiles')
       .update({ last_active: new Date().toISOString() })
       .eq('auth_id', userId);

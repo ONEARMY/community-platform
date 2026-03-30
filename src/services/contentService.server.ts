@@ -62,7 +62,7 @@ export class ContentServiceServer {
     return !!data;
   }
 
-  static async updatePreviousSlugs(content: IDBContentDoc, newSlug: Slug) {
+  static updatePreviousSlugs(content: IDBContentDoc, newSlug: Slug) {
     if (content.slug !== newSlug) {
       return content.previous_slugs ? [...content.previous_slugs, content.slug] : [content.slug];
     }

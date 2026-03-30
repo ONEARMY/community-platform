@@ -119,7 +119,7 @@ async function deleteQuestion(request: Request, id: number) {
       throw validationError('User not found');
     }
 
-    const question = await questionServiceServer.getById(id, client);
+    const question = await new QuestionServiceServer(client).getById(id);
 
     if (!question) {
       throw notFoundError('Question');

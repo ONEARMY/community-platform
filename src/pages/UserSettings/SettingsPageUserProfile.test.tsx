@@ -72,6 +72,7 @@ describe('UserSettings', () => {
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
+      isUserAuthorized: vi.fn().mockReturnValue(false),
     });
 
     // Act
@@ -115,6 +116,7 @@ describe('UserSettings', () => {
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
+      isUserAuthorized: vi.fn().mockReturnValue(false),
     });
 
     // Act
@@ -144,6 +146,7 @@ describe('UserSettings', () => {
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
+      isUserAuthorized: vi.fn().mockReturnValue(false),
     });
 
     const mockTenantContext: TenantSettingsContext = {

@@ -16,3 +16,23 @@ ALTER TABLE ONLY "public"."stripe_customers"
 ALTER TABLE "public"."stripe_customers" ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "tenant_isolation" ON "public"."stripe_customers" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+
+CREATE OR REPLACE FUNCTION "public"."read_secret"("secret_name" "text")
+RETURNS "text"
+LANGUAGE "plpgsql" SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  secret_value text;
+BEGIN
+  SELECT decrypted_secret INTO secret_value
+  FROM vault.decrypted_secrets
+  WHERE name = secret_name
+  LIMIT 1;
+
+  RETURN secret_value;
+END;
+$$;
+
+REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "anon";
+REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "authenticated";

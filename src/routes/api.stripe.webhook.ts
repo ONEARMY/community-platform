@@ -1,17 +1,12 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { stripeServiceServer } from 'src/services/stripeService.server';
 import type Stripe from 'stripe';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
-  }
-
-  const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!STRIPE_WEBHOOK_SECRET) {
-    console.error('STRIPE_WEBHOOK_SECRET not set');
-    return new Response('Webhook secret not configured', { status: 500 });
   }
 
   const body = await request.text();
@@ -23,7 +18,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   let event: Stripe.Event;
   try {
-    event = stripeServiceServer.constructWebhookEvent(body, signature, STRIPE_WEBHOOK_SECRET);
+    const webhookSecret = await getSecret('STRIPE_WEBHOOK_SECRET');
+    event = await stripeServiceServer.constructWebhookEvent(body, signature, webhookSecret);
   } catch (error) {
     console.error('Webhook signature verification failed:', error);
     return new Response('Invalid signature', { status: 400 });

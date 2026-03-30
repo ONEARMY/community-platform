@@ -1,14 +1,15 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
 
-const getStripe = () => {
-  const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+let stripeInstance: Stripe | null = null;
 
-  if (!STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY must be set');
-  }
+const getStripe = async (): Promise<Stripe> => {
+  if (stripeInstance) return stripeInstance;
 
-  return new Stripe(STRIPE_SECRET_KEY);
+  const key = await getSecret('STRIPE_SECRET_KEY');
+  stripeInstance = new Stripe(key);
+  return stripeInstance;
 };
 
 const getCustomerByAuthId = async (
@@ -48,7 +49,7 @@ const getOrCreateCustomer = async (
     return existingCustomerId;
   }
 
-  const stripe = getStripe();
+  const stripe = await getStripe();
   const customer = await stripe.customers.create({
     email,
     metadata: {
@@ -75,7 +76,7 @@ type SubscriptionParams = {
 };
 
 const getProducts = async (): Promise<string[]> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
 
   const products = await stripe.products.list({ active: true, limit: 100 });
 
@@ -95,7 +96,7 @@ export type SupporterPrice = {
 };
 
 const getPrices = async (): Promise<SupporterPrice[]> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
   const productIds = await getProducts();
 
   const allPrices = await Promise.all(
@@ -124,7 +125,7 @@ const createSubscriptionWithPaymentIntent = async (
   customerId: string,
   params: SubscriptionParams,
 ): Promise<string> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
 
   const productIds = await getProducts();
   const productId = productIds[0];
@@ -187,7 +188,7 @@ const createBillingPortalSession = async (
   customerId: string,
   returnUrl: string,
 ): Promise<string> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
 
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
@@ -198,7 +199,7 @@ const createBillingPortalSession = async (
 };
 
 const getSubscription = async (customerId: string): Promise<Stripe.Subscription | null> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
 
   const subscriptions = await stripe.subscriptions.list({
     customer: customerId,
@@ -209,8 +210,12 @@ const getSubscription = async (customerId: string): Promise<Stripe.Subscription 
   return subscriptions.data[0] || null;
 };
 
-const constructWebhookEvent = (body: string, signature: string, secret: string): Stripe.Event => {
-  const stripe = getStripe();
+const constructWebhookEvent = async (
+  body: string,
+  signature: string,
+  secret: string,
+): Promise<Stripe.Event> => {
+  const stripe = await getStripe();
   return stripe.webhooks.constructEvent(body, signature, secret);
 };
 
@@ -223,7 +228,7 @@ const updateSupporterStatus = async (
 };
 
 const createGuestCustomer = async (email: string, name?: string): Promise<string> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
   const customer = await stripe.customers.create({
     email,
     ...(name && { name }),
@@ -234,7 +239,7 @@ const createGuestCustomer = async (email: string, name?: string): Promise<string
 const getStripeCustomer = async (
   customerId: string,
 ): Promise<{ id: string; email: string | null } | null> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
   try {
     const customer = await stripe.customers.retrieve(customerId);
     if (customer.deleted) {
@@ -252,7 +257,7 @@ const linkCustomerToAuthUser = async (
   tenantId: string,
   client: SupabaseClient,
 ): Promise<void> => {
-  const stripe = getStripe();
+  const stripe = await getStripe();
   await stripe.customers.update(stripeCustomerId, {
     metadata: { supabase_user_id: authId, tenant_id: tenantId },
   });

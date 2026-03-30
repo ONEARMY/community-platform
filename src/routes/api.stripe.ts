@@ -1,5 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { stripeServiceServer } from '../services/stripeService.server';
 
@@ -67,13 +68,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         );
       }
 
-      const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-      if (!publishableKey) {
-        return Response.json(
-          {},
-          { headers, status: 400, statusText: 'publishable key not configured' },
-        );
-      }
+      const publishableKey = await getSecret('STRIPE_PUBLISHABLE_KEY');
 
       let customerId: string;
       let accountExists = false;

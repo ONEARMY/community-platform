@@ -47,30 +47,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const tenantId = process.env.TENANT_ID!;
 
-  const claims = await client.auth.getClaims();
+  const body = await request.json();
+  const { action: actionType, currency, interval, amount, name, email } = body;
 
-  if (!claims.data?.claims) {
+  const claims = await client.auth.getClaims();
+  const isAuthenticated = !!claims.data?.claims;
+
+  // All actions except elements_subscription require auth
+  if (!isAuthenticated && actionType !== 'elements_subscription') {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const { data: authUser } = await client.auth.getUser();
-  if (!authUser.user?.email) {
-    return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
-  }
-
   try {
-    const body = await request.json();
-    const { action: actionType, currency, interval, amount, name, email } = body;
-
-    const customerId = await stripeServiceServer.getOrCreateCustomer(
-      claims.data.claims.sub,
-      authUser.user.email,
-      tenantId,
-      client,
-    );
-
-    const origin = new URL(request.url).origin;
-
     if (actionType === 'elements_subscription') {
       if (!currency || !interval || !amount) {
         return Response.json(
@@ -87,15 +75,61 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         );
       }
 
+      let customerId: string;
+      let accountExists = false;
+
+      if (isAuthenticated) {
+        const { data: authUser } = await client.auth.getUser();
+        if (!authUser.user?.email) {
+          return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
+        }
+        customerId = await stripeServiceServer.getOrCreateCustomer(
+          claims.data!.claims!.sub,
+          authUser.user.email,
+          tenantId,
+          client,
+        );
+        updateUserActivity(client, claims.data!.claims!.sub);
+      } else {
+        if (!email) {
+          return Response.json(
+            {},
+            { headers, status: 400, statusText: 'email is required for guest checkout' },
+          );
+        }
+
+        const { data: existingUser } = await client.rpc('get_user_id_by_email', {
+          email,
+        });
+        accountExists = Array.isArray(existingUser) && existingUser.length > 0;
+
+        customerId = await stripeServiceServer.createGuestCustomer(email, name);
+      }
+
       const clientSecret = await stripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
         { currency, interval, amount, name, email },
       );
 
-      updateUserActivity(client, claims.data.claims.sub);
-
-      return Response.json({ clientSecret, publishableKey }, { headers, status: 200 });
+      return Response.json(
+        { clientSecret, publishableKey, stripeCustomerId: customerId, accountExists },
+        { headers, status: 200 },
+      );
     }
+
+    const { data: authUser } = await client.auth.getUser();
+    if (!authUser.user?.email) {
+      return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
+    }
+
+    const customerId = await stripeServiceServer.getOrCreateCustomer(
+      claims.data!.claims!.sub,
+      authUser.user.email,
+      tenantId,
+      client,
+    );
+
+    const origin = new URL(request.url).origin;
 
     if (actionType === 'portal') {
       const portalUrl = await stripeServiceServer.createBillingPortalSession(

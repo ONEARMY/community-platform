@@ -222,14 +222,58 @@ const updateSupporterStatus = async (
   await client.from('profiles').update({ is_supporter: isSupporter }).eq('auth_id', authId);
 };
 
+const createGuestCustomer = async (email: string, name?: string): Promise<string> => {
+  const stripe = getStripe();
+  const customer = await stripe.customers.create({
+    email,
+    ...(name && { name }),
+  });
+  return customer.id;
+};
+
+const getStripeCustomer = async (
+  customerId: string,
+): Promise<{ id: string; email: string | null } | null> => {
+  const stripe = getStripe();
+  try {
+    const customer = await stripe.customers.retrieve(customerId);
+    if (customer.deleted) {
+      return null;
+    }
+    return { id: customer.id, email: customer.email };
+  } catch {
+    return null;
+  }
+};
+
+const linkCustomerToAuthUser = async (
+  stripeCustomerId: string,
+  authId: string,
+  tenantId: string,
+  client: SupabaseClient,
+): Promise<void> => {
+  const stripe = getStripe();
+  await stripe.customers.update(stripeCustomerId, {
+    metadata: { supabase_user_id: authId, tenant_id: tenantId },
+  });
+  await client.from('stripe_customers').insert({
+    auth_id: authId,
+    stripe_customer_id: stripeCustomerId,
+    tenant_id: tenantId,
+  });
+};
+
 export const stripeServiceServer = {
   constructWebhookEvent,
   createBillingPortalSession,
+  createGuestCustomer,
   createSubscriptionWithPaymentIntent,
   getAuthIdByStripeCustomerId,
   getCustomerByAuthId,
   getOrCreateCustomer,
   getPrices,
+  getStripeCustomer,
   getSubscription,
+  linkCustomerToAuthUser,
   updateSupporterStatus,
 };

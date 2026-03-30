@@ -6,7 +6,9 @@ alter table "public"."profiles" alter column "username" drop not null;
 
 UPDATE "public"."profiles" SET username = NULL WHERE username = '';
 
-CREATE UNIQUE INDEX profiles_username_tenant_id_key ON public.profiles USING btree (lower(username), tenant_id) WHERE (username IS NOT NULL);
+DROP INDEX IF EXISTS "public"."profiles_username_tenant_id_key";
+
+CREATE UNIQUE INDEX profiles_username_tenant_id_key ON public.profiles USING btree (username, tenant_id) WHERE (username IS NOT NULL);
 
 set check_function_bodies = off;
 

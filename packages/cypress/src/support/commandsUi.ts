@@ -280,7 +280,11 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 Cypress.Commands.add('completeUserProfile', (username) => {
   cy.log('Complete user profile');
   cy.visit('/settings');
-  cy.get('[data-cy=username]').clear().type(username);
+  cy.get('[data-cy=username]').then(($el) => {
+    if (!$el.prop('disabled')) {
+      cy.wrap($el).clear().type(username);
+    }
+  });
   cy.setSettingImage('avatar', 'userImage');
   cy.setSettingBasicUserInfo({
     displayName: username,

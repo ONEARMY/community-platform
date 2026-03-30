@@ -6,127 +6,98 @@ import type {
   SubscribableContentTypes,
 } from 'oa-shared';
 
-const combineSubscribers = async (
-  ids: (number | null | undefined)[],
-  usernames: string[],
-  client: SupabaseClient,
-): Promise<number[]> => {
-  const profilesToSubscribe: number[] = ids.map((id) => Number(id));
+export class SubscribersServiceServer {
+  constructor(private client: SupabaseClient) {}
 
-  for (const username of usernames) {
-    const { data } = await client.from('profiles').select('id').eq('username', username).single();
-    if (data && !!Number(data.id)) {
-      profilesToSubscribe.push(Number(data.id));
+  async combineSubscribers(
+    ids: (number | null | undefined)[],
+    usernames: string[],
+  ): Promise<number[]> {
+    const profilesToSubscribe: number[] = ids.map((id) => Number(id));
+
+    for (const username of usernames) {
+      const { data } = await this.client
+        .from('profiles')
+        .select('id')
+        .eq('username', username)
+        .single();
+      if (data && !!Number(data.id)) {
+        profilesToSubscribe.push(Number(data.id));
+      }
     }
+
+    const uniqueIdSet = new Set([...profilesToSubscribe]);
+
+    return [...uniqueIdSet];
   }
 
-  const uniqueIdSet = new Set([...profilesToSubscribe]);
+  async addResearchSubscribers(research: ResearchItem, profileId: number) {
+    const subscribers = await this.combineSubscribers(
+      [profileId],
+      research.collaboratorsUsernames || [],
+    );
+    return Promise.all([
+      subscribers.map((subscriber) => {
+        this.add('research', research.id, subscriber);
+      }),
+    ]);
+  }
 
-  return [...uniqueIdSet];
-};
+  async addResearchUpdateSubscribers(update: ResearchUpdate, profileId: number) {
+    const subscribers = await this.combineSubscribers(
+      [profileId, update.research?.created_by],
+      update.research?.collaborators || [],
+    );
+    return Promise.all([
+      subscribers.map((subscriber) => {
+        this.add('research_updates', update.id, subscriber);
+      }),
+    ]);
+  }
 
-const addResearchSubscribers = async (
-  research: ResearchItem,
-  profileId: number,
-  client: SupabaseClient,
-  headers: Headers,
-  addFunction = add,
-) => {
-  const subscribers = await combineSubscribers(
-    [profileId],
-    research.collaboratorsUsernames || [],
-    client,
-  );
-  return Promise.all([
-    subscribers.map((subscriber) => {
-      addFunction('research', research.id, subscriber, client, headers);
-    }),
-  ]);
-};
+  async add(contentType: SubscribableContentTypes, contentId: number, profileId: number) {
+    try {
+      const response = await this.client
+        .from('subscribers')
+        .select('*')
+        .eq('content_type', contentType)
+        .eq('content_id', contentId)
+        .eq('user_id', profileId)
+        .single();
 
-const addResearchUpdateSubscribers = async (
-  update: ResearchUpdate,
-  profileId: number,
-  client: SupabaseClient,
-  headers: Headers,
-  addFunction = add,
-) => {
-  const subscribers = await combineSubscribers(
-    [profileId, update.research?.created_by],
-    update.research?.collaborators || [],
-    client,
-  );
-  return Promise.all([
-    subscribers.map((subscriber) => {
-      addFunction('research_updates', update.id, subscriber, client, headers);
-    }),
-  ]);
-};
+      if (response.data) {
+        // already exists
+        return;
+      }
 
-const add = async (
-  contentType: SubscribableContentTypes,
-  contentId: number,
-  profileId: number,
-  client: SupabaseClient,
-  headers: Headers,
-) => {
-  try {
-    const response = await client
-      .from('subscribers')
-      .select('*')
-      .eq('content_type', contentType)
-      .eq('content_id', contentId)
-      .eq('user_id', profileId)
-      .single();
-
-    if (response.data) {
-      return Response.json({}, { headers, status: 200 });
-    }
-
-    await client.from('subscribers').insert({
-      content_type: contentType,
-      content_id: contentId,
-      user_id: profileId,
-      tenant_id: process.env.TENANT_ID!,
-    });
-    return Response.json({}, { headers, status: 200 });
-  } catch (error) {
-    if (error) {
+      await this.client.from('subscribers').insert({
+        content_type: contentType,
+        content_id: contentId,
+        user_id: profileId,
+        tenant_id: process.env.TENANT_ID!,
+      });
+    } catch (error) {
       console.error(error);
-      return Response.json({}, { headers, status: 500, statusText: 'error' });
     }
   }
-};
 
-const updateResearchSubscribers = async (
-  oldResearch: DBResearchItem,
-  newResearch: ResearchItem,
-  client: SupabaseClient,
-  headers: Headers,
-  addFunction = add,
-) => {
-  const oldCollaborators = oldResearch.collaborators || [];
-  const newCollaborators = newResearch.collaboratorsUsernames || [];
+  async updateResearchSubscribers(oldResearch: DBResearchItem, newResearch: ResearchItem) {
+    const oldCollaborators = oldResearch.collaborators || [];
+    const newCollaborators = newResearch.collaboratorsUsernames || [];
 
-  const newCollaboratorUsernames = newCollaborators.filter(
-    (username) => !oldCollaborators.includes(username),
-  );
+    const newCollaboratorUsernames = newCollaborators.filter(
+      (username) => !oldCollaborators.includes(username),
+    );
 
-  if (newCollaboratorUsernames.length === 0) {
-    return;
+    if (newCollaboratorUsernames.length === 0) {
+      return;
+    }
+
+    const subscribers = await this.combineSubscribers([], newCollaboratorUsernames);
+    return Promise.all([
+      subscribers.map((subscriber) => {
+        this.add('research', newResearch.id, subscriber);
+      }),
+    ]);
   }
-
-  const subscribers = await combineSubscribers([], newCollaboratorUsernames, client);
-  return Promise.all([
-    subscribers.map((subscriber) => {
-      addFunction('research', newResearch.id, subscriber, client, headers);
-    }),
-  ]);
-};
-
-export const subscribersServiceServer = {
-  addResearchSubscribers,
-  addResearchUpdateSubscribers,
-  add,
-  updateResearchSubscribers,
-};
+}

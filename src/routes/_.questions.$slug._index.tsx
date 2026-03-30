@@ -8,16 +8,16 @@ import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { QuestionPage } from 'src/pages/Question/QuestionPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
-import { questionServiceServer } from 'src/services/questionService.server';
+import { QuestionServiceServer } from 'src/services/questionService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
-import { contentServiceServer } from '../services/contentService.server';
+import { ContentServiceServer } from '../services/contentService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await questionServiceServer.getBySlug(client, params.slug!);
+  const result = await new QuestionServiceServer(client).getBySlug(params.slug!);
 
   const tenantSettings = await new TenantSettingsService(client).get();
 
@@ -27,17 +27,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbQuestion = result.data as unknown as DBQuestion;
 
+  const contentService = new ContentServiceServer(client);
+
   if (dbQuestion.id) {
-    await contentServiceServer.incrementViewCount(
-      client,
-      'questions',
-      dbQuestion.total_views,
-      dbQuestion.id,
-    );
+    await contentService.incrementViewCount('questions', dbQuestion.total_views, dbQuestion.id);
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
-    client,
+  const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
     dbQuestion.id,
     'questions',
     dbQuestion.tags,

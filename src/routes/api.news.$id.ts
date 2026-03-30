@@ -4,10 +4,9 @@ import type { DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { hasAdminRights } from 'src/utils/helpers';
 import {
@@ -52,7 +51,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const currentNews = await new NewsServiceServer(client).getById(id);
     const slug = convertToSlug(data.title);
     await validateRequest(params, request, claims.data.claims.sub, data, currentNews, slug, client);
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, slug);
+    const previousSlugs = ContentServiceServer.updatePreviousSlugs(currentNews, slug);
 
     const isFirstPublish = currentNews.is_draft && !data.isDraft && !currentNews.published_at;
 
@@ -83,7 +82,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const news = News.fromDB(newsResult.data[0], []);
 
-    updateUserActivity(client, claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 200 });
   } catch (error) {
@@ -179,13 +178,12 @@ async function validateRequest(
 
   if (
     currentNews.slug !== slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(slug, currentNews.id, client, 'news'))
+    (await new ContentServiceServer(client).isDuplicateExistingSlug(slug, currentNews.id, 'news'))
   ) {
     throw conflictError('This news already exists');
   }
 
-  const profileService = new ProfileServiceServer(client);
-  const profile = await profileService.getByAuthId(userAuthId);
+  const profile = await new ProfileServiceServer(client).getByAuthId(userAuthId);
 
   if (!profile) {
     throw validationError('User not found');

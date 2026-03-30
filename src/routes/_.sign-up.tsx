@@ -60,10 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
-    const response = await authServiceServer.createUserProfile(
-      { user: signupResult.data.user },
-      client,
-    );
+    const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
@@ -80,7 +77,6 @@ export default function Index() {
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
-    username: string().min(2, FRIENDLY_MESSAGES['sign-up/username-short']).required('Required'),
     email: string().email(FRIENDLY_MESSAGES['auth/invalid-email']).required('Required'),
     password: string()
       .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])

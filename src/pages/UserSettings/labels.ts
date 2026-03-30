@@ -109,7 +109,8 @@ export const fields: ILabels = {
   },
   userName: {
     title: 'Username',
-    description: "You set this when you signed up and it can't be changed now. Sorry.",
+    description:
+      'Your unique identifier. Used in your profile URL. Once set, it cannot be changed.',
   },
   tags: {
     description: 'What are your main activities? (choose max five)',

@@ -2,6 +2,7 @@ import { getCountryDataList, getEmojiFlag } from 'countries-list';
 import { observer } from 'mobx-react';
 import { FieldInput, FieldTextarea, Username } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
+import { UserRole } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { SelectField } from 'src/common/Form/Select.field';
 import { fields, headings } from 'src/pages/UserSettings/labels';
@@ -30,9 +31,11 @@ interface IProps {
 }
 
 export const UserInfosSection = observer(({ formValues }: IProps) => {
-  const { profile } = useProfileStore();
+  const { profile, isUserAuthorized } = useProfileStore();
 
   const isMemberProfile = !profile?.type?.isSpace;
+  const isAdmin = isUserAuthorized(UserRole.ADMIN);
+  const isUsernameLocked = !!profile?.username && !isAdmin;
   const { about, country, displayName, userName, website } = fields;
 
   return (
@@ -51,6 +54,7 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
             name="username"
             component={FieldInput}
             placeholder="your username"
+            disabled={isUsernameLocked}
             validate={composeValidators(required, noSpecialCharacters)}
             validateFields={[]}
           />

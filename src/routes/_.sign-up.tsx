@@ -6,7 +6,7 @@ import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { authServiceServer } from 'src/services/authService.server';
+import { AuthServiceServer } from 'src/services/authService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { composeValidators, noSpecialCharacters, required } from 'src/utils/validators';
@@ -37,9 +37,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
   const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
-
+  const authServiceServer = new AuthServiceServer(client);
   const username = formData.get('username') as string;
-  if (!(await authServiceServer.isUsernameAvailable(username, client))) {
+
+  if (!(await authServiceServer.isUsernameAvailable(username))) {
     return data({ error: FRIENDLY_MESSAGES['sign-up/username-taken'] }, { headers });
   }
 
@@ -64,10 +65,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
-    const response = await authServiceServer.createUserProfile(
-      { user: signupResult.data.user, username },
-      client,
-    );
+    const response = await authServiceServer.createUserProfile({
+      user: signupResult.data.user,
+      username,
+    });
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {

@@ -102,7 +102,7 @@ CREATE INDEX "profile_badges_relations_profile_tenant_idx" ON "public"."profile_
 CREATE INDEX "profile_tags_relations_profile_tenant_idx" ON "public"."profile_tags_relations" USING "btree" ("profile_id", "tenant_id");
 CREATE INDEX "profiles_firebase_auth_id_idx" ON "public"."profiles" USING "btree" ("firebase_auth_id");
 CREATE INDEX "profiles_tenant_created_at_idx" ON "public"."profiles" USING "btree" ("tenant_id", "created_at" DESC);
-CREATE UNIQUE INDEX "profiles_username_tenant_id_key" ON "public"."profiles" ("username", "tenant_id") WHERE ("username" IS NOT NULL);
+CREATE UNIQUE INDEX "profiles_username_tenant_id_key" ON "public"."profiles" (LOWER("username"), "tenant_id") WHERE ("username" IS NOT NULL);
 
 ALTER TABLE ONLY "public"."profile_badges_relations"
     ADD CONSTRAINT "profile_badges_relations_profile_badge_id_fkey" FOREIGN KEY ("profile_badge_id") REFERENCES "public"."profile_badges"("id") ON UPDATE CASCADE ON DELETE CASCADE;
@@ -149,7 +149,7 @@ CREATE OR REPLACE FUNCTION "public"."is_username_available"("username" "text", "
   SELECT CASE WHEN $1 IS NULL THEN false
   ELSE NOT EXISTS (
     SELECT 1 FROM profiles
-    WHERE profiles.username = $1
+    WHERE LOWER(profiles.username) = LOWER($1)
       AND ($2 IS NULL OR profiles.id != $2)
       AND tenant_id = ((SELECT current_setting('request.headers', true))::json ->> 'x-tenant-id')
   ) END;

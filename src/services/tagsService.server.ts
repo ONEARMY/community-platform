@@ -1,24 +1,23 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { Tag } from 'oa-shared';
 
-// Is this needed? It's just getting stuff that could be done by tagsService
-const getTags = async (client: SupabaseClient, tagIds: number[]) => {
-  let tags: Tag[] = [];
+export class TagsServiceServer {
+  constructor(private client: SupabaseClient) {}
 
-  if (tagIds?.length > 0) {
-    const tagsResult = await client
-      .from('tags')
-      .select('id,name,created_at,modified_at')
-      .in('id', tagIds);
+  async getTags(tagIds: number[]) {
+    let tags: Tag[] = [];
 
-    if (tagsResult.data) {
-      tags = tagsResult.data.map((x) => Tag.fromDB(x));
+    if (tagIds?.length > 0) {
+      const tagsResult = await this.client
+        .from('tags')
+        .select('id,name,created_at,modified_at')
+        .in('id', tagIds);
+
+      if (tagsResult.data) {
+        tags = tagsResult.data.map((x) => Tag.fromDB(x));
+      }
     }
+
+    return tags;
   }
-
-  return tags;
-};
-
-export const tagsServiceServer = {
-  getTags,
-};
+}

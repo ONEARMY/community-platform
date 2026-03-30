@@ -5,9 +5,9 @@ import type { LoaderFunctionArgs, Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
-import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { NotificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -131,9 +131,9 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     const comment = commentResult.data as DBComment;
     const profile = currentUser.data[0] as DBProfile;
 
-    addSubscriptions(comment, profile, client, headers);
+    addSubscriptions(comment, profile, client);
 
-    notificationsSupabaseServiceServer.createNotificationsNewComment(comment, client, headers);
+    new NotificationsSupabaseServiceServer(client).createNotificationsNewComment(comment);
   }
 
   const commentDb = new DBComment({
@@ -144,7 +144,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const commentFactory = new CommentFactory(new ImageServiceServer(client));
   const comment = await commentFactory.fromDBWithAuthor(commentDb);
 
-  updateUserActivity(client, claims.data.claims.sub);
+  new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
   return Response.json(comment, {
     headers,
@@ -152,28 +152,18 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   });
 }
 
-function addSubscriptions(
-  comment: DBComment,
-  profile: DBProfile,
-  client: SupabaseClient,
-  headers: Headers,
-) {
+function addSubscriptions(comment: DBComment, profile: DBProfile, client: SupabaseClient) {
+  const subscribersServiceServer = new SubscribersServiceServer(client);
   if (comment.source_id && !comment.parent_id) {
     // Subscribe to peer comments...
-    subscribersServiceServer.add(
-      comment.source_type,
-      comment.source_id,
-      profile.id,
-      client,
-      headers,
-    );
+    subscribersServiceServer.add(comment.source_type, comment.source_id, profile.id);
     // ...add replies to this comment
-    subscribersServiceServer.add('comments', comment.id, profile.id, client, headers);
+    subscribersServiceServer.add('comments', comment.id, profile.id);
   }
 
   if (comment.source_id && comment.parent_id) {
     // Subscribe to the parent of this reply
-    subscribersServiceServer.add('comments', comment.parent_id, profile.id, client, headers);
+    subscribersServiceServer.add('comments', comment.parent_id, profile.id);
   }
 }
 

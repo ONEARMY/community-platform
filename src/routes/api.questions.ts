@@ -7,10 +7,10 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -101,7 +101,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title);
 
-    if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'questions')) {
+    if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'questions')) {
       throw conflictError('This question already exists');
     }
 
@@ -140,13 +140,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const question = Question.fromDB(questionResult.data[0], []);
-    subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
+    new SubscribersServiceServer(client).add('questions', question.id, profile.id);
 
     if (!question.isDraft) {
       notifyDiscord(question, profile, new URL(request.url).origin.replace('http:', 'https:'));
     }
 
-    updateUserActivity(client, claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ question }, { headers, status: 201 });
   } catch (error) {

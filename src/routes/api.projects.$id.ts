@@ -11,11 +11,10 @@ import type {
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -125,7 +124,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       await libraryService.deleteStepsById([...stepsToDelete]);
     }
 
-    updateUserActivity(client, claims.data.claims.sub);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
@@ -167,10 +166,9 @@ async function validateRequest(
 
   if (
     currentProject.slug !== slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(
+    (await new ContentServiceServer(client).isDuplicateExistingSlug(
       slug,
       currentProject.id,
-      client,
       'projects',
     ))
   ) {
@@ -185,7 +183,7 @@ async function updateProject(
   data: ProjectDTO,
   slug: string,
 ) {
-  const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, slug);
+  const previousSlugs = ContentServiceServer.updatePreviousSlugs(currentProject, slug);
 
   let moderation = currentProject.moderation;
 

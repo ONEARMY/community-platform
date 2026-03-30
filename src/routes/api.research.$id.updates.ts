@@ -3,10 +3,9 @@ import type { DBMedia, DBProfile, DBResearchItem, IMediaFile, ResearchUpdateDTO 
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -75,22 +74,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, []);
     researchUpdate.research = updateResult.data.research;
 
-    await subscribersServiceServer.addResearchUpdateSubscribers(
+    await new SubscribersServiceServer(client).addResearchUpdateSubscribers(
       researchUpdate,
       profile.id,
-      client,
-      headers,
     );
 
-    broadcastCoordinationServiceServer.researchUpdate(
-      researchUpdate,
-      profile,
-      client,
-      headers,
-      request,
-    );
-
-    updateUserActivity(client, claims.data.claims.sub);
+    new BroadcastCoordinationServiceServer(client).researchUpdate(researchUpdate, profile, request);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {

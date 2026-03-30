@@ -312,6 +312,13 @@ export class ProfileServiceServer {
     }
   }
 
+  async updateUserActivity(userId: string) {
+    return this.client
+      .from('profiles')
+      .update({ last_active: new Date().toISOString() })
+      .eq('auth_id', userId);
+  }
+
   /**
    * Calculate the moderation status for a profile's map pin based on profile type changes.
    *    If a profile changes from a space to 'member', the pin is automatically accepted.

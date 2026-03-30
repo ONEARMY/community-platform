@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const body = await request.json();
-    const { action: actionType, priceId } = body;
+    const { action: actionType, currency, interval, amount, name, email } = body;
 
     const customerId = await stripeServiceServer.getOrCreateCustomer(
       claims.data.claims.sub,
@@ -71,56 +71,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const origin = new URL(request.url).origin;
 
-    // --- Variant: Redirect ---
-    if (actionType === 'checkout') {
-      const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
-      if (!stripePriceId) {
-        return Response.json({}, { headers, status: 400, statusText: 'price ID not configured' });
-      }
-
-      const checkoutUrl = await stripeServiceServer.createCheckoutSession(
-        customerId,
-        stripePriceId,
-        `${origin}/settings?subscription=success`,
-        `${origin}/settings?subscription=cancelled`,
-      );
-
-      updateUserActivity(client, claims.data.claims.sub);
-
-      return Response.json({ url: checkoutUrl }, { headers, status: 200 });
-    }
-
-    // --- Variant: Embedded ---
-    if (actionType === 'embedded_checkout') {
-      const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
-      if (!stripePriceId) {
-        return Response.json({}, { headers, status: 400, statusText: 'price ID not configured' });
-      }
-
-      const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-      if (!publishableKey) {
+    if (actionType === 'elements_subscription') {
+      if (!currency || !interval || !amount) {
         return Response.json(
           {},
-          { headers, status: 400, statusText: 'publishable key not configured' },
+          { headers, status: 400, statusText: 'currency, interval, and amount are required' },
         );
-      }
-
-      const clientSecret = await stripeServiceServer.createEmbeddedCheckoutSession(
-        customerId,
-        stripePriceId,
-        `${origin}/settings?subscription=success`,
-      );
-
-      updateUserActivity(client, claims.data.claims.sub);
-
-      return Response.json({ clientSecret, publishableKey }, { headers, status: 200 });
-    }
-
-    // --- Variant: Elements ---
-    if (actionType === 'elements_subscription') {
-      const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
-      if (!stripePriceId) {
-        return Response.json({}, { headers, status: 400, statusText: 'price ID not configured' });
       }
 
       const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
@@ -133,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       const clientSecret = await stripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
-        stripePriceId,
+        { currency, interval, amount, name, email },
       );
 
       updateUserActivity(client, claims.data.claims.sub);
@@ -151,8 +107,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     return Response.json({}, { headers, status: 400, statusText: 'invalid action' });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'error' });
+    const message = error?.message || 'An unexpected error occurred';
+    return Response.json({ error: message }, { headers, status: 500 });
   }
 };

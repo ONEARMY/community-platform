@@ -66,75 +66,101 @@ const getOrCreateCustomer = async (
   return customer.id;
 };
 
-// --- Variant: Redirect ---
-const createCheckoutSession = async (
-  customerId: string,
-  priceId: string,
-  successUrl: string,
-  cancelUrl: string,
-): Promise<string> => {
-  const stripe = getStripe();
-
-  const session = await stripe.checkout.sessions.create({
-    customer: customerId,
-    mode: 'subscription',
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
-    success_url: successUrl,
-    cancel_url: cancelUrl,
-  });
-
-  if (!session.url) {
-    throw new Error('Failed to create checkout session');
-  }
-
-  return session.url;
+type SubscriptionParams = {
+  currency: string;
+  interval: 'month' | 'year';
+  amount: number;
+  name?: string;
+  email?: string;
 };
 
-// --- Variant: Embedded ---
-const createEmbeddedCheckoutSession = async (
-  customerId: string,
-  priceId: string,
-  returnUrl: string,
-): Promise<string> => {
+const getProducts = async (): Promise<string[]> => {
   const stripe = getStripe();
 
-  const session = await stripe.checkout.sessions.create({
-    customer: customerId,
-    mode: 'subscription',
-    payment_method_types: ['card'],
-    ui_mode: 'embedded',
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
-    return_url: returnUrl,
-  });
+  const products = await stripe.products.list({ active: true, limit: 100 });
 
-  if (!session.client_secret) {
-    throw new Error('Failed to create embedded checkout session');
+  if (!products.data.length) {
+    throw new Error('No active Stripe products found');
   }
 
-  return session.client_secret;
+  return products.data.map((p) => p.id);
 };
 
-// --- Variant: Elements ---
+export type SupporterPrice = {
+  id: string;
+  unitAmount: number;
+  currency: string;
+  interval: 'month' | 'year';
+  lookupKey: string | null;
+};
+
+const getPrices = async (): Promise<SupporterPrice[]> => {
+  const stripe = getStripe();
+  const productIds = await getProducts();
+
+  const allPrices = await Promise.all(
+    productIds.map((productId) =>
+      stripe.prices.list({
+        product: productId,
+        active: true,
+        limit: 100,
+      }),
+    ),
+  );
+
+  return allPrices
+    .flatMap((result) => result.data)
+    .filter((p) => p.recurring && p.unit_amount !== null)
+    .map((p) => ({
+      id: p.id,
+      unitAmount: p.unit_amount!,
+      currency: p.currency,
+      interval: p.recurring!.interval as 'month' | 'year',
+      lookupKey: p.lookup_key ?? null,
+    }));
+};
+
 const createSubscriptionWithPaymentIntent = async (
   customerId: string,
-  priceId: string,
+  params: SubscriptionParams,
 ): Promise<string> => {
   const stripe = getStripe();
+
+  const productIds = await getProducts();
+  const productId = productIds[0];
+
+  // Update customer with name/email if provided
+  if (params.name || params.email) {
+    await stripe.customers.update(customerId, {
+      ...(params.name && { name: params.name }),
+      ...(params.email && { email: params.email }),
+    });
+  }
+
+  // Find an existing price matching currency/interval/amount, or create one
+  const existingPrices = await stripe.prices.list({
+    product: productId,
+    active: true,
+    currency: params.currency.toLowerCase(),
+    limit: 100,
+  });
+
+  const matchingPrice = existingPrices.data.find(
+    (p) => p.unit_amount === params.amount && p.recurring?.interval === params.interval,
+  );
+
+  const price =
+    matchingPrice ??
+    (await stripe.prices.create({
+      unit_amount: params.amount,
+      currency: params.currency.toLowerCase(),
+      recurring: { interval: params.interval },
+      product: productId,
+    }));
 
   const subscription = await stripe.subscriptions.create({
     customer: customerId,
-    items: [{ price: priceId }],
+    items: [{ price: price.id }],
     payment_behavior: 'default_incomplete',
     expand: ['latest_invoice'],
   });
@@ -199,12 +225,11 @@ const updateSupporterStatus = async (
 export const stripeServiceServer = {
   constructWebhookEvent,
   createBillingPortalSession,
-  createCheckoutSession,
-  createEmbeddedCheckoutSession,
   createSubscriptionWithPaymentIntent,
   getAuthIdByStripeCustomerId,
   getCustomerByAuthId,
   getOrCreateCustomer,
+  getPrices,
   getSubscription,
   updateSupporterStatus,
 };

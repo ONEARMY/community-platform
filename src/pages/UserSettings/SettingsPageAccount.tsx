@@ -1,15 +1,10 @@
 import { observer } from 'mobx-react';
-import { ExternalLink } from 'oa-components';
-import { UserRole } from 'oa-shared';
-import { AuthWrapper } from 'src/common/AuthWrapper';
+import { Button, ExternalLink, Icon, InternalLink } from 'oa-components';
 import { DISCORD_INVITE_URL } from 'src/constants';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { Flex, Heading, Text } from 'theme-ui';
 
 import { PatreonIntegration } from './content/fields/PatreonIntegration';
-import { StripeIntegration } from './content/fields/StripeIntegration';
-import { StripeIntegrationElements } from './content/fields/StripeIntegrationElements';
-import { StripeIntegrationEmbedded } from './content/fields/StripeIntegrationEmbedded';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 
@@ -30,11 +25,36 @@ export const SettingsPageAccount = observer(() => {
       </Flex>
 
       <PatreonIntegration />
-      <AuthWrapper roleRequired={UserRole.ADMIN}>
-        <StripeIntegration />
-        <StripeIntegrationEmbedded />
-        <StripeIntegrationElements />
-      </AuthWrapper>
+
+      <Flex
+        sx={{
+          alignItems: 'flex-start',
+          backgroundColor: 'offWhite',
+          borderRadius: 3,
+          flexDirection: 'column',
+          padding: 4,
+          gap: [2, 4],
+        }}
+      >
+        <Flex sx={{ flexDirection: 'row', gap: [2, 4] }}>
+          <Icon glyph="supporter" size={45} />
+          <Flex sx={{ flexDirection: 'column', flex: 1, gap: 2 }}>
+            <Heading as="h2" variant="small">
+              Become a supporter
+            </Heading>
+            <Text variant="quiet">
+              As a supporter you get a badge on the platform, special insights and voting rights on
+              decisions.
+            </Text>
+          </Flex>
+        </Flex>
+        <InternalLink to="/supporter">
+          <Button type="button" variant="primary">
+            Support us
+          </Button>
+        </InternalLink>
+      </Flex>
+
       <ChangePasswordForm />
       <ChangeEmailForm />
 

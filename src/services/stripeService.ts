@@ -18,75 +18,39 @@ const getSubscriptionStatus = async (): Promise<SubscriptionStatus | null> => {
   return null;
 };
 
-// --- Variant: Redirect ---
-const createCheckoutSession = async (): Promise<string | null> => {
+type ElementsSubscriptionParams = {
+  currency: string;
+  interval: 'month' | 'year';
+  amount: number;
+  name: string;
+  email: string;
+};
+
+type ElementsSubscriptionResponse =
+  | { ok: true; clientSecret: string; publishableKey: string }
+  | { ok: false; error: string };
+
+const createElementsSubscription = async (
+  params: ElementsSubscriptionParams,
+): Promise<ElementsSubscriptionResponse> => {
   try {
     const response = await fetch('/api/stripe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'checkout' }),
+      body: JSON.stringify({ action: 'elements_subscription', ...params }),
     });
 
-    if (!response.ok) {
-      return null;
-    }
-
     const data = await response.json();
-    return data.url;
-  } catch (error) {
-    console.error(error);
-  }
-
-  return null;
-};
-
-type EmbeddedCheckoutResult = {
-  clientSecret: string;
-  publishableKey: string;
-};
-
-// --- Variant: Embedded ---
-const createEmbeddedCheckoutSession = async (): Promise<EmbeddedCheckoutResult | null> => {
-  try {
-    const response = await fetch('/api/stripe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'embedded_checkout' }),
-    });
 
     if (!response.ok) {
-      return null;
+      return { ok: false, error: data.error || 'Something went wrong.' };
     }
 
-    const data = await response.json();
-    return { clientSecret: data.clientSecret, publishableKey: data.publishableKey };
+    return { ok: true, clientSecret: data.clientSecret, publishableKey: data.publishableKey };
   } catch (error) {
     console.error(error);
+    return { ok: false, error: 'Network error. Please try again.' };
   }
-
-  return null;
-};
-
-// --- Variant: Elements ---
-const createElementsSubscription = async (): Promise<EmbeddedCheckoutResult | null> => {
-  try {
-    const response = await fetch('/api/stripe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'elements_subscription' }),
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const data = await response.json();
-    return { clientSecret: data.clientSecret, publishableKey: data.publishableKey };
-  } catch (error) {
-    console.error(error);
-  }
-
-  return null;
 };
 
 const createPortalSession = async (): Promise<string | null> => {
@@ -112,8 +76,6 @@ const createPortalSession = async (): Promise<string | null> => {
 
 export const stripeService = {
   getSubscriptionStatus,
-  createCheckoutSession,
-  createEmbeddedCheckoutSession,
   createElementsSubscription,
   createPortalSession,
 };

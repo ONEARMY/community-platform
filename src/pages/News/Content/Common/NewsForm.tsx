@@ -18,6 +18,7 @@ import { storageService } from 'src/services/storageService';
 import { composeValidators, minValue, required } from 'src/utils/validators';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
+import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
 
 interface IProps {
   'data-testid'?: string;
@@ -152,6 +153,13 @@ export const NewsForm = (props: IProps) => {
             handleSubmitDraft={handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[props.formAction]}
+            sidebar={
+              <NewsPreviewEmailButton
+                submitting={submitting}
+                formValues={values}
+                setSaveErrorMessage={setSaveErrorMessage}
+              />
+            }
             submitFailed={submitFailed}
             submitting={submitting || isSubmitting}
             unsavedChangesDialog={unsavedChangesDialog}

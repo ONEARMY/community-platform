@@ -3,7 +3,7 @@
 import { HTTPException } from 'hono/http-exception';
 import { AuthError } from 'node_modules/@supabase/supabase-js';
 import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
-import { News } from 'oa-shared';
+import { getSummaryFromMarkdown, News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
@@ -12,7 +12,6 @@ import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
-import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';

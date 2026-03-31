@@ -69,7 +69,7 @@ export class ContentRedirectServiceServer {
           comment.id,
         );
       default:
-        return null
+        return null;
     }
   }
 

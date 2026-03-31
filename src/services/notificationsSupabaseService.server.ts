@@ -152,7 +152,7 @@ export class NotificationsSupabaseServiceServer {
       }
 
       const notification = new DBNotification({
-        action_type: 'news',
+        action_type: 'newNews',
         content_id: contentId,
         title: news.title,
         triggered_by_id: news.created_by!,

@@ -81,8 +81,10 @@ export const fakeDisplayNotification = (
   email: {
     body: undefined,
     buttonLabel: 'See the full discussion',
+    displayDate: faker.date.past().toDateString(),
     preview: 'Jeff has left a new comment',
     subject: 'A new comment on something',
+    heroImage: undefined,
   },
   sidebar: {
     icon: 'discussion',

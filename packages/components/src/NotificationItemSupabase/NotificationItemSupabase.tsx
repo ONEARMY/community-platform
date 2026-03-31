@@ -1,6 +1,6 @@
-import type { NotificationDisplay } from 'oa-shared';
+import { getSummaryFromMarkdown, type NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
-import { Avatar, Flex, Text } from 'theme-ui';
+import { Avatar, Flex, Image, Text } from 'theme-ui';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';
@@ -55,16 +55,24 @@ export const NotificationItemSupabase = (props: IProps) => {
   };
 
   const isDiscussion = notification.contentType === 'comments';
+  const isNews = notification.contentType === 'news';
 
   return (
     <Flex data-cy="NotificationListItemSupabase" data-testid="NotificationListItemSupabase">
       <InternalLink onClick={onClick} to={notification.link} sx={{ color: 'black', width: '100%' }}>
         <Flex sx={borderStyle}>
           {notification.sidebar.image ? (
-            <Avatar
-              src={notification.sidebar.image}
-              sx={{ width: 60, height: 60, objectFit: 'cover' }}
-            />
+            isNews ? (
+              <Image
+                src={notification.sidebar.image}
+                sx={{ borderRadius: 2, width: 80, height: 80, objectFit: 'cover' }}
+              />
+            ) : (
+              <Avatar
+                src={notification.sidebar.image}
+                sx={{ width: 60, height: 60, objectFit: 'cover' }}
+              />
+            )
           ) : (
             notification.sidebar.icon && (
               <Flex>
@@ -75,7 +83,7 @@ export const NotificationItemSupabase = (props: IProps) => {
           <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
               <Text sx={{ flex: 1 }}>
-                {notification.triggeredBy} {notification.title}
+                {!isNews && notification.triggeredBy} {notification.title}
               </Text>
               <Text sx={{ fontSize: 1, color: 'grey', textAlign: 'right' }}>
                 <DisplayDate createdAt={notification.date} showLabel={false} />
@@ -94,7 +102,7 @@ export const NotificationItemSupabase = (props: IProps) => {
                   whiteSpace: 'nowrap',
                 }}
               >
-                {notification.body}
+                {getSummaryFromMarkdown(notification.body!)}
               </Text>
             </Flex>
           </Flex>

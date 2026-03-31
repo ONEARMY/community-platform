@@ -13,7 +13,6 @@ export * from './media';
 export * from './messages';
 export * from './moderation';
 export * from './news';
-export * from './notifications';
 export * from './notificationsPreferences';
 export * from './patreon';
 export * from './patreonSettings';

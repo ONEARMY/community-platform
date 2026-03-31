@@ -1,9 +1,11 @@
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
+import { generateAlphaNumeric, generateNewUserDetails, getTenantUser } from '../../utils/TestUtils';
 
 let initialRandomId;
 
 describe('[Question]', () => {
+  const demoAdmin = getTenantUser(users.admin);
   beforeEach(() => {
     initialRandomId = generateAlphaNumeric(8).toLowerCase();
   });
@@ -143,7 +145,7 @@ describe('[Question]', () => {
     it('[By Admin]', () => {
       const question = MOCK_DATA.questions[0];
 
-      cy.signIn('demo_admin@example.com', 'demo_admin');
+      cy.signIn(demoAdmin.email, demoAdmin.password);
 
       cy.step('Question is not authored by the admin');
       cy.visit(`/questions/${question.slug}`);

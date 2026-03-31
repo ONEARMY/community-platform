@@ -2,7 +2,7 @@
 // questions and projects. Any changes here should be replicated there.
 
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric } from '../../utils/TestUtils';
+import { generateAlphaNumeric, getTenantUser } from '../../utils/TestUtils';
 
 let randomId;
 
@@ -12,8 +12,8 @@ describe('[Research.Discussions]', () => {
   });
 
   it('allows authenticated users to contribute to discussions', () => {
-    const admin = MOCK_DATA.users.admin;
-    const secondCommentor = MOCK_DATA.users.profile_views;
+    const admin = getTenantUser(MOCK_DATA.users.admin);
+    const secondCommentor = getTenantUser(MOCK_DATA.users.profile_views);
 
     cy.signIn(admin.email, admin.password);
 

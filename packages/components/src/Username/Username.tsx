@@ -82,7 +82,6 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
         border: '1px solid transparent',
         display: 'inline-flex',
         minWidth: 0,
-        overflow: 'hidden',
         paddingX: 1,
         paddingY: '3px',
         borderRadius: 1,

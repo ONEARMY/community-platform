@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants';
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric } from '../../utils/TestUtils';
+import { generateAlphaNumeric, getTenantUser } from '../../utils/TestUtils';
 
 const generateArticle = () => {
   const title = faker.lorem.words(4);
@@ -19,8 +19,8 @@ const generateArticle = () => {
   };
 };
 
-const admin = MOCK_DATA.users.admin;
-const researcher = MOCK_DATA.users.research_creator;
+const admin = getTenantUser(MOCK_DATA.users.admin);
+const researcher = getTenantUser(MOCK_DATA.users.research_creator);
 
 describe('[Research]', () => {
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('[Research]', () => {
       const updateTitle = faker.lorem.words(5);
       const updateDescription = 'This is the description for the update.';
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8';
-      const subscriber = MOCK_DATA.users.subscriber;
+      const subscriber = getTenantUser(MOCK_DATA.users.subscriber);
       const researchURL = `/research/${expected.slug}`;
 
       cy.signIn(subscriber.email, subscriber.password);

@@ -1,4 +1,4 @@
-import { questionServiceServer } from 'src/services/questionService.server';
+import { QuestionServiceServer } from 'src/services/questionService.server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockClient: any = {
@@ -46,7 +46,7 @@ describe('getQuestionsByUser', () => {
 
     mockClient.rpc.mockResolvedValueOnce(mockResponse);
 
-    const result = await questionServiceServer.getQuestionsByUser(mockClient, 'testuser');
+    const result = await new QuestionServiceServer(mockClient).getQuestionsByUser('testuser');
 
     expect(mockClient.rpc).toHaveBeenCalledWith('get_user_questions', {
       username_param: 'testuser',
@@ -62,7 +62,7 @@ describe('getQuestionsByUser', () => {
 
     mockClient.rpc.mockResolvedValueOnce(mockResponse);
 
-    const result = await questionServiceServer.getQuestionsByUser(mockClient, 'testuser');
+    const result = await new QuestionServiceServer(mockClient).getQuestionsByUser('testuser');
 
     expect(result).toEqual([]);
   });
@@ -78,7 +78,7 @@ describe('getQuestionsByUser', () => {
 
     mockClient.rpc.mockResolvedValueOnce(mockResponse);
 
-    const result = await questionServiceServer.getQuestionsByUser(mockClient, 'testuser');
+    const result = await new QuestionServiceServer(mockClient).getQuestionsByUser('testuser');
 
     expect(result).toEqual([]);
   });

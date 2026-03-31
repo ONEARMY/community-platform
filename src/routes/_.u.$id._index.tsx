@@ -7,7 +7,7 @@ import { ProfilePage } from 'src/pages/User/content/ProfilePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { questionServiceServer } from 'src/services/questionService.server';
+import { QuestionServiceServer } from 'src/services/questionService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -25,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       profileService.getByUsername(username),
       new LibraryServiceServer(client).getUserProjects(username),
       new ResearchServiceServer(client).getUserResearch(username),
-      questionServiceServer.getQuestionsByUser(client, username),
+      new QuestionServiceServer(client).getQuestionsByUser(username),
     ]);
 
     const userCreatedDocs = {

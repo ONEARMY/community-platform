@@ -63,5 +63,3 @@ export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c('VITE_SENTRY_DSN', 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729'),
   environment: siteVariant,
 };
-
-export const GA_TRACKING_ID = _c('VITE_GA_TRACKING_ID');

@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "profile_guidelines" "text",
     "questions_guidelines" "text",
     "supported_modules" "text",
-    "patreon_id" "text"
+    "patreon_id" "text",
+    "ga_tracking_id" "text"
 );
 
 ALTER TABLE "public"."tenant_settings" ENABLE ROW LEVEL SECURITY;

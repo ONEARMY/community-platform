@@ -20,6 +20,7 @@ export class TenantSettings {
   colorAccentHover: string;
   showImpact: boolean;
   createResearchRoles: UserRole[];
+  gaTrackingId: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

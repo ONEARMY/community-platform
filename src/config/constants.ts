@@ -6,7 +6,6 @@
  */
 export const _supportedConfigurationOptions = [
   'VITE_SENTRY_DSN',
-  'VITE_GA_TRACKING_ID',
   'VITE_BRANCH',
   'VITE_SITE_VARIANT',
 ] as const;

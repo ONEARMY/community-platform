@@ -1,19 +1,20 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import { useLocation } from 'react-router';
-import { GA_TRACKING_ID } from 'src/config/config';
+import { TenantContext } from 'src/pages/common/TenantContext';
 
 export const GoogleAnalytics = () => {
   const location = useLocation();
+  const env = useContext(TenantContext);
 
   useEffect(() => {
-    if (GA_TRACKING_ID) {
-      ReactGA.initialize([{ trackingId: GA_TRACKING_ID }]);
+    if (env?.gaTrackingId) {
+      ReactGA.initialize([{ trackingId: env.gaTrackingId }]);
     }
   }, []);
 
   useEffect(() => {
-    if (GA_TRACKING_ID) {
+    if (env?.gaTrackingId) {
       sendPageView(location);
     }
   }, [location]);

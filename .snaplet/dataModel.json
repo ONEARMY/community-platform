@@ -11120,9 +11120,9 @@
           "maxLength": null
         },
         {
-          "id": "public.tenant_settings.ga_tenant_id",
-          "name": "ga_tenant_id",
-          "columnName": "ga_tenant_id",
+          "id": "public.tenant_settings.ga_tracking_id",
+          "name": "ga_tracking_id",
+          "columnName": "ga_tracking_id",
           "type": "text",
           "isRequired": false,
           "kind": "scalar",

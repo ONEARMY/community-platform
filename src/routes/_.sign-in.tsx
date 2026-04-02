@@ -81,7 +81,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return redirect('/settings', { headers });
   }
 
-  const path = getReturnUrl(request, '/');
+  const fallbackPath = `/u/${profile.username}`;
+  const path = getReturnUrl(request, fallbackPath);
 
   return redirect(path, { headers });
 };

@@ -184,7 +184,7 @@ export class SupabaseTestsService {
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
       const researchItem = MOCK_DATA.research[i];
-      const createdBy = profiles.find((profile) => profile.username === researchItem.created_by_username).id || profiles[0].id;
+      const createdBy = profiles.find((profile) => profile.username === researchItem.created_by_username)?.id || profiles[0].id;
 
       if (researchItem.updates) {
         const { research_updates } = await this.seedDatabase({
@@ -384,7 +384,7 @@ export class SupabaseTestsService {
         slug: item.slug,
         time: item.time,
         difficulty_level: item.difficultyLevel,
-        created_by: profiles.find((x) => x.username === item.createdBy).id || null,
+        created_by: profiles.find((x) => x.username === item.createdBy)?.id || null,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[i % 2].id,
         deleted: item.deleted,

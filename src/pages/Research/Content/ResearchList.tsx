@@ -116,10 +116,6 @@ const ResearchList = () => {
         </Box>
       )}
 
-      {!isFetching && researchItems?.length === 0 && (
-        <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
-      )}
-
       {!isFetching && researchItems && researchItems.length > 0 && researchItems.length < total && (
         <Flex
           sx={{

@@ -92,7 +92,22 @@ DECLARE
 BEGIN
   -- Parse the search query once if provided, using prefix matching for partial words
   IF search_query IS NOT NULL THEN
-    ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
+    -- Split search query into words, sanitize each with plainto_tsquery, then add prefix matching
+    ts_query := to_tsquery('english', 
+      array_to_string(
+        ARRAY(
+          SELECT regexp_replace(
+            plainto_tsquery('english', word)::text,
+            '''(\w+)''',
+            '''\1'':*',
+            'g'
+          )
+          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
+          WHERE word != ''
+        ),
+        ' & '
+      )
+    );
   END IF;
  
   RETURN QUERY
@@ -209,7 +224,22 @@ DECLARE
   ts_query tsquery;
 BEGIN
   IF search_query IS NOT NULL THEN
-    ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
+    -- Split search query into words, sanitize each with plainto_tsquery, then add prefix matching
+    ts_query := to_tsquery('english', 
+      array_to_string(
+        ARRAY(
+          SELECT regexp_replace(
+            plainto_tsquery('english', word)::text,
+            '''(\w+)''',
+            '''\1'':*',
+            'g'
+          )
+          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
+          WHERE word != ''
+        ),
+        ' & '
+      )
+    );
   END IF;
 
   RETURN (

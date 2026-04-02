@@ -14,6 +14,7 @@ export interface Props {
 export const Modal = (props: Props) => {
   const { children, width = 300, height, isOpen, sx, onDismiss } = props;
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const mouseDownOutsideRef = useRef(false);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -26,13 +27,31 @@ export const Modal = (props: Props) => {
     }
   }, [isOpen]);
 
+  const handleMouseDown = (e: React.MouseEvent<HTMLDialogElement>) => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const rect = dialog.getBoundingClientRect();
+    mouseDownOutsideRef.current =
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom;
+  };
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    // Only close if clicking the backdrop (::backdrop)
+    // Only close if both mousedown and mouseup happened outside the modal
     const rect = dialog.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+    const clickedOutside =
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom;
+
+    if (mouseDownOutsideRef.current && clickedOutside) {
       onDismiss?.();
     }
   };
@@ -46,6 +65,7 @@ export const Modal = (props: Props) => {
   return (
     <dialog
       ref={dialogRef}
+      onMouseDown={handleMouseDown}
       onClick={handleBackdropClick}
       onClose={handleClose}
       style={{

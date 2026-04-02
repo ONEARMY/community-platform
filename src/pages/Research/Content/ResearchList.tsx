@@ -103,7 +103,7 @@ const ResearchList = () => {
             m: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: [0, 2],
+            gap: 2,
           }}
         >
           {researchItemList.map((item) => (
@@ -114,10 +114,6 @@ const ResearchList = () => {
             />
           ))}
         </Box>
-      )}
-
-      {!isFetching && researchItems?.length === 0 && (
-        <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
       )}
 
       {!isFetching && researchItems && researchItems.length > 0 && researchItems.length < total && (

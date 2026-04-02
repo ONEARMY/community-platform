@@ -74,7 +74,7 @@ export const QuestionListing = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <QuestionListHeader
-        itemCount={isFetching ? undefined: total}
+        itemCount={isFetching ? undefined : total}
         draftCount={isFetchingDrafts ? undefined : draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}
@@ -94,12 +94,11 @@ export const QuestionListing = () => {
             padding: 0,
             margin: 0,
             marginBottom: 2,
-            background: 'lightGrey',
+            background: '#f4f6f7',
             display: 'flex',
             flexDirection: 'column',
             gap: '2px',
           }}
-          variant="responsive"
         >
           {questionsList.map((question, index) => (
             <QuestionListItem key={index} question={question} query={q} />

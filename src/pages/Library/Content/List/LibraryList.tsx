@@ -17,10 +17,12 @@ export const LibraryList = () => {
   const [isFetching, setIsFetching] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
   const [total, setTotal] = useState(0);
-  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>({
-    getDraftCount: libraryService.getDraftCount,
-    getDrafts: libraryService.getDrafts,
-  });
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>(
+    {
+      getDraftCount: libraryService.getDraftCount,
+      getDrafts: libraryService.getDrafts,
+    },
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(LibrarySearchParams.q) || '';
@@ -67,7 +69,8 @@ export const LibraryList = () => {
     setIsFetching(false);
   };
 
-  const showLoadMore = !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
+  const showLoadMore =
+    !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
@@ -78,13 +81,17 @@ export const LibraryList = () => {
         showDrafts={showDrafts}
       />
 
-      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]} sx={{ paddingTop: 1, marginBottom: 3 }}>
+      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]}>
         {showDrafts ? (
           drafts.map((item) => {
             return <ProjectCard key={item.id} item={item} />;
           })
         ) : (
-          <>{projects && projects.length > 0 && projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}</>
+          <>
+            {projects &&
+              projects.length > 0 &&
+              projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}
+          </>
         )}
       </Grid>
 

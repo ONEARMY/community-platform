@@ -208,7 +208,7 @@ export const ResearchFilterHeader = (props: IProps) => {
           (Array.isArray(createResearchRoles) && createResearchRoles.length === 0)) && (
           <ReturnPathLink to="/sign-up">
             <Button type="button" variant="primary" data-cy="sign-up">
-              {listing.join}
+              {listing.create}
             </Button>
           </ReturnPathLink>
         )
@@ -233,9 +233,8 @@ export const ResearchFilterHeader = (props: IProps) => {
     <Flex
       sx={{
         gap: 2,
-        flexDirection: ['column', 'column', 'row'],
         flexWrap: 'wrap',
-        display: ['none', 'flex', 'flex'],
+        display: ['none', 'none', 'flex'],
       }}
     >
       <Flex sx={{ width: ['100%', '100%', '220px'] }}>
@@ -249,7 +248,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         </FieldContainer>
       </Flex>
 
-      <Flex sx={{ width: ['100%', '100%', '220px'] }}>
+      <Flex sx={{ width: ['100%', '100%', '160px'] }}>
         <FieldContainer>
           <Select
             options={researchStatusOptions}
@@ -260,10 +259,9 @@ export const ResearchFilterHeader = (props: IProps) => {
         </FieldContainer>
       </Flex>
 
-      <Flex sx={{ width: ['100%', '100%', '270px'] }}>
+      <Flex sx={{ width: ['100%', '100%', '200px'] }}>
         <SearchField
           dataCy="research-search-box"
-          placeHolder={listing.search}
           value={searchString}
           onChange={(value) => {
             setSearchString(value);
@@ -295,7 +293,7 @@ export const ResearchFilterHeader = (props: IProps) => {
   ];
 
   const mobileFilteringComponents = (
-    <Flex sx={{ display: ['flex', 'none', 'none'], gap: '5px' }}>
+    <Flex sx={{ display: ['flex', 'flex', 'none'], gap: '5px' }}>
       <Flex sx={{ position: 'relative' }}>
         <ButtonIcon
           onClick={handleOpenSortModal}
@@ -345,14 +343,13 @@ export const ResearchFilterHeader = (props: IProps) => {
   );
 
   const mobileSearchBar = (
-    <Flex sx={{ display: ['flex', 'none', 'none'], width: '100%' }}>
+    <Flex sx={{ display: ['flex', 'flex', 'none'], width: '100%' }}>
       <div ref={formRef} style={{ width: '100%' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <SearchField
             isExpanded
             autoFocus
             dataCy="research-search-box"
-            placeHolder={listing.search}
             value={searchString}
             onChange={(value) => {
               setSearchString(value);

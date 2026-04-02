@@ -46,7 +46,6 @@ export const listing = {
   create: 'Add news',
   filterCategory: 'Filter by category',
   incompleteProfile: 'Complete your profile to add news',
-  join: 'Sign up to be able to add news',
   loadMore: 'Load More',
   loggedOut: 'Gotta log in please for the awesome power of news adding.',
   noNews: 'No new has been added yet',

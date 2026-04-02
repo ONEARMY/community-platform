@@ -28,10 +28,9 @@ export const ListHeader = (props: IProps) => {
     <>
       <Flex
         sx={{
-          paddingTop: [6, 12],
-          paddingBottom: [4, 8],
+          paddingTop: [6, 6, 12],
           flexDirection: 'column',
-          gap: [4, 8],
+          gap: [4, 4, 8],
         }}
       >
         <Heading
@@ -47,26 +46,39 @@ export const ListHeader = (props: IProps) => {
         </Heading>
         <Flex sx={{ justifyContent: 'center' }}>{categoryComponent}</Flex>
       </Flex>
-      <Flex
-        sx={{
-          justifyContent: 'space-between',
-          flexDirection: ['column', 'row', 'row'],
-          gap: [2, 2, 2],
-          paddingX: [2, 0],
-          maxWidth: '100%',
-        }}
-      >
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Flex
           sx={{
-            flexDirection: ['column', 'column', 'row'],
+            justifyContent: 'space-between',
+            flexDirection: ['column', 'row', 'row'],
             gap: [2, 2, 2],
-            width: ['100%', '100%', 'auto'],
-            alignItems: ['flex-start', 'flex-start', 'center'],
-            display: ['none', 'flex', 'flex'],
+            maxWidth: '100%',
           }}
         >
-          {!showDrafts && filteringComponents}
-          {itemCount !== undefined && itemCount != null && (
+          <Flex
+            sx={{
+              flexDirection: ['column', 'column', 'row'],
+              gap: [2, 2, 2],
+              width: ['100%', '100%', 'auto'],
+              alignItems: ['flex-start', 'flex-start', 'center'],
+              display: ['none', 'none', 'flex'],
+            }}
+          >
+            {!showDrafts && filteringComponents}
+          </Flex>
+          <Flex
+            sx={{
+              justifyContent: 'space-between',
+              width: ['100%', '100%', 'auto'],
+              flexShrink: 0,
+            }}
+          >
+            {mobileFilteringComponents ?? null}
+            {actionComponents}
+          </Flex>
+        </Flex>
+        <Flex sx={{ gap: 4, lineHeight: '1.5rem' }}>
+          {!searchString ? (
             <Flex
               sx={{
                 flexDirection: 'row',
@@ -75,33 +87,9 @@ export const ListHeader = (props: IProps) => {
                 width: ['100%', '100%', 'auto'],
               }}
             >
-              <Text sx={{ marginLeft: [0, 0, 2] }}>{`${itemCount} ${itemLabel}`}</Text>
+              <Text>{`${itemCount} ${itemLabel}`}</Text>
             </Flex>
-          )}
-        </Flex>
-        <Flex
-          sx={{
-            gap: 2,
-            alignSelf: ['flex-start', 'flex-start', 'flex-end'],
-            display: ['flex', 'flex', 'flex'],
-            justifyContent: ['space-between', 'space-between', 'flex-start'],
-            width: ['100%', 'auto', 'auto'],
-            flexShrink: 0,
-          }}
-        >
-          {mobileFilteringComponents ?? null}
-          {actionComponents}
-        </Flex>
-        <Flex
-          sx={{
-            flexDirection: ['column', 'column', 'row'],
-            gap: [2, 2, 2],
-            width: ['100%', '100%', 'auto'],
-            alignItems: ['flex-start', 'flex-start', 'center'],
-            display: ['flex', 'none', 'none'],
-          }}
-        >
-          {itemCount !== undefined && itemCount != null && (
+          ) : (
             <Flex
               sx={{
                 flexDirection: 'row',
@@ -110,9 +98,7 @@ export const ListHeader = (props: IProps) => {
                 width: ['100%', '100%', 'auto'],
               }}
             >
-              <Text sx={{ marginLeft: [0, 0, 2] }}>
-                {searchString && `${itemCount} ${itemLabel} for "${searchString}"`}
-              </Text>
+              <Text>{searchString && `${itemCount} ${itemLabel} for "${searchString}"`}</Text>
             </Flex>
           )}
         </Flex>

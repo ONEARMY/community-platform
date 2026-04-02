@@ -57,6 +57,7 @@ export const FieldTextarea = ({
         rows={rows ? rows : 5}
         sx={{
           resize: rest?.style?.resize ? rest.style.resize : 'vertical',
+          minWidth: '100%',
         }}
         {...input}
         {...rest}

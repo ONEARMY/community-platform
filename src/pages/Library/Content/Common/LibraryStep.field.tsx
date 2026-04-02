@@ -193,7 +193,7 @@ export const LibraryStepField = ({
             data-testid="step-description"
             modifiers={{ capitalize: true, trim: true }}
             component={FieldTextarea}
-            style={{ resize: 'vertical', height: '300px' }}
+            rows={10}
             validate={(value, allValues) =>
               draftValidationWrapper(
                 value,

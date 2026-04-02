@@ -22,11 +22,7 @@ export const LibraryDescriptionField = () => {
         modifiers={{ capitalize: true, trim: true }}
         isEqual={COMPARISONS.textInput}
         component={FieldTextarea}
-        style={{
-          resize: 'none',
-          flex: 1,
-          minHeight: '150px',
-        }}
+        rows={10}
         maxLength={LIBRARY_DESCRIPTION_MAX_LENGTH}
         showCharacterCount
         placeholder={description}

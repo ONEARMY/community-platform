@@ -72,12 +72,11 @@ export const EditComment = (props: IProps) => {
             as="form"
             sx={{
               flexDirection: 'column',
-              padding: 2,
               gap: 2,
             }}
             onSubmit={handleSubmit}
           >
-            <Label as="label" htmlFor="comment" sx={{ marginBottom: '6px', fontSize: 3 }}>
+            <Label as="label" htmlFor="comment" sx={{ fontSize: 3 }}>
               Edit {isReply ? 'Reply' : 'Comment'}
             </Label>
 
@@ -89,11 +88,11 @@ export const EditComment = (props: IProps) => {
               id="comment"
               validate={required}
               name="comment"
-              rows={2}
+              rows={4}
               sx={{ padding: 1 }}
             />
-            <Flex mt={4} ml="auto">
-              <Button type="button" small mr={4} variant="outline" onClick={() => props?.handleCancel()}>
+            <Flex sx={{ gap: 2, justifyContent: 'flex-end' }}>
+              <Button type="button" small variant="outline" onClick={() => props?.handleCancel()}>
                 Cancel
               </Button>
               <Button

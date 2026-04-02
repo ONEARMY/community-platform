@@ -29,7 +29,6 @@ export const ListHeader = (props: IProps) => {
       <Flex
         sx={{
           paddingTop: [6, 12],
-          paddingBottom: [4, 8],
           flexDirection: 'column',
           gap: [4, 8],
         }}

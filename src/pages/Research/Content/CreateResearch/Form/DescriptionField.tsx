@@ -23,11 +23,7 @@ export const DescriptionField = () => {
         validateFields={[]}
         isEqual={COMPARISONS.textInput}
         component={FieldTextarea}
-        style={{
-          resize: 'none',
-          flex: 1,
-          minHeight: '150px',
-        }}
+        rows={10}
         maxLength={RESEARCH_MAX_LENGTH}
         showCharacterCount
         placeholder={placeholder}

@@ -45,8 +45,10 @@ export const FieldTextarea = ({
   ...rest
 }: Props) => {
   const curLength = useMemo<number>(() => input?.value?.length ?? 0, [input?.value]);
+  const { sx: restSx, ...restWithoutSx } = rest;
+
   return (
-    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+    <Flex sx={{ flexDirection: 'column', gap: 1, width: '100%' }}>
       {meta.error && meta.touched && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
 
       <Textarea
@@ -58,9 +60,12 @@ export const FieldTextarea = ({
         sx={{
           resize: rest?.style?.resize ? rest.style.resize : 'vertical',
           minWidth: '100%',
+          height: 'auto',
+          fieldSizing: 'fixed',
+          ...restSx,
         }}
         {...input}
-        {...rest}
+        {...restWithoutSx}
         onBlur={(e) => {
           if (modifiers) {
             e.target.value = processInputModifiers(e.target.value, modifiers);

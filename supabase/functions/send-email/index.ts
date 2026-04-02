@@ -53,10 +53,7 @@ Deno.serve(async (req) => {
       ...email_data,
     } as any;
 
-    if (!user['user_metadata']?.username) {
-      console.error('No username found for email');
-      return;
-    }
+    const username = user['user_metadata']?.username || 'there';
 
     switch (email_data.email_action_type) {
       case 'moderation_notification': {
@@ -68,21 +65,21 @@ Deno.serve(async (req) => {
       }
       case 'signup': {
         subject = 'Welcome! Please confirm your email';
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(React.createElement(SignUpEmail, details));
         break;
       }
       case 'login': {
         subject = 'Fancy magic link for login!';
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(React.createElement(MagicLinkEmail, details));
         break;
       }
       case 'recovery': {
         subject = 'So you need to reset your password?';
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(React.createElement(ResetPasswordEmail, details));
         break;
@@ -91,7 +88,7 @@ Deno.serve(async (req) => {
         const newEmail = user['new_email']!;
         subject = "You're changing your email";
         to = newEmail;
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(
           React.createElement(EmailChangeNewEmail, {

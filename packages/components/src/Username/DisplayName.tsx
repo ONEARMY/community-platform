@@ -30,7 +30,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
         }}
-        title={displayName || username || undefined}
+        title={displayName || username || ''}
       >
         {displayName || username}
       </Text>

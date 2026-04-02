@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Flex, Label } from 'theme-ui';
 import { object, string } from 'yup';
-
 import { Banner } from '../Banner/Banner';
 import { Button } from '../Button/Button';
 import { FieldTextarea } from '../FieldTextarea/FieldTextarea';
@@ -89,7 +88,7 @@ export const EditComment = (props: IProps) => {
               validate={required}
               name="comment"
               rows={4}
-              sx={{ padding: 1 }}
+              sx={{ padding: 1, fontSize: '16px', lineHeight: '1.4' }}
             />
             <Flex sx={{ gap: 2, justifyContent: 'flex-end' }}>
               <Button type="button" small variant="outline" onClick={() => props?.handleCancel()}>

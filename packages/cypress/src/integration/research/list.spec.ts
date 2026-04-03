@@ -40,10 +40,10 @@ describe('[Research - List Articles]', () => {
   it('[Pagination - Navigates to next page]', () => {
     cy.step('Verify pagination is visible');
     cy.get('[data-cy=pagination]').should('be.visible');
-    cy.get('[data-cy=pagination-icon-chevron-right]').should('be.visible');
+    cy.get('[data-cy=pagination-icon-paginationSingleRight]').should('be.visible');
 
     cy.step('Click next page');
-    cy.get('[data-cy=pagination-icon-chevron-right]').click();
+    cy.get('[data-cy=pagination-icon-paginationSingleRight]').click();
 
     cy.step('Verify page changed');
     cy.url().should('include', 'pageNo=1');

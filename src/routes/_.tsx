@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, Outlet, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
+import { Toaster } from 'sonner';
 import { Alerts } from 'src/common/Alerts/Alerts';
 import { Analytics } from 'src/common/Analytics';
 import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter';
@@ -56,6 +57,29 @@ export default function Index() {
                 <Analytics />
                 <Header />
                 <Alerts />
+                <ClientOnly fallback={<></>}>
+                  {() => (
+                    <>
+                      <style>
+                        {`
+                          [data-sonner-toast] [data-icon] {
+                            display: none !important;
+                          }
+                        `}
+                      </style>
+                      <Toaster
+                        position="bottom-center"
+                        expand={true}
+                        richColors={false}
+                        closeButton={false}
+                        toastOptions={{
+                          unstyled: true,
+                          duration: 4000,
+                        }}
+                      />
+                    </>
+                  )}
+                </ClientOnly>
 
                 <Outlet />
 

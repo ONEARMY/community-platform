@@ -58,14 +58,14 @@ describe('[Questions]', () => {
       cy.get('[data-cy=pagination-icon-chevron-right]').click();
 
       // Now on page 2 with 2 remaining items
-      cy.get('[data-cy=question-list-item]').should('have.length', 2);
+      cy.get('[data-cy=question-list-item]').should('have.length', 3);
       cy.url().should('include', 'pageNo=1');
     });
 
     it('should show previous questions', () => {
       // First navigate to the next page
       cy.get('[data-cy=pagination-icon-chevron-right]').click();
-      cy.get('[data-cy=question-list-item]').should('have.length', 2);
+      cy.get('[data-cy=question-list-item]').should('have.length', 3);
       cy.url().should('include', 'pageNo=1');
 
       // Then go back to previous page

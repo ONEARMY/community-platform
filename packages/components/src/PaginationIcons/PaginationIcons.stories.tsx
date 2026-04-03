@@ -11,7 +11,7 @@ export const ChevronLeft: StoryFn<typeof PaginationIcons> = () => (
   <PaginationIcons
     hidden={false}
     title="Previous"
-    directionIcon="chevron-left"
+    directionIcon="paginationSingleLeft"
     ariaLabel='Previous page'
     onClick={() => console.log('Previous clicked')}
   />
@@ -22,7 +22,7 @@ export const ChevronRight: StoryFn<typeof PaginationIcons> = () => (
     hidden={false}
     title="Next"
     ariaLabel='Next page'
-    directionIcon="chevron-right"
+    directionIcon="paginationSingleRight"
     onClick={() => console.log('Next clicked')}
   />
 );

@@ -55,7 +55,7 @@ describe('[Questions]', () => {
       cy.url().should('not.include', 'pageNo=');
 
       // Click next page
-      cy.get('[data-cy=pagination-icon-chevron-right]').click();
+      cy.get('[data-cy=pagination-icon-paginationSingleRight]').click();
 
       // Now on page 2 with 2 remaining items
       cy.get('[data-cy=question-list-item]').should('have.length', 3);
@@ -64,12 +64,12 @@ describe('[Questions]', () => {
 
     it('should show previous questions', () => {
       // First navigate to the next page
-      cy.get('[data-cy=pagination-icon-chevron-right]').click();
+      cy.get('[data-cy=pagination-icon-paginationSingleRight]').click();
       cy.get('[data-cy=question-list-item]').should('have.length', 3);
       cy.url().should('include', 'pageNo=1');
 
       // Then go back to previous page
-      cy.get('[data-cy=pagination-icon-chevron-left]').click();
+      cy.get('[data-cy=pagination-icon-paginationSingleLeft]').click();
       cy.get('[data-cy=question-list-item]').should('have.length', 20);
       cy.url().should('include', 'pageNo=0');
     });

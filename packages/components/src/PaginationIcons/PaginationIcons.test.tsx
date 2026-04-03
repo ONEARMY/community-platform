@@ -12,12 +12,12 @@ describe('PaginationIcons', () => {
         hidden={false}
         ariaLabel='Navigate Previous page'
         title="Previous"
-        directionIcon="chevron-left"
+        directionIcon="paginationSingleLeft"
         onClick={() => {}}
       />,
     );
 
-    expect(getByTestId('pagination-icon-chevron-left')).toBeInTheDocument();
+    expect(getByTestId('pagination-icon-paginationSingleLeft')).toBeInTheDocument();
     expect(getByTitle('Previous')).toBeInTheDocument();
   });
 
@@ -27,12 +27,12 @@ describe('PaginationIcons', () => {
         ariaLabel="Navigate Previous page"
         hidden={true}
         title="Previous"
-        directionIcon="chevron-left"
+        directionIcon="paginationSingleLeft"
         onClick={() => {}}
       />,
     );
 
-    const button = queryByTestId('pagination-icon-chevron-left');
+    const button = queryByTestId('pagination-icon-paginationSingleLeft');
     expect(button).not.toBeInTheDocument();
   });
 
@@ -42,12 +42,12 @@ describe('PaginationIcons', () => {
         ariaLabel='Navigate next page'
         hidden={false}
         title="Next"
-        directionIcon="chevron-right"
+        directionIcon="paginationSingleRight"
         onClick={() => {}}
       />,
     );
 
-    const button = getByTestId('pagination-icon-chevron-right');
+    const button = getByTestId('pagination-icon-paginationSingleRight');
     expect(button).toBeInTheDocument()
   });
 
@@ -58,19 +58,19 @@ describe('PaginationIcons', () => {
         ariaLabel='Navigate next page'
         hidden={false}
         title="Next"
-        directionIcon="chevron-right"
+        directionIcon="paginationSingleRight"
         onClick={handleClick}
       />,
     );
 
-    getByTestId('pagination-icon-chevron-right').click();
+    getByTestId('pagination-icon-paginationSingleRight').click();
     expect(handleClick).toHaveBeenCalledOnce();
   });
 
   it('renders different icon types', () => {
     const icons: Array<
-      'chevron-left' | 'chevron-right' | 'double-arrow-left' | 'double-arrow-right'
-    > = ['chevron-left', 'chevron-right', 'double-arrow-left', 'double-arrow-right'];
+      'paginationSingleLeft' | 'paginationSingleRight' | 'double-arrow-left' | 'double-arrow-right'
+    > = ['paginationSingleLeft', 'paginationSingleRight', 'double-arrow-left', 'double-arrow-right'];
 
     icons.forEach((icon) => {
       const { getByTestId } = render(

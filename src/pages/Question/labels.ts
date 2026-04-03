@@ -37,7 +37,6 @@ export const listing = {
   create: 'Ask a question',
   filterCategory: 'Filter by category',
   incompleteProfile: 'Complete your profile to ask your question',
-  join: 'Sign up to ask your question',
   loadMore: 'Load More',
   loggedOut: 'Gotta log in please for that sweet sweet question asking...',
   noQuestions: 'No questions have been asked yet',

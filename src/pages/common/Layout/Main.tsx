@@ -23,7 +23,7 @@ const Main = (props: IProps) => {
             // Base css for all the pages, except Map & Academy
             position: 'relative',
             maxWidth: 'container',
-            px: [0, 2, 4],
+            px: [2, 2, 4],
             mx: 'auto',
             my: 0,
           }),

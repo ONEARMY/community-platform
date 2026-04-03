@@ -428,6 +428,7 @@ const main = async () => {
       color_accent_hover: '#ffde45',
       show_impact: true,
       create_research_roles: ['admin', 'research_creator'],
+      ga_tracking_id: 'test_ga_id',
     },
   ]);
 

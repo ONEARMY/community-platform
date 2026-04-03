@@ -17,11 +17,10 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -145,9 +144,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       : null;
 
     project.steps = await uploadSteps(data, formData, projectDb, client);
-    subscribersServiceServer.add('projects', project.id, profile.id, client, headers);
+    new SubscribersServiceServer(client).add('projects', project.id, profile.id);
 
-    updateUserActivity(client, claims.data.claims.sub);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
@@ -214,7 +213,7 @@ async function validateRequest(
     throw validationError('3 steps are required', 'stepCount');
   }
 
-  if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects')) {
+  if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'projects')) {
     throw conflictError('A project with this name already exists');
   }
 

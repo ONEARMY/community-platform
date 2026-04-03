@@ -164,6 +164,7 @@ describe('UserSettings', () => {
       colorPrimaryHover: '#ffde45',
       colorAccent: '#fee77b',
       colorAccentHover: '#ffde45',
+      gaTrackingId: 'mock-ga-tracking-id',
       showImpact: true,
       createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
       environment: {},

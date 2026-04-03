@@ -1,6 +1,6 @@
-import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
+import { NotificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FactoryDBProfile } from '../factories/profile';
@@ -22,10 +22,13 @@ describe('broadcastCoordinationServiceServer', () => {
     const mockResearch = FactoryDBResearchItem({
       is_draft: false,
     });
-    const mockHeaders = new Headers();
 
     beforeEach(() => {
       vi.clearAllMocks();
+      vi.spyOn(
+        NotificationsSupabaseServiceServer.prototype,
+        'createNotificationsResearchUpdate',
+      ).mockImplementation(vi.fn());
     });
 
     describe('when research update has draft research', () => {
@@ -35,16 +38,14 @@ describe('broadcastCoordinationServiceServer', () => {
           research: { ...mockResearch, is_draft: true },
         });
 
-        broadcastCoordinationServiceServer.researchUpdate(
-          researchUpdate,
-          mockProfile,
+        const broadcastCoordinationServiceServer = new BroadcastCoordinationServiceServer(
           mockClient,
-          mockHeaders,
-          mockRequest,
         );
 
+        broadcastCoordinationServiceServer.researchUpdate(researchUpdate, mockProfile, mockRequest);
+
         expect(
-          notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
+          NotificationsSupabaseServiceServer.prototype.createNotificationsResearchUpdate,
         ).not.toHaveBeenCalled();
         expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
       });
@@ -57,16 +58,14 @@ describe('broadcastCoordinationServiceServer', () => {
           research: mockResearch,
         });
 
-        broadcastCoordinationServiceServer.researchUpdate(
+        new BroadcastCoordinationServiceServer(mockClient).researchUpdate(
           researchUpdate,
           mockProfile,
-          mockClient,
-          mockHeaders,
           mockRequest,
         );
 
         expect(
-          notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
+          NotificationsSupabaseServiceServer.prototype.createNotificationsResearchUpdate,
         ).not.toHaveBeenCalled();
         expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
       });
@@ -82,17 +81,15 @@ describe('broadcastCoordinationServiceServer', () => {
           is_draft: false,
         });
 
-        broadcastCoordinationServiceServer.researchUpdate(
+        new BroadcastCoordinationServiceServer(mockClient).researchUpdate(
           researchUpdate,
           mockProfile,
-          mockClient,
-          mockHeaders,
           mockRequest,
           oldResearchUpdate,
         );
 
         expect(
-          notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
+          NotificationsSupabaseServiceServer.prototype.createNotificationsResearchUpdate,
         ).not.toHaveBeenCalled();
         expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
       });
@@ -108,18 +105,16 @@ describe('broadcastCoordinationServiceServer', () => {
           is_draft: true,
         });
 
-        broadcastCoordinationServiceServer.researchUpdate(
+        new BroadcastCoordinationServiceServer(mockClient).researchUpdate(
           researchUpdate,
           mockProfile,
-          mockClient,
-          mockHeaders,
           mockRequest,
           oldResearchUpdate,
         );
 
         expect(
-          notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
-        ).toHaveBeenCalledWith(mockResearch, researchUpdate, mockProfile, mockClient);
+          NotificationsSupabaseServiceServer.prototype.createNotificationsResearchUpdate,
+        ).toHaveBeenCalledWith(mockResearch, researchUpdate, mockProfile);
         expect(discordServiceServer.postWebhookRequest).toHaveBeenCalled();
       });
 
@@ -129,17 +124,15 @@ describe('broadcastCoordinationServiceServer', () => {
           research: mockResearch,
         });
 
-        broadcastCoordinationServiceServer.researchUpdate(
+        new BroadcastCoordinationServiceServer(mockClient).researchUpdate(
           researchUpdate,
           mockProfile,
-          mockClient,
-          mockHeaders,
           mockRequest,
         );
 
         expect(
-          notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
-        ).toHaveBeenCalledWith(mockResearch, researchUpdate, mockProfile, mockClient);
+          NotificationsSupabaseServiceServer.prototype.createNotificationsResearchUpdate,
+        ).toHaveBeenCalledWith(mockResearch, researchUpdate, mockProfile);
         expect(discordServiceServer.postWebhookRequest).toHaveBeenCalled();
       });
     });

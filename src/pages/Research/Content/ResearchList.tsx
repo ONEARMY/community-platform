@@ -81,7 +81,15 @@ const ResearchList = () => {
   const researchItemList = showDrafts ? drafts : researchItems;
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        gap: [2, 3],
+        maxWidth: ['639px', '791px', '1000px'],
+        width: '100%',
+        mx: 'auto',
+      }}
+    >
       <ResearchFilterHeader
         itemCount={isFetching ? undefined : total}
         draftCount={isFetchingDrafts ? undefined : draftCount}
@@ -90,7 +98,18 @@ const ResearchList = () => {
       />
 
       {((researchItems && researchItems.length !== 0) || showDrafts) && (
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }} data-cy="ResearchList">
+        <Box
+          as="ul"
+          data-cy="ResearchList"
+          sx={{
+            listStyle: 'none',
+            p: 0,
+            m: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
           {researchItemList.map((item) => (
             <ResearchListItem
               key={item.id}
@@ -98,11 +117,7 @@ const ResearchList = () => {
               showWeeklyVotes={sort === 'MostUsefulLastWeek'}
             />
           ))}
-        </ul>
-      )}
-
-      {!isFetching && researchItems?.length === 0 && (
-        <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
+        </Box>
       )}
 
       {!isFetching && researchItems && researchItems.length > 0 && (

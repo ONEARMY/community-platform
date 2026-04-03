@@ -83,7 +83,7 @@ export const LibraryList = () => {
         showDrafts={showDrafts}
       />
 
-      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]} sx={{ paddingTop: 1, marginBottom: 3 }}>
+      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]}>
         {showDrafts ? (
           drafts.map((item) => {
             return <ProjectCard key={item.id} item={item} />;

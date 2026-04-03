@@ -26,8 +26,7 @@ COPY . .
 # Install packages
 RUN bun install
 
-RUN echo "VITE_SITE_VARIANT=\"preview\"" >> .env && \
-    echo "VITE_GA_TRACKING_ID=\"G-G4QQ9NSQPC\"" >> .env
+RUN echo "VITE_SITE_VARIANT=\"preview\"" >> .env
 
 # Build application (skip tsc type checking - already done in CI)
 RUN bun run build:shared && bun run build:themes && bun run build:components && bun run build:vite

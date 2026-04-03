@@ -31,6 +31,8 @@ interface IProps {
 const ResearchForm = ({ id, formData, research }: IProps) => {
   const toast = useToast();
   const [status, setStatus] = useState<ResearchStatus | undefined>(research?.status || undefined);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const initialValues = useMemo<ResearchFormData>(
     () =>
@@ -46,7 +48,9 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
   );
 
   const updateStatus = async (status: ResearchStatus) => {
+    setIsUpdatingStatus(true);
     const promise = researchService.updateResearchStatus(id!, status);
+
     toast.promise(promise, {
       loading: 'Updating research status...',
       success: () => {
@@ -64,6 +68,15 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         return `Error: ${error.message}`;
       },
     });
+
+    try {
+      await promise;
+    } finally {
+      setTimeout(() => {
+        // to avoid spam clicking
+        setIsUpdatingStatus(false);
+      }, 1000);
+    }
   };
 
   const onSubmit = async (values: ResearchFormData, isDraft = false) => {
@@ -86,6 +99,10 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
       },
       duration: 10000,
     });
+
+    await promise;
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
   };
 
   const heading = id ? headings.overview.edit : headings.overview.create;
@@ -118,7 +135,12 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();
-          await onSubmit(values, true);
+          setIsSubmittingDraft(true);
+          try {
+            await onSubmit(values, true);
+          } finally {
+            setIsSubmittingDraft(false);
+          }
         };
 
         const sidebar = (
@@ -129,7 +151,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
                 onClick={() => updateStatus(status === 'complete' ? 'in-progress' : 'complete')}
                 variant={status === 'complete' ? 'info' : 'success'}
                 type="submit"
-                disabled={!id}
+                disabled={!id || isUpdatingStatus || submitting || isSubmittingDraft}
                 sx={{
                   width: '100%',
                   display: 'block',
@@ -175,7 +197,8 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
             heading={heading}
             sidebar={sidebar}
             submitFailed={submitFailed}
-            submitting={submitting}
+            submitting={submitting || isSubmittingDraft || isUpdatingStatus}
+            hideSubmittingMessage={true}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <ResearchTitleField />

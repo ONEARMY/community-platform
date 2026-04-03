@@ -20,6 +20,7 @@ interface IProps {
   sidebar?: React.ReactNode;
   submitFailed: boolean;
   submitting: boolean;
+  hideSubmittingMessage?: boolean;
   unsavedChangesDialog?: React.ReactNode;
 }
 
@@ -41,6 +42,7 @@ export const FormWrapper = (props: IProps) => {
     sidebar,
     submitFailed,
     submitting,
+    hideSubmittingMessage,
     unsavedChangesDialog,
   } = props;
 
@@ -124,7 +126,9 @@ export const FormWrapper = (props: IProps) => {
           {DRAFT_LABEL}
         </Button>
 
-        {submitting && <Loader label="Submitting, please do not close the page..." />}
+        {submitting && !hideSubmittingMessage && (
+          <Loader label="Submitting, please do not close the page..." />
+        )}
 
         {sidebar && sidebar}
 

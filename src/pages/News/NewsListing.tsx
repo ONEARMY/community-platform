@@ -6,6 +6,7 @@ import { logger } from 'src/logger';
 import { newsContentService } from 'src/pages/News/newsContent.service';
 import { Flex, Heading } from 'theme-ui';
 import useDrafts from '../common/Drafts/useDraftsSupabase';
+import { ITEMS_PER_PAGE } from './constants';
 import { listing } from './labels';
 import { NewsListHeader } from './NewsListHeader';
 import { NewsListItem } from './NewsListItem';
@@ -24,7 +25,6 @@ export const NewsListing = () => {
   const q = searchParams.get('q') || '';
   const sort = searchParams.get('sort') as NewsSortOption;
   const pageNumber = parseInt(searchParams.get('pageNo') || '0');
-  const itemsPerPage = 10;
 
   useEffect(() => {
     if (!sort) {
@@ -38,7 +38,7 @@ export const NewsListing = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      const skip = pageNumber * itemsPerPage;
+      const skip = pageNumber * ITEMS_PER_PAGE;
       fetchNews(skip);
     }
   }, [q, sort, pageNumber]);
@@ -112,7 +112,7 @@ export const NewsListing = () => {
         {showLoadMore && (
           <Flex sx={{ justifyContent: 'center' }}>
             <Pagination
-              totalPages={Math.ceil(total / itemsPerPage)}
+              totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
               onPageChange={updatePageNumber}
               page={pageNumber}
             />

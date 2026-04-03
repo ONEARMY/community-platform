@@ -16,8 +16,12 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
     onPageChange(value - 1);
   }, 500);
 
+  const isValidPageNumber = (value: number | undefined): value is number => {
+    return value !== undefined && value >= 1 && value <= totalPages;
+  };
+
   const handlePageChange = (value?: number) => {
-    if (value && value >= 1 && value <= totalPages && value !== page + 1) {
+    if (isValidPageNumber(value) && value !== page + 1) {
       debouncedChange(value);
     } else {
       debouncedChange.cancel();
@@ -87,6 +91,16 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
                 setPageNumber(undefined);
               }
             }}
+            onBlur={() => {
+              if (isValidPageNumber(pageNumber) && pageNumber !== page + 1) {
+                debouncedChange.cancel();
+                onPageChange(pageNumber - 1);
+              } else if (!pageNumber) {
+                debouncedChange.cancel();
+              } else {
+                setPageNumber(page + 1);
+              }
+            }}
             aria-label="Enter page number"
             sx={{
               border: '2px solid black',
@@ -103,12 +117,14 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               justifyItems: 'center',
               backgroundColor: 'white',
               fontSize: 3,
+              fontWeight: 'bold',
             }}
           />
           <Flex
             sx={{
               justifyContent: 'center',
               alignItems: 'center',
+              fontWeight: 'bold',
             }}
           >
             <Text>{`of ${totalPages}`}</Text>

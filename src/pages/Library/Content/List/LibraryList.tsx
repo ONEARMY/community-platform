@@ -6,6 +6,7 @@ import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { Flex, Grid, Heading } from 'theme-ui';
+import { ITEMS_PER_PAGE } from '../../constants';
 import { LibrarySearchParams, libraryService } from '../../library.service';
 import { LibraryListHeader } from './LibraryListHeader';
 import type { LibrarySortOption } from './LibrarySortOptions';
@@ -28,7 +29,6 @@ export const LibraryList = () => {
   const category = searchParams.get(LibrarySearchParams.category) || '';
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
   const pageNumber = parseInt(searchParams.get('pageNo') || '0');
-  const itemsPerPage = 12;
 
   useEffect(() => {
     if (!sort) {
@@ -43,7 +43,7 @@ export const LibraryList = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      const skip = pageNumber * itemsPerPage;
+      const skip = pageNumber * ITEMS_PER_PAGE;
       fetchProjects(skip);
     }
   }, [q, category, sort]);
@@ -104,7 +104,7 @@ export const LibraryList = () => {
           }}
         >
           <Pagination
-            totalPages={Math.ceil(total / itemsPerPage)}
+            totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
             onPageChange={updatePageNumber}
             page={pageNumber}
           />

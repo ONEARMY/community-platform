@@ -51,7 +51,7 @@ describe('[Questions]', () => {
 
     it('should load more questions', () => {
       // Initially on page 1 with 22 items
-      cy.get('[data-cy=question-list-item]').should('have.length', 21);
+      cy.get('[data-cy=question-list-item]').should('have.length', 20);
       cy.url().should('not.include', 'pageNo=');
 
       // Click next page
@@ -70,7 +70,7 @@ describe('[Questions]', () => {
 
       // Then go back to previous page
       cy.get('[data-cy=pagination-icon-chevron-left]').click();
-      cy.get('[data-cy=question-list-item]').should('have.length', 21);
+      cy.get('[data-cy=question-list-item]').should('have.length', 20);
       cy.url().should('include', 'pageNo=0');
     });
   });

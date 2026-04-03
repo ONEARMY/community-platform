@@ -5,14 +5,13 @@ import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { Box, Flex } from 'theme-ui';
+import { ITEMS_PER_PAGE } from '../constants';
 import { listing } from '../labels';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { researchService } from '../research.service';
 import { ResearchFilterHeader } from './ResearchListHeader';
 import ResearchListItem from './ResearchListItem';
 import { ResearchSearchParams } from './ResearchSearchParams';
-
-const itemsPerPage = 10;
 
 const ResearchList = () => {
   const [isFetching, setIsFetching] = useState(true);
@@ -44,7 +43,7 @@ const ResearchList = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      const skip = (parseInt(pageNumber) || 0) * itemsPerPage;
+      const skip = (parseInt(pageNumber) || 0) * ITEMS_PER_PAGE;
       fetchResearchItems(skip);
     }
   }, [q, category, status, sort, pageNumber]);
@@ -113,7 +112,7 @@ const ResearchList = () => {
           }}
         >
           <Pagination
-            totalPages={Math.ceil(total / itemsPerPage)}
+            totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
             onPageChange={updatePageNumber}
             page={parseInt(pageNumber) || 0}
           />

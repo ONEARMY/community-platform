@@ -154,6 +154,8 @@ export const glyphs: IGlyphs = {
   verified: iconMap.verified,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
+  paginationSingleLeft: iconMap.paginationSingleLeft,
+  paginationSingleRight: iconMap.paginationSingleRight,
 };
 
 export type IconProps = IProps & VerticalAlignProps & SpaceProps;

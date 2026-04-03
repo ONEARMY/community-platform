@@ -58,6 +58,8 @@ import megaphoneActiveSVG from '../../assets/icons/megaphone-active.svg';
 import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg';
 import mouldsSVG from '../../assets/icons/moulds.svg';
 import otherSVG from '../../assets/icons/other.svg';
+import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
+import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
 import patreonSVG from '../../assets/icons/patreon.svg';
 import plasticSVG from '../../assets/icons/plastic.svg';
 import productsSVG from '../../assets/icons/products.svg';
@@ -102,22 +104,8 @@ export const iconMap = {
   bazar: <ImageIcon src={bazarSVG} />,
   category: <ImageIcon src={categorySVG} data-testid="category-icon" />,
   chevronDown: <ImageIcon src={chevronDownSVG} />,
-  chevronLeft: (
-    <ImageIcon
-      src={chevronLeftSVG}
-      style={{
-        maxWidth: 'none',
-      }}
-    />
-  ),
-  chevronRight: (
-    <ImageIcon
-      src={chevronRightSVG}
-      style={{
-        maxWidth: 'none',
-      }}
-    />
-  ),
+  chevronLeft: <ImageIcon src={chevronLeftSVG} />,
+  chevronRight: <ImageIcon src={chevronRightSVG} />,
   chevronUp: <ImageIcon src={chevronUpSVG} />,
   collaborator: <ImageIcon src={collaboratorSVG} />,
   close: <ImageIcon src={closeSVG} data-cy="close" />,
@@ -173,6 +161,22 @@ export const iconMap = {
   moulds: <ImageIcon src={mouldsSVG} />,
   other: <ImageIcon src={otherSVG} />,
   patreon: <ImageIcon src={patreonSVG} />,
+  paginationSingleLeft: (
+    <ImageIcon
+      src={paginationSingleLeftSVG}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
+  paginationSingleRight: (
+    <ImageIcon
+      src={paginationSingleRightSVG}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
   plastic: <ImageIcon src={plasticSVG} />,
   profile: <ImageIcon src={profileSVG} />,
   products: <ImageIcon src={productsSVG} />,

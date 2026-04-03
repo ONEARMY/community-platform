@@ -103,6 +103,8 @@ export type availableGlyphs =
   | 'gps-location'
   | 'copy-link'
   | 'double-arrow-right'
-  | 'double-arrow-left';
+  | 'double-arrow-left'
+  | 'paginationSingleLeft'
+  | 'paginationSingleRight';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

@@ -64,7 +64,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
         )}
         <Box sx={{ display: ['none', 'flex'] }}>
           <PaginationIcons
-            directionIcon="chevron-left"
+            directionIcon="paginationSingleLeft"
             onClick={() => onPageChange(page - 1)}
             hidden={page === 0}
             title="Previous Page"
@@ -118,6 +118,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               backgroundColor: 'white',
               fontSize: 3,
               fontWeight: 'bold',
+              fontFamily: "'Varela Round',Arial,sans-serif",
             }}
           />
           <Flex
@@ -125,6 +126,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               justifyContent: 'center',
               alignItems: 'center',
               fontWeight: 'bold',
+              minWidth: 'max-content',
             }}
           >
             <Text>{`of ${totalPages}`}</Text>
@@ -135,7 +137,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
       <>
         <Box sx={{ display: ['none', 'flex'] }}>
           <PaginationIcons
-            directionIcon="chevron-right"
+            directionIcon="paginationSingleRight"
             onClick={() => onPageChange(page + 1)}
             hidden={page === totalPages - 1}
             title="Next Page"

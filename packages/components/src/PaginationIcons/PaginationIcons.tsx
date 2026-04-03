@@ -4,7 +4,11 @@ interface IProps {
   hidden?: boolean;
   title: string;
   ariaLabel: string;
-  directionIcon: 'chevron-left' | 'chevron-right' | 'double-arrow-left' | 'double-arrow-right';
+  directionIcon:
+    | 'paginationSingleLeft'
+    | 'paginationSingleRight'
+    | 'double-arrow-left'
+    | 'double-arrow-right';
   onClick: () => void;
 }
 

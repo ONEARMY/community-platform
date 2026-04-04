@@ -31,7 +31,7 @@ export const Select = (props: Props) => {
   const SelectStyles: Partial<StylesConfig> = {
     container: (provided) => ({
       ...provided,
-      fontSize: theme.fontSizes[2] + 'px',
+      fontSize: theme.fontSizes[1] + 'px',
       fontFamily: '"Varela Round", Arial, sans-serif',
     }),
     control: (provided) => ({

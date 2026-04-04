@@ -2,7 +2,7 @@ import { Flex, Label, Text } from 'theme-ui';
 
 const _labelStyle = {
   fontSize: 2,
-  marginBottom: 2,
+  marginBottom: 1,
   display: 'block',
 };
 
@@ -30,18 +30,18 @@ export const FormFieldWrapper = (props: IProps) => {
   const heading = required ? `${text} *` : text;
 
   return (
-    <Flex sx={{ flexDirection, flexWrap, marginBottom: 2 }}>
+    <Flex sx={{ flexDirection, flexWrap }}>
       <Label sx={_labelStyle} htmlFor={htmlFor}>
         {heading}
       </Label>
 
       {description && (
-        <Text variant="quiet" sx={{ fontSize: 2, marginBottom: 2 }}>
+        <Text variant="quiet" sx={{ fontSize: 2 }}>
           {description}
         </Text>
       )}
 
-      <Flex sx={{ gap: '1rem' }}>{children}</Flex>
+      <Flex sx={{ flexDirection: 'column' }}>{children}</Flex>
     </Flex>
   );
 };

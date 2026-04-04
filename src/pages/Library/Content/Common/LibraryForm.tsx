@@ -29,7 +29,7 @@ interface LibraryFormProps {
 export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
 
@@ -58,7 +58,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
     setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
+    setSaveErrorMessage(undefined);
     setIsSubmitting(true);
     setIsSavingAsDraft(isDraft);
 
@@ -99,19 +99,6 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
         ...arrayMutators,
       }}
       enableReinitialize={true}
-      validate={(values) => {
-        const errors = {};
-
-        if (!values.category) {
-          errors['category'] = 'Category is required.';
-        }
-
-        if (!values.coverImage?.id) {
-          errors['coverImage'] = 'The Cover Image is required (either new or existing).';
-        }
-
-        return errors;
-      }}
       render={({
         errors,
         dirty,
@@ -161,13 +148,13 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
                 flexDirection: ['column', 'row'],
               }}
             >
-              <Flex sx={{ flexDirection: 'column', gap: 2, flex: 1 }}>
+              <Flex sx={{ flexDirection: 'column', gap: '1rem', flex: 1 }}>
                 <LibraryTitleField />
                 <LibraryDescriptionField />
                 <LibraryCategoryField />
-                <TagsField title={intro.tags.title} />
                 <LibraryTimeField />
                 <LibraryDifficultyField />
+                <TagsField title={intro.tags.title} />
                 <FilesFields contentType="projects" contentId={id ?? null} />
               </Flex>
               <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>

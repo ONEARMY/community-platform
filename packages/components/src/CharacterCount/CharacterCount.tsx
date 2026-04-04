@@ -32,7 +32,14 @@ export const CharacterCount = ({ currentSize, minSize, maxSize }: ICharacterCoun
       data-cy="character-count"
       color={color}
       ml="auto"
-      sx={{ alignSelf: 'flex-end', fontSize: 1, fontWeight }}
+      sx={{
+        position: 'absolute',
+        right: 1,
+        bottom: -4,
+        alignSelf: 'flex-end',
+        fontSize: 1,
+        fontWeight,
+      }}
     >
       {currentSize} / {maxSize}
     </Text>

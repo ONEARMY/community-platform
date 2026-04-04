@@ -36,7 +36,7 @@ export const SettingsFormNotifications = ({
         </TextNotification>
       )}
       {showErrorsNotification && (
-        <ErrorsContainer saving={Object.values(errors).map((value) => String(value))} />
+        <ErrorsContainer serverErrors={Object.values(errors).map((value) => String(value))} />
       )}
     </>
   );

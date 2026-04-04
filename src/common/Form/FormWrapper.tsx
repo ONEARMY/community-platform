@@ -9,8 +9,8 @@ interface IProps {
   buttonLabel: string;
   contentType: ContentFormType;
   children: React.ReactNode;
-  errorsClientSide: IErrorsListSet[] | undefined;
-  errorSubmitting: string | undefined | null;
+  errorsClientSide?: IErrorsListSet[];
+  errorSubmitting?: string;
   guidelines?: React.ReactNode;
   handleSubmit: () => void;
   handleSubmitDraft: (e: React.MouseEvent) => void;
@@ -80,7 +80,17 @@ export const FormWrapper = (props: IProps) => {
             </Flex>
           </Card>
           {guidelines && <Box sx={{ display: ['block', 'block', 'none'] }}>{guidelines}</Box>}
-          <Card sx={{ padding: 4, overflow: 'visible' }}>{children}</Card>
+          <Card
+            sx={{
+              padding: 4,
+              overflow: 'visible',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+            }}
+          >
+            {children}
+          </Card>
           {belowBody}
         </Flex>
       </Flex>
@@ -125,11 +135,9 @@ export const FormWrapper = (props: IProps) => {
         </Button>
 
         {submitting && <Loader label="Submitting, please do not close the page..." />}
-
         {sidebar && sidebar}
-
-        {errorSubmitting && <ErrorsContainer saving={[errorSubmitting]} />}
-        {hasClientSideErrors && <ErrorsContainer client={errorsClientSide} />}
+        {errorSubmitting && <ErrorsContainer serverErrors={[errorSubmitting]} />}
+        {hasClientSideErrors && <ErrorsContainer clientErrors={errorsClientSide} />}
       </Flex>
     </Flex>
   );

@@ -73,7 +73,7 @@ describe('[Profile]', () => {
 
       cy.step('Form errors without a message');
       cy.get('[data-cy=contact-submit]').click();
-      cy.contains('Make sure this field is filled correctly').should('be.visible');
+      cy.contains('This field is required').should('be.visible');
 
       cy.step('Contact form will send');
       const message = faker.lorem.sentences(50).slice(0, MESSAGE_MAX_CHARACTERS).trim();

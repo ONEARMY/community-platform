@@ -79,10 +79,10 @@ const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
     body: data,
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ error: 'Failed to save map pin' }));
-    const errorMessage = errorData.error || errorData.message || 'Failed to save map pin';
-    throw new Error(errorMessage);
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   const { mapPin } = await response.json();
@@ -115,13 +115,12 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
     body: data,
   });
 
-  if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({ error: 'Failed to update impact data' }));
-    const errorMessage = errorData.error || errorData.message || 'Failed to update impact data';
-    throw new Error(errorMessage);
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    throw new Error(errorMessage, { cause: response.status });
   }
+
   const { impact } = await response.json();
 
   return JSON.parse(impact) as IUserImpact;

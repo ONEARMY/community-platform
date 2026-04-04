@@ -1,3 +1,4 @@
+import { HTTPException } from 'hono/http-exception';
 import type { DBMapPin, DBProfile, UpsertPin } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
@@ -6,6 +7,12 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { MapPinsServiceServer } from 'src/services/mapPinsService.server';
 import { MapServiceServer } from 'src/services/mapService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import {
+  forbiddenError,
+  methodNotAllowedError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -14,14 +21,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const profileService = new ProfileServiceServer(client);
     const dbProfile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!dbProfile) {
-      return { status: 404, statusText: 'profile not found' };
+      throw forbiddenError();
     }
 
     if (request.method === 'DELETE') {
@@ -42,18 +49,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       profile_id: profile.id,
     };
 
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, data);
 
     const mapService = new MapServiceServer(client);
     const result = await mapService.upsert(data, profile);
 
     if (result?.error) {
       console.error(result.error);
-      return Response.json({}, { headers, status: 500, statusText: 'Error saving map pin' });
+      throw new Error(result.error.message || 'Error saving map pin');
     }
 
     const pinFactory = new MapPinFactory(client);
@@ -63,6 +66,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ mapPin }, { headers, status: 200 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error saving map pin' });
   }
@@ -70,22 +77,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(request: Request, data: UpsertPin) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
   if (!data.country) {
-    return { status: 400, statusText: 'country is required' };
+    throw validationError('country is required');
   }
   if (!data.country_code) {
-    return { status: 400, statusText: 'countryCode is required' };
+    throw validationError('countryCode is required');
   }
   if (!data.lat) {
-    return { status: 400, statusText: 'lat is required' };
+    throw validationError('lat is required');
   }
   if (!data.lng) {
-    return { status: 400, statusText: 'lng is required' };
+    throw validationError('lng is required');
   }
-
-  return { valid: true };
 }
 
 async function deletePin(request: Request, profile: DBProfile) {
@@ -95,7 +100,7 @@ async function deletePin(request: Request, profile: DBProfile) {
     await new MapPinsServiceServer(client).delete(profile.id);
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error deleting pin' });
+    return Response.json({}, { headers, status: 500 });
   }
 
   return Response.json({}, { headers, status: 200 });

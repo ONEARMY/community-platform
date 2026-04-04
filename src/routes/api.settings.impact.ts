@@ -1,8 +1,16 @@
+import { HTTPException } from 'hono/http-exception';
 import type { IImpactDataField, IUserImpact } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { data } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImpactServiceServer } from 'src/services/impactService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import {
+  forbiddenError,
+  methodNotAllowedError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -11,70 +19,67 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return { status: 404, statusText: 'profile not found' };
+      throw forbiddenError();
     }
 
     const formData = await request.formData();
-    const data = {
+    const fieldData = {
       year: Number(formData.get('year')),
       fields: formData.get('fields') as string,
     };
 
-    const { valid, status, statusText } = await validateRequest(request, data);
+    await validateRequest(request, fieldData);
 
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
-
-    const fields: IImpactDataField[] = JSON.parse(data.fields);
+    const fields: IImpactDataField[] = JSON.parse(fieldData.fields);
     const impactService = new ImpactServiceServer(client);
-    const result = await impactService.update(profile.id, data.year, fields);
+    const result = await impactService.update(profile.id, fieldData.year, fields);
 
     if (result?.error) {
       console.error(result.error);
-      return Response.json({}, { headers, status: 500, statusText: 'Error saving impact' });
+      throw new Error(result.error.message || 'Error saving impact');
     }
 
     const impact = result.data as unknown as IUserImpact;
 
     profileService.updateUserActivity(claims.data.claims.sub);
 
-    return Response.json(impact, { headers, status: 200 });
+    return data(impact, { headers, status: 200 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error saving impact' });
   }
 };
 
 async function validateRequest(request: Request, data: any) {
-  // TODO: Create ImpactDTO
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
   if (!data.year) {
-    return { status: 400, statusText: 'year is required' };
+    throw validationError('year is required');
   }
 
   if (!data.fields) {
-    return { status: 400, statusText: 'fields is required' };
+    throw validationError('fields are required');
   }
 
   try {
     const fields: IImpactDataField[] = JSON.parse(data.fields);
 
     if (!Array.isArray(fields) || !fields?.length) {
-      return { status: 400, statusText: 'fields is not valid' };
+      throw validationError('fields are not valid');
     }
   } catch (_) {
-    return { status: 400, statusText: 'invalid fields' };
+    throw validationError('fields are not valid');
   }
-
-  return { valid: true };
 }

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   composeValidators,
@@ -21,7 +21,7 @@ describe('draftValidationWrapper', () => {
 
     draftValidationWrapper(value, { allowDraftSave }, validator);
 
-    expect(validator).toHaveBeenCalledWith(value);
+    expect(validator).toHaveBeenCalledWith(value, { allowDraftSave });
   });
 
   it('returns undefined when draft save is allowed', () => {

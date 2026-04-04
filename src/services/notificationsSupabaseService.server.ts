@@ -112,14 +112,6 @@ export class NotificationsSupabaseServiceServer {
       );
     } catch (error) {
       console.error(error);
-
-      return Response.json(
-        { error },
-        {
-          status: 500,
-          statusText: 'Error creating notifications: Comments',
-        },
-      );
     }
   }
 

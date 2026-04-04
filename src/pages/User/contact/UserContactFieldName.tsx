@@ -1,6 +1,7 @@
 import { FieldInput } from 'oa-components';
 import { Field } from 'react-final-form';
 import { contact } from 'src/pages/User/labels';
+import { required } from 'src/utils/validators';
 import { Flex, Label } from 'theme-ui';
 
 export const UserContactFieldName = () => {
@@ -17,6 +18,7 @@ export const UserContactFieldName = () => {
         name={name}
         placeholder={placeholder}
         sx={{ backgroundColor: 'white' }}
+        validate={required}
         validateFields={[]}
       />
     </Flex>

@@ -26,33 +26,31 @@ export const UserContactForm = observer(({ user }: Props) => {
 
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
 
-  const { button, title, successMessage } = contact;
   const buttonName = 'contact-submit';
   const formId = 'contact-form';
 
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null);
-    const response = await messageService.sendMessage({
-      to: user.username,
-      message: formValues.message,
-      name: formValues.name,
-    });
+    try {
+      await messageService.sendMessage({
+        to: user.username,
+        message: formValues.message,
+        name: formValues.name,
+      });
 
-    if (response.ok) {
       form.restart();
-      return setSubmitResults({ type: 'success', message: successMessage });
+      return setSubmitResults({ type: 'success', message: contact.successMessage });
+    } catch (error) {
+      if (error.message) {
+        setSubmitResults({ type: 'error', message: error.message });
+      }
     }
-
-    return setSubmitResults({
-      type: 'error',
-      message: `${response.statusText}. Please try again or report the problem.`,
-    });
   };
 
   return (
     <Flex sx={{ flexDirection: 'column' }} data-cy="UserContactForm">
       <Heading as="h3" variant="small" mb={2}>
-        {`${title} ${user.displayName}`}
+        {`${contact.title} ${user.displayName}`}
       </Heading>
       <Form
         onSubmit={onSubmit}
@@ -76,7 +74,7 @@ export const UserContactForm = observer(({ user }: Props) => {
                     disabled={submitting}
                     form={formId}
                   >
-                    {button}
+                    {contact.button}
                   </Button>
                 </Box>
               </Flex>

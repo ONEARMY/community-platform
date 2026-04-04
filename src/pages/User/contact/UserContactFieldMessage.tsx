@@ -2,7 +2,7 @@ import { FieldTextarea } from 'oa-components';
 import { Field } from 'react-final-form';
 import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { contact } from 'src/pages/User/labels';
-import { required } from 'src/utils/validators';
+import { minValue, required } from 'src/utils/validators';
 import { Flex, Label } from 'theme-ui';
 
 export const UserContactFieldMessage = () => {
@@ -21,7 +21,7 @@ export const UserContactFieldMessage = () => {
         modifiers={{ capitalize: true, trim: true }}
         component={FieldTextarea}
         sx={{ backgroundColor: 'white' }}
-        validate={required}
+        validate={(value) => required(value) || minValue(MESSAGE_MIN_CHARACTERS)(value)}
         validateFields={[]}
         showCharacterCount
       />

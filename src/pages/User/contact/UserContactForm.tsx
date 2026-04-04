@@ -61,15 +61,13 @@ export const UserContactForm = observer(({ user }: Props) => {
         render={({ handleSubmit, submitting }) => {
           return (
             <form>
-              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+              <Flex sx={{ flexDirection: 'column', gap: 3 }}>
                 <UserContactError submitResults={submitResults} />
-
                 <UserContactFieldName />
                 <UserContactFieldMessage />
 
                 <Box sx={{ flexSelf: 'flex-start' }}>
                   <Button
-                    large
                     onClick={handleSubmit}
                     data-cy={buttonName}
                     data-testid={buttonName}

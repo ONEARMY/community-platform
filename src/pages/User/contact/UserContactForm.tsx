@@ -51,7 +51,7 @@ export const UserContactForm = observer(({ user }: Props) => {
 
   return (
     <Flex sx={{ flexDirection: 'column' }} data-cy="UserContactForm">
-      <Heading as="h3" variant="small" my={2}>
+      <Heading as="h3" variant="small" mb={2}>
         {`${title} ${user.displayName}`}
       </Heading>
       <Form

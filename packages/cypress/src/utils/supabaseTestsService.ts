@@ -73,6 +73,16 @@ export class SupabaseTestsService {
         continue;
       }
 
+      // Log errors so they're visible in CI
+      console.error(`[${this.tenantId}] Error seeding ${table}:`, {
+        error: result.error,
+        message: result.error?.message,
+        code: result.error?.code,
+        details: result.error?.details,
+        hint: result.error?.hint,
+        rowCount: rows.length
+      });
+
       results[table] = result;
     }
 

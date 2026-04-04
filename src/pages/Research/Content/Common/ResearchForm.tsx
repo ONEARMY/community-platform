@@ -180,7 +180,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
             buttonLabel={buttons.publish}
             contentType="research"
             errorsClientSide={errorsClientSide}
-            errorSubmitting={null}
             guidelines={<ResearchPostingGuidelines />}
             handleSubmit={handleSubmit}
             handleSubmitDraft={handleSubmitDraft}

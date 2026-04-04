@@ -92,6 +92,7 @@ export const ImageInputV2 = (props: IProps) => {
         borderColor: 'background',
         borderStyle: hasImage ? 'none' : 'solid',
         borderRadius: 1,
+        borderWidth: '2px',
         backgroundColor: 'white',
         height: '100%',
         width: '100%',

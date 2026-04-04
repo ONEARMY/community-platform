@@ -99,19 +99,6 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
         ...arrayMutators,
       }}
       enableReinitialize={true}
-      validate={(values) => {
-        const errors = {};
-
-        if (!values.category) {
-          errors['category'] = 'Category is required.';
-        }
-
-        if (!values.coverImage?.id) {
-          errors['coverImage'] = 'The Cover Image is required (either new or existing).';
-        }
-
-        return errors;
-      }}
       render={({
         errors,
         dirty,
@@ -165,9 +152,9 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
                 <LibraryTitleField />
                 <LibraryDescriptionField />
                 <LibraryCategoryField />
-                <TagsField title={intro.tags.title} />
                 <LibraryTimeField />
                 <LibraryDifficultyField />
+                <TagsField title={intro.tags.title} />
                 <FilesFields contentType="projects" contentId={id ?? null} />
               </Flex>
               <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>

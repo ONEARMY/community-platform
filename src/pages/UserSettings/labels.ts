@@ -131,7 +131,7 @@ export const fields: ILabels = {
 };
 
 export const form = {
-  defaultError: 'Make sure this field is filled correctly',
+  defaultError: 'This field is required',
   saveSuccess: 'Yay! Impact data saved.',
   saveNotificationPreferences: 'Whoop. Preferences updated.',
 };

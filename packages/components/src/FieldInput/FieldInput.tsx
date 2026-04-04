@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import type { FieldRenderProps } from 'react-final-form';
 import { Box, Flex, Input, Text } from 'theme-ui';
 import { CharacterCount } from '../CharacterCount/CharacterCount';
@@ -45,7 +44,7 @@ export const FieldInput = ({
   endAdornment,
   ...rest
 }: Props) => {
-  const curLength = useMemo<number>(() => input?.value?.length ?? 0, [input?.value]);
+  const curLength = input?.value?.length ?? 0;
 
   const InputElement = (
     <Input

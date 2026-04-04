@@ -48,7 +48,7 @@ export const FieldTextarea = ({
   const { sx: restSx, ...restWithoutSx } = rest;
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: 1, width: '100%' }}>
+    <Flex sx={{ position: 'relative', flexDirection: 'column', gap: 1, width: '100%' }}>
       {meta.error && meta.touched && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
 
       <Textarea

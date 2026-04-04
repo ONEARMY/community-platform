@@ -8,6 +8,12 @@ export type CategoriesSelectProps = {
   isForm: boolean;
   categories: SelectValue[];
   onChange: (value: SelectValue) => void;
+  invalid?: boolean;
+};
+
+const getVariant = (isForm: boolean, invalid: boolean) => {
+  if (!isForm) return undefined;
+  return invalid ? 'formError' : 'form';
 };
 
 export const CategoriesSelectV2 = ({
@@ -16,15 +22,19 @@ export const CategoriesSelectV2 = ({
   isForm,
   categories,
   onChange,
+  invalid = false,
 }: CategoriesSelectProps) => {
   const handleChange = (changedValue) => {
     onChange(changedValue ?? null);
   };
 
   return (
-    <FieldContainer data-cy={categories ? 'category-select' : 'category-select-empty'}>
+    <FieldContainer
+      invalid={invalid}
+      data-cy={categories ? 'category-select' : 'category-select-empty'}
+    >
       <Select
-        variant={isForm ? 'form' : undefined}
+        variant={getVariant(isForm, invalid)}
         options={categories}
         placeholder={placeholder}
         value={value}

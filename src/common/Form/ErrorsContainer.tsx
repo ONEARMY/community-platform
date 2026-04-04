@@ -5,15 +5,16 @@ import { headings } from './labels';
 import type { IErrorsListSet } from './types';
 
 interface IProps {
-  client?: (IErrorsListSet | undefined)[] | undefined;
-  saving?: (string | undefined | null)[];
+  clientErrors?: IErrorsListSet[];
+  serverErrors?: string[];
 }
 
-export const ErrorsContainer = ({ client, saving }: IProps) => {
-  const hasClientErrors = client && client.length !== 0;
-  const hasSaveErrors = saving && saving.filter((error) => error != undefined).length !== 0;
+export const ErrorsContainer = ({ clientErrors, serverErrors }: IProps) => {
+  const hasClientErrors = clientErrors && clientErrors.length !== 0;
+  const hasServerErrors =
+    serverErrors && serverErrors.filter((error) => error != undefined).length !== 0;
 
-  if (!hasClientErrors && !hasSaveErrors) {
+  if (!hasClientErrors && !hasServerErrors) {
     return null;
   }
 
@@ -31,44 +32,36 @@ export const ErrorsContainer = ({ client, saving }: IProps) => {
       }}
     >
       <Text sx={{ fontSize: 2, fontWeight: 'bold' }}>{headings.errors}</Text>
-      {hasSaveErrors && (
+      {hasServerErrors && (
         <ul style={{ padding: 0, margin: 0, listStylePosition: 'inside' }}>
-          {saving.map((x, i) => (
+          {serverErrors.map((x, i) => (
             <li key={i}>{x}</li>
           ))}
         </ul>
       )}
-      {hasClientErrors && <ErrorsListSet errorsListSet={client} />}
-    </Card>
-  );
-};
+      {hasClientErrors &&
+        clientErrors.map((errorsList, index) => {
+          const { errors, title, keys, labels } = errorsList;
 
-const ErrorsListSet = ({ errorsListSet }) => {
-  return errorsListSet.map((errorsList, index) => {
-    if (errorsList === undefined) return;
-    return <ErrorsList key={index} errorsList={errorsList} />;
-  });
-};
-
-const ErrorsList = ({ errorsList }) => {
-  const { errors, title, keys, labels } = errorsList;
-
-  return (
-    <Flex sx={{ flexDirection: 'column' }}>
-      {title && (
-        <Box paddingBottom={1}>
-          <Text>{title}</Text>
-        </Box>
-      )}
-      <ul style={{ padding: 0, margin: 0, listStylePosition: 'inside' }}>
-        {keys.map((key, index) => {
           return (
-            <li key={index}>
-              <strong>{labels[key].title}</strong>: {errors[key]}
-            </li>
+            <Flex key={index} sx={{ flexDirection: 'column' }}>
+              {title && (
+                <Box paddingBottom={1}>
+                  <Text>{title}</Text>
+                </Box>
+              )}
+              <ul style={{ padding: 0, margin: 0, listStylePosition: 'inside' }}>
+                {keys.map((key, keyIndex) => {
+                  return (
+                    <li key={keyIndex}>
+                      <strong>{labels[key].title}</strong>: {errors[key] as string}
+                    </li>
+                  );
+                })}
+              </ul>
+            </Flex>
           );
         })}
-      </ul>
-    </Flex>
+    </Card>
   );
 };

@@ -9,7 +9,7 @@ import { logger } from 'src/logger';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { FilesFields } from '../../../common/FormFields/FilesFields';
-import { buttons, headings, update } from '../../labels';
+import { buttons, headings, updateForm } from '../../labels';
 import { researchService } from '../../research.service';
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField';
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField';
@@ -24,7 +24,7 @@ interface IProps {
 
 export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
   const navigate = useNavigate();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
@@ -48,7 +48,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
     }
     setIsSaving(true);
     setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
+    setSaveErrorMessage(undefined);
 
     try {
       const result = await researchService.upsertUpdate(research.id, id, formData, isDraft);
@@ -96,7 +96,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
           submitting,
           values,
         }) => {
-          const errorsClientSide = [errorSet(errors, update)];
+          const errorsClientSide = [errorSet(errors, updateForm)];
 
           const handleSubmitDraft = () => onSubmit(values, true);
 

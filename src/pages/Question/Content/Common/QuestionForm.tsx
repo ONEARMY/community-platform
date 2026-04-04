@@ -28,7 +28,7 @@ interface IProps {
 
 export const QuestionForm = (props: IProps) => {
   const navigate = useNavigate();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const id = props?.id || null;
@@ -48,7 +48,7 @@ export const QuestionForm = (props: IProps) => {
 
   const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
     setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
+    setSaveErrorMessage(undefined);
     setIsSubmitting(true);
 
     try {

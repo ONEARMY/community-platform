@@ -28,7 +28,7 @@ interface IProps {
 
 export const NewsForm = (props: IProps) => {
   const navigate = useNavigate();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -48,7 +48,7 @@ export const NewsForm = (props: IProps) => {
 
   const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
     setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
+    setSaveErrorMessage(undefined);
     setIsSubmitting(true);
 
     try {

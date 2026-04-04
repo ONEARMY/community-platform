@@ -148,6 +148,9 @@ async function validateRequest(
   if (!profile) {
     throw validationError('User not found');
   }
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
   }

@@ -140,6 +140,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
+    if (!profile.username) {
+      return Response.json(
+        { error: 'You must set a username before creating content' },
+        { headers, status: 403 },
+      );
+    }
+
     const projectDb = await createProject(client, data, slug, moderation, profile);
     const project = Project.fromDB(projectDb, []);
 

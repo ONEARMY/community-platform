@@ -118,6 +118,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const profile = profileRequest.data[0] as DBProfile;
 
+    if (!profile.username) {
+      throw validationError('You must set a username before creating content', 'username');
+    }
+
     const questionResult = await client
       .from('questions')
       .insert({

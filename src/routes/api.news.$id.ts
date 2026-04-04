@@ -136,6 +136,10 @@ async function validateRequest(
     throw validationError('User not found');
   }
 
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
+
   const isCreator = currentNews.created_by === profile.id;
 
   if (!isCreator && !hasAdminRights(profile)) {

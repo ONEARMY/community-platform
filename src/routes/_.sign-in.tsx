@@ -77,11 +77,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const profile = await profileService.getByAuthId(signInResult.data.user.id);
-  if (!profile?.username) {
-    return redirect('/settings', { headers });
-  }
 
-  const fallbackPath = `/u/${profile.username}`;
+  const fallbackPath = profile?.username ? `/u/${profile.username}` : '/';
   const path = getReturnUrl(request, fallbackPath);
 
   return redirect(path, { headers });

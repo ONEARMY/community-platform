@@ -47,6 +47,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
+    if (!profile.username) {
+      return Response.json(
+        { error: 'You must set a username before creating content' },
+        { headers, status: 403 },
+      );
+    }
+
     validateRequest(request, data, research, profile);
 
     const updateResult = await client

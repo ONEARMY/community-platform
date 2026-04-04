@@ -91,7 +91,7 @@ export const LibraryStepField = ({
   const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS;
 
   return (
-    <Card data-cy={`step_${index}`} mt={5} key={index}>
+    <Card data-cy={`step_${index}`} key={index}>
       <Flex p={3} sx={{ flexDirection: 'column' }}>
         <Flex p={0}>
           <Heading as="h3" variant="small" sx={{ flex: 1 }} mb={3}>
@@ -154,77 +154,79 @@ export const LibraryStepField = ({
           </Modal>
         </Flex>
 
-        <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label sx={_labelStyle} htmlFor={`${name}.title`}>
-            {`${steps.title.title} *`}
-          </Label>
-          <Field
-            name={`${name}.title`}
-            data-cy="step-title"
-            data-testid="step-title"
-            modifiers={{ capitalize: true, trim: true }}
-            component={FieldInput}
-            placeholder={steps.title.placeholder}
-            maxLength={LIBRARY_TITLE_MAX_LENGTH}
-            minLength={LIBRARY_TITLE_MIN_LENGTH}
-            validate={(value, allValues) =>
-              draftValidationWrapper(
-                value,
-                allValues,
-                composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)),
-              )
-            }
-            validateFields={[]}
-            isEqual={COMPARISONS.textInput}
-            showCharacterCount
-          />
-        </Flex>
+        <Flex sx={{ flexDirection: 'column', gap: '1rem' }}>
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Label sx={_labelStyle} htmlFor={`${name}.title`}>
+              {`${steps.title.title} *`}
+            </Label>
+            <Field
+              name={`${name}.title`}
+              data-cy="step-title"
+              data-testid="step-title"
+              modifiers={{ capitalize: true, trim: true }}
+              component={FieldInput}
+              placeholder={steps.title.placeholder}
+              maxLength={LIBRARY_TITLE_MAX_LENGTH}
+              minLength={LIBRARY_TITLE_MIN_LENGTH}
+              validate={(value, allValues) =>
+                draftValidationWrapper(
+                  value,
+                  allValues,
+                  composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)),
+                )
+              }
+              validateFields={[]}
+              isEqual={COMPARISONS.textInput}
+              showCharacterCount
+            />
+          </Flex>
 
-        <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label sx={_labelStyle} htmlFor={`${name}.text`}>
-            {`${steps.description.title} *`}
-          </Label>
-          <Field
-            name={`${name}.description`}
-            placeholder={steps.description.placeholder}
-            minLength={STEP_DESCRIPTION_MIN_LENGTH}
-            maxLength={STEP_DESCRIPTION_MAX_LENGTH}
-            data-cy="step-description"
-            data-testid="step-description"
-            modifiers={{ capitalize: true, trim: true }}
-            component={FieldTextarea}
-            rows={10}
-            validate={(value, allValues) =>
-              draftValidationWrapper(
-                value,
-                allValues,
-                composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)),
-              )
-            }
-            validateFields={[]}
-            isEqual={COMPARISONS.textInput}
-            showCharacterCount
-          />
-        </Flex>
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Label sx={_labelStyle} htmlFor={`${name}.text`}>
+              {`${steps.description.title} *`}
+            </Label>
+            <Field
+              name={`${name}.description`}
+              placeholder={steps.description.placeholder}
+              minLength={STEP_DESCRIPTION_MIN_LENGTH}
+              maxLength={STEP_DESCRIPTION_MAX_LENGTH}
+              data-cy="step-description"
+              data-testid="step-description"
+              modifiers={{ capitalize: true, trim: true }}
+              component={FieldTextarea}
+              rows={10}
+              validate={(value, allValues) =>
+                draftValidationWrapper(
+                  value,
+                  allValues,
+                  composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)),
+                )
+              }
+              validateFields={[]}
+              isEqual={COMPARISONS.textInput}
+              showCharacterCount
+            />
+          </Flex>
 
-        <StepImagesField
-          stepIndex={index}
-          contentType={contentType}
-          contentId={contentId}
-          images={images}
-          fieldName={name}
-        />
-
-        <Flex sx={{ flexDirection: 'column' }}>
-          <Field
-            name={`${name}.videoUrl`}
-            data-cy="step-videoUrl"
-            data-testid="step-videoUrl"
-            component={FieldInput}
-            placeholder={steps.videoUrl.placeholder}
-            validate={(_, allValues) => validateStepMedia(allValues)}
-            isEqual={COMPARISONS.textInput}
+          <StepImagesField
+            stepIndex={index}
+            contentType={contentType}
+            contentId={contentId}
+            images={images}
+            fieldName={name}
           />
+
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Field
+              name={`${name}.videoUrl`}
+              data-cy="step-videoUrl"
+              data-testid="step-videoUrl"
+              component={FieldInput}
+              placeholder={steps.videoUrl.placeholder}
+              validate={(_, allValues) => validateStepMedia(allValues)}
+              isEqual={COMPARISONS.textInput}
+            />
+          </Flex>
         </Flex>
       </Flex>
     </Card>

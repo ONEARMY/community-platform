@@ -12,7 +12,7 @@ import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common';
 import { fireConfetti } from 'src/utils/fireConfetti';
-import { buttons, headings, overview } from '../../labels';
+import { buttons, headings, researchForm } from '../../labels';
 import { researchService } from '../../research.service';
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField';
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
@@ -28,7 +28,7 @@ interface IProps {
 const ResearchForm = ({ id, formData, research }: IProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = useMemo<ResearchFormData>(
@@ -56,7 +56,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
 
   const onSubmit = async (values: ResearchFormData, isDraft = false) => {
     setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
+    setSaveErrorMessage(undefined);
     setIsSubmitting(true);
 
     try {
@@ -90,13 +90,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
       mutators={{
         ...arrayMutators,
       }}
-      validate={(values) => {
-        const errors = {};
-        if (values.coverImage == null) {
-          errors['coverImage'] = 'Cover image is required.';
-        }
-        return errors;
-      }}
       render={({
         errors,
         dirty,
@@ -107,7 +100,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         submitSucceeded,
         values,
       }) => {
-        const errorsClientSide = [errorSet(errors, overview)];
+        const errorsClientSide = [errorSet(errors, researchForm)];
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();
@@ -130,15 +123,12 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
                   display: 'block',
                 }}
               >
-                <span>
-                  {research?.status === 'complete' ? buttons.markInProgress : buttons.markCompleted}
-                </span>
+                {research?.status === 'complete' ? buttons.markInProgress : buttons.markCompleted}
               </Button>
             )}
 
             {research?.updates && (
               <ResearchEditorOverview
-                sx={{ marginTop: 4 }}
                 updates={research?.updates
                   .filter((u) => !u.deleted)
                   .map((u) => ({
@@ -176,10 +166,10 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
           >
             <ResearchTitleField />
             <ResearchDescriptionField />
-            <ResearchFieldCategory />
-            <TagsField title={overview.tags.title} />
-            <ResearchCollaboratorsField />
             <ImageField title="Cover Image" contentType="research" contentId={id} />
+            <ResearchFieldCategory />
+            <TagsField title={researchForm.tags.title} />
+            <ResearchCollaboratorsField />
           </FormWrapper>
         );
       }}

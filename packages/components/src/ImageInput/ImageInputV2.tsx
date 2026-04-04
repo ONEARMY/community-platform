@@ -90,7 +90,7 @@ export const ImageInputV2 = (props: IProps) => {
         alignItems: 'center',
         position: 'relative',
         borderColor: 'background',
-        borderStyle: hasImage ? 'none' : 'dashed',
+        borderStyle: hasImage ? 'none' : 'solid',
         borderRadius: 1,
         backgroundColor: 'white',
         height: '100%',

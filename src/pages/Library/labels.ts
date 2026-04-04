@@ -58,7 +58,7 @@ export const intro: ILabels = {
     title: 'Difficulty level?',
   },
   fileLink: {
-    title: 'Add a download link',
+    title: 'Or add a download link',
     description: 'Link to Google Drive, Dropbox, Grabcad etc',
   },
   files: {

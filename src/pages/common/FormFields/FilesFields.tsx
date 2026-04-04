@@ -1,11 +1,9 @@
 import { FieldInput } from 'oa-components';
 import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared';
-import { UserRole } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { Field, useForm, useFormState } from 'react-final-form';
 import { ClientOnly } from 'remix-utils/client-only';
-import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay';
 import { FileInputField } from 'src/common/Form/FileInput.field';
 import { MAX_LINK_LENGTH } from 'src/pages/constants';
@@ -31,7 +29,7 @@ export const FilesFields = (props: FilesFieldsProps) => {
     <ClientOnly fallback={<></>}>
       {() => (
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-          <WarningMessages show={hasBothError} />
+          {hasBothError && <WarningMessages show={hasBothError} />}
           <Label htmlFor="files">{fileLabels.files.title}</Label>
           {!!state.values.files?.length && (
             <AlreadyAddedFiles
@@ -112,7 +110,6 @@ const UploadNewFiles = ({
   uploadError,
   setUploadError,
 }: UploadNewFilesProps) => {
-  const { fileLink, files } = fileLabels;
   const identity = 'file-download-link';
   const state = useFormState<IFilesForm>();
   const form = useForm<ProjectFormData>();
@@ -148,52 +145,27 @@ const UploadNewFiles = ({
 
   return (
     <>
-      {uploadError && <Text sx={{ color: 'error', fontSize: 1, mb: 2 }}>{uploadError}</Text>}
-      <Flex sx={{ flexDirection: 'column', mb: 3 }}>
-        <AuthWrapper
-          roleRequired={UserRole.ADMIN}
-          fallback={
-            <>
-              {isUploading ? (
-                <Flex sx={{ alignItems: 'center', mb: 2 }}>
-                  <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
-                  <Text sx={{ ml: 2 }}>Uploading files...</Text>
-                </Flex>
-              ) : (
-                <Field
-                  hasText={false}
-                  name="fileUploadTrigger"
-                  data-cy="file-input-field"
-                  component={FileInputField}
-                  admin={false}
-                  onFilesChange={handleFilesChange}
-                />
-              )}
-              <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>{files.description}</Text>
-            </>
-          }
-        >
-          {isUploading ? (
-            <Flex sx={{ alignItems: 'center', mb: 2 }}>
-              <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
-              <Text sx={{ ml: 2 }}>Uploading files...</Text>
-            </Flex>
-          ) : (
-            <Field
-              hasText={false}
-              name="fileUploadTrigger"
-              data-cy="file-input-field"
-              admin={true}
-              component={FileInputField}
-              onFilesChange={handleFilesChange}
-            />
-          )}
-          <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>Maximum file size 300MB</Text>
-        </AuthWrapper>
+      {uploadError && <Text sx={{ color: 'error', fontSize: 1 }}>{uploadError}</Text>}
+      <Flex sx={{ flexDirection: 'column' }}>
+        {isUploading ? (
+          <Flex sx={{ alignItems: 'center', mb: 2 }}>
+            <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
+            <Text sx={{ ml: 2 }}>Uploading files...</Text>
+          </Flex>
+        ) : (
+          <Field
+            hasText={false}
+            name="fileUploadTrigger"
+            data-cy="file-input-field"
+            component={FileInputField}
+            admin={false}
+            onFilesChange={handleFilesChange}
+          />
+        )}
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
-        <Label htmlFor={identity} sx={{ fontSize: 1, mb: 2 }}>
-          {fileLink.title}
+        <Label htmlFor={identity} sx={{ fontSize: 2, mb: 1 }}>
+          {fileLabels.fileLink.title}
         </Label>
         <Field
           id="fileLink"
@@ -202,7 +174,7 @@ const UploadNewFiles = ({
           component={FieldInput}
           isEqual={COMPARISONS.textInput}
           maxLength={MAX_LINK_LENGTH}
-          placeholder={fileLink.placeholder}
+          placeholder={fileLabels.fileLink.placeholder}
           validateFields={[]}
         />
       </Flex>

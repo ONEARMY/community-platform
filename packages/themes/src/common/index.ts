@@ -52,6 +52,21 @@ export const baseTheme = {
       fontSize: '16px',
       color: commonStyles.colors.grey,
     },
+    h1: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: 6,
+      fontWeight: 'normal',
+    },
+    h2: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: 5,
+      fontWeight: 'normal',
+    },
+    h3: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: 4,
+      fontWeight: 'normal',
+    },
   },
   space: commonStyles.space,
   radii: commonStyles.space,

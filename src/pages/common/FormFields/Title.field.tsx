@@ -1,3 +1,4 @@
+import { FieldValidator } from 'final-form';
 import { FieldInput } from 'oa-components';
 import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
@@ -5,7 +6,7 @@ import { NEWS_MAX_TITLE_LENGTH, NEWS_MIN_TITLE_LENGTH } from 'src/pages/News/con
 
 interface IProps {
   placeholder?: string;
-  validate: (value: any) => Promise<any>;
+  validate: FieldValidator<string>;
   title: string;
 }
 

@@ -1,6 +1,6 @@
 export const fileLabels = {
   fileLink: {
-    title: 'Add a download link',
+    title: 'Or add a download link',
     placeholder: 'Link to Google Drive, Dropbox, Grabcad etc',
   },
   files: {

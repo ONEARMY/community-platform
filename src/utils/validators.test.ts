@@ -6,7 +6,6 @@ import {
   endsWithQuestionMark,
   minValue,
   noSpecialCharacters,
-  validateTitle,
 } from './validators';
 
 // Mock out module store to limit impact of circular dependency
@@ -32,19 +31,6 @@ describe('draftValidationWrapper', () => {
     draftValidationWrapper('title', { allowDraftSave }, validator);
 
     expect(validator).toHaveBeenCalledTimes(0);
-  });
-});
-
-describe('validateTitle', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it('returns false when title reduces to a new slug', async () => {
-    const title = 'A Clockwork Orange';
-    const validator = validateTitle();
-
-    expect(validator(title)).toEqual(false);
   });
 });
 
@@ -81,7 +67,7 @@ describe('composeValidators', () => {
       minValue(QUESTION_MIN_TITLE_LENGTH),
       endsWithQuestionMark(),
     );
-    const messages = await composedValidatorsFunc('this is');
+    const messages = composedValidatorsFunc('this is', {});
     expect(messages).toContain('Needs to end with a question mark');
     expect(messages).toContain(`Should be more than ${QUESTION_MIN_TITLE_LENGTH} characters`);
   });

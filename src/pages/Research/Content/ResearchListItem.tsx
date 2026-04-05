@@ -14,7 +14,6 @@ import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
 import { researchStatusColour } from '../researchHelpers';
-import './ResearchListItem.css';
 
 interface IProps {
   item: ResearchItem;
@@ -65,7 +64,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
             alignItems: 'start',
           }}
         >
-          <Box sx={{ position: 'relative', lineHeight: 0 }}>
+          <Box sx={{ position: 'relative' }}>
             <Image
               sx={{
                 width: ['120px', '175px', '263px'],
@@ -82,13 +81,6 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
             {isSubscribed && (
               <FollowIcon
                 tooltip="You are following updates"
-                tooltipProps={{
-                  place: 'top',
-                  offset: 8,
-                  noArrow: true,
-                  positionStrategy: 'fixed',
-                  className: 'research-follow-tooltip',
-                }}
                 sx={{
                   position: 'absolute',
                   top: 1,
@@ -144,7 +136,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                         left: 0,
                         top: 0,
                         right: 0,
-                        height: '175px',
+                        height: ['120px', '175px', '175px'],
                       },
                     }}
                   >

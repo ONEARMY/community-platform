@@ -113,7 +113,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
               minWidth: 0,
               width: '100%',
               height: ['auto', '100%', '100%'],
-              gap: 2,
+              gap: 1,
             }}
           >
             <Flex sx={{ width: '100%', flexDirection: 'column', gap: 1 }}>
@@ -237,7 +237,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                 sx={{
                   justifyContent: 'space-between',
                   width: '100%',
-                  mt: [0, 3, 3],
+                  mt: [0, 2, 2],
                 }}
               >
                 <Flex

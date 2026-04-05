@@ -71,6 +71,7 @@ describe('[Profile]', () => {
       cy.step('Other users can contact people');
       const contacter = generateNewUserDetails();
       cy.signUpNewUser(contacter);
+      cy.setProfileUsername(contacter.username);
       cy.visit(`/u/${contactee.username}`);
       cy.get('[data-cy=contact-tab]').click();
       cy.get('[data-cy="UserContactForm"]').should('be.visible');

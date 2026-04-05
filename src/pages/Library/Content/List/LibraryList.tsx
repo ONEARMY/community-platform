@@ -28,7 +28,7 @@ export const LibraryList = () => {
   const q = searchParams.get(LibrarySearchParams.q) || '';
   const category = searchParams.get(LibrarySearchParams.category) || '';
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
-  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
+  const pageNumber = parseInt(searchParams.get('page') || '1');
 
   useEffect(() => {
     if (!sort) {
@@ -43,10 +43,10 @@ export const LibraryList = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      const skip = pageNumber * ITEMS_PER_PAGE;
+      const skip = (pageNumber - 1) * ITEMS_PER_PAGE;
       fetchProjects(skip);
     }
-  }, [q, category, sort]);
+  }, [q, category, sort, pageNumber]);
 
   const fetchProjects = async (skip: number = 0) => {
     setIsFetching(true);
@@ -67,7 +67,7 @@ export const LibraryList = () => {
 
   const updatePageNumber = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('pageNo', value.toString());
+    params.set('page', value.toString());
     setSearchParams(params, { replace: true });
   };
 

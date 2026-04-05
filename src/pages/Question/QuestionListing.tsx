@@ -27,7 +27,7 @@ export const QuestionListing = () => {
   const q = searchParams.get('q') || '';
   const category = searchParams.get('category') || '';
   const sort = searchParams.get('sort') as QuestionSortOption;
-  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
+  const pageNumber = Math.max(1, parseInt(searchParams.get('page') || '1') || 1);
 
   useEffect(() => {
     if (!sort) {
@@ -42,7 +42,7 @@ export const QuestionListing = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      const skip = pageNumber * ITEMS_PER_PAGE;
+      const skip = (pageNumber - 1) * ITEMS_PER_PAGE;
       fetchQuestions(skip);
     }
   }, [q, category, sort, pageNumber]);
@@ -70,7 +70,7 @@ export const QuestionListing = () => {
 
   const updatePageNumber = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('pageNo', value.toString());
+    params.set('page', value.toString());
     setSearchParams(params, { replace: true });
   };
 

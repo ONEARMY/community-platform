@@ -10,10 +10,10 @@ export interface Props {
 }
 
 export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
-  const [pageNumber, setPageNumber] = useState<number | undefined>(page + 1);
+  const [pageNumber, setPageNumber] = useState<number | undefined>(page);
 
   const debouncedChange = useDebouncedCallback((value: number) => {
-    onPageChange(value - 1);
+    onPageChange(value);
   }, 500);
 
   const isValidPageNumber = (value: number | undefined): value is number => {
@@ -21,7 +21,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
   };
 
   const handlePageChange = (value?: number) => {
-    if (isValidPageNumber(value) && value !== page + 1) {
+    if (isValidPageNumber(value) && value !== page) {
       debouncedChange(value);
     } else {
       debouncedChange.cancel();
@@ -29,7 +29,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
   };
 
   useEffect(() => {
-    setPageNumber(page + 1);
+    setPageNumber(page);
   }, [page]);
 
   return (
@@ -42,13 +42,13 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
     >
       <PaginationIcons
         directionIcon="double-arrow-left"
-        onClick={() => onPageChange(0)}
+        onClick={() => onPageChange(1)}
         title="First Page"
         ariaLabel="Go to first page"
-        hidden={page === 0}
+        hidden={page === 1}
       />
       <>
-        {page > 0 && (
+        {page > 1 && (
           <Text
             sx={{
               display: ['flex', 'none'],
@@ -56,7 +56,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               cursor: 'pointer',
               px: 2,
             }}
-            hidden={page === 0}
+            hidden={page === 1}
             onClick={() => onPageChange(page - 1)}
           >
             PREV
@@ -66,7 +66,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
           <PaginationIcons
             directionIcon="paginationSingleLeft"
             onClick={() => onPageChange(page - 1)}
-            hidden={page === 0}
+            hidden={page === 1}
             title="Previous Page"
             ariaLabel="Go to previous page"
           />
@@ -94,11 +94,11 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
             onBlur={() => {
               if (isValidPageNumber(pageNumber) && pageNumber !== page + 1) {
                 debouncedChange.cancel();
-                onPageChange(pageNumber - 1);
+                onPageChange(pageNumber);
               } else if (!pageNumber) {
                 debouncedChange.cancel();
               } else {
-                setPageNumber(page + 1);
+                setPageNumber(page);
               }
             }}
             aria-label="Enter page number"
@@ -139,12 +139,12 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
           <PaginationIcons
             directionIcon="paginationSingleRight"
             onClick={() => onPageChange(page + 1)}
-            hidden={page === totalPages - 1}
+            hidden={page === totalPages}
             title="Next Page"
             ariaLabel="Go to next page"
           />
         </Box>
-        {page < totalPages - 1 && page >= 0 && (
+        {page < totalPages && page >= 0 && (
           <Text
             sx={{
               display: ['flex', 'none'],
@@ -152,7 +152,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               cursor: 'pointer',
               px: 2,
             }}
-            hidden={page === totalPages - 1}
+            hidden={page === totalPages}
             onClick={() => onPageChange(page + 1)}
           >
             NEXT
@@ -164,7 +164,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
         onClick={() => onPageChange(totalPages - 1)}
         title="Last Page"
         ariaLabel="Go to last page"
-        hidden={page === totalPages - 1}
+        hidden={page === totalPages}
       />
     </Flex>
   );

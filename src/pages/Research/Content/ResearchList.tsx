@@ -6,7 +6,6 @@ import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { Box, Flex } from 'theme-ui';
 import { ITEMS_PER_PAGE } from '../constants';
-import { listing } from '../labels';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { researchService } from '../research.service';
 import { ResearchFilterHeader } from './ResearchListHeader';
@@ -28,7 +27,7 @@ const ResearchList = () => {
   const category = searchParams.get(ResearchSearchParams.category) || '';
   const status = searchParams.get(ResearchSearchParams.status) as ResearchStatus | null;
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
-  const pageNumber = searchParams.get(ResearchSearchParams.pageNo) as ResearchSortOption;
+  const pageNumber = Math.max(1, parseInt(searchParams.get(ResearchSearchParams.page) || '1') || 1);
 
   useEffect(() => {
     if (!sort) {
@@ -43,7 +42,7 @@ const ResearchList = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      const skip = (parseInt(pageNumber) || 0) * ITEMS_PER_PAGE;
+      const skip = (pageNumber - 1) * ITEMS_PER_PAGE;
       fetchResearchItems(skip);
     }
   }, [q, category, status, sort, pageNumber]);
@@ -51,7 +50,7 @@ const ResearchList = () => {
   const updatePageNumber = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    params.set(ResearchSearchParams.pageNo, value.toString());
+    params.set(ResearchSearchParams.page, value.toString());
     setSearchParams(params, { replace: true });
   };
 
@@ -129,7 +128,7 @@ const ResearchList = () => {
           <Pagination
             totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
             onPageChange={updatePageNumber}
-            page={parseInt(pageNumber) || 0}
+            page={pageNumber || 1}
           />
         </Flex>
       )}

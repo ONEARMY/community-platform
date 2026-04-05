@@ -3,5 +3,5 @@ export enum ResearchSearchParams {
   q = 'q',
   sort = 'sort',
   status = 'status',
-  pageNo = 'pageNo',
+  page = 'page',
 }

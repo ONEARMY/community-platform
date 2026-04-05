@@ -46,7 +46,7 @@ describe('[Research - List Articles]', () => {
     cy.get('[data-cy=pagination-icon-paginationSingleRight]').click();
 
     cy.step('Verify page changed');
-    cy.url().should('include', 'pageNo=1');
+    cy.url().should('include', 'page=2');
     cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', 0);
   });
 });

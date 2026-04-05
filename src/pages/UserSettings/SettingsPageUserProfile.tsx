@@ -34,6 +34,11 @@ export const SettingsPageUserProfile = observer(() => {
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || [];
 
     try {
+      if (values.username && values.username !== profile.username) {
+        const usernameResult = await profileService.updateUsername(values.username);
+        update(usernameResult);
+      }
+
       const updatedProfile = await profileService.update(values);
 
       update(updatedProfile);

@@ -1,8 +1,6 @@
 export type UserEmailData = {
+  id: string;
   email: string;
   code: string;
   new_email?: string;
-  user_metadata?: {
-    username?: string;
-  };
 };

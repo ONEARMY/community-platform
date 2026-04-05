@@ -76,7 +76,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const country = formData.get('country');
 
     const data = {
-      username: String(formData.get('username')),
       displayName: String(formData.get('displayName')),
       about: String(formData.get('about')),
       country: country === 'null' ? null : String(country),
@@ -125,14 +124,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw validationError('Profile not found', 'id');
     }
 
-    const usernameCheck = await client.rpc('is_username_available', {
-      username: data.username,
-      exclude_profile_id: profileData.id,
-    });
-    if (!usernameCheck.data) {
-      throw validationError('Username is already taken', 'username');
-    }
-
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.updateProfile(profileData?.id, data);
     profileService.updateUserActivity(claims.data.claims.sub);
@@ -160,10 +151,6 @@ async function validateRequest(
 
   if (!profile?.id) {
     throw validationError('Profile not found', 'id');
-  }
-
-  if (!data.username) {
-    throw validationError('username is required', 'username');
   }
 
   if (!data.displayName) {

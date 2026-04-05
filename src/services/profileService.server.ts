@@ -180,6 +180,39 @@ export class ProfileServiceServer {
     return data as DBAuthorVotes[];
   }
 
+  async updateUsername(id: number, username: string) {
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ username })
+      .eq('id', id)
+      .select(
+        `*,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url,
+            premium_tier
+          )
+        )`,
+      )
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
+  }
+
   async updateProfile(id: number, values: ProfileDTO) {
     const types = await new ProfileTypesServiceServer(this.client).get();
     const typeId = types.find((x) => x.name === values.type)!.id;
@@ -191,7 +224,6 @@ export class ProfileServiceServer {
     const { data, error } = await this.client
       .from('profiles')
       .update({
-        username: values.username,
         about: values.about,
         country: values.country,
         display_name: values.displayName,

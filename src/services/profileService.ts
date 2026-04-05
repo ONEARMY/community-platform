@@ -26,7 +26,6 @@ const get = async (): Promise<Profile | undefined> => {
 const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin);
   const data = createFormData<ProfileDTO>({
-    username: value.username,
     displayName: value.displayName,
     about: value.about,
     country: value.country,
@@ -59,6 +58,30 @@ const update = async (value: ProfileFormData) => {
 
   if (!result) {
     throw new Error('Failed to update profile');
+  }
+
+  return result;
+};
+
+const updateUsername = async (username: string): Promise<Profile> => {
+  const url = new URL('/api/profile/username', window.location.origin);
+
+  const response = await fetch(url, {
+    body: JSON.stringify({ username }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to update username' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update username';
+    throw new Error(errorMessage);
+  }
+
+  const result = (await response.json()) as Profile | null;
+
+  if (!result) {
+    throw new Error('Failed to update username');
   }
 
   return result;
@@ -130,6 +153,7 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
 export const profileService = {
   get,
   update,
+  updateUsername,
   upsertPin,
   deletePin,
   updateImpact,

@@ -494,7 +494,6 @@ export class SupabaseTestsService {
       email: user.email,
       password: user.password,
       email_confirm: true,
-      user_metadata: { username: user.username },
     });
 
     let authId: string;

@@ -384,7 +384,6 @@ export type ProfileFormData = {
 };
 
 export type ProfileDTO = {
-  username: string;
   displayName: string;
   about: string;
   isContactable: boolean;

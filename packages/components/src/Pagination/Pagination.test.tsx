@@ -1,13 +1,17 @@
 import '@testing-library/jest-dom/vitest';
 
 import { fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { render } from '../test/utils';
 import { Pagination } from './Pagination';
 
 describe('Pagination Component', () => {
   const mockOnPageChange = vi.fn();
+
+  beforeEach(() => {
+    mockOnPageChange.mockClear();
+  });
 
   it('renders correctly on the first page', () => {
     const screen = render(<Pagination page={1} totalPages={10} onPageChange={mockOnPageChange} />);
@@ -91,9 +95,9 @@ describe('Pagination Component', () => {
     vi.advanceTimersByTime(500);
     expect(mockOnPageChange).not.toHaveBeenCalledWith(11);
 
-    fireEvent.change(input, { target: { value: '1' } });
+    fireEvent.change(input, { target: { value: '0' } });
     vi.advanceTimersByTime(500);
-    expect(mockOnPageChange).not.toHaveBeenCalledWith(1);
+    expect(mockOnPageChange).not.toHaveBeenCalledWith(0);
     vi.useRealTimers();
   });
 });

@@ -161,7 +161,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
       </>
       <PaginationIcons
         directionIcon="double-arrow-right"
-        onClick={() => onPageChange(totalPages - 1)}
+        onClick={() => onPageChange(totalPages)}
         title="Last Page"
         ariaLabel="Go to last page"
         hidden={page === totalPages}

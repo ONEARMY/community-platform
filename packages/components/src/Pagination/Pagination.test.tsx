@@ -10,7 +10,7 @@ describe('Pagination Component', () => {
   const mockOnPageChange = vi.fn();
 
   it('renders correctly on the first page', () => {
-    const screen = render(<Pagination page={0} totalPages={10} onPageChange={mockOnPageChange} />);
+    const screen = render(<Pagination page={1} totalPages={10} onPageChange={mockOnPageChange} />);
 
     expect(screen.getByLabelText('Enter page number')).toHaveValue(1);
     expect(screen.getByText('of 10')).toBeInTheDocument();
@@ -22,7 +22,7 @@ describe('Pagination Component', () => {
   });
 
   it('renders correctly on a middle page', () => {
-    const screen = render(<Pagination page={4} totalPages={10} onPageChange={mockOnPageChange} />);
+    const screen = render(<Pagination page={5} totalPages={10} onPageChange={mockOnPageChange} />);
 
     expect(screen.getByLabelText('Enter page number')).toHaveValue(5);
     expect(screen.getByLabelText('Go to first page')).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('Pagination Component', () => {
   });
 
   it('renders correctly on the last page', () => {
-    const screen = render(<Pagination page={9} totalPages={10} onPageChange={mockOnPageChange} />);
+    const screen = render(<Pagination page={10} totalPages={10} onPageChange={mockOnPageChange} />);
 
     expect(screen.getByLabelText('Enter page number')).toHaveValue(10);
     expect(screen.getByLabelText('Go to first page')).toBeInTheDocument();
@@ -59,14 +59,14 @@ describe('Pagination Component', () => {
     const screen = render(<Pagination page={4} totalPages={10} onPageChange={mockOnPageChange} />);
     const firstButton = screen.getByLabelText('Go to first page');
     fireEvent.click(firstButton);
-    expect(mockOnPageChange).toHaveBeenCalledWith(0);
+    expect(mockOnPageChange).toHaveBeenCalledWith(1);
   });
 
   it('calls onPageChange with the correct page number when last is clicked', () => {
     const screen = render(<Pagination page={4} totalPages={10} onPageChange={mockOnPageChange} />);
     const lastButton = screen.getByLabelText('Go to last page');
     fireEvent.click(lastButton);
-    expect(mockOnPageChange).toHaveBeenCalledWith(9);
+    expect(mockOnPageChange).toHaveBeenCalledWith(10);
   });
 
   it('calls onPageChange with the correct page number when input is changed', async () => {
@@ -78,7 +78,7 @@ describe('Pagination Component', () => {
 
     vi.advanceTimersByTime(500);
 
-    expect(mockOnPageChange).toHaveBeenCalledWith(6);
+    expect(mockOnPageChange).toHaveBeenCalledWith(7);
     vi.useRealTimers();
   });
 
@@ -89,11 +89,11 @@ describe('Pagination Component', () => {
 
     fireEvent.change(input, { target: { value: '11' } });
     vi.advanceTimersByTime(500);
-    expect(mockOnPageChange).not.toHaveBeenCalledWith(10);
+    expect(mockOnPageChange).not.toHaveBeenCalledWith(11);
 
-    fireEvent.change(input, { target: { value: '0' } });
+    fireEvent.change(input, { target: { value: '1' } });
     vi.advanceTimersByTime(500);
-    expect(mockOnPageChange).not.toHaveBeenCalledWith(-1);
+    expect(mockOnPageChange).not.toHaveBeenCalledWith(1);
     vi.useRealTimers();
   });
 });

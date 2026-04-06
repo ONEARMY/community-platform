@@ -89,6 +89,13 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     );
   }
 
+  if (!currentUser.data.at(0)!.username) {
+    return Response.json(
+      { error: 'You must set a username before commenting' },
+      { headers, status: 403 },
+    );
+  }
+
   const newComment = {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,

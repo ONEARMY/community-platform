@@ -96,7 +96,7 @@ export class ResearchItem implements IContentDoc {
     tags: Tag[],
     images: Image[] = [],
     collaborators: Author[] = [],
-    currentUsername?: string,
+    currentUser?: { id: number; username: string | null },
   ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
@@ -107,12 +107,14 @@ export class ResearchItem implements IContentDoc {
         return true;
       }
 
-      if (!currentUsername) {
+      if (!currentUser) {
         return false;
       }
 
-      const isAuthor = obj.author?.username === currentUsername;
-      const isCollaborator = (obj.collaborators || []).includes(currentUsername);
+      const isAuthor = currentUser.id === obj.author?.id;
+      const isCollaborator = !!(
+        currentUser.username && (obj.collaborators || []).includes(currentUser.username)
+      );
 
       return isAuthor || isCollaborator;
     });

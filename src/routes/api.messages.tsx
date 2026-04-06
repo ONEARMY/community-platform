@@ -34,15 +34,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const userProfile = await client
       .from('profiles')
-      .select('id,username')
-      .eq('username', claims.data.claims.user_metadata?.username);
+      .select('id,username,display_name')
+      .eq('auth_id', claims.data.claims.sub);
+
+    const messenger = userProfile.data?.at(0);
+    if (!messenger?.username) {
+      return Response.json(
+        { error: 'You must set a username before sending messages' },
+        { headers, status: 403 },
+      );
+    }
 
     const recipientProfile = await client
       .from('profiles')
       .select('id,auth_id')
       .eq('username', data.to);
 
-    const from = userProfile.data!.at(0)!.id;
+    const from = messenger.id;
     const to = recipientProfile.data!.at(0)!.id;
     const toAuthId = recipientProfile.data!.at(0)!.auth_id;
 
@@ -84,7 +92,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           username: data.to,
         });
     const receiver = emailResult.data[0];
-    const messenger = userProfile.data![0];
 
     const emailTemplate = (
       <ReceiverMessage

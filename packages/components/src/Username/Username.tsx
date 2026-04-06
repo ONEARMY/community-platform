@@ -25,6 +25,10 @@ const getCountryCode = (country: string | undefined) => {
 export const Username = ({ user, sx, target, isLink = true }: IProps) => {
   const { username, badges } = user;
 
+  if (!username) {
+    return null;
+  }
+
   const countryCode = user.country ? getCountryCode(user.country) : null;
 
   const UserNameBody = (

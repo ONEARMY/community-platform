@@ -4,7 +4,7 @@ import { MessageSettings } from '../models/messageSettings';
 type ReceiverMessageArgs = {
   messengerEmailAddress: string;
   messengerName: string | undefined;
-  messengerUsername: string;
+  messengerUsername: string | null;
   receiverName: string;
   settings: MessageSettings;
   text: string;
@@ -19,7 +19,7 @@ export default function ReceiverMessage({
   messengerUsername,
 }: ReceiverMessageArgs) {
   const isMessengerName = messengerName && messengerName !== 'undefined';
-  const name = isMessengerName ? messengerName : messengerUsername;
+  const name = isMessengerName ? messengerName : messengerUsername || 'Someone';
 
   const preview = `${name} wants to chat to you!`;
 
@@ -53,8 +53,12 @@ export default function ReceiverMessage({
               <Img width="85" alt={settings.siteName} src={settings.siteImage} />
               <p>Hey {receiverName},</p>
               <p>
-                <a href={`${settings.siteUrl}/u/${messengerUsername}`}>{name}</a> has sent you a
-                message through{' '}
+                {messengerUsername ? (
+                  <a href={`${settings.siteUrl}/u/${messengerUsername}`}>{name}</a>
+                ) : (
+                  <strong>{name}</strong>
+                )}{' '}
+                has sent you a message through{' '}
                 <a href={settings.siteUrl} target="_blank">
                   {settings.siteName}
                 </a>

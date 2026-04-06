@@ -35,7 +35,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
 
-  const username = claims.data?.claims?.user_metadata?.username || null;
+  let username: string | null = null;
+  if (claims.data?.claims) {
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+    username = profile?.username || null;
+  }
 
   const { data, error } = await client.rpc('get_projects', {
     search_query: q || null,
@@ -134,6 +138,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (!profile) {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+    }
+
+    if (!profile.username) {
+      return Response.json(
+        { error: 'You must set a username before creating content' },
+        { headers, status: 403 },
+      );
     }
 
     const projectDb = await createProject(client, data, slug, moderation, profile);

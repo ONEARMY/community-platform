@@ -82,7 +82,6 @@ export { Tab, TabPanel, Tabs, TabsList } from './TabbedContent/TabbedContent';
 export { Tag } from './Tag/Tag';
 export { TagList } from './TagList/TagList';
 export { TextNotification } from './TextNotification/TextNotification';
-export type { TooltipProps } from './Tooltip/Tooltip';
 export { Tooltip } from './Tooltip/Tooltip';
 export { UsefulStatsButton } from './UsefulStatsButton/UsefulStatsButton';
 export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWrapper';

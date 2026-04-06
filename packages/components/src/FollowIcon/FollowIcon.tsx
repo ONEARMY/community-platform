@@ -1,15 +1,14 @@
 import { useId } from 'react';
 import { Box, ThemeUIStyleObject } from 'theme-ui';
 import { Icon } from '../Icon/Icon';
-import { Tooltip, type TooltipProps } from '../Tooltip/Tooltip';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface FollowIconProps {
   tooltip: string;
   sx?: ThemeUIStyleObject;
-  tooltipProps?: Omit<TooltipProps, 'id'>;
 }
 
-export const FollowIcon = ({ tooltip, sx, tooltipProps }: FollowIconProps) => {
+export const FollowIcon = ({ tooltip, sx }: FollowIconProps) => {
   const uuid = useId();
 
   return (
@@ -25,7 +24,7 @@ export const FollowIcon = ({ tooltip, sx, tooltipProps }: FollowIconProps) => {
       >
         <Icon glyph="thunderbolt" />
       </Box>
-      <Tooltip id={uuid} {...tooltipProps} />
+      <Tooltip id={uuid} />
     </>
   );
 };

@@ -1,0 +1,1 @@
+import{j as t}from"./emotion-react-jsx-runtime.browser.esm-Ab2AT6WB.js";import{I as r}from"./TextNotification-DOP5W2SG.js";import{B as n}from"./theme-ui-components.esm-CgKY1DA8.js";const e=o=>t.jsx(n,{...o,sx:{background:"white",borderRadius:99,padding:1,...o.sx},children:t.jsx(r,{glyph:o.icon,size:18})});export{e as B};

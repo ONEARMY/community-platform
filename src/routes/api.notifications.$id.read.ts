@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 export const action = async ({ params, request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -20,7 +20,7 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
 
     await client.from('notifications').update({ is_read: true }).eq('id', params.id);
 
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

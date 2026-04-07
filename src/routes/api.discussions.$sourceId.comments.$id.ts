@@ -3,7 +3,7 @@ import type { DBComment, DBProfile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 type Supabase = {
   headers: Headers;
@@ -76,7 +76,7 @@ async function updateComment(
     return Response.json({}, { headers, status: 500, statusText: 'Error updating comment' });
   }
 
-  new ProfileServiceServer(client).updateUserActivity(user.auth_id);
+  updateUserActivity(client, user.auth_id);
 
   return new Response(null, { headers, status: 204 });
 }
@@ -101,7 +101,7 @@ async function deleteComment({ client, headers }: Supabase, id: string, user: DB
     return Response.json({}, { headers, status: 500, statusText: 'Error deleting comment' });
   }
 
-  new ProfileServiceServer(client).updateUserActivity(user.auth_id);
+  updateUserActivity(client, user.auth_id);
 
   return new Response(null, { headers, status: 204 });
 }

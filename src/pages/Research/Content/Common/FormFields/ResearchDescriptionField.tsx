@@ -20,7 +20,11 @@ export const ResearchDescriptionField = () => {
         validateFields={[]}
         isEqual={COMPARISONS.textInput}
         component={FieldTextarea}
-        rows={10}
+        style={{
+          resize: 'none',
+          flex: 1,
+          minHeight: '150px',
+        }}
         maxLength={RESEARCH_MAX_LENGTH}
         showCharacterCount
         placeholder={placeholder}

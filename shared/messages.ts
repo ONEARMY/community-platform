@@ -41,6 +41,7 @@ export const getFriendlyMessage = (systemMessage = '') => {
   if (Object.hasOwn(FRIENDLY_MESSAGES, messageKey)) {
     return FRIENDLY_MESSAGES[messageKey];
   } else {
+    console.log(`%c No friendly message for [${messageKey}]`, 'background: #222; color: #bada55');
     return systemMessage;
   }
 };

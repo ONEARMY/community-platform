@@ -7,8 +7,8 @@ export type Props = {
   autoFocus?: boolean;
   name?: string;
   id?: string;
-  placeHolder?: string;
   dataCy: string;
+  placeHolder: string;
   value: string;
   onChange: (value: string) => void;
   onClear: () => void;
@@ -52,7 +52,7 @@ export const SearchField = (props: Props) => {
         variant="inputOutline"
         type="search"
         data-cy={dataCy}
-        placeholder={placeHolder === undefined ? 'Search' : placeHolder}
+        placeholder={placeHolder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         sx={{

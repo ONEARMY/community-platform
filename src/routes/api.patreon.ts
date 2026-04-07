@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
+
 import { PatreonServiceServer } from '../services/patreonService.server';
 
 export const loader = async ({ request }) => {
@@ -11,16 +12,9 @@ export const loader = async ({ request }) => {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const { data } = await client
-    .from('profiles')
-    .select('patreon,is_supporter')
-    .eq('auth_id', claims.data.claims.sub)
-    .single();
+  const { data } = await client.from('profiles').select('patreon,is_supporter').eq('auth_id', claims.data.claims.sub).single();
 
-  return Response.json(
-    { isSupporter: data?.is_supporter, patreon: data?.patreon },
-    { headers, status: 200 },
-  );
+  return Response.json({ isSupporter: data?.is_supporter, patreon: data?.patreon }, { headers, status: 200 });
 };
 
 export const action = async ({ request }) => {
@@ -38,7 +32,8 @@ export const action = async ({ request }) => {
 
   try {
     await new PatreonServiceServer(client).disconnectUser(claims.data.claims.sub);
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({}, { headers, status: 200 });
   } catch (err) {

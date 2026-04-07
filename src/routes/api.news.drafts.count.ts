@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ContentServiceServer } from 'src/services/contentService.server';
+import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -19,7 +19,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 400, statusText: 'invalid user' });
   }
 
-  const count = await new ContentServiceServer(client).getDraftCount(profile.id, 'news');
+  const count = await contentServiceServer.getDraftCount(client, profile.id, 'news');
 
   return Response.json({ total: count }, { headers });
 };

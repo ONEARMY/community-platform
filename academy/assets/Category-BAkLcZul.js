@@ -1,0 +1,1 @@
+import{j as r}from"./emotion-react-jsx-runtime.browser.esm-Ab2AT6WB.js";import{F as s,T as e}from"./theme-ui-components.esm-CgKY1DA8.js";const d=t=>{const{category:a,sx:o}=t;return r.jsx(s,{sx:{alignItems:"start"},children:r.jsx(e,{"data-cy":"category",sx:{fontSize:1,backgroundColor:"lightGrey",paddingX:2,paddingY:1,borderRadius:1,...o},children:a.name})})};export{d as C};

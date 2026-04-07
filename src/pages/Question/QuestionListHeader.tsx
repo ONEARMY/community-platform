@@ -182,7 +182,7 @@ export const QuestionListHeader = (props: IProps) => {
       loggedOut={
         <ReturnPathLink to="/sign-up">
           <Button type="button" data-cy="sign-up" variant="primary">
-            {listing.create}
+            {listing.join}
           </Button>
         </ReturnPathLink>
       }
@@ -208,7 +208,7 @@ export const QuestionListHeader = (props: IProps) => {
         gap: 2,
         flexDirection: ['column', 'column', 'row'],
         flexWrap: 'wrap',
-        display: ['none', 'none', 'flex'],
+        display: ['none', 'flex', 'flex'],
       }}
     >
       <Flex sx={{ width: ['100%', '100%', '230px'] }}>
@@ -241,7 +241,7 @@ export const QuestionListHeader = (props: IProps) => {
   );
 
   const mobileFilteringComponents = (
-    <Flex sx={{ display: ['flex', 'flex', 'none'], gap: '5px' }}>
+    <Flex sx={{ display: ['flex', 'none', 'none'], gap: '5px' }}>
       <Flex sx={{ position: 'relative' }}>
         <ButtonIcon
           onClick={handleOpenSortModal}
@@ -291,7 +291,7 @@ export const QuestionListHeader = (props: IProps) => {
   );
 
   const mobileSearchBar = (
-    <Flex sx={{ display: ['flex', 'flex', 'none'], width: '100%' }}>
+    <Flex sx={{ display: ['flex', 'none', 'none'], width: '100%' }}>
       <div ref={formRef} style={{ width: '100%' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <SearchField

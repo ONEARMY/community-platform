@@ -3,70 +3,62 @@ import type { DBNotification, SubscribedUser } from 'oa-shared';
 import { createElement } from 'react';
 import { sendBatchEmails } from 'src/.server/resend';
 import { InstantNotificationEmail } from 'src/.server/templates/instant-notification-email';
+import { transformNotification } from 'src/routes/api.notifications';
 import { tokens } from 'src/utils/tokens.server';
-import { NotificationMapperServiceServer } from './notificationMapperService.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
 
-export class NotificationEmailServiceServer {
-  constructor(private client: SupabaseClient) {}
-
-  async sendInstantNotificationEmails(
-    subscribers: SubscribedUser[],
-    dbNotification: DBNotification,
-  ) {
-    try {
-      const emailsToSend = subscribers.filter((result) => {
-        if (result.profile_id === dbNotification.triggered_by_id) {
-          return false;
-        }
-
-        if (result.is_unsubscribed) {
-          return false;
-        }
-
-        if (result.replies === false && dbNotification.action_type === 'newReply') {
-          return false;
-        }
-
-        if (result.comments === false && dbNotification.action_type === 'newComment') {
-          return false;
-        }
-
-        if (
-          result.research_updates === false &&
-          dbNotification.action_type === 'newContent' &&
-          dbNotification.content_type === 'research_updates'
-        ) {
-          return false;
-        }
-
-        if (
-          result.email.endsWith('@example.com') ||
-          result.email.endsWith('@test.com') ||
-          result.email.endsWith('@resend.dev')
-        ) {
-          return false;
-        }
-
-        return true;
-      });
-
-      if (emailsToSend.length === 0) {
-        throw new Error('No emails to send');
+const sendInstantNotificationEmails = async (
+  client: SupabaseClient,
+  subscribers: SubscribedUser[],
+  dbNotification: DBNotification,
+  headers: Headers,
+) => {
+  try {
+    const emailsToSend = subscribers.filter((result) => {
+      if (result.profile_id === dbNotification.triggered_by_id) {
+        return false;
       }
 
-      const fullNotification = await new NotificationMapperServiceServer(
-        this.client,
-      ).transformNotification(dbNotification);
+      if (result.is_unsubscribed) {
+        return false;
+      }
 
-      const codes = emailsToSend.map((p) => ({
-        email: p.email,
-        code: tokens.generate(p.profile_id, p.profile_created_at),
-      }));
+      if (result.replies === false && dbNotification.action_type === 'newReply') {
+        return false;
+      }
 
-      const tenantSettings = await new TenantSettingsService(this.client).get();
+      if (result.comments === false && dbNotification.action_type === 'newComment') {
+        return false;
+      }
 
-      const emails = codes.map(({ code, email }) => {
+      if (
+        result.research_updates === false &&
+        dbNotification.action_type === 'newContent' &&
+        dbNotification.content_type === 'research_updates'
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
+    if (emailsToSend.length === 0) {
+      throw new Error('No emails to send');
+    }
+
+    const fullNotification = await transformNotification(dbNotification, client);
+
+    const codes = emailsToSend.map((p) => ({
+      email: p.email,
+      code: tokens.generate(p.profile_id, p.profile_created_at),
+    }));
+
+    const tenantSettings = await new TenantSettingsService(client).get();
+
+    sendBatchEmails({
+      from: tenantSettings.emailFrom,
+      subject: fullNotification.email.subject,
+      emails: codes.map(({ code, email }) => {
         return {
           to: email,
           template: createElement(InstantNotificationEmail, {
@@ -75,15 +67,18 @@ export class NotificationEmailServiceServer {
             settings: tenantSettings,
           }),
         };
-      });
-
-      sendBatchEmails({
-        from: tenantSettings.emailFrom,
-        subject: fullNotification.email.subject,
-        emails,
-      });
-    } catch (error) {
-      console.error('Error creating email notification:', error);
-    }
+      }),
+    });
+  } catch (error) {
+    console.error('Error creating email notification:', error);
+    return Response.json(error, {
+      headers,
+      status: 500,
+      statusText: error.statusText,
+    });
   }
-}
+};
+
+export const notificationEmailService = {
+  sendInstantNotificationEmails,
+};

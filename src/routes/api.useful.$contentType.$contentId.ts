@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 export async function action({ request, params }: LoaderFunctionArgs) {
   if (request.method !== 'POST' && request.method !== 'DELETE') {
@@ -49,7 +49,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 500, statusText: 'error' });
   }
 
-  await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+  updateUserActivity(client, claims.data.claims.sub);
 
   return Response.json({}, { headers, status: 200 });
 }

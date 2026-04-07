@@ -6,8 +6,9 @@ import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { QuestionServiceServer } from 'src/services/questionService.server';
+import { questionServiceServer } from 'src/services/questionService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 import { hasAdminRights } from 'src/utils/helpers';
 import {
   conflictError,
@@ -16,7 +17,7 @@ import {
   validationError,
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { ContentServiceServer } from '../services/contentService.server';
+import { contentServiceServer } from '../services/contentService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -45,11 +46,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const currentQuestion = await new QuestionServiceServer(client).getById(id);
+    const currentQuestion = await questionServiceServer.getById(id, client);
 
     await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
 
-    const previousSlugs = ContentServiceServer.updatePreviousSlugs(currentQuestion, slug);
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, slug);
 
     const isFirstPublish =
       currentQuestion.is_draft && !data.isDraft && !currentQuestion.published_at;
@@ -83,7 +84,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     );
 
     const question = Question.fromDB(questionResult.data[0], [], newImages);
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ question }, { headers, status: 200 });
   } catch (error) {
@@ -128,9 +129,10 @@ async function validateRequest(
 
   if (
     currentQuestion.slug !== slug &&
-    (await new ContentServiceServer(client).isDuplicateExistingSlug(
+    (await contentServiceServer.isDuplicateExistingSlug(
       slug,
       currentQuestion.id,
+      client,
       'questions',
     ))
   ) {

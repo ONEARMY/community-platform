@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 export async function action({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -15,9 +16,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-
-    const profileService = new ProfileServiceServer(client);
-    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
       throw { status: 400, statusText: 'user not found' };
@@ -53,7 +52,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
         .eq('user_id', profile.id);
     }
 
-    profileService.updateUserActivity(claims.data.claims.sub);
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

@@ -38,8 +38,7 @@ export class TenantSettingsService {
         color_accent,
         color_accent_hover,
         show_impact,
-        create_research_roles,
-        ga_tracking_id`,
+        create_research_roles`,
       )
       .single();
 
@@ -64,7 +63,6 @@ export class TenantSettingsService {
       colorAccentHover: data?.color_accent_hover,
       showImpact: data?.show_impact,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
-      gaTrackingId: data?.ga_tracking_id,
     });
 
     cache.set('tenant-settings', settings);

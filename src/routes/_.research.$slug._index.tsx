@@ -5,7 +5,7 @@ import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ContentServiceServer } from 'src/services/contentService.server';
+import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -27,13 +27,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbResearch = result.item;
 
-  const contentService = new ContentServiceServer(client);
-
   if (dbResearch.id) {
-    await contentService.incrementViewCount('research', dbResearch.total_views, dbResearch.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'research',
+      dbResearch.total_views,
+      dbResearch.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
     dbResearch.id,
     'research',
     dbResearch.tags,

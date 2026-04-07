@@ -1,22 +1,58 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
+import { Notification, NotificationDisplay } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { NotificationMapperServiceServer } from 'src/services/notificationMapperService.server';
 
 const transformNotificationList = async (
   dbNotifications: DBNotification[],
   client: SupabaseClient,
 ) => {
-  const notificationMapperService = new NotificationMapperServiceServer(client);
-
   return Promise.allSettled(
-    dbNotifications.map((dbNotification) =>
-      notificationMapperService.transformNotification(dbNotification),
-    ),
+    dbNotifications.map((dbNotification) => transformNotification(dbNotification, client)),
   ).then((results) => {
     return results.filter((result) => result.status === 'fulfilled').map((result) => result.value);
   });
+};
+
+export const transformNotification = async (
+  dbNotification: DBNotification,
+  client: SupabaseClient,
+) => {
+  try {
+    const notification = Notification.fromDB(dbNotification);
+
+    if (notification.triggeredBy && dbNotification.triggered_by?.photo) {
+      const { data } = client.storage
+        .from(process.env.TENANT_ID as string)
+        .getPublicUrl(dbNotification.triggered_by.photo.path);
+      if (data?.publicUrl) {
+        notification.triggeredBy.photo = {
+          id: dbNotification.triggered_by.photo.id,
+          path: dbNotification.triggered_by.photo.path,
+          fullPath: dbNotification.triggered_by.photo.fullPath,
+          publicUrl: data.publicUrl,
+        };
+      }
+    }
+
+    const content = await client
+      .from(notification.contentType)
+      .select('*')
+      .eq('id', notification.contentId)
+      .single();
+
+    if (content.data) {
+      notification.content = content.data;
+    } else {
+      throw Error('Comment not found, probably deleted');
+    }
+
+    return NotificationDisplay.fromNotification(notification);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

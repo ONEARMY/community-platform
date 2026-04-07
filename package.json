@@ -22,6 +22,7 @@
     "build:vite": "react-router build",
     "build:shared": "bun run --filter oa-shared build",
     "build": "bun run build:shared && bun run build:themes && bun run build:components && bun run build:vite && tsc",
+    "preview": "NODE_ENV=production bun server.js",
     "lint": "biome lint --write",
     "format": "biome check --write",
     "serve": "npx serve -s build",
@@ -110,6 +111,7 @@
     "theme-ui": "^0.17.2",
     "tslog": "^4.10.2",
     "use-debounce": "^10.1.0",
+    "workbox-window": "^7.4.0",
     "yup": "^1.7.1"
   },
   "devDependencies": {
@@ -120,7 +122,7 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@snaplet/copycat": "^6.0.0",
-    "@snaplet/seed": "0.98.0",
+    "@snaplet/seed": "^0.98.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -146,6 +148,7 @@
     "typescript": "^5.7.2",
     "vite": "^7.1.12",
     "vite-plugin-env-compatible": "^2.0.1",
+    "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.5"

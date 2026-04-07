@@ -5,6 +5,7 @@ import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 import { validationError } from 'src/utils/httpException';
 
 export const loader = async ({ request }) => {
@@ -126,7 +127,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.updateProfile(profileData?.id, data);
-    profileService.updateUserActivity(claims.data.claims.sub);
+
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json(profile, { headers, status: 200 });
   } catch (error) {

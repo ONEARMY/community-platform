@@ -1,0 +1,1 @@
+import{w as o,O as t}from"./chunk-UVKPFVEO-CIEVcf-2.js";import{a as r}from"./emotion-react-jsx-runtime.browser.esm-Ab2AT6WB.js";import{M as i}from"./Main-CzbN45Dc.js";import"./leaflet-BMES6qD7.js";import"./theme-ui-components.esm-CgKY1DA8.js";const f=o(function(){return r(i,{sx:{flex:1},children:r(t,{})})});export{f as default};

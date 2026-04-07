@@ -44,7 +44,7 @@ export class StorageServiceServer {
 
         result.push(
           new Image({
-            id: x.id,
+            id: x.id ?? '',
             publicUrl: data.publicUrl,
           }),
         );
@@ -277,9 +277,9 @@ export class StorageServiceServer {
     return data?.map(
       (x) =>
         new MediaFile({
-          id: x.id,
+          id: x.id ?? '',
           name: x.name,
-          size: x.metadata.size,
+          size: x.metadata?.size ?? 0,
           url: `${mapUrlPrefix}/${x.id}`,
         }),
     );

@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Serve existing files directly (IMPORTANT)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Serve existing directories directly
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Proxy ONLY other requests to Node
+RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]
+
+RequestHeader set X-Forwarded-Proto "https"

@@ -1,0 +1,6 @@
+import{b as i,a as e,F as I}from"./emotion-react-jsx-runtime.browser.esm-Ab2AT6WB.js";import{a as f,u as x,e as F,c as y}from"./TextNotification-DOP5W2SG.js";import{r as m}from"./leaflet-BMES6qD7.js";import{I as S,F as v,s as E}from"./UnsavedChangesDialog-B65Xhyv6.js";import{F as U}from"./FieldContainer-5KxjDals.js";import"./index-Dt9tQl3E.js";import{T as c,S as w}from"./theme-ui-components.esm-CgKY1DA8.js";const b=f.div`
+  height: 200px;
+  width: 370px;
+  max-width: 100%;
+  margin-bottom: 6px;
+`,P=d=>{const{title:g,contentType:p,contentId:u=null}=d,h=x(),t=F(),[o,n]=m.useState(!1),[s,a]=m.useState(null);return i(v,{htmlFor:"image",text:g,required:!0,children:[s&&e(c,{sx:{color:"error",fontSize:1,mb:2},children:s}),e(b,{"data-cy":o?"image-uploading":"image-input",children:e(U,{style:{height:"100%",width:"100%",display:"flex",alignItems:"center",justifyContent:"center"},children:o?i(I,{children:[e(w,{sx:{color:y.colors.darkGrey}}),e(c,{sx:{ml:2},children:"Uploading image..."})]}):e(S,{onFilesChange:async l=>{if(!l){t.change("coverImage",null),a(null);return}n(!0),a(null);try{const r=await E.imageUpload(u,p,l);t.change("coverImage",r)}catch(r){a(r instanceof Error?r.message:"Failed to upload image. Please try again."),t.change("coverImage",null)}finally{n(!1)}},onError:a,image:h.values.coverImage||void 0})})})]})};export{P as I};

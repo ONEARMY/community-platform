@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths';
+import { VitePWA } from 'vite-plugin-pwa';
 
 import type { ViteUserConfig } from 'vitest/config';
 
@@ -31,49 +32,122 @@ const vitestConfig: ViteUserConfig = {
   },
 };
 
-// https://vitejs.dev/config/
 export default defineConfig({
+  base: '/academy/',
+
   define: {
     global: 'globalThis',
   },
+
   build: {
     target: ['es2020'],
-    sourcemap: process.env.NODE_ENV !== 'production', // to enable local server-side debugging
+    sourcemap: process.env.NODE_ENV !== 'production',
+
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Split leaflet and related packages into their own chunk
-          if (id.includes('node_modules/leaflet') || 
-              id.includes('node_modules/react-leaflet') ||
-              id.includes('node_modules/@react-leaflet')) {
+          if (
+            id.includes('node_modules/leaflet') ||
+            id.includes('node_modules/react-leaflet') ||
+            id.includes('node_modules/@react-leaflet')
+          ) {
             return 'leaflet';
           }
         },
       },
     },
   },
+
   plugins: [
     !process.env.VITEST ? reactRouter() : react(),
-    // TODO - confirm if required (given manual resolutions below)
+
     ViteTsConfigPathsPlugin({
       root: './',
     }),
-    // support import of svg files
+
     svgr(),
+
+    // ✅ UPDATED PWA CONFIG
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      strategies: 'generateSW',
+
+      // ❌ IMPORTANT: disable static manifest
+      manifest: false,
+
+      base: '/academy/',
+
+      devOptions: {
+        enabled: true,
+      },
+
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+
+        runtimeCaching: [
+          // ✅ Static assets only
+          {
+            urlPattern: ({ request }) =>
+              ['script', 'style', 'image', 'font'].includes(request.destination),
+
+            handler: 'CacheFirst',
+
+            options: {
+              cacheName: 'static-assets',
+
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+            },
+          },
+
+          // ❌ NEVER cache API
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/api'),
+            handler: 'NetworkOnly',
+          },
+
+          // ❌ NEVER cache Supabase
+          {
+            urlPattern: ({ url }) =>
+              url.hostname.includes('supabase'),
+            handler: 'NetworkOnly',
+          },
+
+          // ✅ HTML navigation (SSR pages)
+          {
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+          },
+        ],
+      },
+    }),
   ],
-  // open browser with server (note, will open at 127.0.1 not localhost on node <17)
-  // https://vitejs.dev/config/server-options.html#server-options
+
   ssr: {
-    noExternal: ['remix-utils', '@mui/base', '@mui/utils', '@mui/types'],
+    noExternal: [
+      'remix-utils',
+      '@mui/base',
+      '@mui/utils',
+      '@mui/types',
+    ],
   },
+
   resolve: {
     alias: {
       'oa-shared': resolve(__dirname, './shared/index.ts'),
-      'oa-components': resolve(__dirname, './packages/components/src/index.ts'),
+      'oa-components': resolve(
+        __dirname,
+        './packages/components/src/index.ts'
+      ),
     },
   },
+
   test: vitestConfig.test,
 });

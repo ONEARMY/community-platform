@@ -85,8 +85,11 @@ export const listing = {
   filterCategory: 'Filter by category',
   heading: 'Help out with Research & Development',
   incompleteProfile: 'Complete your profile to add your research',
+  join: 'Sign up to add your research',
   loadMore: 'Load More',
   loggedOut: 'Oh we really want your research knowledge. Trust us. But a login is needed first.',
+  noItems: 'No research to show',
+  search: 'Search for a research',
   sort: 'Sort by',
   status: 'Filter by status',
 };

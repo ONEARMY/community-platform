@@ -12,7 +12,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
-import { ContentServiceServer } from '../services/contentService.server';
+import { contentServiceServer } from '../services/contentService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -54,10 +54,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 async function loadNews(client: SupabaseClient, dbNews: DBNews) {
-  const contentService = new ContentServiceServer(client);
-  await contentService.incrementViewCount('news', dbNews.total_views, dbNews!.id);
+  await contentServiceServer.incrementViewCount(client, 'news', dbNews.total_views, dbNews!.id);
 
-  const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
     dbNews.id,
     'news',
     dbNews.tags,

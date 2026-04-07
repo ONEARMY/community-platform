@@ -10,11 +10,12 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { discordServiceServer } from 'src/services/discordService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { SubscribersServiceServer } from 'src/services/subscribersService.server';
+import { subscribersServiceServer } from 'src/services/subscribersService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { ContentServiceServer } from '../services/contentService.server';
+import { contentServiceServer } from '../services/contentService.server';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -145,7 +146,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title);
 
-    if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
+    if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'news')) {
       throw conflictError('This news already exists');
     }
 
@@ -186,13 +187,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], []);
-    new SubscribersServiceServer(client).add('news', news.id, profile.id);
+    subscribersServiceServer.add('news', news.id, profile.id, client, headers);
 
     if (!news.isDraft) {
       notifyDiscord(news, profile, new URL(request.url).origin.replace('http:', 'https:'));
     }
 
-    await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 201 });
   } catch (error) {

@@ -1,44 +1,46 @@
 import { useContext } from 'react';
 import { Link } from 'react-router';
 import { TenantContext } from 'src/pages/common/TenantContext';
-import { Box, Image, Text } from 'theme-ui';
+import { Box, Flex, Image, Text } from 'theme-ui';
 
 const Logo = () => {
   const tenantContext = useContext(TenantContext);
   const name = tenantContext?.siteName;
   const logo = tenantContext?.siteImage;
 
+  const logoSize = [50, 50, 100];
+
   return (
     <Box
       sx={{
+        py: [2, 2, 0], // padding on y axes ( top & bottom )
+        marginBottom: [0, 0, '-50px'],
         position: 'relative',
       }}
     >
       <Link to="/">
-        <Image
-          loading="lazy"
-          src={logo}
+        <Flex
+          ml={[0, 4]}
           sx={{
-            // 831px and below
-            width: 60,
-            height: 60,
-            marginBottom: '-20px',
-            '@media screen and (min-width: 832px)': {
-              width: 80,
-              height: 80,
-              marginBottom: '-30px',
-              marginLeft: '20px',
-            },
-            '@media screen and (min-width: 1200px)': {
-              width: 100,
-              height: 100,
-              marginBottom: '-40px',
-              marginLeft: '20px',
-            },
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            width: logoSize,
+            height: logoSize,
           }}
-          alt={`${name} logo`}
-          title={`${name} logo`}
-        />
+        >
+          <Image
+            loading="lazy"
+            src={logo}
+            style={{ maxWidth: 100, maxHeight: 100 }}
+            sx={{
+              width: logoSize,
+              height: logoSize,
+            }}
+            alt={`${name} logo`}
+            title={`${name} logo`}
+          />
+        </Flex>
         <Text className="sr-only" ml={2} sx={{ display: ['none', 'none', 'block'] }} color="black">
           {name}
         </Text>

@@ -1,0 +1,1 @@
+var t=(e=>(e.LIBRARY="library",e.MAP="map",e.RESEARCH="research",e.ACADEMY="academy",e.QUESTIONS="questions",e.NEWS="news",e))(t||{});const a=e=>{const r=(e||"library,map,research,academy,questions,news").split(",").map(s=>s.trim())||[];return Object.values(t).filter(s=>r.includes(s))},u=(e,r)=>a(e).includes(r);export{t as M,a as g,u as i};

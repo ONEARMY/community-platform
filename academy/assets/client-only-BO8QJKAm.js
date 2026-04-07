@@ -1,0 +1,1 @@
+import{r as e}from"./leaflet-BMES6qD7.js";function n(){return()=>{}}function u(){return e.useSyncExternalStore(n,()=>!0,()=>!1)}function s({children:r,fallback:t=null}){return u()?r():t}export{s as C};

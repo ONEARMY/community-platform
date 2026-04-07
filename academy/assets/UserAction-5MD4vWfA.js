@@ -1,0 +1,1 @@
+import{o as n}from"./mobxreact.esm-DafdYEug.js";import{u as f}from"./profile.store-BhhkoQvV.js";const p=n(o=>{const{incompleteProfile:r,loggedIn:e,loggedOut:t}=o,{isComplete:s,profile:i}=f();return i?s===!1&&r||e:t});export{p as U};

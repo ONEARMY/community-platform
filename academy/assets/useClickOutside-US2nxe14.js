@@ -1,0 +1,1 @@
+import{r}from"./leaflet-BMES6qD7.js";const u=t=>{const e=r.useRef(null);return r.useEffect(()=>{const n=s=>{e.current&&!e.current.contains(s.target)&&t()};return document.addEventListener("mousedown",n),()=>document.removeEventListener("mousedown",n)},[t]),e};export{u};

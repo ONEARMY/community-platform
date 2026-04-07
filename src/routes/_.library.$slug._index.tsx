@@ -6,7 +6,7 @@ import { CommentFactory } from 'src/factories/commentFactory.server';
 import { ProjectPage } from 'src/pages/Library/Content/Page/ProjectPage';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ContentServiceServer } from 'src/services/contentService.server';
+import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -23,13 +23,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbProject = result.data as unknown as DBProject;
 
-  const contentService = new ContentServiceServer(client);
-
   if (dbProject.id) {
-    await contentService.incrementViewCount('projects', dbProject.total_views, dbProject.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'projects',
+      dbProject.total_views,
+      dbProject.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
     dbProject.id,
     'projects',
     dbProject.tags,

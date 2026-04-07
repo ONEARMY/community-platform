@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -29,7 +29,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .update({ is_read: true })
       .eq('owned_by_id', profile?.data?.id);
 
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

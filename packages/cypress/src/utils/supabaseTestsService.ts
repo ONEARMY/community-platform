@@ -47,7 +47,7 @@ export class SupabaseTestsService {
       if (!data.users.length) break;
 
       for (const user of data.users) {
-        if (user.email?.includes(`+${this.tenantId}`)) {
+        if (user.email?.includes(`+${this.tenantId}@`)) {
           toDelete.push(user.id);
         }
       }
@@ -256,7 +256,6 @@ export class SupabaseTestsService {
           color_accent_hover: '#ffde45',
           show_impact: true,
           create_research_roles: undefined,
-          ga_tracking_id: 'G-TEST123456',
           tenant_id: this.tenantId,
         },
       ],

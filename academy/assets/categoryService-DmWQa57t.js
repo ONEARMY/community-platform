@@ -1,0 +1,1 @@
+import{l as t}from"./index-Dt9tQl3E.js";const o=async r=>{try{return await(await fetch(`/api/categories/${r}`)).json()}catch(e){return t.error("Failed to fetch categories",{error:e}),[]}},s={getCategories:o};export{s as c};

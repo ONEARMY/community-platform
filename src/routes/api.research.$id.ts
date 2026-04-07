@@ -4,10 +4,11 @@ import type { DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ContentServiceServer } from 'src/services/contentService.server';
+import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
-import { SubscribersServiceServer } from 'src/services/subscribersService.server';
+import { subscribersServiceServer } from 'src/services/subscribersService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 import {
   conflictError,
   forbiddenError,
@@ -52,7 +53,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     await validateRequest(request, claims.data.claims.sub, data, oldResearch, slug, client);
 
-    const previousSlugs = ContentServiceServer.updatePreviousSlugs(oldResearch, slug);
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, slug);
 
     const isFirstPublish = oldResearch.is_draft && !data.isDraft && !oldResearch.published_at;
 
@@ -81,8 +82,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const research = ResearchItem.fromDB(researchResult.data, []);
 
-    await new SubscribersServiceServer(client).updateResearchSubscribers(oldResearch, research);
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    await subscribersServiceServer.updateResearchSubscribers(
+      oldResearch,
+      research,
+      client,
+      headers,
+    );
+
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
@@ -154,7 +161,7 @@ async function validateRequest(
 
   if (
     research.slug !== slug &&
-    (await new ContentServiceServer(client).isDuplicateExistingSlug(slug, research.id, 'research'))
+    (await contentServiceServer.isDuplicateExistingSlug(slug, research.id, client, 'research'))
   ) {
     throw conflictError('This research already exists');
   }

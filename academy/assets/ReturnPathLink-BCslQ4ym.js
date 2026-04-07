@@ -1,0 +1,1 @@
+import{j as e}from"./emotion-react-jsx-runtime.browser.esm-Ab2AT6WB.js";import{u as r,L as a}from"./chunk-UVKPFVEO-CIEVcf-2.js";const c=t=>{const n=r(),o=`${t.to}?returnUrl=${encodeURIComponent(n?.pathname)}`;return e.jsx(a,{...t,to:o,children:t.children})};export{c as R};

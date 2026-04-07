@@ -16,6 +16,7 @@ const createMockLoaderArgs = (request: Request): LoaderFunctionArgs => ({
   params: {},
   context: {},
   unstable_pattern: '',
+  unstable_url: new URL(request.url),
 });
 
 const createMockActionArgs = (request: Request): ActionFunctionArgs => ({
@@ -23,6 +24,7 @@ const createMockActionArgs = (request: Request): ActionFunctionArgs => ({
   params: {},
   context: {},
   unstable_pattern: '',
+  unstable_url: new URL(request.url),
 });
 
 describe('loader', () => {

@@ -3,6 +3,7 @@ import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImpactServiceServer } from 'src/services/impactService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -44,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const impact = result.data as unknown as IUserImpact;
 
-    profileService.updateUserActivity(claims.data.claims.sub);
+    updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json(impact, { headers, status: 200 });
   } catch (error) {

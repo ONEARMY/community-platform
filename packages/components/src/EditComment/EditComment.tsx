@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Flex, Label } from 'theme-ui';
 import { object, string } from 'yup';
+
 import { Banner } from '../Banner/Banner';
 import { Button } from '../Button/Button';
 import { FieldTextarea } from '../FieldTextarea/FieldTextarea';
@@ -71,11 +72,12 @@ export const EditComment = (props: IProps) => {
             as="form"
             sx={{
               flexDirection: 'column',
+              padding: 2,
               gap: 2,
             }}
             onSubmit={handleSubmit}
           >
-            <Label as="label" htmlFor="comment" sx={{ fontSize: 3 }}>
+            <Label as="label" htmlFor="comment" sx={{ marginBottom: '6px', fontSize: 3 }}>
               Edit {isReply ? 'Reply' : 'Comment'}
             </Label>
 
@@ -87,11 +89,11 @@ export const EditComment = (props: IProps) => {
               id="comment"
               validate={required}
               name="comment"
-              rows={4}
-              sx={{ padding: 1, fontSize: '16px', lineHeight: '1.4' }}
+              rows={2}
+              sx={{ padding: 1 }}
             />
-            <Flex sx={{ gap: 2, justifyContent: 'flex-end' }}>
-              <Button type="button" small variant="outline" onClick={() => props?.handleCancel()}>
+            <Flex mt={4} ml="auto">
+              <Button type="button" small mr={4} variant="outline" onClick={() => props?.handleCancel()}>
                 Cancel
               </Button>
               <Button

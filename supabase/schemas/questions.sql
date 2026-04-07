@@ -61,19 +61,7 @@ DECLARE
   ts_query tsquery;
 BEGIN
   IF search_query IS NOT NULL THEN
-    -- Split search query into words and create prefix-matching tsquery with AND logic
-    -- Sanitize each word to prevent tsquery injection
-    ts_query := to_tsquery('english', 
-      array_to_string(
-        ARRAY(
-          SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
-          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
-          WHERE word != '' 
-            AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
-        ),
-        ' & '
-      )
-    );
+    ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
   END IF;
 
   RETURN QUERY
@@ -149,19 +137,7 @@ DECLARE
   ts_query tsquery;
 BEGIN
   IF search_query IS NOT NULL THEN
-    -- Split search query into words and create prefix-matching tsquery with AND logic
-    -- Sanitize each word to prevent tsquery injection
-    ts_query := to_tsquery('english', 
-      array_to_string(
-        ARRAY(
-          SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
-          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
-          WHERE word != '' 
-            AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
-        ),
-        ' & '
-      )
-    );
+    ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
   END IF;
 
   RETURN (

@@ -157,6 +157,7 @@ export const listing = {
   empty: 'No projects to show!',
   filterCategory: 'Filter by category',
   incompleteProfile: 'Complete your profile to add your project',
+  join: 'Sign up to add your project',
   loadMore: 'Load More',
   loggedOut: 'We need that password of yours before learning about your awesome project...',
   totalComments: 'Total comments',

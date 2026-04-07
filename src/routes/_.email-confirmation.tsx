@@ -1,3 +1,4 @@
+import { isbot } from 'isbot';
 import { Button, HeroBanner } from 'oa-components';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
@@ -15,16 +16,36 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   const claims = await client.auth.getClaims();
-
   if (claims.data?.claims) {
     return redirect('/settings/profile', { headers });
   }
 
-  if (token || error) {
-    return data({ token, error }, { headers });
+  if (error) {
+    return data({ error }, { headers });
   }
 
-  return redirect('/', { headers });
+  if (!token) {
+    return redirect('/', { headers });
+  }
+
+  const looksLikeBot = isbot(request.headers.get('user-agent'));
+
+  if (looksLikeBot) {
+    // Show the confirmation page with button click as fallback
+    return data({ token, error: null }, { headers });
+  }
+
+  // Auto-confirm for real browsers
+  const tokenVerification = await client.auth.verifyOtp({
+    token_hash: token,
+    type: 'signup',
+  });
+
+  if (!tokenVerification.data.user) {
+    return data({ token, error: null }, { headers });
+  }
+
+  return redirect('/settings/profile?emailConfirmed=true', { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {

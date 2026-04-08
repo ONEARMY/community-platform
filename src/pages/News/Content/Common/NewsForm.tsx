@@ -16,6 +16,7 @@ import * as LABELS from 'src/pages/News/labels';
 import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
 import { composeValidators, minValue, required } from 'src/utils/validators';
+import { Divider } from 'theme-ui';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
@@ -176,10 +177,13 @@ export const NewsForm = (props: IProps) => {
             />
             <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
+            <Divider />
             <ProfileBadgeField
+              description={LABELS.fields.profileBadge.description as string}
               placeholder={LABELS.fields.profileBadge.placeholder as string}
               title={LABELS.fields.profileBadge.title}
             />
+            <Divider />
             <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>
         );

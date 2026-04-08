@@ -22,8 +22,10 @@ export const fields: ILabels = {
     title: 'Body',
   },
   profileBadge: {
-    title: 'Limit to badged users',
-    placeholder: 'Select if this is for profiles with a certain profile badge',
+    title: 'Limit visible to',
+    description:
+      'Leave empty to be visible for everyone. Picking a badge will hide it from the general public.',
+    placeholder: 'Select who can see this post',
   },
   summary: {
     title: 'Summary',

@@ -7,11 +7,12 @@ import { ProfileBadgeService } from 'src/services/profileBadgeService';
 import { FormFieldWrapper } from './FormFieldWrapper';
 
 interface IProps {
+  description: string;
   placeholder: string;
   title: string;
 }
 
-export const ProfileBadgeField = ({ placeholder, title }: IProps) => {
+export const ProfileBadgeField = ({ description, placeholder, title }: IProps) => {
   const [profileBadges, setProfileBadges] = useState<SelectValue[]>([]);
   const name = 'profileBadge';
 
@@ -33,16 +34,17 @@ export const ProfileBadgeField = ({ placeholder, title }: IProps) => {
   }, []);
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title}>
+    <FormFieldWrapper description={description} htmlFor={name} text={title}>
       <Field
         name={name}
         id={name}
         isEqual={(a, b) => !!a && a?.value === b?.value}
         render={({ input, ...rest }) => (
-          <FieldContainer data-cy="profileBadge-select">
+          <FieldContainer data-cy={`${name}-select`}>
             <Select
               {...rest}
               variant="form"
+              // isMulti={true}
               options={profileBadges || []}
               value={input.value}
               onChange={(changedValue) => {

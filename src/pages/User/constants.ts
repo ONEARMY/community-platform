@@ -1,2 +1,0 @@
-export const MESSAGE_MIN_CHARACTERS = 10;
-export const MESSAGE_MAX_CHARACTERS = 500;

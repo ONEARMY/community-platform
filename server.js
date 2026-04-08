@@ -68,14 +68,8 @@ const imgSrc = [
   '*.patreonusercontent.com',
   '*.basemaps.cartocdn.com',
   '*.supabase.co',
-  "http://127.0.0.1:54321",
-  "http://127.0.0.1:3000",
-  "https://community.preciousplastic.com",
   process.env.SUPABASE_API_URL,
 ].filter(Boolean);
-
-
-
 
 app.use(
   secureHeaders({
@@ -166,42 +160,13 @@ if (isProd) {
     }),
   );
 
-
-  app.get('/manifest.webmanifest', (c) => {
-  const APP_NAME = process.env.APP_NAME || 'Community';
-  const THEME_COLOR = process.env.THEME_COLOR || '#000000';
-  const SHORT_NAME = process.env.SHORT_NAME || 'Community';
-
-  return c.json({
-    name: APP_NAME,
-    short_name: SHORT_NAME,
-    start_url: '/academy/',
-    scope: '/academy/',
-    display: 'standalone',
-    theme_color: THEME_COLOR,
-    background_color: '#ffffff',
-    icons: [
-      {
-        src: '/academy/icon/icon-192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: '/academy/icon/icon-512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-    ],
-  });
-});
-
   // Serve PWA files explicitly
-  // app.use(
-  //   '/sw.js',
-  //   serveStatic({
-  //     root: './build/client',
-  //   }),
-  // );
+  app.use(
+    '/sw.js',
+    serveStatic({
+      root: './build/client',
+    }),
+  );
 
   app.use(
     '/manifest.webmanifest',

@@ -32,9 +32,9 @@ const vitestConfig: ViteUserConfig = {
   },
 };
 
+// https://vitejs.dev/config/
 export default defineConfig({
   base: '/academy/',
-
   define: {
     global: 'globalThis',
   },
@@ -50,6 +50,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          // Split leaflet into separate chunk
           if (
             id.includes('node_modules/leaflet') ||
             id.includes('node_modules/react-leaflet') ||
@@ -71,29 +72,67 @@ export default defineConfig({
 
     svgr(),
 
-    // ✅ UPDATED PWA CONFIG
+    // ✅ PWA Plugin Added Here
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       strategies: 'generateSW',
-
-      // ❌ IMPORTANT: disable static manifest
-      manifest: false,
-
       base: '/academy/',
-
       devOptions: {
         enabled: true,
+      },      
+
+      manifest: {
+        name:
+          process.env.VITE_APP_NAME || 'Community App',
+
+        short_name:
+          process.env.VITE_APP_SHORT_NAME || 'Community',
+
+        theme_color:
+          process.env.VITE_THEME_COLOR || '#1976d2',
+
+        background_color: '#ffffff',
+
+        display: 'standalone',
+
+        start_url: '/academy',
+        scope: '/academy/',
+
+        icons: [
+          {
+            src: '/icon/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/icon/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+        screenshots: [
+        {
+          src: '/screenshots/mobile.png',
+          sizes: '540x720',
+          type: 'image/png'
+        },
+        {
+          src: '/screenshots/desktop.png',
+          sizes: '1280x800',
+          type: 'image/png',
+          form_factor: 'wide'
+        }
+      ]
       },
 
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-
         runtimeCaching: [
-          // ✅ Static assets only
           {
             urlPattern: ({ request }) =>
-              ['script', 'style', 'image', 'font'].includes(request.destination),
+              request.destination === 'script' ||
+              request.destination === 'style' ||
+              request.destination === 'image',
 
             handler: 'CacheFirst',
 
@@ -101,29 +140,11 @@ export default defineConfig({
               cacheName: 'static-assets',
 
               expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+                maxEntries: 100,
+                maxAgeSeconds:
+                  60 * 60 * 24 * 30, // 30 days
               },
             },
-          },
-
-          // ❌ NEVER cache API
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/api'),
-            handler: 'NetworkOnly',
-          },
-
-          // ❌ NEVER cache Supabase
-          {
-            urlPattern: ({ url }) =>
-              url.hostname.includes('supabase'),
-            handler: 'NetworkOnly',
-          },
-
-          // ✅ HTML navigation (SSR pages)
-          {
-            urlPattern: ({ request }) => request.mode === 'navigate',
-            handler: 'NetworkFirst',
           },
         ],
       },
@@ -141,7 +162,11 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      'oa-shared': resolve(__dirname, './shared/index.ts'),
+      'oa-shared': resolve(
+        __dirname,
+        './shared/index.ts'
+      ),
+
       'oa-components': resolve(
         __dirname,
         './packages/components/src/index.ts'

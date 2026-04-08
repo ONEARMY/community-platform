@@ -51,6 +51,8 @@ export type availableGlyphs =
   | 'information'
   | 'instagram'
   | 'landscape'
+  | 'library'
+  | 'loading'
   | 'location-on'
   | 'lock'
   | 'machine'
@@ -63,6 +65,7 @@ export type availableGlyphs =
   | 'menu'
   | 'more-vert'
   | 'moulds'
+  | 'news'
   | 'notifications'
   | 'other'
   | 'patreon'
@@ -106,7 +109,6 @@ export type availableGlyphs =
   | 'success'
   | 'error'
   | 'warning'
-  | 'info'
-  | 'loading';
+  | 'info';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

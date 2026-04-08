@@ -130,7 +130,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
           <FormWrapper
             belowBody={belowBody}
             buttonLabel={buttons.publish}
-            contentType="research"
+            contentType="projects"
             errorsClientSide={errorsClientSide}
             errorSubmitting={saveErrorMessage}
             guidelines={<LibraryPostingGuidelines />}

@@ -1,6 +1,5 @@
-import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
+import { availableGlyphs, Button, Icon, Loader } from 'oa-components';
 import type { ContentFormType } from 'oa-shared';
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
 import { ErrorsContainer } from './ErrorsContainer';
 import type { IErrorsListSet } from './types';
@@ -26,6 +25,14 @@ interface IProps {
 
 const DRAFT_LABEL = 'Save as draft';
 
+const glyphMap: { [key in ContentFormType]: availableGlyphs } = {
+  news: 'news',
+  projects: 'library',
+  questions: 'library',
+  research: 'research',
+  researchUpdate: 'research',
+};
+
 export const FormWrapper = (props: IProps) => {
   const {
     belowBody,
@@ -47,6 +54,7 @@ export const FormWrapper = (props: IProps) => {
   } = props;
 
   const hasClientSideErrors = hasValidationErrors && submitFailed;
+  const glyph = glyphMap[contentType];
 
   return (
     <Flex
@@ -73,12 +81,10 @@ export const FormWrapper = (props: IProps) => {
           <Card sx={{ backgroundColor: 'softblue' }}>
             <Flex
               data-cy={`${contentType}-title`}
-              sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
+              sx={{ alignItems: 'center', paddingX: 3, paddingY: 2, gap: 3 }}
             >
               <Heading as="h1">{heading}</Heading>
-              <Box ml="15px">
-                <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
-              </Box>
+              <Icon glyph={glyph} size={20} />
             </Flex>
           </Card>
           {guidelines && <Box sx={{ display: ['block', 'block', 'none'] }}>{guidelines}</Box>}

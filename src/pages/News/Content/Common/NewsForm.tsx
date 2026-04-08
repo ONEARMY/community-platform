@@ -7,6 +7,7 @@ import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
 import { CategoryField } from 'src/pages/common/FormFields/Category.field';
+import { ContentReachField } from 'src/pages/common/FormFields/ContentReachField';
 import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
 import { TitleField } from 'src/pages/common/FormFields/Title.field';
@@ -182,6 +183,10 @@ export const NewsForm = (props: IProps) => {
               description={LABELS.fields.profileBadge.description as string}
               placeholder={LABELS.fields.profileBadge.placeholder as string}
               title={LABELS.fields.profileBadge.title}
+            />
+            <ContentReachField
+              placeholder={LABELS.fields.contentReach.placeholder as string}
+              title={LABELS.fields.contentReach.title}
             />
             <Divider />
             <NewsBodyField imageUpload={imageUpload} />

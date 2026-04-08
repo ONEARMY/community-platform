@@ -1,22 +1,32 @@
 import { observer } from 'mobx-react';
-import type { DBNotificationsPreferences } from 'oa-shared';
+import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isUserContactable } from 'src/utils/helpers';
+import {
+  defaultNewContentReachValue,
+  NewsContentReachOptions,
+} from './content/fields/NotificationsNewsField';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [initialValues, setInitialValues] = useState<DBNotificationsPreferences | null>(null);
+  const [initialValues, setInitialValues] = useState<NotificationsPreferencesFormData | null>(null);
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
 
   const { profile } = useProfileStore();
 
   const refreshPreferences = async () => {
-    const preferences = await notificationsPreferencesService.getPreferences();
+    const dbPreferences = await notificationsPreferencesService.getPreferences();
+    const preferences: NotificationsPreferencesFormData = {
+      ...dbPreferences,
+      news:
+        NewsContentReachOptions.find(({ value }) => value === dbPreferences?.news) ||
+        defaultNewContentReachValue,
+    };
+
     setInitialValues(preferences);
     setIsLoading(false);
   };
@@ -25,7 +35,12 @@ export const SupabaseNotifications = observer(() => {
     refreshPreferences();
   }, []);
 
-  const onSubmit = async (values: DBNotificationsPreferences) => {
+  const onSubmit = async (formValues) => {
+    const values = {
+      ...formValues,
+      news: formValues.news.value,
+    };
+
     setIsLoading(true);
     setSubmitResults(null);
 
@@ -67,7 +82,7 @@ export const SupabaseNotifications = observer(() => {
       isLoading={isLoading}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
-      profileIsContactable={isUserContactable(profile)}
+      profile={profile}
       submitResults={submitResults}
     />
   );

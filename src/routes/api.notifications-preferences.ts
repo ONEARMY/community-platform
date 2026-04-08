@@ -1,11 +1,12 @@
 import type { DBNotificationsPreferencesFields } from 'oa-shared';
+import { NEWS_CONTENT_REACH_DEFAULT } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
 export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields = {
   comments: true,
-  news: true,
+  news: NEWS_CONTENT_REACH_DEFAULT,
   replies: true,
   research_updates: true,
   is_unsubscribed: false,
@@ -38,7 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
     const comments = formData.get('comments') === 'true';
-    const news = formData.get('news') === 'true';
+    const news = formData.get('news');
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('research_updates') === 'true';
     const is_unsubscribed = formData.get('is_unsubscribed') === 'true';

@@ -4,6 +4,7 @@ import { UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { isUserAdmin } from 'src/utils/isAdmin';
 
 type Supabase = {
   headers: Headers;
@@ -123,10 +124,6 @@ async function getProfileByAuthId(request: Request, authId: string) {
   }
 
   return data[0] as DBProfile;
-}
-
-function isUserAdmin(user: DBProfile) {
-  return user.roles && user.roles.includes(UserRole.ADMIN);
 }
 
 async function validateRequest(params: Params<string>, request: Request) {

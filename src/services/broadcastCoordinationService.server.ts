@@ -6,12 +6,7 @@ import { NotificationsSupabaseServiceServer } from './notificationsSupabaseServi
 export class BroadcastCoordinationServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  news(
-    news: DBNews,
-    profile: DBProfile | null,
-    request: Request,
-    oldNews?: DBNews,
-  ) {
+  news(news: DBNews, profile: DBProfile | null, request: Request, oldNews?: DBNews) {
     const beforeCheck = oldNews ? !!oldNews.is_draft : true;
     const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
 

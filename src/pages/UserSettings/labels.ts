@@ -1,3 +1,4 @@
+import type { NewsContentReachOption } from 'oa-shared';
 import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
@@ -129,6 +130,16 @@ export const fields: ILabels = {
     description:
       'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
   },
+};
+
+type NewsNewsContentReachOptionsLabelList = {
+  [option in NewsContentReachOption]: string;
+};
+
+export const contentReach: NewsNewsContentReachOptionsLabelList = {
+  all: 'Keep me close (all news)',
+  important: 'Big updates (major news only)',
+  none: 'No emails',
 };
 
 export const form = {

@@ -7,13 +7,16 @@ import {
   InternalLink,
   Loader,
 } from 'oa-components';
-import type { DBNotificationsPreferences } from 'oa-shared';
+import type { DBNotificationsPreferences, Profile } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { UserContactError } from 'src/pages/User/contact';
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
+import { isUserContactable } from 'src/utils/helpers';
+import { isUserAdmin } from 'src/utils/isAdmin';
 import { Button, Flex, Text } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
+import { NotificationsNewsField } from './content/fields/NotificationsNewsField';
 
 const formId = 'SupabaseNotifications';
 
@@ -66,16 +69,18 @@ interface IProps {
   isLoading: boolean;
   onSubmit: (values: DBNotificationsPreferences) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
-  profileIsContactable?: boolean;
+  profile: Profile;
   submitResults: SubmitResults | null;
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable, submitResults } =
-    props;
+  const { initialValues, isLoading, onSubmit, onUnsubscribe, profile, submitResults } = props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const tenantContext = useContext(TenantContext);
   const showMessagingSetting = !tenantContext?.noMessaging;
+
+  const profileIsContactable = isUserContactable(profile);
+  const showNewsPreference = profile.badges?.length || isUserAdmin(profile);
 
   const fields = useMemo(() => {
     const allFields = [...baseFields];
@@ -97,8 +102,18 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       });
     }
 
+    if (showNewsPreference) {
+      allFields.unshift({
+        component: <NotificationsNewsField defaultValue={initialValues?.news} />,
+        description: 'Get notified when news from HQ are posted',
+        glyph: 'news',
+        name: 'Coming soon: News updates',
+        evenGridSplit: true,
+      });
+    }
+
     return allFields;
-  }, [showMessagingSetting, profileIsContactable]);
+  }, [showMessagingSetting, profileIsContactable, initialValues]);
 
   return (
     <Form

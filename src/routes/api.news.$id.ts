@@ -4,8 +4,8 @@ import type { DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ContentServiceServer } from 'src/services/contentService.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { hasAdminRights } from 'src/utils/helpers';
@@ -79,13 +79,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    const broadcastCoordinationServiceServer = new BroadcastCoordinationServiceServer(client)
-    broadcastCoordinationServiceServer.news(
-      newsResult.data[0],
-      profile,
-      request,
-      currentNews,
-    );
+    const broadcastCoordinationServiceServer = new BroadcastCoordinationServiceServer(client);
+    broadcastCoordinationServiceServer.news(newsResult.data[0], profile, request, currentNews);
 
     new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

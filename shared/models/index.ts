@@ -6,6 +6,7 @@ export * from './common';
 export * from './content';
 export * from './db';
 export * from './document';
+export * from './emailContentReach';
 export * from './filesForm';
 export * from './library';
 export * from './maps';

@@ -7,7 +7,7 @@ import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
 import { CategoryField } from 'src/pages/common/FormFields/Category.field';
-import { ContentReachField } from 'src/pages/common/FormFields/ContentReachField';
+import { EmailContentReachNewsField } from 'src/pages/common/FormFields/EmailContentReachNewsField';
 import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
 import { TitleField } from 'src/pages/common/FormFields/Title.field';
@@ -45,6 +45,7 @@ export const NewsForm = (props: IProps) => {
         profileBadge: props.formData?.profileBadge || null,
         tags: props.formData?.tags || [],
         title: props.formData?.title || '',
+        emailContentReach: props.formData?.emailContentReach || null,
       }) satisfies NewsFormData,
     [],
   );
@@ -63,6 +64,7 @@ export const NewsForm = (props: IProps) => {
         profileBadge: formValues.profileBadge || null,
         tags: formValues.tags,
         title: formValues.title!,
+        emailContentReach: formValues.emailContentReach!,
       });
 
       if (result) {
@@ -184,7 +186,7 @@ export const NewsForm = (props: IProps) => {
               placeholder={LABELS.fields.profileBadge.placeholder as string}
               title={LABELS.fields.profileBadge.title}
             />
-            <ContentReachField
+            <EmailContentReachNewsField
               placeholder={LABELS.fields.contentReach.placeholder as string}
               title={LABELS.fields.contentReach.title}
             />

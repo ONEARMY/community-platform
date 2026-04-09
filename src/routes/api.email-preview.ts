@@ -43,10 +43,23 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    await new NotificationEmailServiceServer(client).sendNewsPreview(
-      claims.data.claims.user_metadata?.username,
-      draftNotificationDisplay,
-    );
+    const userProfile = await client
+      .from('profiles')
+      .select('id,created_at')
+      .eq('auth_id', claims.data.claims.sub);
+
+    if (userProfile.data && userProfile.data![0]) {
+      const previewer = {
+        email: claims.data.claims.email,
+        profile_id: userProfile.data![0].id,
+        createdAt: userProfile.data![0].created_at,
+      };
+
+      await new NotificationEmailServiceServer(client).sendNewsPreview(
+        previewer,
+        draftNotificationDisplay,
+      );
+    }
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

@@ -11,17 +11,13 @@ import { TenantSettingsService } from './tenantSettingsService.server';
 export class NotificationEmailServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  async sendNewsPreview(previewerUsername: number, notification: NotificationDisplay) {
+  async sendNewsPreview(previewer, notification: NotificationDisplay) {
     const tenantSettings = await new TenantSettingsService(this.client).get();
 
     try {
-      const previewer = (
-        await this.client.rpc('get_user_email_by_username', { username: previewerUsername })
-      ).data[0];
-
       const codes = {
         email: previewer.email,
-        code: tokens.generate(previewer.profile_id, previewer.profile_created_at),
+        code: tokens.generate(previewer.profile_id, previewer.created_at),
       };
 
       const email = {

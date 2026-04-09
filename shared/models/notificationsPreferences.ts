@@ -1,49 +1,59 @@
+import { DBEmailContentReach } from './emailContentReach';
+import { SelectValue } from './selectValue';
+
+export type DBNotificationsPreferencesDefaults = {
+  comments: boolean;
+  email_content_reach: number;
+  replies: boolean;
+  research_updates: boolean;
+  is_unsubscribed: boolean;
+};
+
+export class DBNotificationsPreferences {
+  id: number;
+  user_id: number;
+  comments: boolean;
+  email_content_reach: DBEmailContentReach;
+  replies: boolean;
+  research_updates: boolean;
+  is_unsubscribed: boolean;
+
+  static toFormData(dbNotifications: DBNotificationsPreferences): NotificationsPreferencesFormData {
+    return {
+      ...dbNotifications,
+      email_content_reach: DBEmailContentReach.toNotificationsFormField(
+        dbNotifications.email_content_reach,
+      ),
+    };
+  }
+}
+
 export class NotificationsPreferences {
   id?: number;
-  user_id?: number;
+  userId?: number;
   comments: boolean;
-  news: NewsContentReachOption;
+  emailContentReach: number;
   replies: boolean;
   researchUpdates: boolean;
   isUnsubscribed: boolean;
 }
 
-export class DBNotificationsPreferencesFields {
+export interface NotificationsPreferencesFormData {
+  id?: number;
   comments: boolean;
-  news: NewsContentReachOption;
+  email_content_reach: SelectValue;
   replies: boolean;
   research_updates: boolean;
   is_unsubscribed: boolean;
 }
 
-export class DBNotificationsPreferences extends DBNotificationsPreferencesFields {
-  id: number;
-  user_id: number;
+// For setting notifications via the links in emails
+
+export interface NotificationsPreferencesViaEmailFormData extends NotificationsPreferencesFormData {
+  userCode: string;
 }
 
 export interface DBPreferencesWithProfileContact {
   preferences: DBNotificationsPreferences;
   is_contactable: undefined | boolean;
-}
-
-export type NotificationsPreferenceTypes = 'comments' | 'news' | 'replies' | 'research_updates';
-
-export type NewsContentReachOption = 'all' | 'important' | 'none';
-export const NewsContentReachOptionList = ['all', 'important', 'none'] as NewsContentReachOption[];
-export const NEWS_CONTENT_REACH_DEFAULT = 'important';
-
-export interface NotificationsPreferencesFormData {
-  comments: boolean;
-  news: { value: NewsContentReachOption; label: string };
-  replies: boolean;
-  research_updates: boolean;
-  id?: number;
-}
-
-export interface NotificationsPreferencesViaEmailFormData {
-  comments: boolean;
-  news: { value: NewsContentReachOption; label: string };
-  replies: boolean;
-  research_updates: boolean;
-  userCode: string;
 }

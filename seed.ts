@@ -90,6 +90,10 @@ const _BADGES_RELATIONS_BASE: Partial<profile_badges_relationsScalars> = {
   tenant_id,
 };
 
+const _EMAIL_CONTENT_REACH_BASE = {
+  tenant_id,
+};
+
 const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }];
 
 const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
@@ -198,6 +202,28 @@ const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Moulds', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Products', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
+];
+
+const seedEmailContentReach = () => [
+  {
+    ..._EMAIL_CONTENT_REACH_BASE,
+    name: 'all',
+    preferences_label: 'Keep me close',
+    create_content_label: 'Regular post',
+  },
+  {
+    ..._EMAIL_CONTENT_REACH_BASE,
+    name: 'important',
+    preferences_label: 'Big updates',
+    create_content_label: 'Big update',
+    default_option: true,
+  },
+  {
+    ..._EMAIL_CONTENT_REACH_BASE,
+    name: 'none',
+    preferences_label: 'No emails',
+    create_content_label: 'Silent (no email)',
+  },
 ];
 
 const seedQuestions = (profile: profilesInputs): questionsChildInputs =>
@@ -451,6 +477,7 @@ const main = async () => {
   // await seed.map_pins(seedMapPins(profiles))
   const { tags } = await seed.tags(seedTags());
   const { categories } = await seed.categories(seedCategories());
+  await seed.email_content_reach(seedEmailContentReach());
 
   const questionsAcc: questionsScalars[] = [];
 

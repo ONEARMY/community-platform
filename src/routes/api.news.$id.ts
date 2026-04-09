@@ -35,6 +35,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
+      emailContentReach: Number(formData.get('emailContentReach')),
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
@@ -66,6 +67,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         tags: data.tags,
         title: data.title,
         hero_image: data.heroImage,
+        email_content_reach: data.emailContentReach,
         ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', id)
@@ -122,6 +124,10 @@ async function validateRequest(
 
   if (!data.heroImage) {
     throw validationError('Hero Image is required', 'heroImage');
+  }
+
+  if (!data.emailContentReach) {
+    throw validationError('Email content reach is required', 'emailContentReach');
   }
 
   if (!currentNews) {

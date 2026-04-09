@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { tokens } from 'src/utils/tokens.server';
-import { DEFAULT_NOTIFICATION_PREFERENCES } from './api.notifications-preferences';
+import { setDefaultNotifications } from './api.notifications-preferences';
 
 interface DecodedToken {
   profileId: string;
@@ -38,7 +38,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       .maybeSingle();
 
     const is_contactable = userData.data?.is_contactable;
-    const preferences = preferencesData.data || DEFAULT_NOTIFICATION_PREFERENCES;
+    const preferences = setDefaultNotifications(preferencesData.data);
 
     return Response.json({ preferences, is_contactable }, { headers, status: 200 });
   } catch (error) {

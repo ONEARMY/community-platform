@@ -53,6 +53,7 @@ export const loader = async ({ request }) => {
       title,
       total_views,
       hero_image,
+      email_content_reach:email_content_reach(*),
       author:profiles(id, display_name, username, country, badges:profile_badges_relations(
         profile_badges(
           id,
@@ -133,6 +134,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
+      emailContentReach: Number(formData.get('emailContentReach')),
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
@@ -182,6 +184,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         hero_image: data.heroImage,
         tenant_id: process.env.TENANT_ID,
         title: data.title,
+        email_content_reach: data.emailContentReach,
       })
       .select();
 
@@ -226,6 +229,10 @@ async function validateRequest(request: Request, data: any, authError: AuthError
   }
 
   if (!data.heroImage) {
-    throw validationError('Hero image is required', 'body');
+    throw validationError('Hero image is required', 'heroImage');
+  }
+
+  if (!data.emailContentReach) {
+    throw validationError('Email content reach is required', 'emailContentReach');
   }
 }

@@ -11,6 +11,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     isDraft: form.isDraft,
     profileBadge: Number(form.profileBadge?.value) || null,
     tags: form.tags || null,
+    emailContentReach: Number(form.emailContentReach?.value) || null,
   });
 
   const response =

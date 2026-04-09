@@ -5,6 +5,7 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
+import { DBEmailContentReach, EmailContentReach } from './emailContentReach';
 import { DBMedia, Image, MediaWithPublicUrl } from './media';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
@@ -34,6 +35,7 @@ export class DBNews implements IDBContentDoc {
   readonly useful_count?: number;
   readonly body: string;
   readonly hero_image: DBMedia | null;
+  readonly email_content_reach: DBEmailContentReach;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null) {
     let htmlBody = marked(news.body, {
@@ -57,6 +59,7 @@ export class DBNews implements IDBContentDoc {
         : null,
       tags: news.tags,
       title: news.title,
+      emailContentReach: DBEmailContentReach.toCreateCreateFormField(news.email_content_reach),
     } satisfies NewsFormData;
   }
 }
@@ -88,6 +91,7 @@ export class News implements IContentDoc {
   title: string;
   totalViews: number;
   usefulCount: number;
+  emailContentReach: EmailContentReach;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
@@ -125,6 +129,7 @@ export class News implements IContentDoc {
       title: news.title,
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
+      emailContentReach: EmailContentReach.fromDB(news.email_content_reach),
     });
   }
 }
@@ -137,6 +142,7 @@ export type NewsFormData = {
   profileBadge: SelectValue | null;
   tags?: number[];
   title: string;
+  emailContentReach: SelectValue | null;
 };
 
 export type NewsDTO = {
@@ -147,4 +153,5 @@ export type NewsDTO = {
   isDraft: boolean | null;
   profileBadge: number | null;
   tags: number[] | null;
+  emailContentReach: number | null;
 };

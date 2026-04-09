@@ -1,14 +1,10 @@
 import { observer } from 'mobx-react';
-import type { NotificationsPreferencesFormData } from 'oa-shared';
+import { DBNotificationsPreferences, type NotificationsPreferencesFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import {
-  defaultNewContentReachValue,
-  NewsContentReachOptions,
-} from './content/fields/NotificationsNewsField';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
@@ -20,12 +16,12 @@ export const SupabaseNotifications = observer(() => {
 
   const refreshPreferences = async () => {
     const dbPreferences = await notificationsPreferencesService.getPreferences();
-    const preferences: NotificationsPreferencesFormData = {
-      ...dbPreferences,
-      news:
-        NewsContentReachOptions.find(({ value }) => value === dbPreferences?.news) ||
-        defaultNewContentReachValue,
-    };
+
+    if (!dbPreferences) {
+      return setSubmitResults({ type: 'error', message: 'Error finding preferences' });
+    }
+
+    const preferences = DBNotificationsPreferences.toFormData(dbPreferences);
 
     setInitialValues(preferences);
     setIsLoading(false);
@@ -36,16 +32,11 @@ export const SupabaseNotifications = observer(() => {
   }, []);
 
   const onSubmit = async (formValues) => {
-    const values = {
-      ...formValues,
-      news: formValues.news.value,
-    };
-
     setIsLoading(true);
     setSubmitResults(null);
 
     try {
-      await notificationsPreferencesService.setPreferences(values);
+      await notificationsPreferencesService.setPreferences(formValues);
       await refreshPreferences();
       setSubmitResults({
         type: 'success',

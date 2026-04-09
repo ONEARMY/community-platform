@@ -1,22 +1,32 @@
 import { Select } from 'oa-components';
-import { NewsContentReachOptionList } from 'oa-shared';
+import { EmailContentReach, SelectValue } from 'oa-shared';
+import { useEffect, useState } from 'react';
 import { Field } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { emailContentReachService } from 'src/services/emailContentReachService';
 import { FormFieldWrapper } from './FormFieldWrapper';
-import { contentReach } from './labels';
 
 interface IProps {
   placeholder: string;
   title: string;
 }
 
-export const ContentReachField = ({ placeholder, title }: IProps) => {
-  const name = 'contentReach';
+export const EmailContentReachNewsField = ({ placeholder, title }: IProps) => {
+  const [options, setOptions] = useState<SelectValue[]>([]);
+  const name = 'emailContentReach';
 
-  const NewsContentReachOptions = NewsContentReachOptionList.map((option) => ({
-    value: option,
-    label: contentReach[option],
-  }));
+  useEffect(() => {
+    const fetchEmailContentReach = async () => {
+      const emailContentReach = await emailContentReachService.getAll();
+      if (emailContentReach) {
+        const fieldOptions = emailContentReach.map((reach) => {
+          return EmailContentReach.toCreateCreateFormField(reach);
+        });
+        setOptions(fieldOptions);
+      }
+    };
+    fetchEmailContentReach();
+  }, []);
 
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
@@ -29,7 +39,7 @@ export const ContentReachField = ({ placeholder, title }: IProps) => {
             <Select
               {...rest}
               variant="form"
-              options={NewsContentReachOptions || []}
+              options={options || []}
               value={input.value}
               onChange={(changedValue) => {
                 input.onChange(changedValue ?? null);

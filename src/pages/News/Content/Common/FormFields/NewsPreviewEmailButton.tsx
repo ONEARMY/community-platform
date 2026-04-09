@@ -24,19 +24,22 @@ export const NewsPreviewEmailButton = (props: IProps) => {
       profileBadge: formValues.profileBadge || null,
       tags: formValues.tags,
       title: formValues.title || '',
+      emailContentReach: null,
     };
 
     try {
       await emailPreviewService.send(draftNews);
-      setTimeout(() => {
-        // The preview will send very quick, adding this to create an
-        // artificial delay to prevent accidential spamming
-        setIsSendingPreview(false);
-      }, 2000);
+      setSaveErrorMessage(null);
     } catch (error) {
       console.error(error);
       setSaveErrorMessage(error.message);
     }
+
+    setTimeout(() => {
+      // The preview will send very quick, adding this to create an
+      // artificial delay to prevent accidential spamming
+      setIsSendingPreview(false);
+    }, 2000);
   };
 
   return (

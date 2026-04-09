@@ -1,15 +1,19 @@
-import type { DBNotificationsPreferencesFields } from 'oa-shared';
-import { NEWS_CONTENT_REACH_DEFAULT } from 'oa-shared';
+import type { DBNotificationsPreferencesDefaults, EmailContentReach } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { emailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
-export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields = {
-  comments: true,
-  news: NEWS_CONTENT_REACH_DEFAULT,
-  replies: true,
-  research_updates: true,
-  is_unsubscribed: false,
+export const setDefaultNotifications = (
+  defaultEmailContentReach: EmailContentReach,
+): DBNotificationsPreferencesDefaults => {
+  return {
+    comments: true,
+    email_content_reach: defaultEmailContentReach.id,
+    is_unsubscribed: false,
+    replies: true,
+    research_updates: true,
+  };
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -20,16 +24,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!claims.data?.claims) {
     return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
   }
-
   const { data } = await client
     .from('notifications_preferences')
-    .select('*, profiles!inner(id)')
+    .select('*,profiles!inner(id),email_content_reach:email_content_reach(*)')
     .eq('profiles.auth_id', claims.data?.claims?.sub)
     .single();
 
-  const preferences = data || DEFAULT_NOTIFICATION_PREFERENCES;
+  if (data) {
+    return Response.json({ preferences: data }, { headers, status: 200 });
+  }
 
-  return Response.json({ preferences }, { headers, status: 200 });
+  const emailContentReach = await emailContentReachServiceServer.getDefault(client);
+  if (emailContentReach) {
+    const preferences = setDefaultNotifications(emailContentReach);
+    return Response.json({ preferences }, { headers, status: 200 });
+  }
+
+  return Response.json({}, { headers, status: 500, statusText: 'Error loading preferences' });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -39,10 +50,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
     const comments = formData.get('comments') === 'true';
-    const news = formData.get('news');
+    const email_content_reach = null;
+    const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('research_updates') === 'true';
-    const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
 
     const claims = await client.auth.getClaims();
 
@@ -61,10 +72,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .from('notifications_preferences')
         .update({
           comments,
-          news,
           replies,
           research_updates,
           is_unsubscribed,
+          email_content_reach,
         })
         .eq('id', id)
         .select();
@@ -86,10 +97,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await client.from('notifications_preferences').insert({
       user_id: data.id,
       comments,
-      news,
       replies,
       research_updates,
       is_unsubscribed,
+      email_content_reach,
       tenant_id: process.env.TENANT_ID!,
     });
 

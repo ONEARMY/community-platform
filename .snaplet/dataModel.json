@@ -3687,6 +3687,20 @@
           "maxLength": null
         },
         {
+          "id": "public.news.email_reach",
+          "name": "email_reach",
+          "columnName": "email_reach",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
@@ -3867,7 +3881,7 @@
           "id": "public.notifications.action_type",
           "name": "action_type",
           "columnName": "action_type",
-          "type": "notification_action_types",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -4116,6 +4130,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications_preferences.news",
+          "name": "news",
+          "columnName": "news",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -11883,20 +11911,6 @@
         },
         {
           "name": "research"
-        }
-      ]
-    },
-    "notification_action_types": {
-      "schemaName": "public",
-      "values": [
-        {
-          "name": "newComment"
-        },
-        {
-          "name": "newContent"
-        },
-        {
-          "name": "newReply"
         }
       ]
     },

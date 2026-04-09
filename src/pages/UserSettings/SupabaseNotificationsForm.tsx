@@ -7,7 +7,7 @@ import {
   InternalLink,
   Loader,
 } from 'oa-components';
-import type { DBNotificationsPreferences, Profile } from 'oa-shared';
+import type { NotificationsPreferencesFormData, Profile } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { UserContactError } from 'src/pages/User/contact';
@@ -16,7 +16,7 @@ import { isUserContactable } from 'src/utils/helpers';
 import { isUserAdmin } from 'src/utils/isAdmin';
 import { Button, Flex, Text } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
-import { NotificationsNewsField } from './content/fields/NotificationsNewsField';
+import { EmailContentReachPreferenceField } from './content/fields/EmailContentReachPreferenceField';
 
 const formId = 'SupabaseNotifications';
 
@@ -65,9 +65,9 @@ const baseFields: GridFormFields[] = [
 ];
 
 interface IProps {
-  initialValues: DBNotificationsPreferences | null;
+  initialValues: NotificationsPreferencesFormData | null;
   isLoading: boolean;
-  onSubmit: (values: DBNotificationsPreferences) => Promise<void>;
+  onSubmit: (values: NotificationsPreferencesFormData) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
   profile: Profile;
   submitResults: SubmitResults | null;
@@ -104,7 +104,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
 
     if (showNewsPreference) {
       allFields.unshift({
-        component: <NotificationsNewsField defaultValue={initialValues?.news} />,
+        component: <EmailContentReachPreferenceField />,
         description: 'Get notified when news from HQ are posted',
         glyph: 'news',
         name: 'Coming soon: News updates',

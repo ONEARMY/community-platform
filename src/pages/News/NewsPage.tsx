@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react';
 import {
   Category,
-  ContentImageLightbox,
   ContentStatistics,
   DisplayDate,
   ProfileBadgeContentLabel,
   TagList,
+  useImageLightbox,
 } from 'oa-components';
 import type { News } from 'oa-shared';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import PageHeader from 'src/common/PageHeader';
@@ -25,39 +25,51 @@ interface IProps {
 
 export const NewsPage = observer(({ news }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(news.subscriberCount);
-  const [heroImage, setHeroImage] = useState<HTMLImageElement | null>(null);
   const heroImageRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    if (heroImageRef.current && !heroImage) {
-      // need state to trigger re-render of ContentImageLightbox because ref doesn't trigger re-render
-      setHeroImage(heroImageRef.current);
-    }
-  }, []);
-
   const { profile } = useProfileStore();
 
   const isEditable = useMemo(() => {
     return hasAdminRights(profile) || news.author?.username === profile?.username;
   }, [profile, news.author]);
 
-  const prependImages = useMemo(() => {
-    return heroImage ? [heroImage] : [];
-  }, [heroImage]);
+  const allImages = useMemo(() => {
+    const images: {
+      src: string;
+      alt?: string;
+    }[] = [];
+
+    if (news.heroImage) {
+      images.push({ src: news.heroImage.publicUrl, alt: news.title });
+    }
+
+    news.bodyHtml.replace(/<img[^>]+src="([^">]+)"[^>]*>/g, (_, src) => {
+      images.push({ src, alt: news.title });
+      return '';
+    });
+    return images;
+  }, [news.id]);
+
+  useImageLightbox({ images: allImages });
 
   return (
     <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>
       <PageHeader>
         <Breadcrumbs steps={[{ text: 'News', link: '/news' }, { text: news.title }]} />
       </PageHeader>
-
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
             <Image
+              key={news.id}
               ref={heroImageRef}
               src={news.heroImage.publicUrl}
-              sx={{ borderRadius: 2, width: '100%', cursor: 'pointer' }}
+              sx={{
+                borderRadius: 2,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                cursor: 'pointer',
+              }}
             />
           </AspectRatio>
         )}
@@ -133,9 +145,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               },
             }}
           >
-            <ContentImageLightbox prependImages={prependImages}>
-              <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
-            </ContentImageLightbox>
+            <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
           </Box>
 
           <Flex
@@ -182,6 +192,7 @@ export const NewsPage = observer(({ news }: IProps) => {
           </Flex>
         </Flex>
       </Flex>
+
       <ClientOnly fallback={<></>}>
         {() => (
           <Card

@@ -148,6 +148,9 @@ async function validateRequest(
   if (!profile) {
     throw validationError('User not found');
   }
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
   }
@@ -233,10 +236,13 @@ async function deleteProject(request: Request, id: number) {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const canEdit = await new LibraryServiceServer(client).isAllowedToEditProjectById(
-    id,
-    claims.data.claims.user_metadata?.username,
-  );
+  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+  if (!profile) {
+    return Response.json({}, { headers, status: 401 });
+  }
+
+  const canEdit = await new LibraryServiceServer(client).isAllowedToEditProjectById(id, profile);
 
   if (canEdit) {
     await client

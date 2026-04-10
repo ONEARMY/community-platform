@@ -34,6 +34,11 @@ export const SettingsPageUserProfile = observer(() => {
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || [];
 
     try {
+      if (values.username && values.username !== profile.username) {
+        const usernameResult = await profileService.updateUsername(values.username);
+        update(usernameResult);
+      }
+
       const updatedProfile = await profileService.update(values);
 
       update(updatedProfile);
@@ -63,6 +68,7 @@ export const SettingsPageUserProfile = observer(() => {
   const initialValues = useMemo<ProfileFormData>(
     () =>
       ({
+        username: profile.username || '',
         type: profile.type?.name || 'member',
         displayName: profile.displayName || '',
         about: profile.about || '',
@@ -85,7 +91,7 @@ export const SettingsPageUserProfile = observer(() => {
     <Form
       id={formId}
       onSubmit={async (values) => await saveProfile(values)}
-      initialValues={{ ...initialValues, username: profile.username }}
+      initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       validateOnBlur
       render={({

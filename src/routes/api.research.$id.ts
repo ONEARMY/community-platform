@@ -105,9 +105,15 @@ async function deleteResearch(request, id: number) {
       return Response.json({}, { headers, status: 401 });
     }
 
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
     const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
       id,
-      claims.data.claims.user_metadata?.username,
+      profile,
     );
 
     if (canEdit) {
@@ -165,11 +171,18 @@ async function validateRequest(
     throw validationError('User not found');
   }
 
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
+
   if (profile.roles?.includes(UserRole.ADMIN)) {
     return;
   }
 
-  if (research.created_by !== profile.id && !research.collaborators?.includes(profile.username)) {
+  if (
+    research.created_by !== profile.id &&
+    !(profile.username && research.collaborators?.includes(profile.username))
+  ) {
     throw forbiddenError();
   }
 }

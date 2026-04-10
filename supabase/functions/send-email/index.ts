@@ -10,6 +10,7 @@ import { ResetPasswordEmail } from './_templates/reset-password.tsx';
 import { SignUpEmail } from './_templates/sign-up.tsx';
 import { signWebhookHeader } from './signWebhookHeader.ts';
 import { getTenantSettings } from './getTenantSettings.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2.46.1';
 
 import type { NotificationDisplay, UserEmailData } from 'oa-shared';
 import { ModerationEmail } from './_templates/moderation-email.tsx';
@@ -53,6 +54,8 @@ Deno.serve(async (req) => {
       ...email_data,
     } as any;
 
+    const username = await getUsername(req, user.id);
+
     switch (email_data.email_action_type) {
       case 'moderation_notification': {
         if (email_data.notification) {
@@ -63,21 +66,21 @@ Deno.serve(async (req) => {
       }
       case 'signup': {
         subject = 'Welcome! Please confirm your email';
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(React.createElement(SignUpEmail, details));
         break;
       }
       case 'login': {
         subject = 'Fancy magic link for login!';
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(React.createElement(MagicLinkEmail, details));
         break;
       }
       case 'recovery': {
         subject = 'So you need to reset your password?';
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(React.createElement(ResetPasswordEmail, details));
         break;
@@ -86,7 +89,7 @@ Deno.serve(async (req) => {
         const newEmail = user['new_email']!;
         subject = "You're changing your email";
         to = newEmail;
-        details.username = user['user_metadata'].username;
+        details.username = username;
 
         html = await render(
           React.createElement(EmailChangeNewEmail, {
@@ -136,3 +139,29 @@ Deno.serve(async (req) => {
     headers: responseHeaders,
   });
 });
+
+async function getUsername(req: Request, authId: string): Promise<string> {
+  try {
+    const client = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('PUBLISHABLE_KEY') ?? '',
+      {
+        global: {
+          headers: {
+            Authorization: req.headers.get('Authorization')!,
+          },
+        },
+      },
+    );
+
+    const { data } = await client
+      .from('profiles')
+      .select('username')
+      .eq('auth_id', authId)
+      .single();
+
+    return data?.username || 'there';
+  } catch {
+    return 'there';
+  }
+}

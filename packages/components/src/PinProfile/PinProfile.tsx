@@ -12,7 +12,7 @@ export interface IProps {
 }
 
 export const PinProfile = ({ item, onClose }: IProps) => {
-  const isContactable = item.profile?.isContactable !== false;
+  const isContactable = item.profile?.isContactable !== false && item.profile?.username;
 
   return (
     <CardButton sx={{ '&:hover': 'none' }} data-cy="PinProfile">

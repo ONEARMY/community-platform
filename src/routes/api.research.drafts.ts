@@ -77,7 +77,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     )
     .or('deleted.eq.false,deleted.is.null')
     .eq('is_draft', true)
-    .or(`created_by.eq.${profile.id},collaborators.cs.{${profile.username}}`);
+    .or(
+      `created_by.eq.${profile.id}${profile.username ? `,collaborators.cs.{${profile.username}}` : ''}`,
+    );
 
   if (result.error) {
     console.error(result.error);

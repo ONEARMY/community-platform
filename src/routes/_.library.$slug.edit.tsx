@@ -4,6 +4,7 @@ import { data, redirect, useLoaderData } from 'react-router';
 import { LibraryForm } from 'src/pages/Library/Content/Common/LibraryForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 
@@ -16,13 +17,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/library/${params.slug}/edit`, headers);
   }
 
-  const username = claims.data.claims.user_metadata?.username;
+  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
   const libraryService = new LibraryServiceServer(client);
 
   const projectDb = (await libraryService.getBySlug(params.slug as string))
     .data as unknown as DBProject;
 
-  if (!(await libraryService.isAllowedToEditProject(projectDb.author?.username || '', username))) {
+  if (!profile || !(await libraryService.isAllowedToEditProject(projectDb, profile))) {
     return redirect('/forbidden?page=library-edit', { headers });
   }
 

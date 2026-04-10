@@ -67,17 +67,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const fallbackPath = signInResult.data.user?.user_metadata.username
-    ? `/u/${signInResult.data.user?.user_metadata.username}`
-    : '/';
-  const path = getReturnUrl(request, fallbackPath);
+  const profileService = new ProfileServiceServer(client);
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user);
+    await profileService.ensureProfile(signInResult.data.user);
   } catch (error) {
     console.error(error);
   }
+
+  const profile = await profileService.getByAuthId(signInResult.data.user.id);
+
+  const fallbackPath = profile?.username ? `/u/${profile.username}` : '/';
+  const path = getReturnUrl(request, fallbackPath);
 
   return redirect(path, { headers });
 };

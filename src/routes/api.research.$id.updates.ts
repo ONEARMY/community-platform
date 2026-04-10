@@ -47,6 +47,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
+    if (!profile.username) {
+      return Response.json(
+        { error: 'You must set a username before creating content' },
+        { headers, status: 403 },
+      );
+    }
+
     validateRequest(request, data, research, profile);
 
     const updateResult = await client
@@ -125,7 +132,7 @@ function validateRequest(
 
   if (
     profile.id !== research.author?.id &&
-    !research.collaborators?.includes(profile.username) &&
+    !(profile.username && research.collaborators?.includes(profile.username)) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
     throw forbiddenError('You do not have permission to add updates to this research');

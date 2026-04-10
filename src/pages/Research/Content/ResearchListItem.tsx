@@ -47,6 +47,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
         p: [3, 4],
         border: '2px solid',
         borderRadius: 2,
+        overflow: 'visible',
         '&:last-of-type': {
           borderBottom: '2px solid',
         },
@@ -56,14 +57,14 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
       <Flex sx={{ width: '100%', position: 'relative' }}>
         <Grid
           columns={['120px 1fr', '175px 1fr', '263px 1fr']}
-          gap={[3, 4, 8]}
+          gap={[3, 4, 4]}
           sx={{
             width: '100%',
             gridTemplateRows: ['minmax(120px, auto)', 'minmax(175px, auto)', 'minmax(175px, auto)'],
             alignItems: 'start',
           }}
         >
-          <Box sx={{ position: 'relative', lineHeight: 0 }}>
+          <Box sx={{ position: 'relative' }}>
             <Image
               sx={{
                 width: ['120px', '175px', '263px'],
@@ -100,193 +101,210 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
               flexDirection: 'column',
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
+              alignSelf: ['auto', 'stretch', 'stretch'],
               minWidth: 0,
+              width: '100%',
+              height: ['auto', '100%', '100%'],
+              gap: 1,
             }}
           >
-            <Flex sx={{ pb: 1 }}>
-              <Heading
+            <Flex sx={{ width: '100%', flexDirection: 'column', gap: 1 }}>
+              <Flex>
+                <Heading
+                  sx={{
+                    fontSize: [3, 4],
+                    lineHeight: '1.2',
+                    display: '-webkit-box',
+                    WebkitLineClamp: [2, 2, 2],
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    wordBreak: 'break-word',
+                  }}
+                >
+                  <InternalLink
+                    to={`/research/${encodeURIComponent(item.slug)}`}
+                    sx={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      '&:focus': {
+                        outline: 'none',
+                        textDecoration: 'none',
+                      },
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        height: ['120px', '175px', '175px'],
+                      },
+                    }}
+                  >
+                    {item.title}
+                  </InternalLink>
+                </Heading>
+              </Flex>
+              <Flex
                 sx={{
-                  fontSize: [3, 4],
-                  lineHeight: '1.2',
-                  display: '-webkit-box',
-                  WebkitLineClamp: [2, 2, 2],
+                  width: '100%',
+                  alignItems: 'center',
+                }}
+              >
+                <Flex
+                  sx={{
+                    alignItems: ['flex-start', 'flex-start', 'center'],
+                    flexDirection: ['column', 'row'],
+                    flexWrap: ['nowrap', 'wrap'],
+                    gap: 1,
+                  }}
+                >
+                  {item.author && (
+                    <Username
+                      user={item.author}
+                      sx={{
+                        position: 'relative',
+                        paddingX: 0,
+                        paddingY: 0,
+                        marginLeft: 0,
+                        transform: 'translateY(-1px)',
+                        fontSize: 2,
+                      }}
+                    />
+                  )}
+                  {Boolean(collaborators.length) && (
+                    <Text
+                      sx={{
+                        ml: 4,
+                        display: ['none', 'block'],
+                        fontSize: 1,
+                        color: 'darkGrey',
+                        transform: 'translateY(2px)',
+                      }}
+                    >
+                      {collaborators.length +
+                        (collaborators.length === 1 ? ' contributor' : ' contributors')}
+                    </Text>
+                  )}
+                  <Text
+                    sx={{
+                      fontSize: [1, 2],
+                      color: 'darkGrey',
+                      transform: 'translateX(2px)',
+                    }}
+                  >
+                    {relativeLabel != null && `updated ${relativeLabel}`}
+                  </Text>
+                </Flex>
+              </Flex>
+            </Flex>
+            <Flex
+              sx={{
+                width: '100%',
+                flexDirection: 'column',
+                justifyContent: ['flex-start', 'space-between', 'space-between'],
+                flex: [0, 1, 1],
+                minHeight: [null, 0, 0],
+              }}
+            >
+              <Text
+                sx={{
+                  display: ['none', '-webkit-box'],
+                  fontFamily: 'body',
+                  lineHeight: '1.4',
+                  fontSize: 3,
+                  color: 'darkGrey',
+                  width: '100%',
+                  minHeight: 0,
+                  flexShrink: 1,
+                  WebkitLineClamp: [2, 3, 3],
                   WebkitBoxOrient: 'vertical',
+                  textOverflow: 'ellipsis',
                   overflow: 'hidden',
                   wordBreak: 'break-word',
                 }}
               >
-                <InternalLink
-                  to={`/research/${encodeURIComponent(item.slug)}`}
-                  sx={{
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    '&:focus': {
-                      outline: 'none',
-                      textDecoration: 'none',
-                    },
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      left: 0,
-                      top: 0,
-                      right: 0,
-                      height: '175px',
-                    },
-                  }}
-                >
-                  {item.title}
-                </InternalLink>
-              </Heading>
-            </Flex>
-            <Flex
-              sx={{
-                width: '100%',
-                alignItems: 'center',
-                pb: 2,
-              }}
-            >
+                {item.description}
+              </Text>
               <Flex
                 sx={{
-                  alignItems: ['flex-start', 'flex-start', 'center'],
-                  flexDirection: ['column', 'row'],
-                  flexWrap: ['nowrap', 'wrap'],
-                  gap: 1,
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  mt: [0, 2, 2],
                 }}
               >
-                {item.author && (
-                  <Username
-                    user={item.author}
-                    sx={{
-                      position: 'relative',
-                      paddingX: 0,
-                      paddingY: 0,
-                      marginLeft: 0,
-                      transform: 'translateY(-1px)',
-                      fontSize: 2,
-                    }}
-                  />
-                )}
-                {Boolean(collaborators.length) && (
+                <Flex
+                  sx={{
+                    justifyContent: 'flex-start',
+                    gap: 2,
+                  }}
+                >
+                  {item.category && item.category.name?.trim() ? (
+                    <Box sx={{ display: ['none', 'block', 'block'] }}>
+                      <Category category={item.category} sx={{ fontSize: 1 }} />
+                    </Box>
+                  ) : null}
                   <Text
                     sx={{
-                      ml: 4,
-                      display: ['none', 'block'],
+                      display: 'inline-block',
+                      verticalAlign: 'bottom',
+                      color: 'black',
                       fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
+                      background: researchStatusColour(status),
+                      padding: 1,
+                      borderRadius: 1,
+                      whiteSpace: 'nowrap',
+                    }}
+                    data-cy="ItemResearchStatus"
+                  >
+                    {ResearchStatusRecord[status]}
+                  </Text>
+                </Flex>
+                <Flex>
+                  {/* Hide these on mobile, show on tablet & above. */}
+                  <Box
+                    sx={{
+                      display: ['none', 'flex', 'flex'],
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      gap: 2,
                     }}
                   >
-                    {collaborators.length +
-                      (collaborators.length === 1 ? ' contributor' : ' contributors')}
-                  </Text>
-                )}
-                <Text
-                  sx={{
-                    fontSize: [1, 2],
-                    color: 'darkGrey',
-                    transform: 'translateX(2px)',
-                  }}
-                >
-                  {relativeLabel != null && `updated ${relativeLabel}`}
-                </Text>
-              </Flex>
-            </Flex>
-            <Text
-              sx={{
-                display: ['none', '-webkit-box'],
-                fontFamily: 'body',
-                lineHeight: '1.4',
-                fontSize: 3,
-                color: 'darkGrey',
-                width: '100%',
-                minHeight: 0,
-                flexShrink: 1,
-                WebkitLineClamp: [2, 2, 3],
-                WebkitBoxOrient: 'vertical',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                wordBreak: 'break-word',
-              }}
-            >
-              {item.description}
-            </Text>
-            <Flex
-              sx={{
-                justifyContent: 'space-between',
-                width: '100%',
-                pt: [0, 3],
-              }}
-            >
-              <Flex
-                sx={{
-                  justifyContent: 'flex-start',
-                  gap: 2,
-                }}
-              >
-                <Flex sx={{ display: ['none', 'flex', 'flex'] }}>
-                  {item.category && <Category category={item.category} sx={{ fontSize: 1 }} />}
-                </Flex>
-                <Text
-                  sx={{
-                    display: 'inline-block',
-                    verticalAlign: 'bottom',
-                    color: 'black',
-                    fontSize: 1,
-                    background: researchStatusColour(status),
-                    padding: 1,
-                    borderRadius: 1,
-                    whiteSpace: 'nowrap',
-                  }}
-                  data-cy="ItemResearchStatus"
-                >
-                  {ResearchStatusRecord[status]}
-                </Text>
-              </Flex>
-              <Flex>
-                {/* Hide these on mobile, show on tablet & above. */}
-                <Box
-                  sx={{
-                    display: ['none', 'flex', 'flex'],
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    gap: 2,
-                  }}
-                >
-                  <IconCountWithTooltip
-                    count={usefulDisplayCount}
-                    icon="star-active"
-                    text="How useful is it"
-                  />
-                  <IconCountWithTooltip
-                    count={item.commentCount || 0}
-                    icon="comment"
-                    text="Total comments"
-                  />
+                    <IconCountWithTooltip
+                      count={usefulDisplayCount}
+                      icon="star-active"
+                      text="How useful is it"
+                    />
+                    <IconCountWithTooltip
+                      count={item.commentCount || 0}
+                      icon="comment"
+                      text="Total comments"
+                    />
 
-                  <IconCountWithTooltip
-                    count={item.updateCount}
-                    dataCy="ItemUpdateText"
-                    icon="update"
-                    text="Amount of updates"
-                  />
-                </Box>
-                {/* Show these on mobile, hide on tablet & above. */}
-                <Box
-                  sx={{
-                    display: ['flex', 'none', 'none'],
-                    alignItems: 'center',
-                    gap: 2,
-                  }}
-                >
-                  <Text color="black" sx={_commonStatisticStyle}>
-                    {usefulDisplayCount}
-                    <Icon glyph="star-active" ml={1} />
-                  </Text>
-                  <Text color="black" sx={_commonStatisticStyle}>
-                    {item.commentCount || 0}
-                    <Icon glyph="comment" ml={1} />
-                  </Text>
-                </Box>
+                    <IconCountWithTooltip
+                      count={item.updateCount}
+                      dataCy="ItemUpdateText"
+                      icon="update"
+                      text="Amount of updates"
+                    />
+                  </Box>
+                  {/* Show these on mobile, hide on tablet & above. */}
+                  <Box
+                    sx={{
+                      display: ['flex', 'none', 'none'],
+                      alignItems: 'center',
+                      gap: 2,
+                    }}
+                  >
+                    <Text color="black" sx={_commonStatisticStyle}>
+                      {usefulDisplayCount}
+                      <Icon glyph="star-active" ml={1} />
+                    </Text>
+                    <Text color="black" sx={_commonStatisticStyle}>
+                      {item.commentCount || 0}
+                      <Icon glyph="comment" ml={1} />
+                    </Text>
+                  </Box>
+                </Flex>
               </Flex>
             </Flex>
           </Flex>

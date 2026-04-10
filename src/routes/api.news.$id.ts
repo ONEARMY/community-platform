@@ -14,6 +14,7 @@ import {
   forbiddenError,
   methodNotAllowedError,
   notFoundError,
+  unauthorizedError,
   validationError,
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
@@ -39,7 +40,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const currentNews = await new NewsServiceServer(client).getById(id);
@@ -133,6 +134,10 @@ async function validateRequest(
 
   if (!profile) {
     throw validationError('User not found');
+  }
+
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
   }
 
   const isCreator = currentNews.created_by === profile.id;

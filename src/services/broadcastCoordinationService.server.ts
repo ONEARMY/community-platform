@@ -26,6 +26,14 @@ export class BroadcastCoordinationServiceServer {
         update,
         profile as DBProfile,
       );
+
+      if (!profile.username) {
+        console.warn(
+          `Profile with id ${profile.id} does not have a username, using "Someone" as fallback for Discord notification.`,
+        );
+        return;
+      }
+
       discordServiceServer.postWebhookRequest(
         `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}#update_${update.id}>`,
       );

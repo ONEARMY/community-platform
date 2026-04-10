@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
@@ -27,16 +28,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research', { headers });
   }
 
-  const username = claims.data.claims.user_metadata?.username;
+  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
   const researchDb = result.item;
-  const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators, username);
+  const currentUser = profile ? { id: profile.id, username: profile.username } : undefined;
+  const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators, currentUser);
   const update = research.updates.find((x) => x.id === Number(params.updateId));
 
   if (!update) {
     return redirect('/research', { headers });
   }
 
-  if (!(await researchService.isAllowedToEditResearch(researchDb, username))) {
+  if (!profile || !(await researchService.isAllowedToEditResearch(researchDb, profile))) {
     return redirect('/forbidden?page=research-update-edit', { headers });
   }
 

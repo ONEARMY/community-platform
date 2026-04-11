@@ -1,10 +1,5 @@
 import { toast as sonnerToast } from 'sonner';
-import {
-  CustomToast,
-  CustomToast2,
-  type CustomToastProps,
-  createToastOptions,
-} from './CustomToast';
+import { CustomToast, type CustomToastProps, createToastOptions } from './CustomToast';
 
 interface ToastOptions
   extends Pick<CustomToastProps, 'description' | 'actionLink' | 'actionButton'> {
@@ -133,12 +128,9 @@ export const useToast = () => {
       // Use custom toast to get access to toastId
       let toastId: string | number;
 
-      // Randomly choose between two toast styles for demonstration
-      const ToastComponent = Math.random() < 0.5 ? CustomToast2 : CustomToast;
-
       toastId = sonnerToast.custom(
         (id) => (
-          <ToastComponent
+          <CustomToast
             message={options.loading}
             description={options.description}
             type="loading"
@@ -174,7 +166,7 @@ export const useToast = () => {
           sonnerToast.dismiss(toastId);
           sonnerToast.custom(
             (id) => (
-              <ToastComponent
+              <CustomToast
                 message={message}
                 description={description}
                 type="success"
@@ -197,7 +189,7 @@ export const useToast = () => {
           sonnerToast.dismiss(toastId);
           sonnerToast.custom(
             (id) => (
-              <ToastComponent
+              <CustomToast
                 message={message}
                 description={options.description}
                 type="error"

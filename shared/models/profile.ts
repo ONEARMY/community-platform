@@ -305,7 +305,7 @@ export class NotificationDisplay {
         return (notification.content as Comment).comment;
       }
       case 'news': {
-        return notification.content ? (notification.content as News).body : '';
+        return undefined;
       }
       default: {
         return '';
@@ -363,6 +363,13 @@ export class NotificationDisplay {
     return `/redirect?id=${notification.contentId}&ct=${notification.contentType}`;
   }
 
+  static setTriggeredBy(notification: Notification) {
+    if (notification.actionType === 'newNews') {
+      return 'Check the latest news update: ';
+    }
+    return notification.triggeredBy?.username || '';
+  }
+
   static fromNotification(notification: Notification): NotificationDisplay {
     return new NotificationDisplay({
       id: notification.id,
@@ -383,7 +390,7 @@ export class NotificationDisplay {
         image: this.setSidebarImage(notification),
       },
       title: this.setTitle(notification),
-      triggeredBy: notification.triggeredBy?.username || '',
+      triggeredBy: this.setTriggeredBy(notification),
       link: this.setLink(notification),
     });
   }

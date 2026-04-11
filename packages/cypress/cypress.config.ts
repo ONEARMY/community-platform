@@ -56,6 +56,7 @@ export default defineConfig({
           );
 
           await supabaseService.seedMap(profiles);
+          await supabaseService.seedEmailContentReach()
 
           const { tags } = await supabaseService.seedTags();
           await supabaseService.seedQuestions(profiles);

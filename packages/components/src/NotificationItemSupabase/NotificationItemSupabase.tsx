@@ -1,4 +1,4 @@
-import { getSummaryFromMarkdown, type NotificationDisplay } from 'oa-shared';
+import type { NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Avatar, Flex, Image, Text } from 'theme-ui';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
@@ -80,29 +80,35 @@ export const NotificationItemSupabase = (props: IProps) => {
               </Flex>
             )
           )}
-          <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
-            <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
-              <Text sx={{ flex: 1 }}>
-                {!isNews && notification.triggeredBy} {notification.title}
-              </Text>
+          <Flex sx={{ justifyItems: 'stretch', flex: 1 }}>
+            <Flex sx={{ flex: 1, gap: 2, flexDirection: 'column' }}>
+              <Flex sx={{ gap: 2 }}>
+                <Text sx={{ flex: 1 }}>
+                  {notification.triggeredBy} <strong>{notification.title}</strong>
+                </Text>
+              </Flex>
+              {notification.body && (
+                <Flex sx={{ ...(isDiscussion ? commentStyling : {}) }}>
+                  <Text
+                    sx={{
+                      background: 'softblue',
+                      border: '2px solid black',
+                      borderRadius: 5,
+                      padding: 2,
+
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {notification.body}
+                  </Text>
+                </Flex>
+              )}
+            </Flex>
+            <Flex sx={{ justifySelf: 'flex-end' }}>
               <Text sx={{ fontSize: 1, color: 'grey', textAlign: 'right' }}>
                 <DisplayDate createdAt={notification.date} showLabel={false} />
-              </Text>
-            </Flex>
-            <Flex sx={{ ...(isDiscussion ? commentStyling : {}) }}>
-              <Text
-                sx={{
-                  background: 'softblue',
-                  border: '2px solid black',
-                  borderRadius: 5,
-                  padding: 2,
-
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {getSummaryFromMarkdown(notification.body!)}
               </Text>
             </Flex>
           </Flex>

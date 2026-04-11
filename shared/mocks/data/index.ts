@@ -1,6 +1,7 @@
 export { badges } from './badges';
 export { categories } from './categories';
 export { discussions } from './discussions';
+export { emailContentReach } from './emailContentReach';
 export { mapPins } from './mappins';
 export { messages } from './messages';
 export { news } from './news';

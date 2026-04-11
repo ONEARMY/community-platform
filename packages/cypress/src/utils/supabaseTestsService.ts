@@ -151,6 +151,12 @@ export class SupabaseTestsService {
     return data;
   }
 
+  async seedEmailContentReach() {
+    await this.seedDatabase({
+      emailContentReach: MOCK_DATA.emailContentReach
+    })
+  }
+
   async seedResearch(profiles: DBProfile[], tagsData) {
     const { categories } = await this.seedCategories('research');
 

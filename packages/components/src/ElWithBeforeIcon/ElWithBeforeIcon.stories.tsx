@@ -1,4 +1,4 @@
-import HeaderHowtoIcon from '../../../../src/assets/icon/icon-library.svg';
+import HeaderHowtoIcon from '../../assets/icons/icon-library.svg';
 import { ElWithBeforeIcon } from './ElWithBeforeIcon';
 
 import type { Meta, StoryFn, StoryObj } from '@storybook/react-vite';

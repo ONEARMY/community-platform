@@ -91,7 +91,7 @@ export class News implements IContentDoc {
   title: string;
   totalViews: number;
   usefulCount: number;
-  emailContentReach: EmailContentReach;
+  emailContentReach: EmailContentReach | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);

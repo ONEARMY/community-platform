@@ -33,7 +33,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const preferencesData = await client
       .from('notifications_preferences')
-      .select('*')
+      .select('*,email_content_reach:email_content_reach(*)')
       .eq('user_id', userId)
       .maybeSingle();
 
@@ -86,18 +86,20 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     const existingPreferencesId = existingPreferences.data?.id || null;
     const comments = formData.get('comments') === 'true';
+    const email_content_reach = formData.get('email_content_reach');
     const replies = formData.get('replies') === 'true';
-    const researchUpdates = formData.get('research_updates') === 'true';
-    const isUnsubscribed = formData.get('is_unsubscribed') === 'true';
+    const research_updates = formData.get('research_updates') === 'true';
+    const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
 
     if (existingPreferencesId) {
       await client
         .from('notifications_preferences')
         .update({
           comments,
+          email_content_reach,
           replies,
-          research_updates: researchUpdates,
-          is_unsubscribed: isUnsubscribed,
+          research_updates,
+          is_unsubscribed,
         })
         .eq('id', existingPreferencesId)
         .select();
@@ -107,9 +109,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await client.from('notifications_preferences').insert({
       user_id: userId,
       comments,
+      email_content_reach,
       replies,
-      research_updates: researchUpdates,
-      is_unsubscribed: isUnsubscribed,
+      research_updates,
+      is_unsubscribed,
       tenant_id: process.env.TENANT_ID!,
     });
 

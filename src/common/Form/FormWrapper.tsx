@@ -9,7 +9,7 @@ interface IProps {
   contentType: ContentFormType;
   children: React.ReactNode;
   errorsClientSide?: IErrorsListSet[];
-  errorSubmitting?: string;
+  errorSubmitting?: string | null;
   guidelines?: React.ReactNode;
   handleSubmit: () => void;
   handleSubmitDraft: (e: React.MouseEvent) => void;

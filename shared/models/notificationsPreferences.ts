@@ -1,9 +1,9 @@
-import { DBEmailContentReach } from './emailContentReach';
+import { DBEmailContentReach, EmailContentReach } from './emailContentReach';
 import { SelectValue } from './selectValue';
 
 export type DBNotificationsPreferencesDefaults = {
   comments: boolean;
-  email_content_reach: number;
+  email_content_reach: DBEmailContentReach;
   replies: boolean;
   research_updates: boolean;
   is_unsubscribed: boolean;
@@ -21,9 +21,9 @@ export class DBNotificationsPreferences {
   static toFormData(dbNotifications: DBNotificationsPreferences): NotificationsPreferencesFormData {
     return {
       ...dbNotifications,
-      email_content_reach: DBEmailContentReach.toNotificationsFormField(
-        dbNotifications.email_content_reach,
-      ),
+      email_content_reach:
+        dbNotifications.email_content_reach &&
+        DBEmailContentReach.toNotificationsFormField(dbNotifications.email_content_reach),
     };
   }
 }
@@ -32,7 +32,7 @@ export class NotificationsPreferences {
   id?: number;
   userId?: number;
   comments: boolean;
-  emailContentReach: number;
+  emailContentReach: EmailContentReach | null;
   replies: boolean;
   researchUpdates: boolean;
   isUnsubscribed: boolean;
@@ -49,11 +49,11 @@ export interface NotificationsPreferencesFormData {
 
 // For setting notifications via the links in emails
 
-export interface NotificationsPreferencesViaEmailFormData extends NotificationsPreferencesFormData {
-  userCode: string;
+export interface DBPreferencesWithProfileContact extends DBNotificationsPreferences {
+  is_contactable: undefined | boolean;
 }
 
-export interface DBPreferencesWithProfileContact {
-  preferences: DBNotificationsPreferences;
+export interface NotificationsPreferencesViaEmailFormData extends NotificationsPreferencesFormData {
   is_contactable: undefined | boolean;
+  user_code: string;
 }

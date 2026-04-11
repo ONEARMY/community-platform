@@ -15,7 +15,8 @@ const getPreferences = async (
     }
 
     const { preferences, is_contactable } = await response.json();
-    return { preferences, is_contactable };
+
+    return { ...preferences, is_contactable };
   } catch (err) {
     console.error(err);
     return null;
@@ -25,33 +26,35 @@ const getPreferences = async (
 const setPreferences = async (
   data: NotificationsPreferencesViaEmailFormData,
 ): Promise<Response> => {
-  const formData = new FormData();
-  formData.append('comments', data.comments.toString());
-  formData.append('news', data.comments.toString());
-  formData.append('replies', data.replies.toString());
-  formData.append('research_updates', data.research_updates.toString());
-  formData.append('is_unsubscribed', 'false');
+  const body = new FormData();
 
-  return fetch(`/api/notifications-preferences-via-email/${data.userCode}`, {
+  body.append('comments', data.comments.toString());
+  body.append('news', data.comments.toString());
+  body.append('replies', data.replies.toString());
+  body.append('research_updates', data.research_updates.toString());
+  body.append('email_content_reach', data.email_content_reach.value.toString());
+  body.append('is_unsubscribed', 'false');
+
+  return fetch(`/api/notifications-preferences-via-email/${data.user_code}`, {
     method: 'POST',
-    body: formData,
+    body,
   });
 };
 
 const setUnsubscribe = async (userCode: string, id?: number): Promise<Response> => {
-  const formData = new FormData();
-  if (id) {
-    formData.append('id', id.toString());
-  }
-  formData.append('comments', 'false');
-  formData.append('news', 'false');
-  formData.append('replies', 'false');
-  formData.append('research_updates', 'false');
-  formData.append('is_unsubscribed', 'true');
+  const body = new FormData();
+
+  id && body.append('id', id.toString());
+  body.append('comments', 'false');
+  body.append('news', 'false');
+  body.append('replies', 'false');
+  body.append('research_updates', 'false');
+  body.append('email_content_reach', 'null');
+  body.append('is_unsubscribed', 'true');
 
   return fetch(`/api/notifications-preferences-via-email/${userCode}`, {
     method: 'POST',
-    body: formData,
+    body,
   });
 };
 

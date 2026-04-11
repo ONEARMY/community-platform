@@ -5,6 +5,7 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+const mockEmailReachField = { value: '1', label: 'All emails'}
 
 describe('notificationsPreferencesService', () => {
   beforeEach(() => {
@@ -53,9 +54,10 @@ describe('notificationsPreferencesService', () => {
       const formData = {
         id: 123,
         comments: true,
-        news: true,
         replies: false,
         research_updates: true,
+        email_content_reach: mockEmailReachField,
+        is_unsubscribed: false,
       };
 
       const result = await notificationsPreferencesService.setPreferences(formData);
@@ -85,6 +87,8 @@ describe('notificationsPreferencesService', () => {
         news: false,
         replies: true,
         research_updates: false,
+        email_content_reach: mockEmailReachField,
+        is_unsubscribed: false,
       };
 
       await notificationsPreferencesService.setPreferences(formData);
@@ -95,6 +99,7 @@ describe('notificationsPreferencesService', () => {
       expect(body.get('comments')).toBe('false');
       expect(body.get('replies')).toBe('true');
       expect(body.get('research_updates')).toBe('false');
+      expect(body.get('email_content_reach')).toBe('1');
       expect(body.get('is_unsubscribed')).toBe('false');
     });
 
@@ -107,6 +112,8 @@ describe('notificationsPreferencesService', () => {
         news: true,
         replies: true,
         research_updates: true,
+        email_content_reach: mockEmailReachField,
+        is_unsubscribed: false,
       };
 
       await notificationsPreferencesService.setPreferences(formData);
@@ -134,7 +141,6 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBe('456');
       expect(body.get('comments')).toBe('false');
-      expect(body.get('news')).toBe('false');
       expect(body.get('replies')).toBe('false');
       expect(body.get('research_updates')).toBe('false');
       expect(body.get('is_unsubscribed')).toBe('true');
@@ -151,9 +157,9 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBeNull();
       expect(body.get('comments')).toBe('false');
-      expect(body.get('news')).toBe('false');
       expect(body.get('replies')).toBe('false');
       expect(body.get('research_updates')).toBe('false');
+      expect(body.get('email_content_reach')).toBe('null');
       expect(body.get('is_unsubscribed')).toBe('true');
     });
   });

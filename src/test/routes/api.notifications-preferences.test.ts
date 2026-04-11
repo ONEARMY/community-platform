@@ -45,6 +45,7 @@ describe('loader', () => {
       replies: true,
       research_updates: false,
       is_unsubscribed: true,
+      email_content_reach: null,
     };
 
     mockClient.mocks.auth.getClaims.mockResolvedValue({
@@ -58,7 +59,7 @@ describe('loader', () => {
     expect(response.status).toBe(200);
     expect(result).toEqual({ preferences: mockPreferences });
     expect(mockClient.mocks.from).toHaveBeenCalledWith('notifications_preferences');
-    expect(mockClient.mocks.select).toHaveBeenCalledWith('*, profiles!inner(id)');
+    expect(mockClient.mocks.select).toHaveBeenCalledWith('*');
     expect(mockClient.mocks.eq).toHaveBeenCalledWith('profiles.auth_id', 'user123');
     expect(mockClient.mocks.single).toHaveBeenCalled();
   });
@@ -68,8 +69,8 @@ describe('loader', () => {
     const defaultPreferences = {
       comments: true,
       replies: true,
-      news: true,
       research_updates: true,
+      email_content_reach: null, // Should really be mocked to return a proper result
       is_unsubscribed: false,
     };
 
@@ -124,8 +125,8 @@ describe('action', () => {
       id: '1',
       comments: 'false',
       replies: 'true',
-      news: 'false',
       research_updates: 'false',
+      email_content_reach: '2',
       is_unsubscribed: 'true',
     });
 
@@ -146,7 +147,7 @@ describe('action', () => {
     expect(mockClient.mocks.update).toHaveBeenCalledWith({
       comments: false,
       replies: true,
-      news: false,
+      email_content_reach: '2',
       research_updates: false,
       is_unsubscribed: true,
     });
@@ -160,7 +161,7 @@ describe('action', () => {
     const formData = createFormData({
       comments: 'true',
       replies: 'false',
-      news: 'true',
+      email_content_reach: '2',
       research_updates: 'true',
       is_unsubscribed: 'false',
     });
@@ -185,7 +186,7 @@ describe('action', () => {
       user_id: 456,
       comments: true,
       replies: false,
-      news: true,
+      email_content_reach: '2',
       research_updates: true,
       is_unsubscribed: false,
       tenant_id: 'test-tenant',

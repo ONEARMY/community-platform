@@ -7,7 +7,11 @@ import {
   InternalLink,
   Loader,
 } from 'oa-components';
-import type { NotificationsPreferencesFormData, Profile } from 'oa-shared';
+import type {
+  NotificationsPreferencesFormData,
+  NotificationsPreferencesViaEmailFormData,
+  Profile,
+} from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { UserContactError } from 'src/pages/User/contact';
@@ -65,22 +69,33 @@ const baseFields: GridFormFields[] = [
 ];
 
 interface IProps {
-  initialValues: NotificationsPreferencesFormData | null;
+  initialValues: NotificationsPreferencesFormData | NotificationsPreferencesViaEmailFormData | null;
   isLoading: boolean;
-  onSubmit: (values: NotificationsPreferencesFormData) => Promise<void>;
+  onSubmit: (
+    values: NotificationsPreferencesFormData | NotificationsPreferencesViaEmailFormData,
+  ) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
-  profile: Profile;
   submitResults: SubmitResults | null;
+  profile?: Profile;
+  profileIsContactable?: boolean;
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const { initialValues, isLoading, onSubmit, onUnsubscribe, profile, submitResults } = props;
+  const {
+    initialValues,
+    isLoading,
+    onSubmit,
+    onUnsubscribe,
+    profile,
+    profileIsContactable,
+    submitResults,
+  } = props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const tenantContext = useContext(TenantContext);
   const showMessagingSetting = !tenantContext?.noMessaging;
 
-  const profileIsContactable = isUserContactable(profile);
-  const showNewsPreference = profile.badges?.length || isUserAdmin(profile);
+  const showProfileIsContactable = profileIsContactable || isUserContactable(profile || null);
+  const showNewsPreference = profile && (profile.badges?.length || isUserAdmin(profile));
 
   const fields = useMemo(() => {
     const allFields = [...baseFields];
@@ -93,7 +108,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
             to="/settings/profile#public-contact"
             sx={{ textAlign: 'center', ':hover': { textDecoration: 'underline' } }}
           >
-            {profileIsContactable ? 'Stop receiving messages' : 'Start receiving messages'}
+            {showProfileIsContactable ? 'Stop receiving messages' : 'Start receiving messages'}
           </InternalLink>
         ),
         description: 'Through the contact form on your profile page',
@@ -102,6 +117,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       });
     }
 
+    // Currently not showing from the via email route. Needs fixing.
     if (showNewsPreference) {
       allFields.unshift({
         component: <EmailContentReachPreferenceField />,

@@ -6,6 +6,7 @@ const send = async (form: NewsFormData) => {
     title: form.title,
     body: form.body,
     category: Number(form.category?.value) || null,
+    emailContentReach: null,
     heroImage: form.heroImage ? DBMedia.fromPublicMedia(form.heroImage) : null,
     isDraft: form.isDraft,
     profileBadge: Number(form.profileBadge?.value) || null,

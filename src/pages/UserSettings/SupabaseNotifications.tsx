@@ -21,9 +21,9 @@ export const SupabaseNotifications = observer(() => {
       return setSubmitResults({ type: 'error', message: 'Error finding preferences' });
     }
 
-    const preferences = DBNotificationsPreferences.toFormData(dbPreferences);
+    const asFormData = DBNotificationsPreferences.toFormData(dbPreferences);
 
-    setInitialValues(preferences);
+    setInitialValues(asFormData);
     setIsLoading(false);
   };
 
@@ -31,7 +31,7 @@ export const SupabaseNotifications = observer(() => {
     refreshPreferences();
   }, []);
 
-  const onSubmit = async (formValues) => {
+  const onSubmit = async (formValues: NotificationsPreferencesFormData) => {
     setIsLoading(true);
     setSubmitResults(null);
 

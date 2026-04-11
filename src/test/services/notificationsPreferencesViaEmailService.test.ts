@@ -7,6 +7,8 @@ const createFetchResponse = (data: any, ok = true, status = 200) => ({
   json: async () => data,
 });
 
+const mockEmailReachField = { value: '2', label: 'Never'}
+
 describe('notificationsPreferencesViaEmailService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -17,14 +19,6 @@ describe('notificationsPreferencesViaEmailService', () => {
     it('should return preferences when API call succeeds', async () => {
       const mockPreferences = {
         is_contactable: true,
-        preferences: {
-          id: 1,
-          user_id: 123,
-          comments: true,
-          replies: false,
-          research_updates: true,
-          is_unsubscribed: false,
-        },
       };
 
       global.fetch = vi.fn().mockResolvedValue(createFetchResponse(mockPreferences));
@@ -88,7 +82,10 @@ describe('notificationsPreferencesViaEmailService', () => {
         news: true,
         replies: false,
         research_updates: true,
-        userCode: 'user123',
+        user_code: 'user123',
+        is_contactable: true,
+        email_content_reach: mockEmailReachField, 
+        is_unsubscribed: false,
       };
 
       const result = await notificationsPreferencesViaEmailService.setPreferences(testData);
@@ -107,6 +104,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('research_updates')).toBe('true');
       expect(formData.get('is_unsubscribed')).toBe('false');
+      expect(formData.get('email_content_reach')).toBe('2');
       expect(result).toBe(mockResponse);
     });
 
@@ -120,6 +118,10 @@ describe('notificationsPreferencesViaEmailService', () => {
         replies: false,
         research_updates: false,
         userCode: 'user123',
+        is_contactable: true,
+        user_code: 'anything',
+        email_content_reach: mockEmailReachField, 
+        is_unsubscribed: false,
       };
 
       await notificationsPreferencesViaEmailService.setPreferences(testData);
@@ -129,6 +131,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('research_updates')).toBe('false');
+      expect(formData.get('email_content_reach')).toBe('2');
     });
   });
 

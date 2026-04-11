@@ -1,15 +1,15 @@
-import type { DBNotificationsPreferencesDefaults, EmailContentReach } from 'oa-shared';
+import type { DBEmailContentReach, DBNotificationsPreferencesDefaults } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { emailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
 export const setDefaultNotifications = (
-  defaultEmailContentReach: EmailContentReach,
+  dbDefaultEmailContentReach: DBEmailContentReach,
 ): DBNotificationsPreferencesDefaults => {
   return {
     comments: true,
-    email_content_reach: defaultEmailContentReach.id,
+    email_content_reach: dbDefaultEmailContentReach,
     is_unsubscribed: false,
     replies: true,
     research_updates: true,
@@ -24,6 +24,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!claims.data?.claims) {
     return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
   }
+
+  const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault(client);
+  let preferences = setDefaultNotifications(dbDefaultEmailContentReach as DBEmailContentReach);
+
   const { data } = await client
     .from('notifications_preferences')
     .select('*,profiles!inner(id),email_content_reach:email_content_reach(*)')
@@ -31,16 +35,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .single();
 
   if (data) {
-    return Response.json({ preferences: data }, { headers, status: 200 });
+    preferences = {
+      ...preferences,
+      ...data,
+    };
   }
 
-  const emailContentReach = await emailContentReachServiceServer.getDefault(client);
-  if (emailContentReach) {
-    const preferences = setDefaultNotifications(emailContentReach);
-    return Response.json({ preferences }, { headers, status: 200 });
-  }
-
-  return Response.json({}, { headers, status: 500, statusText: 'Error loading preferences' });
+  return Response.json({ preferences }, { headers, status: 200 });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -50,7 +51,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
     const comments = formData.get('comments') === 'true';
-    const email_content_reach = null;
+    const email_content_reach = formData.get('email_content_reach');
     const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('research_updates') === 'true';

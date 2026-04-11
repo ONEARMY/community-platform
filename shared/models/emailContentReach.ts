@@ -15,17 +15,21 @@ export class DBEmailContentReach implements IDBDocSB {
   }
 
   static toCreateCreateFormField(dbEmailContentReach: DBEmailContentReach) {
-    return {
-      value: dbEmailContentReach.id.toString(),
-      label: dbEmailContentReach.create_content_label,
-    };
+    return (
+      dbEmailContentReach && {
+        value: dbEmailContentReach.id.toString(),
+        label: dbEmailContentReach.create_content_label,
+      }
+    );
   }
 
   static toNotificationsFormField(dbEmailContentReach: DBEmailContentReach) {
-    return {
-      value: dbEmailContentReach.id.toString(),
-      label: dbEmailContentReach.preferences_label,
-    };
+    return (
+      dbEmailContentReach && {
+        value: dbEmailContentReach.id.toString(),
+        label: dbEmailContentReach.preferences_label,
+      }
+    );
   }
 }
 
@@ -68,18 +72,22 @@ export class EmailContentReach implements IDoc {
     });
   }
 
-  static toCreateCreateFormField(dbEmailContentReach: EmailContentReach) {
-    return {
-      value: dbEmailContentReach.id.toString(),
-      label: dbEmailContentReach.createContentLabel,
-    };
+  static toCreateCreateFormField(emailContentReach: EmailContentReach) {
+    return (
+      emailContentReach && {
+        value: emailContentReach.id.toString(),
+        label: emailContentReach.createContentLabel,
+      }
+    );
   }
 
-  static toNotificationsFormField(dbEmailContentReach: EmailContentReach) {
-    return {
-      value: dbEmailContentReach.id.toString(),
-      label: dbEmailContentReach.preferencesLabel,
-    };
+  static toNotificationsFormField(emailContentReach: EmailContentReach) {
+    return (
+      emailContentReach && {
+        value: emailContentReach.id.toString(),
+        label: emailContentReach.preferencesLabel,
+      }
+    );
   }
 
   static findById(optionId: number | string, emailContentReachOptions: EmailContentReach[]) {

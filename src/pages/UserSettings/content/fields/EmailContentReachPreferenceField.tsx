@@ -16,7 +16,7 @@ export const EmailContentReachPreferenceField = () => {
         const fieldOptions = emailContentReach.map((reach) => {
           return EmailContentReach.toNotificationsFormField(reach);
         });
-        setOptions(fieldOptions);
+        setOptions(fieldOptions as SelectValue[]);
       }
     };
     fetchEmailContentReach();

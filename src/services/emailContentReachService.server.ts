@@ -13,7 +13,9 @@ const getAll = async (client: SupabaseClient): Promise<DBEmailContentReach[] | n
 
 const getDefault = async (client: SupabaseClient) => {
   const dbAll = await getAll(client);
-  const defaultOption = dbAll ? dbAll.find(({ default_option }) => default_option === true) : null;
+  const defaultOption = dbAll
+    ? (dbAll.find(({ default_option }) => default_option === true) as DBEmailContentReach)
+    : null;
 
   return defaultOption;
 };

@@ -14,6 +14,40 @@ import { NotificationEmailServiceServer } from './notificationEmailService.serve
 export class NotificationsSupabaseServiceServer {
   constructor(private client: SupabaseClient) {}
 
+  async getAllProfiles() {
+    // Currently simplified to direct client request (and not a function) as not emailing all users yet
+    try {
+      const response = await this.client.from('profiles').select(
+        `
+          id,
+          roles,
+          badges:profile_badges_relations(
+            profile_badges(id)
+          ),
+          email_content_reach:email_content_reach(*)
+        `,
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+
+  async getProfilesByBadgeId(badgeId: number) {
+    try {
+      const response = await this.client.rpc('get_profiles_by_badge', {
+        p_badge_id: badgeId,
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+
   async getSubscribedUsers(
     contentId: number,
     contentType: SubscribableContentTypes,
@@ -21,34 +55,11 @@ export class NotificationsSupabaseServiceServer {
     try {
       let data;
 
-      if (contentType === 'news') {
-        const response = await this.client.from('profiles').select(
-          `id,
-          roles,
-          badges:profile_badges_relations(
-            profile_badges(id)
-          )
-          `,
-        );
-        data =
-          response.data &&
-          response.data.map(({ id, roles, badges }) => ({
-            badge_ids: badges
-              ? badges
-                  .map(({ profile_badges }) => profile_badges)
-                  .flat()
-                  .map((badge) => badge.id)
-              : [],
-            profile_id: id,
-            roles,
-          }));
-      } else {
-        const response = await this.client.rpc('get_subscribed_users_emails_to_notify', {
-          p_content_id: contentId,
-          p_content_type: contentType,
-        });
-        data = response.data;
-      }
+      const response = await this.client.rpc('get_subscribed_users_emails_to_notify', {
+        p_content_id: contentId,
+        p_content_type: contentType,
+      });
+      data = response.data;
 
       return data as SubscribedUser[];
     } catch (error) {
@@ -61,6 +72,8 @@ export class NotificationsSupabaseServiceServer {
     notification: DBNotification,
     subscriberIds: SubscribedUser[],
   ): Promise<void> {
+    if (!subscriberIds) return;
+
     try {
       const notificationsToInsert = subscriberIds.map(
         (subscriber) =>
@@ -118,7 +131,7 @@ export class NotificationsSupabaseServiceServer {
         (user) => user.profile_id !== comment.created_by,
       );
 
-      const notification = new DBNotification({
+      const dbNotification = new DBNotification({
         action_type: isReply ? 'newReply' : 'newComment',
         content_id: comment.id!,
         title: title,
@@ -127,12 +140,12 @@ export class NotificationsSupabaseServiceServer {
         content_type: 'comments',
       });
 
-      await this.createNotifications(notification, subscribers);
+      await this.createNotifications(dbNotification, subscribers);
 
-      await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails(
-        subscribers,
-        notification,
-      );
+      await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
+        emailSubscribers: subscribers,
+        dbNotification,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -142,16 +155,7 @@ export class NotificationsSupabaseServiceServer {
     try {
       const contentId = news.id;
 
-      let subscribers = await this.getSubscribedUsers(contentId, 'news');
-      if (news.profile_badge) {
-        subscribers = subscribers.filter(
-          (subscriber) =>
-            subscriber.badge_ids.includes(news.profile_badge as unknown as number) ||
-            (subscriber.roles && subscriber.roles.includes('admin')),
-        );
-      }
-
-      const notification = new DBNotification({
+      const dbNotification = new DBNotification({
         action_type: 'newNews',
         content_id: contentId,
         title: news.title,
@@ -159,7 +163,54 @@ export class NotificationsSupabaseServiceServer {
         content_type: 'news',
       });
 
-      await this.createNotifications(notification, subscribers);
+      // For in-app
+      let subscribers;
+      if (!news.profile_badge) {
+        subscribers = await this.getAllProfiles();
+      }
+
+      if (news.profile_badge) {
+        subscribers = await this.getProfilesByBadgeId(news.profile_badge.id);
+      }
+      await this.createNotifications(dbNotification, subscribers);
+
+      // For email
+      if (news.profile_badge) {
+        switch (news.email_content_reach?.name) {
+          case 'important': {
+            // Exclude the no email people
+            const emailSubscribers = subscribers.filter(
+              (subscriber) =>
+                subscriber.notifcation_preferences?.email_content_reach?.name !== 'none',
+            );
+            await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
+              emailSubscribers,
+              dbNotification,
+              isNews: true,
+              excludeTriggerer: false,
+            });
+            return;
+          }
+          case 'all': {
+            // Include only the all email people
+            const emailSubscribers = subscribers.filter(
+              (subscriber) =>
+                subscriber.notifcation_preferences?.email_content_reach?.name === 'all',
+            );
+            await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
+              emailSubscribers,
+              dbNotification,
+              isNews: true,
+              excludeTriggerer: false,
+            });
+            return;
+          }
+          default: {
+            return;
+          }
+        }
+      }
+      return;
     } catch (error) {
       console.error(error);
     }
@@ -173,7 +224,7 @@ export class NotificationsSupabaseServiceServer {
     try {
       const contentType: SubscribableContentTypes = 'research';
       const subscribers = await this.getSubscribedUsers(research.id, contentType);
-      const notification = new DBNotification({
+      const dbNotification = new DBNotification({
         action_type: 'newContent',
         title: research.title,
         content_id: researchUpdate.id!,
@@ -182,12 +233,13 @@ export class NotificationsSupabaseServiceServer {
         triggered_by: profile,
       });
 
-      await this.createNotifications(notification, subscribers);
+      await this.createNotifications(dbNotification, subscribers);
 
-      await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails(
-        subscribers,
-        notification,
-      );
+      await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
+        emailSubscribers: subscribers,
+        dbNotification,
+        excludeTriggerer: false,
+      });
     } catch (error) {
       console.error(error);
     }

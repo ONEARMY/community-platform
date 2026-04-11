@@ -1,16 +1,18 @@
 import { Button } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
+import { useToast } from 'src/common/Toast/useToast';
 import { emailPreviewService } from 'src/services/emailPreviewService';
 
 interface IProps {
   formValues: Partial<NewsFormData>;
-  setSaveErrorMessage: Dispatch<SetStateAction<string | null>>;
+  isSubmittingDraft: boolean;
   submitting: boolean;
 }
 
 export const NewsPreviewEmailButton = (props: IProps) => {
-  const { formValues, setSaveErrorMessage, submitting } = props;
+  const toast = useToast();
+  const { formValues, isSubmittingDraft, submitting } = props;
   const [isSendingPreview, setIsSendingPreview] = useState<boolean>(false);
 
   const previewEmail = async () => {
@@ -27,19 +29,23 @@ export const NewsPreviewEmailButton = (props: IProps) => {
       emailContentReach: null,
     };
 
-    try {
-      await emailPreviewService.send(draftNews);
-      setSaveErrorMessage(null);
-    } catch (error) {
-      console.error(error);
-      setSaveErrorMessage(error.message);
-    }
+    const promise = emailPreviewService.send(draftNews);
 
-    setTimeout(() => {
-      // The preview will send very quick, adding this to create an
-      // artificial delay to prevent accidential spamming
-      setIsSendingPreview(false);
-    }, 2000);
+    toast.promise(promise, {
+      loading: 'Sending preview news email',
+      success: () => {
+        return {
+          message: 'Preview news email sent',
+        };
+      },
+      error: (error) => {
+        console.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // to avoid spam clicking
   };
 
   return (
@@ -48,7 +54,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
       onClick={previewEmail}
       variant="outline"
       type="button"
-      disabled={submitting || isSendingPreview}
+      disabled={submitting || isSendingPreview || isSubmittingDraft}
       sx={{
         width: '100%',
         display: 'block',

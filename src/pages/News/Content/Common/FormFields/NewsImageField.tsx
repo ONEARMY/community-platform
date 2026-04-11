@@ -11,6 +11,7 @@ import { Spinner, Text } from 'theme-ui';
 
 const ImageInputFieldWrapper = styled.div`
   width: 620px;
+  max-width: 100%;
   height: 310px;
 `;
 

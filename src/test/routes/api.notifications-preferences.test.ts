@@ -41,6 +41,8 @@ describe('loader', () => {
   it('returns user preferences when found', async () => {
     const mockClaims = { sub: 'user123' };
     const mockPreferences = {
+      id: 'user123',
+      user_id: 'abcd',
       comments: false,
       replies: true,
       research_updates: false,
@@ -48,18 +50,29 @@ describe('loader', () => {
       email_content_reach: null,
     };
 
+    const mockResults = {
+      id: 'user123',
+      userId: 'abcd',
+      comments: false,
+      replies: true,
+      researchUpdates: false,
+      isUnsubscribed: true,
+      emailContentReach: null,
+    };
+
     mockClient.mocks.auth.getClaims.mockResolvedValue({
       data: { claims: mockClaims },
     });
-    mockClient.mocks.single.mockResolvedValue({ data: mockPreferences });
+    mockClient.mocks.single.mockResolvedValueOnce({ data: mockPreferences });
+    mockClient.mocks.single.mockResolvedValueOnce({ data: mockPreferences });
 
     const response = await loader(createMockLoaderArgs(mockRequest));
     const result = await response.json();
 
     expect(response.status).toBe(200);
-    expect(result).toEqual({ preferences: mockPreferences });
+    expect(result).toEqual({ preferences: mockResults });
     expect(mockClient.mocks.from).toHaveBeenCalledWith('notifications_preferences');
-    expect(mockClient.mocks.select).toHaveBeenCalledWith('*');
+    expect(mockClient.mocks.select).toHaveBeenCalledWith('*,profiles!inner(id),email_content_reach:email_content_reach(*)');
     expect(mockClient.mocks.eq).toHaveBeenCalledWith('profiles.auth_id', 'user123');
     expect(mockClient.mocks.single).toHaveBeenCalled();
   });
@@ -74,6 +87,14 @@ describe('loader', () => {
       is_unsubscribed: false,
     };
 
+    const defaultResults = {
+      comments: true,
+      replies: true,
+      researchUpdates: true,
+      emailContentReach: null, // Should really be mocked to return a proper result
+      isUnsubscribed: false,
+    };
+
     mockClient.mocks.auth.getClaims.mockResolvedValue({
       data: { claims: mockClaims },
     });
@@ -83,7 +104,7 @@ describe('loader', () => {
     const result = await response.json();
 
     expect(response.status).toBe(200);
-    expect(result).toEqual({ preferences: defaultPreferences });
+    expect(result).toEqual({ preferences: defaultResults });
   });
 
   it('returns 401 when user is not authenticated', async () => {

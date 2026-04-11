@@ -38,7 +38,6 @@ export const ProfileBadgeField = ({ description, placeholder, title }: IProps) =
       <Field
         name={name}
         id={name}
-        isEqual={(a, b) => !!a && a?.value === b?.value}
         render={({ input, ...rest }) => (
           <FieldContainer data-cy={`${name}-select`}>
             <Select

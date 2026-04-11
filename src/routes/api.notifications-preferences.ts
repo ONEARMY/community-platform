@@ -1,4 +1,5 @@
 import type { DBEmailContentReach, DBNotificationsPreferencesDefaults } from 'oa-shared';
+import { NotificationsPreferences } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { emailContentReachServiceServer } from 'src/services/emailContentReachService.server';
@@ -26,7 +27,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault(client);
-  let preferences = setDefaultNotifications(dbDefaultEmailContentReach as DBEmailContentReach);
+  const defaultDBPreferences = setDefaultNotifications(
+    dbDefaultEmailContentReach as DBEmailContentReach,
+  );
 
   const { data } = await client
     .from('notifications_preferences')
@@ -34,12 +37,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .eq('profiles.auth_id', claims.data?.claims?.sub)
     .single();
 
-  if (data) {
-    preferences = {
-      ...preferences,
-      ...data,
-    };
-  }
+  const preferences = NotificationsPreferences.fromDB({
+    ...defaultDBPreferences,
+    ...data,
+  });
 
   return Response.json({ preferences }, { headers, status: 200 });
 };

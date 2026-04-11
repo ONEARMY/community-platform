@@ -1,10 +1,10 @@
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { useToast } from 'src/common/Toast';
 import { logger } from 'src/logger';
 import { CategoryField } from 'src/pages/common/FormFields/Category.field';
 import { EmailContentReachNewsField } from 'src/pages/common/FormFields/EmailContentReachNewsField';
@@ -16,6 +16,7 @@ import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPosting
 import * as LABELS from 'src/pages/News/labels';
 import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
+import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
 import { Divider } from 'theme-ui';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
@@ -30,10 +31,9 @@ interface IProps {
 }
 
 export const NewsForm = (props: IProps) => {
-  const navigate = useNavigate();
+  const toast = useToast();
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const initialValues = useMemo<NewsFormData>(
     () =>
@@ -51,35 +51,37 @@ export const NewsForm = (props: IProps) => {
   );
 
   const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
-    setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
-    setIsSubmitting(true);
+    const promise = newsService.upsert(props.id, {
+      body: formValues.body!,
+      category: formValues.category || null,
+      heroImage: formValues.heroImage || null,
+      isDraft,
+      profileBadge: formValues.profileBadge || null,
+      tags: formValues.tags,
+      title: formValues.title!,
+      emailContentReach: formValues.emailContentReach!,
+    });
 
-    try {
-      const result = await newsService.upsert(props.id, {
-        body: formValues.body!,
-        category: formValues.category || null,
-        heroImage: formValues.heroImage || null,
-        isDraft: isDraft,
-        profileBadge: formValues.profileBadge || null,
-        tags: formValues.tags,
-        title: formValues.title!,
-        emailContentReach: formValues.emailContentReach!,
-      });
+    toast.promise(promise, {
+      loading: isDraft ? 'Saving draft news...' : 'Publishing news...',
+      success: (data) => {
+        !isDraft && fireConfetti();
+        return {
+          message: isDraft ? 'Draft news saved' : 'News published',
+          actionLink: {
+            href: '/news/' + data.slug,
+            label: isDraft ? 'View draft news' : 'View news',
+          },
+        };
+      },
+      error: (error) => {
+        console.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
 
-      if (result) {
-        navigate('/news/' + result.slug);
-      }
-    } catch (e) {
-      if (e.cause && e.message) {
-        setSaveErrorMessage(e.message);
-      }
-      logger.error(e);
-      setIsSubmitting(false);
-      throw e;
-    } finally {
-      setIsSubmitting(false);
-    }
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
   };
 
   const imageUpload = useCallback(
@@ -140,11 +142,17 @@ export const NewsForm = (props: IProps) => {
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();
-          await onSubmit(values, true);
+          setIsSubmittingDraft(true);
+          try {
+            await onSubmit(values, true);
+            form.reset(values);
+          } finally {
+            setIsSubmittingDraft(false);
+          }
         };
 
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
         );
         const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
 
@@ -163,11 +171,12 @@ export const NewsForm = (props: IProps) => {
               <NewsPreviewEmailButton
                 submitting={submitting}
                 formValues={values}
-                setSaveErrorMessage={setSaveErrorMessage}
+                isSubmittingDraft={isSubmittingDraft}
               />
             }
+            hideSubmittingMessage={true}
             submitFailed={submitFailed}
-            submitting={submitting || isSubmitting}
+            submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <TitleField
@@ -180,7 +189,7 @@ export const NewsForm = (props: IProps) => {
               removeImage={removeImage}
               contentId={props.id || null}
             />
-            <CategoryField type="news" />
+            <CategoryField type="news" text={LABELS.fields.category.title} />
             <TagsField title={LABELS.fields.tags.title} />
             <Divider />
             <ProfileBadgeField

@@ -1,4 +1,5 @@
 import type { IDBDocSB, IDoc } from './document';
+import { SelectValue } from './selectValue';
 
 export class DBEmailContentReach implements IDBDocSB {
   id: number;
@@ -14,7 +15,9 @@ export class DBEmailContentReach implements IDBDocSB {
     Object.assign(this, obj);
   }
 
-  static toCreateCreateFormField(dbEmailContentReach: DBEmailContentReach | null) {
+  static toCreateCreateFormField(
+    dbEmailContentReach: DBEmailContentReach | null,
+  ): SelectValue | null {
     if (!dbEmailContentReach) return null;
 
     return {
@@ -23,7 +26,9 @@ export class DBEmailContentReach implements IDBDocSB {
     };
   }
 
-  static toNotificationsFormField(dbEmailContentReach: DBEmailContentReach | null) {
+  static toNotificationsFormField(
+    dbEmailContentReach: DBEmailContentReach | null,
+  ): SelectValue | null {
     if (!dbEmailContentReach) return null;
 
     return {
@@ -72,7 +77,7 @@ export class EmailContentReach implements IDoc {
     });
   }
 
-  static toCreateCreateFormField(emailContentReach: EmailContentReach | null) {
+  static toCreateCreateFormField(emailContentReach: EmailContentReach | null): SelectValue | null {
     if (!emailContentReach) return null;
     return {
       value: emailContentReach.id.toString(),
@@ -80,7 +85,7 @@ export class EmailContentReach implements IDoc {
     };
   }
 
-  static toNotificationsFormField(emailContentReach: EmailContentReach | null) {
+  static toNotificationsFormField(emailContentReach: EmailContentReach | null): SelectValue | null {
     if (!emailContentReach) return null;
 
     return {

@@ -134,7 +134,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
-      emailContentReach: Number(formData.get('emailContentReach')),
+      emailContentReach: formData.has('emailContentReach')
+        ? Number(formData.get('emailContentReach'))
+        : null,
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
@@ -186,7 +188,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         title: data.title,
         email_content_reach: data.emailContentReach,
       })
-      .select();
+      .select('*, profile_badge:profile_badge(*),email_content_reach:email_content_reach(*)');
 
     if (newsResult.error || !newsResult.data) {
       throw newsResult.error;
@@ -209,6 +211,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 };
 
 async function validateRequest(request: Request, data: any, authError: AuthError | null) {
+  const notDraft = data.is_draft === false;
+
   if (authError) {
     return {
       status: authError?.status,
@@ -224,15 +228,15 @@ async function validateRequest(request: Request, data: any, authError: AuthError
     throw validationError('Title is required', 'title');
   }
 
-  if (!data.body) {
+  if (!data.body && notDraft) {
     throw validationError('Body is required', 'body');
   }
 
-  if (!data.heroImage) {
+  if (!data.heroImage && notDraft) {
     throw validationError('Hero image is required', 'heroImage');
   }
 
-  if (!data.emailContentReach && data.is_draft === false) {
+  if (!data.emailContentReach && notDraft) {
     throw validationError('Email content reach is required to publish', 'emailContentReach');
   }
 }

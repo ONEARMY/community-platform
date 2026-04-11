@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { DBNotificationsPreferences, type NotificationsPreferencesFormData } from 'oa-shared';
+import { NotificationsPreferences, type NotificationsPreferencesFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
@@ -15,13 +15,13 @@ export const SupabaseNotifications = observer(() => {
   const { profile } = useProfileStore();
 
   const refreshPreferences = async () => {
-    const dbPreferences = await notificationsPreferencesService.getPreferences();
+    const preferences = await notificationsPreferencesService.getPreferences();
 
-    if (!dbPreferences) {
+    if (!preferences) {
       return setSubmitResults({ type: 'error', message: 'Error finding preferences' });
     }
 
-    const asFormData = DBNotificationsPreferences.toFormData(dbPreferences);
+    const asFormData = NotificationsPreferences.toFormData(preferences);
 
     setInitialValues(asFormData);
     setIsLoading(false);

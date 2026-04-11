@@ -35,7 +35,9 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
-      emailContentReach: Number(formData.get('emailContentReach')),
+      emailContentReach: formData.has('emailContentReach')
+        ? Number(formData.get('emailContentReach'))
+        : null,
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
@@ -106,6 +108,8 @@ async function validateRequest(
   slug: string,
   client: SupabaseClient,
 ): Promise<void> {
+  const notDraft = data.isDraft === false;
+
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
   }
@@ -118,15 +122,15 @@ async function validateRequest(
     throw validationError('Title is required', 'title');
   }
 
-  if (!data.body) {
-    throw validationError('Body is required', 'body');
+  if (!data.body && notDraft) {
+    throw validationError('Body is required to publish', 'body');
   }
 
-  if (!data.heroImage) {
-    throw validationError('Hero Image is required', 'heroImage');
+  if (!data.heroImage && notDraft) {
+    throw validationError('A hero image is required to publish', 'heroImage');
   }
 
-  if (!data.emailContentReach && data.isDraft === false) {
+  if (!data.emailContentReach && notDraft) {
     throw validationError('Email content reach is required to publish', 'emailContentReach');
   }
 

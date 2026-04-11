@@ -1,4 +1,4 @@
-import { DBNotificationsPreferences, NotificationsPreferencesViaEmailFormData } from 'oa-shared';
+import { NotificationsPreferences, NotificationsPreferencesViaEmailFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
@@ -23,8 +23,8 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     }
 
     const asFormData = {
-      ...DBNotificationsPreferences.toFormData(dbPreferences),
-      is_contactable: dbPreferences.is_contactable,
+      ...NotificationsPreferences.toFormData(dbPreferences),
+      is_contactable: dbPreferences.isContactable,
       user_code: userCode,
     };
 
@@ -76,7 +76,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
       isLoading={isLoading}
       onSubmit={onSubmit as any}
       onUnsubscribe={onUnsubscribe}
-      // profileIsContactable={initialValues?.is_contactable}
+      profileIsContactable={initialValues?.is_contactable}
       submitResults={submitResults}
     />
   );

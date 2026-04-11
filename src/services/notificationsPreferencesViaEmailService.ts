@@ -1,11 +1,9 @@
 import type {
-  DBPreferencesWithProfileContact,
   NotificationsPreferencesViaEmailFormData,
+  PreferencesWithProfileContact,
 } from 'oa-shared';
 
-const getPreferences = async (
-  userCode: string,
-): Promise<DBPreferencesWithProfileContact | null> => {
+const getPreferences = async (userCode: string): Promise<PreferencesWithProfileContact | null> => {
   try {
     const response = await fetch(`/api/notifications-preferences-via-email/${userCode}`);
 
@@ -14,9 +12,9 @@ const getPreferences = async (
       return null;
     }
 
-    const { preferences, is_contactable } = await response.json();
+    const { preferences, isContactable } = await response.json();
 
-    return { ...preferences, is_contactable };
+    return { ...preferences, isContactable };
   } catch (err) {
     console.error(err);
     return null;
@@ -32,7 +30,8 @@ const setPreferences = async (
   body.append('news', data.comments.toString());
   body.append('replies', data.replies.toString());
   body.append('research_updates', data.research_updates.toString());
-  body.append('email_content_reach', data.email_content_reach.value.toString());
+  data.email_content_reach &&
+    body.append('email_content_reach', data.email_content_reach.value.toString());
   body.append('is_unsubscribed', 'false');
 
   return fetch(`/api/notifications-preferences-via-email/${data.user_code}`, {

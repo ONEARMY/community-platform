@@ -1,6 +1,6 @@
-import type { DBNotificationsPreferences, NotificationsPreferencesFormData } from 'oa-shared';
+import type { NotificationsPreferences, NotificationsPreferencesFormData } from 'oa-shared';
 
-const getPreferences = async (): Promise<DBNotificationsPreferences | null> => {
+const getPreferences = async (): Promise<NotificationsPreferences | null> => {
   try {
     const preferencesData = await fetch('/api/notifications-preferences');
     const { preferences } = await preferencesData.json();
@@ -19,7 +19,8 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
   body.append('comments', data.comments.toString());
   body.append('replies', data.replies.toString());
   body.append('research_updates', data.research_updates.toString());
-  body.append('email_content_reach', data.email_content_reach.value.toString());
+  data.email_content_reach &&
+    body.append('email_content_reach', data.email_content_reach.value.toString());
   body.append('is_unsubscribed', 'false');
 
   return fetch('/api/notifications-preferences', {

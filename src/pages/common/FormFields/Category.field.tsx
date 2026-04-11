@@ -8,9 +8,10 @@ import { FormFieldWrapper } from './FormFieldWrapper';
 
 interface IProps {
   type: ContentType;
+  text?: string;
 }
 
-export const CategoryField = ({ type }: IProps) => {
+export const CategoryField = ({ type, text }: IProps) => {
   const [categories, setCategories] = useState<SelectValue[]>([]);
   const name = 'category';
 
@@ -32,11 +33,10 @@ export const CategoryField = ({ type }: IProps) => {
   }, []);
 
   return (
-    <FormFieldWrapper htmlFor={name} text={fields.category.title}>
+    <FormFieldWrapper htmlFor={name} text={text || fields.category.title}>
       <Field
         name={name}
         id={name}
-        isEqual={(a, b) => !!a && a?.value === b?.value}
         render={({ input, ...rest }) => (
           <CategoriesSelectV2
             {...rest}

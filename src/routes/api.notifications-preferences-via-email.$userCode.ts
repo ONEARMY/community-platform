@@ -1,5 +1,12 @@
+import {
+  type DBEmailContentReach,
+  DBNotificationsPreferences,
+  NotificationsPreferences,
+  NotificationsPreferencesFormData,
+} from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { emailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { tokens } from 'src/utils/tokens.server';
 import { setDefaultNotifications } from './api.notifications-preferences';
 
@@ -31,16 +38,24 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
     }
 
-    const preferencesData = await client
+    const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault(client);
+    const defaultDBPreferences = setDefaultNotifications(
+      dbDefaultEmailContentReach as DBEmailContentReach,
+    );
+
+    const { data } = await client
       .from('notifications_preferences')
       .select('*,email_content_reach:email_content_reach(*)')
       .eq('user_id', userId)
       .maybeSingle();
 
-    const is_contactable = userData.data?.is_contactable;
-    const preferences = setDefaultNotifications(preferencesData.data);
+    const isContactable = !!userData.data?.is_contactable;
+    const preferences: NotificationsPreferences = NotificationsPreferences.fromDB({
+      ...defaultDBPreferences,
+      ...(data as DBNotificationsPreferences),
+    });
 
-    return Response.json({ preferences, is_contactable }, { headers, status: 200 });
+    return Response.json({ preferences, isContactable }, { headers, status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json({ error }, { headers, status: 500 });

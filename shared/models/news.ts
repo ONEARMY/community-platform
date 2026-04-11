@@ -35,7 +35,7 @@ export class DBNews implements IDBContentDoc {
   readonly useful_count?: number;
   readonly body: string;
   readonly hero_image: DBMedia | null;
-  readonly email_content_reach: DBEmailContentReach;
+  readonly email_content_reach: DBEmailContentReach | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null) {
     let htmlBody = marked(news.body, {
@@ -129,7 +129,8 @@ export class News implements IContentDoc {
       title: news.title,
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
-      emailContentReach: EmailContentReach.fromDB(news.email_content_reach),
+      emailContentReach:
+        news.email_content_reach && EmailContentReach.fromDB(news.email_content_reach || null),
     });
   }
 }

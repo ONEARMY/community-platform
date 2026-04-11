@@ -112,6 +112,8 @@ export const NewsForm = (props: IProps) => {
     return errors;
   }, []);
 
+  const shouldDisableEmailContentReach = !!(props.id && props.formData?.isDraft === false);
+
   return (
     <Form
       key={props.id || 'new'}
@@ -189,6 +191,7 @@ export const NewsForm = (props: IProps) => {
             <EmailContentReachNewsField
               placeholder={LABELS.fields.contentReach.placeholder as string}
               title={LABELS.fields.contentReach.title}
+              shouldDisableEmailContentReach={shouldDisableEmailContentReach}
             />
             <Divider />
             <NewsBodyField imageUpload={imageUpload} />

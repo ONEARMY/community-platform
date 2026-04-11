@@ -14,22 +14,22 @@ export class DBEmailContentReach implements IDBDocSB {
     Object.assign(this, obj);
   }
 
-  static toCreateCreateFormField(dbEmailContentReach: DBEmailContentReach) {
-    return (
-      dbEmailContentReach && {
-        value: dbEmailContentReach.id.toString(),
-        label: dbEmailContentReach.create_content_label,
-      }
-    );
+  static toCreateCreateFormField(dbEmailContentReach: DBEmailContentReach | null) {
+    if (!dbEmailContentReach) return null;
+
+    return {
+      value: dbEmailContentReach.id.toString(),
+      label: dbEmailContentReach.create_content_label,
+    };
   }
 
-  static toNotificationsFormField(dbEmailContentReach: DBEmailContentReach) {
-    return (
-      dbEmailContentReach && {
-        value: dbEmailContentReach.id.toString(),
-        label: dbEmailContentReach.preferences_label,
-      }
-    );
+  static toNotificationsFormField(dbEmailContentReach: DBEmailContentReach | null) {
+    if (!dbEmailContentReach) return null;
+
+    return {
+      value: dbEmailContentReach.id.toString(),
+      label: dbEmailContentReach.preferences_label,
+    };
   }
 }
 
@@ -72,22 +72,21 @@ export class EmailContentReach implements IDoc {
     });
   }
 
-  static toCreateCreateFormField(emailContentReach: EmailContentReach) {
-    return (
-      emailContentReach && {
-        value: emailContentReach.id.toString(),
-        label: emailContentReach.createContentLabel,
-      }
-    );
+  static toCreateCreateFormField(emailContentReach: EmailContentReach | null) {
+    if (!emailContentReach) return null;
+    return {
+      value: emailContentReach.id.toString(),
+      label: emailContentReach.createContentLabel,
+    };
   }
 
-  static toNotificationsFormField(emailContentReach: EmailContentReach) {
-    return (
-      emailContentReach && {
-        value: emailContentReach.id.toString(),
-        label: emailContentReach.preferencesLabel,
-      }
-    );
+  static toNotificationsFormField(emailContentReach: EmailContentReach | null) {
+    if (!emailContentReach) return null;
+
+    return {
+      value: emailContentReach.id.toString(),
+      label: emailContentReach.preferencesLabel,
+    };
   }
 
   static findById(optionId: number | string, emailContentReachOptions: EmailContentReach[]) {

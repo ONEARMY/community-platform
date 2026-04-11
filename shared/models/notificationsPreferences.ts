@@ -41,7 +41,7 @@ export class NotificationsPreferences {
 export interface NotificationsPreferencesFormData {
   id?: number;
   comments: boolean;
-  email_content_reach: SelectValue;
+  email_content_reach: SelectValue | null;
   replies: boolean;
   research_updates: boolean;
   is_unsubscribed: boolean;

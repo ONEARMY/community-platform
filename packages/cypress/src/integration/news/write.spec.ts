@@ -61,6 +61,9 @@ describe('[News.Write]', () => {
     cy.selectTag(tag1, '[data-cy="tag-select"]');
     cy.selectTag(tag2, '[data-cy="tag-select"]');
 
+    // Should error as email content reach not set
+    // Set email content reach
+
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);
     cy.get('[data-cy=submit]').click();
@@ -113,6 +116,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=existingHeroImage]').find('[data-cy=delete-image]').click({force: true});
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
     cy.get('[data-cy=delete-image]').should('exist');
+
+    // Email content reach field should be disabled
 
     cy.step('Updated news details shown');
     cy.wait(2000);

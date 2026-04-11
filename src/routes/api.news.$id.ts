@@ -126,8 +126,8 @@ async function validateRequest(
     throw validationError('Hero Image is required', 'heroImage');
   }
 
-  if (!data.emailContentReach) {
-    throw validationError('Email content reach is required', 'emailContentReach');
+  if (!data.emailContentReach && data.isDraft === false) {
+    throw validationError('Email content reach is required to publish', 'emailContentReach');
   }
 
   if (!currentNews) {

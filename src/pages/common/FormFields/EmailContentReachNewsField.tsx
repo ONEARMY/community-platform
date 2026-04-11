@@ -9,9 +9,11 @@ import { FormFieldWrapper } from './FormFieldWrapper';
 interface IProps {
   placeholder: string;
   title: string;
+  shouldDisableEmailContentReach: boolean;
 }
 
-export const EmailContentReachNewsField = ({ placeholder, title }: IProps) => {
+export const EmailContentReachNewsField = (props: IProps) => {
+  const { placeholder, title, shouldDisableEmailContentReach } = props;
   const [options, setOptions] = useState<SelectValue[]>([]);
   const name = 'emailContentReach';
 
@@ -22,14 +24,18 @@ export const EmailContentReachNewsField = ({ placeholder, title }: IProps) => {
         const fieldOptions = emailContentReach.map((reach) => {
           return EmailContentReach.toCreateCreateFormField(reach);
         });
-        setOptions(fieldOptions);
+        setOptions(fieldOptions as SelectValue[]);
       }
     };
     fetchEmailContentReach();
   }, []);
 
+  const description = shouldDisableEmailContentReach
+    ? 'This field is disabled as the news has already been published'
+    : undefined;
+
   return (
-    <FormFieldWrapper htmlFor={name} text={title} required>
+    <FormFieldWrapper htmlFor={name} text={title} description={description} required>
       <Field
         name={name}
         id={name}
@@ -45,6 +51,7 @@ export const EmailContentReachNewsField = ({ placeholder, title }: IProps) => {
                 input.onChange(changedValue ?? null);
               }}
               placeholder={placeholder}
+              isDisabled={shouldDisableEmailContentReach}
             />
           </FieldContainer>
         )}

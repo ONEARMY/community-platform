@@ -222,6 +222,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
       cy.url().should('include', `/research/${slug}`);
 
       cy.step('Edit research and replace cover image');

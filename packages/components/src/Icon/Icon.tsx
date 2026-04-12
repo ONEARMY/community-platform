@@ -106,7 +106,6 @@ export const glyphs: IGlyphs = {
   impact: iconMap.impact,
   instagram: <FaInstagram />,
   landscape: iconMap.landscape,
-  loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   lock: <MdLock />,
   machine: iconMap.machine,
@@ -154,6 +153,11 @@ export const glyphs: IGlyphs = {
   verified: iconMap.verified,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
+  success: iconMap.success,
+  error: iconMap.error,
+  warning: iconMap.warning,
+  info: iconMap.info,
+  loading: iconMap.loading,
 };
 
 export type IconProps = IProps & VerticalAlignProps & SpaceProps;

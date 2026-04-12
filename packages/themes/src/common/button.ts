@@ -66,6 +66,13 @@ export const buttons = {
     '&:hover': {
       backgroundColor: white,
     },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
+      backgroundColor: red2,
+    },
   },
   success: {
     ...BASE_BUTTON,
@@ -75,6 +82,13 @@ export const buttons = {
     '&:hover': {
       filter: 'brightness(90%)',
     },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
+      backgroundColor: betaGreen,
+    },
   },
   info: {
     ...BASE_BUTTON,
@@ -83,6 +97,13 @@ export const buttons = {
     color: black,
     '&:hover': {
       filter: 'brightness(90%)',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
+      backgroundColor: blue,
     },
   },
   outline: {

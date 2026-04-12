@@ -51,7 +51,6 @@ export type availableGlyphs =
   | 'information'
   | 'instagram'
   | 'landscape'
-  | 'loading'
   | 'location-on'
   | 'lock'
   | 'machine'
@@ -103,6 +102,11 @@ export type availableGlyphs =
   | 'gps-location'
   | 'copy-link'
   | 'double-arrow-right'
-  | 'double-arrow-left';
+  | 'double-arrow-left'
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'loading';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

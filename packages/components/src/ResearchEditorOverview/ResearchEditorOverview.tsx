@@ -1,4 +1,3 @@
-import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Card, Heading, Text } from 'theme-ui';
 import { Button } from '../Button/Button';
 import { InternalLink } from '../InternalLink/InternalLink';
@@ -16,13 +15,12 @@ export interface ResearchEditorOverviewProps {
   newItemTitle?: string;
   showCreateUpdateButton?: boolean;
   showBackToResearchButton?: boolean;
-  sx?: ThemeUIStyleObject;
 }
 
 export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
-  const { updates, sx, researchSlug, showCreateUpdateButton, showBackToResearchButton } = props;
+  const { updates, researchSlug, showCreateUpdateButton, showBackToResearchButton } = props;
   return (
-    <Card sx={{ padding: 4, ...sx }}>
+    <Card sx={{ padding: 4 }}>
       <Heading as="h2" mb={3} variant="small">
         Research overview
       </Heading>

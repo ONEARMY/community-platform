@@ -193,8 +193,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
             hideSubmittingMessage={true}
             unsavedChangesDialog={unsavedChangesDialog}
           >
-            <div>{JSON.stringify(submitSucceeded)}</div>
-            <div>{JSON.stringify(dirty) && 'dirty'}</div>
             <ResearchTitleField />
             <ResearchDescriptionField />
             <ImageField title="Cover Image" contentType="research" contentId={id} />

@@ -58,6 +58,7 @@ export const CustomToast = ({
         borderRadius: 1,
         backgroundColor: commonStyles.colors.white,
       }}
+      data-cy="toast"
     >
       <Flex
         sx={{
@@ -97,6 +98,7 @@ export const CustomToast = ({
           <Link
             to={actionLink.href}
             onClick={handleClose}
+            data-cy="toast-action-link"
             style={{ fontWeight: 500, color: 'black', textDecoration: 'underline' }}
           >
             {actionLink.label}
@@ -108,6 +110,7 @@ export const CustomToast = ({
               actionButton.callback();
               handleClose();
             }}
+            data-cy="toast-action-button"
           >
             {actionButton.label}
           </Button>

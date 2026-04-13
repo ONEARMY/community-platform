@@ -157,7 +157,10 @@ describe('[Research]', () => {
       cy.step('Published when fields are populated correctly');
       cy.get('[data-cy=submit]').click();
 
-      cy.url().should('contain', `${researchURL}#update_`);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+
       cy.contains(updateTitle).should('be.visible');
       cy.contains(updateDescription).should('be.visible');
 
@@ -313,6 +316,10 @@ describe('[Research]', () => {
 
       cy.step('Save as Draft');
       cy.get('[data-cy=draft]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
 
       cy.step('Can see Draft after refresh');
       cy.contains(updateTitle);

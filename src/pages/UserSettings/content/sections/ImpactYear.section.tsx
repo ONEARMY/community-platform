@@ -10,7 +10,11 @@ import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Heading, Text } from 'theme-ui';
-import { sortImpactYearDisplayFields, transformImpactData, transformImpactInputs } from '../../utils';
+import {
+  sortImpactYearDisplayFields,
+  transformImpactData,
+  transformImpactInputs,
+} from '../../utils';
 import { ImpactYearField } from '../fields/ImpactYear.field';
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field';
 

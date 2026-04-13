@@ -21,7 +21,13 @@ export const FieldCheckbox = ({ input, meta, disabled, ...rest }: Props) => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       {meta.error && meta.touched && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
-      <StyledCheckbox {...inputProps} {...rest} type="checkbox" disabled={disabled} checked={!!value} />
+      <StyledCheckbox
+        {...inputProps}
+        {...rest}
+        type="checkbox"
+        disabled={disabled}
+        checked={!!value}
+      />
     </Flex>
   );
 };

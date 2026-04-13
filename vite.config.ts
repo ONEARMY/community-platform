@@ -46,9 +46,11 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           // Split leaflet and related packages into their own chunk
-          if (id.includes('node_modules/leaflet') || 
-              id.includes('node_modules/react-leaflet') ||
-              id.includes('node_modules/@react-leaflet')) {
+          if (
+            id.includes('node_modules/leaflet') ||
+            id.includes('node_modules/react-leaflet') ||
+            id.includes('node_modules/@react-leaflet')
+          ) {
             return 'leaflet';
           }
         },

@@ -27,7 +27,12 @@ type FieldProps = FieldRenderProps<any, any> & {
 };
 
 const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
-  <Input type="hidden" variant={meta.error && meta.touched ? 'error' : 'input'} {...input} {...rest} />
+  <Input
+    type="hidden"
+    variant={meta.error && meta.touched ? 'error' : 'input'}
+    {...input}
+    {...rest}
+  />
 );
 
 // validation - return undefined if no error (i.e. valid)
@@ -41,7 +46,16 @@ const HiddenInput = styled(Field)`
 `;
 
 export const ProfileTypeRadioField = (props: IProps) => {
-  const { value, isSelected, textLabel, subText, name, fullWidth, required, 'data-cy': dataCy } = props;
+  const {
+    value,
+    isSelected,
+    textLabel,
+    subText,
+    name,
+    fullWidth,
+    required,
+    'data-cy': dataCy,
+  } = props;
 
   const classNames: string[] = [];
   if (isSelected) {

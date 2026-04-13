@@ -38,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     console.error(error);
-    return Response.json({ error: 'Error creating research', status: 500 }, { status: 500 });
+    return Response.json({ error: 'Error changing password', status: 500 }, { status: 500 });
   }
 
   return new Response(null, { headers, status: 204 });

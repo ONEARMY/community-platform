@@ -3,10 +3,17 @@ const changeEmail = async (email: string, password: string) => {
   data.append('email', email);
   data.append('password', password);
 
-  return await fetch('/api/account/change-email', {
+  const response = await fetch('/api/account/change-email', {
     method: 'POST',
     body: data,
   });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || 'Failed to change email');
+  }
+
+  return response;
 };
 
 const changePassword = async (oldPassword: string, newPassword: string) => {
@@ -14,10 +21,17 @@ const changePassword = async (oldPassword: string, newPassword: string) => {
   data.append('oldPassword', oldPassword);
   data.append('newPassword', newPassword);
 
-  return await fetch('/api/account/change-password', {
+  const response = await fetch('/api/account/change-password', {
     method: 'POST',
     body: data,
   });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || 'Failed to change password');
+  }
+
+  return response;
 };
 
 export const accountService = {

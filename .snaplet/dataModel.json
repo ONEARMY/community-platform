@@ -3160,7 +3160,7 @@
           "name": "body",
           "columnName": "body",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -8888,7 +8888,7 @@
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": false,
+          "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
         },
@@ -11436,6 +11436,61 @@
         },
         {
           "name": "SUCCESS"
+        }
+      ]
+    },
+    "key_status": {
+      "schemaName": "pgsodium",
+      "values": [
+        {
+          "name": "default"
+        },
+        {
+          "name": "expired"
+        },
+        {
+          "name": "invalid"
+        },
+        {
+          "name": "valid"
+        }
+      ]
+    },
+    "key_type": {
+      "schemaName": "pgsodium",
+      "values": [
+        {
+          "name": "aead-det"
+        },
+        {
+          "name": "aead-ietf"
+        },
+        {
+          "name": "auth"
+        },
+        {
+          "name": "generichash"
+        },
+        {
+          "name": "hmacsha256"
+        },
+        {
+          "name": "hmacsha512"
+        },
+        {
+          "name": "kdf"
+        },
+        {
+          "name": "secretbox"
+        },
+        {
+          "name": "secretstream"
+        },
+        {
+          "name": "shorthash"
+        },
+        {
+          "name": "stream_xchacha20"
         }
       ]
     },

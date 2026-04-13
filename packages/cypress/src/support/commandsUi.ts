@@ -88,7 +88,7 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click({ force: true });
 
-  cy.contains('a[data-cy=toast-action-link]').should('contain', 'Profile updated!');
+  cy.contains('[data-cy=toast-message]').should('contain', 'Profile updated!');
 });
 
 Cypress.Commands.add('setSettingVisitorPolicy', (policyText: string, details?: string) => {

@@ -475,7 +475,7 @@ describe('[Library]', () => {
     it('[Delete button is visible]', () => {
       cy.signIn(admin.email, admin.password);
 
-      cy.visit('/library/qwerty');
+      cy.visit('/library/qwerty/edit');
 
       cy.step('Delete button should be visible to project author');
       cy.get('[data-cy="Project: delete button"]').should('be.visible');

@@ -1,6 +1,6 @@
 import type { DBNotificationsPreferences, DBPreferencesWithProfileContact } from 'oa-shared';
 import { useEffect, useState } from 'react';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
+import { useToast } from 'src/common/Toast';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
@@ -12,7 +12,7 @@ interface IProps {
 export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initialValues, setInitialValues] = useState<DBPreferencesWithProfileContact | null>(null);
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
+  const toast = useToast();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesViaEmailService.getPreferences(userCode);
@@ -27,43 +27,48 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
 
   const onSubmit = async (values: DBNotificationsPreferences) => {
     setIsLoading(true);
-    setSubmitResults(null);
 
-    try {
-      await notificationsPreferencesViaEmailService.setPreferences({
-        ...values,
-        userCode,
-      });
-      await refreshPreferences();
-      setSubmitResults({
-        type: 'success',
-        message: form.saveNotificationPreferences,
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    const promise = notificationsPreferencesViaEmailService.setPreferences({
+      ...values,
+      userCode,
+    });
+
+    toast.promise(promise, {
+      loading: 'Saving your notification preferences...',
+      success: () => {
+        refreshPreferences().finally(() => setIsLoading(false));
+        return form.saveNotificationPreferences;
+      },
+      error: (error) => {
+        setIsLoading(false);
+        return `Error: ${error.message}`;
+      },
+    });
   };
 
   const onUnsubscribe = async () => {
     setIsLoading(true);
-    setSubmitResults(null);
 
-    try {
-      await notificationsPreferencesViaEmailService.setUnsubscribe(
-        userCode,
-        initialValues?.preferences.id,
-      );
-      await refreshPreferences();
-      setSubmitResults({
-        type: 'success',
-        message: form.saveNotificationPreferences,
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    const promise = notificationsPreferencesViaEmailService.setUnsubscribe(
+      userCode,
+      initialValues?.preferences.id,
+    );
+    toast.promise(promise, {
+      loading: 'Unsubscribing...',
+      success: () => {
+        refreshPreferences().finally(() => setIsLoading(false));
+        return form.saveNotificationPreferences;
+      },
+      error: (error) => {
+        setIsLoading(false);
+        return `Error: ${error.message}`;
+      },
+    });
   };
 
-  if (!userCode) return null;
+  if (!userCode) {
+    return null;
+  }
 
   return (
     <SupabaseNotificationsForm
@@ -72,7 +77,6 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
       profileIsContactable={initialValues?.is_contactable}
-      submitResults={submitResults}
     />
   );
 };

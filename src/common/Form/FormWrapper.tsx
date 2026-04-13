@@ -1,5 +1,4 @@
 import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
-import type { ContentFormType } from 'oa-shared';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
 import { ErrorsContainer } from './ErrorsContainer';
@@ -7,7 +6,6 @@ import type { IErrorsListSet } from './types';
 
 interface IProps {
   buttonLabel: string;
-  contentType: ContentFormType;
   children: React.ReactNode;
   errorsClientSide?: IErrorsListSet[];
   errorSubmitting?: string;
@@ -31,7 +29,6 @@ export const FormWrapper = (props: IProps) => {
     belowBody,
     buttonLabel,
     children,
-    contentType,
     errorsClientSide,
     errorSubmitting,
     guidelines,
@@ -66,15 +63,11 @@ export const FormWrapper = (props: IProps) => {
         {unsavedChangesDialog}
         <Flex
           as="form"
-          id={`${contentType}Form`}
           sx={{ width: '100%', flexDirection: 'column', gap: '1rem' }}
           onSubmit={handleSubmit}
         >
           <Card sx={{ backgroundColor: 'softblue' }}>
-            <Flex
-              data-cy={`${contentType}-title`}
-              sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
-            >
+            <Flex sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}>
               <Heading as="h1">{heading}</Heading>
               <Box ml="15px">
                 <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />

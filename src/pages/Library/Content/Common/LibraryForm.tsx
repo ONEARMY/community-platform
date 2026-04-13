@@ -2,10 +2,9 @@ import arrayMutators from 'final-form-arrays';
 import type { ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
-import { logger } from 'src/logger';
+import { useToast } from 'src/common/Toast';
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
@@ -27,11 +26,8 @@ interface LibraryFormProps {
 }
 
 export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
-  const navigate = useNavigate();
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
+  const toast = useToast();
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const initialValues = useMemo<ProjectFormData>(
     () =>
@@ -57,43 +53,34 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const headingText = id ? headings.edit : headings.create;
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
-    setIntentionalNavigation(true);
-    setSaveErrorMessage(undefined);
-    setIsSubmitting(true);
-    setIsSavingAsDraft(isDraft);
+    const promise = libraryService.upsert(id || null, values, isDraft);
 
-    try {
-      if (!isDraft) {
-        if (!values.category?.value) {
-          const error = 'Category is required';
-          setSaveErrorMessage(error);
-          throw new Error(error);
-        } else if (!values.coverImage?.id) {
-          const error = 'The Cover Image is required';
-          setSaveErrorMessage(error);
-          throw new Error(error);
-        }
-      }
+    toast.promise(promise, {
+      loading: isDraft ? 'Saving draft...' : 'Publishing project...',
+      success: (data) => {
+        return {
+          message: isDraft ? 'Draft saved!' : 'Project published!',
+          actionLink: {
+            href: `/library/${data.project.slug}`,
+            label: isDraft ? 'View draft' : 'View project',
+          },
+        };
+      },
+      error: (error) => {
+        console.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
 
-      const result = await libraryService.upsert(id || null, values, isDraft);
+    await promise;
 
-      setTimeout(() => {
-        navigate(`/library/${result.project.slug}`);
-      }, 100);
-    } catch (e) {
-      if (e.cause && e.message) {
-        setSaveErrorMessage(e.message);
-      }
-      logger.error(e);
-      setIsSubmitting(false);
-    } finally {
-      setIsSubmitting(false);
-    }
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
   };
 
   return (
     <Form<ProjectFormData>
-      onSubmit={(values) => onSubmit(values, false)}
+      onSubmit={async (values) => await onSubmit(values, false)}
       initialValues={initialValues}
       mutators={{
         ...arrayMutators,
@@ -115,31 +102,32 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
           </Flex>
         );
 
-        const errorsClientSide = transformLibraryErrors(errors, isSavingAsDraft);
+        const errorsClientSide = transformLibraryErrors(errors);
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();
+          setIsSubmittingDraft(true);
           await onSubmit(values, true);
+          setIsSubmittingDraft(false);
         };
 
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
         );
 
         return (
           <FormWrapper
             belowBody={belowBody}
             buttonLabel={buttons.publish}
-            contentType="research"
             errorsClientSide={errorsClientSide}
-            errorSubmitting={saveErrorMessage}
             guidelines={<LibraryPostingGuidelines />}
             handleSubmit={handleSubmit}
             handleSubmitDraft={handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
             heading={headingText}
             submitFailed={submitFailed}
-            submitting={submitting || isSubmitting}
+            submitting={submitting || isSubmittingDraft}
+            hideSubmittingMessage={true}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <Flex

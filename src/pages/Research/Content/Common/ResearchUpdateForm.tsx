@@ -2,12 +2,10 @@ import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
 import type { ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
-import { logger } from 'src/logger';
+import { useToast } from 'src/common/Toast/useToast';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
-import { fireConfetti } from 'src/utils/fireConfetti';
 import { FilesFields } from '../../../common/FormFields/FilesFields';
 import { buttons, headings, updateForm } from '../../labels';
 import { researchService } from '../../research.service';
@@ -23,11 +21,8 @@ interface IProps {
 }
 
 export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
-  const navigate = useNavigate();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
-  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const toast = useToast();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
 
   const initialValues = useMemo<ResearchUpdateFormData>(
     () =>
@@ -43,30 +38,29 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
   );
 
   const onSubmit = async (formData: ResearchUpdateFormData, isDraft = false) => {
-    if (isSaving) {
-      return;
-    }
-    setIsSaving(true);
-    setIntentionalNavigation(true);
-    setSaveErrorMessage(undefined);
+    const promise = researchService.upsertUpdate(research.id, id, formData, isDraft);
 
-    try {
-      const result = await researchService.upsertUpdate(research.id, id, formData, isDraft);
+    toast.promise(promise, {
+      loading: isDraft ? 'Saving draft...' : 'Publishing research update...',
+      success: (data) => {
+        return {
+          message: isDraft ? 'Draft saved!' : 'Research update published!',
+          actionLink: {
+            href: `/research/${research.slug}#update_${data.researchUpdate.id}`,
+            label: isDraft ? 'View draft' : 'View research update',
+          },
+        };
+      },
+      error: (error) => {
+        console.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
 
-      if (!isDraft) {
-        fireConfetti();
-      }
+    await promise;
 
-      if (result) {
-        setTimeout(() => {
-          navigate(`/research/${research.slug}#update_${result.researchUpdate.id}`);
-        }, 100);
-      }
-    } catch (error) {
-      setSaveErrorMessage(error.message);
-      logger.error(error);
-      setIsSaving(false);
-    }
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
   };
 
   const handleDelete = async () => {
@@ -88,6 +82,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
         initialValues={initialValues}
         render={({
           dirty,
+          form,
           handleSubmit,
           hasValidationErrors,
           errors,
@@ -98,12 +93,13 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
         }) => {
           const errorsClientSide = [errorSet(errors, updateForm)];
 
-          const handleSubmitDraft = () => onSubmit(values, true);
+          const handleSubmitDraft = async () => {
+            await onSubmit(values, true);
+            form.reset(values);
+          };
 
           const unsavedChangesDialog = (
-            <UnsavedChangesDialog
-              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
-            />
+            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
           );
 
           const sidebar = (
@@ -117,7 +113,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
                   }}
                   variant="destructive"
                   type="submit"
-                  disabled={isSaving || submitting}
+                  disabled={submitting}
                   sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
                 >
                   {buttons.deletion.text}
@@ -138,9 +134,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
           return (
             <FormWrapper
               buttonLabel={buttons.publish}
-              contentType="researchUpdate"
               errorsClientSide={errorsClientSide}
-              errorSubmitting={saveErrorMessage}
               handleSubmit={handleSubmit}
               handleSubmitDraft={handleSubmitDraft}
               hasValidationErrors={hasValidationErrors}
@@ -148,6 +142,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
               sidebar={sidebar}
               submitFailed={submitFailed}
               submitting={submitting}
+              hideSubmittingMessage={true}
               unsavedChangesDialog={unsavedChangesDialog}
             >
               <TitleField />

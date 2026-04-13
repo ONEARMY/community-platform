@@ -17,6 +17,7 @@ import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common';
 import { buttons, headings, researchForm } from '../../labels';
 import { researchService } from '../../research.service';
+import DeleteResearchButton from './DeleteResearchButton';
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField';
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
 import { ResearchTitleField } from './FormFields/ResearchTitleField';
@@ -156,6 +157,8 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
               </Button>
             )}
 
+            {research && <DeleteResearchButton research={research} />}
+
             {research?.updates && (
               <ResearchEditorOverview
                 updates={research?.updates
@@ -180,7 +183,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         return (
           <FormWrapper
             buttonLabel={buttons.publish}
-            contentType="research"
             errorsClientSide={errorsClientSide}
             guidelines={<ResearchPostingGuidelines />}
             handleSubmit={handleSubmit}

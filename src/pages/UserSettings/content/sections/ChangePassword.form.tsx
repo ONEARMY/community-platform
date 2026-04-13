@@ -1,11 +1,9 @@
 import { Accordion, Button, FieldInput } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
-import { useState } from 'react';
 import { Form } from 'react-final-form';
 import { PasswordField } from 'src/common/Form/PasswordField';
+import { useToast } from 'src/common/Toast/useToast';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
-import { UserContactError } from 'src/pages/User/contact/UserContactError';
 import { buttons, fields } from 'src/pages/UserSettings/labels';
 import { Flex } from 'theme-ui';
 import { accountService } from '../../services/account.service';
@@ -17,44 +15,24 @@ interface IFormValues {
 }
 
 export const ChangePasswordForm = () => {
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
+  const toast = useToast();
 
   const formId = 'changePassword';
 
   const onSubmit = async (values: IFormValues) => {
     const { oldPassword, newPassword } = values;
 
-    try {
-      const result = await accountService.changePassword(oldPassword, newPassword);
+    const promise = accountService.changePassword(oldPassword, newPassword);
 
-      if (!result.ok) {
-        const data = await result.json();
-
-        if (data.error) {
-          setSubmitResults({ type: 'error', message: data.error });
-        } else {
-          setSubmitResults({
-            type: 'error',
-            message: 'Oops, something went wrong!',
-          });
-        }
-
-        return;
-      }
-
-      setSubmitResults({
-        type: 'success',
-        message: FRIENDLY_MESSAGES['auth/password-changed'],
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    toast.promise(promise, {
+      loading: 'Changing your password...',
+      success: () => FRIENDLY_MESSAGES['auth/password-changed'],
+      error: (error) => `Error: ${error.message}`,
+    });
   };
 
   return (
     <Flex data-cy="changePasswordContainer" sx={{ flexDirection: 'column', gap: 2 }}>
-      <UserContactError submitResults={submitResults} />
-
       <Accordion
         title="Change Password"
         subtitle="Here you can change your password to a stronger one."

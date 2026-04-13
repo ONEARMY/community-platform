@@ -144,7 +144,6 @@ export const NewsForm = (props: IProps) => {
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[props.formAction]}
-            contentType="news"
             errorsClientSide={errorsClientSide}
             errorSubmitting={saveErrorMessage}
             guidelines={<NewsPostingGuidelines />}

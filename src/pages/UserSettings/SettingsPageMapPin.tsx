@@ -5,6 +5,7 @@ import type { ILatLng, MapPin } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Link, useNavigate } from 'react-router';
+import { useToast } from 'src/common/Toast';
 import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSettings/labels';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -12,17 +13,15 @@ import { getLocationData } from 'src/utils/getLocationData';
 import { Alert, Card, Flex, Heading, Text } from 'theme-ui';
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
 import { mapPinService } from '../Maps/map.service';
-import type { IFormNotification } from './content/SettingsFormNotifications';
-import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 
 export const SettingsPageMapPin = observer(() => {
   const [mapPin, setMapPin] = useState<MapPin | undefined>();
   const [previewMapPin, setPreviewMapPin] = useState<MapPin | undefined>();
   const [markerIcon, setMarkerIcon] = useState<DivIcon>();
-  const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const newMapRef = useRef<LeafletMap>(null);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const { profile, isComplete } = useProfileStore();
 
@@ -55,47 +54,33 @@ export const SettingsPageMapPin = observer(() => {
   }, []);
 
   const onSubmit = async (obj: { location: ILatLng }) => {
-    try {
-      const pinData = await getLocationData(obj.location);
-      const newPin = await profileService.upsertPin(pinData);
-      setMapPin(newPin);
-      setPreviewMapPin(undefined);
+    const pinData = await getLocationData(obj.location);
+    const promise = profileService.upsertPin(pinData);
 
-      setNotification({
-        message: mapForm.successfulSave,
-        icon: 'check',
-        show: true,
-        variant: 'success',
-      });
-    } catch (error) {
-      setNotification({
-        message: `Save Failed - ${error.message} `,
-        icon: 'close',
-        show: true,
-        variant: 'failure',
-      });
-    }
+    toast.promise(promise, {
+      loading: 'Saving your map pin...',
+      success: (newPin) => {
+        setMapPin(newPin);
+        setPreviewMapPin(undefined);
+
+        return 'Map pin saved!';
+      },
+      error: (error) => `Error: ${error.message}`,
+    });
   };
 
   const onSubmitDelete = async () => {
-    try {
-      await profileService.deletePin();
-      setMapPin(undefined);
+    const promise = profileService.deletePin();
+    toast.promise(promise, {
+      loading: 'Deleting your map pin...',
+      success: () => {
+        setMapPin(undefined);
+        setShowConfirmModal(false);
 
-      setNotification({
-        message: mapForm.successfulDelete,
-        icon: 'check',
-        show: true,
-        variant: 'success',
-      });
-    } catch (error) {
-      setNotification({
-        message: `Delete failed - ${error.message} `,
-        icon: 'close',
-        show: true,
-        variant: 'failure',
-      });
-    }
+        return 'Map pin deleted!';
+      },
+      error: (error) => `Error: ${error.message}`,
+    });
   };
 
   if (!profile) {
@@ -132,15 +117,9 @@ export const SettingsPageMapPin = observer(() => {
           id={formId}
           onSubmit={onSubmit}
           initialValues={initialValues}
-          render={({ values, errors, submitFailed, submitting, handleSubmit }) => {
+          render={({ values, submitting, handleSubmit }) => {
             return (
               <>
-                <SettingsFormNotifications
-                  errors={errors}
-                  notification={notification}
-                  submitFailed={submitFailed}
-                />
-
                 {!mapPin && (
                   <Text
                     variant="paragraph"

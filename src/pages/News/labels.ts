@@ -2,6 +2,11 @@ import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
   create: 'Publish',
+  deletion: {
+    text: 'Delete this news',
+    confirm: 'Delete',
+    message: 'Are you sure you want to delete this news?',
+  },
   draft: { create: 'Save as draft', update: 'Save to draft' },
   edit: 'Update',
 };

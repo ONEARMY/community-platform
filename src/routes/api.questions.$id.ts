@@ -13,17 +13,23 @@ import {
   conflictError,
   forbiddenError,
   methodNotAllowedError,
+  notFoundError,
+  unauthorizedError,
   validationError,
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const id = Number(params.id);
+
+  if (request.method === 'DELETE') {
+    return await deleteQuestion(request, id);
+  }
+
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id);
-
     const formData = await request.formData();
 
     const data = {
@@ -42,7 +48,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const currentQuestion = await new QuestionServiceServer(client).getById(id);
@@ -95,6 +101,54 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({ error: 'Error updating question' }, { headers, status: 500 });
   }
 };
+
+async function deleteQuestion(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      throw unauthorizedError();
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      throw validationError('User not found');
+    }
+
+    const question = await new QuestionServiceServer(client).getById(id);
+
+    if (!question) {
+      throw notFoundError('Question');
+    }
+
+    const isCreator = question.created_by === profile.id;
+
+    if (!isCreator && !hasAdminRights(profile)) {
+      throw forbiddenError();
+    }
+
+    await client
+      .from('questions')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    console.error('Delete question error:', error);
+    return Response.json({}, { status: 500, headers });
+  }
+}
 
 async function validateRequest(
   params: Params<string>,

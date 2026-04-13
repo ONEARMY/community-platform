@@ -1,3 +1,4 @@
+import { Button, ConfirmModal } from 'oa-components';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
@@ -31,7 +32,22 @@ export const QuestionForm = (props: IProps) => {
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const id = props?.id || null;
+  const isEdit = props.formAction === 'edit';
+
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setShowDeleteModal(false);
+    try {
+      await questionService.deleteQuestion(id);
+      window.location.assign('/questions');
+    } catch (e) {
+      setSaveErrorMessage(e.message || 'Error deleting question');
+    }
+  };
 
   const initialValues = useMemo<QuestionFormData>(
     () =>
@@ -78,68 +94,97 @@ export const QuestionForm = (props: IProps) => {
   };
 
   return (
-    <Form
-      data-testid={props['data-testid']}
-      onSubmit={(values) => onSubmit(values, false)}
-      initialValues={initialValues}
-      render={({
-        errors,
-        dirty,
-        handleSubmit,
-        hasValidationErrors,
-        submitFailed,
-        submitting,
-        submitSucceeded,
-        values,
-      }) => {
-        const errorsClientSide = [errorSet(errors, LABELS.fields)];
+    <>
+      <Form
+        data-testid={props['data-testid']}
+        onSubmit={(values) => onSubmit(values, false)}
+        initialValues={initialValues}
+        render={({
+          errors,
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          submitFailed,
+          submitting,
+          submitSucceeded,
+          values,
+        }) => {
+          const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = async (e: React.MouseEvent) => {
-          e.preventDefault();
-          await onSubmit(values, true);
-        };
+          const handleSubmitDraft = async (e: React.MouseEvent) => {
+            e.preventDefault();
+            await onSubmit(values, true);
+          };
 
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
-        );
-
-        const validate = composeValidators(
-          required,
-          minValue(QUESTION_MIN_TITLE_LENGTH),
-          endsWithQuestionMark(),
-        );
-
-        return (
-          <FormWrapper
-            buttonLabel={LABELS.buttons[props.formAction]}
-            contentType="questions"
-            errorsClientSide={errorsClientSide}
-            errorSubmitting={saveErrorMessage}
-            guidelines={<QuestionPostingGuidelines />}
-            handleSubmit={handleSubmit}
-            handleSubmitDraft={handleSubmitDraft}
-            hasValidationErrors={hasValidationErrors}
-            heading={LABELS.headings[props.formAction]}
-            submitFailed={submitFailed}
-            submitting={submitting || isSubmitting}
-            unsavedChangesDialog={unsavedChangesDialog}
-          >
-            <TitleField
-              placeholder={LABELS.fields.title.placeholder}
-              validate={validate}
-              title={LABELS.fields.title.title}
+          const unsavedChangesDialog = (
+            <UnsavedChangesDialog
+              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
             />
-            <QuestionDescriptionField />
-            <QuestionImagesField
+          );
+
+          const validate = composeValidators(
+            required,
+            minValue(QUESTION_MIN_TITLE_LENGTH),
+            endsWithQuestionMark(),
+          );
+
+          const sidebar = isEdit ? (
+            <Button
+              data-cy="delete"
+              onClick={(evt) => {
+                setShowDeleteModal(true);
+                evt.preventDefault();
+              }}
+              variant="destructive"
+              type="submit"
+              disabled={submitting || isSubmitting}
+              sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+            >
+              {LABELS.buttons.deletion.text}
+            </Button>
+          ) : null;
+
+          return (
+            <FormWrapper
+              buttonLabel={LABELS.buttons[props.formAction]}
               contentType="questions"
-              contentId={id}
-              maxImages={QUESTION_MAX_IMAGES}
-            />
-            <CategoryField type="questions" />
-            <TagsField title={LABELS.fields.tags.title} />
-          </FormWrapper>
-        );
-      }}
-    />
+              errorsClientSide={errorsClientSide}
+              errorSubmitting={saveErrorMessage}
+              guidelines={<QuestionPostingGuidelines />}
+              handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
+              hasValidationErrors={hasValidationErrors}
+              heading={LABELS.headings[props.formAction]}
+              sidebar={sidebar}
+              submitFailed={submitFailed}
+              submitting={submitting || isSubmitting}
+              unsavedChangesDialog={unsavedChangesDialog}
+            >
+              <TitleField
+                placeholder={LABELS.fields.title.placeholder}
+                validate={validate}
+                title={LABELS.fields.title.title}
+              />
+              <QuestionDescriptionField />
+              <QuestionImagesField
+                contentType="questions"
+                contentId={id}
+                maxImages={QUESTION_MAX_IMAGES}
+              />
+              <CategoryField type="questions" />
+              <TagsField title={LABELS.fields.tags.title} />
+            </FormWrapper>
+          );
+        }}
+      />
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message={LABELS.buttons.deletion.message}
+        confirmButtonText={LABELS.buttons.deletion.confirm}
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={handleDelete}
+        confirmVariant="destructive"
+      />
+    </>
   );
 };

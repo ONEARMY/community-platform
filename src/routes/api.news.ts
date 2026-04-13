@@ -65,7 +65,8 @@ export const loader = async ({ request }) => {
       { count: 'exact' },
     )
 
-    .eq('is_draft', false);
+    .eq('is_draft', false)
+    .or('deleted.eq.false,deleted.is.null');
 
   if (!isAdmin) {
     query = query.or(

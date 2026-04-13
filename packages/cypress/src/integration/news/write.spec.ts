@@ -202,4 +202,39 @@ describe('[News.Write]', () => {
     // Should check an admin can edit other's content
     // })
   });
+
+  describe('[Delete a news item]', () => {
+    it('[By Author]', () => {
+      const title = `${generateAlphaNumeric(8).toLowerCase()} Deletable news`;
+      const expectedSlug = title.replace(/\s/g, '-');
+
+      cy.visit('/news');
+      const user = users.admin;
+      cy.signIn(user.email, user.password);
+
+      cy.step('Create a news item to delete');
+      cy.visit('/news/create');
+      cy.get('[data-cy=field-title]', { timeout: 20000 });
+      cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
+      cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.addToMarkdownField('This news will be deleted.');
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.url().should('include', '/news/');
+
+      cy.step('Navigate to edit page');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(2000);
+
+      cy.step('Click delete button');
+      cy.get('[data-cy=delete]').click();
+
+      cy.step('Confirm deletion');
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+
+      cy.step('Redirected to news listing');
+      cy.url().should('include', '/news');
+      cy.contains(title).should('not.exist');
+    });
+  });
 });

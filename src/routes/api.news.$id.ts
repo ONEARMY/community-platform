@@ -20,10 +20,15 @@ import {
 import { convertToSlug } from 'src/utils/slug';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const id = Number(params.id);
+
+  if (request.method === 'DELETE') {
+    return await deleteNews(request, id);
+  }
+
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id);
     const formData = await request.formData();
     const data = {
       body: formData.get('body') as string,
@@ -89,6 +94,54 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({ error: 'Error updating news', status: 500 }, { status: 500 });
   }
 };
+
+async function deleteNews(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      throw unauthorizedError();
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      throw validationError('User not found');
+    }
+
+    const news = await new NewsServiceServer(client).getById(id);
+
+    if (!news) {
+      throw notFoundError('News');
+    }
+
+    const isCreator = news.created_by === profile.id;
+
+    if (!isCreator && !hasAdminRights(profile)) {
+      throw forbiddenError('Unauthorized');
+    }
+
+    await client
+      .from('news')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    console.error('Delete news error:', error);
+    return Response.json({}, { status: 500, headers });
+  }
+}
 
 async function validateRequest(
   params: Params<string>,

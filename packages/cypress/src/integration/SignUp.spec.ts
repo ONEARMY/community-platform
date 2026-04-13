@@ -44,7 +44,7 @@ describe('[User sign-up]', () => {
       cy.logout();
       cy.fillSignupForm(email, password);
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', FRIENDLY_MESSAGES['generic-error']);
+      cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['generic-error']).should('be.visible');
     });
   });
 

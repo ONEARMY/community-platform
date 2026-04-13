@@ -44,8 +44,6 @@ export const NewsPreviewEmailButton = (props: IProps) => {
       },
       duration: 10000,
     });
-
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // to avoid spam clicking
   };
 
   return (

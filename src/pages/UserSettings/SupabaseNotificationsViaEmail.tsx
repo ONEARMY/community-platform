@@ -26,8 +26,6 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   }, []);
 
   const onSubmit = async (values: DBNotificationsPreferences) => {
-    setIsLoading(true);
-
     const promise = notificationsPreferencesViaEmailService.setPreferences({
       ...values,
       userCode,
@@ -36,19 +34,16 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     toast.promise(promise, {
       loading: 'Saving your notification preferences...',
       success: () => {
-        refreshPreferences().finally(() => setIsLoading(false));
+        refreshPreferences();
         return form.saveNotificationPreferences;
       },
       error: (error) => {
-        setIsLoading(false);
         return `Error: ${error.message}`;
       },
     });
   };
 
   const onUnsubscribe = async () => {
-    setIsLoading(true);
-
     const promise = notificationsPreferencesViaEmailService.setUnsubscribe(
       userCode,
       initialValues?.preferences.id,
@@ -56,11 +51,10 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     toast.promise(promise, {
       loading: 'Unsubscribing...',
       success: () => {
-        refreshPreferences().finally(() => setIsLoading(false));
+        refreshPreferences();
         return form.saveNotificationPreferences;
       },
       error: (error) => {
-        setIsLoading(false);
         return `Error: ${error.message}`;
       },
     });

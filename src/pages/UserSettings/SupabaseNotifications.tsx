@@ -9,7 +9,7 @@ import { isUserContactable } from 'src/utils/helpers';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [initialValues, setInitialValues] = useState<DBNotificationsPreferences | null>(null);
   const toast = useToast();
 
@@ -26,36 +26,30 @@ export const SupabaseNotifications = observer(() => {
   }, []);
 
   const onSubmit = async (values: DBNotificationsPreferences) => {
-    setIsLoading(true);
-
     const promise = notificationsPreferencesService.setPreferences(values);
 
     toast.promise(promise, {
       loading: 'Saving your notification preferences...',
       success: () => {
-        refreshPreferences().finally(() => setIsLoading(false));
+        refreshPreferences();
         return form.saveNotificationPreferences;
       },
       error: (error) => {
-        setIsLoading(false);
         return `Error: ${error.message}`;
       },
     });
   };
 
   const onUnsubscribe = async () => {
-    setIsLoading(true);
-
     const promise = notificationsPreferencesService.setUnsubscribe(initialValues?.id);
 
     toast.promise(promise, {
       loading: 'Unsubscribing...',
       success: () => {
-        refreshPreferences().finally(() => setIsLoading(false));
+        refreshPreferences();
         return form.saveNotificationPreferences;
       },
       error: (error) => {
-        setIsLoading(false);
         return `Error: ${error.message}`;
       },
     });

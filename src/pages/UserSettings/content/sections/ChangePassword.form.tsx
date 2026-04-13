@@ -16,7 +16,6 @@ interface IFormValues {
 
 export const ChangePasswordForm = () => {
   const toast = useToast();
-
   const formId = 'changePassword';
 
   const onSubmit = async (values: IFormValues) => {

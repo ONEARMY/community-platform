@@ -30,7 +30,6 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
-    "downlevelIteration": true,
     "paths": { "*": ["./*"] }
   },
   "include": ["src/**/*", "types", "vite-env.d.ts"],

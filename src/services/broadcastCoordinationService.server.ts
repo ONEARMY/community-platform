@@ -6,19 +6,19 @@ import { NotificationsSupabaseServiceServer } from './notificationsSupabaseServi
 export class BroadcastCoordinationServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  news(news: DBNews, profile: DBProfile | null, request: Request, oldNews?: DBNews) {
-    const beforeCheck = oldNews ? !!oldNews.is_draft : true;
+  news(dbNews: DBNews, profile: DBProfile | null, request: Request, oldDBNews?: DBNews) {
+    const beforeCheck = oldDBNews ? !!oldDBNews.is_draft : true;
     const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
 
-    if (!news || !profile || news?.is_draft) {
+    if (!dbNews || !profile || dbNews?.is_draft) {
       return;
     }
 
-    if (beforeCheck && news.is_draft === false) {
-      new NotificationsSupabaseServiceServer(this.client).createNotificationsNews(news);
+    if (beforeCheck && dbNews.is_draft === false) {
+      new NotificationsSupabaseServiceServer(this.client).createNotificationsNews(dbNews);
 
       discordServiceServer.postWebhookRequest(
-        `📰 ${profile.username} has news: ${news.title}\n<${siteUrl}/news/${news.slug}>`,
+        `📰 ${profile.username} has news: ${dbNews.title}\n<${siteUrl}/news/${dbNews.slug}>`,
       );
     }
   }

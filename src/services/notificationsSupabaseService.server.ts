@@ -17,17 +17,7 @@ export class NotificationsSupabaseServiceServer {
   async getAllProfiles() {
     // Currently simplified to direct client request (and not a function) as not emailing all users yet
     try {
-      const response = await this.client.from('profiles').select(
-        `
-          id,
-          roles,
-          badges:profile_badges_relations(
-            profile_badges(id)
-          ),
-          email_content_reach:email_content_reach(*)
-        `,
-      );
-
+      const response = await this.client.from('profiles').select(`id`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -40,7 +30,6 @@ export class NotificationsSupabaseServiceServer {
       const response = await this.client.rpc('get_profiles_by_badge', {
         p_badge_id: badgeId,
       });
-
       return response.data;
     } catch (error) {
       console.error(error);
@@ -70,7 +59,7 @@ export class NotificationsSupabaseServiceServer {
 
   async createNotifications(
     notification: DBNotification,
-    subscriberIds: SubscribedUser[],
+    subscriberIds: Partial<SubscribedUser>[],
   ): Promise<void> {
     if (!subscriberIds) return;
 
@@ -85,7 +74,7 @@ export class NotificationsSupabaseServiceServer {
             source_content_type: notification.source_content_type,
             title: notification.title,
             triggered_by_id: notification.triggered_by_id,
-            owned_by_id: subscriber.profile_id,
+            owned_by_id: subscriber.profile_id!,
             is_read: false,
             tenant_id: process.env.TENANT_ID!,
           }),
@@ -163,25 +152,22 @@ export class NotificationsSupabaseServiceServer {
         content_type: 'news',
       });
 
-      // For in-app
-      let subscribers;
       if (!news.profile_badge) {
-        subscribers = await this.getAllProfiles();
+        const allSubscribers = await this.getAllProfiles();
+        const subscriberIds = allSubscribers?.map(({ id }) => ({ profile_id: id })) || [];
+        await this.createNotifications(dbNotification, subscriberIds);
       }
 
       if (news.profile_badge) {
-        subscribers = await this.getProfilesByBadgeId(news.profile_badge.id);
-      }
-      await this.createNotifications(dbNotification, subscribers);
+        const badgeSubscribers = await this.getProfilesByBadgeId(news.profile_badge.id);
+        await this.createNotifications(dbNotification, badgeSubscribers);
 
-      // For email
-      if (news.profile_badge) {
         switch (news.email_content_reach?.name) {
           case 'important': {
             // Exclude the no email people
-            const emailSubscribers = subscribers.filter(
+            const emailSubscribers = badgeSubscribers.filter(
               (subscriber) =>
-                subscriber.notifcation_preferences?.email_content_reach?.name !== 'none',
+                subscriber.notification_preferences?.email_content_reach?.name !== 'none',
             );
             await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
               emailSubscribers,
@@ -193,9 +179,9 @@ export class NotificationsSupabaseServiceServer {
           }
           case 'all': {
             // Include only the all email people
-            const emailSubscribers = subscribers.filter(
+            const emailSubscribers = badgeSubscribers.filter(
               (subscriber) =>
-                subscriber.notifcation_preferences?.email_content_reach?.name === 'all',
+                subscriber.notification_preferences?.email_content_reach?.name === 'all',
             );
             await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
               emailSubscribers,

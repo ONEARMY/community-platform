@@ -12,6 +12,7 @@ import { Flex } from 'theme-ui';
 import { buttons, headings, intro } from '../../labels';
 import { libraryService } from '../../library.service';
 import { transformLibraryErrors } from '../utils';
+import DeleteProjectButton from './DeleteProjectButton';
 import { LibraryCategoryField } from './LibraryCategory.field';
 import { LibraryDescriptionField } from './LibraryDescription.field';
 import { LibraryDifficultyField } from './LibraryDifficulty.field';
@@ -128,6 +129,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
             submitFailed={submitFailed}
             submitting={submitting || isSubmittingDraft}
             hideSubmittingMessage={true}
+            sidebar={<>{id && <DeleteProjectButton id={id} />}</>}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <Flex

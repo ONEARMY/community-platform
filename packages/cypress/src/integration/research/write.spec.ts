@@ -248,6 +248,15 @@ describe('[Research]', () => {
       cy.url().should('include', `/research/${slug}`);
       cy.contains(updatedDescription);
     });
+
+    it('[Delete button is visible]', () => {
+      cy.signIn(admin.email, admin.password);
+
+      cy.visit(editResearchUrl);
+
+      cy.step('Delete button should be visible to research author');
+      cy.get('[data-cy="Research: delete button"]').should('be.visible');
+    });
   });
 
   describe('[Displays draft updates for Author]', () => {

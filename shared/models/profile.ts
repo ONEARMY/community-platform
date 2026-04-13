@@ -290,6 +290,9 @@ export class NotificationDisplay {
       case 'newReply': {
         return `You have a new comment reply!`;
       }
+      case 'newNews': {
+        return notification.title;
+      }
       default: {
         return 'You have a new notification!';
       }
@@ -305,7 +308,7 @@ export class NotificationDisplay {
         return (notification.content as Comment).comment;
       }
       case 'news': {
-        return undefined;
+        return (notification.content as News).body;
       }
       default: {
         return '';

@@ -28,15 +28,8 @@ describe('[News.Write]', () => {
     cy.visit('/news/create');
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
-    cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
     cy.step('Can add draft news');
-    cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
-
-    cy.addToMarkdownField(initialNewsBodyOne);
-    cy.addToMarkdownField(initialNewsBodyTwo);
-    cy.addToMarkdownField(initialNewsBodyThree);
-
     cy.get('[data-cy=draft]').click();
     cy.wait(2000);
     cy.url().should('include', initialExpectedSlug);
@@ -49,20 +42,24 @@ describe('[News.Write]', () => {
 
     cy.step('Shows draft news');
     cy.get('[data-cy=draft-tag]').should('be.visible');
-    cy.contains(initialNewsBodyOne);
+    cy.contains(initialTitle);
 
-    cy.step('No notification generated yet')
+    cy.step('No notification generated yet for draft')
     cy.expectNoNewNotification()
 
-    cy.step('Submit news');
+    cy.step('Can update and publish news');
     cy.get('[data-cy=edit]').click();
+    cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+    cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
+
+    cy.addToMarkdownField(initialNewsBodyOne);
+    cy.addToMarkdownField(initialNewsBodyTwo);
+    cy.addToMarkdownField(initialNewsBodyThree);
 
     cy.selectTag(category, '[data-cy=category-select]');
     cy.selectTag(tag1, '[data-cy="tag-select"]');
     cy.selectTag(tag2, '[data-cy="tag-select"]');
-
-    // Should error as email content reach not set
-    // Set email content reach
+    cy.selectTag("Big update", '[data-cy=emailContentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);
@@ -166,6 +163,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.addToMarkdownField(content);
     cy.selectTag("PRO", '[data-cy=profileBadge-select]');
+    cy.selectTag("Big update", '[data-cy=emailContentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);

@@ -11,8 +11,6 @@ describe('[Notifications]', () => {
     cy.get('[data-cy=SupabaseNotifications-field-replies]').click();
     cy.get('[data-cy=SupabaseNotifications-field-research_updates]').invoke('prop', 'indeterminate', true);
     cy.get('[data-cy=SupabaseNotifications-field-research_updates]').click();
-    cy.get('[data-cy=SupabaseNotifications-field-news]').invoke('prop', 'indeterminate', true);
-    cy.get('[data-cy=SupabaseNotifications-field-news]').click();
 
     cy.get('[data-cy=save-notifications-preferences]').click();
 
@@ -20,7 +18,6 @@ describe('[Notifications]', () => {
     cy.get('[data-cy=SupabaseNotifications-field-comments]').invoke('prop', 'indeterminate', false);
     cy.get('[data-cy=SupabaseNotifications-field-replies]').invoke('prop', 'indeterminate', false);
     cy.get('[data-cy=SupabaseNotifications-field-research_updates]').invoke('prop', 'indeterminate', false);
-    cy.get('[data-cy=SupabaseNotifications-field-news]').invoke('prop', 'indeterminate', false);
 
     cy.step('Changing messaging updates preferences form');
     cy.get('[data-cy=messages-link]').contains('Stop receiving messages').click();
@@ -31,4 +28,6 @@ describe('[Notifications]', () => {
     cy.get('[data-cy=tab-Notifications]').click();
     cy.get('[data-cy=messages-link]').contains('Start receiving messages');
   });
+
+  // To do: Set up test with a badger account to see/set the news notification setting 
 });

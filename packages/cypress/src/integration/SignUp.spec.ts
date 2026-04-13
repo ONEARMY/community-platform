@@ -44,9 +44,7 @@ describe('[User sign-up]', () => {
       cy.logout();
       cy.fillSignupForm(email, password);
       cy.get('[data-cy=submit]').click();
-      cy.get('[data-cy="TextNotification: failure"]')
-        .contains(FRIENDLY_MESSAGES['generic-error'])
-        .should('be.visible');
+      cy.get('a[data-cy=toast-action-link]').should('contain', FRIENDLY_MESSAGES['generic-error']);
     });
   });
 
@@ -67,15 +65,11 @@ describe('[User sign-up]', () => {
 
       cy.step('Update Email');
       cy.get('[data-cy="accordionContainer"]').click({ multiple: true });
-      cy.get('[data-cy="changeEmailContainer"]')
-        .contains(`Current email address: ${email}`)
-        .should('be.visible');
+      cy.get('[data-cy="changeEmailContainer"]').contains(`Current email address: ${email}`).should('be.visible');
       cy.get('[data-cy="newEmail"]').clear().type(newEmail);
       cy.get('[data-cy="password"]').clear().type(password);
       cy.get('[data-cy="changeEmailSubmit"]').click();
-      cy.get('[data-cy="changeEmailContainer"')
-        .contains(FRIENDLY_MESSAGES['auth/email-changed'])
-        .should('be.visible');
+      cy.get('[data-cy="changeEmailContainer"').contains(FRIENDLY_MESSAGES['auth/email-changed']).should('be.visible');
 
       cy.step('Update Password');
       cy.get('[data-cy="accordionContainer"]').click({ multiple: true });
@@ -83,9 +77,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="newPassword"]').clear().type(newPassword);
       cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword);
       cy.get('[data-cy="changePasswordSubmit"]').click();
-      cy.get('[data-cy="changePasswordContainer"')
-        .contains(FRIENDLY_MESSAGES['auth/password-changed'])
-        .should('be.visible');
+      cy.get('[data-cy="changePasswordContainer"').contains(FRIENDLY_MESSAGES['auth/password-changed']).should('be.visible');
     });
   });
 });

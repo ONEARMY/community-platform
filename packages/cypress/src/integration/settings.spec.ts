@@ -74,7 +74,7 @@ describe('[Settings]', () => {
 
     cy.step("Can't save without required fields being populated");
     cy.get('[data-cy=save]').click();
-    cy.get('[data-cy=errors-container]').should('be.visible');
+    cy.contains('span').should('contain', 'This field is required');
     cy.get('[data-cy=CompleteProfileHeader]').should('be.visible');
 
     cy.step('Can set the required fields');

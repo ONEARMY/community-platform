@@ -418,6 +418,10 @@ describe('[Research]', () => {
       cy.get('[data-cy=remove-file]').should('exist');
 
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+
       cy.url().should('include', `${researchSlug}#update_`);
 
       cy.step('Edit update and replace media');
@@ -439,6 +443,11 @@ describe('[Research]', () => {
       cy.get('[data-cy=remove-file]').should('exist');
 
       cy.get('[data-cy=submit]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+
       cy.url().should('include', `${researchSlug}#update_`);
       cy.contains(updatedTitle);
       cy.contains(updatedDescription);

@@ -88,8 +88,7 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click({ force: true });
 
-  cy.get('[data-cy=errors-container]').should('not.exist');
-  cy.get('a[data-cy=toast-action-link]').should('contain', 'Profile updated!');
+  cy.contains('a[data-cy=toast-action-link]').should('contain', 'Profile updated!');
 });
 
 Cypress.Commands.add('setSettingVisitorPolicy', (policyText: string, details?: string) => {
@@ -287,7 +286,7 @@ Cypress.Commands.add('setProfileUsername', (username: string) => {
   cy.get('[data-cy=info-about').clear().type(`${username} profile`);
   cy.get('[data-cy=save]').click({ force: true });
   cy.get('[data-cy=errors-container]').should('not.exist');
-  cy.get('a[data-cy=toast-action-link]').should('contain', 'Username updated!');
+  cy.contains('a[data-cy=toast-action-link]', 'Username updated!').should('exist');
 });
 
 Cypress.Commands.add('signUpCompletedUser', (user?) => {

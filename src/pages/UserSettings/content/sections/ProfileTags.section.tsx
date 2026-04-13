@@ -16,7 +16,13 @@ export const ProfileTags = ({ typeName }: IProps) => {
 
   const renderTagsSelect = useCallback(
     ({ input }) => (
-      <ProfileTagsSelect value={input.value} onChange={(tags) => input.onChange(tags)} maxTotal={5} profileType={typeName} isForm />
+      <ProfileTagsSelect
+        value={input.value}
+        onChange={(tags) => input.onChange(tags)}
+        maxTotal={5}
+        profileType={typeName}
+        isForm
+      />
     ),
     [typeName],
   );

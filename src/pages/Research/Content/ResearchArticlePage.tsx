@@ -48,11 +48,16 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   }, [activeUser, research.author]);
 
   const isDeletable = useMemo(() => {
-    return !!activeUser && (hasAdminRights(activeUser) || research.author?.username === activeUser.username);
+    return (
+      !!activeUser &&
+      (hasAdminRights(activeUser) || research.author?.username === activeUser.username)
+    );
   }, [activeUser, research.author]);
 
   const sortedUpdates = useMemo(() => {
-    return research?.updates?.slice().sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    return research?.updates
+      ?.slice()
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, [research?.updates]);
 
   const handleDelete = async (research: ResearchItem) => {
@@ -156,7 +161,9 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         ))}
       </Flex>
 
-      <ClientOnly fallback={<></>}>{() => <ResearchEngagementSection research={research} />}</ClientOnly>
+      <ClientOnly fallback={<></>}>
+        {() => <ResearchEngagementSection research={research} />}
+      </ClientOnly>
 
       {isEditable && (
         <Flex sx={{ my: 4 }}>

@@ -18,12 +18,14 @@ const DeleteResearchButton = observer(({ research }: DeleteResearchButtonProps) 
   const toast = useToast();
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const isDeletable = useMemo(() => {
     return !!profile && (hasAdminRights(profile) || research.author?.username === profile.username);
   }, [profile, research.author]);
 
   const handleDelete = async (research: ResearchItem) => {
+    setIsDeleting(true);
     const promise = researchService.deleteResearch(research.id);
 
     toast.promise(promise, {
@@ -35,12 +37,14 @@ const DeleteResearchButton = observer(({ research }: DeleteResearchButtonProps) 
           label: research.title,
         });
         navigate('/research');
+        setIsDeleting(false);
         return {
           message: `Research deleted!`,
         };
       },
       error: (error) => {
         console.error(error);
+        setIsDeleting(false);
         return `Error: ${error.message}`;
       },
     });
@@ -56,7 +60,7 @@ const DeleteResearchButton = observer(({ research }: DeleteResearchButtonProps) 
         type="button"
         data-cy="Research: delete button"
         variant="destructive"
-        disabled={research?.deleted}
+        disabled={research?.deleted || isDeleting}
         sx={{ justifyContent: 'center' }}
         onClick={() => setShowDeleteModal(true)}
       >

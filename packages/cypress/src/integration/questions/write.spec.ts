@@ -61,6 +61,10 @@ describe('[Question]', () => {
       });
 
       cy.get('[data-cy=draft]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
+
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
 
       cy.step('Can get to drafts');
@@ -85,6 +89,9 @@ describe('[Question]', () => {
 
       cy.step('Submit question');
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
 
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
 
@@ -151,7 +158,7 @@ describe('[Question]', () => {
       cy.visit(`/questions/${question.slug}`);
       cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
 
-      cy.step('Admin can see the edit button on another user\'s question');
+      cy.step("Admin can see the edit button on another user's question");
       cy.get('[data-cy=edit]').should('be.visible');
 
       cy.step('Admin can access the edit page');

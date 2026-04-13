@@ -252,7 +252,7 @@ describe('[Research]', () => {
     it('[Delete button is visible]', () => {
       cy.signIn(admin.email, admin.password);
 
-      cy.visit(editResearchUrl);
+      cy.visit('/research/a-research-test-4/edit');
 
       cy.step('Delete button should be visible to research author');
       cy.get('[data-cy="Research: delete button"]').should('be.visible');
@@ -353,6 +353,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(finalUpdateTitle);
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
       cy.contains(finalUpdateTitle);
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist');
 

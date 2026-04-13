@@ -44,7 +44,7 @@ describe('[User sign-up]', () => {
       cy.logout();
       cy.fillSignupForm(email, password);
       cy.get('[data-cy=submit]').click();
-      cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['generic-error']).should('be.visible');
+      cy.get('[data-cy="TextNotification: failure"]').contains(FRIENDLY_MESSAGES['generic-error']).should('be.visible');
     });
   });
 

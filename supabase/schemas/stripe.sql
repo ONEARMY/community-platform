@@ -3,7 +3,9 @@ CREATE TABLE IF NOT EXISTS "public"."stripe_customers" (
     "auth_id" "uuid" NOT NULL,
     "stripe_customer_id" "text" NOT NULL,
     "tenant_id" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL
+    "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
+    CONSTRAINT "stripe_customers_auth_id_tenant_id_key" UNIQUE ("auth_id", "tenant_id"),
+    CONSTRAINT "stripe_customers_stripe_customer_id_key" UNIQUE ("stripe_customer_id")
 );
 
 CREATE INDEX "idx_stripe_customers_auth_id" ON "public"."stripe_customers" USING "btree" ("auth_id");

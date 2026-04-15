@@ -5,7 +5,9 @@ create table "public"."stripe_customers" (
   "tenant_id" text not null,
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   constraint "stripe_customers_pkey" primary key ("id"),
-  constraint "stripe_customers_auth_id_fkey" foreign key ("auth_id") references "auth"."users"("id") on update cascade on delete cascade
+  constraint "stripe_customers_auth_id_fkey" foreign key ("auth_id") references "auth"."users"("id") on update cascade on delete cascade,
+  constraint "stripe_customers_auth_id_tenant_id_key" unique ("auth_id", "tenant_id"),
+  constraint "stripe_customers_stripe_customer_id_key" unique ("stripe_customer_id")
 );
 
 create index "idx_stripe_customers_auth_id" on "public"."stripe_customers" using btree ("auth_id");

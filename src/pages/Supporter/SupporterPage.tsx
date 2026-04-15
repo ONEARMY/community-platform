@@ -22,15 +22,20 @@ type PageState = 'form' | 'checkout' | 'thank-you';
 export const SupporterPage = ({
   prices,
   isAuthenticated,
+  userEmail,
+  isAdmin,
 }: {
   prices: SupporterPrice[];
   isAuthenticated: boolean;
+  userEmail: string;
+  isAdmin: boolean;
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
 
-  // Preview mode: /supporter?step=login or ?step=create
+  // Preview mode: /supporter?step=login or ?step=create (admin only)
   const [previewMode] = useState(() => {
+    if (!isAdmin) return null;
     const step = new URLSearchParams(window.location.search).get('step');
     return step === 'login' || step === 'create' ? step : null;
   });
@@ -39,7 +44,7 @@ export const SupporterPage = ({
   const [currency, setCurrency] = useState('');
   const [interval, setInterval] = useState<Interval>('month');
   const [name, setName] = useState(previewMode ? 'Test User' : '');
-  const [email, setEmail] = useState(previewMode ? 'user@example.com' : '');
+  const [email, setEmail] = useState(previewMode ? 'user@example.com' : userEmail);
   const [amount, setAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,17 +69,21 @@ export const SupporterPage = ({
     }
   }, [currencies, currency]);
 
-  const availableAmounts = useMemo(
+  const availablePrices = useMemo(
     () =>
       prices
         .filter((p) => p.currency === currency && p.interval === interval)
-        .map((p) => p.unitAmount)
-        .filter((v, i, arr) => arr.indexOf(v) === i)
-        .sort((a, b) => a - b),
+        .sort((a, b) => a.unitAmount - b.unitAmount),
     [prices, currency, interval],
   );
 
+  const availableAmounts = useMemo(
+    () => availablePrices.map((p) => p.unitAmount),
+    [availablePrices],
+  );
+
   const selectedAmount = availableAmounts.includes(amount) ? amount : availableAmounts[0] || 0;
+  const selectedPriceId = availablePrices.find((p) => p.unitAmount === selectedAmount)?.id || null;
   const symbol = CURRENCY_SYMBOLS[currency] || currency.toUpperCase();
 
   useEffect(() => {
@@ -105,9 +114,7 @@ export const SupporterPage = ({
     setError(null);
 
     const result = await stripeService.createElementsSubscription({
-      currency,
-      interval,
-      amount: selectedAmount,
+      priceId: selectedPriceId!,
       name,
       email,
     });

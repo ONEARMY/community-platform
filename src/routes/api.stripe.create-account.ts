@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
-import { authServiceServer } from 'src/services/authService.server';
+import { AuthServiceServer } from 'src/services/authService.server';
 import { stripeServiceServer } from 'src/services/stripeService.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -28,24 +28,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const adminClient = createSupabaseAdminServerClient();
-    const tenantId = process.env.TENANT_ID!;
-
-    const baseUsername = email
-      .split('@')[0]
-      .replace(/[^a-zA-Z0-9_-]/g, '')
-      .slice(0, 20);
-    let username = baseUsername;
-    let suffix = 1;
-    while (!(await authServiceServer.isUsernameAvailable(username, adminClient))) {
-      username = `${baseUsername}${suffix}`;
-      suffix++;
+    const tenantId = process.env.TENANT_ID;
+    if (!tenantId) {
+      return Response.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
     const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
-      user_metadata: { username },
     });
 
     if (createError) {
@@ -59,7 +50,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Failed to create account.' }, { status: 500 });
     }
 
-    await authServiceServer.createUserProfile({ user: newUser.user, username }, adminClient);
+    const authService = new AuthServiceServer(adminClient);
+    await authService.createUserProfile({ user: newUser.user });
 
     await stripeServiceServer.linkCustomerToAuthUser(
       stripeCustomerId,

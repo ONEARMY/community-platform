@@ -13,12 +13,19 @@ export const getSecret = async (name: string): Promise<string> => {
   if (cached) return cached;
 
   const client = createSupabaseAdminServerClient();
-  const { data, error } = await client.rpc('read_secret', { secret_name: prefixedName });
+  const { data } = await client.rpc('read_secret', { secret_name: prefixedName });
 
-  if (error || !data) {
-    throw new Error(`Secret "${prefixedName}" not found in vault`);
+  if (data) {
+    cache.set(prefixedName, data);
+    return data;
   }
 
-  cache.set(prefixedName, data);
-  return data;
+  // Fall back to environment variable (e.g. from .env.local) for local dev
+  const envValue = process.env[name];
+  if (envValue) {
+    cache.set(prefixedName, envValue);
+    return envValue;
+  }
+
+  throw new Error(`Secret "${prefixedName}" not found in vault or environment`);
 };

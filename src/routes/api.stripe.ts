@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 import { stripeServiceServer } from '../services/stripeService.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -46,10 +46,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const { client, headers } = createSupabaseServerClient(request);
-  const tenantId = process.env.TENANT_ID!;
+  const tenantId = process.env.TENANT_ID;
+  if (!tenantId) {
+    return Response.json({ error: 'Server configuration error' }, { status: 500 });
+  }
 
   const body = await request.json();
-  const { action: actionType, currency, interval, amount, name, email } = body;
+  const { action: actionType, priceId, name, email } = body;
 
   const claims = await client.auth.getClaims();
   const isAuthenticated = !!claims.data?.claims;
@@ -61,11 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     if (actionType === 'elements_subscription') {
-      if (!currency || !interval || !amount) {
-        return Response.json(
-          {},
-          { headers, status: 400, statusText: 'currency, interval, and amount are required' },
-        );
+      if (!priceId) {
+        return Response.json({}, { headers, status: 400, statusText: 'priceId is required' });
       }
 
       const publishableKey = await getSecret('STRIPE_PUBLISHABLE_KEY');
@@ -78,13 +78,32 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         if (!authUser.user?.email) {
           return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
         }
-        customerId = await stripeServiceServer.getOrCreateCustomer(
+
+        const existingCustomerId = await stripeServiceServer.getCustomerByAuthId(
           claims.data!.claims!.sub,
-          authUser.user.email,
-          tenantId,
           client,
         );
-        updateUserActivity(client, claims.data!.claims!.sub);
+        if (existingCustomerId) {
+          const existingSub = await stripeServiceServer.getSubscription(existingCustomerId);
+          if (existingSub) {
+            return Response.json(
+              {
+                error:
+                  'You already have an active subscription. Manage it from your Settings page.',
+              },
+              { headers, status: 409 },
+            );
+          }
+          customerId = existingCustomerId;
+        } else {
+          customerId = await stripeServiceServer.createCustomer(
+            claims.data!.claims!.sub,
+            authUser.user.email,
+            tenantId,
+            client,
+          );
+        }
+        new ProfileServiceServer(client).updateUserActivity(claims.data!.claims!.sub);
       } else {
         if (!email) {
           return Response.json(
@@ -98,12 +117,30 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         });
         accountExists = Array.isArray(existingUser) && existingUser.length > 0;
 
+        if (accountExists && existingUser) {
+          const userId = existingUser[0].id;
+          const existingCustomerId = await stripeServiceServer.getCustomerByAuthId(userId, client);
+          if (existingCustomerId) {
+            const existingSub = await stripeServiceServer.getSubscription(existingCustomerId);
+            if (existingSub) {
+              return Response.json(
+                {
+                  error:
+                    'This email already has an active subscription. Please sign in to manage it.',
+                },
+                { headers, status: 409 },
+              );
+            }
+          }
+        }
+
         customerId = await stripeServiceServer.createGuestCustomer(email, name);
       }
 
       const clientSecret = await stripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
-        { currency, interval, amount, name, email },
+        priceId,
+        name,
       );
 
       return Response.json(

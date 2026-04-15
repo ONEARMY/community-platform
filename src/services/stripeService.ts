@@ -19,9 +19,7 @@ const getSubscriptionStatus = async (): Promise<SubscriptionStatus | null> => {
 };
 
 type ElementsSubscriptionParams = {
-  currency: string;
-  interval: 'month' | 'year';
-  amount: number;
+  priceId: string;
   name: string;
   email: string;
 };

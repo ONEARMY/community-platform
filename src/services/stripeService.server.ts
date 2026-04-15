@@ -3,6 +3,7 @@ import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
 
 let stripeInstance: Stripe | null = null;
+let cachedProductIds: string[] | null = null;
 
 const getStripe = async (): Promise<Stripe> => {
   if (stripeInstance) return stripeInstance;
@@ -38,17 +39,12 @@ const getAuthIdByStripeCustomerId = async (
   return data?.auth_id || null;
 };
 
-const getOrCreateCustomer = async (
+const createCustomer = async (
   authUserId: string,
   email: string,
   tenantId: string,
   client: SupabaseClient,
 ): Promise<string> => {
-  const existingCustomerId = await getCustomerByAuthId(authUserId, client);
-  if (existingCustomerId) {
-    return existingCustomerId;
-  }
-
   const stripe = await getStripe();
   const customer = await stripe.customers.create({
     email,
@@ -67,24 +63,31 @@ const getOrCreateCustomer = async (
   return customer.id;
 };
 
-type SubscriptionParams = {
-  currency: string;
-  interval: 'month' | 'year';
-  amount: number;
-  name?: string;
-  email?: string;
+const getOrCreateCustomer = async (
+  authUserId: string,
+  email: string,
+  tenantId: string,
+  client: SupabaseClient,
+): Promise<string> => {
+  const existingCustomerId = await getCustomerByAuthId(authUserId, client);
+  if (existingCustomerId) {
+    return existingCustomerId;
+  }
+  return createCustomer(authUserId, email, tenantId, client);
 };
 
 const getProducts = async (): Promise<string[]> => {
-  const stripe = await getStripe();
+  if (cachedProductIds) return cachedProductIds;
 
+  const stripe = await getStripe();
   const products = await stripe.products.list({ active: true, limit: 100 });
 
   if (!products.data.length) {
     throw new Error('No active Stripe products found');
   }
 
-  return products.data.map((p) => p.id);
+  cachedProductIds = products.data.map((p) => p.id);
+  return cachedProductIds;
 };
 
 export type SupporterPrice = {
@@ -123,45 +126,18 @@ const getPrices = async (): Promise<SupporterPrice[]> => {
 
 const createSubscriptionWithPaymentIntent = async (
   customerId: string,
-  params: SubscriptionParams,
+  priceId: string,
+  name?: string,
 ): Promise<string> => {
   const stripe = await getStripe();
 
-  const productIds = await getProducts();
-  const productId = productIds[0];
-
-  // Update customer with name/email if provided
-  if (params.name || params.email) {
-    await stripe.customers.update(customerId, {
-      ...(params.name && { name: params.name }),
-      ...(params.email && { email: params.email }),
-    });
+  if (name) {
+    await stripe.customers.update(customerId, { name });
   }
-
-  // Find an existing price matching currency/interval/amount, or create one
-  const existingPrices = await stripe.prices.list({
-    product: productId,
-    active: true,
-    currency: params.currency.toLowerCase(),
-    limit: 100,
-  });
-
-  const matchingPrice = existingPrices.data.find(
-    (p) => p.unit_amount === params.amount && p.recurring?.interval === params.interval,
-  );
-
-  const price =
-    matchingPrice ??
-    (await stripe.prices.create({
-      unit_amount: params.amount,
-      currency: params.currency.toLowerCase(),
-      recurring: { interval: params.interval },
-      product: productId,
-    }));
 
   const subscription = await stripe.subscriptions.create({
     customer: customerId,
-    items: [{ price: price.id }],
+    items: [{ price: priceId }],
     payment_behavior: 'default_incomplete',
     expand: ['latest_invoice'],
   });
@@ -229,6 +205,12 @@ const updateSupporterStatus = async (
 
 const createGuestCustomer = async (email: string, name?: string): Promise<string> => {
   const stripe = await getStripe();
+
+  const existing = await stripe.customers.list({ email, limit: 1 });
+  if (existing.data.length > 0) {
+    return existing.data[0].id;
+  }
+
   const customer = await stripe.customers.create({
     email,
     ...(name && { name }),
@@ -261,18 +243,36 @@ const linkCustomerToAuthUser = async (
   await stripe.customers.update(stripeCustomerId, {
     metadata: { supabase_user_id: authId, tenant_id: tenantId },
   });
-  await client.from('stripe_customers').insert({
-    auth_id: authId,
-    stripe_customer_id: stripeCustomerId,
-    tenant_id: tenantId,
-  });
+  await client.from('stripe_customers').upsert(
+    {
+      auth_id: authId,
+      stripe_customer_id: stripeCustomerId,
+      tenant_id: tenantId,
+    },
+    { onConflict: 'auth_id,tenant_id' },
+  );
+};
+
+const getAuthIdByStripeCustomerEmail = async (
+  stripeCustomerId: string,
+  client: SupabaseClient,
+): Promise<string | null> => {
+  const customer = await getStripeCustomer(stripeCustomerId);
+  if (!customer?.email) return null;
+
+  const { data } = await client.rpc('get_user_id_by_email', { email: customer.email });
+  if (!Array.isArray(data) || data.length === 0) return null;
+
+  return data[0].id;
 };
 
 export const stripeServiceServer = {
   constructWebhookEvent,
   createBillingPortalSession,
+  createCustomer,
   createGuestCustomer,
   createSubscriptionWithPaymentIntent,
+  getAuthIdByStripeCustomerEmail,
   getAuthIdByStripeCustomerId,
   getCustomerByAuthId,
   getOrCreateCustomer,

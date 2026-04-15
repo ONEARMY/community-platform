@@ -23,7 +23,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const adminClient = createSupabaseAdminServerClient();
-    const tenantId = process.env.TENANT_ID!;
+    const tenantId = process.env.TENANT_ID;
+    if (!tenantId) {
+      return Response.json({ error: 'Server configuration error' }, { status: 500 });
+    }
 
     const { data: signInData, error: signInError } = await adminClient.auth.signInWithPassword({
       email,

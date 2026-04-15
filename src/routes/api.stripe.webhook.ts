@@ -35,9 +35,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const customerId = subscription.customer as string;
         const isActive = subscription.status === 'active' || subscription.status === 'trialing';
 
-        const authId = await stripeServiceServer.getAuthIdByStripeCustomerId(customerId, client);
+        let authId = await stripeServiceServer.getAuthIdByStripeCustomerId(customerId, client);
         if (!authId) {
-          console.error('Stripe customer not found:', customerId);
+          // Guest checkout: try matching by email and auto-link
+          authId = await stripeServiceServer.getAuthIdByStripeCustomerEmail(customerId, client);
+          if (authId) {
+            const tenantId = process.env.TENANT_ID;
+            if (tenantId) {
+              await stripeServiceServer.linkCustomerToAuthUser(
+                customerId,
+                authId,
+                tenantId,
+                client,
+              );
+            }
+          }
+        }
+        if (!authId) {
+          console.warn('Stripe customer not linked to any user:', customerId);
           break;
         }
 
@@ -49,13 +64,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
 
-        const authId = await stripeServiceServer.getAuthIdByStripeCustomerId(customerId, client);
+        let authId = await stripeServiceServer.getAuthIdByStripeCustomerId(customerId, client);
         if (!authId) {
-          console.error('Stripe customer not found:', customerId);
+          authId = await stripeServiceServer.getAuthIdByStripeCustomerEmail(customerId, client);
+        }
+        if (!authId) {
+          console.warn('Stripe customer not linked to any user:', customerId);
           break;
         }
 
         await stripeServiceServer.updateSupporterStatus(authId, false, client);
+        break;
+      }
+
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object;
+        const customerId = invoice.customer as string;
+        console.warn('Invoice payment failed for customer:', customerId, 'invoice:', invoice.id);
         break;
       }
 

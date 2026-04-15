@@ -19,6 +19,7 @@ export const SupporterForm = () => {
     setName,
     email,
     setEmail,
+    isAuthenticated,
     isLoading,
     error,
     onSupport,
@@ -194,6 +195,7 @@ export const SupporterForm = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
+              disabled={isAuthenticated}
               sx={{
                 border: '1px solid',
                 borderColor: 'offWhite',
@@ -201,6 +203,7 @@ export const SupporterForm = () => {
                 px: 3,
                 py: 3,
                 bg: 'background',
+                opacity: isAuthenticated ? 0.7 : 1,
                 '&:focus': { outline: 'none', borderColor: 'green' },
               }}
             />
@@ -212,7 +215,7 @@ export const SupporterForm = () => {
             type="button"
             variant="primary"
             onClick={onSupport}
-            disabled={isLoading || !selectedAmount}
+            disabled={isLoading || !selectedAmount || !name.trim() || !email.trim()}
           >
             {isLoading
               ? 'Processing...'

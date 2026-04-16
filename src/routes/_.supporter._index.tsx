@@ -6,8 +6,7 @@ import Main from 'src/pages/common/Layout/Main';
 import { SupporterPage } from 'src/pages/Supporter/SupporterPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import type { SupporterPrice } from 'src/services/stripeService.server';
-import { stripeServiceServer } from 'src/services/stripeService.server';
+import { StripeServiceServer, type SupporterPrice } from 'src/services/stripeService.server';
 import { Flex, Heading, Text } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -36,7 +35,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   try {
-    const prices = await stripeServiceServer.getPrices();
+    const stripeService = new StripeServiceServer(client);
+    const prices = await stripeService.getPrices();
     return Response.json({ prices, isAuthenticated, userEmail, isAdmin });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);

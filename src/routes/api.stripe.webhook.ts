@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
-import { stripeServiceServer } from 'src/services/stripeService.server';
+import { StripeServiceServer } from 'src/services/stripeService.server';
 import type Stripe from 'stripe';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -16,16 +16,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return new Response('No signature', { status: 400 });
   }
 
+  const client = createSupabaseAdminServerClient();
+  const stripeService = new StripeServiceServer(client);
+
   let event: Stripe.Event;
   try {
     const webhookSecret = await getSecret('STRIPE_WEBHOOK_SECRET');
-    event = await stripeServiceServer.constructWebhookEvent(body, signature, webhookSecret);
+    event = await stripeService.constructWebhookEvent(body, signature, webhookSecret);
   } catch (error) {
     console.error('Webhook signature verification failed:', error);
     return new Response('Invalid signature', { status: 400 });
   }
-
-  const client = createSupabaseAdminServerClient();
 
   try {
     switch (event.type) {
@@ -33,21 +34,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
-        const isActive = subscription.status === 'active' || subscription.status === 'trialing';
+        const isActive = subscription.status === 'active';
 
-        let authId = await stripeServiceServer.getAuthIdByStripeCustomerId(customerId, client);
+        let authId = await stripeService.getAuthIdByStripeCustomerId(customerId);
         if (!authId) {
           // Guest checkout: try matching by email and auto-link
-          authId = await stripeServiceServer.getAuthIdByStripeCustomerEmail(customerId, client);
+          authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
           if (authId) {
             const tenantId = process.env.TENANT_ID;
             if (tenantId) {
-              await stripeServiceServer.linkCustomerToAuthUser(
-                customerId,
-                authId,
-                tenantId,
-                client,
-              );
+              await stripeService.linkCustomerToAuthUser(customerId, authId, tenantId);
             }
           }
         }
@@ -56,7 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           break;
         }
 
-        await stripeServiceServer.updateSupporterStatus(authId, isActive, client);
+        await stripeService.updateSupporterStatus(authId, isActive);
         break;
       }
 
@@ -64,16 +60,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
 
-        let authId = await stripeServiceServer.getAuthIdByStripeCustomerId(customerId, client);
+        let authId = await stripeService.getAuthIdByStripeCustomerId(customerId);
         if (!authId) {
-          authId = await stripeServiceServer.getAuthIdByStripeCustomerEmail(customerId, client);
+          authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
         }
         if (!authId) {
           console.warn('Stripe customer not linked to any user:', customerId);
           break;
         }
 
-        await stripeServiceServer.updateSupporterStatus(authId, false, client);
+        await stripeService.updateSupporterStatus(authId, false);
         break;
       }
 

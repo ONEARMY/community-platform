@@ -1,8 +1,9 @@
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
-import { stripeServiceServer } from '../services/stripeService.server';
+import { StripeServiceServer } from '../services/stripeService.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -13,14 +14,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const customerId = await stripeServiceServer.getCustomerByAuthId(claims.data.claims.sub, client);
+  const stripeService = new StripeServiceServer(client);
+  const customerId = await stripeService.getCustomerByAuthId(claims.data.claims.sub);
 
   if (!customerId) {
     return Response.json({ hasSubscription: false }, { headers, status: 200 });
   }
 
   try {
-    const subscription = await stripeServiceServer.getSubscription(customerId);
+    const subscription = await stripeService.getSubscription(customerId);
     return Response.json(
       {
         hasSubscription: !!subscription,
@@ -62,6 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({}, { headers, status: 401 });
   }
 
+  const stripeService = new StripeServiceServer(client);
+
   try {
     if (actionType === 'elements_subscription') {
       if (!priceId) {
@@ -79,28 +83,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
         }
 
-        const existingCustomerId = await stripeServiceServer.getCustomerByAuthId(
+        const existingCustomerId = await stripeService.getCustomerByAuthId(
           claims.data!.claims!.sub,
-          client,
         );
         if (existingCustomerId) {
-          const existingSub = await stripeServiceServer.getSubscription(existingCustomerId);
+          const existingSub = await stripeService.getSubscription(existingCustomerId);
           if (existingSub) {
             return Response.json(
               {
-                error:
-                  'You already have an active subscription. Manage it from your Settings page.',
+                error: FRIENDLY_MESSAGES['generic-error'],
               },
               { headers, status: 409 },
             );
           }
           customerId = existingCustomerId;
         } else {
-          customerId = await stripeServiceServer.createCustomer(
+          customerId = await stripeService.createCustomer(
             claims.data!.claims!.sub,
             authUser.user.email,
             tenantId,
-            client,
           );
         }
         new ProfileServiceServer(client).updateUserActivity(claims.data!.claims!.sub);
@@ -119,14 +120,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
         if (accountExists && existingUser) {
           const userId = existingUser[0].id;
-          const existingCustomerId = await stripeServiceServer.getCustomerByAuthId(userId, client);
+          const existingCustomerId = await stripeService.getCustomerByAuthId(userId);
           if (existingCustomerId) {
-            const existingSub = await stripeServiceServer.getSubscription(existingCustomerId);
+            const existingSub = await stripeService.getSubscription(existingCustomerId);
             if (existingSub) {
               return Response.json(
                 {
-                  error:
-                    'This email already has an active subscription. Please sign in to manage it.',
+                  error: FRIENDLY_MESSAGES['generic-error'],
                 },
                 { headers, status: 409 },
               );
@@ -134,10 +134,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           }
         }
 
-        customerId = await stripeServiceServer.createGuestCustomer(email, name);
+        customerId = await stripeService.createGuestCustomer(email, name);
       }
 
-      const clientSecret = await stripeServiceServer.createSubscriptionWithPaymentIntent(
+      const clientSecret = await stripeService.createSubscriptionWithPaymentIntent(
         customerId,
         priceId,
         name,
@@ -154,17 +154,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
     }
 
-    const customerId = await stripeServiceServer.getOrCreateCustomer(
+    const customerId = await stripeService.getOrCreateCustomer(
       claims.data!.claims!.sub,
       authUser.user.email,
       tenantId,
-      client,
     );
 
     const origin = new URL(request.url).origin;
 
     if (actionType === 'portal') {
-      const portalUrl = await stripeServiceServer.createBillingPortalSession(
+      const portalUrl = await stripeService.createBillingPortalSession(
         customerId,
         `${origin}/settings`,
       );

@@ -1,7 +1,8 @@
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { AuthServiceServer } from 'src/services/authService.server';
-import { stripeServiceServer } from 'src/services/stripeService.server';
+import { StripeServiceServer } from 'src/services/stripeService.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
@@ -22,12 +23,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Password must be at least 6 characters.' }, { status: 400 });
     }
 
-    const customer = await stripeServiceServer.getStripeCustomer(stripeCustomerId);
+    const adminClient = createSupabaseAdminServerClient();
+    const stripeService = new StripeServiceServer(adminClient);
+
+    const customer = await stripeService.getStripeCustomer(stripeCustomerId);
     if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }
 
-    const adminClient = createSupabaseAdminServerClient();
     const tenantId = process.env.TENANT_ID;
     if (!tenantId) {
       return Response.json({ error: 'Server configuration error' }, { status: 500 });
@@ -41,10 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (createError) {
       if (createError.message?.includes('already been registered')) {
-        return Response.json(
-          { error: 'An account with this email already exists. Please sign in instead.' },
-          { status: 409 },
-        );
+        return Response.json({ error: FRIENDLY_MESSAGES['generic-error'] }, { status: 409 });
       }
       console.error('Error creating user:', createError);
       return Response.json({ error: 'Failed to create account.' }, { status: 500 });
@@ -53,14 +53,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const authService = new AuthServiceServer(adminClient);
     await authService.createUserProfile({ user: newUser.user });
 
-    await stripeServiceServer.linkCustomerToAuthUser(
-      stripeCustomerId,
-      newUser.user.id,
-      tenantId,
-      adminClient,
-    );
+    await stripeService.linkCustomerToAuthUser(stripeCustomerId, newUser.user.id, tenantId);
 
-    await stripeServiceServer.updateSupporterStatus(newUser.user.id, true, adminClient);
+    await stripeService.updateSupporterStatus(newUser.user.id, true);
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {

@@ -177,8 +177,16 @@ export class StripeServiceServer {
     return stripe.webhooks.constructEvent(body, signature, secret);
   }
 
-  async updateSupporterStatus(authId: string, isSupporter: boolean): Promise<void> {
-    await this.client.from('profiles').update({ is_supporter: isSupporter }).eq('auth_id', authId);
+  async updateSupporterStatus(
+    authId: string,
+    isSupporter: boolean,
+    tenantId: string,
+  ): Promise<void> {
+    await this.client
+      .from('profiles')
+      .update({ is_supporter: isSupporter })
+      .eq('auth_id', authId)
+      .eq('tenant_id', tenantId);
   }
 
   async createGuestCustomer(email: string, name?: string): Promise<string> {

@@ -28,6 +28,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return new Response('Invalid signature', { status: 400 });
   }
 
+  const tenantId = process.env.TENANT_ID;
+
   try {
     switch (event.type) {
       case 'customer.subscription.created':
@@ -40,11 +42,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         if (!authId) {
           // Guest checkout: try matching by email and auto-link
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
-          if (authId) {
-            const tenantId = process.env.TENANT_ID;
-            if (tenantId) {
-              await stripeService.linkCustomerToAuthUser(customerId, authId, tenantId);
-            }
+          if (authId && tenantId) {
+            await stripeService.linkCustomerToAuthUser(customerId, authId, tenantId);
           }
         }
         if (!authId) {
@@ -52,7 +51,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           break;
         }
 
-        await stripeService.updateSupporterStatus(authId, isActive);
+        if (tenantId) {
+          await stripeService.updateSupporterStatus(authId, isActive, tenantId);
+        }
         break;
       }
 
@@ -69,7 +70,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           break;
         }
 
-        await stripeService.updateSupporterStatus(authId, false);
+        if (tenantId) {
+          await stripeService.updateSupporterStatus(authId, false, tenantId);
+        }
         break;
       }
 

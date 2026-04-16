@@ -41,7 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     await stripeService.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
 
-    await stripeService.updateSupporterStatus(signInData.user.id, true);
+    await stripeService.updateSupporterStatus(signInData.user.id, true, tenantId);
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {

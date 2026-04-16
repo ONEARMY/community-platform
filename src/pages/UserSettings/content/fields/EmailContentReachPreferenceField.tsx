@@ -1,5 +1,5 @@
 import { Select } from 'oa-components';
-import { EmailContentReach, SelectValue } from 'oa-shared';
+import type { SelectValue } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Field } from 'react-final-form';
 import { emailContentReachService } from 'src/services/emailContentReachService';
@@ -11,13 +11,8 @@ export const EmailContentReachPreferenceField = () => {
 
   useEffect(() => {
     const fetchEmailContentReach = async () => {
-      const emailContentReach = await emailContentReachService.getAll();
-      if (emailContentReach) {
-        const fieldOptions = emailContentReach.map((reach) => {
-          return EmailContentReach.toNotificationsFormField(reach);
-        });
-        setOptions(fieldOptions as SelectValue[]);
-      }
+      const emailContentReach = await emailContentReachService.getAllAsSelectValue();
+      emailContentReach && setOptions(emailContentReach);
     };
     fetchEmailContentReach();
   }, []);

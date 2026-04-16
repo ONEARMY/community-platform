@@ -9,7 +9,7 @@ const cache = new Keyv<EmailContentReach[]>({ ttl: 3600000 }); // ttl: 60 minute
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const cachedEmailContentReach = await cache.get('email_content_reach');
+  const cachedEmailContentReach = await cache.get('emailContentReach');
 
   if (cachedEmailContentReach && isProductionEnvironment()) {
     return Response.json(cachedEmailContentReach, { headers, status: 200 });
@@ -20,6 +20,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const emailContentReach = dbEmailContentReachResults.data
     ? dbEmailContentReachResults.data.map((dbReach) => EmailContentReach.fromDB(dbReach))
     : [];
+
+  if (emailContentReach) {
+    cache.set('emailContentReach', emailContentReach, 3600000);
+  }
 
   return Response.json(emailContentReach, { headers, status: 200 });
 };

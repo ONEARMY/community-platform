@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { NotificationEmailServiceServer } from 'src/services/notificationEmailService.server';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -37,11 +38,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request);
 
     const userProfile = await client
       .from('profiles')
@@ -77,8 +74,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
 async function validateRequest(request: Request) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
-
-  return { valid: true };
 }

@@ -1,26 +1,25 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { DBEmailContentReach } from 'oa-shared';
 
-const getAll = async (client: SupabaseClient): Promise<DBEmailContentReach[] | null> => {
-  try {
-    const response = await client.from('email_content_reach').select('*');
-    return response.data as DBEmailContentReach[];
-  } catch (error) {
-    console.error({ error });
-    return null;
+export class EmailContentReachServiceServer {
+  constructor(private client: SupabaseClient) {}
+
+  async getAll(): Promise<DBEmailContentReach[] | null> {
+    try {
+      const response = await this.client.from('email_content_reach').select('*');
+      return response.data as DBEmailContentReach[];
+    } catch (error) {
+      console.error({ error });
+      return null;
+    }
   }
-};
 
-const getDefault = async (client: SupabaseClient) => {
-  const dbAll = await getAll(client);
-  const defaultOption = dbAll
-    ? (dbAll.find(({ default_option }) => default_option === true) as DBEmailContentReach)
-    : null;
+  async getDefault() {
+    const dbAll = await this.getAll();
+    const defaultOption = dbAll
+      ? (dbAll.find(({ default_option }) => default_option === true) as DBEmailContentReach)
+      : null;
 
-  return defaultOption;
-};
-
-export const emailContentReachServiceServer = {
-  getAll,
-  getDefault,
-};
+    return defaultOption;
+  }
+}

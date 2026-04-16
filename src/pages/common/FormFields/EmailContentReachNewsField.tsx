@@ -1,5 +1,5 @@
 import { Select } from 'oa-components';
-import { EmailContentReach, SelectValue } from 'oa-shared';
+import type { SelectValue } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Field } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
@@ -19,13 +19,8 @@ export const EmailContentReachNewsField = (props: IProps) => {
 
   useEffect(() => {
     const fetchEmailContentReach = async () => {
-      const emailContentReach = await emailContentReachService.getAll();
-      if (emailContentReach) {
-        const fieldOptions = emailContentReach.map((reach) => {
-          return EmailContentReach.toCreateCreateFormField(reach);
-        });
-        setOptions(fieldOptions as SelectValue[]);
-      }
+      const emailContentReach = await emailContentReachService.getAllAsSelectValue();
+      emailContentReach && setOptions(emailContentReach);
     };
     fetchEmailContentReach();
   }, []);

@@ -2,8 +2,9 @@ import type { DBEmailContentReach, DBNotificationsPreferencesDefaults } from 'oa
 import { NotificationsPreferences } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { emailContentReachServiceServer } from 'src/services/emailContentReachService.server';
+import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const setDefaultNotifications = (
   dbDefaultEmailContentReach: DBEmailContentReach,
@@ -26,7 +27,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
   }
 
-  const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault(client);
+  const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
+  const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault();
   const defaultDBPreferences = setDefaultNotifications(
     dbDefaultEmailContentReach as DBEmailContentReach,
   );
@@ -58,16 +60,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const research_updates = formData.get('research_updates') === 'true';
 
     const claims = await client.auth.getClaims();
-
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-
-    const { valid, status, statusText } = await validateRequest(request);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request);
 
     if (id) {
       await client
@@ -117,8 +113,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(request: Request) {
   if (request.method !== 'POST') {
-    return { valid: false, status: 405, statusText: 'Method not allowed' };
+    throw methodNotAllowedError();
   }
-
-  return { valid: true };
 }

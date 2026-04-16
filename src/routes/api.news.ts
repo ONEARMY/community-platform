@@ -1,7 +1,5 @@
-// TODO: split this in separate files once we update remix to NOT use file-based routing
-
+import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import { AuthError } from 'node_modules/@supabase/supabase-js';
 import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
@@ -140,18 +138,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
-
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-
-    await validateRequest(request, data, claims.error);
-
     const slug = convertToSlug(data.title);
-
-    if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
-      throw conflictError('This news already exists');
-    }
+    await validateRequest(request, data, slug, claims.error, client);
 
     const profileRequest = await client
       .from('profiles')
@@ -210,7 +201,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   }
 };
 
-async function validateRequest(request: Request, data: any, authError: AuthError | null) {
+async function validateRequest(
+  request: Request,
+  data: any,
+  slug: string,
+  authError: AuthError | null,
+  client: SupabaseClient,
+) {
   const notDraft = data.isDraft === false;
 
   if (authError) {
@@ -238,5 +235,9 @@ async function validateRequest(request: Request, data: any, authError: AuthError
 
   if (!data.emailContentReach && notDraft) {
     throw validationError('Email content reach is required to publish', 'emailContentReach');
+  }
+
+  if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
+    throw conflictError('This news already exists');
   }
 }

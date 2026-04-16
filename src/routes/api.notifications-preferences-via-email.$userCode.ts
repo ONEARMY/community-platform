@@ -2,11 +2,11 @@ import {
   type DBEmailContentReach,
   DBNotificationsPreferences,
   NotificationsPreferences,
-  NotificationsPreferencesFormData,
 } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { emailContentReachServiceServer } from 'src/services/emailContentReachService.server';
+import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { tokens } from 'src/utils/tokens.server';
 import { setDefaultNotifications } from './api.notifications-preferences';
 
@@ -38,7 +38,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
     }
 
-    const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault(client);
+    const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
+    const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault();
     const defaultDBPreferences = setDefaultNotifications(
       dbDefaultEmailContentReach as DBEmailContentReach,
     );
@@ -79,18 +80,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       .eq('id', profileId)
       .eq('created_at', decoded.profileCreatedAt)
       .maybeSingle();
-
     const userId = userData.data?.id as number;
 
-    if (!userId) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
-    }
-
-    const { valid, status, statusText } = await validateRequest(request, userId);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, userId);
 
     const formData = await request.formData();
     const existingPreferences = await client
@@ -140,11 +132,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 async function validateRequest(request: Request, userId: number) {
   if (!userId) {
-    return { valid: false, status: 401, statusText: 'unauthorized' };
+    throw validationError('User not found');
   }
 
   if (request.method !== 'POST') {
-    return { valid: false, status: 405, statusText: 'Method not allowed' };
+    return methodNotAllowedError();
   }
 
   return { valid: true };

@@ -1,6 +1,6 @@
 import type { NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
-import { Avatar, Flex, Image, Text } from 'theme-ui';
+import { Avatar, Flex, Text } from 'theme-ui';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';

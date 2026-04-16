@@ -3,7 +3,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { NotificationEmailServiceServer } from 'src/services/notificationEmailService.server';
-import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

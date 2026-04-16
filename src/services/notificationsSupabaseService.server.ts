@@ -181,7 +181,8 @@ export class NotificationsSupabaseServiceServer {
             // Include only the all email people
             const emailSubscribers = badgeSubscribers.filter(
               (subscriber) =>
-                subscriber.notification_preferences?.email_content_reach?.name === 'all',
+                subscriber.notification_preferences?.email_content_reach?.name === 'all' ||
+                subscriber.roles.includes('admin'),
             );
             await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
               emailSubscribers,

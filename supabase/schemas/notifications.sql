@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS "public"."notifications_preferences" (
     "replies" boolean NOT NULL,
     "tenant_id" "text" NOT NULL,
     "research_updates" boolean NOT NULL,
-    "is_unsubscribed" boolean DEFAULT false NOT NULL
+    "is_unsubscribed" boolean DEFAULT false NOT NULL,
+    "email_content_reach" bigint
 );
 
 ALTER TABLE ONLY "public"."notifications"

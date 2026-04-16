@@ -15,8 +15,12 @@ interface IProps {
 }
 
 const markdownCustomStyles = {
-  img: { maxWidth: '500px' },
+  img: { maxWidth: '500px', width: '100%' },
   p: { lineHeight: '1.5em' },
+};
+
+const markdownContainerStyles = {
+  maxWidth: '500px',
 };
 
 export const NewsEmail = (props: IProps) => {
@@ -88,7 +92,12 @@ export const NewsEmail = (props: IProps) => {
       </Row>
 
       <Html>
-        <Markdown markdownCustomStyles={markdownCustomStyles}>{notification.email.body!}</Markdown>
+        <Markdown
+          markdownCustomStyles={markdownCustomStyles}
+          markdownContainerStyles={markdownContainerStyles}
+        >
+          {notification.email.body!}
+        </Markdown>
       </Html>
 
       <ButtonCallToAction href={commentButtonLink} />

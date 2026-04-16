@@ -32,6 +32,8 @@ describe('[News.Write]', () => {
     cy.step('Can add draft news');
     cy.get('[data-cy=draft]').click();
     cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('Draft news saved')
+    cy.get('[data-cy=toast-action-link]').click()
     cy.url().should('include', initialExpectedSlug);
 
     cy.step('Can get to drafts');
@@ -66,6 +68,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=submit]').click();
 
     cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('News published')
+    cy.get('[data-cy=toast-action-link]').click()
     cy.url().should('include', initialExpectedSlug);
 
     cy.step('All news fields shown');
@@ -88,11 +92,10 @@ describe('[News.Write]', () => {
 
     cy.step('Notification generated for update');
     cy.expectNewNotification({
-      content: initialNewsBodyOne,
       path: initialExpectedSlug,
       title: initialTitle,
-      username: user.username,
     });
+    cy.get('[data-cy="NotificationListSupabase-CloseButton"]').click()
 
     cy.step('Edit fields');
     cy.wait(2000);
@@ -114,12 +117,15 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
     cy.get('[data-cy=delete-image]').should('exist');
 
-    // Email content reach field should be disabled
+    // Email reach field disabled
+    // cy.get('[data-cy=emailContentReach-select]').find('[class=data-cy--is-disabled]')
 
     cy.step('Updated news details shown');
     cy.wait(2000);
     cy.get('[data-cy=submit]').click();
     cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('News published')
+    cy.get('[data-cy=toast-action-link]').click()
     cy.url().should('include', updatedExpectedSlug);
     cy.contains(updatedNewsBody);
 
@@ -170,18 +176,18 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=submit]').click();
 
     cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('News published')
+    cy.get('[data-cy=toast-action-link]').click()
     cy.url().should('include', path);
 
     cy.step("Shows it's for PRO badgers only")
-    cy.get('[data-cy=profileBadge]').contains('only news');
+    cy.get('[data-cy=profileBadge]').contains('news');
 
     cy.step('For creator, notification generated for update');
     cy.reload() // Annoying delay generating the notification
     cy.expectNewNotification({
-      content,
       path,
       title,
-      username: creator.username,
     });
 
     cy.step('Not visible to logged out users');

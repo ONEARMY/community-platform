@@ -14,7 +14,7 @@ export const getSummaryFromMarkdown = (text: string) => {
   const linesWithText = linesWithTokens.map((line: any) => line.tokens).flat();
 
   const flattenedLines = linesWithText
-    .slice(0, 3)
+    .slice(0, 1)
     .map((token) => token['text'] && token['text'].trim());
 
   return flattenedLines

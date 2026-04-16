@@ -84,7 +84,15 @@ export const NewsListItem = ({ news, query }: IProps) => {
           </Text>
 
           {news.summary && (
-            <Text data-cy="news-list-item-summary" sx={{ paddingY: 2, fontSize: 2 }}>
+            <Text
+              data-cy="news-list-item-summary"
+              sx={{
+                paddingY: 2,
+                fontSize: 2,
+                color: 'grey',
+                lineHeight: 2,
+              }}
+            >
               <Highlighter searchWords={searchWords} textToHighlight={news.summary} />
             </Text>
           )}

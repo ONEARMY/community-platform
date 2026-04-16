@@ -18,7 +18,7 @@ import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
-import { Divider } from 'theme-ui';
+import { Flex } from 'theme-ui';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
@@ -114,7 +114,11 @@ export const NewsForm = (props: IProps) => {
     return errors;
   }, []);
 
-  const shouldDisableEmailContentReach = !!(props.id && props.formData?.isDraft === false);
+  const shouldDisableEmailContentReach = !!(
+    props.id &&
+    props.formData?.emailContentReach &&
+    props.formData?.isDraft === false
+  );
 
   return (
     <Form
@@ -191,18 +195,18 @@ export const NewsForm = (props: IProps) => {
             />
             <CategoryField type="news" text={LABELS.fields.category.title} />
             <TagsField title={LABELS.fields.tags.title} />
-            <Divider />
-            <ProfileBadgeField
-              description={LABELS.fields.profileBadge.description as string}
-              placeholder={LABELS.fields.profileBadge.placeholder as string}
-              title={LABELS.fields.profileBadge.title}
-            />
-            <EmailContentReachNewsField
-              placeholder={LABELS.fields.contentReach.placeholder as string}
-              title={LABELS.fields.contentReach.title}
-              shouldDisableEmailContentReach={shouldDisableEmailContentReach}
-            />
-            <Divider />
+            <Flex sx={{ flexDirection: 'column', paddingY: 4, gap: 2 }}>
+              <ProfileBadgeField
+                description={LABELS.fields.profileBadge.description as string}
+                placeholder={LABELS.fields.profileBadge.placeholder as string}
+                title={LABELS.fields.profileBadge.title}
+              />
+              <EmailContentReachNewsField
+                placeholder={LABELS.fields.contentReach.placeholder as string}
+                title={LABELS.fields.contentReach.title}
+                shouldDisableEmailContentReach={shouldDisableEmailContentReach}
+              />
+            </Flex>
             <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>
         );

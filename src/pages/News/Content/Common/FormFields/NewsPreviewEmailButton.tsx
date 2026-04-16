@@ -44,6 +44,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
       },
       duration: 10000,
     });
+    setIsSendingPreview(false);
   };
 
   return (
@@ -58,7 +59,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         display: 'block',
       }}
     >
-      Preview email
+      Send yourself a preview email
     </Button>
   );
 };

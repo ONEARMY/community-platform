@@ -2,7 +2,6 @@ import { Flex, Label, Text } from 'theme-ui';
 
 const _labelStyle = {
   fontSize: 2,
-  marginBottom: 1,
   display: 'block',
 };
 
@@ -30,7 +29,7 @@ export const FormFieldWrapper = (props: IProps) => {
   const heading = required ? `${text} *` : text;
 
   return (
-    <Flex sx={{ flexDirection, flexWrap }}>
+    <Flex sx={{ flexDirection, flexWrap, gap: 1 }}>
       <Label sx={_labelStyle} htmlFor={htmlFor}>
         {heading}
       </Label>

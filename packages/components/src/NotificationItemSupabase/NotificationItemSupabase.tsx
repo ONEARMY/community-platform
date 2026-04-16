@@ -62,17 +62,10 @@ export const NotificationItemSupabase = (props: IProps) => {
       <InternalLink onClick={onClick} to={notification.link} sx={{ color: 'black', width: '100%' }}>
         <Flex sx={borderStyle}>
           {notification.sidebar.image ? (
-            isNews ? (
-              <Image
-                src={notification.sidebar.image}
-                sx={{ borderRadius: 2, width: 80, height: 80, objectFit: 'cover' }}
-              />
-            ) : (
-              <Avatar
-                src={notification.sidebar.image}
-                sx={{ width: 60, height: 60, objectFit: 'cover' }}
-              />
-            )
+            <Avatar
+              src={notification.sidebar.image}
+              sx={{ width: 60, height: 60, objectFit: 'cover', borderRadius: isNews ? 2 : 99 }}
+            />
           ) : (
             notification.sidebar.icon && (
               <Flex>
@@ -80,7 +73,7 @@ export const NotificationItemSupabase = (props: IProps) => {
               </Flex>
             )
           )}
-          <Flex sx={{ justifyItems: 'stretch', flex: 1 }}>
+          <Flex sx={{ justifyItems: 'stretch', flex: 1, gap: 2 }}>
             <Flex sx={{ flex: 1, gap: 2, flexDirection: 'column' }}>
               <Flex sx={{ gap: 2 }}>
                 <Text sx={{ flex: 1 }}>

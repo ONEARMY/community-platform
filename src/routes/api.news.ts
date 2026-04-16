@@ -211,7 +211,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 };
 
 async function validateRequest(request: Request, data: any, authError: AuthError | null) {
-  const notDraft = data.is_draft === false;
+  const notDraft = data.isDraft === false;
 
   if (authError) {
     return {

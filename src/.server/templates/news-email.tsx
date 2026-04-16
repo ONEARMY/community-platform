@@ -1,7 +1,8 @@
-import { Column, Html, Img, Markdown, Row, Section, Text } from '@react-email/components';
+import { Column, Html, Img, Markdown, Row, Text } from '@react-email/components';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
 import { BoxText } from './components/box-text';
 import { Button } from './components/button';
+import { ButtonCallToAction } from './components/button-call-to-action';
 import { Header } from './components/header';
 import { Heading } from './components/heading';
 import { Layout, urlAppend } from './Layout';
@@ -12,6 +13,11 @@ interface IProps {
   userCode: string;
   isPreview?: boolean;
 }
+
+const markdownCustomStyles = {
+  img: { maxWidth: '500px' },
+  p: { lineHeight: '1.5em' },
+};
 
 export const NewsEmail = (props: IProps) => {
   const { notification, settings, userCode, isPreview } = props;
@@ -64,7 +70,7 @@ export const NewsEmail = (props: IProps) => {
               <td style={{ paddingRight: '12px' }}>
                 <Button href={commentButtonLink} customStyle={buttonStyle}>
                   <Img
-                    alt="Leave a comment"
+                    alt=""
                     height="15px"
                     src="https://community.preciousplastic.com/assets/icon-comment-N7-BVPWS.svg"
                     width="15px"
@@ -82,15 +88,10 @@ export const NewsEmail = (props: IProps) => {
       </Row>
 
       <Html>
-        <Markdown>{notification.email.body!}</Markdown>
+        <Markdown markdownCustomStyles={markdownCustomStyles}>{notification.email.body!}</Markdown>
       </Html>
 
-      <Section style={{ paddingTop: '15px' }}>
-        <Heading as="h2" customStyle={{ textAlign: 'center' }}>
-          Liked this post?
-        </Heading>
-        <Button href={commentButtonLink}>Join the discussion</Button>
-      </Section>
+      <ButtonCallToAction href={commentButtonLink} />
     </Layout>
   );
 };

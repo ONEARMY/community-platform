@@ -226,6 +226,9 @@ export class NotificationDisplay {
       case 'research_updates': {
         return `${(notification.content as ResearchUpdate)?.title}:\n\n${(notification.content as ResearchUpdate)?.description}`;
       }
+      case 'news': {
+        return (notification.content as News).body;
+      }
       default: {
         return this.setBody(notification) || '';
       }
@@ -306,9 +309,6 @@ export class NotificationDisplay {
       }
       case 'comments': {
         return (notification.content as Comment).comment;
-      }
-      case 'news': {
-        return (notification.content as News).body;
       }
       default: {
         return '';

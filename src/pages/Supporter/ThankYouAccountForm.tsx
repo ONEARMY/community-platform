@@ -6,7 +6,7 @@ import { useSupporterContext } from './SupporterContext';
 import { ThankYouLayout } from './ThankYouLayout';
 
 export const ThankYouAccountForm = () => {
-  const { email, name, stripeCustomerId } = useSupporterContext();
+  const { email, name, stripeCustomerId, accountCreated } = useSupporterContext();
 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,12 +25,18 @@ export const ThankYouAccountForm = () => {
       return;
     }
 
-    const result = await stripeService.createSupporterAccount({
-      email,
-      password,
-      name,
-      stripeCustomerId: stripeCustomerId!,
-    });
+    const result = accountCreated
+      ? await stripeService.setPassword({
+          email,
+          stripeCustomerId: stripeCustomerId!,
+          password,
+        })
+      : await stripeService.createSupporterAccount({
+          email,
+          password,
+          name,
+          stripeCustomerId: stripeCustomerId!,
+        });
 
     if (!result.ok) {
       setError(result.error);
@@ -135,7 +141,13 @@ export const ThankYouAccountForm = () => {
                 disabled={isSubmitting || password.length < 6}
                 sx={{ justifyContent: 'center' }}
               >
-                {isSubmitting ? 'Creating account...' : 'Create account'}
+                {isSubmitting
+                  ? accountCreated
+                    ? 'Setting password...'
+                    : 'Creating account...'
+                  : accountCreated
+                    ? 'Set password'
+                    : 'Create account'}
               </Button>
 
               <Text sx={{ fontSize: 1, color: 'grey' }}>

@@ -54,6 +54,7 @@ export const SupporterPage = ({
     previewMode ? 'cus_preview' : null,
   );
   const [accountExists, setAccountExists] = useState(previewMode === 'login');
+  const [accountCreated, setAccountCreated] = useState(false);
 
   const currencies = useMemo(() => {
     const unique = [...new Set(prices.map((p) => p.currency))];
@@ -90,21 +91,41 @@ export const SupporterPage = ({
     if (previewMode) return;
 
     const params = new URLSearchParams(window.location.search);
-    if (params.get('payment') === 'success' && !isAuthenticated) {
-      const customerParam = params.get('customer');
-      const emailParam = params.get('email');
-      const nameParam = params.get('name');
-      const accountExistsParam = params.get('accountExists');
+    if (params.get('payment') !== 'success' || isAuthenticated) return;
 
-      if (customerParam && emailParam) {
-        setStripeCustomerId(customerParam);
-        setEmail(emailParam);
-        if (nameParam) setName(nameParam);
-        if (accountExistsParam === 'true') setAccountExists(true);
-        setPageState('thank-you');
-        window.history.replaceState({}, '', '/supporter');
+    const customerParam = params.get('customer');
+    const emailParam = params.get('email');
+    const nameParam = params.get('name');
+    const accountExistsParam = params.get('accountExists');
+
+    if (!customerParam || !emailParam) return;
+
+    setStripeCustomerId(customerParam);
+    setEmail(emailParam);
+    if (nameParam) setName(nameParam);
+
+    const autoCreate = async () => {
+      if (accountExistsParam === 'true') {
+        setAccountExists(true);
+        return;
       }
-    }
+
+      try {
+        const result = await stripeService.createSupporterAccount({
+          email: emailParam,
+          password: crypto.randomUUID(),
+          name: nameParam || emailParam.split('@')[0],
+          stripeCustomerId: customerParam,
+        });
+        if (result.ok) setAccountCreated(true);
+      } catch (err) {
+        console.error('Auto-create account failed:', err);
+      }
+    };
+
+    autoCreate();
+    setPageState('thank-you');
+    window.history.replaceState({}, '', '/supporter');
   }, [isAuthenticated, previewMode]);
 
   const handleSupport = async () => {
@@ -131,14 +152,29 @@ export const SupporterPage = ({
     setIsLoading(false);
   };
 
-  const handlePaymentSuccess = () => {
+  const handlePaymentSuccess = async () => {
     if (previewMode) return;
 
     if (isAuthenticated) {
       window.location.assign('/settings?subscription=success');
-    } else {
-      setPageState('thank-you');
+      return;
     }
+
+    if (!accountExists && stripeCustomerId) {
+      try {
+        const result = await stripeService.createSupporterAccount({
+          email,
+          password: crypto.randomUUID(),
+          name: name || email.split('@')[0],
+          stripeCustomerId,
+        });
+        if (result.ok) setAccountCreated(true);
+      } catch (err) {
+        console.error('Auto-create account failed:', err);
+      }
+    }
+
+    setPageState('thank-you');
   };
 
   const handleBack = () => {
@@ -166,6 +202,7 @@ export const SupporterPage = ({
     isLoading,
     error,
     accountExists,
+    accountCreated,
     clientSecret,
     stripeInstance,
     stripeCustomerId,

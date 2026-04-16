@@ -147,10 +147,40 @@ const linkExistingAccount = async (
   }
 };
 
+type SetPasswordParams = {
+  email: string;
+  stripeCustomerId: string;
+  password: string;
+};
+
+type SetPasswordResponse = { ok: true } | { ok: false; error: string };
+
+const setPassword = async (params: SetPasswordParams): Promise<SetPasswordResponse> => {
+  try {
+    const response = await fetch('/api/stripe/set-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { ok: false, error: data.error || 'Something went wrong.' };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error(error);
+    return { ok: false, error: 'Network error. Please try again.' };
+  }
+};
+
 export const stripeService = {
   getSubscriptionStatus,
   createElementsSubscription,
   createPortalSession,
   createSupporterAccount,
   linkExistingAccount,
+  setPassword,
 };

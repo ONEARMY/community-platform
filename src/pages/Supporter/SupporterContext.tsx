@@ -24,6 +24,7 @@ export type SupporterState = {
   isLoading: boolean;
   error: string | null;
   accountExists: boolean;
+  accountCreated: boolean;
 
   clientSecret: string | null;
   stripeInstance: Promise<StripeType | null> | null;

@@ -59,7 +59,6 @@ export const NewsPage = observer(({ news }: IProps) => {
       <Flex
         sx={{
           flexDirection: 'column',
-          gap: 2,
           background: 'white',
           borderRadius: 4,
           marginBottom: 4,
@@ -72,7 +71,8 @@ export const NewsPage = observer(({ news }: IProps) => {
               ref={heroImageRef}
               src={news.heroImage.publicUrl}
               sx={{
-                borderRadius: 2,
+                borderTopLeftRadius: 2,
+                borderTopRightRadius: 2,
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
@@ -85,41 +85,45 @@ export const NewsPage = observer(({ news }: IProps) => {
         <Flex
           sx={{
             flexDirection: 'column',
-            gap: 2,
             padding: [2, 4, 6],
+            paddingBottom: [1, 2, 4],
           }}
         >
-          <Flex sx={{ alignItems: 'center', gap: 2 }}>
-            {news.category && <Category category={news.category} />}
-            {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
+          <Flex sx={{ flexDirection: 'column', gap: 2, marginBottom: 3 }}>
+            {news.category || news.profileBadge ? (
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                {news.category && <Category category={news.category} />}
+                {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
+              </Flex>
+            ) : null}
+
+            <Heading as="h1" data-cy="news-title" data-testid="news-title">
+              {news.title}
+            </Heading>
+
+            <Text variant="auxiliary">
+              {/* Intentionally not passing modifiedAt - news edits are often minor fixes */}
+              <DisplayDate
+                createdAt={news.createdAt}
+                publishedAt={news.publishedAt}
+                publishedAction="Published"
+              />
+            </Text>
+
+            {news.isDraft && <DraftTag />}
+
+            {isEditable && (
+              <ClientOnly fallback={<></>}>
+                {() => (
+                  <Link to={'/news/' + news.slug + '/edit'}>
+                    <Button type="button" variant="primary" data-cy="edit">
+                      Edit
+                    </Button>
+                  </Link>
+                )}
+              </ClientOnly>
+            )}
           </Flex>
-
-          <Heading as="h1" data-cy="news-title" data-testid="news-title">
-            {news.title}
-          </Heading>
-
-          <Text variant="auxiliary">
-            {/* Intentionally not passing modifiedAt - news edits are often minor fixes */}
-            <DisplayDate
-              createdAt={news.createdAt}
-              publishedAt={news.publishedAt}
-              publishedAction="Published"
-            />
-          </Text>
-
-          {news.isDraft && <DraftTag />}
-
-          {isEditable && (
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <Link to={'/news/' + news.slug + '/edit'}>
-                  <Button type="button" variant="primary" data-cy="edit">
-                    Edit
-                  </Button>
-                </Link>
-              )}
-            </ClientOnly>
-          )}
 
           <Divider />
 
@@ -132,6 +136,30 @@ export const NewsPage = observer(({ news }: IProps) => {
               a: {
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
+              },
+              h1: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h2: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h3: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h4: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h5: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h6: {
+                lineHeight: 1.2,
+                marginBottom: 0,
               },
               blockQuote: {
                 paddingX: 4,
@@ -162,11 +190,9 @@ export const NewsPage = observer(({ news }: IProps) => {
               flexWrap: 'wrap',
               gap: 3,
               justifyContent: 'stretch',
-              paddingTop: 2,
-              paddingBottom: 2,
             }}
           >
-            {news.tags && (
+            {news.tags && news.tags.length > 0 && (
               <TagList data-cy="news-tags" tags={news.tags.map((t) => ({ label: t.name }))} />
             )}
 

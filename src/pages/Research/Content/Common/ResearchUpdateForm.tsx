@@ -1,9 +1,9 @@
+import { FormApi } from 'node_modules/final-form/dist';
 import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
 import type { ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast/useToast';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { FilesFields } from '../../../common/FormFields/FilesFields';
@@ -37,7 +37,11 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
     [],
   );
 
-  const onSubmit = async (formData: ResearchUpdateFormData, isDraft = false) => {
+  const onSubmit = async (
+    form: FormApi<ResearchUpdateFormData, Partial<ResearchUpdateFormData>>,
+    formData: ResearchUpdateFormData,
+    isDraft = false,
+  ) => {
     const promise = researchService.upsertUpdate(research.id, id, formData, isDraft);
 
     toast.promise(promise, {
@@ -78,29 +82,23 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
   return (
     <>
       <Form<ResearchUpdateFormData>
-        onSubmit={async (values) => await onSubmit(values)}
+        onSubmit={async (values, form) => await onSubmit(form, values, false)}
         initialValues={initialValues}
         render={({
-          dirty,
           form,
           handleSubmit,
           hasValidationErrors,
           errors,
           submitFailed,
-          submitSucceeded,
           submitting,
           values,
         }) => {
           const errorsClientSide = [errorSet(errors, updateForm)];
 
           const handleSubmitDraft = async () => {
-            await onSubmit(values, true);
+            await onSubmit(form, values, true);
             form.reset(values);
           };
-
-          const unsavedChangesDialog = (
-            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-          );
 
           const sidebar = (
             <>
@@ -143,7 +141,6 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
               submitFailed={submitFailed}
               submitting={submitting}
               hideSubmittingMessage={true}
-              unsavedChangesDialog={unsavedChangesDialog}
             >
               <TitleField />
               <DescriptionField />

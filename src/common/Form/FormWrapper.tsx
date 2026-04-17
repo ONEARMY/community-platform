@@ -1,8 +1,10 @@
 import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
+import { useFormState } from 'react-final-form';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
 import { ErrorsContainer } from './ErrorsContainer';
 import type { IErrorsListSet } from './types';
+import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 
 interface IProps {
   buttonLabel: string;
@@ -43,6 +45,7 @@ export const FormWrapper = (props: IProps) => {
     unsavedChangesDialog,
   } = props;
 
+  const { dirty } = useFormState({ subscription: { dirty: true } });
   const hasClientSideErrors = hasValidationErrors && submitFailed;
 
   return (
@@ -60,7 +63,7 @@ export const FormWrapper = (props: IProps) => {
           width: ['100%', '100%', `${(2 / 3) * 100}%`],
         }}
       >
-        {unsavedChangesDialog}
+        {unsavedChangesDialog ?? <UnsavedChangesDialog hasChanges={dirty} />}
         <Flex
           as="form"
           sx={{ width: '100%', flexDirection: 'column', gap: '1rem' }}

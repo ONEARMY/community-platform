@@ -1,4 +1,5 @@
 import arrayMutators from 'final-form-arrays';
+import { FormApi } from 'node_modules/final-form/dist';
 import { Button, ResearchEditorOverview } from 'oa-components';
 import {
   type ResearchFormData,
@@ -9,7 +10,6 @@ import {
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
 import { TagsField } from 'src/pages/common/FormFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
@@ -80,12 +80,17 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
     }
   };
 
-  const onSubmit = async (values: ResearchFormData, isDraft = false) => {
+  const onSubmit = async (
+    form: FormApi<ResearchFormData, Partial<ResearchFormData>>,
+    values: ResearchFormData,
+    isDraft = false,
+  ) => {
     const promise = researchService.upsert(id || null, values, isDraft);
 
     toast.promise(promise, {
       loading: isDraft ? 'Saving draft...' : 'Publishing research...',
       success: (data) => {
+        form.reset(values);
         return {
           message: isDraft ? 'Draft saved!' : 'Research published!',
           actionLink: {
@@ -110,7 +115,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
 
   return (
     <Form<ResearchFormData>
-      onSubmit={async (values) => await onSubmit(values)}
+      onSubmit={async (values, form) => await onSubmit(form, values)}
       initialValues={initialValues}
       mutators={{
         ...arrayMutators,
@@ -123,7 +128,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         hasValidationErrors,
         submitFailed,
         submitting,
-        submitSucceeded,
         values,
       }) => {
         const errorsClientSide = [errorSet(errors, researchForm)];
@@ -132,7 +136,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
           e.preventDefault();
           setIsSubmittingDraft(true);
           try {
-            await onSubmit(values, true);
+            await onSubmit(form, values, true);
             form.reset(values);
           } finally {
             setIsSubmittingDraft(false);
@@ -176,10 +180,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
           </>
         );
 
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-        );
-
         return (
           <FormWrapper
             buttonLabel={buttons.publish}
@@ -193,7 +193,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
             submitFailed={submitFailed}
             submitting={submitting || isSubmittingDraft || isUpdatingStatus}
             hideSubmittingMessage={true}
-            unsavedChangesDialog={unsavedChangesDialog}
           >
             <ResearchTitleField />
             <ResearchDescriptionField />

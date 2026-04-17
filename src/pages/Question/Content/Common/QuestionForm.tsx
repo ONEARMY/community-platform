@@ -1,9 +1,9 @@
+import { FormApi } from 'node_modules/final-form/dist';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
 import { CategoryField, TagsField, TitleField } from 'src/pages/common/FormFields';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
@@ -42,19 +42,24 @@ export const QuestionForm = (props: IProps) => {
     [],
   );
 
-  const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
+  const onSubmit = async (
+    form: FormApi<QuestionFormData, Partial<QuestionFormData>>,
+    values: QuestionFormData,
+    isDraft: boolean = false,
+  ) => {
     const promise = questionService.upsert(id, {
-      title: formValues.title!,
-      description: formValues.description!,
-      tags: formValues.tags || null,
-      category: formValues.category || null,
-      images: formValues.images || null,
+      title: values.title!,
+      description: values.description!,
+      tags: values.tags || null,
+      category: values.category || null,
+      images: values.images || null,
       isDraft: isDraft,
     });
 
     toast.promise(promise, {
       loading: isDraft ? 'Saving draft...' : 'Submitting question...',
       success: (data) => {
+        form.reset(values);
         return {
           message: isDraft ? 'Draft saved!' : 'Question submitted!',
           actionLink: {
@@ -76,19 +81,17 @@ export const QuestionForm = (props: IProps) => {
   };
 
   return (
-    <Form
+    <Form<QuestionFormData>
       data-testid={props['data-testid']}
-      onSubmit={async (values) => await onSubmit(values, false)}
+      onSubmit={async (values, form) => await onSubmit(form, values, false)}
       initialValues={initialValues}
       render={({
         errors,
-        dirty,
         handleSubmit,
         hasValidationErrors,
         submitFailed,
         submitting,
         form,
-        submitSucceeded,
         values,
       }) => {
         const errorsClientSide = [errorSet(errors, LABELS.fields)];
@@ -96,16 +99,12 @@ export const QuestionForm = (props: IProps) => {
         const handleSubmitDraft = async () => {
           setIsSubmittingDraft(true);
           try {
-            await onSubmit(values, true);
+            await onSubmit(form, values, true);
             form.reset(values);
           } finally {
             setIsSubmittingDraft(false);
           }
         };
-
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-        );
 
         const validate = composeValidators(
           required,
@@ -125,7 +124,6 @@ export const QuestionForm = (props: IProps) => {
             submitFailed={submitFailed}
             submitting={submitting || isSubmittingDraft}
             hideSubmittingMessage={true}
-            unsavedChangesDialog={unsavedChangesDialog}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

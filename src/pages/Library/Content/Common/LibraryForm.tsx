@@ -1,9 +1,9 @@
 import arrayMutators from 'final-form-arrays';
+import { FormApi } from 'node_modules/final-form/dist';
 import type { ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
@@ -53,7 +53,11 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
 
   const headingText = id ? headings.edit : headings.create;
 
-  const onSubmit = async (values: ProjectFormData, isDraft = false) => {
+  const onSubmit = async (
+    form: FormApi<ProjectFormData, Partial<ProjectFormData>>,
+    values: ProjectFormData,
+    isDraft = false,
+  ) => {
     try {
       const promise = libraryService.upsert(id || null, values, isDraft);
 
@@ -85,7 +89,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
 
   return (
     <Form<ProjectFormData>
-      onSubmit={async (values) => await onSubmit(values, false)}
+      onSubmit={async (values, form) => await onSubmit(form, values, false)}
       initialValues={initialValues}
       mutators={{
         ...arrayMutators,
@@ -97,9 +101,9 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
         handleSubmit,
         hasValidationErrors,
         submitFailed,
-        submitSucceeded,
         submitting,
         values,
+        form,
       }) => {
         const belowBody = (
           <Flex sx={{ flexDirection: 'column' }}>
@@ -112,13 +116,10 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();
           setIsSubmittingDraft(true);
-          await onSubmit(values, true);
+          await onSubmit(form, values, true);
+          form.reset(values);
           setIsSubmittingDraft(false);
         };
-
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-        );
 
         return (
           <FormWrapper
@@ -134,7 +135,6 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
             submitting={submitting || isSubmittingDraft}
             hideSubmittingMessage={true}
             sidebar={<>{id && <DeleteProjectButton id={id} />}</>}
-            unsavedChangesDialog={unsavedChangesDialog}
           >
             <Flex
               sx={{

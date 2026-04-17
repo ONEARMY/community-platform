@@ -135,7 +135,7 @@ Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
     field.visible === false && cy.get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`).click();
   });
   cy.get(`[data-cy="impactForm-${year}-button-save"]`).click();
-  cy.contains(form.saveSuccess);
+  cy.contains('Impact updated!').should('be.visible');
 });
 
 Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {

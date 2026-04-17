@@ -176,7 +176,9 @@ describe('[Library]', () => {
       cy.fillIntroTitle(`qwerty ${randomId}`);
 
       cy.get('[data-cy=draft]').click();
-      cy.get('[data-cy=errors-container]').should('not.exist');
+      cy.contains('Draft saved!').should('be.visible');
+      cy.wait(1000);
+      cy.contains('View draft').should('be.visible').click();
 
       const firstSlug = `/library/qwerty-${randomId}`;
       cy.url().should('include', firstSlug);

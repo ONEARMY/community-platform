@@ -36,7 +36,10 @@ export const CategoryField = ({ type }: IProps) => {
       <Field
         name={name}
         id={name}
-        isEqual={(a, b) => !!a && a?.value === b?.value}
+        isEqual={(a, b) => {
+          if (!a && !b) return true; // both null/undefined = equal
+          return !!a && a?.value === b?.value;
+        }}
         render={({ input, ...rest }) => (
           <CategoriesSelectV2
             {...rest}

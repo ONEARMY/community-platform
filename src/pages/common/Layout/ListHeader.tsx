@@ -68,13 +68,13 @@ export const ListHeader = (props: IProps) => {
           </Flex>
           <Flex
             sx={{
-              justifyContent: 'space-between',
               width: ['100%', '100%', 'auto'],
               flexShrink: 0,
+              justifyContent: 'space-between',
             }}
           >
             {mobileFilteringComponents ?? null}
-            {actionComponents}
+            <Flex sx={{ gap: 2 }}>{actionComponents}</Flex>
           </Flex>
         </Flex>
         <Flex sx={{ gap: 4, lineHeight: '1.5rem' }}>

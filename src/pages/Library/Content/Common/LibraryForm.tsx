@@ -54,29 +54,33 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const headingText = id ? headings.edit : headings.create;
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
-    const promise = libraryService.upsert(id || null, values, isDraft);
+    try {
+      const promise = libraryService.upsert(id || null, values, isDraft);
 
-    toast.promise(promise, {
-      loading: isDraft ? 'Saving draft...' : 'Publishing project...',
-      success: (data) => {
-        return {
-          message: isDraft ? 'Draft saved!' : 'Project published!',
-          actionLink: {
-            href: `/library/${data.project.slug}`,
-            label: isDraft ? 'View draft' : 'View project',
-          },
-        };
-      },
-      error: (error) => {
-        console.error(error);
-        return `Error: ${error.message}`;
-      },
-      duration: 10000,
-    });
+      toast.promise(promise, {
+        loading: isDraft ? 'Saving draft...' : 'Publishing project...',
+        success: (data) => {
+          return {
+            message: isDraft ? 'Draft saved!' : 'Project published!',
+            actionLink: {
+              href: `/library/${data.project.slug}`,
+              label: isDraft ? 'View draft' : 'View project',
+            },
+          };
+        },
+        error: (error) => {
+          console.error(error);
+          return `Error: ${error.message}`;
+        },
+        duration: 10000,
+      });
 
-    await promise;
+      await promise;
 
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+    } catch (_) {
+      // do nothing, error is handled by toast
+    }
   };
 
   return (

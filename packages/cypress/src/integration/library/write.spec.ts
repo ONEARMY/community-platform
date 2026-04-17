@@ -170,8 +170,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=draft]').click();
 
       cy.wait(1000);
-      cy.get('[data-cy=errors-container]').should('be.visible');
-      cy.contains('A project with this name already exists').should('be.visible');
+      cy.contains('Error: A project with this name already exists').should('be.visible');
 
       cy.step('A basic draft is created');
       cy.fillIntroTitle(`qwerty ${randomId}`);

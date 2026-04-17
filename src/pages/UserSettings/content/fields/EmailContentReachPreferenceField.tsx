@@ -7,7 +7,7 @@ import { Box } from 'theme-ui';
 
 export const EmailContentReachPreferenceField = () => {
   const [options, setOptions] = useState<SelectValue[]>([]);
-  const name = 'email_content_reach';
+  const name = 'emailContentReach';
 
   useEffect(() => {
     const fetchEmailContentReach = async () => {

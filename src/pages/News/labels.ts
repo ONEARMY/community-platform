@@ -19,7 +19,7 @@ export const fields: ILabels = {
   },
   contentReach: {
     placeholder: 'Define who gets this post as an email.',
-    title: 'Coming soon: Email reach',
+    title: 'Email reach',
   },
   body: {
     placeholder: 'Write and structure the body of your article. Markdown is also supported.',

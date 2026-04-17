@@ -6,7 +6,7 @@ import {
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
-import { methodNotAllowedError, validationError } from 'src/utils/httpException';
+import { methodNotAllowedError, unauthorizedError, validationError } from 'src/utils/httpException';
 import { tokens } from 'src/utils/tokens.server';
 import { setDefaultNotifications } from './api.notifications-preferences';
 
@@ -20,7 +20,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   try {
     if (!params.userCode) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
+      throw unauthorizedError();
     }
 
     const decoded = tokens.verify(params.userCode) as DecodedToken;
@@ -35,7 +35,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const userId = userData.data?.id as number;
     if (!userId) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
+      throw unauthorizedError();
     }
 
     const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
@@ -68,7 +68,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   try {
     if (!params.userCode) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
+      throw unauthorizedError();
     }
 
     const decoded = tokens.verify(params.userCode) as DecodedToken;
@@ -93,20 +93,20 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     const existingPreferencesId = existingPreferences.data?.id || null;
     const comments = formData.get('comments') === 'true';
-    const email_content_reach = formData.get('email_content_reach');
+    const emailContentReach = formData.get('emailContentReach');
     const replies = formData.get('replies') === 'true';
-    const research_updates = formData.get('research_updates') === 'true';
-    const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
+    const researchUpdates = formData.get('researchUpdates') === 'true';
+    const isUnsubscribed = formData.get('isUnsubscribed') === 'true';
 
     if (existingPreferencesId) {
       await client
         .from('notifications_preferences')
         .update({
           comments,
-          email_content_reach,
+          email_content_reach: emailContentReach,
           replies,
-          research_updates,
-          is_unsubscribed,
+          research_updates: researchUpdates,
+          is_unsubscribed: isUnsubscribed,
         })
         .eq('id', existingPreferencesId)
         .select();
@@ -116,10 +116,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await client.from('notifications_preferences').insert({
       user_id: userId,
       comments,
-      email_content_reach,
+      email_content_reach: emailContentReach,
       replies,
-      research_updates,
-      is_unsubscribed,
+      research_updates: researchUpdates,
+      is_unsubscribed: isUnsubscribed,
       tenant_id: process.env.TENANT_ID!,
     });
 

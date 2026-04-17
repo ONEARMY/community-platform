@@ -74,9 +74,10 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBe('123');
       expect(body.get('comments')).toBe('true');
+      expect(body.get('news')).toBe('false');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('true');
-      expect(body.get('is_unsubscribed')).toBe('false');
+      expect(body.get('researchUpdates')).toBe('true');
+      expect(body.get('isUnsubscribed')).toBe('false');
       expect(result).toBe(mockResponse);
     });
 
@@ -145,8 +146,8 @@ describe('notificationsPreferencesService', () => {
       expect(body.get('id')).toBe('456');
       expect(body.get('comments')).toBe('false');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('true');
+      expect(body.get('researchUpdates')).toBe('false');
+      expect(body.get('isUnsubscribed')).toBe('true');
       expect(result).toBe(mockResponse);
     });
 
@@ -161,9 +162,9 @@ describe('notificationsPreferencesService', () => {
       expect(body.get('id')).toBeNull();
       expect(body.get('comments')).toBe('false');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('email_content_reach')).toBe('null');
-      expect(body.get('is_unsubscribed')).toBe('true');
+      expect(body.get('researchUpdates')).toBe('false');
+      expect(body.get('emailContentReach')).toBe('null');
+      expect(body.get('isUnsubscribed')).toBe('true');
     });
   });
 });

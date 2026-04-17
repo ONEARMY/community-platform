@@ -103,9 +103,9 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('comments')).toBe('true');
       expect(formData.get('news')).toBe('true');
       expect(formData.get('replies')).toBe('false');
-      expect(formData.get('research_updates')).toBe('true');
-      expect(formData.get('is_unsubscribed')).toBe('false');
-      expect(formData.get('email_content_reach')).toBe('2');
+      expect(formData.get('researchUpdates')).toBe('true');
+      expect(formData.get('isUnsubscribed')).toBe('false');
+      expect(formData.get('emailContentReach')).toBe('2');
       expect(result).toBe(mockResponse);
     });
 
@@ -155,8 +155,8 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('comments')).toBe('false');
       expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
-      expect(formData.get('research_updates')).toBe('false');
-      expect(formData.get('is_unsubscribed')).toBe('true');
+      expect(formData.get('researchUpdates')).toBe('false');
+      expect(formData.get('isUnsubscribed')).toBe('true');
       expect(result).toBe(mockResponse);
     });
 
@@ -171,8 +171,8 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('comments')).toBe('false');
       expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
-      expect(formData.get('research_updates')).toBe('false');
-      expect(formData.get('is_unsubscribed')).toBe('true');
+      expect(formData.get('researchUpdates')).toBe('false');
+      expect(formData.get('isUnsubscribed')).toBe('true');
     });
 
     it('should handle undefined id parameter', async () => {

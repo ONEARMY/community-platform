@@ -17,6 +17,7 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
 
   data.id && body.append('id', data.id.toString());
   body.append('comments', data.comments.toString());
+  body.append('news', data.news.toString());
   body.append('replies', data.replies.toString());
   body.append('researchUpdates', data.researchUpdates.toString());
   data.emailContentReach &&
@@ -34,10 +35,11 @@ const setUnsubscribe = async (id: number | undefined) => {
 
   id && body.append('id', id.toString());
   body.append('comments', 'false');
+  body.append('news', 'false');
   body.append('replies', 'false');
-  body.append('research_updates', 'false');
-  body.append('email_content_reach', 'null');
-  body.append('is_unsubscribed', 'true');
+  body.append('researchUpdates', 'false');
+  body.append('emailContentReach', 'null');
+  body.append('isUnsubscribed', 'true');
 
   return fetch('/api/notifications-preferences', {
     method: 'POST',

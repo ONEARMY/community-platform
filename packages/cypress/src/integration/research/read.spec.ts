@@ -110,9 +110,6 @@ describe('[Research]', () => {
         //   image,
         // )
 
-        cy.step('Delete button should not be visible');
-        cy.get('[data-cy="Research: delete button"]').should('not.exist');
-
         cy.step('Breadcrumbs work');
         cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Research');
         cy.get('[data-cy=breadcrumbsItem]').first().children().should('have.attr', 'href').and('equal', `/research`);
@@ -127,32 +124,6 @@ describe('[Research]', () => {
             cy.contains(article.title);
           });
         });
-      });
-    });
-
-    describe('[By Author]', () => {
-      beforeEach(() => {
-        cy.signIn(demoUser.email, demoUser.password);
-        cy.visit(authoredResearchArticleUrl);
-      });
-
-      it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the article');
-
-        cy.get('[data-cy="Research: delete button"]').should('be.visible');
-      });
-    });
-
-    describe('[By Admin]', () => {
-      beforeEach(() => {});
-
-      it('[Delete button is visible]', () => {
-        cy.signIn(demoAdmin.email, demoAdmin.password);
-        cy.visit(researchArticleUrl);
-        cy.wait(1000);
-
-        cy.step('Delete button should be visible to the author of the article');
-        cy.get('[data-cy="Research: delete button"]').should('be.visible');
       });
     });
   });

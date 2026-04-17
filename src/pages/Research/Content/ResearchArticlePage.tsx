@@ -1,18 +1,15 @@
 import { observer } from 'mobx-react';
-import { Button, ConfirmModal } from 'oa-components';
+import { Button } from 'oa-components';
 import type { ResearchItem } from 'oa-shared';
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { useEffect, useMemo } from 'react';
+import { Link, useLocation } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
-import { trackEvent } from 'src/common/Analytics';
 import PageHeader from 'src/common/PageHeader';
-import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { getResearchCommentId, getResearchUpdateId } from 'src/pages/Research/Content/helper';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Box, Flex } from 'theme-ui';
-import { researchService } from '../research.service';
 import ResearchDescription from './ResearchDescription';
 import ResearchEngagementSection from './ResearchEngagementSection';
 import ResearchUpdate from './ResearchUpdate';
@@ -24,9 +21,6 @@ interface IProps {
 export const ResearchArticlePage = observer(({ research }: IProps) => {
   const location = useLocation();
   const { profile: activeUser } = useProfileStore();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const navigate = useNavigate();
 
   const scrollIntoRelevantSection = () => {
     if (getResearchCommentId(location.hash) === '') return;
@@ -47,40 +41,17 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     );
   }, [activeUser, research.author]);
 
-  const isDeletable = useMemo(() => {
-    return (
-      !!activeUser &&
-      (hasAdminRights(activeUser) || research.author?.username === activeUser.username)
-    );
-  }, [activeUser, research.author]);
-
   const sortedUpdates = useMemo(() => {
     return research?.updates
       ?.slice()
       .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, [research?.updates]);
 
-  const handleDelete = async (research: ResearchItem) => {
-    try {
-      await researchService.deleteResearch(research.id);
-      trackEvent({
-        category: 'research',
-        action: 'deleted',
-        label: research.title,
-      });
-
-      navigate('/research');
-    } catch (err) {
-      logger.error(err);
-      // at least log the error
-    }
-  };
-
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <PageHeader
         actions={
-          (isDeletable || isEditable) && (
+          isEditable && (
             <Flex
               sx={{
                 gap: 2,
@@ -95,29 +66,6 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     Edit
                   </Button>
                 </Link>
-              )}
-              {isDeletable && (
-                <>
-                  <Button
-                    type="button"
-                    data-cy="Research: delete button"
-                    variant="destructive"
-                    disabled={research.deleted}
-                    onClick={() => setShowDeleteModal(true)}
-                  >
-                    Delete
-                  </Button>
-
-                  <ConfirmModal
-                    key={research.id}
-                    isOpen={showDeleteModal}
-                    message="Are you sure you want to delete this Research?"
-                    confirmButtonText="Delete"
-                    handleCancel={() => setShowDeleteModal(false)}
-                    handleConfirm={() => handleDelete && handleDelete(research)}
-                    confirmVariant="destructive"
-                  />
-                </>
               )}
             </Flex>
           )

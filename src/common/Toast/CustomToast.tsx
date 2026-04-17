@@ -75,6 +75,7 @@ export const CustomToast = ({
           {type !== 'default' && type !== 'loading' && <Icon size={24} glyph={type} />}
           <Flex sx={{ flexDirection: 'column' }}>
             <Text
+              data-cy="toast-message"
               sx={{
                 fontWeight: 600,
                 color: 'black',
@@ -84,6 +85,7 @@ export const CustomToast = ({
             </Text>
             {description && (
               <Text
+                data-cy="toast-description"
                 sx={{
                   fontSize: 2,
                   color: 'grey',

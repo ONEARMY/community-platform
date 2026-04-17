@@ -157,41 +157,6 @@ describe('[Library]', () => {
           cy.contains(item.title);
         });
       });
-
-      it('[Delete button should not be visible to everyone', () => {
-        cy.step('Delete button should not be visible');
-        cy.get('[data-cy="Library: delete button"]').should('not.exist');
-      });
-    });
-
-    describe('[By Owner]', () => {
-      const owner = getTenantUser(users.settings_workplace_new);
-
-      beforeEach(() => {
-        cy.signIn(owner.email, owner.password);
-        cy.visit(itemUrl);
-      });
-
-      it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the how-to');
-        cy.get('[data-cy="Library: delete button"]').should('be.visible');
-
-        cy.step('Edit button is available to the owner');
-        cy.get('[data-cy=edit]').should('have.attr', 'href', `${itemUrl}/edit`);
-      });
-    });
-
-    describe('[By Admin]', () => {
-      beforeEach(() => {
-        cy.signIn(demoAdmin.email, demoAdmin.password);
-        cy.visit(itemUrl);
-      });
-
-      it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the article');
-
-        cy.get('[data-cy="Library: delete button"]').should('be.visible');
-      });
     });
   });
 

@@ -16,6 +16,7 @@ export const COMPARISONS = {
     return isEqual(a, b);
   },
   tagsSupabase: (a: Tag, b: Tag): boolean => {
+    if (!a && !b) return true; // both null = equal
     return !!a && a?.id === b?.id;
   },
   image: (a, b): boolean => {

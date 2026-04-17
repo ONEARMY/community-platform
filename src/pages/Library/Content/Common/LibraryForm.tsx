@@ -1,11 +1,10 @@
 import arrayMutators from 'final-form-arrays';
+import { FormApi } from 'node_modules/final-form/dist';
 import type { ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
-import { logger } from 'src/logger';
+import { useToast } from 'src/common/Toast';
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
@@ -13,6 +12,7 @@ import { Flex } from 'theme-ui';
 import { buttons, headings, intro } from '../../labels';
 import { libraryService } from '../../library.service';
 import { transformLibraryErrors } from '../utils';
+import DeleteProjectButton from './DeleteProjectButton';
 import { LibraryCategoryField } from './LibraryCategory.field';
 import { LibraryDescriptionField } from './LibraryDescription.field';
 import { LibraryDifficultyField } from './LibraryDifficulty.field';
@@ -27,11 +27,8 @@ interface LibraryFormProps {
 }
 
 export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
-  const navigate = useNavigate();
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | undefined>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
+  const toast = useToast();
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const initialValues = useMemo<ProjectFormData>(
     () =>
@@ -56,44 +53,44 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
 
   const headingText = id ? headings.edit : headings.create;
 
-  const onSubmit = async (values: ProjectFormData, isDraft = false) => {
-    setIntentionalNavigation(true);
-    setSaveErrorMessage(undefined);
-    setIsSubmitting(true);
-    setIsSavingAsDraft(isDraft);
-
+  const onSubmit = async (
+    form: FormApi<ProjectFormData, Partial<ProjectFormData>>,
+    values: ProjectFormData,
+    isDraft = false,
+  ) => {
     try {
-      if (!isDraft) {
-        if (!values.category?.value) {
-          const error = 'Category is required';
-          setSaveErrorMessage(error);
-          throw new Error(error);
-        } else if (!values.coverImage?.id) {
-          const error = 'The Cover Image is required';
-          setSaveErrorMessage(error);
-          throw new Error(error);
-        }
-      }
+      const promise = libraryService.upsert(id || null, values, isDraft);
 
-      const result = await libraryService.upsert(id || null, values, isDraft);
+      toast.promise(promise, {
+        loading: isDraft ? 'Saving draft...' : 'Publishing project...',
+        success: (data) => {
+          form.reset(values);
+          return {
+            message: isDraft ? 'Draft saved!' : 'Project published!',
+            actionLink: {
+              href: `/library/${data.project.slug}`,
+              label: isDraft ? 'View draft' : 'View project',
+            },
+          };
+        },
+        error: (error) => {
+          console.error(error);
+          return `Error: ${error.message}`;
+        },
+        duration: 10000,
+      });
 
-      setTimeout(() => {
-        navigate(`/library/${result.project.slug}`);
-      }, 100);
-    } catch (e) {
-      if (e.cause && e.message) {
-        setSaveErrorMessage(e.message);
-      }
-      logger.error(e);
-      setIsSubmitting(false);
-    } finally {
-      setIsSubmitting(false);
+      await promise;
+
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+    } catch (_) {
+      // do nothing, error is handled by toast
     }
   };
 
   return (
     <Form<ProjectFormData>
-      onSubmit={(values) => onSubmit(values, false)}
+      onSubmit={async (values, form) => await onSubmit(form, values, false)}
       initialValues={initialValues}
       mutators={{
         ...arrayMutators,
@@ -101,13 +98,12 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
       enableReinitialize={true}
       render={({
         errors,
-        dirty,
         handleSubmit,
         hasValidationErrors,
         submitFailed,
-        submitSucceeded,
         submitting,
         values,
+        form,
       }) => {
         const belowBody = (
           <Flex sx={{ flexDirection: 'column' }}>
@@ -115,32 +111,30 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
           </Flex>
         );
 
-        const errorsClientSide = transformLibraryErrors(errors, isSavingAsDraft);
+        const errorsClientSide = transformLibraryErrors(errors);
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();
-          await onSubmit(values, true);
+          setIsSubmittingDraft(true);
+          await onSubmit(form, values, true);
+          form.reset(values);
+          setIsSubmittingDraft(false);
         };
-
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
-        );
 
         return (
           <FormWrapper
             belowBody={belowBody}
             buttonLabel={buttons.publish}
-            contentType="research"
             errorsClientSide={errorsClientSide}
-            errorSubmitting={saveErrorMessage}
             guidelines={<LibraryPostingGuidelines />}
             handleSubmit={handleSubmit}
             handleSubmitDraft={handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
             heading={headingText}
             submitFailed={submitFailed}
-            submitting={submitting || isSubmitting}
-            unsavedChangesDialog={unsavedChangesDialog}
+            submitting={submitting || isSubmittingDraft}
+            hideSubmittingMessage={true}
+            sidebar={<>{id && <DeleteProjectButton id={id} />}</>}
           >
             <Flex
               sx={{

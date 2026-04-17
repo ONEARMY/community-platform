@@ -11,26 +11,16 @@ interface IProps {
   description?: string;
   htmlFor?: string;
   required?: boolean;
-  flexDirection?: 'column' | 'row' | 'row-reverse' | 'column-reverse';
-  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   text: string;
 }
 
 export const FormFieldWrapper = (props: IProps) => {
-  const {
-    children,
-    description,
-    htmlFor,
-    required,
-    text,
-    flexDirection = 'column',
-    flexWrap = 'nowrap',
-  } = props;
+  const { children, description, htmlFor, required, text } = props;
 
   const heading = required ? `${text} *` : text;
 
   return (
-    <Flex sx={{ flexDirection, flexWrap }}>
+    <Flex sx={{ flexDirection: 'column' }}>
       <Label sx={_labelStyle} htmlFor={htmlFor}>
         {heading}
       </Label>

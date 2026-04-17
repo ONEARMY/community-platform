@@ -1,4 +1,5 @@
 import arrayMutators from 'final-form-arrays';
+import { FormApi } from 'node_modules/final-form/dist';
 import { Button, ResearchEditorOverview } from 'oa-components';
 import {
   type ResearchFormData,
@@ -9,7 +10,6 @@ import {
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
 import { TagsField } from 'src/pages/common/FormFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
@@ -17,6 +17,7 @@ import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common';
 import { buttons, headings, researchForm } from '../../labels';
 import { researchService } from '../../research.service';
+import DeleteResearchButton from './DeleteResearchButton';
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField';
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
 import { ResearchTitleField } from './FormFields/ResearchTitleField';
@@ -79,12 +80,17 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
     }
   };
 
-  const onSubmit = async (values: ResearchFormData, isDraft = false) => {
+  const onSubmit = async (
+    form: FormApi<ResearchFormData, Partial<ResearchFormData>>,
+    values: ResearchFormData,
+    isDraft = false,
+  ) => {
     const promise = researchService.upsert(id || null, values, isDraft);
 
     toast.promise(promise, {
       loading: isDraft ? 'Saving draft...' : 'Publishing research...',
       success: (data) => {
+        form.reset(values);
         return {
           message: isDraft ? 'Draft saved!' : 'Research published!',
           actionLink: {
@@ -109,20 +115,18 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
 
   return (
     <Form<ResearchFormData>
-      onSubmit={async (values) => await onSubmit(values)}
+      onSubmit={async (values, form) => await onSubmit(form, values)}
       initialValues={initialValues}
       mutators={{
         ...arrayMutators,
       }}
       render={({
         errors,
-        dirty,
         form,
         handleSubmit,
         hasValidationErrors,
         submitFailed,
         submitting,
-        submitSucceeded,
         values,
       }) => {
         const errorsClientSide = [errorSet(errors, researchForm)];
@@ -131,7 +135,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
           e.preventDefault();
           setIsSubmittingDraft(true);
           try {
-            await onSubmit(values, true);
+            await onSubmit(form, values, true);
             form.reset(values);
           } finally {
             setIsSubmittingDraft(false);
@@ -156,6 +160,8 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
               </Button>
             )}
 
+            {research && <DeleteResearchButton research={research} />}
+
             {research?.updates && (
               <ResearchEditorOverview
                 updates={research?.updates
@@ -173,14 +179,9 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
           </>
         );
 
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-        );
-
         return (
           <FormWrapper
             buttonLabel={buttons.publish}
-            contentType="research"
             errorsClientSide={errorsClientSide}
             guidelines={<ResearchPostingGuidelines />}
             handleSubmit={handleSubmit}
@@ -191,7 +192,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
             submitFailed={submitFailed}
             submitting={submitting || isSubmittingDraft || isUpdatingStatus}
             hideSubmittingMessage={true}
-            unsavedChangesDialog={unsavedChangesDialog}
           >
             <ResearchTitleField />
             <ResearchDescriptionField />

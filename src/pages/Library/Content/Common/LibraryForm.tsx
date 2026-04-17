@@ -64,6 +64,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
       toast.promise(promise, {
         loading: isDraft ? 'Saving draft...' : 'Publishing project...',
         success: (data) => {
+          form.reset(values);
           return {
             message: isDraft ? 'Draft saved!' : 'Project published!',
             actionLink: {
@@ -97,7 +98,6 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
       enableReinitialize={true}
       render={({
         errors,
-        dirty,
         handleSubmit,
         hasValidationErrors,
         submitFailed,

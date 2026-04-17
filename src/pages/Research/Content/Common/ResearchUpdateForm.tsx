@@ -47,6 +47,8 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
     toast.promise(promise, {
       loading: isDraft ? 'Saving draft...' : 'Publishing research update...',
       success: (data) => {
+        form.reset(formData);
+
         return {
           message: isDraft ? 'Draft saved!' : 'Research update published!',
           actionLink: {

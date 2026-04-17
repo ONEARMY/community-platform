@@ -122,7 +122,6 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
       }}
       render={({
         errors,
-        dirty,
         form,
         handleSubmit,
         hasValidationErrors,

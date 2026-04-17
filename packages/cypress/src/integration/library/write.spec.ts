@@ -229,6 +229,8 @@ describe('[Library]', () => {
       cy.get('[data-cy=draft]').click();
       cy.get('[data-cy=errors-container]').should('not.exist');
 
+      cy.contains('View draft').should('be.visible').click();
+
       cy.step('A full draft can be submitted for review');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=errors-container]').should('not.exist');

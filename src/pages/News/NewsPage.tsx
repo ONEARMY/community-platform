@@ -143,6 +143,8 @@ export const NewsPage = observer(({ news }: IProps) => {
               img: {
                 borderRadius: 2,
                 maxWidth: '100%',
+                display: 'block',
+                margin: '0 auto',
               },
               iframe: {
                 maxHeight: ['300px', '370px', '420px'],

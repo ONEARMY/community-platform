@@ -1,6 +1,7 @@
 import type {
   categoriesChildInputs,
   categoriesScalars,
+  map_pinsChildInputs,
   newsScalars,
   profile_badges_relationsScalars,
   profile_badgesScalars,
@@ -102,24 +103,65 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
     name: 'member',
     display_name: 'Member',
     is_space: false,
-    description: 'test',
+    description: '',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
-    map_pin_name: '',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-member.svg',
+    map_pin_name: 'Want to get started',
     order: 1,
     small_image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
   },
   {
     ..._TYPES_BASE,
-    name: 'space',
-    display_name: 'Space',
+    name: 'workspace',
+    display_name: 'Workspace',
     is_space: true,
-    description: 'test',
-    image_url: '',
-    map_pin_name: '',
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-workspace.svg',
+    map_pin_name: 'Workspace',
     order: 2,
-    small_image_url: '',
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-workspace-small.svg',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'machine-builder',
+    display_name: 'Machine Builder',
+    is_space: true,
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-machine.svg',
+    map_pin_name: 'Machine Builder',
+    order: 3,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-machine-small.svg',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'community-point',
+    display_name: 'Community Point',
+    is_space: true,
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-community.svg',
+    map_pin_name: 'Community Point',
+    order: 4,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-community-small.svg',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'collection-point',
+    display_name: 'Collection Point',
+    is_space: true,
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-collection.svg',
+    map_pin_name: 'Collection Point',
+    order: 5,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-collection-small.svg',
   },
 ];
 
@@ -392,6 +434,114 @@ const baseResearch: Partial<researchScalars> = {
   collaborators: [],
 };
 
+const mapPins = [
+  {
+    lat: 38.7223,
+    lng: -9.1393,
+    administrative: 'Lisbon',
+    country: 'Portugal',
+    country_code: 'pt',
+    moderation: 'accepted',
+    name: 'Lisbon',
+    post_code: '1700',
+  },
+  {
+    lat: 40.7128,
+    lng: -74.006,
+    administrative: 'New York',
+    country: 'United States',
+    country_code: 'us',
+    moderation: 'accepted',
+    name: 'New York City',
+    post_code: '10001',
+  },
+  {
+    lat: 51.5074,
+    lng: -0.1278,
+    administrative: 'London',
+    country: 'United Kingdom',
+    country_code: 'gb',
+    moderation: 'accepted',
+    name: 'London',
+    post_code: 'SW1A',
+  },
+  {
+    lat: 48.8566,
+    lng: 2.3522,
+    administrative: 'Paris',
+    country: 'France',
+    country_code: 'fr',
+    moderation: 'accepted',
+    name: 'Paris',
+    post_code: '75001',
+  },
+  {
+    lat: 35.6762,
+    lng: 139.6503,
+    administrative: 'Tokyo',
+    country: 'Japan',
+    country_code: 'jp',
+    moderation: 'accepted',
+    name: 'Tokyo',
+    post_code: '100-0001',
+  },
+  {
+    lat: -33.8688,
+    lng: 151.2093,
+    administrative: 'Sydney',
+    country: 'Australia',
+    country_code: 'au',
+    moderation: 'accepted',
+    name: 'Sydney',
+    post_code: '2000',
+  },
+  {
+    lat: 52.52,
+    lng: 13.405,
+    administrative: 'Berlin',
+    country: 'Germany',
+    country_code: 'de',
+    moderation: 'accepted',
+    name: 'Berlin',
+    post_code: '10115',
+  },
+  {
+    lat: 19.4326,
+    lng: -99.1332,
+    administrative: 'Mexico City',
+    country: 'Mexico',
+    country_code: 'mx',
+    moderation: 'accepted',
+    name: 'Mexico City',
+    post_code: '06000',
+  },
+  {
+    lat: -22.9068,
+    lng: -43.1729,
+    administrative: 'Rio de Janeiro',
+    country: 'Brazil',
+    country_code: 'br',
+    moderation: 'accepted',
+    name: 'Rio de Janeiro',
+    post_code: '20040',
+  },
+];
+
+const seedMapPins = (profiles: profilesScalars[]): map_pinsChildInputs =>
+  mapPins.slice(0, profiles.length).map((pin, index) => ({
+    tenant_id,
+    profile_id: profiles[index].id,
+    lat: String(pin.lat),
+    lng: String(pin.lng),
+    country: pin.country!,
+    country_code: pin.country_code!,
+    moderation: pin.moderation!,
+    administrative: pin.administrative,
+    post_code: pin.post_code,
+    moderation_feedback: (pin as any).moderation_feedback,
+    name: pin.name,
+  }));
+
 const seedResearch: Partial<researchScalars>[] = [
   {
     ...baseResearch,
@@ -466,7 +616,15 @@ const main = async () => {
     (profilesSeed(tenant_id) as any[]).map((profile: profilesInputs, index) => ({
       ...profile,
       auth_id: users[index].id,
-      profile_type: profile_types[0].id,
+      profile_type: (
+        profile_types.find(
+          (t) =>
+            t.name ===
+            (['member', 'workspace', 'machine-builder', 'community-point', 'collection-point'][
+              index
+            ] ?? 'member'),
+        ) ?? profile_types[0]
+      ).id,
     })),
   );
 
@@ -474,7 +632,7 @@ const main = async () => {
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
   await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
 
-  // await seed.map_pins(seedMapPins(profiles))
+  await seed.map_pins(seedMapPins(profiles));
   const { tags } = await seed.tags(seedTags());
   const { categories } = await seed.categories(seedCategories());
   await seed.email_content_reach(seedEmailContentReach());

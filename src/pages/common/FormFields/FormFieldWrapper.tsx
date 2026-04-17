@@ -2,6 +2,7 @@ import { Flex, Label, Text } from 'theme-ui';
 
 const _labelStyle = {
   fontSize: 2,
+  marginBottom: 1,
   display: 'block',
 };
 
@@ -10,26 +11,16 @@ interface IProps {
   description?: string;
   htmlFor?: string;
   required?: boolean;
-  flexDirection?: 'column' | 'row' | 'row-reverse' | 'column-reverse';
-  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   text: string;
 }
 
 export const FormFieldWrapper = (props: IProps) => {
-  const {
-    children,
-    description,
-    htmlFor,
-    required,
-    text,
-    flexDirection = 'column',
-    flexWrap = 'nowrap',
-  } = props;
+  const { children, description, htmlFor, required, text } = props;
 
   const heading = required ? `${text} *` : text;
 
   return (
-    <Flex sx={{ flexDirection, flexWrap, gap: 1 }}>
+    <Flex sx={{ flexDirection: 'column' }}>
       <Label sx={_labelStyle} htmlFor={htmlFor}>
         {heading}
       </Label>

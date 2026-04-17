@@ -13,6 +13,7 @@ export class DBNotificationsPreferences {
   id: number;
   user_id: number;
   comments: boolean;
+  news: boolean;
   email_content_reach: DBEmailContentReach;
   replies: boolean;
   research_updates: boolean;
@@ -23,6 +24,7 @@ export class NotificationsPreferences {
   id?: number;
   userId?: number;
   comments: boolean;
+  news: boolean;
   emailContentReach: EmailContentReach | null;
   replies: boolean;
   researchUpdates: boolean;
@@ -33,6 +35,7 @@ export class NotificationsPreferences {
       id: dBNotificationsPreferences.id || undefined,
       userId: dBNotificationsPreferences.user_id || undefined,
       comments: dBNotificationsPreferences.comments,
+      news: dBNotificationsPreferences.news,
       emailContentReach: EmailContentReach.fromDB(dBNotificationsPreferences.email_content_reach),
       replies: dBNotificationsPreferences.replies,
       researchUpdates: dBNotificationsPreferences.research_updates,
@@ -47,9 +50,10 @@ export class NotificationsPreferences {
       id: notificationsPreferences.id || undefined,
       comments: notificationsPreferences.comments,
       replies: notificationsPreferences.replies,
-      research_updates: notificationsPreferences.researchUpdates,
-      is_unsubscribed: notificationsPreferences.isUnsubscribed,
-      email_content_reach:
+      researchUpdates: notificationsPreferences.researchUpdates,
+      isUnsubscribed: notificationsPreferences.isUnsubscribed,
+      news: notificationsPreferences.news,
+      emailContentReach:
         notificationsPreferences.emailContentReach &&
         EmailContentReach.toNotificationsFormField(notificationsPreferences.emailContentReach),
     };
@@ -58,11 +62,12 @@ export class NotificationsPreferences {
 
 export interface NotificationsPreferencesFormData {
   id?: number;
+  news: boolean;
   comments: boolean;
-  email_content_reach: SelectValue | null;
+  emailContentReach: SelectValue | null;
   replies: boolean;
-  research_updates: boolean;
-  is_unsubscribed: boolean;
+  researchUpdates: boolean;
+  isUnsubscribed: boolean;
 }
 
 // For setting notifications via the links in emails
@@ -72,6 +77,6 @@ export interface PreferencesWithProfileContact extends NotificationsPreferences 
 }
 
 export interface NotificationsPreferencesViaEmailFormData extends NotificationsPreferencesFormData {
-  is_contactable: undefined | boolean;
-  user_code: string;
+  isContactable: undefined | boolean;
+  userCode: string;
 }

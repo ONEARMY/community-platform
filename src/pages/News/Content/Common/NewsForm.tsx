@@ -32,7 +32,6 @@ interface IProps {
 
 export const NewsForm = (props: IProps) => {
   const toast = useToast();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const initialValues = useMemo<NewsFormData>(
@@ -92,11 +91,7 @@ export const NewsForm = (props: IProps) => {
       try {
         const response = await storageService.imageUpload(props.id, 'news', imageFile);
         return response || null;
-      } catch (e) {
-        if (e.cause && e.message) {
-          setSaveErrorMessage(e.message);
-        }
-        logger.error(e);
+      } catch (_) {
         return null;
       }
     },
@@ -163,9 +158,7 @@ export const NewsForm = (props: IProps) => {
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[props.formAction]}
-            contentType="news"
             errorsClientSide={errorsClientSide}
-            errorSubmitting={saveErrorMessage}
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
             handleSubmitDraft={handleSubmitDraft}
@@ -193,7 +186,7 @@ export const NewsForm = (props: IProps) => {
               removeImage={removeImage}
               contentId={props.id || null}
             />
-            <CategoryField type="news" text={LABELS.fields.category.title} />
+            <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
             <Flex sx={{ flexDirection: 'column', paddingY: 4, gap: 2 }}>
               <ProfileBadgeField

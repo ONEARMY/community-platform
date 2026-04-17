@@ -1,3 +1,4 @@
+import { NotificationsPreferencesViaEmailFormData } from 'oa-shared';
 import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -7,7 +8,7 @@ const createFetchResponse = (data: any, ok = true, status = 200) => ({
   json: async () => data,
 });
 
-const mockEmailReachField = { value: '2', label: 'Never'}
+const mockEmailReachField = { value: '2', label: 'Never' };
 
 describe('notificationsPreferencesViaEmailService', () => {
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       const mockPreferences = {
         isContactable: true,
       };
-      
+
       global.fetch = vi.fn().mockResolvedValue(createFetchResponse(mockPreferences));
 
       const result = await notificationsPreferencesViaEmailService.getPreferences('user123');
@@ -81,12 +82,12 @@ describe('notificationsPreferencesViaEmailService', () => {
         comments: true,
         news: true,
         replies: false,
-        research_updates: true,
-        user_code: 'user123',
-        is_contactable: true,
-        email_content_reach: mockEmailReachField, 
-        is_unsubscribed: false,
-      };
+        researchUpdates: true,
+        userCode: 'user123',
+        isContactable: true,
+        emailContentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesViaEmailFormData;
 
       const result = await notificationsPreferencesViaEmailService.setPreferences(testData);
 
@@ -116,13 +117,12 @@ describe('notificationsPreferencesViaEmailService', () => {
         comments: false,
         news: false,
         replies: false,
-        research_updates: false,
+        researchUpdates: false,
         userCode: 'user123',
-        is_contactable: true,
-        user_code: 'anything',
-        email_content_reach: mockEmailReachField, 
-        is_unsubscribed: false,
-      };
+        isContactable: true,
+        emailContentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesViaEmailFormData;
 
       await notificationsPreferencesViaEmailService.setPreferences(testData);
 
@@ -130,8 +130,8 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('comments')).toBe('false');
       expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
-      expect(formData.get('research_updates')).toBe('false');
-      expect(formData.get('email_content_reach')).toBe('2');
+      expect(formData.get('researchUpdates')).toBe('false');
+      expect(formData.get('emailContentReach')).toBe('2');
     });
   });
 

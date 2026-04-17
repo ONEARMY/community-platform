@@ -4,6 +4,7 @@ import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/c
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import {
+  forbiddenError,
   methodNotAllowedError,
   tooManyRequestsError,
   unauthorizedError,
@@ -38,11 +39,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .eq('auth_id', claims.data.claims.sub);
 
     const messenger = userProfile.data?.at(0);
+
     if (!messenger?.username) {
-      return Response.json(
-        { error: 'You must set a username before sending messages' },
-        { headers, status: 403 },
-      );
+      throw forbiddenError('You must have a username to send messages.');
     }
 
     const recipientProfile = await client

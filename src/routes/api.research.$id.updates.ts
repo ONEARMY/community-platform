@@ -6,7 +6,12 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
-import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  forbiddenError,
+  methodNotAllowedError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -31,7 +36,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const researchResult = await client
@@ -44,14 +49,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found', 'profile');
     }
 
     if (!profile.username) {
-      return Response.json(
-        { error: 'You must set a username before creating content' },
-        { headers, status: 403 },
-      );
+      throw forbiddenError('You must set a username before creating content');
     }
 
     validateRequest(request, data, research, profile);
@@ -118,7 +120,7 @@ function validateRequest(
     throw validationError('description is required', 'description');
   }
 
-  if (!data.images && !data.videoUrl) {
+  if (!data.isDraft && !data.images && !data.videoUrl) {
     throw validationError('images or video URL are required', 'images');
   }
 

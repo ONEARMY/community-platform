@@ -2,13 +2,12 @@ import { observer } from 'mobx-react';
 import {
   ArticleCallToActionSupabase,
   Button,
-  ConfirmModal,
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components';
 import type { Project, ProjectStep } from 'oa-shared';
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
@@ -19,7 +18,6 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card, Flex } from 'theme-ui';
-import { libraryService } from '../../library.service';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 
@@ -36,25 +34,6 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   } = useUsefulVote('projects', item.id, item.usefulCount);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleDelete = async () => {
-    try {
-      await libraryService.deleteProject(item.id);
-      trackEvent({
-        category: 'projects',
-        action: 'deleted',
-        label: item.title,
-      });
-
-      navigate('/library');
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const isEditable = useMemo(() => {
     return (
       !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
@@ -66,32 +45,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
       <PageHeader
         actions={
           isEditable && (
-            <Flex sx={{ gap: 2, width: ['100%', 'auto', 'auto'], justifyContent: 'flex-end' }}>
-              <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
-                <Button type="button" variant="primary">
-                  Edit
-                </Button>
-              </Link>
-
-              <Button
-                type="button"
-                data-cy="Library: delete button"
-                variant="destructive"
-                disabled={item.deleted}
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Delete
+            <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
+              <Button type="button" variant="primary">
+                Edit
               </Button>
-
-              <ConfirmModal
-                isOpen={showDeleteModal}
-                message="Are you sure you want to delete this project?"
-                confirmButtonText="Delete"
-                handleCancel={() => setShowDeleteModal(false)}
-                handleConfirm={() => handleDelete()}
-                confirmVariant="destructive"
-              />
-            </Flex>
+            </Link>
           )
         }
       >

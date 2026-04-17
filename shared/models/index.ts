@@ -14,7 +14,7 @@ export * from './media';
 export * from './messages';
 export * from './moderation';
 export * from './news';
-export * from './notificationsPreferences';
+export * from './notificationPreferences';
 export * from './patreon';
 export * from './patreonSettings';
 export * from './profile';

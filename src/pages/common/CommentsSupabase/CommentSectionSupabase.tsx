@@ -45,7 +45,9 @@ export const CommentSectionSupabase = observer((props: IProps) => {
     const fetchComments = async () => {
       try {
         const comments = await commentService.getComments(sourceType, sourceId);
-        const highlightedCommentId = location.hash?.startsWith('#comment:') ? location.hash.replace('#comment:', '') : null;
+        const highlightedCommentId = location.hash?.startsWith('#comment:')
+          ? location.hash.replace('#comment:', '')
+          : null;
 
         if (highlightedCommentId) {
           const highlightedComment = comments.find((x) => x.id === +highlightedCommentId);
@@ -53,7 +55,9 @@ export const CommentSectionSupabase = observer((props: IProps) => {
             highlightedComment.highlighted = true;
           } else {
             // find in replies and set highlighted
-            const highlightedReply = comments.flatMap((x) => x.replies).find((x) => x?.id === +highlightedCommentId);
+            const highlightedReply = comments
+              .flatMap((x) => x.replies)
+              .find((x) => x?.id === +highlightedCommentId);
 
             if (highlightedReply) {
               highlightedReply.highlighted = true;
@@ -61,7 +65,9 @@ export const CommentSectionSupabase = observer((props: IProps) => {
           }
 
           // ensure highlighted comment is visible
-          const index = comments.findIndex((x) => x.highlighted || x.replies?.some((y) => y.highlighted));
+          const index = comments.findIndex(
+            (x) => x.highlighted || x.replies?.some((y) => y.highlighted),
+          );
 
           if (index > 5) {
             setCommentLimit(index + 1);

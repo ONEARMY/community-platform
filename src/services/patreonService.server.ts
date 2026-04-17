@@ -52,7 +52,10 @@ export class PatreonServiceServer {
   }
 
   async disconnectUser(userAuthId: string) {
-    await this.client.from('profiles').update({ patreon: null, is_supporter: false }).eq('auth_id', userAuthId);
+    await this.client
+      .from('profiles')
+      .update({ patreon: null, is_supporter: false })
+      .eq('auth_id', userAuthId);
   }
 
   private async isSupporter(patreonUser: IPatreonUser) {
@@ -72,10 +75,16 @@ export class PatreonServiceServer {
     // As we do not request the identity.membership scope, we only receive the user's membership to the
     // One Army Patreon page, not other campaigns they may be part of.
     const membership =
-      patreonUser.data.relationships.memberships.data.length > 0 ? patreonUser.included.find(({ type }) => type === 'member') : undefined;
+      patreonUser.data.relationships.memberships.data.length > 0
+        ? patreonUser.included.find(({ type }) => type === 'member')
+        : undefined;
 
     const tiers = membership?.relationships.currently_entitled_tiers.data
-      .map(({ id }) => patreonUser.included.find(({ type, id: includedId }) => type === 'tier' && id === includedId))
+      .map(({ id }) =>
+        patreonUser.included.find(
+          ({ type, id: includedId }) => type === 'tier' && id === includedId,
+        ),
+      )
       .map(({ id, attributes }) => ({ id, attributes }));
 
     const userMembership = membership

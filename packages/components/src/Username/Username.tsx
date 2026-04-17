@@ -22,7 +22,8 @@ const getCountryCode = (country: string | undefined) => {
   return countryToAlpha2(country);
 };
 
-export const Username = ({ user, sx, target, isLink = true }: IProps) => {
+export const Username = (props: IProps) => {
+  const { user, sx = {}, target = '_self', isLink = true } = props;
   const { username, badges } = user;
 
   if (!username) {
@@ -81,7 +82,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
   return (
     <InternalLink
       to={`/u/${username}`}
-      target={target || '_self'}
+      target={target}
       sx={{
         border: '1px solid transparent',
         display: 'inline-flex',
@@ -104,7 +105,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
           background: 'softblue',
           textcolor: 'bluetag',
         },
-        ...(sx || {}),
+        ...sx,
       }}
     >
       {UserNameBody}

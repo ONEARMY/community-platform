@@ -11,7 +11,9 @@ interface IProps {
   header: string;
 }
 
-export const ProfileList = ({ profiles = [], onClose, header }: IProps) => {
+export const ProfileList = (props: IProps) => {
+  const { profiles, onClose, header } = props;
+
   return (
     <Flex
       data-cy="profile-list-modal"

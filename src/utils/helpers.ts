@@ -10,7 +10,8 @@ export const stripSpecialCharacters = (text: string) => {
 };
 
 // get special characters from string using the same pattern as stripSpecialCharacters
-export const getSpecialCharacters = (text: string): string[] => Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
+export const getSpecialCharacters = (text: string): string[] =>
+  Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
 
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {

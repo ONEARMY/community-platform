@@ -65,9 +65,9 @@ export const MapCardList = (props: IProps) => {
         <>
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-              gap: 0,
+              columnWidth: '240px',
+              columnGap: 0,
+              '& > *': { breakInside: 'avoid' },
             }}
           >
             {displayItems}

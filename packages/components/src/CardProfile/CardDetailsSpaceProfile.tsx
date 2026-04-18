@@ -1,8 +1,9 @@
 import type { PinProfile } from 'oa-shared';
-import { Box, Flex, Image, Text } from 'theme-ui';
+import { Avatar, Box, Flex, Image, Text } from 'theme-ui';
+import defaultProfileImage from '../../assets/images/default_member.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
-import { Username } from '../Username/Username';
+import { DisplayName } from '../Username/DisplayName';
 
 interface IProps {
   profile: PinProfile;
@@ -33,36 +34,45 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
               loading="lazy"
             />
           </Flex>
-          <Box
-            sx={{
-              position: 'relative',
-              height: 0,
-              top: '-20px',
-              width: '100%',
-            }}
-          >
-            <MemberBadge
-              profileType={profile.type || undefined}
-              size={40}
-              sx={{
-                float: 'right',
-                marginX: 2,
-              }}
-            />
-          </Box>
         </>
       )}
       <Flex
         sx={{
           alignItems: 'flex-start',
           flexDirection: 'column',
-          gap: 1,
-          padding: 2,
+          gap: 2,
+          p: 3,
         }}
       >
-        <Flex sx={{ gap: 2, minWidth: 0, width: '100%' }}>
-          {!hasImage && <MemberBadge profileType={profile.type || undefined} size={30} />}
-          <Username
+        <Flex sx={{ gap: 2, minWidth: 0, width: '100%', alignItems: 'end' }}>
+          <Box
+            sx={{
+              position: 'relative',
+              width: '80px',
+              height: '80px',
+              flexShrink: 0,
+              marginTop: '-40px',
+            }}
+          >
+            <Avatar
+              src={profileUrl || defaultProfileImage}
+              sx={{
+                width: '80px',
+                height: '80px',
+                objectFit: 'cover',
+                flexShrink: 0,
+                border: '3px solid white',
+                boxSizing: 'border-box',
+              }}
+              loading="lazy"
+            />
+            <MemberBadge
+              profileType={profile.type || undefined}
+              size={22}
+              sx={{ position: 'absolute', bottom: 0, right: 0, m: '3px' }}
+            />
+          </Box>
+          <DisplayName
             user={profile}
             sx={{ alignSelf: 'flex-start' }}
             isLink={isLink}
@@ -75,7 +85,17 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
         )}
 
         {aboutText && (
-          <Text variant="quiet" sx={{ fontSize: 2, wordBreak: 'break-word' }}>
+          <Text
+            variant="quiet"
+            sx={{
+              fontSize: 2,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              wordBreak: 'break-word',
+            }}
+          >
             {aboutText}
           </Text>
         )}

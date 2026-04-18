@@ -6,9 +6,10 @@ import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile';
 export interface IProps {
   item: MapPin;
   isLink?: boolean;
+  variant?: 'pin' | 'list';
 }
 
-export const CardProfile = ({ item, isLink = false }: IProps) => {
+export const CardProfile = ({ item, isLink = false, variant }: IProps) => {
   const { profile } = item;
 
   const isWorkspace = profile?.type && profile?.type.isSpace;
@@ -18,7 +19,7 @@ export const CardProfile = ({ item, isLink = false }: IProps) => {
       {isWorkspace ? (
         <CardDetailsSpaceProfile profile={profile} isLink={isLink} />
       ) : (
-        <CardDetailsMemberProfile profile={profile} isLink={isLink} />
+        <CardDetailsMemberProfile profile={profile} isLink={isLink} variant={variant} />
       )}
     </Flex>
   );

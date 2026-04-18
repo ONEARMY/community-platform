@@ -2,9 +2,11 @@ import { ReactCountryFlag } from 'react-country-flag';
 
 interface IProps {
   countryCode: string;
+  height?: string;
+  width?: string;
 }
 
-export const FlagIcon = ({ countryCode }: IProps) => {
+export const FlagIcon = ({ countryCode, height = '14px', width = '21px' }: IProps) => {
   return (
     <ReactCountryFlag
       data-cy={`country:${countryCode}`}
@@ -14,8 +16,8 @@ export const FlagIcon = ({ countryCode }: IProps) => {
       style={{
         borderRadius: '3px',
         backgroundSize: 'cover',
-        height: '14px',
-        width: '21px',
+        height,
+        width,
       }}
     />
   );

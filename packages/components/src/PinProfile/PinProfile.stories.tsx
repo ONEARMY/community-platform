@@ -36,7 +36,7 @@ export const DefaultMember: StoryFn<typeof PinProfile> = () => {
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
-      <PinProfile item={item} onClose={() => console.log()} />
+      <PinProfile item={item} />
     </div>
   );
 };
@@ -79,7 +79,7 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
-      <PinProfile item={item} onClose={() => console.log()} />
+      <PinProfile item={item} />
     </div>
   );
 };

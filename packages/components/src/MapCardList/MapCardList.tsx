@@ -35,6 +35,7 @@ export const MapCardList = (props: IProps) => {
           key={item.id}
           isSelectedPin={isSelectedPin}
           onPinClick={onPinClick}
+          variant="list"
           viewport={viewport}
         />
       );
@@ -62,7 +63,13 @@ export const MapCardList = (props: IProps) => {
       {isListEmpty && EMPTY_LIST}
       {!isListEmpty && (
         <>
-          <Box sx={{ columnCount: [1, 2, 2, 3], columnGap: 0, '& > *': { breakInside: 'avoid' } }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: 0,
+            }}
+          >
             {displayItems}
           </Box>
           {hasMore && (

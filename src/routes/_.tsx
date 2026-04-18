@@ -50,7 +50,7 @@ export default function Index() {
   return (
     <TenantContext.Provider value={tenantSettings}>
       <SessionContext.Provider value={claims}>
-        <ProfileStoreProvider>
+        <ProfileStoreProvider key={claims?.sub ?? 'anonymous'}>
           <SubscriptionStoreProvider>
             <UsefulVoteStoreProvider>
               <Flex sx={{ height: '100vh', flexDirection: 'column' }} data-cy="page-container">

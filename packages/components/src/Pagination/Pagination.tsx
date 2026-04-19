@@ -66,7 +66,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
           <PaginationIcons
             directionIcon="paginationSingleLeft"
             onClick={() => onPageChange(page - 1)}
-            // hidden={page === 1}
+            hidden={page === 1}
             title="Previous Page"
             ariaLabel="Go to previous page"
           />

@@ -66,7 +66,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
           <PaginationIcons
             directionIcon="paginationSingleLeft"
             onClick={() => onPageChange(page - 1)}
-            hidden={page === 1}
+            // hidden={page === 1}
             title="Previous Page"
             ariaLabel="Go to previous page"
           />
@@ -74,7 +74,15 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
       </>
 
       {totalPages !== 1 && (
-        <>
+        <Flex
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontWeight: 'bold',
+            gap: 1,
+            flexGrow: 1,
+          }}
+        >
           <Input
             type="number"
             inputMode="numeric"
@@ -117,21 +125,12 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               justifyItems: 'center',
               backgroundColor: 'white',
               fontSize: 3,
-              fontWeight: 'bold',
               fontFamily: "'Varela Round',Arial,sans-serif",
             }}
           />
-          <Flex
-            sx={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              fontWeight: 'bold',
-              minWidth: 'max-content',
-            }}
-          >
-            <Text>{`of ${totalPages}`}</Text>
-          </Flex>
-        </>
+
+          <Text sx={{ minWidth: 'max-content' }}>{`of ${totalPages}`}</Text>
+        </Flex>
       )}
 
       <>

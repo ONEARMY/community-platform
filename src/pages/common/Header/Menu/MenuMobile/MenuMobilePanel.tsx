@@ -28,9 +28,11 @@ const MenuMobilePanel = () => {
           boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
         }}
       >
-        {getAvailablePageList(getSupportedModules(tenantContext?.supportedModules || '')).map((page) => (
-          <MenuMobileLink path={page.path} content={page.title} key={page.path} />
-        ))}
+        {getAvailablePageList(getSupportedModules(tenantContext?.supportedModules || '')).map(
+          (page) => (
+            <MenuMobileLink path={page.path} content={page.title} key={page.path} />
+          ),
+        )}
         <Profile isMobile={true} />
       </Flex>
     </Box>

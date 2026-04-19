@@ -122,6 +122,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw validationError('User not found');
     }
 
+    if (!profile.username) {
+      throw validationError('You must set a username before creating content', 'username');
+    }
+
     const researchStatus: ResearchStatus = 'in-progress';
     const researchResult = await client
       .from('research')

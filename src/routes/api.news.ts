@@ -162,6 +162,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const profile = profileRequest.data[0] as DBProfile;
 
+    if (!profile.username) {
+      throw validationError('You must set a username before creating content', 'username');
+    }
+
     const newsResult = await client
       .from('news')
       .insert({
@@ -208,6 +212,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
   const title = news.title;
   const slug = news.slug;
+
+  if (!profile.username) {
+    return;
+  }
 
   discordServiceServer.postWebhookRequest(
     `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,

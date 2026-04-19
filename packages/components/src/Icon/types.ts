@@ -51,7 +51,6 @@ export type availableGlyphs =
   | 'information'
   | 'instagram'
   | 'landscape'
-  | 'loading'
   | 'location-on'
   | 'lock'
   | 'machine'
@@ -105,6 +104,11 @@ export type availableGlyphs =
   | 'double-arrow-right'
   | 'double-arrow-left'
   | 'paginationSingleLeft'
-  | 'paginationSingleRight';
+  | 'paginationSingleRight'
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'loading';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

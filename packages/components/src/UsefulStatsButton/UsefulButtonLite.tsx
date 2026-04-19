@@ -13,7 +13,13 @@ export interface UsefulConfig {
   sx?: ThemeUIStyleObject;
 }
 
-export const UsefulButtonLite = ({ hasUserVotedUseful, votedUsefulCount, isLoggedIn, sx, onUsefulClick }: UsefulConfig) => {
+export const UsefulButtonLite = ({
+  hasUserVotedUseful,
+  votedUsefulCount,
+  isLoggedIn,
+  sx,
+  onUsefulClick,
+}: UsefulConfig) => {
   const { theme } = useThemeUI() as any;
   const navigate = useNavigate();
   const uuid = useId();
@@ -29,7 +35,8 @@ export const UsefulButtonLite = ({ hasUserVotedUseful, votedUsefulCount, isLogge
     setDisabled(false);
   };
 
-  const backgroundColor = !votedUsefulCount || votedUsefulCount === 0 ? 'transparent' : theme.colors.background;
+  const backgroundColor =
+    !votedUsefulCount || votedUsefulCount === 0 ? 'transparent' : theme.colors.background;
 
   return (
     <Flex sx={{ alignSelf: 'flex-end', position: 'relative', alignItems: 'center' }}>
@@ -61,7 +68,11 @@ export const UsefulButtonLite = ({ hasUserVotedUseful, votedUsefulCount, isLogge
         data-tooltip-content={isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         title="Mark as useful"
-        onClick={() => (isLoggedIn ? handleUsefulClick() : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname)))}
+        onClick={() =>
+          isLoggedIn
+            ? handleUsefulClick()
+            : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
+        }
         disabled={disabled}
         variant="outline"
         sx={{
@@ -81,7 +92,11 @@ export const UsefulButtonLite = ({ hasUserVotedUseful, votedUsefulCount, isLogge
         }}
       >
         <Flex sx={{ alignItems: 'center' }}>
-          <Icon glyph="star-active" size={24} filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'} />
+          <Icon
+            glyph="star-active"
+            size={24}
+            filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
+          />
         </Flex>
       </Button>
     </Flex>

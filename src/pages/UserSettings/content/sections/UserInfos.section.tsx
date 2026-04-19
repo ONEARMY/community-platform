@@ -2,11 +2,17 @@ import { getCountryDataList, getEmojiFlag } from 'countries-list';
 import { observer } from 'mobx-react';
 import { FieldInput, FieldTextarea, Username } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
+import { UserRole } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { SelectField } from 'src/common/Form/Select.field';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { required, validateUrl } from 'src/utils/validators';
+import {
+  composeValidators,
+  noSpecialCharacters,
+  required,
+  validateUrl,
+} from 'src/utils/validators';
 import { Flex, Heading, Text } from 'theme-ui';
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
@@ -25,9 +31,11 @@ interface IProps {
 }
 
 export const UserInfosSection = observer(({ formValues }: IProps) => {
-  const { profile } = useProfileStore();
+  const { profile, isUserAuthorized } = useProfileStore();
 
   const isMemberProfile = !profile?.type?.isSpace;
+  const isAdmin = isUserAuthorized(UserRole.ADMIN);
+  const isUsernameLocked = !!profile?.username && !isAdmin;
   const { about, country, displayName, userName, website } = fields;
 
   return (
@@ -45,9 +53,10 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
             data-cy="username"
             name="username"
             component={FieldInput}
-            validate={required}
+            placeholder="your username"
+            disabled={isUsernameLocked}
+            validate={composeValidators(required, noSpecialCharacters)}
             validateFields={[]}
-            disabled
           />
         </Flex>
 
@@ -105,10 +114,11 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
             <Text sx={{ fontSize: 1 }} variant="quiet">
               Preview:
             </Text>
-            {profile?.username && (
+            {formValues.username && (
               <Username
                 user={{
                   ...profile,
+                  username: formValues.username,
                   country: formValues.country,
                 }}
               />

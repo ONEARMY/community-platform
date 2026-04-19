@@ -40,7 +40,10 @@ export class SubscriptionStore {
     return this.subscriptions.get(key)?.isLoading ?? false;
   }
 
-  async checkAndCacheSubscription(contentType: SubscribableContentTypes, itemId: number): Promise<boolean> {
+  async checkAndCacheSubscription(
+    contentType: SubscribableContentTypes,
+    itemId: number,
+  ): Promise<boolean> {
     const key = this.getCacheKey(contentType, itemId);
     const existing = this.subscriptions.get(key);
 
@@ -164,16 +167,23 @@ export class SubscriptionStore {
     }
   }
 
-  async toggleSubscription(contentType: SubscribableContentTypes, itemId: number): Promise<boolean> {
+  async toggleSubscription(
+    contentType: SubscribableContentTypes,
+    itemId: number,
+  ): Promise<boolean> {
     const currentState = this.isSubscribed(contentType, itemId);
 
     if (currentState === undefined) {
       // Not loaded yet, check first
       const isSubscribed = await this.checkAndCacheSubscription(contentType, itemId);
-      return isSubscribed ? this.unsubscribe(contentType, itemId) : this.subscribe(contentType, itemId);
+      return isSubscribed
+        ? this.unsubscribe(contentType, itemId)
+        : this.subscribe(contentType, itemId);
     }
 
-    return currentState ? this.unsubscribe(contentType, itemId) : this.subscribe(contentType, itemId);
+    return currentState
+      ? this.unsubscribe(contentType, itemId)
+      : this.subscribe(contentType, itemId);
   }
 
   clearCache() {
@@ -181,8 +191,12 @@ export class SubscriptionStore {
   }
 
   // TODO: have an endpoint to fetch multiple subscriptions
-  async preloadSubscriptions(items: Array<{ contentType: SubscribableContentTypes; itemId: number }>): Promise<void> {
-    await Promise.all(items.map((item) => this.checkAndCacheSubscription(item.contentType, item.itemId)));
+  async preloadSubscriptions(
+    items: Array<{ contentType: SubscribableContentTypes; itemId: number }>,
+  ): Promise<void> {
+    await Promise.all(
+      items.map((item) => this.checkAndCacheSubscription(item.contentType, item.itemId)),
+    );
   }
 }
 
@@ -200,7 +214,11 @@ export const SubscriptionStoreProvider = ({ children }: { children: React.ReactN
     }
   }, [profile]);
 
-  return <SubscriptionStoreContext.Provider value={subscriptionStore}>{children}</SubscriptionStoreContext.Provider>;
+  return (
+    <SubscriptionStoreContext.Provider value={subscriptionStore}>
+      {children}
+    </SubscriptionStoreContext.Provider>
+  );
 };
 
 export const useSubscriptionStore = () => {

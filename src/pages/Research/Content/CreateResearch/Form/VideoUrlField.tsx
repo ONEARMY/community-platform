@@ -3,7 +3,7 @@ import { Field } from 'react-final-form';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { Flex, Label } from 'theme-ui';
 
-import { errors as errorsLabel, update as updateLabels } from '../../../labels';
+import { errors as errorsLabel, updateForm as updateLabels } from '../../../labels';
 
 const VideoUrlField = () => {
   const { title, placeholder } = updateLabels.videoUrl;

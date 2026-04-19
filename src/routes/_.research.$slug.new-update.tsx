@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 
@@ -23,11 +24,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research', { headers });
   }
 
-  const username = claims.data.claims.user_metadata?.username;
+  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
   const researchDb = result.item as unknown as DBResearchItem;
   const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators);
 
-  if (!(await researchService.isAllowedToEditResearch(researchDb, username))) {
+  if (!profile || !(await researchService.isAllowedToEditResearch(researchDb, profile))) {
     return redirect('/forbidden?page=research-edit-create', { headers });
   }
 

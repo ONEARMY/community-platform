@@ -56,11 +56,9 @@ describe('[Settings]', () => {
     const user = generateNewUserDetails();
     cy.signUpNewUser(user);
 
+    cy.step('Without username, Profile menu directs to settings');
     cy.clickMenuItem(UserMenuItem.Profile);
-
-    cy.step('Incomplete profile banner visible');
-    cy.get('[data-cy=emptyProfileMessage]').should('be.visible');
-    cy.get('[data-cy=incompleteProfileBanner]').click();
+    cy.url().should('include', '/settings');
 
     cy.step('Cannot add map pin');
     cy.get('[data-cy="tab-Map"]').click();
@@ -76,10 +74,11 @@ describe('[Settings]', () => {
 
     cy.step("Can't save without required fields being populated");
     cy.get('[data-cy=save]').click();
-    cy.get('[data-cy=errors-container]').should('be.visible');
+    cy.contains('This field is required').should('be.visible');
     cy.get('[data-cy=CompleteProfileHeader]').should('be.visible');
 
     cy.step('Can set the required fields');
+    cy.get('[data-cy=username]').clear().type(user.username);
     cy.setSettingBasicUserInfo({
       displayName,
       country,
@@ -130,7 +129,7 @@ describe('[Settings]', () => {
     cy.get('[data-cy=complete-profile-button]').should('not.exist');
     cy.fillSettingMapPin(mapDetails);
     cy.get('[data-cy=save-map-pin]').click();
-    cy.contains('Map pin saved successfully');
+    cy.contains('Map pin saved!');
     cy.contains('Your current map pin is here:');
     cy.contains(locationStub.country);
 
@@ -162,9 +161,10 @@ describe('[Settings]', () => {
 
     cy.step("Can't save without required fields being populated");
     cy.get('[data-cy=save]').click();
-    cy.get('[data-cy=errors-container]').should('be.visible');
+    cy.contains('This field is required.').should('be.visible');
 
     cy.step('Populate profile');
+    cy.get('[data-cy=username]').clear().type(user.username);
     cy.setSettingBasicUserInfo({
       displayName,
       description,
@@ -242,9 +242,10 @@ describe('[Precious Plastic]', () => {
 
     cy.step("Can't save without required fields being populated");
     cy.get('[data-cy=save]').click();
-    cy.get('[data-cy=errors-container]').should('be.visible');
+    cy.contains('This field is required.').should('be.visible');
 
     cy.step('Populate profile');
+    cy.get('[data-cy=username]').clear().type(user.username);
     cy.setSettingBasicUserInfo({
       displayName,
       description,

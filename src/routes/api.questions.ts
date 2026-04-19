@@ -118,6 +118,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const profile = profileRequest.data[0] as DBProfile;
 
+    if (!profile.username) {
+      throw validationError('You must set a username before creating content', 'username');
+    }
+
     const questionResult = await client
       .from('questions')
       .insert({
@@ -163,6 +167,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) {
   const title = question.title;
   const slug = question.slug;
+
+  if (!profile?.username) {
+    console.warn(`Profile ${profile?.id} has no username, skipping Discord notification`);
+    return;
+  }
 
   discordServiceServer.postWebhookRequest(
     `❓ ${profile.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,

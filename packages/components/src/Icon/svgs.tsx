@@ -23,6 +23,7 @@ import doubleTickSVG from '../../assets/icons/double-tick.svg';
 import editSVG from '../../assets/icons/edit.svg';
 import emailSVG from '../../assets/icons/email.svg';
 import employeeSVG from '../../assets/icons/employee.svg';
+import errorSVG from '../../assets/icons/error.svg';
 import eyeSVG from '../../assets/icons/eye.svg';
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg';
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg';
@@ -46,8 +47,10 @@ import usefulSVG from '../../assets/icons/icon-useful.svg';
 import verifiedSVG from '../../assets/icons/icon-verified-badge.svg';
 import websiteSVG from '../../assets/icons/icon-website.svg';
 import impactSVG from '../../assets/icons/impact.svg';
+import infoSVG from '../../assets/icons/info.svg';
 import informationSVG from '../../assets/icons/information.svg';
 import landscapeSVG from '../../assets/icons/landscape.svg';
+import loadingSVG from '../../assets/icons/loading.svg';
 import machineSVG from '../../assets/icons/machine.svg';
 import machinesSVG from '../../assets/icons/machines.svg';
 import mapSVG from '../../assets/icons/map.svg';
@@ -73,6 +76,7 @@ import serviceEmailSVG from '../../assets/icons/service-email.svg';
 import slidersSVG from '../../assets/icons/sliders.svg';
 import starterKitsSVG from '../../assets/icons/starter-kits.svg';
 import stepSVG from '../../assets/icons/step.svg';
+import successSVG from '../../assets/icons/success.svg';
 import supporterSVG from '../../assets/icons/supporter.svg';
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg';
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg';
@@ -81,7 +85,7 @@ import visitorsAppointmentSVG from '../../assets/icons/visitors-appointment.svg'
 import visitorsClosedSVG from '../../assets/icons/visitors-closed.svg';
 import visitorsOpenSVG from '../../assets/icons/visitors-open.svg';
 import volunteerSVG from '../../assets/icons/volunteer.svg';
-import loadingSVG from '../../assets/images/loading.svg';
+import warningSVG from '../../assets/icons/warning.svg';
 
 const imgStyle = {
   maxWidth: '100%',
@@ -151,7 +155,6 @@ export const iconMap = {
   impact: <ImageIcon src={impactSVG} />,
   information: <ImageIcon src={informationSVG} />,
   landscape: <ImageIcon src={landscapeSVG} />,
-  loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
   machine: <ImageIcon src={machineSVG} />,
   machines: <ImageIcon src={machinesSVG} />,
   map: <ImageIcon src={mapSVG} />,
@@ -207,4 +210,9 @@ export const iconMap = {
   visitorsClosed: <ImageIcon src={visitorsClosedSVG} />,
   visitorsOpen: <ImageIcon src={visitorsOpenSVG} />,
   website: <ImageIcon src={websiteSVG} />,
+  success: <ImageIcon src={successSVG} />,
+  error: <ImageIcon src={errorSVG} />,
+  warning: <ImageIcon src={warningSVG} />,
+  info: <ImageIcon src={infoSVG} />,
+  loading: <ImageIcon src={loadingSVG} />,
 };

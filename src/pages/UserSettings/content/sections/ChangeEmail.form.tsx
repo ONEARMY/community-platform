@@ -1,12 +1,11 @@
 import { Accordion, Button, FieldInput } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Field, Form } from 'react-final-form';
 import { PasswordField } from 'src/common/Form/PasswordField';
+import { useToast } from 'src/common/Toast/useToast';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { SessionContext } from 'src/pages/common/SessionContext';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
-import { UserContactError } from 'src/pages/User/contact/UserContactError';
 import { buttons, fields } from 'src/pages/UserSettings/labels';
 import { Flex } from 'theme-ui';
 import { accountService } from '../../services/account.service';
@@ -18,42 +17,23 @@ interface IFormValues {
 
 export const ChangeEmailForm = () => {
   const claims = useContext(SessionContext);
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
+  const toast = useToast();
 
   const formId = 'changeEmail';
 
   const onSubmit = async (values: IFormValues) => {
     const { newEmail, password } = values;
-    try {
-      const result = await accountService.changeEmail(newEmail, password);
+    const promise = accountService.changeEmail(newEmail, password);
 
-      if (!result.ok) {
-        const data = await result.json();
-
-        if (data.error) {
-          setSubmitResults({ type: 'error', message: data.error });
-        } else {
-          setSubmitResults({
-            type: 'error',
-            message: 'Oops, something went wrong!',
-          });
-        }
-
-        return;
-      }
-
-      setSubmitResults({
-        type: 'success',
-        message: FRIENDLY_MESSAGES['auth/email-changed'],
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    toast.promise(promise, {
+      loading: 'Changing your email...',
+      success: () => FRIENDLY_MESSAGES['auth/email-changed'],
+      error: (error) => `Error: ${error.message}`,
+    });
   };
 
   return (
     <Flex data-cy="changeEmailContainer" sx={{ flexDirection: 'column', gap: 2 }}>
-      <UserContactError submitResults={submitResults} />
       <Accordion title="Change Email" subtitle={`${fields.email.title}: ${claims?.email}`}>
         <Form
           onSubmit={onSubmit}

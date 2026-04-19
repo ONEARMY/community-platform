@@ -1,11 +1,10 @@
+import { FormApi } from 'node_modules/final-form/dist';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
-import { logger } from 'src/logger';
+import { useToast } from 'src/common/Toast';
 import { CategoryField, TagsField, TitleField } from 'src/pages/common/FormFields';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common';
@@ -15,7 +14,6 @@ import {
 } from 'src/pages/Question/Content/Common/FormFields';
 import * as LABELS from 'src/pages/Question/labels';
 import { questionService } from 'src/services/questionService';
-import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, endsWithQuestionMark, minValue, required } from 'src/utils/validators';
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants';
 
@@ -27,10 +25,8 @@ interface IProps {
 }
 
 export const QuestionForm = (props: IProps) => {
-  const navigate = useNavigate();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const toast = useToast();
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
   const id = props?.id || null;
 
   const initialValues = useMemo<QuestionFormData>(
@@ -46,62 +42,69 @@ export const QuestionForm = (props: IProps) => {
     [],
   );
 
-  const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
-    setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
-    setIsSubmitting(true);
+  const onSubmit = async (
+    form: FormApi<QuestionFormData, Partial<QuestionFormData>>,
+    values: QuestionFormData,
+    isDraft: boolean = false,
+  ) => {
+    const promise = questionService.upsert(id, {
+      title: values.title!,
+      description: values.description!,
+      tags: values.tags || null,
+      category: values.category || null,
+      images: values.images || null,
+      isDraft: isDraft,
+    });
 
-    try {
-      const result = await questionService.upsert(id, {
-        title: formValues.title!,
-        description: formValues.description!,
-        tags: formValues.tags || null,
-        category: formValues.category || null,
-        images: formValues.images || null,
-        isDraft: isDraft,
-      });
+    toast.promise(promise, {
+      loading: isDraft ? 'Saving draft...' : 'Submitting question...',
+      success: (data) => {
+        form.reset(values);
+        return {
+          message: isDraft ? 'Draft saved!' : 'Question submitted!',
+          actionLink: {
+            href: `/questions/${data.slug}`,
+            label: isDraft ? 'View draft' : 'View question',
+          },
+        };
+      },
+      error: (error) => {
+        console.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
 
-      if (result) {
-        fireConfetti();
-        navigate('/questions/' + result.slug);
-      }
-    } catch (e) {
-      if (e.cause && e.message) {
-        setSaveErrorMessage(e.message);
-      }
-      logger.error(e);
-      setIsSubmitting(false);
-      throw e;
-    } finally {
-      setIsSubmitting(false);
-    }
+    await promise;
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
   };
 
   return (
-    <Form
+    <Form<QuestionFormData>
       data-testid={props['data-testid']}
-      onSubmit={(values) => onSubmit(values, false)}
+      onSubmit={async (values, form) => await onSubmit(form, values, false)}
       initialValues={initialValues}
       render={({
         errors,
-        dirty,
         handleSubmit,
         hasValidationErrors,
         submitFailed,
         submitting,
-        submitSucceeded,
+        form,
         values,
       }) => {
         const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = async (e: React.MouseEvent) => {
-          e.preventDefault();
-          await onSubmit(values, true);
+        const handleSubmitDraft = async () => {
+          setIsSubmittingDraft(true);
+          try {
+            await onSubmit(form, values, true);
+            form.reset(values);
+          } finally {
+            setIsSubmittingDraft(false);
+          }
         };
-
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
-        );
 
         const validate = composeValidators(
           required,
@@ -112,17 +115,15 @@ export const QuestionForm = (props: IProps) => {
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[props.formAction]}
-            contentType="questions"
             errorsClientSide={errorsClientSide}
-            errorSubmitting={saveErrorMessage}
             guidelines={<QuestionPostingGuidelines />}
             handleSubmit={handleSubmit}
             handleSubmitDraft={handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[props.formAction]}
             submitFailed={submitFailed}
-            submitting={submitting || isSubmitting}
-            unsavedChangesDialog={unsavedChangesDialog}
+            submitting={submitting || isSubmittingDraft}
+            hideSubmittingMessage={true}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

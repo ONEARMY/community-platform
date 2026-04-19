@@ -76,6 +76,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').type(expected.description).blur();
 
       cy.get('[data-cy=draft]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
 
       cy.get('[data-cy=draft-tag]').should('be.visible');
       cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
@@ -98,6 +101,9 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
 
       cy.url().should('include', researchURL);
       cy.visit(researchURL);
@@ -151,7 +157,10 @@ describe('[Research]', () => {
       cy.step('Published when fields are populated correctly');
       cy.get('[data-cy=submit]').click();
 
-      cy.url().should('contain', `${researchURL}#update_`);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+
       cy.contains(updateTitle).should('be.visible');
       cy.contains(updateDescription).should('be.visible');
 
@@ -220,20 +229,33 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+
       cy.url().should('include', `/research/${slug}`);
 
       cy.step('Edit research and replace cover image');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=intro-description]').clear().type(updatedDescription).blur();
-      
+
       cy.step('Delete existing image and upload new one');
-      cy.get('[data-cy=delete-image]').click({force: true});
+      cy.get('[data-cy=delete-image]').click({ force: true });
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
-      
+
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/research/${slug}`);
       cy.contains(updatedDescription);
+    });
+
+    it('[Delete button is visible]', () => {
+      cy.signIn(admin.email, admin.password);
+
+      cy.visit('/research/a-research-test-4/edit');
+
+      cy.step('Delete button should be visible to research author');
+      cy.get('[data-cy="Research: delete button"]').should('be.visible');
     });
   });
 
@@ -261,7 +283,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=create]:visible').click();
 
       cy.wait(2000);
-      
+
       cy.step('Enter research article details');
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
@@ -269,6 +291,10 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+
       cy.get('[data-cy=follow-button]', { timeout: 20000 }).should('contain', 'Following');
       cy.contains(researchItem.title);
 
@@ -300,6 +326,10 @@ describe('[Research]', () => {
       cy.step('Save as Draft');
       cy.get('[data-cy=draft]').click();
 
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
+
       cy.step('Can see Draft after refresh');
       cy.contains(updateTitle);
       cy.get('[data-cy=DraftUpdateLabel]').should('be.visible');
@@ -323,6 +353,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(finalUpdateTitle);
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
       cy.contains(finalUpdateTitle);
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist');
 
@@ -365,6 +398,10 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
       cy.url().should('include', `/research/${researchSlug}`);
 
       cy.step('Create update with image and file');
@@ -374,16 +411,20 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updateTitle);
       cy.get('[data-cy=intro-description]').clear().type(updateDescription).blur();
-      
+
       cy.step('Add images to update');
       cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
-      
+
       cy.step('Add file to update');
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       cy.get('[data-cy=remove-file]').should('exist');
 
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+
       cy.url().should('include', `${researchSlug}#update_`);
 
       cy.step('Edit update and replace media');
@@ -393,18 +434,23 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updatedTitle);
       cy.get('[data-cy=intro-description]').clear().type(updatedDescription).blur();
-      
+
       cy.step('Replace image');
-      cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').click({force: true});
+      cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').click({ force: true });
       cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').should('exist');
-      
+
       cy.step('Replace file');
       cy.get('[data-cy=remove-file]').click();
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       cy.get('[data-cy=remove-file]').should('exist');
 
       cy.get('[data-cy=submit]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+
       cy.url().should('include', `${researchSlug}#update_`);
       cy.contains(updatedTitle);
       cy.contains(updatedDescription);

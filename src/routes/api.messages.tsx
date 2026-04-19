@@ -1,6 +1,15 @@
+import { HTTPException } from 'hono/http-exception';
 import type { ActionFunctionArgs } from 'react-router';
+import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import {
+  forbiddenError,
+  methodNotAllowedError,
+  tooManyRequestsError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 import { sendEmail } from '../.server/resend';
 import ReceiverMessage from '../.server/templates/ReceiverMessage';
 
@@ -19,30 +28,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      claims.data.claims.email!,
-      data,
-    );
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, claims.data.claims.email!, data);
 
     const userProfile = await client
       .from('profiles')
-      .select('id,username')
-      .eq('username', claims.data.claims.user_metadata?.username);
+      .select('id,username,display_name')
+      .eq('auth_id', claims.data.claims.sub);
+
+    const messenger = userProfile.data?.at(0);
+
+    if (!messenger?.username) {
+      throw forbiddenError('You must have a username to send messages.');
+    }
 
     const recipientProfile = await client
       .from('profiles')
       .select('id,auth_id')
       .eq('username', data.to);
 
-    const from = userProfile.data!.at(0)!.id;
+    const from = messenger.id;
     const to = recipientProfile.data!.at(0)!.id;
     const toAuthId = recipientProfile.data!.at(0)!.auth_id;
 
@@ -59,14 +66,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     if (countResult.count! >= 20) {
-      return Response.json(
-        { error: 'Too many requests' },
-        {
-          headers,
-          status: 429,
-          statusText:
-            "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
-        },
+      throw tooManyRequestsError(
+        "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
       );
     }
 
@@ -90,7 +91,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           username: data.to,
         });
     const receiver = emailResult.data[0];
-    const messenger = userProfile.data![0];
 
     const emailTemplate = (
       <ReceiverMessage
@@ -116,14 +116,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     if (sendResult.error) {
-      return Response.json(
-        { error: sendResult.error },
-        { headers, status: 429, statusText: sendResult.error },
-      );
+      throw sendResult.error;
     }
 
     return Response.json(null, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
 
     return Response.json({ error }, { headers, status: 500, statusText: 'Error sending message' });
@@ -131,22 +132,33 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 async function validateRequest(request: Request, userEmail: string | null, data: any) {
-  // TODO: Create a MessageDTO
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.to) {
-    return { status: 400, statusText: 'to is required' };
+    throw validationError('to is required', 'to');
   }
 
   if (!data.message) {
-    return { status: 400, statusText: 'message is required' };
+    throw validationError('message is required', 'message');
+  }
+
+  if (data.message.length < MESSAGE_MIN_CHARACTERS) {
+    throw validationError(
+      `Message must be at least ${MESSAGE_MIN_CHARACTERS} characters`,
+      'message',
+    );
+  }
+
+  if (data.message.length > MESSAGE_MAX_CHARACTERS) {
+    throw validationError(
+      `Message must be no more than ${MESSAGE_MAX_CHARACTERS} characters`,
+      'message',
+    );
   }
 
   if (!userEmail) {
-    return { status: 400, statusText: 'Unable to get messenger email address' };
+    throw validationError('Unable to get messenger email address', 'email');
   }
-
-  return { valid: true };
 }

@@ -57,7 +57,7 @@ export const ProfileModal = observer(() => {
         }}
       >
         <ModalLink
-          to={'/u/' + activeUser?.username}
+          to={activeUser?.username ? '/u/' + activeUser.username : '/settings/profile'}
           data-cy="menu-Profile"
           className={({ isActive }) => (isActive ? 'current' : '')}
         >

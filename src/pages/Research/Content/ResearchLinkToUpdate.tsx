@@ -34,7 +34,11 @@ export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
       data-tooltip-id="link-update"
       data-tooltip-content={showCheck ? SUCCESS : COPY_TO_CLIPBOARD}
     >
-      {showCheck ? <Icon glyph="check" color="green" size={30} /> : <Icon glyph="hyperlink" size={30} />}
+      {showCheck ? (
+        <Icon glyph="check" color="green" size={30} />
+      ) : (
+        <Icon glyph="hyperlink" size={30} />
+      )}
       <Tooltip id="link-update" />
     </Button>
   );

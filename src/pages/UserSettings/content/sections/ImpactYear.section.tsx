@@ -3,14 +3,16 @@ import type { IImpactDataField, IImpactYear } from 'oa-shared';
 import { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useLocation } from 'react-router';
-import { UserContactError } from 'src/pages/User/contact';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
-import { form } from 'src/pages/UserSettings/labels';
+import { useToast } from 'src/common/Toast';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Heading, Text } from 'theme-ui';
-import { sortImpactYearDisplayFields, transformImpactData, transformImpactInputs } from '../../utils';
+import {
+  sortImpactYearDisplayFields,
+  transformImpactData,
+  transformImpactInputs,
+} from '../../utils';
 import { ImpactYearField } from '../fields/ImpactYear.field';
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field';
 
@@ -21,11 +23,10 @@ interface Props {
 export const ImpactYearSection = observer(({ year }: Props) => {
   const [impact, setImpact] = useState<IImpactDataField[] | undefined>(undefined);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
-
   const impactDivRef = useRef<HTMLInputElement>(null);
   const { hash } = useLocation();
   const { profile, updateImpact } = useProfileStore();
+  const toast = useToast();
 
   const formId = `impactForm-${year}`;
   const sx = {
@@ -68,23 +69,23 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   }, [hash]);
 
   const onSubmit = async (values) => {
-    setSubmitResults(null);
-    try {
-      const fields = transformImpactInputs(values);
-      const impact = await profileService.updateImpact(year, fields);
-      updateImpact(impact);
-      setSubmitResults({ type: 'success', message: form.saveSuccess });
-      setIsEditMode(false);
-      setImpact(sortImpactYearDisplayFields(fields));
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    const fields = transformImpactInputs(values);
+    const promise = profileService.updateImpact(year, fields);
+    toast.promise(promise, {
+      loading: 'Updating your impact...',
+      success: (impact) => {
+        updateImpact(impact);
+        setIsEditMode(false);
+        setImpact(sortImpactYearDisplayFields(fields));
+
+        return 'Impact updated!';
+      },
+      error: (error) => `Error: ${error.message}`,
+    });
   };
 
   return (
     <Flex sx={sx} id={`year_${year}`}>
-      <UserContactError submitResults={submitResults} />
-
       <Heading as="h3" variant="small" ref={impactDivRef}>
         {year}
       </Heading>

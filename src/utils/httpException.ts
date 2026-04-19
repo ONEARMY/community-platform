@@ -46,3 +46,7 @@ export function forbiddenError(message = 'Forbidden') {
 export function conflictError(message: string) {
   return createHTTPException(409, message);
 }
+
+export function tooManyRequestsError(message: string) {
+  return createHTTPException(429, message);
+}

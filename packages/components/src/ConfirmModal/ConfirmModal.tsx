@@ -15,7 +15,14 @@ export interface Props {
 }
 
 export const ConfirmModal = (props: Props) => {
-  const { message, confirmButtonText, isOpen, width, confirmVariant = 'primary', cancelVariant = 'outline' } = props;
+  const {
+    message,
+    confirmButtonText,
+    isOpen,
+    width,
+    confirmVariant = 'primary',
+    cancelVariant = 'outline',
+  } = props;
 
   return (
     <Modal onDismiss={() => props?.handleCancel} isOpen={isOpen} width={width}>
@@ -31,7 +38,12 @@ export const ConfirmModal = (props: Props) => {
       >
         <Text sx={{ alignSelf: 'stretch', fontWeight: 'bold' }}>{message}</Text>
         <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-          <Button type="button" variant={cancelVariant} data-cy="Confirm.modal: Cancel" onClick={() => props?.handleCancel()}>
+          <Button
+            type="button"
+            variant={cancelVariant}
+            data-cy="Confirm.modal: Cancel"
+            onClick={() => props?.handleCancel()}
+          >
             Cancel
           </Button>
 

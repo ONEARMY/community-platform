@@ -118,8 +118,12 @@ export class ProfileStore {
   }
 
   getMissingFields(profile: Partial<Profile>) {
-    const { about, coverImages, displayName, photo } = profile;
+    const { about, coverImages, displayName, photo, username } = profile;
     const missing: string[] = [];
+
+    if (!username) {
+      missing.push('Username');
+    }
 
     if (!displayName) {
       missing.push('Display name');
@@ -141,9 +145,9 @@ export class ProfileStore {
   }
 
   isProfileComplete(profile: Partial<Profile>) {
-    const { about, coverImages, displayName, photo } = profile;
+    const { about, coverImages, displayName, photo, username } = profile;
 
-    const isBasicInfoFilled = !!(about && displayName);
+    const isBasicInfoFilled = !!(username && about && displayName);
 
     const isMember = profile.type?.name === 'member';
     const isSpace = !isMember;

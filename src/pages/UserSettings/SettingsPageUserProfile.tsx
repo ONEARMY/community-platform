@@ -3,17 +3,15 @@ import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Button, Loader } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { Form } from 'react-final-form';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
-import { logger } from 'src/logger';
+import { useToast } from 'src/common/Toast';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
 import { Flex } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
-import type { IFormNotification } from './content/SettingsFormNotifications';
-import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 import { ProfileTypeSection } from './content/sections/ProfileType.section';
 import { PublicContactSection } from './content/sections/PublicContact.section';
 import { UserImagesSection } from './content/sections/UserImages.section';
@@ -22,9 +20,10 @@ import { VisitorSection } from './content/sections/VisitorSection';
 import { buttons } from './labels';
 
 export const SettingsPageUserProfile = observer(() => {
-  const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
+  const toast = useToast();
   const tenantContext = useContext(TenantContext);
-  const { profileTypes, profile, update, refresh } = useProfileStore();
+  const profileStore = useProfileStore();
+  const { profile, profileTypes } = profileStore;
 
   if (!profile) {
     return null;
@@ -33,36 +32,39 @@ export const SettingsPageUserProfile = observer(() => {
   const saveProfile = async (values: ProfileFormData) => {
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || [];
 
-    try {
-      const updatedProfile = await profileService.update(values);
-
-      update(updatedProfile);
-      refresh();
-
-      setNotification({
-        message: 'Profile Saved',
-        icon: 'check',
-        show: true,
-        variant: 'success',
-      });
-    } catch (error) {
-      logger.error(error, 'SettingsPage.saveProfile.error');
-      setNotification({
-        message: error.toString(),
-        icon: 'close',
-        show: true,
-        variant: 'failure',
+    if (values.username && values.username !== profile?.username) {
+      const usernamePromise = profileService.updateUsername(values.username);
+      toast.promise(usernamePromise, {
+        loading: 'Updating username...',
+        success: (usernameResult) => {
+          profileStore.update(usernameResult);
+          return 'Username updated!';
+        },
+        error: (error) => `Error: ${error.message}`,
       });
     }
+
+    const profilePromise = profileService.update(values);
+
+    toast.promise(profilePromise, {
+      loading: 'Updating profile...',
+      success: (updatedProfile) => {
+        profileStore.update(updatedProfile);
+        profileStore.refresh();
+        return 'Profile updated!';
+      },
+      error: (error) => `Error: ${error.message}`,
+    });
   };
 
   const coverImages = profile.coverImages
-    ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
+    ? profile.coverImages?.slice(0, 4).map((image) => toJS(image))
     : [];
 
   const initialValues = useMemo<ProfileFormData>(
     () =>
       ({
+        username: profile.username || '',
         type: profile.type?.name || 'member',
         displayName: profile.displayName || '',
         about: profile.about || '',
@@ -85,12 +87,11 @@ export const SettingsPageUserProfile = observer(() => {
     <Form
       id={formId}
       onSubmit={async (values) => await saveProfile(values)}
-      initialValues={{ ...initialValues, username: profile.username }}
+      initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       validateOnBlur
       render={({
         dirty,
-        submitFailed,
         submitting,
         submitSucceeded,
         values,
@@ -105,12 +106,6 @@ export const SettingsPageUserProfile = observer(() => {
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
             {submitting && <Loader sx={{ alignSelf: 'center' }} />}
-            <SettingsFormNotifications
-              errors={errors}
-              notification={notification}
-              submitFailed={submitFailed}
-            />
-
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <ProfileTypeSection profileTypes={profileTypes || []} />

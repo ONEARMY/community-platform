@@ -150,28 +150,23 @@ export class ResearchServiceServer {
       : [];
   }
 
-  async isAllowedToEditResearch(research: DBResearchItem, currentUsername: string) {
-    if (!currentUsername) {
-      return false;
-    }
-
-    if (currentUsername === research.author?.username) {
+  async isAllowedToEditResearch(research: DBResearchItem, profile: DBProfile) {
+    if (profile.id === research.author?.id) {
       return true;
     }
 
-    if (Array.isArray(research.collaborators) && research.collaborators.includes(currentUsername)) {
+    if (
+      profile.username &&
+      Array.isArray(research.collaborators) &&
+      research.collaborators.includes(profile.username)
+    ) {
       return true;
     }
 
-    const { data } = await this.client
-      .from('profiles')
-      .select('roles')
-      .eq('username', currentUsername);
-
-    return data?.at(0)?.roles?.includes(UserRole.ADMIN);
+    return profile.roles?.includes(UserRole.ADMIN);
   }
 
-  async isAllowedToEditResearchById(id: number, currentUsername: string) {
+  async isAllowedToEditResearchById(id: number, profile: DBProfile) {
     const researchResult = await this.client
       .from('research')
       .select('id,created_by,collaborators,author:profiles(id,username)')
@@ -180,7 +175,7 @@ export class ResearchServiceServer {
 
     const research = researchResult.data as unknown as DBResearchItem;
 
-    return this.isAllowedToEditResearch(research, currentUsername);
+    return this.isAllowedToEditResearch(research, profile);
   }
 
   async getById(id: number) {
@@ -204,7 +199,7 @@ export class ResearchServiceServer {
     return (
       profile &&
       (profile.id === research.author?.id ||
-        research.collaborators?.includes(profile.username) ||
+        (profile.username && research.collaborators?.includes(profile.username)) ||
         profile?.roles?.includes(UserRole.ADMIN))
     );
   }

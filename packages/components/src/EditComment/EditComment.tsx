@@ -20,7 +20,7 @@ export const EditComment = (props: IProps) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const validationSchema = object({
-    comment: string().required('Make sure this field is filled correctly'),
+    comment: string().required(),
   });
 
   const required = (value: string) => (value?.trim() ? undefined : 'Comment cannot be blank');

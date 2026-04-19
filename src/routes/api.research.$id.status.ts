@@ -28,9 +28,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
     const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
       id,
-      claims.data.claims.user_metadata?.username,
+      profile,
     );
 
     if (!canEdit) {

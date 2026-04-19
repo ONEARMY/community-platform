@@ -1,13 +1,9 @@
 import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
 import type { Profile } from 'oa-shared';
-import { useState } from 'react';
 import { Form } from 'react-final-form';
-import {
-  UserContactError,
-  UserContactFieldMessage,
-  UserContactFieldName,
-} from 'src/pages/User/contact';
+import { useToast } from 'src/common/Toast';
+import { UserContactFieldMessage, UserContactFieldName } from 'src/pages/User/contact';
 import { contact } from 'src/pages/User/labels';
 import { messageService } from 'src/services/messageService';
 import { isUserContactable } from 'src/utils/helpers';
@@ -17,42 +13,37 @@ interface Props {
   user: Profile;
 }
 
-type SubmitResults = { type: 'success' | 'error'; message: string };
-
 export const UserContactForm = observer(({ user }: Props) => {
+  const toast = useToast();
+
   if (!isUserContactable(user)) {
     return null;
   }
 
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
-
-  const { button, title, successMessage } = contact;
   const buttonName = 'contact-submit';
   const formId = 'contact-form';
 
   const onSubmit = async (formValues, form) => {
-    setSubmitResults(null);
-    const response = await messageService.sendMessage({
-      to: user.username,
+    const promise = messageService.sendMessage({
+      to: user.username!,
       message: formValues.message,
       name: formValues.name,
     });
 
-    if (response.ok) {
-      form.restart();
-      return setSubmitResults({ type: 'success', message: successMessage });
-    }
-
-    return setSubmitResults({
-      type: 'error',
-      message: `${response.statusText}. Please try again or report the problem.`,
+    toast.promise(promise, {
+      loading: 'Sending your message...',
+      success: () => {
+        form.restart();
+        return contact.successMessage;
+      },
+      error: (error) => `Error: ${error.message}`,
     });
   };
 
   return (
     <Flex sx={{ flexDirection: 'column' }} data-cy="UserContactForm">
-      <Heading as="h3" variant="small" my={2}>
-        {`${title} ${user.displayName}`}
+      <Heading as="h3" variant="small" mb={2}>
+        {`${contact.title} ${user.displayName}`}
       </Heading>
       <Form
         onSubmit={onSubmit}
@@ -61,15 +52,12 @@ export const UserContactForm = observer(({ user }: Props) => {
         render={({ handleSubmit, submitting }) => {
           return (
             <form>
-              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                <UserContactError submitResults={submitResults} />
-
+              <Flex sx={{ flexDirection: 'column', gap: 3 }}>
                 <UserContactFieldName />
                 <UserContactFieldMessage />
 
                 <Box sx={{ flexSelf: 'flex-start' }}>
                   <Button
-                    large
                     onClick={handleSubmit}
                     data-cy={buttonName}
                     data-testid={buttonName}
@@ -78,7 +66,7 @@ export const UserContactForm = observer(({ user }: Props) => {
                     disabled={submitting}
                     form={formId}
                   >
-                    {button}
+                    {contact.button}
                   </Button>
                 </Box>
               </Flex>

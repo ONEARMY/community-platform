@@ -18,7 +18,15 @@ export interface FollowButtonProps {
 }
 
 export const FollowButton = (props: FollowButtonProps) => {
-  const { isFollowing, isLoggedIn, labelFollow = 'Follow', labelUnfollow = 'Following', onFollowClick, sx, variant = 'outline' } = props;
+  const {
+    isFollowing,
+    isLoggedIn,
+    labelFollow = 'Follow',
+    labelUnfollow = 'Following',
+    onFollowClick,
+    sx,
+    variant = 'outline',
+  } = props;
   const navigate = useNavigate();
   const uuid = useId();
 
@@ -32,7 +40,11 @@ export const FollowButton = (props: FollowButtonProps) => {
         data-tooltip-content={isFollowing ? props.tooltipUnfollow : props.tooltipFollow}
         variant={variant}
         sx={{ fontSize: 2, ...sx }}
-        onClick={() => (isLoggedIn ? onFollowClick() : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname)))}
+        onClick={() =>
+          isLoggedIn
+            ? onFollowClick()
+            : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
+        }
         icon={isFollowing ? 'thunderbolt' : 'thunderbolt-grey'}
         small={!!props.small}
       >

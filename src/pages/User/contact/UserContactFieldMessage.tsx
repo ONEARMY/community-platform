@@ -2,14 +2,14 @@ import { FieldTextarea } from 'oa-components';
 import { Field } from 'react-final-form';
 import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { contact } from 'src/pages/User/labels';
-import { required } from 'src/utils/validators';
-import { Box, Label } from 'theme-ui';
+import { minValue, required } from 'src/utils/validators';
+import { Flex, Label } from 'theme-ui';
 
 export const UserContactFieldMessage = () => {
   const name = 'message';
 
   return (
-    <Box>
+    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       <Label htmlFor={name}>{`${contact.message.title} *`}</Label>
       <Field
         name={name}
@@ -21,10 +21,10 @@ export const UserContactFieldMessage = () => {
         modifiers={{ capitalize: true, trim: true }}
         component={FieldTextarea}
         sx={{ backgroundColor: 'white' }}
-        validate={required}
+        validate={(value) => required(value) || minValue(MESSAGE_MIN_CHARACTERS)(value)}
         validateFields={[]}
         showCharacterCount
       />
-    </Box>
+    </Flex>
   );
 };

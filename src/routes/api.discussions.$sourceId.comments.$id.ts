@@ -31,6 +31,13 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 400, statusText: 'user not found' });
   }
 
+  if (!profile.username) {
+    return Response.json(
+      { error: 'You must set a username before modifying comments' },
+      { headers, status: 403 },
+    );
+  }
+
   const commentId: string = params.id!;
 
   try {

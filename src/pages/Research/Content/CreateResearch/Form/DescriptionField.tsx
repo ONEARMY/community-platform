@@ -5,7 +5,7 @@ import { draftValidationWrapper, required } from 'src/utils/validators';
 import { Flex, Label } from 'theme-ui';
 
 import { RESEARCH_MAX_LENGTH } from '../../../constants';
-import { update as updateLabels } from '../../../labels';
+import { updateForm as updateLabels } from '../../../labels';
 
 export const DescriptionField = () => {
   const { title, placeholder } = updateLabels.description;

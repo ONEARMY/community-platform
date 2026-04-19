@@ -14,7 +14,9 @@ const GlobalSiteFooter = () => {
     return !path.startsWith('/map') && !path.startsWith('/academy') && path !== '/';
   }, [location?.pathname]);
 
-  return showFooter ? <SiteFooter siteName={tenantContext?.siteName || 'Community Platform'} /> : null;
+  return showFooter ? (
+    <SiteFooter siteName={tenantContext?.siteName || 'Community Platform'} />
+  ) : null;
 };
 
 export default GlobalSiteFooter;

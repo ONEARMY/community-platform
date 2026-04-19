@@ -28,7 +28,7 @@ export function createUsefulStatistic(
         }
       },
       modalComponent: (profiles: ProfileListItem[]) => (
-        <ProfileList header="Others that found it useful" profiles={profiles || []} />
+        <ProfileList header="Others that found it useful" profiles={profiles} />
       ),
     }),
   };

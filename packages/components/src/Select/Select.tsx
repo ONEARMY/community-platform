@@ -31,22 +31,22 @@ export const Select = (props: Props) => {
   const SelectStyles: Partial<StylesConfig> = {
     container: (provided) => ({
       ...provided,
-      fontSize: theme.fontSizes[2] + 'px',
+      fontSize: theme.fontSizes[1] + 'px',
       fontFamily: '"Varela Round", Arial, sans-serif',
     }),
     control: (provided) => ({
       ...provided,
-      border: '1px solid ' + theme.colors.softblue,
+      border: '2px solid ' + theme.colors.softblue,
       backgroundColor: theme.colors.background,
       minHeight: '40px',
       cursor: 'pointer',
       boxShadow: 'none',
       ':focus': {
-        border: '1px solid ' + theme.colors.blue,
+        border: '2px solid ' + theme.colors.blue,
         outline: 'none',
       },
       ':hover': {
-        border: '1px solid ' + theme.colors.blue,
+        border: '2px solid ' + theme.colors.blue,
       },
     }),
 
@@ -60,11 +60,11 @@ export const Select = (props: Props) => {
 
     menu: (provided) => ({
       ...provided,
-      border: '1px solid ' + theme.colors.softblue,
+      border: '2px solid ' + theme.colors.softblue,
       boxShadow: 'none',
       backgroundColor: theme.colors.background,
       ':hover': {
-        border: '1px solid ' + theme.colors.softblue,
+        border: '2px solid ' + theme.colors.softblue,
       },
     }),
 
@@ -73,7 +73,7 @@ export const Select = (props: Props) => {
       borderRadius: data.color ? 99 : 4,
       backgroundColor: data.color ? `${data.color}20` : theme.colors.white,
       padding: '2px',
-      border: '1px solid ',
+      border: '2px solid ',
       borderColor: data.color || theme.colors.softgrey,
       color: data.color || theme.colors.grey,
     }),
@@ -111,19 +111,19 @@ export const Select = (props: Props) => {
     ...SelectStyles,
     control: (provided) => ({
       ...provided,
-      border: '1px solid ' + theme.colors.red,
+      border: '2px solid ' + theme.colors.red,
       ':focus': {
-        border: '1px solid ' + theme.colors.red,
+        border: '2px solid ' + theme.colors.red,
       },
       ':hover': {
-        border: '1px solid ' + theme.colors.red,
+        border: '2px solid ' + theme.colors.red,
       },
     }),
     menu: (provided) => ({
       ...provided,
-      border: '1px solid ' + theme.colors.red,
+      border: '2px solid ' + theme.colors.red,
       ':hover': {
-        border: '1px solid ' + theme.colors.red,
+        border: '2px solid ' + theme.colors.red,
       },
     }),
   };
@@ -144,10 +144,10 @@ export const Select = (props: Props) => {
       cursor: 'pointer',
       boxShadow: 'none',
       ':hover': {
-        border: '1px solid ' + theme.colors.blue,
+        border: '2px solid ' + theme.colors.blue,
       },
       ':focus': {
-        border: '1px solid ' + theme.colors.blue,
+        border: '2px solid ' + theme.colors.blue,
       },
     }),
     placeholder: (provided) => ({
@@ -177,7 +177,7 @@ export const Select = (props: Props) => {
       ...provided,
       backgroundColor: theme.colors.softblue,
       padding: '2px',
-      border: '1px solid ' + theme.colors.black,
+      border: '2px solid ' + theme.colors.black,
       color: theme.colors.grey,
     }),
 

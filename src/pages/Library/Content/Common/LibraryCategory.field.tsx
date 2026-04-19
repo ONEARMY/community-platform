@@ -6,6 +6,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { intro } from 'src/pages/Library/labels';
 import { categoryService } from 'src/services/categoryService';
 import { required } from 'src/utils/validators';
+import { Box, Text } from 'theme-ui';
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance';
 
 export const LibraryCategoryField = () => {
@@ -34,15 +35,18 @@ export const LibraryCategoryField = () => {
       <Field
         name="category"
         validate={required}
-        validateFields={[]}
-        render={({ input }) => (
-          <>
+        render={({ input, meta }) => (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {meta.touched && meta.error && (
+              <Text sx={{ color: 'error', fontSize: 1 }}>{meta.error}</Text>
+            )}
             <CategoriesSelectV2
               isForm={true}
               onChange={(category) => input.onChange(category)}
               value={input.value}
               placeholder={placeholder || ''}
               categories={options}
+              invalid={meta.touched && meta.error}
             />
             {input?.value?.value && (
               <LibraryCategoryGuidance
@@ -50,7 +54,7 @@ export const LibraryCategoryField = () => {
                 type="main"
               />
             )}
-          </>
+          </Box>
         )}
       />
     </FormFieldWrapper>

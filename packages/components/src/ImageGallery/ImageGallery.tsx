@@ -170,7 +170,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
   // Detect images wider than 16:9 and remove aspect ratio constraint to prevent letterboxing
   const ASPECT_RATIO_16_9 = 16 / 9;
-  const isWideImage = state.activeImageAspectRatio ? state.activeImageAspectRatio > ASPECT_RATIO_16_9 : false;
+  const isWideImage = state.activeImageAspectRatio
+    ? state.activeImageAspectRatio > ASPECT_RATIO_16_9
+    : false;
   const useFlexibleAspectRatio = isWideImage && !!props.allowPortrait;
   const allowPortrait = !!props.allowPortrait;
 
@@ -203,7 +205,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 right: 0,
                 zIndex: 2,
               }}
-              onClick={() => setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)}
+              onClick={() =>
+                setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)
+              }
             >
               <Arrow direction="right" sx={{ marginRight: '10px' }} />
             </NavButton>
@@ -213,7 +217,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 left: 0,
                 zIndex: 2,
               }}
-              onClick={() => setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)}
+              onClick={() =>
+                setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)
+              }
             >
               <Arrow direction="left" sx={{ marginLeft: '10px' }} />
             </NavButton>

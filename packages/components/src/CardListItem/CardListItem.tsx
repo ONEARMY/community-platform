@@ -32,7 +32,11 @@ export const CardListItem = (props: IProps) => {
 
   if (viewport === 'mobile') {
     return (
-      <InternalLink target="_blank" to={`/u/${item.profile!.username}`} {...wrapperProps}>
+      <InternalLink
+        target="_blank"
+        to={item.profile?.username ? `/u/${item.profile.username}` : '/settings/profile'}
+        {...wrapperProps}
+      >
         {Card}
       </InternalLink>
     );

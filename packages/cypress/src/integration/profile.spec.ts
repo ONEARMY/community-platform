@@ -38,6 +38,7 @@ describe('[Profile]', () => {
     it('[User directed to own profile]', () => {
       const user = generateNewUserDetails();
       cy.signUpNewUser(user);
+      cy.setProfileUsername(user.username);
       cy.visit('/');
 
       cy.step('Go to Profile');
@@ -55,25 +56,30 @@ describe('[Profile]', () => {
 
       cy.step('Can sign-up and have a contact form');
       cy.signUpNewUser(contactee);
+      cy.setProfileUsername(contactee.username);
       cy.visit(`/u/${contactee.username}`);
+      cy.get('[data-cy=contact-tab]').click();
       cy.get('[data-cy="UserContactForm-Available"]');
 
       cy.step("Logged out people can see that they're contactable");
       cy.logout();
       cy.wait(2000);
       cy.visit(`/u/${contactee.username}`);
+      cy.get('[data-cy=contact-tab]').click();
       cy.get('[data-cy="UserContactNotLoggedIn"]');
 
       cy.step('Other users can contact people');
       const contacter = generateNewUserDetails();
       cy.signUpNewUser(contacter);
+      cy.setProfileUsername(contacter.username);
       cy.visit(`/u/${contactee.username}`);
+      cy.get('[data-cy=contact-tab]').click();
       cy.get('[data-cy="UserContactForm"]').should('be.visible');
       cy.contains(`${contact.title} ${contactee.username}`).should('be.visible');
 
       cy.step('Form errors without a message');
       cy.get('[data-cy=contact-submit]').click();
-      cy.contains('Make sure this field is filled correctly').should('be.visible');
+      cy.contains('This field is required').should('be.visible');
 
       cy.step('Contact form will send');
       const message = faker.lorem.sentences(50).slice(0, MESSAGE_MAX_CHARACTERS).trim();
@@ -247,6 +253,7 @@ describe('[Profile]', () => {
       cy.visit('/settings');
       cy.get('[data-cy=tab-Profile]').click();
       cy.get('[data-cy=workspace]').click();
+      cy.get('[data-cy=username]').clear().type(newUser.username);
       cy.setSettingImage('avatar', 'userImage');
       cy.setSettingImage('profile-cover-1', 'coverImages-0');
       cy.setSettingBasicUserInfo({

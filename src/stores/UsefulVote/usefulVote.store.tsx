@@ -49,7 +49,12 @@ export class UsefulVoteStore {
     return this.votes.get(key)?.isLoading ?? false;
   }
 
-  async initializeVote(contentType: UsefulContentType, contentId: number, initialUsefulCount: number, isLoggedIn: boolean): Promise<void> {
+  async initializeVote(
+    contentType: UsefulContentType,
+    contentId: number,
+    initialUsefulCount: number,
+    isLoggedIn: boolean,
+  ): Promise<void> {
     const key = this.getCacheKey(contentType, contentId);
     const existing = this.votes.get(key);
 
@@ -183,7 +188,11 @@ export const UsefulVoteStoreProvider = ({ children }: { children: React.ReactNod
     }
   }, [profile]);
 
-  return <UsefulVoteStoreContext.Provider value={usefulVoteStore}>{children}</UsefulVoteStoreContext.Provider>;
+  return (
+    <UsefulVoteStoreContext.Provider value={usefulVoteStore}>
+      {children}
+    </UsefulVoteStoreContext.Provider>
+  );
 };
 
 export const useUsefulVoteStore = () => {

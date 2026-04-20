@@ -30,7 +30,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
         paddingY: '3px',
       }}
     >
-      <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+      <Flex sx={{ flexDirection: 'column' }}>
         <Flex>
           <Text
             sx={{
@@ -49,12 +49,21 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
               return <UserBadge key={badge.id} badge={badge} />;
             })}
         </Flex>
-        <Flex sx={{ gap: 1, alignItems: 'center' }}>
-          {countryCode && <FlagIcon countryCode={countryCode} width="13.33px" height="10px" />}
-          <Text sx={{ color: 'grey', fontSize: 1, fontFamily: 'body', lineHeight: '100%' }}>
-            {country}
-          </Text>
-        </Flex>
+        {countryCode && (
+          <Flex sx={{ alignItems: 'center', gap: 1, pt: 1 }}>
+            <FlagIcon countryCode={countryCode} />
+            <Text
+              sx={{
+                color: 'grey',
+                fontSize: 1,
+                fontFamily: 'body',
+                lineHeight: '100%',
+              }}
+            >
+              {country}
+            </Text>
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

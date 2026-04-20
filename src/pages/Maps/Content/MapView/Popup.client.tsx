@@ -40,7 +40,7 @@ export const Popup = (props: IProps) => {
       offset={new Point(2, -10)}
       closeOnClick={false}
       closeOnEscapeKey={false}
-      closeButton={true}
+      closeButton={false}
       minWidth={250}
       maxWidth={300}
       autoPan={false}

@@ -15,7 +15,7 @@ import PageHeader from 'src/common/PageHeader';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
-import { AspectRatio, Box, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
+import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 
@@ -52,11 +52,18 @@ export const NewsPage = observer(({ news }: IProps) => {
   useImageLightbox({ images: allImages });
 
   return (
-    <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>
+    <Flex sx={{ flexDirection: 'column', maxWidth: '690px', width: '100%', alignSelf: 'center' }}>
       <PageHeader>
         <Breadcrumbs steps={[{ text: 'News', link: '/news' }, { text: news.title }]} />
       </PageHeader>
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          background: 'white',
+          borderRadius: 4,
+          marginBottom: 4,
+        }}
+      >
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
             <Image
@@ -64,7 +71,8 @@ export const NewsPage = observer(({ news }: IProps) => {
               ref={heroImageRef}
               src={news.heroImage.publicUrl}
               sx={{
-                borderRadius: 2,
+                borderTopLeftRadius: 2,
+                borderTopRightRadius: 2,
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
@@ -76,69 +84,95 @@ export const NewsPage = observer(({ news }: IProps) => {
 
         <Flex
           sx={{
-            alignItems: 'center',
             flexDirection: 'column',
-            gap: 2,
-            padding: [2, 0],
+            padding: [2, 4, 6],
+            paddingBottom: [1, 2, 4],
           }}
         >
-          <Flex sx={{ alignItems: 'center', gap: 2 }}>
-            {news.category && <Category category={news.category} />}
-            {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
-            {news.tags && (
-              <TagList data-cy="news-tags" tags={news.tags.map((t) => ({ label: t.name }))} />
+          <Flex sx={{ flexDirection: 'column', gap: 2, marginBottom: 3 }}>
+            {news.category || news.profileBadge ? (
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                {news.category && <Category category={news.category} />}
+                {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
+              </Flex>
+            ) : null}
+
+            <Heading as="h1" data-cy="news-title" data-testid="news-title">
+              {news.title}
+            </Heading>
+
+            <Text variant="auxiliary">
+              {/* Intentionally not passing modifiedAt - news edits are often minor fixes */}
+              <DisplayDate
+                createdAt={news.createdAt}
+                publishedAt={news.publishedAt}
+                publishedAction="Published"
+              />
+            </Text>
+
+            {news.isDraft && <DraftTag />}
+
+            {isEditable && (
+              <ClientOnly fallback={<></>}>
+                {() => (
+                  <Link to={'/news/' + news.slug + '/edit'}>
+                    <Button type="button" variant="primary" data-cy="edit">
+                      Edit
+                    </Button>
+                  </Link>
+                )}
+              </ClientOnly>
             )}
           </Flex>
 
-          <Heading
-            as="h1"
-            data-cy="news-title"
-            data-testid="news-title"
-            sx={{ textAlign: 'center' }}
-          >
-            {news.title}
-          </Heading>
-
-          <Text variant="auxiliary">
-            {/* Intentionally not passing modifiedAt - news edits are often minor fixes */}
-            <DisplayDate
-              createdAt={news.createdAt}
-              publishedAt={news.publishedAt}
-              publishedAction="Published"
-            />
-          </Text>
-
-          {news.isDraft && <DraftTag />}
-
-          {isEditable && (
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <Link to={'/news/' + news.slug + '/edit'}>
-                  <Button type="button" variant="primary" data-cy="edit">
-                    Edit
-                  </Button>
-                </Link>
-              )}
-            </ClientOnly>
-          )}
+          <Divider />
 
           <Box
             data-cy="news-body"
             sx={{
               alignSelf: 'stretch',
               fontFamily: 'body',
-              lineHeight: 1.5,
+              lineHeight: 2,
               a: {
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
               },
-              h3: { fontSize: 2 },
-              h4: { fontSize: 2 },
-              h5: { fontSize: 2 },
-              h6: { fontSize: 2 },
+              h1: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h2: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h3: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h4: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h5: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              h6: {
+                lineHeight: 1.2,
+                marginBottom: 0,
+              },
+              blockQuote: {
+                paddingX: 4,
+                paddingY: 2,
+                margin: 0,
+                backgroundColor: '#f4f8fd',
+                borderLeft: '3px solid #c8d8ec',
+              },
               img: {
                 borderRadius: 2,
                 maxWidth: '100%',
+                display: 'block',
+                margin: '0 auto',
               },
               iframe: {
                 maxHeight: ['300px', '370px', '420px'],
@@ -148,15 +182,20 @@ export const NewsPage = observer(({ news }: IProps) => {
             <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
           </Box>
 
+          <Divider />
+
           <Flex
             sx={{
+              flexDirection: 'column',
               flexWrap: 'wrap',
               gap: 3,
               justifyContent: 'stretch',
-              paddingTop: 2,
-              paddingBottom: 2,
             }}
           >
+            {news.tags && news.tags.length > 0 && (
+              <TagList data-cy="news-tags" tags={news.tags.map((t) => ({ label: t.name }))} />
+            )}
+
             <ContentStatistics
               statistics={[
                 {
@@ -212,6 +251,6 @@ export const NewsPage = observer(({ news }: IProps) => {
           </Card>
         )}
       </ClientOnly>
-    </Box>
+    </Flex>
   );
 });

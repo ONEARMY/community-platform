@@ -10,8 +10,6 @@ import {
 import type { DBNotificationsPreferences } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
-import { UserContactError } from 'src/pages/User/contact';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { Button, Flex, Text } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
 
@@ -67,12 +65,10 @@ interface IProps {
   onSubmit: (values: DBNotificationsPreferences) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
   profileIsContactable?: boolean;
-  submitResults: SubmitResults | null;
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable, submitResults } =
-    props;
+  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable } = props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const tenantContext = useContext(TenantContext);
   const showMessagingSetting = !tenantContext?.noMessaging;
@@ -116,8 +112,6 @@ export const SupabaseNotificationsForm = (props: IProps) => {
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            <UserContactError submitResults={submitResults} />
-
             <Text as="h3">We should email you about...</Text>
 
             <GridForm fields={fields} />

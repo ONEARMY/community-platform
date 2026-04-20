@@ -36,9 +36,8 @@ export const errorSet = (
 
 export const transformLibraryErrors = (
   errors: ITopLevelErrorsList | undefined,
-  isDraft: boolean,
 ): IErrorsListSet[] => {
-  if (!errors || isDraft) {
+  if (!errors) {
     return [];
   }
 

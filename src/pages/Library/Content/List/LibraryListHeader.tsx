@@ -212,7 +212,7 @@ export const LibraryListHeader = (props: IProps) => {
         </>
       }
       loggedIn={
-        <>
+        <Flex sx={{ gap: 2 }}>
           <DraftButton
             showDrafts={showDrafts}
             draftCount={draftCount}
@@ -223,7 +223,7 @@ export const LibraryListHeader = (props: IProps) => {
               {listing.create}
             </Button>
           </Link>
-        </>
+        </Flex>
       }
       loggedOut={
         <ReturnPathLink to="/sign-up">

@@ -58,8 +58,6 @@ export const NewsImageField = (props: IProps) => {
       description={fields.heroImage.description}
       htmlFor="images"
       text={fields.heroImage.title}
-      flexDirection="row"
-      flexWrap="wrap"
       required
     >
       {uploadError && (

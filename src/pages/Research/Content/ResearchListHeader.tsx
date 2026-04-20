@@ -191,16 +191,18 @@ export const ResearchFilterHeader = (props: IProps) => {
       }
       loggedIn={
         <AuthWrapper roleRequired={createResearchRoles}>
-          <DraftButton
-            showDrafts={showDrafts}
-            draftCount={draftCount}
-            handleShowDrafts={handleShowDrafts}
-          />
-          <Link to="/research/create">
-            <Button type="button" variant="primary" data-cy="create">
-              {listing.create}
-            </Button>
-          </Link>
+          <Flex sx={{ gap: 2 }}>
+            <DraftButton
+              showDrafts={showDrafts}
+              draftCount={draftCount}
+              handleShowDrafts={handleShowDrafts}
+            />
+            <Link to="/research/create">
+              <Button type="button" variant="primary" data-cy="create">
+                {listing.create}
+              </Button>
+            </Link>
+          </Flex>
         </AuthWrapper>
       }
       loggedOut={

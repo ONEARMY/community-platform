@@ -1,13 +1,13 @@
 import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
-import type { ContentFormType } from 'oa-shared';
+import { useFormState } from 'react-final-form';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
 import { ErrorsContainer } from './ErrorsContainer';
 import type { IErrorsListSet } from './types';
+import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 
 interface IProps {
   buttonLabel: string;
-  contentType: ContentFormType;
   children: React.ReactNode;
   errorsClientSide?: IErrorsListSet[];
   errorSubmitting?: string;
@@ -31,7 +31,6 @@ export const FormWrapper = (props: IProps) => {
     belowBody,
     buttonLabel,
     children,
-    contentType,
     errorsClientSide,
     errorSubmitting,
     guidelines,
@@ -46,6 +45,7 @@ export const FormWrapper = (props: IProps) => {
     unsavedChangesDialog,
   } = props;
 
+  const { dirty } = useFormState({ subscription: { dirty: true } });
   const hasClientSideErrors = hasValidationErrors && submitFailed;
 
   return (
@@ -63,18 +63,14 @@ export const FormWrapper = (props: IProps) => {
           width: ['100%', '100%', `${(2 / 3) * 100}%`],
         }}
       >
-        {unsavedChangesDialog}
+        {unsavedChangesDialog ?? <UnsavedChangesDialog hasChanges={dirty} />}
         <Flex
           as="form"
-          id={`${contentType}Form`}
           sx={{ width: '100%', flexDirection: 'column', gap: '1rem' }}
           onSubmit={handleSubmit}
         >
           <Card sx={{ backgroundColor: 'softblue' }}>
-            <Flex
-              data-cy={`${contentType}-title`}
-              sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
-            >
+            <Flex sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}>
               <Heading as="h1">{heading}</Heading>
               <Box ml="15px">
                 <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />

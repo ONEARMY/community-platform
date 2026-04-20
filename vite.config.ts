@@ -4,6 +4,7 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths';
 
@@ -37,7 +38,7 @@ export default defineConfig({
     global: 'globalThis',
   },
   build: {
-    target: ['es2020'],
+    target: ['es2022'],
     sourcemap: process.env.NODE_ENV !== 'production', // to enable local server-side debugging
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -65,6 +66,118 @@ export default defineConfig({
     }),
     // support import of svg files
     svgr(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'robots.txt'],
+      injectRegister: null,
+      outDir: 'build/client',
+      base: '/',
+      //      manifest: false,        // ← don't generate a static manifest
+      // injectManifest: false,  // ← don't inject it into HTML either
+      manifest: {
+        name: 'Community Platform',
+        short_name: 'Community Platform',
+        description: 'Community Platform',
+        theme_color: '#000000',
+        background_color: '#ffffff',
+        display: 'standalone',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: 'any',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: '16x16',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: '32x32',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: '256x256',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/assets/img/one-army-logo.png',
+            sizes: 'any',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,ico,png,svg,woff,woff2}'],
+        navigateFallback: null, // Disable for SSR - let server handle navigation
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 24 hours
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/storage\.googleapis\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'gcs-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
+      },
+      devOptions: {
+        enabled: false,
+      },
+    }),
   ],
   // open browser with server (note, will open at 127.0.1 not localhost on node <17)
   // https://vitejs.dev/config/server-options.html#server-options

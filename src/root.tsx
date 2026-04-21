@@ -104,10 +104,6 @@ export const links: LinksFunction = () => {
       rel: 'manifest',
       href: '/manifest.webmanifest',
     },
-    {
-      rel: 'apple-touch-icon',
-      href: '/assets/img/one-army-logo.png',
-    },
   ];
 };
 

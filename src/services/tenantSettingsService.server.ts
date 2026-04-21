@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import { TenantSettings, UserRole } from 'oa-shared';
+import { PWAIcons, TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 
 const cache = new Keyv<TenantSettings>({ ttl: 3600000 }); // ttl: 60 minutes
@@ -39,7 +39,8 @@ export class TenantSettingsService {
         color_accent_hover,
         show_impact,
         create_research_roles,
-        ga_tracking_id`,
+        ga_tracking_id,
+        pwa_icons`,
       )
       .single();
 
@@ -65,6 +66,7 @@ export class TenantSettingsService {
       showImpact: data?.show_impact,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
       gaTrackingId: data?.ga_tracking_id,
+      pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
     });
 
     cache.set('tenant-settings', settings);

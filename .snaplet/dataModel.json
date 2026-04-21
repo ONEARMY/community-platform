@@ -196,13 +196,7 @@
           "maxLength": 64
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "audit_log_entries_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "banners": {
       "id": "public.banners",
@@ -480,20 +474,6 @@
           "hasDefaultValue": false
         },
         {
-          "name": "prefixes",
-          "type": "prefixes",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "prefixesTobuckets",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
           "name": "s3_multipart_uploads",
           "type": "s3_multipart_uploads",
           "isRequired": false,
@@ -524,11 +504,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "buckets_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "bname",
           "fields": ["name"],
           "nullNotDistinct": false
@@ -541,9 +516,9 @@
       "tableName": "buckets_analytics",
       "fields": [
         {
-          "id": "storage.buckets_analytics.id",
-          "name": "id",
-          "columnName": "id",
+          "id": "storage.buckets_analytics.name",
+          "name": "name",
+          "columnName": "name",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -551,7 +526,7 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
-          "isId": true,
+          "isId": false,
           "maxLength": null
         },
         {
@@ -611,6 +586,34 @@
           "maxLength": null
         },
         {
+          "id": "storage.buckets_analytics.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "storage.buckets_analytics.deleted_at",
+          "name": "deleted_at",
+          "columnName": "deleted_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "iceberg_namespaces",
           "type": "iceberg_namespaces",
           "isRequired": false,
@@ -641,11 +644,89 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "buckets_analytics_pkey",
-          "fields": ["id"],
+          "name": "buckets_analytics_unique_name_idx",
+          "fields": ["name"],
           "nullNotDistinct": false
         }
       ]
+    },
+    "buckets_vectors": {
+      "id": "storage.buckets_vectors",
+      "schemaName": "storage",
+      "tableName": "buckets_vectors",
+      "fields": [
+        {
+          "id": "storage.buckets_vectors.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "storage.buckets_vectors.type",
+          "name": "type",
+          "columnName": "type",
+          "type": "buckettype",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.buckets_vectors.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.buckets_vectors.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "vector_indexes",
+          "type": "vector_indexes",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "vector_indexesTobuckets_vectors",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": []
     },
     "categories": {
       "id": "public.categories",
@@ -1005,6 +1086,356 @@
         }
       ]
     },
+    "custom_oauth_providers": {
+      "id": "auth.custom_oauth_providers",
+      "schemaName": "auth",
+      "tableName": "custom_oauth_providers",
+      "fields": [
+        {
+          "id": "auth.custom_oauth_providers.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.provider_type",
+          "name": "provider_type",
+          "columnName": "provider_type",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.identifier",
+          "name": "identifier",
+          "columnName": "identifier",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.client_id",
+          "name": "client_id",
+          "columnName": "client_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.client_secret",
+          "name": "client_secret",
+          "columnName": "client_secret",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.acceptable_client_ids",
+          "name": "acceptable_client_ids",
+          "columnName": "acceptable_client_ids",
+          "type": "text[]",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.scopes",
+          "name": "scopes",
+          "columnName": "scopes",
+          "type": "text[]",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.pkce_enabled",
+          "name": "pkce_enabled",
+          "columnName": "pkce_enabled",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.attribute_mapping",
+          "name": "attribute_mapping",
+          "columnName": "attribute_mapping",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.authorization_params",
+          "name": "authorization_params",
+          "columnName": "authorization_params",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.enabled",
+          "name": "enabled",
+          "columnName": "enabled",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.email_optional",
+          "name": "email_optional",
+          "columnName": "email_optional",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.issuer",
+          "name": "issuer",
+          "columnName": "issuer",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.discovery_url",
+          "name": "discovery_url",
+          "columnName": "discovery_url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.skip_nonce_check",
+          "name": "skip_nonce_check",
+          "columnName": "skip_nonce_check",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.cached_discovery",
+          "name": "cached_discovery",
+          "columnName": "cached_discovery",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.discovery_cached_at",
+          "name": "discovery_cached_at",
+          "columnName": "discovery_cached_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.authorization_url",
+          "name": "authorization_url",
+          "columnName": "authorization_url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.token_url",
+          "name": "token_url",
+          "columnName": "token_url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.userinfo_url",
+          "name": "userinfo_url",
+          "columnName": "userinfo_url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.jwks_uri",
+          "name": "jwks_uri",
+          "columnName": "jwks_uri",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "custom_oauth_providers_identifier_key",
+          "fields": ["identifier"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "extensions": {
       "id": "_realtime.extensions",
       "schemaName": "_realtime",
@@ -1155,7 +1586,7 @@
           "name": "auth_code",
           "columnName": "auth_code",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -1169,7 +1600,7 @@
           "name": "code_challenge_method",
           "columnName": "code_challenge_method",
           "type": "code_challenge_method",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -1183,7 +1614,7 @@
           "name": "code_challenge",
           "columnName": "code_challenge",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -1291,6 +1722,76 @@
           "maxLength": null
         },
         {
+          "id": "auth.flow_state.invite_token",
+          "name": "invite_token",
+          "columnName": "invite_token",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.flow_state.referrer",
+          "name": "referrer",
+          "columnName": "referrer",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.flow_state.oauth_client_state_id",
+          "name": "oauth_client_state_id",
+          "columnName": "oauth_client_state_id",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.flow_state.linking_target_id",
+          "name": "linking_target_id",
+          "columnName": "linking_target_id",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.flow_state.email_optional",
+          "name": "email_optional",
+          "columnName": "email_optional",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "saml_relay_states",
           "type": "saml_relay_states",
           "isRequired": false,
@@ -1305,13 +1806,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "flow_state_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "hooks": {
       "id": "supabase_functions.hooks",
@@ -1517,9 +2012,9 @@
           "maxLength": null
         },
         {
-          "id": "storage.iceberg_namespaces.bucket_id",
-          "name": "bucket_id",
-          "columnName": "bucket_id",
+          "id": "storage.iceberg_namespaces.bucket_name",
+          "name": "bucket_name",
+          "columnName": "bucket_name",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -1573,12 +2068,40 @@
           "maxLength": null
         },
         {
+          "id": "storage.iceberg_namespaces.metadata",
+          "name": "metadata",
+          "columnName": "metadata",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.iceberg_namespaces.catalog_id",
+          "name": "catalog_id",
+          "columnName": "catalog_id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "buckets_analytics",
           "type": "buckets_analytics",
           "isRequired": true,
           "kind": "object",
           "relationName": "iceberg_namespacesTobuckets_analytics",
-          "relationFromFields": ["bucket_id"],
+          "relationFromFields": ["catalog_id"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,
@@ -1603,13 +2126,8 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "iceberg_namespaces_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "idx_iceberg_namespaces_bucket_id",
-          "fields": ["bucket_id", "name"],
+          "fields": ["catalog_id", "name"],
           "nullNotDistinct": false
         }
       ]
@@ -1648,9 +2166,9 @@
           "maxLength": null
         },
         {
-          "id": "storage.iceberg_tables.bucket_id",
-          "name": "bucket_id",
-          "columnName": "bucket_id",
+          "id": "storage.iceberg_tables.bucket_name",
+          "name": "bucket_name",
+          "columnName": "bucket_name",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -1718,12 +2236,68 @@
           "maxLength": null
         },
         {
+          "id": "storage.iceberg_tables.remote_table_id",
+          "name": "remote_table_id",
+          "columnName": "remote_table_id",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.iceberg_tables.shard_key",
+          "name": "shard_key",
+          "columnName": "shard_key",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.iceberg_tables.shard_id",
+          "name": "shard_id",
+          "columnName": "shard_id",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.iceberg_tables.catalog_id",
+          "name": "catalog_id",
+          "columnName": "catalog_id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "buckets_analytics",
           "type": "buckets_analytics",
           "isRequired": true,
           "kind": "object",
           "relationName": "iceberg_tablesTobuckets_analytics",
-          "relationFromFields": ["bucket_id"],
+          "relationFromFields": ["catalog_id"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,
@@ -1748,13 +2322,13 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "iceberg_tables_pkey",
-          "fields": ["id"],
+          "name": "idx_iceberg_tables_location",
+          "fields": ["location"],
           "nullNotDistinct": false
         },
         {
           "name": "idx_iceberg_tables_namespace_id",
-          "fields": ["name", "namespace_id"],
+          "fields": ["catalog_id", "name", "namespace_id"],
           "nullNotDistinct": false
         }
       ]
@@ -1907,11 +2481,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "identities_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "identities_provider_id_provider_unique",
           "fields": ["provider", "provider_id"],
           "nullNotDistinct": false
@@ -1994,279 +2563,7 @@
           "maxLength": null
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "instances_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "key": {
-      "id": "pgsodium.key",
-      "schemaName": "pgsodium",
-      "tableName": "key",
-      "fields": [
-        {
-          "id": "pgsodium.key.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.status",
-          "name": "status",
-          "columnName": "status",
-          "type": "key_status",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.created",
-          "name": "created",
-          "columnName": "created",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.expires",
-          "name": "expires",
-          "columnName": "expires",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.key_type",
-          "name": "key_type",
-          "columnName": "key_type",
-          "type": "key_type",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.key_id",
-          "name": "key_id",
-          "columnName": "key_id",
-          "type": "int8",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": {
-            "identifier": "\"pgsodium\".\"key_key_id_seq\"",
-            "increment": 1,
-            "start": 1
-          },
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.key_context",
-          "name": "key_context",
-          "columnName": "key_context",
-          "type": "bytea",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.associated_data",
-          "name": "associated_data",
-          "columnName": "associated_data",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.raw_key",
-          "name": "raw_key",
-          "columnName": "raw_key",
-          "type": "bytea",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.raw_key_nonce",
-          "name": "raw_key_nonce",
-          "columnName": "raw_key_nonce",
-          "type": "bytea",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.parent_key",
-          "name": "parent_key",
-          "columnName": "parent_key",
-          "type": "uuid",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.comment",
-          "name": "comment",
-          "columnName": "comment",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "pgsodium.key.user_data",
-          "name": "user_data",
-          "columnName": "user_data",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "key",
-          "type": "key",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "keyTokey",
-          "relationFromFields": ["parent_key"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "key",
-          "type": "key",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "keyTokey",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "secrets",
-          "type": "secrets",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "secretsTokey",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "key_key_id_key_context_key_type_idx",
-          "fields": ["key_context", "key_id", "key_type"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "key_status_idx1",
-          "fields": ["status"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "pgsodium_key_unique_name",
-          "fields": ["name"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "map_pins": {
       "id": "public.map_pins",
@@ -2904,11 +3201,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "amr_id_pk",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "mfa_amr_claims_session_id_authentication_method_pkey",
           "fields": ["authentication_method", "session_id"],
           "nullNotDistinct": false
@@ -3033,13 +3325,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "mfa_challenges_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "mfa_factors": {
       "id": "auth.mfa_factors",
@@ -3215,6 +3501,20 @@
           "maxLength": null
         },
         {
+          "id": "auth.mfa_factors.last_webauthn_challenge_data",
+          "name": "last_webauthn_challenge_data",
+          "columnName": "last_webauthn_challenge_data",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "users",
           "type": "users",
           "isRequired": true,
@@ -3247,11 +3547,6 @@
         {
           "name": "mfa_factors_last_challenged_at_key",
           "fields": ["last_challenged_at"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "mfa_factors_pkey",
-          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
@@ -3332,11 +3627,6 @@
         {
           "name": "migrations_name_key",
           "fields": ["name"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "migrations_pkey",
-          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -4372,6 +4662,20 @@
           "maxLength": null
         },
         {
+          "id": "auth.oauth_authorizations.nonce",
+          "name": "nonce",
+          "columnName": "nonce",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "oauth_clients",
           "type": "oauth_clients",
           "isRequired": true,
@@ -4410,13 +4714,72 @@
           "name": "oauth_authorizations_authorization_id_key",
           "fields": ["authorization_id"],
           "nullNotDistinct": false
-        },
-        {
-          "name": "oauth_authorizations_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
         }
       ]
+    },
+    "oauth_client_states": {
+      "id": "auth.oauth_client_states",
+      "schemaName": "auth",
+      "tableName": "oauth_client_states",
+      "fields": [
+        {
+          "id": "auth.oauth_client_states.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_client_states.provider_type",
+          "name": "provider_type",
+          "columnName": "provider_type",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_client_states.code_verifier",
+          "name": "code_verifier",
+          "columnName": "code_verifier",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_client_states.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": []
     },
     "oauth_clients": {
       "id": "auth.oauth_clients",
@@ -4592,6 +4955,20 @@
           "maxLength": null
         },
         {
+          "id": "auth.oauth_clients.token_endpoint_auth_method",
+          "name": "token_endpoint_auth_method",
+          "columnName": "token_endpoint_auth_method",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "oauth_authorizations",
           "type": "oauth_authorizations",
           "isRequired": false,
@@ -4634,13 +5011,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "oauth_clients_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "oauth_consents": {
       "id": "auth.oauth_consents",
@@ -4761,11 +5132,6 @@
         }
       ],
       "uniqueConstraints": [
-        {
-          "name": "oauth_consents_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
         {
           "name": "oauth_consents_user_client_unique",
           "fields": ["client_id", "user_id"],
@@ -4947,20 +5313,6 @@
           "maxLength": null
         },
         {
-          "id": "storage.objects.level",
-          "name": "level",
-          "columnName": "level",
-          "type": "int4",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "buckets",
           "type": "buckets",
           "isRequired": false,
@@ -4977,23 +5329,8 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "objects_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "bucketid_objname",
           "fields": ["bucket_id", "name"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "idx_name_bucket_level_unique",
-          "fields": ["bucket_id", "level", "name"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "objects_bucket_id_level_idx",
-          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         }
       ]
@@ -5118,11 +5455,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "one_time_tokens_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "one_time_tokens_user_id_token_type_key",
           "fields": ["token_type", "user_id"],
           "nullNotDistinct": false
@@ -5199,104 +5531,6 @@
         {
           "name": "patreon_settings_pkey",
           "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "prefixes": {
-      "id": "storage.prefixes",
-      "schemaName": "storage",
-      "tableName": "prefixes",
-      "fields": [
-        {
-          "id": "storage.prefixes.bucket_id",
-          "name": "bucket_id",
-          "columnName": "bucket_id",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "storage.prefixes.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "storage.prefixes.level",
-          "name": "level",
-          "columnName": "level",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": true,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "storage.prefixes.created_at",
-          "name": "created_at",
-          "columnName": "created_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "storage.prefixes.updated_at",
-          "name": "updated_at",
-          "columnName": "updated_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "buckets",
-          "type": "buckets",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "prefixesTobuckets",
-          "relationFromFields": ["bucket_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "prefixes_pkey",
-          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         }
       ]
@@ -7670,11 +7904,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "refresh_tokens_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "refresh_tokens_token_unique",
           "fields": ["token"],
           "nullNotDistinct": false
@@ -8493,13 +8722,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "s3_multipart_uploads_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "s3_multipart_uploads_parts": {
       "id": "storage.s3_multipart_uploads_parts",
@@ -8675,13 +8898,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "s3_multipart_uploads_parts_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "saml_providers": {
       "id": "auth.saml_providers",
@@ -8834,11 +9051,6 @@
           "name": "saml_providers_entity_id_key",
           "fields": ["entity_id"],
           "nullNotDistinct": false
-        },
-        {
-          "name": "saml_providers_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
         }
       ]
     },
@@ -8988,13 +9200,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "saml_relay_states_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "_realtime_schema_migrations": {
       "id": "_realtime.schema_migrations",
@@ -9052,13 +9258,7 @@
           "maxLength": 255
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "schema_migrations_pkey",
-          "fields": ["version"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "realtime_schema_migrations": {
       "id": "realtime.schema_migrations",
@@ -9223,7 +9423,7 @@
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -9268,20 +9468,6 @@
           "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
-        },
-        {
-          "name": "key",
-          "type": "key",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "secretsTokey",
-          "relationFromFields": ["key_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -9508,6 +9694,48 @@
           "maxLength": null
         },
         {
+          "id": "auth.sessions.refresh_token_hmac_key",
+          "name": "refresh_token_hmac_key",
+          "columnName": "refresh_token_hmac_key",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.sessions.refresh_token_counter",
+          "name": "refresh_token_counter",
+          "columnName": "refresh_token_counter",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.sessions.scopes",
+          "name": "scopes",
+          "columnName": "scopes",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "oauth_clients",
           "type": "oauth_clients",
           "isRequired": false,
@@ -9564,13 +9792,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "sessions_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "sso_domains": {
       "id": "auth.sso_domains",
@@ -9662,13 +9884,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "sso_domains_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "sso_providers": {
       "id": "auth.sso_providers",
@@ -9788,13 +10004,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "sso_providers_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "subscribers": {
       "id": "public.subscribers",
@@ -10480,6 +10690,20 @@
           "name": "ga_tracking_id",
           "columnName": "ga_tracking_id",
           "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.pwa_icons",
+          "name": "pwa_icons",
+          "columnName": "pwa_icons",
+          "type": "jsonb",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -11634,16 +11858,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "users_phone_key",
-          "fields": ["phone"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "users_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
           "name": "confirmation_token_idx",
           "fields": ["confirmation_token"],
           "nullNotDistinct": false
@@ -11671,6 +11885,165 @@
         {
           "name": "users_email_partial_key",
           "fields": ["email"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "users_phone_key",
+          "fields": ["phone"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "vector_indexes": {
+      "id": "storage.vector_indexes",
+      "schemaName": "storage",
+      "tableName": "vector_indexes",
+      "fields": [
+        {
+          "id": "storage.vector_indexes.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.bucket_id",
+          "name": "bucket_id",
+          "columnName": "bucket_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.data_type",
+          "name": "data_type",
+          "columnName": "data_type",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.dimension",
+          "name": "dimension",
+          "columnName": "dimension",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.distance_metric",
+          "name": "distance_metric",
+          "columnName": "distance_metric",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.metadata_configuration",
+          "name": "metadata_configuration",
+          "columnName": "metadata_configuration",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.vector_indexes.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "buckets_vectors",
+          "type": "buckets_vectors",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "vector_indexesTobuckets_vectors",
+          "relationFromFields": ["bucket_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "vector_indexes_name_bucket_id_idx",
+          "fields": ["bucket_id", "name"],
           "nullNotDistinct": false
         }
       ]
@@ -11808,61 +12181,6 @@
         },
         {
           "name": "SUCCESS"
-        }
-      ]
-    },
-    "key_status": {
-      "schemaName": "pgsodium",
-      "values": [
-        {
-          "name": "default"
-        },
-        {
-          "name": "expired"
-        },
-        {
-          "name": "invalid"
-        },
-        {
-          "name": "valid"
-        }
-      ]
-    },
-    "key_type": {
-      "schemaName": "pgsodium",
-      "values": [
-        {
-          "name": "aead-det"
-        },
-        {
-          "name": "aead-ietf"
-        },
-        {
-          "name": "auth"
-        },
-        {
-          "name": "generichash"
-        },
-        {
-          "name": "hmacsha256"
-        },
-        {
-          "name": "hmacsha512"
-        },
-        {
-          "name": "kdf"
-        },
-        {
-          "name": "secretbox"
-        },
-        {
-          "name": "secretstream"
-        },
-        {
-          "name": "shorthash"
-        },
-        {
-          "name": "stream_xchacha20"
         }
       ]
     },
@@ -12049,6 +12367,9 @@
         },
         {
           "name": "STANDARD"
+        },
+        {
+          "name": "VECTOR"
         }
       ]
     }

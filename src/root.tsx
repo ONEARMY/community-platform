@@ -100,15 +100,23 @@ export const links: LinksFunction = () => {
       href: '/api/favicon',
       type: 'image/x-icon',
     },
+    {
+      rel: 'manifest',
+      href: '/manifest.webmanifest',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: '/assets/img/one-army-logo.png',
+    },
   ];
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
   const tags = generateTags(
-    data?.siteName || '',
-    data?.siteDescription || undefined,
+    loaderData?.siteName || '',
+    loaderData?.siteDescription || undefined,
     '/social-image.jpg',
-    { siteName: data?.siteName },
+    { siteName: loaderData?.siteName },
   );
 
   if (import.meta.env.VITE_BRANCH !== 'production') {

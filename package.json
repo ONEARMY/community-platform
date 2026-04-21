@@ -14,7 +14,7 @@
     "start:themes": "bun run --filter oa-themes dev",
     "start:components": "bun run --filter oa-components dev",
     "start:shared": "bun run --filter oa-shared dev",
-    "start:prod": "bun run build:shared && bun run build:themes && bun run build:components && bun ./server.js",
+    "start:prod": "bun run build:shared && bun run build:themes && bun run build:components && cross-env NODE_ENV=production && bun ./server.js",
     "start:platform": "bun run build:shared && bun ./server.js",
     "start:platform-ci": "bun run build:shared && cross-env NODE_ENV=production bun ./server.js",
     "build:themes": "bun run --filter oa-themes build",
@@ -147,9 +147,11 @@
     "typescript": "^5.7.2",
     "vite": "^7.1.12",
     "vite-plugin-env-compatible": "^2.0.1",
+    "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.5"
+    "vitest": "^4.0.5",
+    "workbox-window": "^7.4.0"
   },
   "dependenciesMeta": {
     "cypress": {

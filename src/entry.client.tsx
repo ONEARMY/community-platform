@@ -3,7 +3,6 @@ import * as Sentry from '@sentry/react-router';
 import { startTransition, useMemo, useState } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
-
 import { SENTRY_CONFIG } from './config/config';
 import { ClientStyleContext } from './styles/context';
 import { createEmotionCache } from './styles/createEmotionCache';
@@ -37,3 +36,23 @@ startTransition(() => {
     </ClientCacheProvider>,
   );
 });
+
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  (async () => {
+    try {
+      const { Workbox } = await import('workbox-window');
+      const wb = new Workbox('/sw.js');
+
+      wb.addEventListener('installed', (event) => {
+        if (event.isUpdate) {
+          // TODO: show toast
+          console.log('New version available! Refresh to update.');
+        }
+      });
+
+      await wb.register();
+    } catch (error) {
+      console.debug('Service worker registration skipped:', error.message);
+    }
+  })();
+}

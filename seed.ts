@@ -605,6 +605,13 @@ const main = async () => {
       show_impact: true,
       create_research_roles: ['admin', 'research_creator'],
       ga_tracking_id: 'test_ga_id',
+      pwa_icons: {
+        '16': '',
+        '32': '',
+        '192': '',
+        '256': '',
+        '512': '',
+      },
     },
   ]);
 

@@ -4,6 +4,7 @@ import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -30,6 +31,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Oldest);
   const { isSubscribed, toggle: toggleFollowReplies } = useSubscription(sourceType, sourceId);
   const { profile } = useProfileStore();
+  const location = useLocation();
 
   const displayedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
@@ -84,13 +86,13 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   }, [sourceId, location?.hash]);
 
   useEffect(() => {
-    if (window.location.hash && window.location.hash === '#discussion') {
+    if (location.hash && location.hash === '#discussion') {
       const el = document.getElementById('discussion');
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  }, []);
+  }, [location.hash]);
 
   const postComment = async (comment: string) => {
     try {

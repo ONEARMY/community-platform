@@ -110,6 +110,7 @@ app.use(
         "'unsafe-eval'",
         "'unsafe-inline'",
       ],
+      workerSrc: ["'self'", 'blob:'],
       frameSrc: [
         "'self'",
         'onearmy.github.io',

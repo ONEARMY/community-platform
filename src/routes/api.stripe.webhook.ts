@@ -2,18 +2,19 @@ import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { StripeServiceServer } from 'src/services/stripeService.server';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import type Stripe from 'stripe';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    throw methodNotAllowedError();
   }
 
   const body = await request.text();
   const signature = request.headers.get('stripe-signature');
 
   if (!signature) {
-    return new Response('No signature', { status: 400 });
+    throw validationError('Missing stripe-signature header');
   }
 
   const client = createSupabaseAdminServerClient();
@@ -38,7 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const customerId = subscription.customer as string;
         const isActive = subscription.status === 'active';
 
-        let authId = await stripeService.getAuthIdByStripeCustomerId(customerId);
+        let authId = await stripeService.getAuthIdByStripeCustomerId(customerId, tenantId);
         if (!authId) {
           // Guest checkout: try matching by email and auto-link
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
@@ -61,7 +62,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
 
-        let authId = await stripeService.getAuthIdByStripeCustomerId(customerId);
+        let authId = await stripeService.getAuthIdByStripeCustomerId(customerId, tenantId);
         if (!authId) {
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
         }

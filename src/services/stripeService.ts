@@ -7,17 +7,6 @@ export type SubscriptionStatus = {
   } | null;
 };
 
-const getSubscriptionStatus = async (): Promise<SubscriptionStatus | null> => {
-  try {
-    const response = await fetch('/api/stripe');
-    return (await response.json()) as SubscriptionStatus;
-  } catch (error) {
-    console.error(error);
-  }
-
-  return null;
-};
-
 type ElementsSubscriptionParams = {
   priceId: string;
   name: string;
@@ -33,6 +22,42 @@ type ElementsSubscriptionResponse =
       accountExists: boolean;
     }
   | { ok: false; error: string };
+
+type CreateSupporterAccountParams = {
+  email: string;
+  password: string;
+  name: string;
+  stripeCustomerId: string;
+};
+
+type CreateSupporterAccountResponse = { ok: true } | { ok: false; error: string };
+
+type LinkExistingAccountParams = {
+  email: string;
+  password: string;
+  stripeCustomerId: string;
+};
+
+type LinkExistingAccountResponse = { ok: true } | { ok: false; error: string };
+
+type SetPasswordParams = {
+  email: string;
+  stripeCustomerId: string;
+  password: string;
+};
+
+type SetPasswordResponse = { ok: true } | { ok: false; error: string };
+
+const getSubscriptionStatus = async (): Promise<SubscriptionStatus | null> => {
+  try {
+    const response = await fetch('/api/stripe');
+    return (await response.json()) as SubscriptionStatus;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return null;
+};
 
 const createElementsSubscription = async (
   params: ElementsSubscriptionParams,
@@ -84,15 +109,6 @@ const createPortalSession = async (): Promise<string | null> => {
   return null;
 };
 
-type CreateSupporterAccountParams = {
-  email: string;
-  password: string;
-  name: string;
-  stripeCustomerId: string;
-};
-
-type CreateSupporterAccountResponse = { ok: true } | { ok: false; error: string };
-
 const createSupporterAccount = async (
   params: CreateSupporterAccountParams,
 ): Promise<CreateSupporterAccountResponse> => {
@@ -116,14 +132,6 @@ const createSupporterAccount = async (
   }
 };
 
-type LinkExistingAccountParams = {
-  email: string;
-  password: string;
-  stripeCustomerId: string;
-};
-
-type LinkExistingAccountResponse = { ok: true } | { ok: false; error: string };
-
 const linkExistingAccount = async (
   params: LinkExistingAccountParams,
 ): Promise<LinkExistingAccountResponse> => {
@@ -146,14 +154,6 @@ const linkExistingAccount = async (
     return { ok: false, error: 'Network error. Please try again.' };
   }
 };
-
-type SetPasswordParams = {
-  email: string;
-  stripeCustomerId: string;
-  password: string;
-};
-
-type SetPasswordResponse = { ok: true } | { ok: false; error: string };
 
 const setPassword = async (params: SetPasswordParams): Promise<SetPasswordResponse> => {
   try {

@@ -3,7 +3,7 @@ import { Button, Icon } from 'oa-components';
 import { type FormEvent, useState } from 'react';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
-import { CURRENCY_SYMBOLS, formatAmount } from './SupporterPage';
+import { formatPrice } from './SupporterPage';
 
 const CheckoutForm = () => {
   const {
@@ -23,7 +23,6 @@ const CheckoutForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const symbol = CURRENCY_SYMBOLS[currency] || currency.toUpperCase();
   const label = interval === 'month' ? 'Month' : 'Year';
 
   const handleSubmit = async (event: FormEvent) => {
@@ -86,7 +85,7 @@ const CheckoutForm = () => {
         </Box>
         {errorMessage && <Text sx={{ color: 'red' }}>{errorMessage}</Text>}
         <Button type="submit" variant="primary" disabled={!stripe || isSubmitting}>
-          {isSubmitting ? 'Processing...' : `Pay ${symbol}${formatAmount(selectedAmount)}/${label}`}
+          {isSubmitting ? 'Processing...' : `Pay ${formatPrice(selectedAmount, currency)}/${label}`}
         </Button>
         <Text variant="quiet" sx={{ fontSize: 0 }}>
           By confirming your payment, you allow us to charge your payment method for this and future
@@ -98,7 +97,7 @@ const CheckoutForm = () => {
 };
 
 export const CheckoutView = () => {
-  const { stripeInstance, clientSecret, selectedAmount, interval, symbol, onBack } =
+  const { stripeInstance, clientSecret, selectedAmount, interval, currency, onBack } =
     useSupporterContext();
 
   if (!stripeInstance || !clientSecret) return null;
@@ -111,6 +110,7 @@ export const CheckoutView = () => {
         mx: 'auto',
         my: [3, 5],
         px: [3, 0],
+        gap: 3,
       }}
     >
       <Box
@@ -128,7 +128,6 @@ export const CheckoutView = () => {
           fontWeight: 'bold',
           fontSize: 1,
           fontFamily: 'body',
-          mb: 3,
         }}
       >
         ← Back
@@ -196,8 +195,7 @@ export const CheckoutView = () => {
             <Icon glyph="supporter" size={50} />
             <Text sx={{ fontWeight: 'bold', fontSize: 1 }}>Support</Text>
             <Text sx={{ fontWeight: 'bold', fontSize: 3 }}>
-              {symbol}
-              {formatAmount(selectedAmount)} /{interval === 'month' ? 'month' : 'year'}
+              {formatPrice(selectedAmount, currency)} /{interval === 'month' ? 'month' : 'year'}
             </Text>
             <Text variant="quiet" sx={{ fontSize: 0 }}>
               You can cancel, pause or update your subscription at any time

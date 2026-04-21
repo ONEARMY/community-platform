@@ -33,13 +33,20 @@ export class StripeServiceServer {
     return data?.stripe_customer_id || null;
   }
 
-  async getAuthIdByStripeCustomerId(stripeCustomerId: string): Promise<string | null> {
-    const { data } = await this.client
+  async getAuthIdByStripeCustomerId(
+    stripeCustomerId: string,
+    tenantId?: string,
+  ): Promise<string | null> {
+    let query = this.client
       .from('stripe_customers')
       .select('auth_id')
-      .eq('stripe_customer_id', stripeCustomerId)
-      .single();
+      .eq('stripe_customer_id', stripeCustomerId);
 
+    if (tenantId) {
+      query = query.eq('tenant_id', tenantId);
+    }
+
+    const { data } = await query.single();
     return data?.auth_id || null;
   }
 

@@ -1,5 +1,6 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
 import { useContext, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
 import type { SupporterPrice } from 'src/services/stripeService.server';
@@ -9,13 +10,22 @@ import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
 
-export const CURRENCY_SYMBOLS: Record<string, string> = {
-  eur: '€',
-  usd: '$',
-  gbp: '£',
-};
+export const formatPrice = (cents: number, currency: string) =>
+  new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(cents / 100);
 
-export const formatAmount = (cents: number) => (cents / 100).toFixed(0);
+export const getCurrencySymbol = (currency: string) =>
+  new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+  })
+    .formatToParts(0)
+    .find((p) => p.type === 'currency')?.value || currency.toUpperCase();
 
 type PageState = 'form' | 'checkout' | 'thank-you';
 
@@ -32,16 +42,20 @@ export const SupporterPage = ({
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Preview mode: /supporter?step=login or ?step=create (admin only)
   const [previewMode] = useState(() => {
     if (!isAdmin) return null;
-    const step = new URLSearchParams(window.location.search).get('step');
+    const step = new URLSearchParams(location.search).get('step');
     return step === 'login' || step === 'create' ? step : null;
   });
 
   const [pageState, setPageState] = useState<PageState>(previewMode ? 'thank-you' : 'form');
-  const [currency, setCurrency] = useState('');
+  const [currency, setCurrency] = useState(
+    () => [...new Set(prices.map((p) => p.currency))][0] || '',
+  );
   const [interval, setInterval] = useState<Interval>('month');
   const [name, setName] = useState(previewMode ? 'Test User' : '');
   const [email, setEmail] = useState(previewMode ? 'user@example.com' : userEmail);
@@ -60,15 +74,9 @@ export const SupporterPage = ({
     const unique = [...new Set(prices.map((p) => p.currency))];
     return unique.map((c) => ({
       value: c,
-      label: `${CURRENCY_SYMBOLS[c] || c.toUpperCase()} (${c.toUpperCase()})`,
+      label: `${getCurrencySymbol(c)} (${c.toUpperCase()})`,
     }));
   }, [prices]);
-
-  useEffect(() => {
-    if (currencies.length && !currency) {
-      setCurrency(currencies[0].value);
-    }
-  }, [currencies, currency]);
 
   const availablePrices = useMemo(
     () =>
@@ -85,12 +93,12 @@ export const SupporterPage = ({
 
   const selectedAmount = availableAmounts.includes(amount) ? amount : availableAmounts[0] || 0;
   const selectedPriceId = availablePrices.find((p) => p.unitAmount === selectedAmount)?.id || null;
-  const symbol = CURRENCY_SYMBOLS[currency] || currency.toUpperCase();
+  const symbol = currency ? getCurrencySymbol(currency) : '';
 
   useEffect(() => {
     if (previewMode) return;
 
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
     if (params.get('payment') !== 'success' || isAuthenticated) return;
 
     const customerParam = params.get('customer');
@@ -125,7 +133,7 @@ export const SupporterPage = ({
 
     autoCreate();
     setPageState('thank-you');
-    window.history.replaceState({}, '', '/supporter');
+    navigate('/supporter', { replace: true });
   }, [isAuthenticated, previewMode]);
 
   const handleSupport = async () => {

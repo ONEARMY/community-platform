@@ -1,10 +1,11 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { StripeServiceServer } from 'src/services/stripeService.server';
+import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
-    return Response.json({}, { status: 405, statusText: 'method not allowed' });
+    throw methodNotAllowedError();
   }
 
   try {
@@ -29,7 +30,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }
 
-    const linkedAuthId = await stripeService.getAuthIdByStripeCustomerId(stripeCustomerId);
+    const tenantId = process.env.TENANT_ID;
+    const linkedAuthId = await stripeService.getAuthIdByStripeCustomerId(
+      stripeCustomerId,
+      tenantId,
+    );
     if (!linkedAuthId) {
       return Response.json(
         { error: 'No linked account found for this customer.' },

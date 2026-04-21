@@ -3,10 +3,11 @@ import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { AuthServiceServer } from 'src/services/authService.server';
 import { StripeServiceServer } from 'src/services/stripeService.server';
+import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
-    return Response.json({}, { status: 405, statusText: 'method not allowed' });
+    throw methodNotAllowedError();
   }
 
   try {

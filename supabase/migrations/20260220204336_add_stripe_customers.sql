@@ -23,6 +23,4 @@ create policy "tenant_isolation"
   to public
   using ((tenant_id = ((( SELECT current_setting('request.headers'::text, true) AS current_setting))::json ->> 'x-tenant-id'::text)));
 
-grant select, insert, update, delete on table "public"."stripe_customers" to "anon";
-grant select, insert, update, delete on table "public"."stripe_customers" to "authenticated";
 grant select, insert, update, delete on table "public"."stripe_customers" to "service_role";

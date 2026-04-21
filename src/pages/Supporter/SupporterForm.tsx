@@ -1,7 +1,7 @@
 import { Button, Icon, Select } from 'oa-components';
 import { Box, Card, Flex, Heading, Image, Input, Text } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
-import { formatAmount } from './SupporterPage';
+import { formatPrice } from './SupporterPage';
 
 export const SupporterForm = () => {
   const {
@@ -14,7 +14,6 @@ export const SupporterForm = () => {
     availableAmounts,
     selectedAmount,
     setAmount,
-    symbol,
     name,
     setName,
     email,
@@ -151,8 +150,7 @@ export const SupporterForm = () => {
                     '&:hover': { borderColor: 'green' },
                   }}
                 >
-                  {symbol}
-                  {formatAmount(preset)}
+                  {formatPrice(preset, currency)}
                 </Box>
               ))}
             </Box>
@@ -169,7 +167,7 @@ export const SupporterForm = () => {
               }}
             >
               <Text sx={{ fontSize: 4, fontWeight: 'bold' }}>
-                {symbol} {formatAmount(selectedAmount)}
+                {formatPrice(selectedAmount, currency)}
               </Text>
               <Text variant="quiet">per {label}</Text>
             </Flex>
@@ -219,7 +217,7 @@ export const SupporterForm = () => {
           >
             {isLoading
               ? 'Processing...'
-              : `Support ${symbol}${formatAmount(selectedAmount)}/${label === 'month' ? 'Month' : 'Year'}`}
+              : `Support ${formatPrice(selectedAmount, currency)}/${label === 'month' ? 'Month' : 'Year'}`}
           </Button>
 
           <Text variant="quiet" sx={{ fontSize: 0 }}>

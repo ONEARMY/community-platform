@@ -25,13 +25,12 @@ This is different from SPA mode where a static `index.html` would be precached.
 ## Icons and webmanifest
 
 We need to serve icons and webmanifest dynamically as we are a multi-tenant app.
-For that we need to create two routes:
 
-- /manifest.webmanifest
-- /icon-{size}
+`/manifest.webmanifest` route generates the manifest from `tenant_settings`
+`tenant_settings` now has a `pwa_icons` column with the 5 icon sizes required.
 
 ## Development
 
 PWA features are **disabled in development** mode because React Router 7's dev server conflicts with the service worker registration.
 To test it locally, run `bun run build` and then `bun cross-env NODE_ENV=production bun ./server.js`.
-Don't forget to run it again on every change (no hot reload).
+Don't forget to build it again on every change.

@@ -115,6 +115,22 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
     { siteName: loaderData?.siteName },
   );
 
+  tags.push({
+    name: 'theme-color',
+    content: loaderData?.colorPrimary || '#000',
+  });
+
+  // iOS PWA meta tags
+  tags.push({ name: 'apple-mobile-web-app-capable', content: 'yes' });
+  tags.push({
+    name: 'apple-mobile-web-app-status-bar-style',
+    content: 'default',
+  });
+  tags.push({
+    name: 'apple-mobile-web-app-title',
+    content: loaderData?.siteName || '',
+  });
+
   if (import.meta.env.VITE_BRANCH !== 'production') {
     tags.push({
       name: 'robots',

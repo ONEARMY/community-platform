@@ -1,7 +1,27 @@
 {
   "name": "oa-shared",
   "version": "1.0.0",
-  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "bun": "./index.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./*": {
+      "bun": "./*.ts",
+      "import": "./lib/*.js",
+      "require": "./lib/*.js",
+      "default": "./lib/*.js"
+    }
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": ["./index.ts", "./*"]
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"

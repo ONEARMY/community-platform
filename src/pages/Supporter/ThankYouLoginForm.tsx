@@ -6,7 +6,7 @@ import { useSupporterContext } from './SupporterContext';
 import { ThankYouLayout } from './ThankYouLayout';
 
 export const ThankYouLoginForm = () => {
-  const { email, stripeCustomerId } = useSupporterContext();
+  const { email, stripeCustomerId, previewMode } = useSupporterContext();
 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +16,8 @@ export const ThankYouLoginForm = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (previewMode) return;
+
     setIsSubmitting(true);
     setError(null);
 

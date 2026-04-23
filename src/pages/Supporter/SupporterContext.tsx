@@ -31,6 +31,7 @@ export type SupporterState = {
   stripeCustomerId: string | null;
 
   siteImage: string | undefined;
+  previewMode: boolean;
 
   onSupport: () => void;
   onPaymentSuccess: () => void;

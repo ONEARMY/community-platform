@@ -33,21 +33,18 @@ export const SupporterPage = ({
   prices,
   isAuthenticated,
   userEmail,
-  isAdmin,
 }: {
   prices: SupporterPrice[];
   isAuthenticated: boolean;
   userEmail: string;
-  isAdmin: boolean;
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Preview mode: /supporter?step=login or ?step=create (admin only)
+  // Preview mode: /supporter?step=login or ?step=create
   const [previewMode] = useState(() => {
-    if (!isAdmin) return null;
     const step = new URLSearchParams(location.search).get('step');
     return step === 'login' || step === 'create' ? step : null;
   });
@@ -215,6 +212,7 @@ export const SupporterPage = ({
     stripeInstance,
     stripeCustomerId,
     siteImage,
+    previewMode: !!previewMode,
     onSupport: handleSupport,
     onPaymentSuccess: handlePaymentSuccess,
     onBack: handleBack,

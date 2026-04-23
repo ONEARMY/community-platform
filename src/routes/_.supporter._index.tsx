@@ -1,34 +1,23 @@
-import { UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
 import { SupporterPage } from 'src/pages/Supporter/SupporterPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StripeServiceServer, type SupporterPrice } from 'src/services/stripeService.server';
 import { Flex, Heading, Text } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = createSupabaseServerClient(request);
-  const url = new URL(request.url);
-  const hasPreviewParam = url.searchParams.has('step');
 
   let isAuthenticated = false;
   let userEmail = '';
-  let isAdmin = false;
   try {
     const claims = await client.auth.getClaims();
     isAuthenticated = !!claims.data?.claims;
     if (isAuthenticated) {
       const { data: authUser } = await client.auth.getUser();
       userEmail = authUser.user?.email || '';
-
-      if (hasPreviewParam) {
-        const profileService = new ProfileServiceServer(client);
-        const profile = await profileService.getByAuthId(claims.data!.claims!.sub);
-        isAdmin = profile?.roles?.includes(UserRole.ADMIN) ?? false;
-      }
     }
   } catch {
     // Not authenticated
@@ -37,19 +26,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const stripeService = new StripeServiceServer(client);
     const prices = await stripeService.getPrices();
-    return Response.json({ prices, isAuthenticated, userEmail, isAdmin });
+    return Response.json({ prices, isAuthenticated, userEmail });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);
-    return Response.json({ prices: [], isAuthenticated, userEmail, isAdmin });
+    return Response.json({ prices: [], isAuthenticated, userEmail });
   }
 }
 
 export default function Index() {
-  const { prices, isAuthenticated, userEmail, isAdmin } = useLoaderData<{
+  const { prices, isAuthenticated, userEmail } = useLoaderData<{
     prices: SupporterPrice[];
     isAuthenticated: boolean;
     userEmail: string;
-    isAdmin: boolean;
   }>();
 
   if (!prices.length) {
@@ -75,12 +63,7 @@ export default function Index() {
     <Main style={{ flex: 1 }}>
       <ClientOnly fallback={<></>}>
         {() => (
-          <SupporterPage
-            prices={prices}
-            isAuthenticated={isAuthenticated}
-            userEmail={userEmail}
-            isAdmin={isAdmin}
-          />
+          <SupporterPage prices={prices} isAuthenticated={isAuthenticated} userEmail={userEmail} />
         )}
       </ClientOnly>
     </Main>

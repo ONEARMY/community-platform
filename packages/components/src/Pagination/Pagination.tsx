@@ -79,7 +79,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
             justifyContent: 'center',
             alignItems: 'center',
             fontWeight: 'bold',
-            gap: 1,
+            gap: 2,
             flexGrow: 1,
           }}
         >
@@ -112,8 +112,8 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
             aria-label="Enter page number"
             sx={{
               border: '2px solid black',
-              maxWidth: '44px',
-              maxHeight: '44px',
+              minWidth: '44px',
+              minHeight: '44px',
               appearance: 'textfield',
               MozAppearance: 'textfield',
               '&::-webkit-outer-spin-button': {

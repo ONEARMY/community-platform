@@ -19,6 +19,7 @@ export const SettingsPageAccount = observer(() => {
   const [hasSubscription, setHasSubscription] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
+  // TODO: Remove isAdmin guard once supporter flow is available to all users
   useEffect(() => {
     if (!isAdmin) return;
     stripeService.getSubscriptionStatus().then((status) => {

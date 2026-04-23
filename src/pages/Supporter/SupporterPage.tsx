@@ -161,7 +161,7 @@ export const SupporterPage = ({
     if (previewMode) return;
 
     if (isAuthenticated) {
-      window.location.assign('/settings?subscription=success');
+      navigate('/settings?subscription=success');
       return;
     }
 

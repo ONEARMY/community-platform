@@ -3,6 +3,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
+import { methodNotAllowedError } from 'src/utils/httpException';
 import { StripeServiceServer } from '../services/stripeService.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -44,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
-    return Response.json({}, { status: 405, statusText: 'method not allowed' });
+    throw methodNotAllowedError();
   }
 
   const { client, headers } = createSupabaseServerClient(request);

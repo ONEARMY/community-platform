@@ -61,11 +61,7 @@ const CheckoutForm = () => {
       setErrorMessage(error.message || 'An unexpected error occurred.');
       setIsSubmitting(false);
     } else {
-      if (isAuthenticated) {
-        window.location.assign('/settings?subscription=success');
-      } else {
-        onPaymentSuccess();
-      }
+      onPaymentSuccess();
     }
   };
 

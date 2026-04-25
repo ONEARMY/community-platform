@@ -79,7 +79,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
             justifyContent: 'center',
             alignItems: 'center',
             fontWeight: 'bold',
-            gap: 2,
+            gap: 3,
             flexGrow: 1,
           }}
         >

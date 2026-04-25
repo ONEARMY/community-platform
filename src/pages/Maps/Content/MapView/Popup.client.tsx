@@ -42,7 +42,7 @@ export const Popup = (props: IProps) => {
       closeOnEscapeKey={false}
       closeButton={false}
       minWidth={250}
-      maxWidth={300}
+      maxWidth={325}
       autoPan={false}
     >
       <PinProfile item={props.activePin} />

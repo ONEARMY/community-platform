@@ -1,11 +1,11 @@
-import { Button, Loader } from 'oa-components';
+import { Loader, Pagination } from 'oa-components';
 import type { ResearchItem, ResearchStatus } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { Box, Flex } from 'theme-ui';
-import { listing } from '../labels';
+import { ITEMS_PER_PAGE } from '../constants';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { researchService } from '../research.service';
 import { ResearchFilterHeader } from './ResearchListHeader';
@@ -27,6 +27,7 @@ const ResearchList = () => {
   const category = searchParams.get(ResearchSearchParams.category) || '';
   const status = searchParams.get(ResearchSearchParams.status) as ResearchStatus | null;
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
+  const pageNumber = Math.max(1, parseInt(searchParams.get(ResearchSearchParams.page) || '1') || 1);
 
   useEffect(() => {
     if (!sort) {
@@ -41,9 +42,17 @@ const ResearchList = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchResearchItems();
+      const skip = (pageNumber - 1) * ITEMS_PER_PAGE;
+      fetchResearchItems(skip);
     }
-  }, [q, category, status, sort]);
+  }, [q, category, status, sort, pageNumber]);
+
+  const updatePageNumber = (value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set(ResearchSearchParams.page, value.toString());
+    setSearchParams(params, { replace: true });
+  };
 
   const fetchResearchItems = async (skip: number = 0) => {
     setIsFetching(true);
@@ -58,13 +67,7 @@ const ResearchList = () => {
       );
 
       if (result) {
-        if (skip) {
-          // if skipFrom is set, means we are requesting another page that should be appended
-          setResearchItems((items) => [...items, ...result.items]);
-        } else {
-          setResearchItems(result.items);
-        }
-
+        setResearchItems(result.items);
         setTotal(result.total);
       }
     } catch (error) {
@@ -116,19 +119,17 @@ const ResearchList = () => {
         </Box>
       )}
 
-      {!isFetching && researchItems && researchItems.length > 0 && researchItems.length < total && (
+      {!isFetching && researchItems && researchItems.length > 0 && (
         <Flex
           sx={{
             justifyContent: 'center',
           }}
         >
-          <Button
-            type="button"
-            data-cy="loadMoreButton"
-            onClick={() => fetchResearchItems(researchItems.length)}
-          >
-            {listing.loadMore}
-          </Button>
+          <Pagination
+            totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
+            onPageChange={updatePageNumber}
+            page={pageNumber || 1}
+          />
         </Flex>
       )}
 

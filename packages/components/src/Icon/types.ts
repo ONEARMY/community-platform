@@ -103,6 +103,8 @@ export type availableGlyphs =
   | 'copy-link'
   | 'double-arrow-right'
   | 'double-arrow-left'
+  | 'paginationSingleLeft'
+  | 'paginationSingleRight'
   | 'success'
   | 'error'
   | 'warning'

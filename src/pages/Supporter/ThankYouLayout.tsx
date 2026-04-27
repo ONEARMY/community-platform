@@ -12,9 +12,11 @@ export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
         mx: 'auto',
         my: [3, 5],
         px: [3, 0],
+        flex: 1,
         flexDirection: ['column', 'column', 'row'],
         gap: [4, 6],
-        alignItems: ['center', 'center', 'flex-start'],
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <Flex

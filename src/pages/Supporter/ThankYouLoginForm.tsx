@@ -1,4 +1,4 @@
-import { Button } from 'oa-components';
+import { Button, Icon } from 'oa-components';
 import { type FormEvent, useRef, useState } from 'react';
 import { stripeService } from 'src/services/stripeService';
 import { Box, Card, Flex, Heading, Input, Text } from 'theme-ui';
@@ -82,24 +82,20 @@ export const ThankYouLoginForm = () => {
                       '&:focus': { outline: 'none', borderColor: 'green' },
                     }}
                   />
-                  <button
-                    type="button"
+                  <Icon
+                    glyph={showPassword ? 'hide' : 'show'}
                     onClick={() => setShowPassword(!showPassword)}
-                    style={{
+                    size="25"
+                    sx={{
                       position: 'absolute',
                       right: '12px',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      background: 'transparent',
-                      border: 'none',
                       cursor: 'pointer',
-                      fontSize: '14px',
-                      color: 'grey',
-                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </button>
+                  />
                 </Flex>
               </Box>
 

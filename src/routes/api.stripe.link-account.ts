@@ -1,0 +1,55 @@
+import type { ActionFunctionArgs } from 'react-router';
+import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
+import { StripeServiceServer } from 'src/services/stripeService.server';
+import { methodNotAllowedError } from 'src/utils/httpException';
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  if (request.method !== 'POST') {
+    throw methodNotAllowedError();
+  }
+
+  try {
+    const { email, password, stripeCustomerId } = await request.json();
+
+    if (!email || !password || !stripeCustomerId) {
+      return Response.json(
+        { error: 'Email, password, and stripeCustomerId are required.' },
+        { status: 400 },
+      );
+    }
+
+    const adminClient = createSupabaseAdminServerClient();
+    const stripeService = new StripeServiceServer(adminClient);
+
+    const customer = await stripeService.getStripeCustomer(stripeCustomerId);
+    if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
+      return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
+    }
+
+    const tenantId = process.env.TENANT_ID;
+    if (!tenantId) {
+      return Response.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
+    const { data: signInData, error: signInError } = await adminClient.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError || !signInData.user) {
+      return Response.json({ error: 'Invalid email or password.' }, { status: 401 });
+    }
+
+    await stripeService.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
+
+    await stripeService.updateSupporterStatus(signInData.user.id, true, tenantId);
+
+    return Response.json({ success: true }, { status: 200 });
+  } catch (error: any) {
+    console.error('Error linking supporter account:', error);
+    return Response.json(
+      { error: error?.message || 'An unexpected error occurred.' },
+      { status: 500 },
+    );
+  }
+};

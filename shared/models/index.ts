@@ -24,6 +24,7 @@ export * from './profileType';
 export * from './question';
 export * from './research';
 export * from './selectValue';
+export * from './stripe';
 export * from './subscriber';
 export * from './tag';
 export * from './tags';

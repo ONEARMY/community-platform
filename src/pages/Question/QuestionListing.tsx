@@ -97,10 +97,15 @@ export const QuestionListing = () => {
             padding: 0,
             margin: 0,
             marginBottom: 2,
+            gap: '2px',
+            ml: [-2, 0, 0],
+            mr: [-2, 0, 0],
+            borderLeft: [0, '2px solid', '2px solid'],
+            borderRight: [0, '2px solid', '2px solid'],
             background: '#f4f6f7',
+            borderRadius: [0, 2, 2],
             display: 'flex',
             flexDirection: 'column',
-            gap: '2px',
           }}
         >
           {questionsList.map((question, index) => (

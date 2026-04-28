@@ -106,7 +106,9 @@ const ResearchList = () => {
             m: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: [0, 2, 2],
+            ml: [-2, 0, 0],
+            mr: [-2, 0, 0],
           }}
         >
           {researchItemList.map((item) => (

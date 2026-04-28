@@ -93,6 +93,7 @@ export const Username = (props: IProps) => {
         marginLeft: -1,
         color: 'black',
         fontSize: 2,
+        maxWidth: '100%',
         transition: '80ms ease-out all',
         '&:focus': {
           borderColor: '#20B7EB',

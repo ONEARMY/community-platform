@@ -45,8 +45,9 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
       sx={{
         position: 'relative',
         p: [3, 4],
-        border: '2px solid',
-        borderRadius: 2,
+        border: [0, '2px solid', '2px solid'],
+        borderTop: '2px solid',
+        borderRadius: [0, 2, 2],
         overflow: 'visible',
         '&:last-of-type': {
           borderBottom: '2px solid',

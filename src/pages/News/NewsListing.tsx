@@ -70,7 +70,7 @@ export const NewsListing = () => {
   const newsList = showDrafts ? drafts : news;
 
   return (
-    <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+    <Flex sx={{ flexDirection: 'column', alignItems: 'center', padding: [2, 0, 0] }}>
       <NewsListHeader
         draftCount={draftCount}
         handleShowDrafts={handleShowDrafts}

@@ -46,7 +46,7 @@ export const ListHeader = (props: IProps) => {
         </Heading>
         <Flex sx={{ justifyContent: 'center' }}>{categoryComponent}</Flex>
       </Flex>
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+      <Flex sx={{ flexDirection: 'column', gap: 2, px: [2, 0, 0] }}>
         <Flex
           sx={{
             justifyContent: 'space-between',

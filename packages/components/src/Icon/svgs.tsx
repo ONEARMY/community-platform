@@ -1,3 +1,4 @@
+import React from 'react';
 import accountSVG from '../../assets/icons/account.svg';
 import approvedSVG from '../../assets/icons/approved.svg';
 import attentionSVG from '../../assets/icons/attention.svg';
@@ -62,6 +63,8 @@ import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg';
 import mouldsSVG from '../../assets/icons/moulds.svg';
 import newsSVG from '../../assets/icons/news.svg';
 import otherSVG from '../../assets/icons/other.svg';
+import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
+import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
 import patreonSVG from '../../assets/icons/patreon.svg';
 import plasticSVG from '../../assets/icons/plastic.svg';
 import productsSVG from '../../assets/icons/products.svg';
@@ -91,10 +94,11 @@ const imgStyle = {
 };
 interface IProps {
   src: string;
+  style?: React.CSSProperties;
 }
 
 const ImageIcon = (props: IProps) => {
-  return <img alt="icon" style={imgStyle} {...props} />;
+  return <img alt="icon" {...props} style={{ ...imgStyle, ...props.style }} />;
 };
 
 export const iconMap = {
@@ -122,8 +126,22 @@ export const iconMap = {
   discord: <ImageIcon src={discordSVG} />,
   discussion: <ImageIcon src={discussionSVG} />,
   doubleTick: <ImageIcon src={doubleTickSVG} />,
-  doubleArrowLeft: <ImageIcon src={doubleArrowLeft} />,
-  doubleArrowRight: <ImageIcon src={doubleArrowRight} />,
+  doubleArrowLeft: (
+    <ImageIcon
+      src={doubleArrowLeft}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
+  doubleArrowRight: (
+    <ImageIcon
+      src={doubleArrowRight}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
   edit: <ImageIcon src={editSVG} />,
   email: <ImageIcon src={emailSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
@@ -151,6 +169,22 @@ export const iconMap = {
   news: <ImageIcon src={newsSVG} />,
   other: <ImageIcon src={otherSVG} />,
   patreon: <ImageIcon src={patreonSVG} />,
+  paginationSingleLeft: (
+    <ImageIcon
+      src={paginationSingleLeftSVG}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
+  paginationSingleRight: (
+    <ImageIcon
+      src={paginationSingleRightSVG}
+      style={{
+        maxWidth: 'none',
+      }}
+    />
+  ),
   plastic: <ImageIcon src={plasticSVG} />,
   profile: <ImageIcon src={profileSVG} />,
   products: <ImageIcon src={productsSVG} />,

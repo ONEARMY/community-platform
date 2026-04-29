@@ -156,6 +156,8 @@ export const glyphs: IGlyphs = {
   verified: iconMap.verified,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
+  paginationSingleLeft: iconMap.paginationSingleLeft,
+  paginationSingleRight: iconMap.paginationSingleRight,
   success: iconMap.success,
   error: iconMap.error,
   warning: iconMap.warning,

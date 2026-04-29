@@ -4,14 +4,16 @@ import defaultProfileImage from '../../assets/images/default_member.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
 import { DisplayName } from '../Username/DisplayName';
+import type { CardVariant } from './CardProfile';
+import { SendMessageButton } from './SendMessageButton';
 
 interface IProps {
   item: MapPin;
   isLink: boolean;
-  sendMessageButton?: React.ReactNode;
+  variant: CardVariant;
 }
 
-export const CardDetailsSpaceProfile = ({ item, isLink, sendMessageButton }: IProps) => {
+export const CardDetailsSpaceProfile = ({ item, isLink, variant }: IProps) => {
   const { profile } = item;
   const coverImage =
     profile.coverImages && profile.coverImages[0] && profile.coverImages[0]?.publicUrl;
@@ -98,7 +100,7 @@ export const CardDetailsSpaceProfile = ({ item, isLink, sendMessageButton }: IPr
             {profile.about}
           </Text>
         )}
-        {sendMessageButton}
+        {variant === 'pin' && <SendMessageButton item={item} />}
       </Flex>
     </Flex>
   );

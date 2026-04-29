@@ -5,22 +5,23 @@ import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
 import { DisplayName } from '../Username/DisplayName';
 import type { CardVariant } from './CardProfile';
+import { SendMessageButton } from './SendMessageButton';
 
 interface IProps {
-  cardVariant?: CardVariant;
+  variant: CardVariant;
   item: MapPin;
   isLink: boolean;
-  sendMessageButton?: React.ReactNode;
 }
 
-export const CardDetailsMemberProfile = ({
-  cardVariant,
-  item,
-  isLink,
-  sendMessageButton,
-}: IProps) => {
+export const CardDetailsMemberProfile = ({ variant, item, isLink }: IProps) => {
   const { profile } = item;
   const photoUrl = profile.photo?.publicUrl;
+  const tagsBlock =
+    profile.tags && profile.tags.length > 0 ? (
+      <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1, minWidth: 0, pt: 1 }}>
+        <ProfileTagsList tags={profile.tags} isSpace={false} />
+      </Flex>
+    ) : null;
 
   return (
     <Flex
@@ -62,23 +63,11 @@ export const CardDetailsMemberProfile = ({
             isLink={isLink}
             target="_blank"
           />
-          {cardVariant === 'list' && (
-            <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1, minWidth: 0, pt: 1 }}>
-              {profile.tags && profile.tags.length > 0 && (
-                <ProfileTagsList tags={profile.tags} isSpace={false} />
-              )}
-            </Flex>
-          )}
+          {variant === 'list' && tagsBlock}
         </Flex>
       </Flex>
-      {cardVariant === 'pin' && (
-        <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1, minWidth: 0, pt: 1 }}>
-          {profile.tags && profile.tags.length > 0 && (
-            <ProfileTagsList tags={profile.tags} isSpace={false} />
-          )}
-        </Flex>
-      )}
-      {cardVariant === 'pin' && profile.about && (
+      {variant === 'pin' && tagsBlock}
+      {variant === 'pin' && profile.about && (
         <Text
           variant="quiet"
           sx={{
@@ -93,7 +82,7 @@ export const CardDetailsMemberProfile = ({
           {profile.about}
         </Text>
       )}
-      {sendMessageButton}
+      {variant === 'pin' && <SendMessageButton item={item} />}
     </Flex>
   );
 };

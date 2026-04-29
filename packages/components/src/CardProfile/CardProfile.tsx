@@ -6,33 +6,20 @@ import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile';
 export type CardVariant = 'pin' | 'list';
 
 export interface IProps {
-  cardVariant?: CardVariant;
+  variant?: CardVariant;
   item: MapPin;
   isLink?: boolean;
-  sendMessageButton?: React.ReactNode;
 }
 
-export const CardProfile = ({
-  cardVariant = 'pin',
-  item,
-  isLink = false,
-  sendMessageButton,
-}: IProps) => {
+export const CardProfile = ({ variant = 'pin', item, isLink = false }: IProps) => {
   const isWorkspace = item.profile?.type && item.profile?.type.isSpace;
-  const isContactable = item.profile?.isContactable !== false && item.profile?.username;
-  const messageButton = isContactable ? sendMessageButton : undefined;
 
   return (
     <Flex sx={{ alignItems: 'stretch', alignContent: 'stretch' }}>
       {isWorkspace ? (
-        <CardDetailsSpaceProfile item={item} isLink={isLink} sendMessageButton={messageButton} />
+        <CardDetailsSpaceProfile item={item} isLink={isLink} variant={variant} />
       ) : (
-        <CardDetailsMemberProfile
-          item={item}
-          isLink={isLink}
-          cardVariant={cardVariant}
-          sendMessageButton={messageButton}
-        />
+        <CardDetailsMemberProfile item={item} isLink={isLink} variant={variant} />
       )}
     </Flex>
   );

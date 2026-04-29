@@ -1,12 +1,10 @@
 import type { MapPin } from 'oa-shared';
 import { Box } from 'theme-ui';
 import { CardButton } from '../CardButton/CardButton';
-import type { CardVariant } from '../CardProfile/CardProfile';
 import { CardProfile } from '../CardProfile/CardProfile';
 import { InternalLink } from '../InternalLink/InternalLink';
 
 export interface IProps {
-  cardVariant?: CardVariant;
   item: MapPin;
   isSelectedPin: boolean;
   onPinClick: (arg: MapPin) => void;
@@ -14,12 +12,12 @@ export interface IProps {
 }
 
 export const CardListItem = (props: IProps) => {
-  const { cardVariant, item, onPinClick, isSelectedPin, viewport } = props;
+  const { item, onPinClick, isSelectedPin, viewport } = props;
   const testProp = `CardListItem${isSelectedPin ? '-selected' : ''}`;
 
   const Card = (
     <CardButton isSelected={isSelectedPin} extrastyles={{ minWidth: '230px', maxWidth: '400px' }}>
-      <CardProfile item={item} cardVariant={cardVariant} />
+      <CardProfile item={item} variant="list" />
     </CardButton>
   );
 

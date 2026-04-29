@@ -24,7 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const result = await client
     .from('news')
-    .select('*')
+    .select('*, profile_badges:news_badges_relations(profile_badges(*))')
     .or('deleted.eq.false,deleted.is.null')
     .eq('is_draft', true)
     .or(`created_by.eq.${profile.id}`);

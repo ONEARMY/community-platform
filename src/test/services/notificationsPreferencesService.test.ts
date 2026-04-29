@@ -1,3 +1,4 @@
+import { NotificationsPreferencesFormData } from 'oa-shared';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -5,6 +6,7 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+const mockEmailReachField = { value: '1', label: 'All emails' };
 
 describe('notificationsPreferencesService', () => {
   beforeEach(() => {
@@ -53,9 +55,12 @@ describe('notificationsPreferencesService', () => {
       const formData = {
         id: 123,
         comments: true,
+        news: false,
         replies: false,
-        research_updates: true,
-      };
+        researchUpdates: true,
+        emailContentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesFormData;
 
       const result = await notificationsPreferencesService.setPreferences(formData);
 
@@ -69,9 +74,10 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBe('123');
       expect(body.get('comments')).toBe('true');
+      expect(body.get('news')).toBe('false');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('true');
-      expect(body.get('is_unsubscribed')).toBe('false');
+      expect(body.get('researchUpdates')).toBe('true');
+      expect(body.get('isUnsubscribed')).toBe('false');
       expect(result).toBe(mockResponse);
     });
 
@@ -81,9 +87,12 @@ describe('notificationsPreferencesService', () => {
 
       const formData = {
         comments: false,
+        news: true,
         replies: true,
-        research_updates: false,
-      };
+        researchUpdates: false,
+        emailContentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesFormData;
 
       await notificationsPreferencesService.setPreferences(formData);
       const [, options] = mockFetch.mock.calls[0];
@@ -91,9 +100,11 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBeNull();
       expect(body.get('comments')).toBe('false');
+      expect(body.get('news')).toBe('true');
       expect(body.get('replies')).toBe('true');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('false');
+      expect(body.get('researchUpdates')).toBe('false');
+      expect(body.get('emailContentReach')).toBe('1');
+      expect(body.get('isUnsubscribed')).toBe('false');
     });
 
     it('sends correct FormData when id is undefined', async () => {
@@ -102,9 +113,12 @@ describe('notificationsPreferencesService', () => {
       const formData = {
         id: undefined,
         comments: true,
+        news: true,
         replies: true,
-        research_updates: true,
-      };
+        researchUpdates: true,
+        emailContentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesFormData;
 
       await notificationsPreferencesService.setPreferences(formData);
       const [, options] = mockFetch.mock.calls[0];
@@ -132,8 +146,8 @@ describe('notificationsPreferencesService', () => {
       expect(body.get('id')).toBe('456');
       expect(body.get('comments')).toBe('false');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('true');
+      expect(body.get('researchUpdates')).toBe('false');
+      expect(body.get('isUnsubscribed')).toBe('true');
       expect(result).toBe(mockResponse);
     });
 
@@ -148,8 +162,9 @@ describe('notificationsPreferencesService', () => {
       expect(body.get('id')).toBeNull();
       expect(body.get('comments')).toBe('false');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('true');
+      expect(body.get('researchUpdates')).toBe('false');
+      expect(body.get('emailContentReach')).toBe('null');
+      expect(body.get('isUnsubscribed')).toBe('true');
     });
   });
 });

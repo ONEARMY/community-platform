@@ -7,7 +7,7 @@ import {
   InternalLink,
   Loader,
 } from 'oa-components';
-import type { DBNotificationsPreferences } from 'oa-shared';
+import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Button, Flex, Text } from 'theme-ui';
@@ -60,9 +60,9 @@ const baseFields: GridFormFields[] = [
 ];
 
 interface IProps {
-  initialValues: DBNotificationsPreferences | null;
+  initialValues: NotificationsPreferencesFormData | null;
   isLoading: boolean;
-  onSubmit: (values: DBNotificationsPreferences) => Promise<void>;
+  onSubmit: (values: NotificationsPreferencesFormData) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
   profileIsContactable?: boolean;
 }

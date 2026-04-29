@@ -17,13 +17,19 @@ export const fields: ILabels = {
     placeholder: 'Start typing to find the perfect category...',
     title: 'Which category fits your news?',
   },
+  contentReach: {
+    placeholder: 'Define who gets this post as an email.',
+    title: 'Email reach',
+  },
   body: {
     placeholder: 'Write and structure the body of your article. Markdown is also supported.',
     title: 'Body',
   },
   profileBadge: {
-    title: 'Limit to badged users',
-    placeholder: 'Select if this is for profiles with a certain profile badge',
+    title: 'Limit visibility',
+    description:
+      'Leave empty to be visible for everyone. Picking a badge will hide it from the general public.',
+    placeholder: 'Select who can see this post',
   },
   summary: {
     title: 'Summary',

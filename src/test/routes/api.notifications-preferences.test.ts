@@ -41,24 +41,38 @@ describe('loader', () => {
   it('returns user preferences when found', async () => {
     const mockClaims = { sub: 'user123' };
     const mockPreferences = {
+      id: 'user123',
+      user_id: 'abcd',
       comments: false,
       replies: true,
       research_updates: false,
       is_unsubscribed: true,
+      email_content_reach: null,
+    };
+
+    const mockResults = {
+      id: 'user123',
+      userId: 'abcd',
+      comments: false,
+      replies: true,
+      researchUpdates: false,
+      isUnsubscribed: true,
+      emailContentReach: null,
     };
 
     mockClient.mocks.auth.getClaims.mockResolvedValue({
       data: { claims: mockClaims },
     });
-    mockClient.mocks.single.mockResolvedValue({ data: mockPreferences });
+    mockClient.mocks.single.mockResolvedValueOnce({ data: mockPreferences });
+    mockClient.mocks.single.mockResolvedValueOnce({ data: mockPreferences });
 
     const response = await loader(createMockLoaderArgs(mockRequest));
     const result = await response.json();
 
     expect(response.status).toBe(200);
-    expect(result).toEqual({ preferences: mockPreferences });
+    expect(result).toEqual({ preferences: mockResults });
     expect(mockClient.mocks.from).toHaveBeenCalledWith('notifications_preferences');
-    expect(mockClient.mocks.select).toHaveBeenCalledWith('*, profiles!inner(id)');
+    expect(mockClient.mocks.select).toHaveBeenCalledWith('*,profiles!inner(id),email_content_reach:email_content_reach(*)');
     expect(mockClient.mocks.eq).toHaveBeenCalledWith('profiles.auth_id', 'user123');
     expect(mockClient.mocks.single).toHaveBeenCalled();
   });
@@ -69,7 +83,16 @@ describe('loader', () => {
       comments: true,
       replies: true,
       research_updates: true,
+      email_content_reach: null, // Should really be mocked to return a proper result
       is_unsubscribed: false,
+    };
+
+    const defaultResults = {
+      comments: true,
+      replies: true,
+      researchUpdates: true,
+      emailContentReach: null, // Should really be mocked to return a proper result
+      isUnsubscribed: false,
     };
 
     mockClient.mocks.auth.getClaims.mockResolvedValue({
@@ -81,7 +104,7 @@ describe('loader', () => {
     const result = await response.json();
 
     expect(response.status).toBe(200);
-    expect(result).toEqual({ preferences: defaultPreferences });
+    expect(result).toEqual({ preferences: defaultResults });
   });
 
   it('returns 401 when user is not authenticated', async () => {
@@ -124,6 +147,7 @@ describe('action', () => {
       comments: 'false',
       replies: 'true',
       research_updates: 'false',
+      email_content_reach: '2',
       is_unsubscribed: 'true',
     });
 
@@ -144,6 +168,7 @@ describe('action', () => {
     expect(mockClient.mocks.update).toHaveBeenCalledWith({
       comments: false,
       replies: true,
+      email_content_reach: '2',
       research_updates: false,
       is_unsubscribed: true,
     });
@@ -157,6 +182,7 @@ describe('action', () => {
     const formData = createFormData({
       comments: 'true',
       replies: 'false',
+      email_content_reach: '2',
       research_updates: 'true',
       is_unsubscribed: 'false',
     });
@@ -181,6 +207,7 @@ describe('action', () => {
       user_id: 456,
       comments: true,
       replies: false,
+      email_content_reach: '2',
       research_updates: true,
       is_unsubscribed: false,
       tenant_id: 'test-tenant',

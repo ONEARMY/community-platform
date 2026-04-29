@@ -77,8 +77,8 @@ export const isUserBlockedFromMessaging = (user: Partial<Profile> | null | undef
   return user.isBlockedFromMessaging;
 };
 
-export const isUserContactable = (user: Partial<Profile>) => {
-  if (typeof user.isContactable === 'boolean') {
+export const isUserContactable = (user: Partial<Profile> | null) => {
+  if (typeof user?.isContactable === 'boolean') {
     return isContactable(user.isContactable);
   }
 

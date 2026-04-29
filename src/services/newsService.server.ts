@@ -7,7 +7,11 @@ export class NewsServiceServer {
   constructor(private client: SupabaseClient) {}
 
   async getById(id: number) {
-    const result = await this.client.from('news').select().eq('id', id).single();
+    const result = await this.client
+      .from('news')
+      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
+      .eq('id', id)
+      .single();
     return result.data as DBNews;
   }
 
@@ -28,12 +32,13 @@ export class NewsServiceServer {
        slug,
        summary,
        category:category(id,name),
-       profile_badge:profile_badge(*),
+       profile_badges:news_badges_relations(profile_badges(id,name,display_name,image_url,action_url)),
        tags,
        title,
        total_views,
        tenant_id,
        hero_image,
+       email_content_reach:email_content_reach(*),
        author:profiles(id, display_name, username, country, badges:profile_badges_relations(
           profile_badges(
             id,

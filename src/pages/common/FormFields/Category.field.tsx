@@ -43,6 +43,7 @@ export const CategoryField = ({ type }: IProps) => {
         render={({ input, ...rest }) => (
           <CategoriesSelectV2
             {...rest}
+            id={name}
             categories={categories || []}
             isForm={true}
             onChange={input.onChange}

@@ -3,6 +3,7 @@ import type { SelectValue } from 'oa-shared';
 import { FieldContainer } from '../../../common/Form/FieldContainer';
 
 export type CategoriesSelectProps = {
+  id: string;
   value: SelectValue | null;
   placeholder: string;
   isForm: boolean;
@@ -17,6 +18,7 @@ const getVariant = (isForm: boolean, invalid: boolean) => {
 };
 
 export const CategoriesSelectV2 = ({
+  id,
   value,
   placeholder,
   isForm,
@@ -40,6 +42,7 @@ export const CategoriesSelectV2 = ({
         value={value}
         onChange={handleChange}
         isClearable={true}
+        inputId={id}
       />
     </FieldContainer>
   );

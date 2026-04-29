@@ -9,8 +9,9 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     category: Number(form.category?.value) || null,
     heroImage: form.heroImage ? DBMedia.fromPublicMedia(form.heroImage) : null,
     isDraft: form.isDraft,
-    profileBadge: Number(form.profileBadge?.value) || null,
+    profileBadges: form.profileBadges?.filter((pb) => pb !== null).map((pb) => Number(pb)) || null,
     tags: form.tags || null,
+    emailContentReach: Number(form.emailContentReach?.value) || null,
   });
 
   const response =

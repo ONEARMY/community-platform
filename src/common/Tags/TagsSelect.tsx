@@ -58,6 +58,7 @@ export const TagsSelect = (props: IProps) => {
         getOptionLabel={(tag: Tag) => tag.name}
         getOptionValue={(tag: Tag) => tag.id}
         onChange={onChange}
+        inputId={props.id}
       />
     </FieldContainer>
   );

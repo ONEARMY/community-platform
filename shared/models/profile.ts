@@ -119,8 +119,8 @@ export class Profile {
 
 // Notifications here to avoid circular dependencies
 
-export type NotificationActionType = 'newContent' | 'newComment' | 'newReply';
-export const NotificationContentTypes = ['research_updates', 'comments'] as const;
+export type NotificationActionType = 'newContent' | 'newComment' | 'newReply' | 'newNews';
+export const NotificationContentTypes = ['comments', 'news', 'research_updates'] as const;
 export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
 export type ProfileListItem = Pick<
@@ -204,8 +204,10 @@ export class NotificationDisplay {
   email: {
     body: string | undefined;
     buttonLabel: string;
+    displayDate: string | undefined;
     preview: string;
     subject: string;
+    heroImage: string | undefined;
   };
   link: string;
   sidebar: {
@@ -224,6 +226,9 @@ export class NotificationDisplay {
       case 'research_updates': {
         return `${(notification.content as ResearchUpdate)?.title}:\n\n${(notification.content as ResearchUpdate)?.description}`;
       }
+      case 'news': {
+        return (notification.content as News).body;
+      }
       default: {
         return this.setBody(notification) || '';
       }
@@ -235,6 +240,9 @@ export class NotificationDisplay {
       case 'research_updates': {
         return 'Join the discussion';
       }
+      case 'news': {
+        return 'View on platform';
+      }
       case 'comments': {
         return 'See the full discussion';
       }
@@ -244,10 +252,17 @@ export class NotificationDisplay {
     }
   }
 
+  static setEmailDate(notification: Notification) {
+    return notification.content?.createdAt?.toDateString() || undefined;
+  }
+
   static setEmailPreview(notification: Notification) {
     switch (notification.actionType) {
       case 'newContent': {
         return `New research update on ${notification.title}`;
+      }
+      case 'newNews': {
+        return `News: ${notification.title}`;
       }
       case 'newComment': {
         if (notification.triggeredBy && notification.triggeredBy.username) {
@@ -278,6 +293,9 @@ export class NotificationDisplay {
       case 'newReply': {
         return `You have a new comment reply!`;
       }
+      case 'newNews': {
+        return notification.title;
+      }
       default: {
         return 'You have a new notification!';
       }
@@ -299,9 +317,7 @@ export class NotificationDisplay {
   }
 
   static setDate(notification: Notification) {
-    return notification.modifiedAt
-      ? new Date(notification.modifiedAt)
-      : new Date(notification.createdAt);
+    return new Date(notification.createdAt);
   }
 
   static setTitle(notification: Notification) {
@@ -321,6 +337,12 @@ export class NotificationDisplay {
     }
   }
 
+  static setHeroImage(notification: Notification) {
+    return (
+      (notification.content && (notification.content as News).heroImage?.publicUrl) || undefined
+    );
+  }
+
   static setSidebarIcon(contentType: NotificationContentType): string {
     switch (contentType) {
       case 'comments': {
@@ -335,12 +357,20 @@ export class NotificationDisplay {
     }
   }
 
-  static setSidebarImage(author: BasicAuthorDetails | undefined): string {
-    return author?.photo?.publicUrl || '';
+  static setSidebarImage(notification: Notification): string {
+    const heroImage = this.setHeroImage(notification);
+    return heroImage || notification.triggeredBy?.photo?.publicUrl || '';
   }
 
   static setLink(notification: Notification) {
     return `/redirect?id=${notification.contentId}&ct=${notification.contentType}`;
+  }
+
+  static setTriggeredBy(notification: Notification) {
+    if (notification.actionType === 'newNews') {
+      return 'Check the latest news update: ';
+    }
+    return notification.triggeredBy?.username || '';
   }
 
   static fromNotification(notification: Notification): NotificationDisplay {
@@ -353,15 +383,17 @@ export class NotificationDisplay {
       email: {
         body: this.setEmailBody(notification),
         buttonLabel: this.setEmailButtonLabel(notification),
+        displayDate: this.setEmailDate(notification),
         preview: this.setEmailPreview(notification),
         subject: this.setEmailSubject(notification),
+        heroImage: this.setHeroImage(notification),
       },
       sidebar: {
         icon: this.setSidebarIcon(notification.contentType),
-        image: this.setSidebarImage(notification.triggeredBy),
+        image: this.setSidebarImage(notification),
       },
       title: this.setTitle(notification),
-      triggeredBy: notification.triggeredBy?.username || '',
+      triggeredBy: this.setTriggeredBy(notification),
       link: this.setLink(notification),
     });
   }
@@ -502,6 +534,8 @@ export type SubscribedUser = {
   profile_created_at: string;
   email: string;
   is_unsubscribed: boolean;
+  badge_ids: number[];
+  roles: string[];
   replies: boolean;
   comments: boolean;
   research_updates: boolean;

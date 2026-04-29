@@ -114,6 +114,12 @@ export const buttons = {
     '&:hover': {
       backgroundColor: softblue,
     },
+    '&:disabled': {
+      color: 'lightgrey',
+      cursor: 'not-allowed',
+      borderColor: lightgrey,
+      backgroundColor: 'transparent',
+    },
   },
   quiet: {
     ...BASE_BUTTON,

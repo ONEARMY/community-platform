@@ -5,6 +5,7 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
+import { DBEmailContentReach, EmailContentReach } from './emailContentReach';
 import { DBMedia, Image, MediaWithPublicUrl } from './media';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
@@ -27,13 +28,14 @@ export class DBNews implements IDBContentDoc {
   readonly title: string;
   readonly total_views?: number;
   readonly previous_slugs: string[];
-  readonly profile_badge: DBProfileBadge | null;
+  readonly profile_badges: { profile_badges: DBProfileBadge }[] | null;
   readonly slug: string;
   readonly summary: string | null;
   readonly tags: number[];
   readonly useful_count?: number;
   readonly body: string;
   readonly hero_image: DBMedia | null;
+  readonly email_content_reach: DBEmailContentReach | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null) {
     let htmlBody = marked(news.body, {
@@ -44,6 +46,8 @@ export class DBNews implements IDBContentDoc {
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
 
+    const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
+
     return {
       body: news.body,
       category: news.category
@@ -52,11 +56,10 @@ export class DBNews implements IDBContentDoc {
       isDraft: news.is_draft || false,
       heroImage:
         news.hero_image && publicHeroImage ? { ...news.hero_image, ...publicHeroImage } : null,
-      profileBadge: news.profile_badge
-        ? { value: news.profile_badge.id.toString(), label: news.profile_badge.name }
-        : null,
+      profileBadges,
       tags: news.tags,
       title: news.title,
+      emailContentReach: DBEmailContentReach.toCreateCreateFormField(news.email_content_reach),
     } satisfies NewsFormData;
   }
 }
@@ -77,7 +80,7 @@ export class News implements IContentDoc {
   heroImage: Image | null;
   isDraft: boolean;
   modifiedAt: Date | null;
-  profileBadge: ProfileBadge | null;
+  profileBadges: ProfileBadge[] | null;
   previousSlugs: string[];
   publishedAt: Date | null;
   slug: string;
@@ -88,6 +91,7 @@ export class News implements IContentDoc {
   title: string;
   totalViews: number;
   usefulCount: number;
+  emailContentReach: EmailContentReach | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
@@ -102,6 +106,9 @@ export class News implements IContentDoc {
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
 
+    const profileBadges =
+      news.profile_badges?.map((pb) => ProfileBadge.fromDB(pb.profile_badges)) || [];
+
     return new News({
       id: news.id,
       author: news.author ? Author.fromDB(news.author) : null,
@@ -114,7 +121,7 @@ export class News implements IContentDoc {
       isDraft: news.is_draft || false,
       heroImage: heroImage || null,
       modifiedAt: news.modified_at ? new Date(news.modified_at) : null,
-      profileBadge: news.profile_badge ? ProfileBadge.fromDB(news.profile_badge) : null,
+      profileBadges,
       previousSlugs: news.previous_slugs,
       publishedAt: news.published_at ? new Date(news.published_at) : null,
       slug: news.slug,
@@ -125,6 +132,8 @@ export class News implements IContentDoc {
       title: news.title,
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
+      emailContentReach:
+        news.email_content_reach && EmailContentReach.fromDB(news.email_content_reach || null),
     });
   }
 }
@@ -134,9 +143,10 @@ export type NewsFormData = {
   category: SelectValue | null;
   heroImage: MediaWithPublicUrl | null;
   isDraft: boolean | null;
-  profileBadge: SelectValue | null;
+  profileBadges: (string | null)[] | null;
   tags?: number[];
   title: string;
+  emailContentReach: SelectValue | null;
 };
 
 export type NewsDTO = {
@@ -145,6 +155,7 @@ export type NewsDTO = {
   category: number | null;
   heroImage: DBMedia | null;
   isDraft: boolean | null;
-  profileBadge: number | null;
+  profileBadges: number[] | null;
   tags: number[] | null;
+  emailContentReach: number | null;
 };

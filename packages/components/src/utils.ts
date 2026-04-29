@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import type {
   Author,
   Comment,
+  EmailContentReach,
   News,
   NotificationDisplay,
   PinProfile,
@@ -47,6 +48,19 @@ export const fakeCommentSB = (commentOverloads: Partial<Comment> = {}): Comment 
   ...commentOverloads,
 });
 
+const fakeEmailContentReach = (
+  emailContentReachOverloads: Partial<EmailContentReach> = {},
+): EmailContentReach => ({
+  id: faker.number.int(),
+  createdAt: faker.date.past(),
+  modifiedAt: null,
+  name: 'all',
+  preferencesLabel: 'All emails',
+  createContentLabel: 'Send to everyone',
+  defaultOption: true,
+  ...emailContentReachOverloads,
+});
+
 export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   id: faker.number.int(),
   createdAt: faker.date.past(),
@@ -68,7 +82,8 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   bodyHtml: faker.word.words(50),
   heroImage: null,
   isDraft: false,
-  profileBadge: null,
+  profileBadges: null,
+  emailContentReach: fakeEmailContentReach(),
   ...newsOverloads,
 });
 
@@ -81,8 +96,10 @@ export const fakeDisplayNotification = (
   email: {
     body: undefined,
     buttonLabel: 'See the full discussion',
+    displayDate: faker.date.past().toDateString(),
     preview: 'Jeff has left a new comment',
     subject: 'A new comment on something',
+    heroImage: undefined,
   },
   sidebar: {
     icon: 'discussion',

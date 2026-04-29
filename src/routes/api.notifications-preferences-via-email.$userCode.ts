@@ -1,7 +1,14 @@
+import {
+  type DBEmailContentReach,
+  DBNotificationsPreferences,
+  NotificationsPreferences,
+} from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
+import { methodNotAllowedError, unauthorizedError, validationError } from 'src/utils/httpException';
 import { tokens } from 'src/utils/tokens.server';
-import { DEFAULT_NOTIFICATION_PREFERENCES } from './api.notifications-preferences';
+import { setDefaultNotifications } from './api.notifications-preferences';
 
 interface DecodedToken {
   profileId: string;
@@ -13,7 +20,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   try {
     if (!params.userCode) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
+      throw unauthorizedError();
     }
 
     const decoded = tokens.verify(params.userCode) as DecodedToken;
@@ -28,19 +35,28 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const userId = userData.data?.id as number;
     if (!userId) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
+      throw unauthorizedError();
     }
 
-    const preferencesData = await client
+    const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
+    const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault();
+    const defaultDBPreferences = setDefaultNotifications(
+      dbDefaultEmailContentReach as DBEmailContentReach,
+    );
+
+    const { data } = await client
       .from('notifications_preferences')
-      .select('*')
+      .select('*,email_content_reach:email_content_reach(*)')
       .eq('user_id', userId)
       .maybeSingle();
 
-    const is_contactable = userData.data?.is_contactable;
-    const preferences = preferencesData.data || DEFAULT_NOTIFICATION_PREFERENCES;
+    const isContactable = !!userData.data?.is_contactable;
+    const preferences: NotificationsPreferences = NotificationsPreferences.fromDB({
+      ...defaultDBPreferences,
+      ...(data as DBNotificationsPreferences),
+    });
 
-    return Response.json({ preferences, is_contactable }, { headers, status: 200 });
+    return Response.json({ preferences, isContactable }, { headers, status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json({ error }, { headers, status: 500 });
@@ -52,7 +68,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   try {
     if (!params.userCode) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
+      throw unauthorizedError();
     }
 
     const decoded = tokens.verify(params.userCode) as DecodedToken;
@@ -64,18 +80,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       .eq('id', profileId)
       .eq('created_at', decoded.profileCreatedAt)
       .maybeSingle();
-
     const userId = userData.data?.id as number;
 
-    if (!userId) {
-      return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
-    }
-
-    const { valid, status, statusText } = await validateRequest(request, userId);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, userId);
 
     const formData = await request.formData();
     const existingPreferences = await client
@@ -86,15 +93,17 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     const existingPreferencesId = existingPreferences.data?.id || null;
     const comments = formData.get('comments') === 'true';
+    const emailContentReach = formData.get('emailContentReach');
     const replies = formData.get('replies') === 'true';
-    const researchUpdates = formData.get('research_updates') === 'true';
-    const isUnsubscribed = formData.get('is_unsubscribed') === 'true';
+    const researchUpdates = formData.get('researchUpdates') === 'true';
+    const isUnsubscribed = formData.get('isUnsubscribed') === 'true';
 
     if (existingPreferencesId) {
       await client
         .from('notifications_preferences')
         .update({
           comments,
+          email_content_reach: emailContentReach,
           replies,
           research_updates: researchUpdates,
           is_unsubscribed: isUnsubscribed,
@@ -107,6 +116,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await client.from('notifications_preferences').insert({
       user_id: userId,
       comments,
+      email_content_reach: emailContentReach,
       replies,
       research_updates: researchUpdates,
       is_unsubscribed: isUnsubscribed,
@@ -122,11 +132,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 async function validateRequest(request: Request, userId: number) {
   if (!userId) {
-    return { valid: false, status: 401, statusText: 'unauthorized' };
+    throw validationError('User not found');
   }
 
   if (request.method !== 'POST') {
-    return { valid: false, status: 405, statusText: 'Method not allowed' };
+    return methodNotAllowedError();
   }
 
   return { valid: true };

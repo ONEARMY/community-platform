@@ -1,13 +1,21 @@
-import type { DBNotificationsPreferencesFields } from 'oa-shared';
+import type { DBEmailContentReach, DBNotificationsPreferencesDefaults } from 'oa-shared';
+import { NotificationsPreferences } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { methodNotAllowedError } from 'src/utils/httpException';
 
-export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields = {
-  comments: true,
-  replies: true,
-  research_updates: true,
-  is_unsubscribed: false,
+export const setDefaultNotifications = (
+  dbDefaultEmailContentReach: DBEmailContentReach,
+): DBNotificationsPreferencesDefaults => {
+  return {
+    comments: true,
+    email_content_reach: dbDefaultEmailContentReach,
+    is_unsubscribed: false,
+    replies: true,
+    research_updates: true,
+  };
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -19,13 +27,22 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 401, statusText: 'unauthorized' });
   }
 
+  const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
+  const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault();
+  const defaultDBPreferences = setDefaultNotifications(
+    dbDefaultEmailContentReach as DBEmailContentReach,
+  );
+
   const { data } = await client
     .from('notifications_preferences')
-    .select('*, profiles!inner(id)')
+    .select('*,profiles!inner(id),email_content_reach:email_content_reach(*)')
     .eq('profiles.auth_id', claims.data?.claims?.sub)
     .single();
 
-  const preferences = data || DEFAULT_NOTIFICATION_PREFERENCES;
+  const preferences = NotificationsPreferences.fromDB({
+    ...defaultDBPreferences,
+    ...data,
+  });
 
   return Response.json({ preferences }, { headers, status: 200 });
 };
@@ -37,21 +54,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
     const comments = formData.get('comments') === 'true';
+    const email_content_reach = formData.get('email_content_reach');
+    const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('research_updates') === 'true';
-    const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
 
     const claims = await client.auth.getClaims();
-
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-
-    const { valid, status, statusText } = await validateRequest(request);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request);
 
     if (id) {
       await client
@@ -61,6 +73,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           replies,
           research_updates,
           is_unsubscribed,
+          email_content_reach,
         })
         .eq('id', id)
         .select();
@@ -85,6 +98,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       replies,
       research_updates,
       is_unsubscribed,
+      email_content_reach,
       tenant_id: process.env.TENANT_ID!,
     });
 
@@ -99,8 +113,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(request: Request) {
   if (request.method !== 'POST') {
-    return { valid: false, status: 405, statusText: 'Method not allowed' };
+    throw methodNotAllowedError();
   }
-
-  return { valid: true };
 }

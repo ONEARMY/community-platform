@@ -1,9 +1,10 @@
-import type { DBNotificationsPreferences, NotificationsPreferencesFormData } from 'oa-shared';
+import type { NotificationsPreferences, NotificationsPreferencesFormData } from 'oa-shared';
 
-const getPreferences = async (): Promise<DBNotificationsPreferences | null> => {
+const getPreferences = async (): Promise<NotificationsPreferences | null> => {
   try {
     const preferencesData = await fetch('/api/notifications-preferences');
     const { preferences } = await preferencesData.json();
+
     return preferences;
   } catch (err) {
     console.error(err);
@@ -16,9 +17,14 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
 
   data.id && body.append('id', data.id.toString());
   body.append('comments', data.comments.toString());
+  body.append('news', data.news.toString());
   body.append('replies', data.replies.toString());
-  body.append('research_updates', data.research_updates.toString());
-  body.append('is_unsubscribed', 'false');
+  body.append('researchUpdates', data.researchUpdates.toString());
+  body.append('isUnsubscribed', 'false');
+
+  if (data.emailContentReach?.value) {
+    body.append('emailContentReach', data.emailContentReach.value.toString());
+  }
 
   return fetch('/api/notifications-preferences', {
     method: 'POST',
@@ -31,9 +37,11 @@ const setUnsubscribe = async (id: number | undefined) => {
 
   id && body.append('id', id.toString());
   body.append('comments', 'false');
+  body.append('news', 'false');
   body.append('replies', 'false');
-  body.append('research_updates', 'false');
-  body.append('is_unsubscribed', 'true');
+  body.append('researchUpdates', 'false');
+  body.append('emailContentReach', 'null');
+  body.append('isUnsubscribed', 'true');
 
   return fetch('/api/notifications-preferences', {
     method: 'POST',

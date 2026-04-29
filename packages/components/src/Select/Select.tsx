@@ -22,6 +22,7 @@ export interface Props extends ReactSelectProps {
   defaultValue?: IOption;
   variant?: 'form' | 'formError' | 'icons' | 'tabs';
   useAlternateBackground?: boolean; // this could be a specific color passed in but keeping it simple for now
+  isDisabled?: boolean;
 }
 
 export const Select = (props: Props) => {
@@ -221,6 +222,8 @@ export const Select = (props: Props) => {
       onInputChange={props.onInputChange}
       isOptionDisabled={props.isOptionDisabled}
       noOptionsMessage={props.noOptionsMessage}
+      isDisabled={props.isDisabled}
+      inputId={props.inputId}
     />
   );
 };

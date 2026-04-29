@@ -25,13 +25,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const dbNews = result.data as unknown as DBNews;
-  const profileBadgeId = dbNews.profile_badge?.id;
+  const requiredBadgeIds = dbNews.profile_badges?.map((pb: any) => pb.profile_badges.id) || [];
 
-  if (!profileBadgeId) {
+  // No badge restrictions - allow public access
+  if (requiredBadgeIds.length === 0) {
     const news = await loadNews(client, dbNews);
     return data({ news, tenantSettings }, { headers });
   }
 
+  // Badge restrictions exist - check authentication
   const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
@@ -43,9 +45,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const profile = new ProfileFactory(client).fromDB(dbProfile!);
 
   const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false;
-  const hasLinkedBadge = !!profile?.badges?.find((badge) => badge.id === profileBadgeId);
+  const hasAnyRequiredBadge =
+    profile?.badges?.some((badge) => requiredBadgeIds.includes(badge.id)) ?? false;
 
-  if (isAdmin || hasLinkedBadge) {
+  if (isAdmin || hasAnyRequiredBadge) {
     const news = await loadNews(client, dbNews);
     return data({ news, tenantSettings }, { headers });
   }

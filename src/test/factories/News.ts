@@ -8,6 +8,7 @@ export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): News
     label: faker.lorem.words(1),
     value: faker.number.int().toString(),
   },
+  emailContentReach: null,
   heroImage: {
     id: faker.string.uuid(),
     path: faker.image.url(),
@@ -15,7 +16,7 @@ export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): News
     publicUrl: faker.image.url(),
   },
   isDraft: false,
-  profileBadge: null,
+  profileBadges: null,
   tags: [faker.number.int(), faker.number.int()],
   title: faker.lorem.sentence(),
   ...overloads,
@@ -26,6 +27,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   bodyHtml: faker.lorem.paragraph(),
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
+  emailContentReach: null,
   id: faker.number.int(),
   isDraft: false,
   modifiedAt: faker.date.past(),
@@ -84,7 +86,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   commentCount: faker.number.int(),
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
-  profileBadge: null,
+  profileBadges: null,
   publishedAt: faker.date.past(),
   ...newsOverloads,
 });

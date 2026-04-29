@@ -10,7 +10,6 @@ interface IProps {
   buttonLabel: string;
   children: React.ReactNode;
   errorsClientSide?: IErrorsListSet[];
-  errorSubmitting?: string;
   guidelines?: React.ReactNode;
   handleSubmit: () => void;
   handleSubmitDraft: (e: React.MouseEvent) => void;
@@ -32,7 +31,6 @@ export const FormWrapper = (props: IProps) => {
     buttonLabel,
     children,
     errorsClientSide,
-    errorSubmitting,
     guidelines,
     handleSubmit,
     handleSubmitDraft,
@@ -136,7 +134,6 @@ export const FormWrapper = (props: IProps) => {
           <Loader label="Submitting, please do not close the page..." />
         )}
         {sidebar && sidebar}
-        {errorSubmitting && <ErrorsContainer serverErrors={[errorSubmitting]} />}
         {hasClientSideErrors && <ErrorsContainer clientErrors={errorsClientSide} />}
       </Flex>
     </Flex>

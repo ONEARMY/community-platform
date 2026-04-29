@@ -15,7 +15,7 @@ interface IProps {
 
 export const ProfileBadgeField = ({ description, placeholder, title, showPublicBadge }: IProps) => {
   const [profileBadges, setProfileBadges] = useState<SelectValue[]>([]);
-  const name = 'profileBadge';
+  const name = 'profileBadges';
 
   useEffect(() => {
     const initCategories = async () => {
@@ -43,23 +43,50 @@ export const ProfileBadgeField = ({ description, placeholder, title, showPublicB
         name={name}
         id={name}
         render={({ input, ...rest }) => {
-          const publicOption = { value: null, label: 'Public' };
+          // Normalize stored value to always be an array of value strings
+          const storedValues: (string | null)[] = Array.isArray(input.value)
+            ? input.value.map((v: any) => v?.value ?? v)
+            : input.value
+              ? [typeof input.value === 'object' ? input.value.value : input.value]
+              : showPublicBadge
+                ? [null]
+                : [];
 
-          const selectedOption =
-            profileBadges.find((o) => o.value === (input.value?.value ?? input.value)) ??
-            (showPublicBadge ? publicOption : null);
+          // Map stored values to current option objects
+          const selectedOptions = storedValues
+            .map((val) => profileBadges.find((o) => o.value === val))
+            .filter(Boolean);
+
+          const handleChange = (selected: any[]) => {
+            if (!selected?.length) {
+              // Store null for public, or empty array
+              input.onChange(showPublicBadge ? [null] : []);
+              return;
+            }
+
+            const lastSelected = selected[selected.length - 1];
+            const isLastPublic = lastSelected.value === null;
+
+            if (isLastPublic) {
+              // Public was just added — store only null
+              input.onChange([null]);
+            } else {
+              // Store only the value strings, excluding public
+              const values = selected.filter((o) => o.value !== null).map((o) => o.value);
+              input.onChange(values);
+            }
+          };
 
           return (
             <FieldContainer data-cy={`${name}-select`}>
               <Select
                 {...rest}
                 variant="form"
-                inputId="profileBadge"
+                inputId="profileBadges"
                 options={profileBadges || []}
-                value={selectedOption}
-                onChange={(changedValue) => {
-                  input.onChange(changedValue ?? null);
-                }}
+                value={selectedOptions}
+                onChange={handleChange}
+                isMulti={true}
                 getOptionValue={(option) => option.value ?? '__public__'}
                 isClearable={true}
                 placeholder={placeholder}

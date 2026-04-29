@@ -90,10 +90,12 @@ export const NewsPage = observer(({ news }: IProps) => {
           }}
         >
           <Flex sx={{ flexDirection: 'column', gap: 2, marginBottom: 3 }}>
-            {news.category || news.profileBadge ? (
+            {news.category || (news.profileBadges && news.profileBadges.length > 0) ? (
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
                 {news.category && <Category category={news.category} />}
-                {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
+                {news.profileBadges?.map((badge) => (
+                  <ProfileBadgeContentLabel key={badge.id} profileBadge={badge} />
+                ))}
               </Flex>
             ) : null}
 

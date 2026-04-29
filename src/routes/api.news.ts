@@ -23,94 +23,52 @@ export const loader = async ({ request }) => {
 
   const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
-  let currentUserBadges: number[] = [];
+
+  let userProfileId: number | null = null;
   let isAdmin = false;
+
   if (claims?.data?.claims?.sub) {
     const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
     isAdmin = !!profile?.roles?.includes('admin');
-    currentUserBadges = profile?.badges?.map((x) => x.profile_badges.id) || [];
+    userProfileId = profile?.id ?? null;
+    await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
   }
 
-  let query = client
-    .from('news')
-    .select(
-      `
-      id,
-      created_at,
-      created_by,
-      modified_at,
-      published_at,
-      is_draft,
-      comment_count,
-      body,
-      slug,
-      summary,
-      category:category(id,name),
-      profile_badge:profile_badge(*),
-      tags,
-      title,
-      total_views,
-      hero_image,
-      email_content_reach:email_content_reach(*),
-      author:profiles(id, display_name, username, country, badges:profile_badges_relations(
-        profile_badges(
-          id,
-          name,
-          display_name,
-          image_url,
-          action_url
-        )
-      ))`,
-      { count: 'exact' },
-    )
+  const rpcResult = await client.rpc('get_news_feed', {
+    p_user_profile_id: userProfileId,
+    p_is_admin: isAdmin,
+    p_search: q || null,
+    p_sort: sort || 'Newest',
+    p_skip: skip,
+    p_limit: ITEMS_PER_PAGE,
+  });
 
-    .eq('is_draft', false);
-
-  if (!isAdmin) {
-    query = query.or(
-      `profile_badge.is.null${currentUserBadges.length > 0 ? `,profile_badge.in.(${currentUserBadges.join(',')})` : ''}`,
-    );
+  if (rpcResult.error) {
+    console.error(rpcResult.error);
+    return Response.json({ error: 'Failed to load news' }, { status: 500 });
   }
 
-  if (q) {
-    query = query.textSearch('news_search_fields', q);
-  }
+  const rows = rpcResult.data as (DBNews & { total_count: number })[];
+  const total = rows[0]?.total_count ?? 0;
+  const items = rows.map((row) => News.fromDB(row, []));
 
-  if (sort === 'Newest') {
-    query = query.order('published_at', { ascending: false });
-  } else if (sort === 'Comments') {
-    query = query.order('comment_count', { ascending: false });
-  } else if (sort === 'LeastComments') {
-    query = query.order('comment_count', { ascending: true });
-  }
-
-  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE - 1); // 0 based
-
-  const total = queryResult.count;
-  const data = queryResult.data as unknown as DBNews[];
-  const items = data.map((dbNews) => News.fromDB(dbNews, []));
-
-  if (items && items.length > 0) {
-    // Populate useful votes
+  // Populate useful votes + hero images (unchanged)
+  if (items.length > 0) {
     const votes = await client.rpc('get_useful_votes_count_by_content_id', {
       p_content_type: 'news',
       p_content_ids: items.map((x) => x.id),
     });
 
-    if (votes.data) {
-      const votesByContentId = votes.data.reduce((acc, current) => {
-        acc.set(current.content_id, current.count);
-        return acc;
-      }, new Map());
+    const votesByContentId = (votes.data ?? []).reduce((acc, cur) => {
+      acc.set(cur.content_id, cur.count);
+      return acc;
+    }, new Map());
 
-      for (const item of items) {
-        if (votesByContentId.has(item.id)) {
-          item.usefulCount = votesByContentId.get(item.id)!;
-        }
-        item.heroImage = await new NewsServiceServer(client).getHeroImage(
-          data.find((x) => x.id === item.id)?.hero_image || null,
-        );
-      }
+    for (const item of items) {
+      item.usefulCount = votesByContentId.get(item.id) ?? 0;
+      item.heroImage = await new NewsServiceServer(client).getHeroImage(
+        rows.find((x) => x.id === item.id)?.hero_image ?? null,
+      );
     }
   }
 
@@ -126,7 +84,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       body: formData.get('body') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('isDraft') === 'true',
-      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
+      profileBadges: formData.has('profileBadges')
+        ? formData.getAll('profileBadges').map((x) => Number(x))
+        : [],
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
       heroImage: formData.has('heroImage')
@@ -169,7 +129,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
-        profile_badge: data.profileBadge,
         published_at: data.isDraft ? null : new Date(),
         slug,
         summary: getSummaryFromMarkdown(data.body),
@@ -179,15 +138,45 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         title: data.title,
         email_content_reach: data.emailContentReach,
       })
-      .select('*, profile_badge:profile_badge(*),email_content_reach:email_content_reach(*)');
+      .select('*, email_content_reach:email_content_reach(*)');
 
     if (newsResult.error || !newsResult.data) {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], []);
+    const newsId = newsResult.data[0].id;
+
+    // Insert badge relations
+    if (data.profileBadges && data.profileBadges.length > 0) {
+      const badgeRelations = data.profileBadges.map((badgeId) => ({
+        news_id: newsId,
+        profile_badge_id: badgeId,
+        tenant_id: process.env.TENANT_ID,
+      }));
+
+      const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
+
+      if (badgeResult.error) {
+        console.error('Error inserting badge relations:', badgeResult.error);
+      }
+    }
+
+    // Fetch the complete news with badges for response
+    const completeNews = await client
+      .from('news')
+      .select(
+        '*, profile_badges:news_badges_relations(profile_badges(*)), email_content_reach:email_content_reach(*)',
+      )
+      .eq('id', newsId)
+      .single();
+
+    if (completeNews.error || !completeNews.data) {
+      throw completeNews.error;
+    }
+
+    const news = News.fromDB(completeNews.data, []);
     new SubscribersServiceServer(client).add('news', news.id, profile.id);
-    new BroadcastCoordinationServiceServer(client).news(newsResult.data[0], profile, request);
+    new BroadcastCoordinationServiceServer(client).news(completeNews.data, profile, request);
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 201 });

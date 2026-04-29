@@ -29,7 +29,9 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       body: formData.get('body') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('isDraft') === 'true',
-      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
+      profileBadges: formData.has('profileBadges')
+        ? formData.getAll('profileBadges').map((x) => Number(x))
+        : [],
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
       heroImage: formData.has('heroImage')
@@ -64,7 +66,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         modified_at: new Date(),
         slug: slug,
         previous_slugs: previousSlugs,
-        profile_badge: data.profileBadge,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
@@ -79,12 +80,40 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], []);
+    // Update badge relations: delete existing and insert new ones
+    await client.from('news_badges_relations').delete().eq('news_id', id);
+
+    if (data.profileBadges && data.profileBadges.length > 0) {
+      const badgeRelations = data.profileBadges.map((badgeId) => ({
+        news_id: id,
+        profile_badge_id: badgeId,
+        tenant_id: process.env.TENANT_ID,
+      }));
+
+      const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
+
+      if (badgeResult.error) {
+        console.error('Error inserting badge relations:', badgeResult.error);
+      }
+    }
+
+    // Fetch complete news with badges
+    const completeNews = await client
+      .from('news')
+      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
+      .eq('id', id)
+      .single();
+
+    if (completeNews.error || !completeNews.data) {
+      throw completeNews.error;
+    }
+
+    const news = News.fromDB(completeNews.data, []);
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     const broadcastCoordinationServiceServer = new BroadcastCoordinationServiceServer(client);
-    broadcastCoordinationServiceServer.news(newsResult.data[0], profile, request, currentNews);
+    broadcastCoordinationServiceServer.news(completeNews.data, profile, request, currentNews);
 
     new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

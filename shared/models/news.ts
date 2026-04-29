@@ -28,7 +28,7 @@ export class DBNews implements IDBContentDoc {
   readonly title: string;
   readonly total_views?: number;
   readonly previous_slugs: string[];
-  readonly profile_badge: DBProfileBadge | null;
+  readonly profile_badges: { profile_badges: DBProfileBadge } | null;
   readonly slug: string;
   readonly summary: string | null;
   readonly tags: number[];
@@ -46,6 +46,12 @@ export class DBNews implements IDBContentDoc {
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
 
+    const profileBadges =
+      (news.profile_badges as any)?.map((pb: any) => ({
+        value: pb.profile_badges.id.toString(),
+        label: pb.profile_badges.name,
+      })) || null;
+
     return {
       body: news.body,
       category: news.category
@@ -54,9 +60,7 @@ export class DBNews implements IDBContentDoc {
       isDraft: news.is_draft || false,
       heroImage:
         news.hero_image && publicHeroImage ? { ...news.hero_image, ...publicHeroImage } : null,
-      profileBadge: news.profile_badge
-        ? { value: news.profile_badge.id.toString(), label: news.profile_badge.name }
-        : null,
+      profileBadges,
       tags: news.tags,
       title: news.title,
       emailContentReach: DBEmailContentReach.toCreateCreateFormField(news.email_content_reach),
@@ -80,7 +84,7 @@ export class News implements IContentDoc {
   heroImage: Image | null;
   isDraft: boolean;
   modifiedAt: Date | null;
-  profileBadge: ProfileBadge | null;
+  profileBadges: ProfileBadge[] | null;
   previousSlugs: string[];
   publishedAt: Date | null;
   slug: string;
@@ -106,6 +110,9 @@ export class News implements IContentDoc {
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
 
+    const profileBadges =
+      (news.profile_badges as any)?.map((pb: any) => ProfileBadge.fromDB(pb.profile_badges)) || [];
+
     return new News({
       id: news.id,
       author: news.author ? Author.fromDB(news.author) : null,
@@ -118,7 +125,7 @@ export class News implements IContentDoc {
       isDraft: news.is_draft || false,
       heroImage: heroImage || null,
       modifiedAt: news.modified_at ? new Date(news.modified_at) : null,
-      profileBadge: news.profile_badge ? ProfileBadge.fromDB(news.profile_badge) : null,
+      profileBadges,
       previousSlugs: news.previous_slugs,
       publishedAt: news.published_at ? new Date(news.published_at) : null,
       slug: news.slug,
@@ -140,7 +147,7 @@ export type NewsFormData = {
   category: SelectValue | null;
   heroImage: MediaWithPublicUrl | null;
   isDraft: boolean | null;
-  profileBadge: SelectValue | null;
+  profileBadges: SelectValue[] | null;
   tags?: number[];
   title: string;
   emailContentReach: SelectValue | null;
@@ -152,7 +159,7 @@ export type NewsDTO = {
   category: number | null;
   heroImage: DBMedia | null;
   isDraft: boolean | null;
-  profileBadge: number | null;
+  profileBadges: number[] | null;
   tags: number[] | null;
   emailContentReach: number | null;
 };

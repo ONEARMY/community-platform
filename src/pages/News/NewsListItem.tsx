@@ -71,7 +71,9 @@ export const NewsListItem = ({ news, query }: IProps) => {
             </InternalLink>
 
             {news.category && <Category category={news.category} sx={{ fontSize: 2 }} />}
-            {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
+            {news.profileBadges?.map((badge) => (
+              <ProfileBadgeContentLabel key={badge.id} profileBadge={badge} />
+            ))}
           </Flex>
 
           <Text variant="auxiliary">

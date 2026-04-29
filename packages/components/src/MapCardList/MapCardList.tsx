@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 import { Button } from '../Button/Button';
 import { CardListItem } from '../CardListItem/CardListItem';
+import type { CardVariant } from '../CardProfile/CardProfile';
 import { Icon } from '../Icon/Icon';
 
 export interface IProps {
+  cardVariant?: CardVariant;
   list: MapPin[];
   onPinClick: (arg: MapPin) => void;
   selectedPin?: MapPin | null;
@@ -19,7 +21,7 @@ const ITEMS_PER_RENDER = 20;
 export const MapCardList = (props: IProps) => {
   const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER);
   const [displayItems, setDisplayItems] = useState<JSX.Element[]>([]);
-  const { list, onPinClick, selectedPin, viewport } = props;
+  const { cardVariant = 'list', list, onPinClick, selectedPin, viewport } = props;
 
   useEffect(() => {
     setRenderCount(ITEMS_PER_RENDER);
@@ -31,18 +33,18 @@ export const MapCardList = (props: IProps) => {
 
       return (
         <CardListItem
+          cardVariant={cardVariant}
           item={item}
           key={item.id}
           isSelectedPin={isSelectedPin}
           onPinClick={onPinClick}
-          variant="list"
           viewport={viewport}
         />
       );
     });
 
     setDisplayItems(toRender);
-  }, [renderCount, list]);
+  }, [renderCount, list, cardVariant]);
 
   const addRenderItems = () => setRenderCount((count) => count + ITEMS_PER_RENDER);
 

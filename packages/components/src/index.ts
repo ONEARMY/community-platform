@@ -10,6 +10,7 @@ export { ButtonIcon } from './ButtonIcon/ButtonIcon';
 export { ButtonShowReplies } from './ButtonShowReplies/ButtonShowReplies';
 export { CardButton } from './CardButton/CardButton';
 export { CardListItem } from './CardListItem/CardListItem';
+export type { CardVariant } from './CardProfile/CardProfile';
 export { CardProfile } from './CardProfile/CardProfile';
 export { Category } from './Category/Category';
 export { CategoryHorizonalList } from './CategoryHorizonalList/CategoryHorizonalList';

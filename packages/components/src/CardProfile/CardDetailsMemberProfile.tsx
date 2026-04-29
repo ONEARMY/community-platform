@@ -1,20 +1,26 @@
-import type { PinProfile } from 'oa-shared';
+import type { MapPin } from 'oa-shared';
 import { Avatar, Box, Flex, Text } from 'theme-ui';
 import defaultProfileImage from '../../assets/images/default_member.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
 import { DisplayName } from '../Username/DisplayName';
+import type { CardVariant } from './CardProfile';
 
 interface IProps {
-  profile: PinProfile;
+  cardVariant?: CardVariant;
+  item: MapPin;
   isLink: boolean;
-  variant?: 'pin' | 'list';
+  sendMessageButton?: React.ReactNode;
 }
 
-export const CardDetailsMemberProfile = ({ profile, isLink, variant = 'pin' }: IProps) => {
+export const CardDetailsMemberProfile = ({
+  cardVariant,
+  item,
+  isLink,
+  sendMessageButton,
+}: IProps) => {
+  const { profile } = item;
   const photoUrl = profile.photo?.publicUrl;
-  const aboutText =
-    profile.about && profile.about.length > 80 ? profile.about.slice(0, 78) + '...' : profile.about;
 
   return (
     <Flex
@@ -51,12 +57,12 @@ export const CardDetailsMemberProfile = ({ profile, isLink, variant = 'pin' }: I
         </Box>
         <Flex sx={{ flexDirection: 'column' }}>
           <DisplayName
-            user={profile}
+            user={{ ...profile, country: item.country }}
             sx={{ alignSelf: 'flex-start' }}
             isLink={isLink}
             target="_blank"
           />
-          {variant == 'list' && (
+          {cardVariant === 'list' && (
             <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1, minWidth: 0, pt: 1 }}>
               {profile.tags && profile.tags.length > 0 && (
                 <ProfileTagsList tags={profile.tags} isSpace={false} />
@@ -65,14 +71,14 @@ export const CardDetailsMemberProfile = ({ profile, isLink, variant = 'pin' }: I
           )}
         </Flex>
       </Flex>
-      {variant == 'pin' && (
+      {cardVariant === 'pin' && (
         <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1, minWidth: 0, pt: 1 }}>
           {profile.tags && profile.tags.length > 0 && (
             <ProfileTagsList tags={profile.tags} isSpace={false} />
           )}
         </Flex>
       )}
-      {variant == 'pin' && aboutText && (
+      {cardVariant === 'pin' && profile.about && (
         <Text
           variant="quiet"
           sx={{
@@ -84,9 +90,10 @@ export const CardDetailsMemberProfile = ({ profile, isLink, variant = 'pin' }: I
             wordBreak: 'break-word',
           }}
         >
-          {aboutText}
+          {profile.about}
         </Text>
       )}
+      {sendMessageButton}
     </Flex>
   );
 };

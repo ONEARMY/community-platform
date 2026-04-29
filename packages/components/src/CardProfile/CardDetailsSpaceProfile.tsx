@@ -1,4 +1,4 @@
-import type { PinProfile } from 'oa-shared';
+import type { MapPin } from 'oa-shared';
 import { Avatar, Box, Flex, Image, Text } from 'theme-ui';
 import defaultProfileImage from '../../assets/images/default_member.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
@@ -6,18 +6,17 @@ import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
 import { DisplayName } from '../Username/DisplayName';
 
 interface IProps {
-  profile: PinProfile;
+  item: MapPin;
   isLink: boolean;
+  sendMessageButton?: React.ReactNode;
 }
 
-export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
+export const CardDetailsSpaceProfile = ({ item, isLink, sendMessageButton }: IProps) => {
+  const { profile } = item;
   const coverImage =
     profile.coverImages && profile.coverImages[0] && profile.coverImages[0]?.publicUrl;
   const profileUrl = profile.photo?.publicUrl;
   const hasImage = coverImage || profileUrl;
-
-  const aboutText =
-    profile.about && profile.about.length > 80 ? profile.about.slice(0, 78) + '...' : profile.about;
 
   return (
     <Flex data-testid="CardDetailsSpaceProfile" sx={{ flexDirection: 'column', width: '100%' }}>
@@ -73,7 +72,7 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
             />
           </Box>
           <DisplayName
-            user={profile}
+            user={{ ...profile, country: item.country }}
             sx={{ alignSelf: 'flex-start' }}
             isLink={isLink}
             target="_blank"
@@ -84,7 +83,7 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
           <ProfileTagsList tags={profile.tags} isSpace={true} />
         )}
 
-        {aboutText && (
+        {profile.about && (
           <Text
             variant="quiet"
             sx={{
@@ -96,9 +95,10 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
               wordBreak: 'break-word',
             }}
           >
-            {aboutText}
+            {profile.about}
           </Text>
         )}
+        {sendMessageButton}
       </Flex>
     </Flex>
   );

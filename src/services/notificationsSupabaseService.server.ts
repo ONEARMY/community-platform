@@ -37,6 +37,50 @@ export class NotificationsSupabaseServiceServer {
     }
   }
 
+  async getProfilesByBadgeIds(badgeIds: number[]) {
+    try {
+      if (badgeIds.length === 0) {
+        return [];
+      }
+
+      // Get all profiles that have ANY of the specified badges
+      const response = await this.client
+        .from('profile_badges_relations')
+        .select(
+          `
+          profile_id,
+          profiles!inner (
+            id,
+            display_name,
+            username,
+            email,
+            roles,
+            notification_preferences
+          )
+        `,
+        )
+        .in('profile_badge_id', badgeIds);
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      // Deduplicate profiles (in case a user has multiple badges)
+      const uniqueProfiles = new Map();
+      response.data?.forEach((item: any) => {
+        const profile = item.profiles;
+        if (profile && !uniqueProfiles.has(profile.id)) {
+          uniqueProfiles.set(profile.id, profile);
+        }
+      });
+
+      return Array.from(uniqueProfiles.values());
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+
   async getSubscribedUsers(
     contentId: number,
     contentType: SubscribableContentTypes,
@@ -152,14 +196,16 @@ export class NotificationsSupabaseServiceServer {
         content_type: 'news',
       });
 
-      if (!news.profile_badge) {
+      const badgeIds = news.profile_badges?.map((pb: any) => pb.profile_badges.id) || [];
+
+      if (badgeIds.length === 0) {
+        // No badge restrictions - notify all subscribers
         const allSubscribers = await this.getAllProfiles();
         const subscriberIds = allSubscribers?.map(({ id }) => ({ profile_id: id })) || [];
         await this.createNotifications(dbNotification, subscriberIds);
-      }
-
-      if (news.profile_badge) {
-        const badgeSubscribers = await this.getProfilesByBadgeId(news.profile_badge.id);
+      } else {
+        // Badge restrictions - notify users with ANY of the required badges
+        const badgeSubscribers = await this.getProfilesByBadgeIds(badgeIds);
         await this.createNotifications(dbNotification, badgeSubscribers);
 
         switch (news.email_content_reach?.name) {

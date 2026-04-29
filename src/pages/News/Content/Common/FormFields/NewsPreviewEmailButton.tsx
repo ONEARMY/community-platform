@@ -18,18 +18,16 @@ export const NewsPreviewEmailButton = (props: IProps) => {
   const previewEmail = async () => {
     setIsSendingPreview(true);
 
-    const draftNews = {
+    const promise = emailPreviewService.send({
       body: formValues.body || '',
       category: formValues.category || null,
       heroImage: formValues.heroImage || null,
       isDraft: false,
-      profileBadge: formValues.profileBadge || null,
+      profileBadges: formValues.profileBadges || null,
       tags: formValues.tags,
       title: formValues.title || '',
       emailContentReach: null,
-    };
-
-    const promise = emailPreviewService.send(draftNews);
+    });
 
     toast.promise(promise, {
       loading: 'Sending preview news email',

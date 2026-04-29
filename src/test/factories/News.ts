@@ -16,7 +16,7 @@ export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): News
     publicUrl: faker.image.url(),
   },
   isDraft: false,
-  profileBadge: null,
+  profileBadges: null,
   tags: [faker.number.int(), faker.number.int()],
   title: faker.lorem.sentence(),
   ...overloads,
@@ -86,7 +86,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   commentCount: faker.number.int(),
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
-  profileBadge: null,
+  profileBadges: null,
   publishedAt: faker.date.past(),
   ...newsOverloads,
 });

@@ -82,7 +82,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   bodyHtml: faker.word.words(50),
   heroImage: null,
   isDraft: false,
-  profileBadge: null,
+  profileBadges: null,
   emailContentReach: fakeEmailContentReach(),
   ...newsOverloads,
 });

@@ -28,7 +28,7 @@ export class DBNews implements IDBContentDoc {
   readonly title: string;
   readonly total_views?: number;
   readonly previous_slugs: string[];
-  readonly profile_badges: { profile_badges: DBProfileBadge } | null;
+  readonly profile_badges: { profile_badges: DBProfileBadge }[] | null;
   readonly slug: string;
   readonly summary: string | null;
   readonly tags: number[];
@@ -46,11 +46,7 @@ export class DBNews implements IDBContentDoc {
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
 
-    const profileBadges =
-      (news.profile_badges as any)?.map((pb: any) => ({
-        value: pb.profile_badges.id.toString(),
-        label: pb.profile_badges.name,
-      })) || null;
+    const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
 
     return {
       body: news.body,
@@ -111,7 +107,7 @@ export class News implements IContentDoc {
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
 
     const profileBadges =
-      (news.profile_badges as any)?.map((pb: any) => ProfileBadge.fromDB(pb.profile_badges)) || [];
+      news.profile_badges?.map((pb) => ProfileBadge.fromDB(pb.profile_badges)) || [];
 
     return new News({
       id: news.id,
@@ -147,7 +143,7 @@ export type NewsFormData = {
   category: SelectValue | null;
   heroImage: MediaWithPublicUrl | null;
   isDraft: boolean | null;
-  profileBadges: SelectValue[] | null;
+  profileBadges: (string | null)[] | null;
   tags?: number[];
   title: string;
   emailContentReach: SelectValue | null;

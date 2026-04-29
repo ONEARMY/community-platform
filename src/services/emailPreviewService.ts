@@ -9,7 +9,7 @@ const send = async (form: NewsFormData) => {
     emailContentReach: null,
     heroImage: form.heroImage ? DBMedia.fromPublicMedia(form.heroImage) : null,
     isDraft: form.isDraft,
-    profileBadge: Number(form.profileBadge?.value) || null,
+    profileBadges: form.profileBadges?.map((badge) => Number(badge)) || null,
     tags: form.tags || null,
   });
 

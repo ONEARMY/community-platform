@@ -47,9 +47,9 @@ export const loader = async ({ request }) => {
     console.error(rpcResult.error);
     return Response.json({ error: 'Failed to load news' }, { status: 500 });
   }
-
   const rows = rpcResult.data as (DBNews & { total_count: number })[];
   const total = rows[0]?.total_count ?? 0;
+  // No badge fetch needed anymore
   const items = rows.map((row) => News.fromDB(row, []));
 
   // Populate useful votes + hero images (unchanged)

@@ -14,8 +14,8 @@ export const FlagIcon = ({ countryCode }: IProps) => {
       style={{
         borderRadius: '3px',
         backgroundSize: 'cover',
-        height: '14px',
         width: '21px',
+        height: '14px',
       }}
     />
   );

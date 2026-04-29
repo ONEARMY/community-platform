@@ -1,22 +1,24 @@
-import type { PinProfile } from 'oa-shared';
-import { Box, Flex, Image, Text } from 'theme-ui';
+import type { MapPin } from 'oa-shared';
+import { Avatar, Box, Flex, Image, Text } from 'theme-ui';
+import defaultProfileImage from '../../assets/images/default_member.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
-import { Username } from '../Username/Username';
+import { DisplayName } from '../Username/DisplayName';
+import type { CardVariant } from './CardProfile';
+import { SendMessageButton } from './SendMessageButton';
 
 interface IProps {
-  profile: PinProfile;
+  item: MapPin;
   isLink: boolean;
+  variant: CardVariant;
 }
 
-export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
+export const CardDetailsSpaceProfile = ({ item, isLink, variant }: IProps) => {
+  const { profile } = item;
   const coverImage =
     profile.coverImages && profile.coverImages[0] && profile.coverImages[0]?.publicUrl;
   const profileUrl = profile.photo?.publicUrl;
   const hasImage = coverImage || profileUrl;
-
-  const aboutText =
-    profile.about && profile.about.length > 80 ? profile.about.slice(0, 78) + '...' : profile.about;
 
   return (
     <Flex data-testid="CardDetailsSpaceProfile" sx={{ flexDirection: 'column', width: '100%' }}>
@@ -33,37 +35,46 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
               loading="lazy"
             />
           </Flex>
-          <Box
-            sx={{
-              position: 'relative',
-              height: 0,
-              top: '-20px',
-              width: '100%',
-            }}
-          >
-            <MemberBadge
-              profileType={profile.type || undefined}
-              size={40}
-              sx={{
-                float: 'right',
-                marginX: 2,
-              }}
-            />
-          </Box>
         </>
       )}
       <Flex
         sx={{
           alignItems: 'flex-start',
           flexDirection: 'column',
-          gap: 1,
-          padding: 2,
+          gap: 2,
+          p: 3,
         }}
       >
-        <Flex sx={{ gap: 2, minWidth: 0, width: '100%' }}>
-          {!hasImage && <MemberBadge profileType={profile.type || undefined} size={30} />}
-          <Username
-            user={profile}
+        <Flex sx={{ gap: 2, minWidth: 0, width: '100%', alignItems: 'end' }}>
+          <Box
+            sx={{
+              position: 'relative',
+              width: '80px',
+              height: '80px',
+              flexShrink: 0,
+              marginTop: '-40px',
+            }}
+          >
+            <Avatar
+              src={profileUrl || defaultProfileImage}
+              sx={{
+                width: '80px',
+                height: '80px',
+                objectFit: 'cover',
+                flexShrink: 0,
+                border: '3px solid white',
+                boxSizing: 'border-box',
+              }}
+              loading="lazy"
+            />
+            <MemberBadge
+              profileType={profile.type || undefined}
+              size={22}
+              sx={{ position: 'absolute', bottom: 0, right: 0, m: '3px' }}
+            />
+          </Box>
+          <DisplayName
+            user={{ ...profile, country: item.country }}
             sx={{ alignSelf: 'flex-start' }}
             isLink={isLink}
             target="_blank"
@@ -74,11 +85,22 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
           <ProfileTagsList tags={profile.tags} isSpace={true} />
         )}
 
-        {aboutText && (
-          <Text variant="quiet" sx={{ fontSize: 2, wordBreak: 'break-word' }}>
-            {aboutText}
+        {profile.about && (
+          <Text
+            variant="quiet"
+            sx={{
+              fontSize: 2,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              wordBreak: 'break-word',
+            }}
+          >
+            {profile.about}
           </Text>
         )}
+        {variant === 'pin' && <SendMessageButton item={item} />}
       </Flex>
     </Flex>
   );

@@ -16,8 +16,8 @@ export const CardListItem = (props: IProps) => {
   const testProp = `CardListItem${isSelectedPin ? '-selected' : ''}`;
 
   const Card = (
-    <CardButton isSelected={isSelectedPin}>
-      <CardProfile item={item} />
+    <CardButton isSelected={isSelectedPin} extrastyles={{ minWidth: '230px', maxWidth: '400px' }}>
+      <CardProfile item={item} variant="list" />
     </CardButton>
   );
 

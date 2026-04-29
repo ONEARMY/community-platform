@@ -3,22 +3,23 @@ import { Flex } from 'theme-ui';
 import { CardDetailsMemberProfile } from './CardDetailsMemberProfile';
 import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile';
 
+export type CardVariant = 'pin' | 'list';
+
 export interface IProps {
+  variant?: CardVariant;
   item: MapPin;
   isLink?: boolean;
 }
 
-export const CardProfile = ({ item, isLink = false }: IProps) => {
-  const { profile } = item;
-
-  const isWorkspace = profile?.type && profile?.type.isSpace;
+export const CardProfile = ({ variant = 'pin', item, isLink = false }: IProps) => {
+  const isWorkspace = item.profile?.type && item.profile?.type.isSpace;
 
   return (
     <Flex sx={{ alignItems: 'stretch', alignContent: 'stretch' }}>
       {isWorkspace ? (
-        <CardDetailsSpaceProfile profile={profile} isLink={isLink} />
+        <CardDetailsSpaceProfile item={item} isLink={isLink} variant={variant} />
       ) : (
-        <CardDetailsMemberProfile profile={profile} isLink={isLink} />
+        <CardDetailsMemberProfile item={item} isLink={isLink} variant={variant} />
       )}
     </Flex>
   );

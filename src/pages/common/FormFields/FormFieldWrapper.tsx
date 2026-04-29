@@ -26,7 +26,7 @@ export const FormFieldWrapper = (props: IProps) => {
       </Label>
 
       {description && (
-        <Text variant="quiet" sx={{ fontSize: 2 }}>
+        <Text variant="quiet" sx={{ fontSize: 2, mb: 1 }}>
           {description}
         </Text>
       )}

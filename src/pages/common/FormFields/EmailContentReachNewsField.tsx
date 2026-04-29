@@ -38,6 +38,7 @@ export const EmailContentReachNewsField = (props: IProps) => {
           <FieldContainer data-cy={`${name}-select`}>
             <Select
               {...rest}
+              inputId="emailContentReach"
               variant="form"
               options={options || []}
               value={input.value}

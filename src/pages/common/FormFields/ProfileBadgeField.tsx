@@ -10,9 +10,10 @@ interface IProps {
   description: string;
   placeholder: string;
   title: string;
+  showPublicBadge?: boolean;
 }
 
-export const ProfileBadgeField = ({ description, placeholder, title }: IProps) => {
+export const ProfileBadgeField = ({ description, placeholder, title, showPublicBadge }: IProps) => {
   const [profileBadges, setProfileBadges] = useState<SelectValue[]>([]);
   const name = 'profileBadge';
 
@@ -27,7 +28,10 @@ export const ProfileBadgeField = ({ description, placeholder, title }: IProps) =
         value: badge.id.toString(),
         label: badge.displayName,
       }));
-      setProfileBadges(selectBadges);
+      setProfileBadges([
+        ...(showPublicBadge ? [{ value: null, label: 'Public' }] : []),
+        ...selectBadges,
+      ]);
     };
 
     initCategories();
@@ -38,22 +42,31 @@ export const ProfileBadgeField = ({ description, placeholder, title }: IProps) =
       <Field
         name={name}
         id={name}
-        render={({ input, ...rest }) => (
-          <FieldContainer data-cy={`${name}-select`}>
-            <Select
-              {...rest}
-              variant="form"
-              // isMulti={true}
-              options={profileBadges || []}
-              value={input.value}
-              onChange={(changedValue) => {
-                input.onChange(changedValue ?? null);
-              }}
-              isClearable={true}
-              placeholder={placeholder}
-            />
-          </FieldContainer>
-        )}
+        render={({ input, ...rest }) => {
+          const publicOption = { value: null, label: 'Public' };
+
+          const selectedOption =
+            profileBadges.find((o) => o.value === (input.value?.value ?? input.value)) ??
+            (showPublicBadge ? publicOption : null);
+
+          return (
+            <FieldContainer data-cy={`${name}-select`}>
+              <Select
+                {...rest}
+                variant="form"
+                inputId="profileBadge"
+                options={profileBadges || []}
+                value={selectedOption}
+                onChange={(changedValue) => {
+                  input.onChange(changedValue ?? null);
+                }}
+                getOptionValue={(option) => option.value ?? '__public__'}
+                isClearable={true}
+                placeholder={placeholder}
+              />
+            </FieldContainer>
+          );
+        }}
       />
     </FormFieldWrapper>
   );

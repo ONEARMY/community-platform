@@ -4,6 +4,7 @@ create table "public"."email_content_reach" (
     "tenant_id" text,
     "name" text,
     "preferences_label" text,
+    "preferences_description" text,
     "create_content_label" text,
     "default_option" boolean not null default false
 );

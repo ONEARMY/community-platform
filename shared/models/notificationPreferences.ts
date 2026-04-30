@@ -1,9 +1,9 @@
-import { DBEmailContentReach, EmailContentReach } from './emailContentReach';
+import { EmailContentReach } from './emailContentReach';
 import { SelectValue } from './selectValue';
 
 export type DBNotificationsPreferencesDefaults = {
   comments: boolean;
-  email_content_reach: DBEmailContentReach;
+  email_content_reach: number | null;
   replies: boolean;
   research_updates: boolean;
   is_unsubscribed: boolean;
@@ -13,8 +13,7 @@ export class DBNotificationsPreferences {
   id: number;
   user_id: number;
   comments: boolean;
-  news: boolean;
-  email_content_reach: DBEmailContentReach;
+  email_content_reach: number | null;
   replies: boolean;
   research_updates: boolean;
   is_unsubscribed: boolean;
@@ -24,8 +23,7 @@ export class NotificationsPreferences {
   id?: number;
   userId?: number;
   comments: boolean;
-  news: boolean;
-  emailContentReach: EmailContentReach | null;
+  emailContentReach: number | null;
   replies: boolean;
   researchUpdates: boolean;
   isUnsubscribed: boolean;
@@ -35,34 +33,42 @@ export class NotificationsPreferences {
       id: dBNotificationsPreferences.id || undefined,
       userId: dBNotificationsPreferences.user_id || undefined,
       comments: dBNotificationsPreferences.comments,
-      news: dBNotificationsPreferences.news,
-      emailContentReach: EmailContentReach.fromDB(dBNotificationsPreferences.email_content_reach),
+      emailContentReach: dBNotificationsPreferences.email_content_reach,
       replies: dBNotificationsPreferences.replies,
       researchUpdates: dBNotificationsPreferences.research_updates,
       isUnsubscribed: dBNotificationsPreferences.is_unsubscribed,
-    };
+    } satisfies NotificationsPreferences;
   }
 
   static toFormData(
     notificationsPreferences: NotificationsPreferences,
-  ): NotificationsPreferencesFormData {
+    emailContentReaches: EmailContentReach[] | null,
+  ) {
+    let emailContentReach: SelectValue | null = null;
+
+    if (notificationsPreferences.emailContentReach) {
+      const setting = emailContentReaches?.find(
+        (x) => x.id === notificationsPreferences.emailContentReach,
+      );
+      emailContentReach = setting
+        ? {
+            value: setting.id.toString(),
+            label: setting.preferencesLabel,
+          }
+        : null;
+    }
+
     return {
-      id: notificationsPreferences.id || undefined,
       comments: notificationsPreferences.comments,
       replies: notificationsPreferences.replies,
       researchUpdates: notificationsPreferences.researchUpdates,
       isUnsubscribed: notificationsPreferences.isUnsubscribed,
-      news: notificationsPreferences.news,
-      emailContentReach:
-        notificationsPreferences.emailContentReach &&
-        EmailContentReach.toNotificationsFormField(notificationsPreferences.emailContentReach),
-    };
+      emailContentReach,
+    } satisfies NotificationsPreferencesFormData;
   }
 }
 
 export interface NotificationsPreferencesFormData {
-  id?: number;
-  news: boolean;
   comments: boolean;
   emailContentReach: SelectValue | null;
   replies: boolean;

@@ -17,7 +17,7 @@ export class EmailContentReachServiceServer {
   async getDefault() {
     const dbAll = await this.getAll();
     const defaultOption = dbAll
-      ? (dbAll.find(({ default_option }) => default_option === true) as DBEmailContentReach)
+      ? dbAll.find(({ default_option }) => default_option === true)?.id || null
       : null;
 
     return defaultOption;

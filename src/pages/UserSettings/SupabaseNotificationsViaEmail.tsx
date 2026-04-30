@@ -2,6 +2,7 @@ import { NotificationsPreferences, NotificationsPreferencesViaEmailFormData } fr
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast';
 import { form } from 'src/pages/UserSettings/labels';
+import { emailContentReachService } from 'src/services/emailContentReachService';
 import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
@@ -16,15 +17,18 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   const toast = useToast();
 
   const refreshPreferences = async () => {
-    const dbPreferences = await notificationsPreferencesViaEmailService.getPreferences(userCode);
+    const [preferences, emailContentReach] = await Promise.all([
+      notificationsPreferencesViaEmailService.getPreferences(userCode),
+      emailContentReachService.getAll(),
+    ]);
 
-    if (!dbPreferences) {
+    if (!preferences) {
       return null;
     }
 
     const asFormData = {
-      ...NotificationsPreferences.toFormData(dbPreferences),
-      isContactable: dbPreferences.isContactable,
+      ...NotificationsPreferences.toFormData(preferences, emailContentReach),
+      isContactable: preferences.isContactable,
       userCode: userCode,
     };
 
@@ -55,10 +59,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   };
 
   const onUnsubscribe = async () => {
-    const promise = notificationsPreferencesViaEmailService.setUnsubscribe(
-      userCode,
-      initialValues?.id,
-    );
+    const promise = notificationsPreferencesViaEmailService.unsubscribe(userCode);
     toast.promise(promise, {
       loading: 'Unsubscribing...',
       success: () => {

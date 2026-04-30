@@ -58,6 +58,7 @@ const fakeEmailContentReach = (
   preferencesLabel: 'All emails',
   createContentLabel: 'Send to everyone',
   defaultOption: true,
+  preferencesDescription: 'Receive all email notifications for the content you are involved in.',
   ...emailContentReachOverloads,
 });
 

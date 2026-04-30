@@ -80,7 +80,6 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const testData = {
         comments: true,
-        news: true,
         replies: false,
         researchUpdates: true,
         userCode: 'user123',
@@ -101,7 +100,6 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const formData = (fetch as any).mock.calls[0][1].body;
       expect(formData.get('comments')).toBe('true');
-      expect(formData.get('news')).toBe('true');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('researchUpdates')).toBe('true');
       expect(formData.get('isUnsubscribed')).toBe('false');
@@ -115,7 +113,6 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const testData = {
         comments: false,
-        news: false,
         replies: false,
         researchUpdates: false,
         userCode: 'user123',
@@ -128,19 +125,18 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const formData = (fetch as any).mock.calls[0][1].body;
       expect(formData.get('comments')).toBe('false');
-      expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('researchUpdates')).toBe('false');
       expect(formData.get('emailContentReach')).toBe('2');
     });
   });
 
-  describe('setUnsubscribe', () => {
-    it('should send POST request with unsubscribe data including id when provided', async () => {
+  describe('unsubscribe', () => {
+    it('should send POST request with unsubscribe data', async () => {
       const mockResponse = createFetchResponse({ success: true });
       global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
-      const result = await notificationsPreferencesViaEmailService.setUnsubscribe('user123', 456);
+      const result = await notificationsPreferencesViaEmailService.unsubscribe('user123');
 
       expect(fetch).toHaveBeenCalledWith(
         '/api/notifications-preferences-via-email/user123',
@@ -151,38 +147,11 @@ describe('notificationsPreferencesViaEmailService', () => {
       );
 
       const formData = (fetch as any).mock.calls[0][1].body;
-      expect(formData.get('id')).toBe('456');
       expect(formData.get('comments')).toBe('false');
-      expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('researchUpdates')).toBe('false');
       expect(formData.get('isUnsubscribed')).toBe('true');
       expect(result).toBe(mockResponse);
-    });
-
-    it('should send POST request without id when not provided', async () => {
-      const mockResponse = createFetchResponse({ success: true });
-      global.fetch = vi.fn().mockResolvedValue(mockResponse);
-
-      await notificationsPreferencesViaEmailService.setUnsubscribe('user123');
-
-      const formData = (fetch as any).mock.calls[0][1].body;
-      expect(formData.get('id')).toBeNull();
-      expect(formData.get('comments')).toBe('false');
-      expect(formData.get('news')).toBe('false');
-      expect(formData.get('replies')).toBe('false');
-      expect(formData.get('researchUpdates')).toBe('false');
-      expect(formData.get('isUnsubscribed')).toBe('true');
-    });
-
-    it('should handle undefined id parameter', async () => {
-      const mockResponse = createFetchResponse({ success: true });
-      global.fetch = vi.fn().mockResolvedValue(mockResponse);
-
-      await notificationsPreferencesViaEmailService.setUnsubscribe('user123', undefined);
-
-      const formData = (fetch as any).mock.calls[0][1].body;
-      expect(formData.get('id')).toBeNull();
     });
   });
 });

@@ -34,6 +34,7 @@ export { ExternalLink } from './ExternalLink/ExternalLink';
 export { FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { FieldInput } from './FieldInput/FieldInput';
 export { FieldMarkdown } from './FieldMarkdown/FieldMarkdown';
+export { FieldSwitch } from './FieldSwitch/FieldSwitch';
 export { FieldTextarea } from './FieldTextarea/FieldTextarea';
 export { FlagIcon } from './FlagIcon/FlagIcon';
 export { FollowButton } from './FollowButton/FollowButton';

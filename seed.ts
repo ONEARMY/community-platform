@@ -260,12 +260,6 @@ const seedEmailContentReach = () => [
     create_content_label: 'Big update',
     default_option: true,
   },
-  {
-    ..._EMAIL_CONTENT_REACH_BASE,
-    name: 'none',
-    preferences_label: 'No emails',
-    create_content_label: 'Silent (no email)',
-  },
 ];
 
 const seedQuestions = (profile: profilesInputs): questionsChildInputs =>

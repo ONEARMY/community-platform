@@ -13,10 +13,4 @@ export const emailContentReach: Partial<DBEmailContentReach>[] = [
     create_content_label: 'Big update',
     default_option: true,
   },
-  {
-    name: 'none',
-    preferences_label: 'No emails',
-    create_content_label: 'Silent (no email)',
-    default_option: false,
-  },
 ];

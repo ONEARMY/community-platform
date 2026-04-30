@@ -27,7 +27,6 @@ const setPreferences = async (
   const body = new FormData();
 
   body.append('comments', data.comments.toString());
-  body.append('news', data.news.toString());
   body.append('replies', data.replies.toString());
   body.append('researchUpdates', data.researchUpdates.toString());
   body.append('isUnsubscribed', 'false');
@@ -42,12 +41,10 @@ const setPreferences = async (
   });
 };
 
-const setUnsubscribe = async (userCode: string, id?: number): Promise<Response> => {
+const unsubscribe = async (userCode: string): Promise<Response> => {
   const body = new FormData();
 
-  id && body.append('id', id.toString());
   body.append('comments', 'false');
-  body.append('news', 'false');
   body.append('replies', 'false');
   body.append('researchUpdates', 'false');
   body.append('emailContentReach', 'null');
@@ -62,5 +59,5 @@ const setUnsubscribe = async (userCode: string, id?: number): Promise<Response> 
 export const notificationsPreferencesViaEmailService = {
   getPreferences,
   setPreferences,
-  setUnsubscribe,
+  unsubscribe,
 };

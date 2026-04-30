@@ -15,9 +15,7 @@ const getPreferences = async (): Promise<NotificationsPreferences | null> => {
 const setPreferences = async (data: NotificationsPreferencesFormData) => {
   const body = new FormData();
 
-  data.id && body.append('id', data.id.toString());
   body.append('comments', data.comments.toString());
-  body.append('news', data.news.toString());
   body.append('replies', data.replies.toString());
   body.append('researchUpdates', data.researchUpdates.toString());
   body.append('isUnsubscribed', 'false');
@@ -32,10 +30,9 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
   });
 };
 
-const setUnsubscribe = async (id: number | undefined) => {
+const unsubscribe = async () => {
   const body = new FormData();
 
-  id && body.append('id', id.toString());
   body.append('comments', 'false');
   body.append('news', 'false');
   body.append('replies', 'false');
@@ -52,5 +49,5 @@ const setUnsubscribe = async (id: number | undefined) => {
 export const notificationsPreferencesService = {
   getPreferences,
   setPreferences,
-  setUnsubscribe,
+  unsubscribe,
 };

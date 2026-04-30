@@ -8,6 +8,7 @@ export class DBEmailContentReach implements IDBDocSB {
 
   name: string;
   preferences_label: string;
+  preferences_description: string;
   create_content_label: string;
   default_option: boolean;
 
@@ -45,6 +46,7 @@ export class EmailContentReach implements IDoc {
 
   name: string;
   preferencesLabel: string;
+  preferencesDescription: string;
   createContentLabel: string;
   defaultOption: boolean;
 
@@ -56,12 +58,14 @@ export class EmailContentReach implements IDoc {
     if (!dbEmailContentReach) {
       return null;
     }
+
     const {
       created_at,
       id,
       modified_at,
       name,
       preferences_label,
+      preferences_description,
       create_content_label,
       default_option,
     } = dbEmailContentReach;
@@ -72,22 +76,20 @@ export class EmailContentReach implements IDoc {
       modifiedAt: modified_at ? new Date(modified_at) : null,
       name,
       preferencesLabel: preferences_label,
+      preferencesDescription: preferences_description,
       createContentLabel: create_content_label,
       defaultOption: default_option,
     });
   }
 
-  static toCreateCreateFormField(emailContentReach: EmailContentReach | null): SelectValue | null {
-    if (!emailContentReach) return null;
+  static toCreateCreateFormField(emailContentReach: EmailContentReach): SelectValue {
     return {
       value: emailContentReach.id.toString(),
       label: emailContentReach.createContentLabel,
     };
   }
 
-  static toNotificationsFormField(emailContentReach: EmailContentReach | null): SelectValue | null {
-    if (!emailContentReach) return null;
-
+  static toNotificationsFormField(emailContentReach: EmailContentReach): SelectValue {
     return {
       value: emailContentReach.id.toString(),
       label: emailContentReach.preferencesLabel,

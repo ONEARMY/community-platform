@@ -28,7 +28,7 @@ export const GridForm = ({ fields }: IProps) => {
             columns={evenGridSplit ? [1, 1, '50% 50%'] : [2, '80% 20%']}
             sx={{
               borderRadius: 1,
-              background: index % 2 == 0 ? 'softblue' : 'white',
+              background: index % 2 == 0 ? 'white' : 'softblue',
               padding: 4,
             }}
             data-cy={`field: ${field.name}`}

@@ -1,63 +1,27 @@
-import type { GridFormFields } from 'oa-components';
-import {
-  ConfirmModal,
-  FieldCheckbox,
-  GridForm,
-  InformationTooltip,
-  InternalLink,
-  Loader,
-} from 'oa-components';
+import { ConfirmModal, FieldSwitch, InformationTooltip, InternalLink, Loader } from 'oa-components';
 import type { NotificationsPreferencesFormData } from 'oa-shared';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
-import { Button, Flex, Text } from 'theme-ui';
+import { Button, Flex } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
+import { EmailContentReachRadioOptions } from './content/fields/EmailContentReachPreferenceField';
+import { EmailContentReachSwitch } from './content/fields/EmailContentReachSwitch';
+import { NotificationRow } from './NotificationRow';
 
 const formId = 'SupabaseNotifications';
 
-const baseFields: GridFormFields[] = [
-  {
-    component: (
-      <Field component={FieldCheckbox} data-cy={`${formId}-field-comments`} name="comments" />
-    ),
-    description: 'Top-level comments on your contributions or contributions you follow',
-    glyph: 'comment',
-    name: 'New comments',
-  },
-  {
-    component: (
-      <Field component={FieldCheckbox} data-cy={`${formId}-field-replies`} name="replies" />
-    ),
-    description:
-      "Replies under your comment or a comment thread that you follow. Note that you can always choose to follow or unfollow a single reply thread in the comment's options.",
-    glyph: 'reply',
-    name: 'New replies',
-  },
-  {
-    component: (
-      <Field
-        component={FieldCheckbox}
-        data-cy={`${formId}-field-research_updates`}
-        name="research_updates"
-      />
-    ),
-    description: 'Updates for the research that you follow.',
-    glyph: 'update',
-    name: 'Research Updates',
-  },
-  {
-    component: (
-      <InformationTooltip
-        glyph="information"
-        size={22}
-        tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
-      />
-    ),
-    description: 'Password resets, email verifications and other service emails',
-    glyph: 'service-email',
-    name: 'Service emails',
-  },
-];
+const StyledFieldSwitch = (props) => {
+  return (
+    <FieldSwitch
+      {...props}
+      sx={{
+        'input:checked ~ &': {
+          backgroundColor: '#20b7eb',
+        },
+      }}
+    />
+  );
+};
 
 interface IProps {
   initialValues: NotificationsPreferencesFormData | null;
@@ -65,43 +29,28 @@ interface IProps {
   onSubmit: (values: NotificationsPreferencesFormData) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
   profileIsContactable?: boolean;
+  showNewsPreference?: boolean;
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable } = props;
+  const {
+    initialValues,
+    isLoading,
+    onSubmit,
+    onUnsubscribe,
+    profileIsContactable,
+    showNewsPreference,
+  } = props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const tenantContext = useContext(TenantContext);
   const showMessagingSetting = !tenantContext?.noMessaging;
-
-  const fields = useMemo(() => {
-    const allFields = [...baseFields];
-
-    if (showMessagingSetting) {
-      allFields.push({
-        component: (
-          <InternalLink
-            data-cy="messages-link"
-            to="/settings/profile#public-contact"
-            sx={{ textAlign: 'center', ':hover': { textDecoration: 'underline' } }}
-          >
-            {profileIsContactable ? 'Stop receiving messages' : 'Start receiving messages'}
-          </InternalLink>
-        ),
-        description: 'Through the contact form on your profile page',
-        glyph: 'email',
-        name: 'Receiving messages',
-      });
-    }
-
-    return allFields;
-  }, [showMessagingSetting, profileIsContactable]);
 
   return (
     <Form
       id={formId}
       onSubmit={onSubmit}
       initialValues={initialValues || undefined}
-      render={({ submitting, handleSubmit }) => {
+      render={({ submitting, handleSubmit, values }) => {
         if (isLoading) {
           return (
             <Flex sx={{ minHeight: '700px', alignItems: 'center', justifyContent: 'center' }}>
@@ -110,12 +59,100 @@ export const SupabaseNotificationsForm = (props: IProps) => {
           );
         }
 
+        const isEmailContentReachEnabled = !!values.emailContentReach;
+        let rowIndex = 0;
+
         return (
-          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            <Text as="h3">We should email you about...</Text>
+          <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+            <Flex sx={{ flexDirection: 'column' }}>
+              {showNewsPreference && (
+                <NotificationRow
+                  index={rowIndex++}
+                  glyph="news"
+                  name="Coming soon: News updates"
+                  description="Get notified when news from HQ are posted"
+                  control={<EmailContentReachSwitch />}
+                  subContent={<EmailContentReachRadioOptions show={isEmailContentReachEnabled} />}
+                />
+              )}
 
-            <GridForm fields={fields} />
+              <NotificationRow
+                index={rowIndex++}
+                glyph="comment"
+                name="New comments"
+                description="Top-level comments on your contributions or contributions you follow"
+                control={
+                  <Field
+                    component={StyledFieldSwitch}
+                    data-cy={`${formId}-field-comments`}
+                    name="comments"
+                  />
+                }
+              />
 
+              <NotificationRow
+                index={rowIndex++}
+                glyph="reply"
+                name="New replies"
+                description="Replies under your comment or a comment thread that you follow. Note that you can always choose to follow or unfollow a single reply thread in the comment's options."
+                control={
+                  <Field
+                    component={StyledFieldSwitch}
+                    data-cy={`${formId}-field-replies`}
+                    name="replies"
+                  />
+                }
+              />
+
+              <NotificationRow
+                index={rowIndex++}
+                glyph="update"
+                name="Research Updates"
+                description="Updates for the research that you follow."
+                control={
+                  <Field
+                    component={StyledFieldSwitch}
+                    data-cy={`${formId}-field-research_updates`}
+                    name="research_updates"
+                  />
+                }
+              />
+
+              <NotificationRow
+                index={rowIndex++}
+                glyph="service-email"
+                name="Service emails"
+                description="Password resets, email verifications and other service emails"
+                control={
+                  <InformationTooltip
+                    glyph="information"
+                    size={22}
+                    tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
+                    sx={{ marginRight: 2 }}
+                  />
+                }
+              />
+
+              {showMessagingSetting && (
+                <NotificationRow
+                  index={rowIndex++}
+                  glyph="email"
+                  name="Receiving messages"
+                  description="Through the contact form on your profile page"
+                  control={
+                    <InternalLink
+                      data-cy="messages-link"
+                      to="/settings/profile#public-contact"
+                      sx={{ textAlign: 'center', ':hover': { textDecoration: 'underline' } }}
+                    >
+                      {profileIsContactable
+                        ? 'Stop receiving messages'
+                        : 'Start receiving messages'}
+                    </InternalLink>
+                  }
+                />
+              )}
+            </Flex>
             <Flex sx={{ gap: 2 }}>
               <Button
                 type="submit"

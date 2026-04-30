@@ -3,9 +3,11 @@ import { NotificationsPreferences, type NotificationsPreferencesFormData } from 
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast/useToast';
 import { form } from 'src/pages/UserSettings/labels';
+import { emailContentReachService } from 'src/services/emailContentReachService';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isUserContactable } from 'src/utils/helpers';
+import { isUserAdmin } from 'src/utils/isAdmin';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
@@ -16,11 +18,14 @@ export const SupabaseNotifications = observer(() => {
   const { profile } = useProfileStore();
 
   const refreshPreferences = async () => {
-    const preferences = await notificationsPreferencesService.getPreferences();
+    const [preferences, contentReach] = await Promise.all([
+      notificationsPreferencesService.getPreferences(),
+      emailContentReachService.getAll(),
+    ]);
 
     if (preferences) {
-      const asFormData = NotificationsPreferences.toFormData(preferences);
-      setInitialValues(asFormData);
+      const initialValues = NotificationsPreferences.toFormData(preferences, contentReach);
+      setInitialValues(initialValues);
     }
 
     setIsLoading(false);
@@ -46,7 +51,7 @@ export const SupabaseNotifications = observer(() => {
   };
 
   const onUnsubscribe = async () => {
-    const promise = notificationsPreferencesService.setUnsubscribe(initialValues?.id);
+    const promise = notificationsPreferencesService.unsubscribe();
 
     toast.promise(promise, {
       loading: 'Unsubscribing...',
@@ -71,6 +76,7 @@ export const SupabaseNotifications = observer(() => {
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
       profileIsContactable={isUserContactable(profile)}
+      showNewsPreference={isUserAdmin(profile) || false}
     />
   );
 });

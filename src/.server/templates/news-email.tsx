@@ -1,4 +1,5 @@
-import { Column, Html, Img, Markdown, Row, Text } from '@react-email/components';
+import { Column, Container, Html, Img, Markdown, Row, Text } from '@react-email/components';
+import { CSSProperties } from '@theme-ui/core';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
 import { BoxText } from './components/box-text';
 import { Button } from './components/button';
@@ -14,15 +15,6 @@ interface IProps {
   isPreview?: boolean;
 }
 
-const markdownCustomStyles = {
-  img: { maxWidth: '500px', width: '100%' },
-  p: { lineHeight: '1.5em' },
-};
-
-const markdownContainerStyles = {
-  maxWidth: '500px',
-};
-
 export const NewsEmail = (props: IProps) => {
   const { notification, settings, userCode, isPreview } = props;
 
@@ -33,7 +25,7 @@ export const NewsEmail = (props: IProps) => {
   );
   const preview = isPreview ? `Preview: ${notification.email.preview}` : notification.email.preview;
 
-  const buttonStyle = {
+  const buttonStyle: CSSProperties = {
     backgroundColor: '#E2EDF7',
     border: 0,
     borderRadius: '8px',
@@ -44,63 +36,98 @@ export const NewsEmail = (props: IProps) => {
 
   return (
     <Layout emailType="notification" preview={preview} settings={settings} userCode={userCode}>
-      {isPreview && (
-        <BoxText>
-          <Text>
-            PREVIEW: Remember, things might not fully work correctly (e.g. links if you haven't
-            saved the news as a draft yet)
-          </Text>
-        </BoxText>
-      )}
-
+      <Img
+        src={notification.email.heroImage}
+        alt={notification.title}
+        style={{
+          width: '100%',
+          borderTopLeftRadius: '10px',
+          borderTopRightRadius: '10px',
+          maxHeight: '345px',
+        }}
+      />
       <Header>
-        <Img
-          src={notification.email.heroImage}
-          alt={notification.title}
-          style={{ maxWidth: '500px' }}
-        />
-        <Heading>{notification.title}</Heading>
+        <Heading customStyle={{ padding: '0 20px' }}>{notification.title}</Heading>
         {notification.email.displayDate && (
-          <Heading as="h4" customStyle={{ color: '#696969' }}>
+          <Heading as="h4" customStyle={{ color: '#696969', padding: '0 20px' }}>
             {notification.email.displayDate}
           </Heading>
         )}
       </Header>
 
-      <Row>
-        <Column>
-          <table>
-            <tr>
-              <td style={{ paddingRight: '12px' }}>
-                <Button href={commentButtonLink} customStyle={buttonStyle}>
-                  <Img
-                    alt=""
-                    height="15px"
-                    src="https://community.preciousplastic.com/assets/icon-comment-N7-BVPWS.svg"
-                    width="15px"
-                  />
-                </Button>
-              </td>
-              <td>
-                <Button href={buttonLink} customStyle={buttonStyle}>
-                  {notification.email.buttonLabel}
-                </Button>
-              </td>
-            </tr>
-          </table>
-        </Column>
-      </Row>
+      <Container style={{ padding: '0 20px 20px 20px', margin: 0, maxWidth: '100%' }}>
+        {isPreview && (
+          <BoxText>
+            <Text>
+              PREVIEW: Remember, things might not fully work correctly (e.g. links if you haven't
+              saved the news as a draft yet)
+            </Text>
+          </BoxText>
+        )}
 
-      <Html>
-        <Markdown
-          markdownCustomStyles={markdownCustomStyles}
-          markdownContainerStyles={markdownContainerStyles}
-        >
-          {notification.email.body!}
-        </Markdown>
-      </Html>
-
-      <ButtonCallToAction href={commentButtonLink} />
+        <Row>
+          <Column>
+            <table>
+              <tr>
+                <td style={{ paddingRight: '12px' }}>
+                  <Button href={commentButtonLink} customStyle={buttonStyle}>
+                    <Img
+                      alt=""
+                      height="15px"
+                      src="https://community.preciousplastic.com/assets/icon-comment-N7-BVPWS.svg"
+                      width="15px"
+                    />
+                  </Button>
+                </td>
+                <td>
+                  <Button href={buttonLink} customStyle={buttonStyle}>
+                    {notification.email.buttonLabel}
+                  </Button>
+                </td>
+              </tr>
+            </table>
+          </Column>
+        </Row>
+        <Html>
+          <Markdown
+            markdownCustomStyles={{
+              image: { width: '100%', borderRadius: '10px' },
+              p: { lineHeight: '2' },
+              li: { lineHeight: '2' },
+              h1: {
+                lineHeight: '1.2',
+              },
+              h2: {
+                lineHeight: '1.2',
+              },
+              h3: {
+                lineHeight: '1.2',
+              },
+              h4: {
+                lineHeight: '1.2',
+              },
+              h5: {
+                lineHeight: '1.2',
+              },
+              h6: {
+                lineHeight: '1.2',
+              },
+              blockQuote: {
+                paddingLeft: '20px',
+                paddingRight: '20px',
+                paddingTop: '10px',
+                paddingBottom: '10px',
+                backgroundColor: '#f4f8fd',
+                borderLeft: '3px solid #c8d8ec',
+                margin: 0,
+              },
+            }}
+          >
+            {notification.email.body!}
+          </Markdown>
+        </Html>
+        <ButtonCallToAction href={commentButtonLink} />
+      </Container>
     </Layout>
   );
 };

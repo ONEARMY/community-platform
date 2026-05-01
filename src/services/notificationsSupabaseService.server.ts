@@ -200,7 +200,7 @@ export class NotificationsSupabaseServiceServer {
 
       if (badgeIds.length === 0) {
         // No badge restrictions - notify all subscribers
-        const allSubscribers = await this.getAllProfiles();
+        const allSubscribers = await this.getAllProfiles(); // TODO: filter to only profiles with email verified
         const subscriberIds = allSubscribers?.map(({ id }) => ({ profile_id: id })) || [];
         await this.createNotifications(dbNotification, subscriberIds);
       } else {

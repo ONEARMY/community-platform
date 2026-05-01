@@ -141,27 +141,21 @@ export const NewsPage = observer(({ news }: IProps) => {
               },
               h1: {
                 lineHeight: 1.2,
-                marginBottom: 0,
               },
               h2: {
                 lineHeight: 1.2,
-                marginBottom: 0,
               },
               h3: {
                 lineHeight: 1.2,
-                marginBottom: 0,
               },
               h4: {
                 lineHeight: 1.2,
-                marginBottom: 0,
               },
               h5: {
                 lineHeight: 1.2,
-                marginBottom: 0,
               },
               h6: {
                 lineHeight: 1.2,
-                marginBottom: 0,
               },
               blockQuote: {
                 paddingX: 4,

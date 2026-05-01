@@ -6,7 +6,7 @@ export class DBEmailContentReach implements IDBDocSB {
   created_at: Date;
   modified_at: Date | null;
 
-  name: string;
+  name: 'all' | 'important' | undefined | null;
   preferences_label: string;
   preferences_description: string;
   create_content_label: string;

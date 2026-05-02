@@ -1,6 +1,7 @@
-import { Column, Container, Html, Img, Markdown, Row } from '@react-email/components';
+import { Column, Container, Html, Img, Markdown, Row, Text } from '@react-email/components';
 import { CSSProperties } from '@theme-ui/core';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
+import { BoxText } from './components/box-text';
 import { Button } from './components/button';
 import { ButtonCallToAction } from './components/button-call-to-action';
 import { Header } from './components/header';
@@ -11,10 +12,11 @@ interface IProps {
   notification: NotificationDisplay;
   settings: TenantSettings;
   userCode: string;
+  isPreview?: boolean;
 }
 
 export const NewsEmail = (props: IProps) => {
-  const { notification, settings, userCode } = props;
+  const { notification, settings, userCode, isPreview } = props;
 
   const buttonLink = urlAppend(`${settings.siteUrl}${notification.link}`, 'notification');
   const commentButtonLink = urlAppend(
@@ -57,6 +59,12 @@ export const NewsEmail = (props: IProps) => {
       </Header>
 
       <Container style={{ padding: '0 20px 20px 20px', margin: 0, maxWidth: '100%' }}>
+        {isPreview && (
+          <BoxText>
+            <Text>PREVIEW: if you haven't saved the news as a draft yet, links will not work.</Text>
+          </BoxText>
+        )}
+
         <Row>
           <Column>
             <table>

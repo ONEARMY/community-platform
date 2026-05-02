@@ -8,9 +8,16 @@ import { tokens } from 'src/utils/tokens.server';
 import { NotificationMapperServiceServer } from './notificationMapperService.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
 
+type Previewer = {
+  email: string;
+  profileId: number;
+  createdAt: string;
+};
+
 interface SendInstantNotificationEmailsProps {
   emailSubscribers: SubscribedUser[];
   dbNotification: DBNotification;
+  requestOrigin: string;
   isNews?: boolean;
   excludeTriggerer?: boolean;
 }
@@ -62,13 +69,17 @@ export class NotificationEmailServiceServer {
     });
   }
 
-  async sendNewsPreview(previewer, notification: NotificationDisplay) {
-    const tenantSettings = await new TenantSettingsService(this.client).get();
+  async sendNewsPreview(
+    previewer: Previewer,
+    notification: NotificationDisplay,
+    requestOrigin: string,
+  ) {
+    const tenantSettings = await new TenantSettingsService(this.client, requestOrigin).get();
 
     try {
       const codes = {
         email: previewer.email,
-        code: tokens.generate(previewer.profile_id, previewer.created_at),
+        code: tokens.generate(previewer.profileId, previewer.createdAt),
       };
 
       const email = {
@@ -116,7 +127,10 @@ export class NotificationEmailServiceServer {
         code: tokens.generate(p.profile_id, p.profile_created_at),
       }));
 
-      const tenantSettings = await new TenantSettingsService(this.client).get();
+      const tenantSettings = await new TenantSettingsService(
+        this.client,
+        props.requestOrigin,
+      ).get();
 
       const emails = codes.map(({ code, email }) => {
         return {

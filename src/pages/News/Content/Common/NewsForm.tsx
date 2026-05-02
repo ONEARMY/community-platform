@@ -161,6 +161,7 @@ export const NewsForm = (props: IProps) => {
                 submitting={submitting}
                 formValues={values}
                 isSubmittingDraft={isSubmittingDraft}
+                id={props.id || undefined}
               />
             }
             hideSubmittingMessage={true}

@@ -136,7 +136,7 @@ export class NotificationsSupabaseServiceServer {
     return;
   }
 
-  async createNotificationsNewComment(comment: DBComment) {
+  async createNotificationsNewComment(comment: DBComment, requestOrigin: string) {
     if (!comment.created_by) {
       return;
     }
@@ -178,13 +178,14 @@ export class NotificationsSupabaseServiceServer {
       await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
         emailSubscribers: subscribers,
         dbNotification,
+        requestOrigin,
       });
     } catch (error) {
       console.error(error);
     }
   }
 
-  async createNotificationsNews(news: DBNews) {
+  async createNotificationsNews(news: DBNews, requestOrigin: string) {
     try {
       const contentId = news.id;
 
@@ -220,6 +221,7 @@ export class NotificationsSupabaseServiceServer {
               dbNotification,
               isNews: true,
               excludeTriggerer: false,
+              requestOrigin,
             });
             return;
           }
@@ -235,6 +237,7 @@ export class NotificationsSupabaseServiceServer {
               dbNotification,
               isNews: true,
               excludeTriggerer: false,
+              requestOrigin,
             });
             return;
           }
@@ -253,6 +256,7 @@ export class NotificationsSupabaseServiceServer {
     research: DBResearchItem,
     researchUpdate: ResearchUpdate,
     profile: DBProfile,
+    requestOrigin: string,
   ) {
     try {
       const contentType: SubscribableContentTypes = 'research';
@@ -272,6 +276,7 @@ export class NotificationsSupabaseServiceServer {
         emailSubscribers: subscribers,
         dbNotification,
         excludeTriggerer: false,
+        requestOrigin,
       });
     } catch (error) {
       console.error(error);

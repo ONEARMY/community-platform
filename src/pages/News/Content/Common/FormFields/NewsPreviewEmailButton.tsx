@@ -5,6 +5,7 @@ import { useToast } from 'src/common/Toast/useToast';
 import { emailPreviewService } from 'src/services/emailPreviewService';
 
 interface IProps {
+  id?: number;
   formValues: Partial<NewsFormData>;
   isSubmittingDraft: boolean;
   submitting: boolean;
@@ -18,16 +19,19 @@ export const NewsPreviewEmailButton = (props: IProps) => {
   const previewEmail = async () => {
     setIsSendingPreview(true);
 
-    const promise = emailPreviewService.send({
-      body: formValues.body || '',
-      category: formValues.category || null,
-      heroImage: formValues.heroImage || null,
-      isDraft: false,
-      profileBadges: formValues.profileBadges || null,
-      tags: formValues.tags,
-      title: formValues.title || '',
-      emailContentReach: null,
-    });
+    const promise = emailPreviewService.send(
+      {
+        body: formValues.body || '',
+        category: formValues.category || null,
+        heroImage: formValues.heroImage || null,
+        isDraft: false,
+        profileBadges: formValues.profileBadges || null,
+        tags: formValues.tags,
+        title: formValues.title || '',
+        emailContentReach: null,
+      },
+      props.id,
+    );
 
     toast.promise(promise, {
       loading: 'Sending preview news email',

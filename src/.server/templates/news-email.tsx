@@ -1,7 +1,6 @@
-import { Column, Container, Html, Img, Markdown, Row, Text } from '@react-email/components';
+import { Column, Container, Html, Img, Markdown, Row } from '@react-email/components';
 import { CSSProperties } from '@theme-ui/core';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
-import { BoxText } from './components/box-text';
 import { Button } from './components/button';
 import { ButtonCallToAction } from './components/button-call-to-action';
 import { Header } from './components/header';
@@ -12,19 +11,16 @@ interface IProps {
   notification: NotificationDisplay;
   settings: TenantSettings;
   userCode: string;
-  isPreview?: boolean;
 }
 
 export const NewsEmail = (props: IProps) => {
-  const { notification, settings, userCode, isPreview } = props;
+  const { notification, settings, userCode } = props;
 
   const buttonLink = urlAppend(`${settings.siteUrl}${notification.link}`, 'notification');
   const commentButtonLink = urlAppend(
     `${settings.siteUrl}${notification.link}#discussion`,
     'notification',
   );
-  const preview = isPreview ? `Preview: ${notification.email.preview}` : notification.email.preview;
-
   const buttonStyle: CSSProperties = {
     backgroundColor: '#E2EDF7',
     border: 0,
@@ -35,7 +31,12 @@ export const NewsEmail = (props: IProps) => {
   };
 
   return (
-    <Layout emailType="notification" preview={preview} settings={settings} userCode={userCode}>
+    <Layout
+      emailType="notification"
+      preview={notification.email.preview}
+      settings={settings}
+      userCode={userCode}
+    >
       <Img
         src={notification.email.heroImage}
         alt={notification.title}
@@ -56,15 +57,6 @@ export const NewsEmail = (props: IProps) => {
       </Header>
 
       <Container style={{ padding: '0 20px 20px 20px', margin: 0, maxWidth: '100%' }}>
-        {isPreview && (
-          <BoxText>
-            <Text>
-              PREVIEW: Remember, things might not fully work correctly (e.g. links if you haven't
-              saved the news as a draft yet)
-            </Text>
-          </BoxText>
-        )}
-
         <Row>
           <Column>
             <table>

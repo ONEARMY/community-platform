@@ -1,8 +1,9 @@
 import { DBMedia, NewsDTO, NewsFormData } from 'oa-shared';
 import { createFormData } from './formDataHelper';
 
-const send = async (form: NewsFormData) => {
-  const body = createFormData<NewsDTO>({
+const send = async (form: NewsFormData, id?: number) => {
+  const body = createFormData<NewsDTO & { id?: number }>({
+    id,
     title: form.title,
     body: form.body,
     category: Number(form.category?.value) || null,

@@ -15,7 +15,10 @@ export class BroadcastCoordinationServiceServer {
     }
 
     if (beforeCheck && dbNews.is_draft === false) {
-      new NotificationsSupabaseServiceServer(this.client).createNotificationsNews(dbNews);
+      new NotificationsSupabaseServiceServer(this.client).createNotificationsNews(
+        dbNews,
+        new URL(request.url).origin,
+      );
 
       discordServiceServer.postWebhookRequest(
         `📰 ${profile.username} has news: ${dbNews.title}\n<${siteUrl}/news/${dbNews.slug}>`,
@@ -42,6 +45,7 @@ export class BroadcastCoordinationServiceServer {
         research,
         update,
         profile as DBProfile,
+        new URL(request.url).origin,
       );
 
       if (!profile.username) {

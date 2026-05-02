@@ -1,9 +1,10 @@
+import { HTTPException } from 'hono/http-exception';
 import { DBMedia, News, Notification, NotificationDisplay } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
+import { data, type LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { NotificationEmailServiceServer } from 'src/services/notificationEmailService.server';
-import { methodNotAllowedError } from 'src/utils/httpException';
+import { methodNotAllowedError, unauthorizedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -19,9 +20,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     actionType: 'newNews',
     contentType: 'news',
     sourceContentType: 'news',
-
     title: formData.has('title') ? (formData.get('title') as string) : '[No title]',
+    contentId: formData.has('id') ? Number(formData.get('id')) : undefined,
     content: {
+      id: formData.has('id') ? Number(formData.get('id')) : undefined,
       title: formData.has('title') ? (formData.get('title') as string) : '[No title]',
       body: formData.has('body') ? (formData.get('body') as string) : '[No body]',
       createdAt: new Date(),
@@ -35,45 +37,38 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
-    await validateRequest(request);
+    if (request.method !== 'POST') {
+      throw methodNotAllowedError();
+    }
 
     const userProfile = await client
       .from('profiles')
       .select('id,created_at')
       .eq('auth_id', claims.data.claims.sub);
 
-    if (userProfile.data && userProfile.data![0]) {
-      const previewer = {
-        email: claims.data.claims.email,
-        profile_id: userProfile.data![0].id,
-        createdAt: userProfile.data![0].created_at,
-      };
-
+    if (userProfile.data && userProfile.data[0]) {
       await new NotificationEmailServiceServer(client).sendNewsPreview(
-        previewer,
+        {
+          email: claims.data.claims.email!,
+          profileId: userProfile.data[0].id,
+          createdAt: userProfile.data[0].created_at,
+        },
         draftNotificationDisplay,
+        new URL(request.url).origin,
       );
     }
 
-    return Response.json({}, { headers, status: 200 });
+    return data({}, { headers, status: 200 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json(
-      {},
-      {
-        headers,
-        status: 500,
-        statusText: 'Error sending preview email. Please contact an admin',
-      },
-    );
+
+    return Response.json({}, { headers, status: 500 });
   }
 };
-
-async function validateRequest(request: Request) {
-  if (request.method !== 'POST') {
-    throw methodNotAllowedError();
-  }
-}

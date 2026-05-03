@@ -47,6 +47,7 @@ export const NewsEmail = (props: IProps) => {
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
           maxHeight: '345px',
+          objectFit: 'cover',
         }}
       />
       <Header>

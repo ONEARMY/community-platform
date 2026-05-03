@@ -8,7 +8,7 @@ const createFetchResponse = (data: any, ok = true, status = 200) => ({
   json: async () => data,
 });
 
-const mockEmailReachField = { value: '2', label: 'Never' };
+const mockContentReachField = { value: 'all', label: 'Never' };
 
 describe('notificationsPreferencesViaEmailService', () => {
   beforeEach(() => {
@@ -84,7 +84,7 @@ describe('notificationsPreferencesViaEmailService', () => {
         researchUpdates: true,
         userCode: 'user123',
         isContactable: true,
-        emailContentReach: mockEmailReachField,
+        contentReach: mockContentReachField,
         isUnsubscribed: false,
       } satisfies NotificationsPreferencesViaEmailFormData;
 
@@ -103,7 +103,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('researchUpdates')).toBe('true');
       expect(formData.get('isUnsubscribed')).toBe('false');
-      expect(formData.get('emailContentReach')).toBe('2');
+      expect(formData.get('contentReach')).toBe('all');
       expect(result).toBe(mockResponse);
     });
 
@@ -117,7 +117,7 @@ describe('notificationsPreferencesViaEmailService', () => {
         researchUpdates: false,
         userCode: 'user123',
         isContactable: true,
-        emailContentReach: mockEmailReachField,
+        contentReach: mockContentReachField,
         isUnsubscribed: false,
       } satisfies NotificationsPreferencesViaEmailFormData;
 
@@ -127,7 +127,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       expect(formData.get('comments')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('researchUpdates')).toBe('false');
-      expect(formData.get('emailContentReach')).toBe('2');
+      expect(formData.get('contentReach')).toBe('all');
     });
   });
 

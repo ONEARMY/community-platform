@@ -5,9 +5,9 @@ import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
+import { BadgeVisibilityField } from 'src/pages/common/FormFields/BadgeVisibilityField';
 import { CategoryField } from 'src/pages/common/FormFields/Category.field';
-import { EmailContentReachNewsField } from 'src/pages/common/FormFields/EmailContentReachNewsField';
-import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField';
+import { ContentReachField } from 'src/pages/common/FormFields/ContentReachField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
 import { TitleField } from 'src/pages/common/FormFields/Title.field';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
@@ -42,7 +42,7 @@ export const NewsForm = (props: IProps) => {
         profileBadges: props.formData?.profileBadges || null,
         tags: props.formData?.tags || [],
         title: props.formData?.title || '',
-        emailContentReach: props.formData?.emailContentReach || null,
+        contentReach: props.formData?.contentReach || null,
       }) satisfies NewsFormData,
     [],
   );
@@ -56,7 +56,7 @@ export const NewsForm = (props: IProps) => {
       profileBadges: formValues.profileBadges || null,
       tags: formValues.tags,
       title: formValues.title!,
-      emailContentReach: formValues.emailContentReach!,
+      contentReach: formValues.contentReach!,
     });
 
     toast.promise(promise, {
@@ -184,21 +184,17 @@ export const NewsForm = (props: IProps) => {
 
             <NewsBodyField imageUpload={imageUpload} />
 
-            <ProfileBadgeField
+            <BadgeVisibilityField
               description={LABELS.fields.profileBadge.description as string}
               placeholder={LABELS.fields.profileBadge.placeholder as string}
               title={LABELS.fields.profileBadge.title}
               showPublicBadge={true}
             />
-            <EmailContentReachNewsField
+            <ContentReachField
               placeholder={LABELS.fields.contentReach.placeholder as string}
               title={LABELS.fields.contentReach.title}
-              shouldDisableEmailContentReach={
-                !!(
-                  props.id &&
-                  props.formData?.emailContentReach &&
-                  props.formData?.isDraft === false
-                )
+              shouldDisableContentReach={
+                !!(props.id && props.formData?.contentReach && props.formData?.isDraft === false)
               }
             />
           </FormWrapper>

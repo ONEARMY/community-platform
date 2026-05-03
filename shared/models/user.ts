@@ -3,6 +3,7 @@ export enum UserRole {
   ADMIN = 'admin',
   BETA_TESTER = 'beta-tester',
   RESEARCH_CREATOR = 'research_creator',
+  MODERATOR = 'moderator',
 }
 
 // Below are primarily used for PP

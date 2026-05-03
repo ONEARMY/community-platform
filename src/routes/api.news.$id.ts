@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBNews, NewsDTO } from 'oa-shared';
+import type { ContentReach, DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -37,8 +37,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
-      emailContentReach: formData.has('emailContentReach')
-        ? Number(formData.get('emailContentReach'))
+      contentReach: formData.has('contentReach')
+        ? (formData.get('contentReach') as ContentReach)
         : null,
     } satisfies NewsDTO;
 
@@ -70,7 +70,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         tags: data.tags,
         title: data.title,
         hero_image: data.heroImage,
-        email_content_reach: data.emailContentReach,
+        content_reach: data.contentReach,
         ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', id)
@@ -159,8 +159,8 @@ async function validateRequest(
     throw validationError('A hero image is required to publish', 'heroImage');
   }
 
-  if (!data.emailContentReach && notDraft) {
-    throw validationError('Email content reach is required to publish', 'emailContentReach');
+  if (!data.contentReach && notDraft) {
+    throw validationError('Content reach is required to publish', 'contentReach');
   }
 
   if (!currentNews) {

@@ -1,19 +1,46 @@
-import { EmailContentReach } from './emailContentReach';
 import { SelectValue } from './selectValue';
 
-export type DBNotificationsPreferencesDefaults = {
-  comments: boolean;
-  email_content_reach: number | null;
-  replies: boolean;
-  research_updates: boolean;
-  is_unsubscribed: boolean;
+export type ContentReach = 'all' | 'important' | null;
+
+export const contentReachSettings: {
+  value: ContentReach;
+  contentLabel: string;
+  preferencesLabel: string;
+  description: string;
+}[] = [
+  {
+    value: 'all',
+    contentLabel: 'Send email to a small group of super-fans (Keep me close)',
+    preferencesLabel: 'Keep me close',
+    description: 'Get notified for all news posts',
+  },
+  {
+    value: 'important',
+    contentLabel: 'Send email to the large group (Big updates)',
+    preferencesLabel: 'Big updates',
+    description: 'Major news posts only, like new versions or annual reports',
+  },
+  {
+    value: null,
+    contentLabel: "Don't send any emails",
+    preferencesLabel: 'No Emails',
+    description: 'Do not receive any emails',
+  },
+];
+
+export const NotificationsPreferencesDefaults = {
+  comments: true,
+  content_reach: null,
+  replies: true,
+  research_updates: true,
+  is_unsubscribed: false,
 };
 
 export class DBNotificationsPreferences {
   id: number;
   user_id: number;
   comments: boolean;
-  email_content_reach: number | null;
+  content_reach: ContentReach;
   replies: boolean;
   research_updates: boolean;
   is_unsubscribed: boolean;
@@ -23,7 +50,7 @@ export class NotificationsPreferences {
   id?: number;
   userId?: number;
   comments: boolean;
-  emailContentReach: number | null;
+  contentReach: ContentReach;
   replies: boolean;
   researchUpdates: boolean;
   isUnsubscribed: boolean;
@@ -33,44 +60,35 @@ export class NotificationsPreferences {
       id: dBNotificationsPreferences.id || undefined,
       userId: dBNotificationsPreferences.user_id || undefined,
       comments: dBNotificationsPreferences.comments,
-      emailContentReach: dBNotificationsPreferences.email_content_reach,
+      contentReach: dBNotificationsPreferences.content_reach,
       replies: dBNotificationsPreferences.replies,
       researchUpdates: dBNotificationsPreferences.research_updates,
       isUnsubscribed: dBNotificationsPreferences.is_unsubscribed,
     } satisfies NotificationsPreferences;
   }
 
-  static toFormData(
-    notificationsPreferences: NotificationsPreferences,
-    emailContentReaches: EmailContentReach[] | null,
-  ) {
-    let emailContentReach: SelectValue | null = null;
+  static toFormData(notificationsPreferences: NotificationsPreferences) {
+    const setting = contentReachSettings.find(
+      (option) => option.value === notificationsPreferences.contentReach,
+    );
 
-    if (notificationsPreferences.emailContentReach) {
-      const setting = emailContentReaches?.find(
-        (x) => x.id === notificationsPreferences.emailContentReach,
-      );
-      emailContentReach = setting
-        ? {
-            value: setting.id.toString(),
-            label: setting.preferencesLabel,
-          }
-        : null;
-    }
+    const option: SelectValue | null = setting
+      ? { value: setting.value, label: setting.preferencesLabel }
+      : null;
 
     return {
       comments: notificationsPreferences.comments,
       replies: notificationsPreferences.replies,
       researchUpdates: notificationsPreferences.researchUpdates,
       isUnsubscribed: notificationsPreferences.isUnsubscribed,
-      emailContentReach,
+      contentReach: option || null,
     } satisfies NotificationsPreferencesFormData;
   }
 }
 
 export interface NotificationsPreferencesFormData {
   comments: boolean;
-  emailContentReach: SelectValue | null;
+  contentReach: SelectValue | null;
   replies: boolean;
   researchUpdates: boolean;
   isUnsubscribed: boolean;

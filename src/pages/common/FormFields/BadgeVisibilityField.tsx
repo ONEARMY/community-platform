@@ -13,7 +13,12 @@ interface IProps {
   showPublicBadge?: boolean;
 }
 
-export const ProfileBadgeField = ({ description, placeholder, title, showPublicBadge }: IProps) => {
+export const BadgeVisibilityField = ({
+  description,
+  placeholder,
+  title,
+  showPublicBadge,
+}: IProps) => {
   const [profileBadges, setProfileBadges] = useState<SelectValue[]>([]);
   const name = 'profileBadges';
 

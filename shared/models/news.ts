@@ -5,8 +5,8 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
-import { DBEmailContentReach, EmailContentReach } from './emailContentReach';
 import { DBMedia, Image, MediaWithPublicUrl } from './media';
+import { ContentReach, contentReachSettings } from './notificationPreferences';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
@@ -35,7 +35,7 @@ export class DBNews implements IDBContentDoc {
   readonly useful_count?: number;
   readonly body: string;
   readonly hero_image: DBMedia | null;
-  readonly email_content_reach: DBEmailContentReach | null;
+  readonly content_reach: ContentReach | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null) {
     let htmlBody = marked(news.body, {
@@ -48,6 +48,11 @@ export class DBNews implements IDBContentDoc {
 
     const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
 
+    const setting = contentReachSettings.find((option) => option.value === news.content_reach);
+    const contentReachOption: SelectValue | null = setting
+      ? { value: setting.value, label: setting.contentLabel }
+      : null;
+
     return {
       body: news.body,
       category: news.category
@@ -59,7 +64,7 @@ export class DBNews implements IDBContentDoc {
       profileBadges,
       tags: news.tags,
       title: news.title,
-      emailContentReach: DBEmailContentReach.toCreateCreateFormField(news.email_content_reach),
+      contentReach: contentReachOption || null,
     } satisfies NewsFormData;
   }
 }
@@ -91,7 +96,7 @@ export class News implements IContentDoc {
   title: string;
   totalViews: number;
   usefulCount: number;
-  emailContentReach: EmailContentReach | null;
+  contentReach: ContentReach | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
@@ -132,8 +137,7 @@ export class News implements IContentDoc {
       title: news.title,
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
-      emailContentReach:
-        news.email_content_reach && EmailContentReach.fromDB(news.email_content_reach || null),
+      contentReach: news.content_reach || null,
     });
   }
 }
@@ -146,7 +150,7 @@ export type NewsFormData = {
   profileBadges: (string | null)[] | null;
   tags?: number[];
   title: string;
-  emailContentReach: SelectValue | null;
+  contentReach: SelectValue | null;
 };
 
 export type NewsDTO = {
@@ -157,5 +161,5 @@ export type NewsDTO = {
   isDraft: boolean | null;
   profileBadges: number[] | null;
   tags: number[] | null;
-  emailContentReach: number | null;
+  contentReach: ContentReach | null;
 };

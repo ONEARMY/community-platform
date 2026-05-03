@@ -209,12 +209,13 @@ export class NotificationsSupabaseServiceServer {
         const badgeSubscribers = await this.getProfilesByBadgeIds(badgeIds);
         await this.createNotifications(dbNotification, badgeSubscribers);
 
-        switch (news.email_content_reach?.name) {
+        switch (news.content_reach) {
           case 'important': {
             // Exclude the no email people
             const emailSubscribers = badgeSubscribers.filter(
               (subscriber) =>
-                subscriber.notification_preferences?.email_content_reach?.name !== 'none',
+                subscriber.notification_preferences?.content_reach !== null ||
+                subscriber.roles.includes('admin'),
             );
             await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
               emailSubscribers,
@@ -229,7 +230,7 @@ export class NotificationsSupabaseServiceServer {
             // Include only the all email people
             const emailSubscribers = badgeSubscribers.filter(
               (subscriber) =>
-                subscriber.notification_preferences?.email_content_reach?.name === 'all' ||
+                subscriber.notification_preferences?.content_reach === 'all' ||
                 subscriber.roles.includes('admin'),
             );
             await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({

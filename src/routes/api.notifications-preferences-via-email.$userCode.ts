@@ -1,10 +1,13 @@
-import { DBNotificationsPreferences, NotificationsPreferences } from 'oa-shared';
+import {
+  ContentReach,
+  DBNotificationsPreferences,
+  NotificationsPreferences,
+  NotificationsPreferencesDefaults,
+} from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { methodNotAllowedError, unauthorizedError, validationError } from 'src/utils/httpException';
 import { tokens } from 'src/utils/tokens.server';
-import { setDefaultNotifications } from './api.notifications-preferences';
 
 interface DecodedToken {
   profileId: string;
@@ -34,19 +37,15 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       throw unauthorizedError();
     }
 
-    const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
-    const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault();
-    const defaultDBPreferences = setDefaultNotifications(dbDefaultEmailContentReach);
-
     const { data } = await client
       .from('notifications_preferences')
-      .select('*,email_content_reach:email_content_reach(*)')
+      .select('*')
       .eq('user_id', userId)
       .maybeSingle();
 
     const isContactable = !!userData.data?.is_contactable;
     const preferences: NotificationsPreferences = NotificationsPreferences.fromDB({
-      ...defaultDBPreferences,
+      ...NotificationsPreferencesDefaults,
       ...(data as DBNotificationsPreferences),
     });
 
@@ -87,7 +86,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     const existingPreferencesId = existingPreferences.data?.id || null;
     const comments = formData.get('comments') === 'true';
-    const emailContentReach = formData.get('emailContentReach');
+    const contentReach = formData.get('contentReach') as ContentReach;
     const replies = formData.get('replies') === 'true';
     const researchUpdates = formData.get('researchUpdates') === 'true';
     const isUnsubscribed = formData.get('isUnsubscribed') === 'true';
@@ -97,7 +96,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
         .from('notifications_preferences')
         .update({
           comments,
-          email_content_reach: emailContentReach,
+          content_reach: contentReach,
           replies,
           research_updates: researchUpdates,
           is_unsubscribed: isUnsubscribed,
@@ -110,7 +109,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await client.from('notifications_preferences').insert({
       user_id: userId,
       comments,
-      email_content_reach: emailContentReach,
+      content_reach: contentReach,
       replies,
       research_updates: researchUpdates,
       is_unsubscribed: isUnsubscribed,

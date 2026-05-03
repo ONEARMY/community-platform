@@ -56,7 +56,7 @@ describe('notificationsPreferencesService', () => {
         comments: true,
         replies: false,
         researchUpdates: true,
-        emailContentReach: mockEmailReachField,
+        contentReach: mockEmailReachField,
         isUnsubscribed: false,
       } satisfies NotificationsPreferencesFormData;
 

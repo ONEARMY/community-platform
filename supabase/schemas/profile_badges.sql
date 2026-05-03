@@ -20,19 +20,7 @@ AS $function$
       'replies', np.replies,
       'research_updates', np.research_updates,
       'is_unsubscribed', np.is_unsubscribed,
-      'email_content_reach', case
-        when ecr.id is null then null
-        else jsonb_build_object(
-          'id', ecr.id,
-          'name', ecr.name,
-          'preferences_label', ecr.preferences_label,
-          'preferences_description', ecr.preferences_description,
-          'create_content_label', ecr.create_content_label,
-          'default_option', ecr.default_option,
-          'tenant_id', ecr.tenant_id,
-          'created_at', ecr.created_at
-        )
-      end
+      'content_reach', np.content_reach
     ) as notification_preferences,
     u.email::text as email
   from public.profiles p
@@ -42,8 +30,6 @@ AS $function$
     on pb.id = pbr_all.profile_badge_id
   left join public.notifications_preferences np
     on np.user_id = p.id
-  left join public.email_content_reach ecr
-    on ecr.id = np.email_content_reach
   left join auth.users u
     on u.id = p.auth_id
   where exists (

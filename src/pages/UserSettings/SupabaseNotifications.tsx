@@ -3,7 +3,6 @@ import { NotificationsPreferences, type NotificationsPreferencesFormData } from 
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast/useToast';
 import { form } from 'src/pages/UserSettings/labels';
-import { emailContentReachService } from 'src/services/emailContentReachService';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isUserContactable } from 'src/utils/helpers';
@@ -18,13 +17,10 @@ export const SupabaseNotifications = observer(() => {
   const { profile } = useProfileStore();
 
   const refreshPreferences = async () => {
-    const [preferences, contentReach] = await Promise.all([
-      notificationsPreferencesService.getPreferences(),
-      emailContentReachService.getAll(),
-    ]);
+    const preferences = await notificationsPreferencesService.getPreferences();
 
     if (preferences) {
-      const initialValues = NotificationsPreferences.toFormData(preferences, contentReach);
+      const initialValues = NotificationsPreferences.toFormData(preferences);
       setInitialValues(initialValues);
     }
 

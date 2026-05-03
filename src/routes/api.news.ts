@@ -1,6 +1,6 @@
 import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
+import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
@@ -29,7 +29,7 @@ export const loader = async ({ request }) => {
 
   if (claims?.data?.claims?.sub) {
     const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
-    isAdmin = !!profile?.roles?.includes('admin');
+    isAdmin = !!profile?.roles?.includes('admin') || !!profile?.roles?.includes('moderator');
     userProfileId = profile?.id ?? null;
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
   }
@@ -92,8 +92,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
-      emailContentReach: formData.has('emailContentReach')
-        ? Number(formData.get('emailContentReach'))
+      contentReach: formData.has('contentReach')
+        ? (formData.get('contentReach') as ContentReach)
         : null,
     } satisfies NewsDTO;
 
@@ -134,11 +134,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         hero_image: data.heroImage,
-        tenant_id: process.env.TENANT_ID,
         title: data.title,
-        email_content_reach: data.emailContentReach,
+        content_reach: data.contentReach,
+        tenant_id: process.env.TENANT_ID,
       })
-      .select('*, email_content_reach:email_content_reach(*)');
+      .select('*');
 
     if (newsResult.error || !newsResult.data) {
       throw newsResult.error;
@@ -164,9 +164,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     // Fetch the complete news with badges for response
     const completeNews = await client
       .from('news')
-      .select(
-        '*, profile_badges:news_badges_relations(profile_badges(*)), email_content_reach:email_content_reach(*)',
-      )
+      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
       .eq('id', newsId)
       .single();
 
@@ -222,8 +220,8 @@ async function validateRequest(
     throw validationError('Hero image is required', 'heroImage');
   }
 
-  if (!data.emailContentReach && notDraft) {
-    throw validationError('Email content reach is required to publish', 'emailContentReach');
+  if (!data.contentReach && notDraft) {
+    throw validationError('Content reach is required to publish', 'contentReach');
   }
 
   if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {

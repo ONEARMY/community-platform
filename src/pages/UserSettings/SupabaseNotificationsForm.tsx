@@ -4,8 +4,8 @@ import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Button, Flex } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
-import { EmailContentReachRadioOptions } from './content/fields/EmailContentReachPreferenceField';
-import { EmailContentReachSwitch } from './content/fields/EmailContentReachSwitch';
+import { ContentReachRadioOptions } from './content/fields/ContentReachPreferenceField';
+import { ContentReachSwitch } from './content/fields/ContentReachSwitch';
 import { NotificationRow } from './NotificationRow';
 
 const formId = 'SupabaseNotifications';
@@ -59,7 +59,6 @@ export const SupabaseNotificationsForm = (props: IProps) => {
           );
         }
 
-        const isEmailContentReachEnabled = !!values.emailContentReach;
         let rowIndex = 0;
 
         return (
@@ -71,8 +70,8 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                   glyph="news"
                   name="Coming soon: News updates"
                   description="Get notified when news from HQ are posted"
-                  control={<EmailContentReachSwitch />}
-                  subContent={<EmailContentReachRadioOptions show={isEmailContentReachEnabled} />}
+                  control={<ContentReachSwitch />}
+                  subContent={<ContentReachRadioOptions />}
                 />
               )}
 

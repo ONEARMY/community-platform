@@ -20,8 +20,8 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
   body.append('researchUpdates', data.researchUpdates.toString());
   body.append('isUnsubscribed', 'false');
 
-  if (data.emailContentReach?.value) {
-    body.append('emailContentReach', data.emailContentReach.value.toString());
+  if (data.contentReach?.value) {
+    body.append('contentReach', data.contentReach.value.toString());
   }
 
   return fetch('/api/notifications-preferences', {
@@ -37,7 +37,7 @@ const unsubscribe = async () => {
   body.append('news', 'false');
   body.append('replies', 'false');
   body.append('researchUpdates', 'false');
-  body.append('emailContentReach', 'null');
+  body.append('contentReach', 'null');
   body.append('isUnsubscribed', 'true');
 
   return fetch('/api/notifications-preferences', {

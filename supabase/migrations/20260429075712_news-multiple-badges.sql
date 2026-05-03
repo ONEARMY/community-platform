@@ -1,14 +1,4 @@
-drop policy "tenant_isolation" on "public"."email_content_reach";
-
-alter table "public"."news" drop constraint "news_email_content_reach_fkey";
-
 alter table "public"."news" drop constraint "news_profile_badge_fkey";
-
-alter table "public"."notifications_preferences" drop constraint "notifications_preferences_email_content_reach_fkey";
-
-alter table "public"."email_content_reach" drop constraint "email_content_reach_pkey";
-
-drop index if exists "public"."email_content_reach_pkey";
 
 alter type "public"."notification_action_types" rename to "notification_action_types__old_version_to_be_dropped";
 
@@ -42,8 +32,6 @@ drop type "public"."notification_content_types__old_version_to_be_dropped";
 
 drop type "public"."notification_source_content_type__old_version_to_be_dropped";
 
-alter table "public"."email_content_reach" disable row level security;
-
 CREATE INDEX idx_news_badges_relations_badge_id ON public.news_badges_relations USING btree (profile_badge_id);
 
 CREATE INDEX idx_news_badges_relations_news_badge ON public.news_badges_relations USING btree (news_id, profile_badge_id);
@@ -69,7 +57,7 @@ alter table "public"."news_badges_relations" validate constraint "news_badges_re
 set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION public.get_news_feed(p_user_profile_id bigint DEFAULT NULL::bigint, p_is_admin boolean DEFAULT false, p_search text DEFAULT NULL::text, p_sort text DEFAULT 'Newest'::text, p_skip integer DEFAULT 0, p_limit integer DEFAULT 20)
- RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, published_at timestamp with time zone, is_draft boolean, comment_count bigint, body text, slug text, summary text, tags bigint[], title text, total_views bigint, hero_image json, email_content_reach bigint, total_count bigint)
+ RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, published_at timestamp with time zone, is_draft boolean, comment_count bigint, body text, slug text, summary text, tags bigint[], title text, total_views bigint, hero_image json, content_reach "public"."content_reach", total_count bigint)
  LANGUAGE sql
  STABLE SECURITY DEFINER
  SET search_path TO 'public', 'pg_temp'
@@ -89,7 +77,7 @@ AS $function$
     n.title,
     n.total_views,
     n.hero_image,
-    n.email_content_reach,
+    n.content_reach,
     COUNT(*) OVER () AS total_count
   FROM news n
   WHERE

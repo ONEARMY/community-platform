@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS "public"."news" (
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", ((("title" || ' '::"text") || "body") || ("summary" || ''::"text")))) STORED,
     "is_draft" boolean DEFAULT false NOT NULL,
     "published_at" timestamp with time zone,
-    "email_content_reach" bigint
+    "content_reach" "public"."content_reach"
 );
 
 CREATE OR REPLACE FUNCTION "public"."news_search_fields"("public"."news") RETURNS "text"
@@ -95,7 +95,7 @@ RETURNS TABLE (
   title text,
   total_views bigint,
   hero_image json,
-  email_content_reach bigint,
+  content_reach "public"."content_reach",
   total_count bigint
 )
 LANGUAGE sql
@@ -118,7 +118,7 @@ AS $$
     n.title,
     n.total_views,
     n.hero_image,
-    n.email_content_reach,
+    n.content_reach,
     COUNT(*) OVER () AS total_count
   FROM news n
   WHERE

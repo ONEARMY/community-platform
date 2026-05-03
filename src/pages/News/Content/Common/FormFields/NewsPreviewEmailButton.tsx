@@ -28,7 +28,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         profileBadges: formValues.profileBadges || null,
         tags: formValues.tags,
         title: formValues.title || '',
-        emailContentReach: null,
+        contentReach: null,
       },
       props.id,
     );

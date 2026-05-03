@@ -61,7 +61,7 @@ describe('[News.Write]', () => {
     cy.selectTag(category, '[data-cy=category-select]');
     cy.selectTag(tag1, '[data-cy="tag-select"]');
     cy.selectTag(tag2, '[data-cy="tag-select"]');
-    cy.selectTag("Big update", '[data-cy=emailContentReach-select]');
+    cy.selectTag("Big update", '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);
@@ -118,7 +118,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=delete-image]').should('exist');
 
     // Email reach field disabled
-    // cy.get('[data-cy=emailContentReach-select]').find('[class=data-cy--is-disabled]')
+    // cy.get('[data-cy=contentReach-select]').find('[class=data-cy--is-disabled]')
 
     cy.step('Updated news details shown');
     cy.wait(2000);
@@ -169,7 +169,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.addToMarkdownField(content);
     cy.selectTag("PRO", '[data-cy=profileBadge-select]');
-    cy.selectTag("Big update", '[data-cy=emailContentReach-select]');
+    cy.selectTag("Big update", '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);

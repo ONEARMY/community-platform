@@ -8,7 +8,7 @@ export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): News
     label: faker.lorem.words(1),
     value: faker.number.int().toString(),
   },
-  emailContentReach: null,
+  contentReach: null,
   heroImage: {
     id: faker.string.uuid(),
     path: faker.image.url(),
@@ -27,7 +27,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   bodyHtml: faker.lorem.paragraph(),
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
-  emailContentReach: null,
+  contentReach: null,
   id: faker.number.int(),
   isDraft: false,
   modifiedAt: faker.date.past(),

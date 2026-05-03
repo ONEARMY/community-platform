@@ -40,4 +40,11 @@ export const MOCK_AUTH_USERS: IMockUsers = {
     password: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
   },
+  moderator: {
+    uid: 'demo_moderator',
+    label: 'Moderator',
+    email: 'demo_moderator@test.com',
+    password: 'demo_moderator',
+    roles: [UserRole.MODERATOR],
+  },
 };

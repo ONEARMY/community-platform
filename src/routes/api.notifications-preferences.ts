@@ -1,9 +1,11 @@
 import { HTTPException } from 'hono/http-exception';
-import type { DBNotificationsPreferencesDefaults } from 'oa-shared';
-import { NotificationsPreferences } from 'oa-shared';
+import {
+  ContentReach,
+  NotificationsPreferences,
+  NotificationsPreferencesDefaults,
+} from 'oa-shared';
 import { type ActionFunctionArgs, data, type LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { EmailContentReachServiceServer } from 'src/services/emailContentReachService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { methodNotAllowedError, unauthorizedError } from 'src/utils/httpException';
 
@@ -17,10 +19,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       throw unauthorizedError();
     }
 
-    const emailContentReachServiceServer = new EmailContentReachServiceServer(client);
-    const dbDefaultEmailContentReach = await emailContentReachServiceServer.getDefault();
-    const defaultDBPreferences = setDefaultNotifications(dbDefaultEmailContentReach);
-
     const preferencesData = await client
       .from('notifications_preferences')
       .select('*,profiles!inner(id)')
@@ -28,7 +26,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .single();
 
     const preferences = NotificationsPreferences.fromDB({
-      ...defaultDBPreferences,
+      ...NotificationsPreferencesDefaults,
       ...preferencesData.data,
     });
 
@@ -49,7 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const formData = await request.formData();
     const comments = formData.get('comments') === 'true';
-    const email_content_reach = Number(formData.get('emailContentReach')) || null;
+    const content_reach: ContentReach = (formData.get('contentReach') as ContentReach) || null;
     const is_unsubscribed = formData.get('isUnsubscribed') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('researchUpdates') === 'true';
@@ -87,7 +85,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             replies,
             research_updates,
             is_unsubscribed,
-            email_content_reach,
+            content_reach,
           })
           .eq('user_id', profile.data.id)
       : await client.from('notifications_preferences').insert({
@@ -96,7 +94,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           replies,
           research_updates,
           is_unsubscribed,
-          email_content_reach,
+          content_reach,
           tenant_id: process.env.TENANT_ID!,
         });
 
@@ -122,15 +120,3 @@ async function validateRequest(request: Request) {
     throw methodNotAllowedError();
   }
 }
-
-export const setDefaultNotifications = (
-  dbDefaultEmailContentReach: number | null,
-): DBNotificationsPreferencesDefaults => {
-  return {
-    comments: true,
-    email_content_reach: dbDefaultEmailContentReach,
-    is_unsubscribed: false,
-    replies: true,
-    research_updates: true,
-  };
-};

@@ -56,12 +56,36 @@ alter table "public"."news_badges_relations" validate constraint "news_badges_re
 
 set check_function_bodies = off;
 
-CREATE OR REPLACE FUNCTION public.get_news_feed(p_user_profile_id bigint DEFAULT NULL::bigint, p_is_admin boolean DEFAULT false, p_search text DEFAULT NULL::text, p_sort text DEFAULT 'Newest'::text, p_skip integer DEFAULT 0, p_limit integer DEFAULT 20)
- RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, published_at timestamp with time zone, is_draft boolean, comment_count bigint, body text, slug text, summary text, tags bigint[], title text, total_views bigint, hero_image json, content_reach "public"."content_reach", total_count bigint)
- LANGUAGE sql
- STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
-AS $function$
+CREATE OR REPLACE FUNCTION public.get_news_feed(
+  p_user_profile_id bigint DEFAULT NULL,  -- NULL = unauthenticated
+  p_is_admin boolean DEFAULT false,
+  p_search text DEFAULT NULL,
+  p_sort text DEFAULT 'Newest',
+  p_skip integer DEFAULT 0,
+  p_limit integer DEFAULT 20
+)
+RETURNS TABLE (
+  id bigint,
+  created_at timestamptz,
+  created_by bigint,
+  modified_at timestamptz,
+  published_at timestamptz,
+  is_draft boolean,
+  comment_count bigint,
+  body text,
+  slug text,
+  summary text,
+  tags bigint[],
+  title text,
+  total_views bigint,
+  hero_image json,
+  content_reach "public"."content_reach",
+  total_count bigint
+)
+LANGUAGE sql
+STABLE
+SET search_path = public, pg_temp
+AS $$
   SELECT
     n.id,
     n.created_at,
@@ -113,8 +137,8 @@ AS $function$
     n.published_at DESC  -- stable tiebreaker
   LIMIT p_limit
   OFFSET p_skip;
-$function$
-;
+$$;
+
 
 grant delete on table "public"."news_badges_relations" to "anon";
 

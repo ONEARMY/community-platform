@@ -44,8 +44,8 @@ export const NewsEmail = (props: IProps) => {
         alt={notification.title}
         style={{
           width: '100%',
-          borderTopLeftRadius: '10px',
-          borderTopRightRadius: '10px',
+          borderTopLeftRadius: '15px',
+          borderTopRightRadius: '15px',
           maxHeight: '345px',
           objectFit: 'cover',
         }}

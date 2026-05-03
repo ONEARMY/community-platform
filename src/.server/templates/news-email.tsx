@@ -75,7 +75,7 @@ export const NewsEmail = (props: IProps) => {
                     <Img
                       alt=""
                       height="15px"
-                      src="https://community.preciousplastic.com/assets/icon-comment-N7-BVPWS.svg"
+                      src={`${settings.siteUrl}/assets/icon-comment-N7-BVPWS.svg`}
                       width="15px"
                     />
                   </Button>
@@ -127,6 +127,11 @@ export const NewsEmail = (props: IProps) => {
             {notification.email.body!}
           </Markdown>
         </Html>
+        {notification.tags && notification.tags.length > 0 && (
+          <Text style={{ color: '#83ceeb' }}>
+            {notification.tags.map((tag) => `#${tag.name}`).join(' ')}
+          </Text>
+        )}
         <ButtonCallToAction href={commentButtonLink} />
       </Container>
     </Layout>

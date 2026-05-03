@@ -4,6 +4,7 @@ import { data, type LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { NotificationEmailServiceServer } from 'src/services/notificationEmailService.server';
+import { TagsServiceServer } from 'src/services/tagsService.server';
 import { methodNotAllowedError, unauthorizedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
@@ -16,19 +17,23 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       )
     : null;
 
+  const tagIds = formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : [];
+  const tags = tagIds.length > 0 ? await new TagsServiceServer(client).getTags(tagIds) : [];
+
   const draftNews = {
     actionType: 'newNews',
     contentType: 'news',
     sourceContentType: 'news',
     title: formData.has('title') ? (formData.get('title') as string) : '[No title]',
     contentId: formData.has('id') ? Number(formData.get('id')) : undefined,
-    content: {
+    content: new News({
       id: formData.has('id') ? Number(formData.get('id')) : undefined,
       title: formData.has('title') ? (formData.get('title') as string) : '[No title]',
       body: formData.has('body') ? (formData.get('body') as string) : '[No body]',
       createdAt: new Date(),
       heroImage,
-    } as News,
+      tags,
+    }),
   } as Notification;
 
   const draftNotificationDisplay = NotificationDisplay.fromNotification(draftNews);

@@ -3,7 +3,7 @@ import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
-import type { News } from './news';
+import { News } from './news';
 import type { IPatreonUser } from './patreon';
 import type { DBProfileBadgeJoin } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
@@ -13,6 +13,7 @@ import type { DBProfileType } from './profileType';
 import { ProfileType } from './profileType';
 import type { Question } from './question';
 import type { ResearchUpdate } from './research';
+import { Tag } from './tag';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
 export class DBProfile {
@@ -216,6 +217,7 @@ export class NotificationDisplay {
   };
   title: string;
   triggeredBy: string;
+  tags?: Tag[];
 
   constructor(obj: NotificationDisplay) {
     Object.assign(this, obj);
@@ -395,6 +397,7 @@ export class NotificationDisplay {
       title: this.setTitle(notification),
       triggeredBy: this.setTriggeredBy(notification),
       link: this.setLink(notification),
+      tags: (notification.content as any)?.tags ? (notification.content as any).tags : undefined,
     });
   }
 }

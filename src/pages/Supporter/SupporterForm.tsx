@@ -11,9 +11,10 @@ export const SupporterForm = () => {
     setCurrency,
     interval,
     setInterval,
-    availableAmounts,
+    availablePrices,
+    selectedPriceId,
     selectedAmount,
-    setAmount,
+    setSelectedPriceId,
     name,
     setName,
     email,
@@ -130,27 +131,27 @@ export const SupporterForm = () => {
                 gap: 2,
               }}
             >
-              {availableAmounts.map((preset) => (
+              {availablePrices.map((price) => (
                 <Box
-                  key={preset}
+                  key={price.id}
                   as="button"
-                  onClick={() => setAmount(preset)}
+                  onClick={() => setSelectedPriceId(price.id)}
                   sx={{
                     py: 2,
                     px: 3,
                     border: '2px solid',
-                    borderColor: selectedAmount === preset ? 'green' : 'offWhite',
+                    borderColor: selectedPriceId === price.id ? 'green' : 'offWhite',
                     borderRadius: 1,
                     bg: 'white',
                     cursor: 'pointer',
-                    fontWeight: selectedAmount === preset ? 'bold' : 'normal',
+                    fontWeight: selectedPriceId === price.id ? 'bold' : 'normal',
                     fontSize: 2,
                     textAlign: 'center',
                     fontFamily: 'body',
                     '&:hover': { borderColor: 'green' },
                   }}
                 >
-                  {formatPrice(preset, currency)}
+                  {formatPrice(price.unitAmount, currency)}
                 </Box>
               ))}
             </Box>
@@ -213,7 +214,7 @@ export const SupporterForm = () => {
             type="button"
             variant="primary"
             onClick={onSupport}
-            disabled={isLoading || !selectedAmount || !name.trim() || !email.trim()}
+            disabled={isLoading || !selectedPriceId || !name.trim() || !email.trim()}
           >
             {isLoading
               ? 'Processing...'

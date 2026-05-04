@@ -52,8 +52,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           break;
         }
 
-        if (tenantId) {
-          await stripeService.updateSupporterStatus(authId, isActive, tenantId);
+        if (tenantId && isActive) {
+          const productId = subscription.items.data[0]?.price?.product as string;
+          if (!productId) {
+            console.warn('No product ID found on subscription:', subscription.id);
+            break;
+          }
+
+          const badgeId = await stripeService.getBadgeIdForProduct(productId);
+          if (!badgeId) {
+            console.warn('No badge mapping found for product:', productId);
+            break;
+          }
+
+          await stripeService.assignBadgeForSubscription(authId, tenantId, badgeId);
+        } else if (tenantId && !isActive) {
+          await stripeService.removeTierBadges(authId, tenantId);
         }
         break;
       }
@@ -72,7 +86,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }
 
         if (tenantId) {
-          await stripeService.updateSupporterStatus(authId, false, tenantId);
+          await stripeService.removeTierBadges(authId, tenantId);
         }
         break;
       }

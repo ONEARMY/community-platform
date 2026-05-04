@@ -42,7 +42,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     await stripeService.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
 
-    await stripeService.updateSupporterStatus(signInData.user.id, true, tenantId);
+    // Assign badge based on active subscription's product
+    const subscription = await stripeService.getSubscription(stripeCustomerId);
+    if (subscription) {
+      const productId = subscription.items.data[0]?.price?.product as string;
+      if (productId) {
+        const badgeId = await stripeService.getBadgeIdForProduct(productId);
+        if (badgeId) {
+          await stripeService.assignBadgeForSubscription(signInData.user.id, tenantId, badgeId);
+        }
+      }
+    }
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {

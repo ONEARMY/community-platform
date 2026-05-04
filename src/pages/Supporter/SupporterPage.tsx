@@ -56,7 +56,7 @@ export const SupporterPage = ({
   const [interval, setInterval] = useState<Interval>('month');
   const [name, setName] = useState(previewMode ? 'Test User' : '');
   const [email, setEmail] = useState(previewMode ? 'user@example.com' : userEmail);
-  const [amount, setAmount] = useState(0);
+  const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -83,13 +83,8 @@ export const SupporterPage = ({
     [prices, currency, interval],
   );
 
-  const availableAmounts = useMemo(
-    () => availablePrices.map((p) => p.unitAmount),
-    [availablePrices],
-  );
-
-  const selectedAmount = availableAmounts.includes(amount) ? amount : availableAmounts[0] || 0;
-  const selectedPriceId = availablePrices.find((p) => p.unitAmount === selectedAmount)?.id || null;
+  const selectedPrice = availablePrices.find((p) => p.id === selectedPriceId) || availablePrices[0];
+  const selectedAmount = selectedPrice?.unitAmount || 0;
   const symbol = currency ? getCurrencySymbol(currency) : '';
 
   useEffect(() => {
@@ -140,7 +135,7 @@ export const SupporterPage = ({
     setError(null);
 
     const result = await stripeService.createElementsSubscription({
-      priceId: selectedPriceId!,
+      priceId: selectedPrice!.id,
       name,
       email,
     });
@@ -193,14 +188,14 @@ export const SupporterPage = ({
     setCurrency,
     interval,
     setInterval,
-    amount,
-    setAmount,
+    selectedPriceId: selectedPrice?.id || null,
+    setSelectedPriceId,
     name,
     setName,
     email,
     setEmail,
     currencies,
-    availableAmounts,
+    availablePrices,
     selectedAmount,
     symbol,
     isAuthenticated,

@@ -11,3 +11,10 @@ export type StripeCustomerInsert = {
   stripe_customer_id: string;
   tenant_id: string;
 };
+
+export type StripeBadgeProduct = {
+  id: number;
+  stripe_product_id: string;
+  badge_id: number;
+  tenant_id: string;
+};

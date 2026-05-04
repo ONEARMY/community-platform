@@ -1,4 +1,5 @@
 import { Button, Icon } from 'oa-components';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { type FormEvent, useRef, useState } from 'react';
 import { stripeService } from 'src/services/stripeService';
 import { Box, Card, Flex, Heading, Input, Text } from 'theme-ui';
@@ -9,6 +10,7 @@ export const ThankYouAccountForm = () => {
   const { email, name, stripeCustomerId, accountCreated, previewMode } = useSupporterContext();
 
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +24,13 @@ export const ThankYouAccountForm = () => {
     setError(null);
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError(FRIENDLY_MESSAGES['sign-up/password-short']);
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError(FRIENDLY_MESSAGES['sign-up/password-mismatch']);
       setIsSubmitting(false);
       return;
     }
@@ -74,25 +82,6 @@ export const ThankYouAccountForm = () => {
             <Flex sx={{ flexDirection: 'column', gap: 3 }}>
               <Box>
                 <Text variant="quiet" sx={{ fontSize: 1, mb: 1 }}>
-                  Email
-                </Text>
-                <Input
-                  value={email}
-                  disabled
-                  sx={{
-                    border: '1px solid',
-                    borderColor: 'offWhite',
-                    borderRadius: 1,
-                    px: 3,
-                    py: 3,
-                    bg: 'background',
-                    opacity: 0.7,
-                  }}
-                />
-              </Box>
-
-              <Box>
-                <Text variant="quiet" sx={{ fontSize: 1, mb: 1 }}>
                   Password
                 </Text>
                 <Flex sx={{ position: 'relative' }}>
@@ -131,12 +120,38 @@ export const ThankYouAccountForm = () => {
                 </Flex>
               </Box>
 
+              <Box>
+                <Text variant="quiet" sx={{ fontSize: 1, mb: 1 }}>
+                  Confirm Password
+                </Text>
+                <Flex sx={{ position: 'relative' }}>
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm your password"
+                    required
+                    minLength={6}
+                    sx={{
+                      border: '1px solid',
+                      borderColor: 'offWhite',
+                      borderRadius: 1,
+                      px: 3,
+                      py: 3,
+                      bg: 'background',
+                      pr: '48px',
+                      '&:focus': { outline: 'none', borderColor: 'green' },
+                    }}
+                  />
+                </Flex>
+              </Box>
+
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}
 
               <Button
                 type="submit"
                 variant="primary"
-                disabled={isSubmitting || password.length < 6}
+                disabled={isSubmitting || password.length < 6 || password !== confirmPassword}
                 sx={{ justifyContent: 'center' }}
               >
                 {isSubmitting

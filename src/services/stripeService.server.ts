@@ -184,16 +184,86 @@ export class StripeServiceServer {
     return stripe.webhooks.constructEvent(body, signature, secret);
   }
 
-  async updateSupporterStatus(
-    authId: string,
-    isSupporter: boolean,
-    tenantId: string,
-  ): Promise<void> {
-    await this.client
+  async getBadgeIdForProduct(productId: string): Promise<number | null> {
+    const { data } = await this.client
+      .from('stripe_badge_products')
+      .select('badge_id')
+      .eq('stripe_product_id', productId)
+      .single();
+
+    return data?.badge_id ?? null;
+  }
+
+  async getProfileIdByAuthId(authId: string, tenantId: string): Promise<number | null> {
+    const { data } = await this.client
       .from('profiles')
-      .update({ is_supporter: isSupporter })
+      .select('id')
       .eq('auth_id', authId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    return data?.id ?? null;
+  }
+
+  async assignBadgeForSubscription(
+    authId: string,
+    tenantId: string,
+    badgeId: number,
+  ): Promise<void> {
+    const profileId = await this.getProfileIdByAuthId(authId, tenantId);
+    if (!profileId) {
+      console.warn('No profile found for auth_id:', authId);
+      return;
+    }
+
+    // Get all badge IDs that are stripe-linked tier badges
+    const { data: tierBadges } = await this.client
+      .from('stripe_badge_products')
+      .select('badge_id')
       .eq('tenant_id', tenantId);
+
+    const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
+
+    // Remove any existing tier badges for this profile
+    if (tierBadgeIds.length > 0) {
+      await this.client
+        .from('profile_badges_relations')
+        .delete()
+        .eq('profile_id', profileId)
+        .eq('tenant_id', tenantId)
+        .in('profile_badge_id', tierBadgeIds);
+    }
+
+    // Assign the new badge
+    await this.client.from('profile_badges_relations').insert({
+      profile_id: profileId,
+      profile_badge_id: badgeId,
+      tenant_id: tenantId,
+    });
+  }
+
+  async removeTierBadges(authId: string, tenantId: string): Promise<void> {
+    const profileId = await this.getProfileIdByAuthId(authId, tenantId);
+    if (!profileId) {
+      console.warn('No profile found for auth_id:', authId);
+      return;
+    }
+
+    const { data: tierBadges } = await this.client
+      .from('stripe_badge_products')
+      .select('badge_id')
+      .eq('tenant_id', tenantId);
+
+    const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
+
+    if (tierBadgeIds.length > 0) {
+      await this.client
+        .from('profile_badges_relations')
+        .delete()
+        .eq('profile_id', profileId)
+        .eq('tenant_id', tenantId)
+        .in('profile_badge_id', tierBadgeIds);
+    }
   }
 
   async createGuestCustomer(email: string, name?: string): Promise<string> {

@@ -8,15 +8,15 @@ export type SupporterState = {
   setCurrency: (c: string) => void;
   interval: Interval;
   setInterval: (i: Interval) => void;
-  amount: number;
-  setAmount: (a: number) => void;
+  selectedPriceId: string | null;
+  setSelectedPriceId: (id: string) => void;
   name: string;
   setName: (n: string) => void;
   email: string;
   setEmail: (e: string) => void;
 
   currencies: { value: string; label: string }[];
-  availableAmounts: number[];
+  availablePrices: { id: string; unitAmount: number }[];
   selectedAmount: number;
   symbol: string;
 

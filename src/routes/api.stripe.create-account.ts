@@ -52,11 +52,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const authService = new AuthServiceServer(adminClient);
-    await authService.createUserProfile({ user: newUser.user });
+    await authService.createUserProfile({ user: newUser.user, displayName: name });
 
     await stripeService.linkCustomerToAuthUser(stripeCustomerId, newUser.user.id, tenantId);
 
-    await stripeService.updateSupporterStatus(newUser.user.id, true, tenantId);
+    // Assign badge based on active subscription's product
+    const subscription = await stripeService.getSubscription(stripeCustomerId);
+    if (subscription) {
+      const productId = subscription.items.data[0]?.price?.product as string;
+      if (productId) {
+        const badgeId = await stripeService.getBadgeIdForProduct(productId);
+        if (badgeId) {
+          await stripeService.assignBadgeForSubscription(newUser.user.id, tenantId, badgeId);
+        }
+      }
+    }
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {

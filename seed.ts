@@ -13,6 +13,7 @@ import type {
   questionsChildInputs,
   questionsScalars,
   researchScalars,
+  stripe_badge_productsScalars,
   subscribersChildInputs,
   subscribersScalars,
   tagsChildInputs,
@@ -168,6 +169,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     display_name: 'Supporter',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    premium_tier: null,
   },
   {
     ..._BADGES_BASE,
@@ -177,7 +179,42 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
     premium_tier: 1,
   },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-1',
+    display_name: 'Supporter',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    premium_tier: 1,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-2',
+    display_name: 'Supporter',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    premium_tier: 2,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-3',
+    display_name: 'Supporter',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    premium_tier: 3,
+  },
 ];
+
+const seedStripeBadgeProducts = (
+  badges: profile_badgesScalars[],
+): Partial<stripe_badge_productsScalars>[] => {
+  const tierBadges = badges.filter((b) => b.premium_tier !== null);
+  return tierBadges.map((badge) => ({
+    tenant_id,
+    stripe_product_id: `prod_tier${badge.premium_tier}`,
+    badge_id: badge.id,
+  }));
+};
 
 const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_badgeScalars>[] => {
   const proBadge = badges.find((badge) => badge.name === 'pro');
@@ -605,6 +642,7 @@ const main = async () => {
   const { profile_badges } = await seed.profile_badges(seedBadges());
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
   await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
+  await seed.stripe_badge_products(seedStripeBadgeProducts(profile_badges));
 
   await seed.map_pins(seedMapPins(profiles));
   const { tags } = await seed.tags(seedTags());

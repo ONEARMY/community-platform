@@ -92,7 +92,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           if (existingSub) {
             return Response.json(
               {
-                error: FRIENDLY_MESSAGES['generic-error'],
+                error: FRIENDLY_MESSAGES['supporter/already-subscribed'],
               },
               { headers, status: 409 },
             );
@@ -127,7 +127,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             if (existingSub) {
               return Response.json(
                 {
-                  error: FRIENDLY_MESSAGES['generic-error'],
+                  error: FRIENDLY_MESSAGES['supporter/already-subscribed'],
                 },
                 { headers, status: 409 },
               );

@@ -224,6 +224,7 @@ export const Select = (props: Props) => {
       noOptionsMessage={props.noOptionsMessage}
       isDisabled={props.isDisabled}
       inputId={props.inputId}
+      formatOptionLabel={props.formatOptionLabel}
     />
   );
 };

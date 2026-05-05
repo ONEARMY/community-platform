@@ -5,8 +5,6 @@ import { useToast } from 'src/common/Toast/useToast';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isUserContactable } from 'src/utils/helpers';
-import { isUserAdmin } from 'src/utils/isAdmin';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
@@ -14,7 +12,7 @@ export const SupabaseNotifications = observer(() => {
   const [initialValues, setInitialValues] = useState<NotificationsPreferencesFormData | null>(null);
   const toast = useToast();
 
-  const { profile } = useProfileStore();
+  const { profile, isStaff, isContactable } = useProfileStore();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences();
@@ -71,8 +69,8 @@ export const SupabaseNotifications = observer(() => {
       isLoading={isLoading}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
-      profileIsContactable={isUserContactable(profile)}
-      showNewsPreference={isUserAdmin(profile) || false}
+      profileIsContactable={isContactable}
+      showNewsPreference={isStaff}
     />
   );
 });

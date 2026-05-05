@@ -98,6 +98,7 @@ export interface NotificationsPreferencesFormData {
 
 export interface PreferencesWithProfileContact extends NotificationsPreferences {
   isContactable: undefined | boolean;
+  roles: string[];
 }
 
 export interface NotificationsPreferencesViaEmailFormData extends NotificationsPreferencesFormData {

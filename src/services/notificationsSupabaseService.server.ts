@@ -37,6 +37,42 @@ export class NotificationsSupabaseServiceServer {
     }
   }
 
+  async getProfilesWithAnyBadge() {
+    try {
+      const response = await this.client
+        .from('profile_badges_relations')
+        .select(
+          `
+          profile_id,
+          profiles!inner (
+            id,
+            display_name,
+            username,
+            email,
+            roles,
+            notification_preferences
+          )
+        `,
+        )
+        .or('roles.cs.{admin,editor,moderator}');
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      const uniqueProfiles = new Map(
+        response.data
+          ?.filter((item: any) => item.profiles)
+          .map((item: any) => [item.profiles.id, item.profiles]),
+      );
+
+      return Array.from(uniqueProfiles.values());
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+
   async getProfilesByBadgeIds(badgeIds: number[]) {
     try {
       if (badgeIds.length === 0) {
@@ -59,20 +95,19 @@ export class NotificationsSupabaseServiceServer {
           )
         `,
         )
-        .in('profile_badge_id', badgeIds);
+        .in('profile_badge_id', badgeIds)
+        .or('roles.cs.{admin,editor,moderator}');
 
       if (response.error) {
         throw response.error;
       }
 
       // Deduplicate profiles (in case a user has multiple badges)
-      const uniqueProfiles = new Map();
-      response.data?.forEach((item: any) => {
-        const profile = item.profiles;
-        if (profile && !uniqueProfiles.has(profile.id)) {
-          uniqueProfiles.set(profile.id, profile);
-        }
-      });
+      const uniqueProfiles = new Map(
+        response.data
+          ?.filter((item: any) => item.profiles)
+          .map((item: any) => [item.profiles.id, item.profiles]),
+      );
 
       return Array.from(uniqueProfiles.values());
     } catch (error) {
@@ -197,57 +232,56 @@ export class NotificationsSupabaseServiceServer {
         content_type: 'news',
       });
 
-      const badgeIds = news.profile_badges?.map((pb: any) => pb.profile_badges.id) || [];
+      const badgeIds = news.profile_badges?.map((pb) => pb.profile_badges.id) || [];
+
+      let badgeSubscribers: any[] = [];
 
       if (badgeIds.length === 0) {
-        // No badge restrictions - notify all subscribers
-        const allSubscribers = await this.getAllProfiles(); // TODO: filter to only profiles with email verified
+        // No badge restrictions - notify all (website only, no email)
+        const allSubscribers = await this.getAllProfiles();
         const subscriberIds = allSubscribers?.map(({ id }) => ({ profile_id: id })) || [];
         await this.createNotifications(dbNotification, subscriberIds);
+
+        badgeSubscribers = await this.getProfilesWithAnyBadge();
       } else {
         // Badge restrictions - notify users with ANY of the required badges
-        const badgeSubscribers = await this.getProfilesByBadgeIds(badgeIds);
+        badgeSubscribers = await this.getProfilesByBadgeIds(badgeIds);
         await this.createNotifications(dbNotification, badgeSubscribers);
+      }
 
-        switch (news.content_reach) {
-          case 'important': {
-            // Exclude the no email people
-            const emailSubscribers = badgeSubscribers.filter(
-              (subscriber) =>
-                subscriber.notification_preferences?.content_reach !== null ||
-                subscriber.roles.includes('admin'),
-            );
-            await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
-              emailSubscribers,
-              dbNotification,
-              isNews: true,
-              excludeTriggerer: false,
-              requestOrigin,
-            });
-            return;
-          }
-          case 'all': {
-            // Include only the all email people
-            const emailSubscribers = badgeSubscribers.filter(
-              (subscriber) =>
-                subscriber.notification_preferences?.content_reach === 'all' ||
-                subscriber.roles.includes('admin'),
-            );
-            await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
-              emailSubscribers,
-              dbNotification,
-              isNews: true,
-              excludeTriggerer: false,
-              requestOrigin,
-            });
-            return;
-          }
-          default: {
-            return;
-          }
+      switch (news.content_reach) {
+        case 'important': {
+          // Exclude the no email people
+          const emailSubscribers = badgeSubscribers.filter(
+            (subscriber) => subscriber.notification_preferences?.content_reach !== null,
+          );
+          await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
+            emailSubscribers,
+            dbNotification,
+            isNews: true,
+            excludeTriggerer: false,
+            requestOrigin,
+          });
+          break;
+        }
+        case 'all': {
+          // Include only the all email people
+          const emailSubscribers = badgeSubscribers.filter(
+            (subscriber) => subscriber.notification_preferences?.content_reach === 'all',
+          );
+          await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
+            emailSubscribers,
+            dbNotification,
+            isNews: true,
+            excludeTriggerer: false,
+            requestOrigin,
+          });
+          break;
+        }
+        default: {
+          break;
         }
       }
-      return;
     } catch (error) {
       console.error(error);
     }

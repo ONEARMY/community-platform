@@ -13,6 +13,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initialValues, setInitialValues] =
     useState<NotificationsPreferencesViaEmailFormData | null>(null);
+  const [showNewsPreference, setShowNewsPreference] = useState(false);
   const toast = useToast();
 
   const refreshPreferences = async () => {
@@ -21,6 +22,12 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     if (!preferences) {
       return null;
     }
+
+    setShowNewsPreference(
+      preferences.roles.includes('admin') ||
+        preferences.roles.includes('editor') ||
+        preferences.roles.includes('moderator'),
+    );
 
     const asFormData = {
       ...NotificationsPreferences.toFormData(preferences),
@@ -79,6 +86,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
       onSubmit={onSubmit as any}
       onUnsubscribe={onUnsubscribe}
       profileIsContactable={initialValues?.isContactable}
+      showNewsPreference={showNewsPreference}
     />
   );
 };

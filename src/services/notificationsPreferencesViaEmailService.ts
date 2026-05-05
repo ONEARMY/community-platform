@@ -12,9 +12,9 @@ const getPreferences = async (userCode: string): Promise<PreferencesWithProfileC
       return null;
     }
 
-    const { preferences, isContactable } = await response.json();
+    const { preferences, isContactable, roles } = await response.json();
 
-    return { ...preferences, isContactable };
+    return { ...preferences, isContactable, roles } satisfies PreferencesWithProfileContact;
   } catch (err) {
     console.error(err);
     return null;

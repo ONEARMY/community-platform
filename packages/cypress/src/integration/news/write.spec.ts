@@ -11,14 +11,12 @@ describe('[News.Write]', () => {
     const initialNewsBodyOne = 'Yo.';
     const initialNewsBodyTwo = 'HiHi!';
     const initialNewsBodyThree = 'We did good.';
-    const initialSummary = `${initialNewsBodyOne} ${initialNewsBodyTwo} ${initialNewsBodyThree}`;
     const category = 'Moulds';
     const tag1 = 'product';
     const tag2 = 'workshop';
     const updatedTitle = `Still an amazing thing ${initialRandomId}`;
     const updatedExpectedSlug = `news/still-an-amazing-thing-${initialRandomId}`;
     const updatedNewsBody = 'PLUS sparkles!';
-    const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`;
 
     cy.visit('/news');
     const user = getTenantUser(users.admin);
@@ -32,8 +30,8 @@ describe('[News.Write]', () => {
     cy.step('Can add draft news');
     cy.get('[data-cy=draft]').click();
     cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('Draft news saved')
-    cy.get('[data-cy=toast-action-link]').click()
+    cy.get('[data-cy=toast]').contains('Draft news saved');
+    cy.get('[data-cy=toast-action-link]').click();
     cy.url().should('include', initialExpectedSlug);
 
     cy.step('Can get to drafts');
@@ -46,8 +44,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=draft-tag]').should('be.visible');
     cy.contains(initialTitle);
 
-    cy.step('No notification generated yet for draft')
-    cy.expectNoNewNotification()
+    cy.step('No notification generated yet for draft');
+    cy.expectNoNewNotification();
 
     cy.step('Can update and publish news');
     cy.get('[data-cy=edit]').click();
@@ -68,13 +66,13 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=submit]').click();
 
     cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published')
-    cy.get('[data-cy=toast-action-link]').click()
+    cy.get('[data-cy=toast]').contains('News published');
+    cy.get('[data-cy=toast-action-link]').click();
     cy.url().should('include', initialExpectedSlug);
 
     cy.step('All news fields shown');
     cy.visit('/news');
-    cy.get('[data-cy=news-list-item-summary]').first().contains(initialSummary);
+    cy.get('[data-cy=news-list-item-summary]').first().contains(initialNewsBodyOne);
     cy.get('[data-cy=news-list-item]').contains(initialTitle).click();
 
     cy.contains(initialTitle);
@@ -95,7 +93,7 @@ describe('[News.Write]', () => {
       path: initialExpectedSlug,
       title: initialTitle,
     });
-    cy.get('[data-cy="NotificationListSupabase-CloseButton"]').click()
+    cy.get('[data-cy="NotificationListSupabase-CloseButton"]').click();
 
     cy.step('Edit fields');
     cy.wait(2000);
@@ -113,7 +111,7 @@ describe('[News.Write]', () => {
 
     cy.step('Replace hero image');
     cy.get('[data-cy=existingHeroImage]').should('exist');
-    cy.get('[data-cy=existingHeroImage]').find('[data-cy=delete-image]').click({force: true});
+    cy.get('[data-cy=existingHeroImage]').find('[data-cy=delete-image]').click({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
     cy.get('[data-cy=delete-image]').should('exist');
 
@@ -124,8 +122,8 @@ describe('[News.Write]', () => {
     cy.wait(2000);
     cy.get('[data-cy=submit]').click();
     cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published')
-    cy.get('[data-cy=toast-action-link]').click()
+    cy.get('[data-cy=toast]').contains('News published');
+    cy.get('[data-cy=toast-action-link]').click();
     cy.url().should('include', updatedExpectedSlug);
     cy.contains(updatedNewsBody);
 
@@ -142,7 +140,7 @@ describe('[News.Write]', () => {
 
     cy.step('All updated fields visible on list');
     cy.visit('/news');
-    cy.contains(updatedSummary);
+    cy.contains(updatedNewsBody);
     cy.contains(updatedTitle);
     cy.contains(category);
   });
@@ -153,7 +151,7 @@ describe('[News.Write]', () => {
     const path = `/news/important-update-for-pro-${initialRandomId}`;
     const content = 'PRO Badger update';
 
-    cy.step("Create a new (non-badge) user")
+    cy.step('Create a new (non-badge) user');
     cy.visit('/news');
     const user = generateNewUserDetails();
     cy.signUpNewUser(user);
@@ -168,7 +166,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.addToMarkdownField(content);
-    cy.selectTag("PRO", '[data-cy=profileBadges-select]');
+    cy.selectTag('PRO', '[data-cy=profileBadges-select]');
     cy.selectByValue('important', '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
@@ -176,15 +174,15 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=submit]').click();
 
     cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published')
-    cy.get('[data-cy=toast-action-link]').click()
+    cy.get('[data-cy=toast]').contains('News published');
+    cy.get('[data-cy=toast-action-link]').click();
     cy.url().should('include', path);
 
-    cy.step("Shows it's for PRO badgers only")
+    cy.step("Shows it's for PRO badgers only");
     cy.get('[data-cy=profileBadge]').contains('news');
 
     cy.step('For creator, notification generated for update');
-    cy.reload() // Annoying delay generating the notification
+    cy.reload(); // Annoying delay generating the notification
     cy.expectNewNotification({
       path,
       title,
@@ -201,7 +199,7 @@ describe('[News.Write]', () => {
     cy.contains(title).should('not.exist');
 
     cy.step("Logged in user (who is not an admin) can't view item");
-    cy.signIn(user.email, user.password)
+    cy.signIn(user.email, user.password);
     cy.visit(path);
     cy.reload();
     cy.url().should('include', `news`);

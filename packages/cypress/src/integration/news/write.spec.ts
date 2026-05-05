@@ -61,7 +61,7 @@ describe('[News.Write]', () => {
     cy.selectTag(category, '[data-cy=category-select]');
     cy.selectTag(tag1, '[data-cy="tag-select"]');
     cy.selectTag(tag2, '[data-cy="tag-select"]');
-    cy.selectTag("Big update", '[data-cy=contentReach-select]');
+    cy.selectByValue('important', '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);
@@ -168,8 +168,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.addToMarkdownField(content);
-    cy.selectTag("PRO", '[data-cy=profileBadge-select]');
-    cy.selectTag("Big update", '[data-cy=contentReach-select]');
+    cy.selectTag("PRO", '[data-cy=profileBadges-select]');
+    cy.selectByValue('important', '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.wait(2000);

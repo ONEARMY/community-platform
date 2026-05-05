@@ -45,6 +45,10 @@ export const ContentReachField = (props: IProps) => {
                 onChange={(changedValue) => {
                   input.onChange(changedValue?.value ?? null);
                 }}
+                formatOptionLabel={(option) => {
+                  const { value, label } = option as SelectValue;
+                  return <span data-value={value ?? 'null'}>{label}</span>;
+                }}
                 placeholder={placeholder}
                 isDisabled={shouldDisableContentReach}
               />

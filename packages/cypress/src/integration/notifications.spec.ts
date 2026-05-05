@@ -6,11 +6,11 @@ describe('[Notifications]', () => {
     cy.step('All ticked be default');
     cy.get('[data-cy=tab-Notifications]').click();
     cy.get('[data-cy=SupabaseNotifications-field-comments]').invoke('prop', 'indeterminate', true);
-    cy.get('[data-cy=SupabaseNotifications-field-comments]').click();
+    cy.get('[data-cy=SupabaseNotifications-field-comments]').click({ force: true });
     cy.get('[data-cy=SupabaseNotifications-field-replies]').invoke('prop', 'indeterminate', true);
-    cy.get('[data-cy=SupabaseNotifications-field-replies]').click();
+    cy.get('[data-cy=SupabaseNotifications-field-replies]').click({ force: true });
     cy.get('[data-cy=SupabaseNotifications-field-research_updates]').invoke('prop', 'indeterminate', true);
-    cy.get('[data-cy=SupabaseNotifications-field-research_updates]').click();
+    cy.get('[data-cy=SupabaseNotifications-field-research_updates]').click({ force: true });
 
     cy.get('[data-cy=save-notifications-preferences]').click();
 

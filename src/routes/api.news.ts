@@ -220,10 +220,6 @@ async function validateRequest(
     throw validationError('Hero image is required', 'heroImage');
   }
 
-  if (!data.contentReach && notDraft) {
-    throw validationError('Content reach is required to publish', 'contentReach');
-  }
-
   if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
     throw conflictError('This news already exists');
   }

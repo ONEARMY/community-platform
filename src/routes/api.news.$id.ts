@@ -159,10 +159,6 @@ async function validateRequest(
     throw validationError('A hero image is required to publish', 'heroImage');
   }
 
-  if (!data.contentReach && notDraft) {
-    throw validationError('Content reach is required to publish', 'contentReach');
-  }
-
   if (!currentNews) {
     throw notFoundError('News');
   }

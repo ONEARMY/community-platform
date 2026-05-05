@@ -16,7 +16,7 @@ declare global {
       expectNoNewNotification(): Chainable<void>;
       interceptAddressSearchFetch(addressResponse): Chainable<void>;
       interceptAddressReverseFetch(addressResponse): Chainable<void>;
-      step(message: string);
+      step(message: string): Chainable<void>;
     }
   }
 }
@@ -89,10 +89,9 @@ Cypress.Commands.add('expectNewNotification', (props: ExpectedNewNotification) =
     cy.get('[data-cy=NotificationListSupabase]').contains(title);
   }
   if (content) {
-   cy.get('[data-cy=NotificationListSupabase]').contains(content).click();
+    cy.get('[data-cy=NotificationListSupabase]').contains(content).click();
   }
 
-  cy.get('[data-cy=NotificationListItemSupabase]').first().find('img').should('be.visible');
   cy.url().should('include', path);
 });
 

@@ -40,8 +40,6 @@ export { FlagIcon } from './FlagIcon/FlagIcon';
 export { FollowButton } from './FollowButton/FollowButton';
 export { FollowIcon } from './FollowIcon/FollowIcon';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
-export type { GridFormFields } from './GridForm/GridForm';
-export { GridForm } from './GridForm/GridForm';
 export { Guidelines } from './Guidelines/Guidelines';
 export { HeroBanner } from './HeroBanner/HeroBanner';
 export { useImageLightbox } from './hooks/useImageLightbox';

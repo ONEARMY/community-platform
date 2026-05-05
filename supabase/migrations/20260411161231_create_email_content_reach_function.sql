@@ -64,6 +64,3 @@ as $$
     u.email;
 $$;
 
-revoke all on function public.get_profiles_by_badge(bigint) from public;
-grant execute on function public.get_profiles_by_badge(bigint) to authenticated;
-

@@ -62,7 +62,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       .update({
         body: data.body,
         category: data.category,
-        is_draft: data.isDraft,
+        is_draft: currentNews.published_at ? false : data.isDraft,
         modified_at: new Date(),
         slug: slug,
         previous_slugs: previousSlugs,

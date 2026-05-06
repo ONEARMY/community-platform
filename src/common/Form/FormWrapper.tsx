@@ -12,7 +12,7 @@ interface IProps {
   errorsClientSide?: IErrorsListSet[];
   guidelines?: React.ReactNode;
   handleSubmit: () => void;
-  handleSubmitDraft: (e: React.MouseEvent) => void;
+  handleSubmitDraft?: (e: React.MouseEvent) => void;
   heading: string;
   hasValidationErrors: boolean;
   belowBody?: React.ReactNode;
@@ -116,19 +116,21 @@ export const FormWrapper = (props: IProps) => {
           {buttonLabel}
         </Button>
 
-        <Button
-          data-cy="draft"
-          onClick={handleSubmitDraft}
-          variant="secondary"
-          type="submit"
-          disabled={submitting}
-          sx={{
-            width: '100%',
-            display: 'block',
-          }}
-        >
-          {DRAFT_LABEL}
-        </Button>
+        {handleSubmitDraft && (
+          <Button
+            data-cy="draft"
+            onClick={handleSubmitDraft}
+            variant="secondary"
+            type="submit"
+            disabled={submitting}
+            sx={{
+              width: '100%',
+              display: 'block',
+            }}
+          >
+            {DRAFT_LABEL}
+          </Button>
+        )}
 
         {submitting && !hideSubmittingMessage && (
           <Loader label="Submitting, please do not close the page..." />

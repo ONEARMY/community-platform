@@ -153,7 +153,7 @@ export const NewsForm = (props: IProps) => {
             errorsClientSide={errorsClientSide}
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
-            handleSubmitDraft={handleSubmitDraft}
+            handleSubmitDraft={props.formData?.isDraft === false ? undefined : handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[props.formAction]}
             sidebar={

@@ -23,7 +23,7 @@ interface IProps {
   unsavedChangesDialog?: React.ReactNode;
 }
 
-const DRAFT_LABEL = 'Save as draft';
+const DRAFT_LABEL = 'Save draft';
 
 export const FormWrapper = (props: IProps) => {
   const {

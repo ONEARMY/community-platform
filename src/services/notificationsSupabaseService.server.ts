@@ -37,24 +37,40 @@ export class NotificationsSupabaseServiceServer {
     }
   }
 
+  async getStaffProfiles() {
+    const profileSelect = `
+      id,
+      display_name,
+      username,
+      roles,
+      notifications_preferences (content_reach)
+    `;
+    const response = await this.client
+      .from('profiles')
+      .select(profileSelect)
+      .or('roles.cs.{admin},roles.cs.{editor},roles.cs.{moderator}');
+
+    if (response.error) {
+      throw response.error;
+    }
+
+    return response.data ?? [];
+  }
+
   async getProfilesWithAnyBadge() {
     try {
-      const response = await this.client
-        .from('profile_badges_relations')
-        .select(
-          `
+      const response = await this.client.from('profile_badges_relations').select(
+        `
           profile_id,
           profiles!inner (
             id,
             display_name,
             username,
-            email,
             roles,
-            notification_preferences
+            notifications_preferences (content_reach)
           )
         `,
-        )
-        .or('roles.cs.{admin,editor,moderator}');
+      );
 
       if (response.error) {
         throw response.error;
@@ -89,14 +105,12 @@ export class NotificationsSupabaseServiceServer {
             id,
             display_name,
             username,
-            email,
             roles,
-            notification_preferences
+            notifications_preferences (content_reach)
           )
         `,
         )
-        .in('profile_badge_id', badgeIds)
-        .or('roles.cs.{admin,editor,moderator}');
+        .in('profile_badge_id', badgeIds);
 
       if (response.error) {
         throw response.error;
@@ -136,15 +150,12 @@ export class NotificationsSupabaseServiceServer {
     }
   }
 
-  async createNotifications(
-    notification: DBNotification,
-    subscriberIds: Partial<SubscribedUser>[],
-  ): Promise<void> {
+  async createNotifications(notification: DBNotification, subscriberIds: number[]): Promise<void> {
     if (!subscriberIds) return;
 
     try {
       const notificationsToInsert = subscriberIds.map(
-        (subscriber) =>
+        (subscriberId) =>
           new DBNotification({
             action_type: notification.action_type,
             content_id: notification.content_id,
@@ -153,7 +164,7 @@ export class NotificationsSupabaseServiceServer {
             source_content_type: notification.source_content_type,
             title: notification.title,
             triggered_by_id: notification.triggered_by_id,
-            owned_by_id: subscriber.profile_id!,
+            owned_by_id: subscriberId,
             is_read: false,
             tenant_id: process.env.TENANT_ID!,
           }),
@@ -208,7 +219,10 @@ export class NotificationsSupabaseServiceServer {
         content_type: 'comments',
       });
 
-      await this.createNotifications(dbNotification, subscribers);
+      await this.createNotifications(
+        dbNotification,
+        subscribers.map((s) => s.profile_id),
+      );
 
       await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
         emailSubscribers: subscribers,
@@ -234,27 +248,40 @@ export class NotificationsSupabaseServiceServer {
 
       const badgeIds = news.profile_badges?.map((pb) => pb.profile_badges.id) || [];
 
-      let badgeSubscribers: any[] = [];
+      const staffProfiles = await this.getStaffProfiles();
+
+      // Build the pool of badge holders + staff (used for emails and, when badge-restricted, platform notifications)
+      const badgeSubscribers =
+        badgeIds.length > 0
+          ? await this.getProfilesByBadgeIds(badgeIds)
+          : await this.getProfilesWithAnyBadge();
+      const notifyPool = new Map(badgeSubscribers.map((p: any) => [p.id, p]));
+      for (const staff of staffProfiles) {
+        notifyPool.set(staff.id, staff);
+      }
+      const emailSubscribersPool = Array.from(notifyPool.values());
 
       if (badgeIds.length === 0) {
-        // No badge restrictions - notify all (website only, no email)
+        // No badge restrictions - platform notification goes to all users
         const allSubscribers = await this.getAllProfiles();
-        const subscriberIds = allSubscribers?.map(({ id }) => ({ profile_id: id })) || [];
+        const subscriberIds = allSubscribers?.map(({ id }) => id) || [];
         await this.createNotifications(dbNotification, subscriberIds);
-
-        badgeSubscribers = await this.getProfilesWithAnyBadge();
       } else {
-        // Badge restrictions - notify users with ANY of the required badges
-        badgeSubscribers = await this.getProfilesByBadgeIds(badgeIds);
-        await this.createNotifications(dbNotification, badgeSubscribers);
+        // Badge restrictions - platform notification goes to badge holders + staff only
+        await this.createNotifications(
+          dbNotification,
+          emailSubscribersPool.map((p) => p.id),
+        );
       }
 
       switch (news.content_reach) {
         case 'important': {
-          // Exclude the no email people
-          const emailSubscribers = badgeSubscribers.filter(
-            (subscriber) => subscriber.notification_preferences?.content_reach !== null,
-          );
+          // Send to users who opted into 'important' or 'all' emails
+          const emailSubscribers = emailSubscribersPool.filter((subscriber) => {
+            const reach = subscriber.notifications_preferences?.[0]?.content_reach;
+            return reach === 'important' || reach === 'all';
+          });
+
           await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
             emailSubscribers,
             dbNotification,
@@ -266,9 +293,10 @@ export class NotificationsSupabaseServiceServer {
         }
         case 'all': {
           // Include only the all email people
-          const emailSubscribers = badgeSubscribers.filter(
-            (subscriber) => subscriber.notification_preferences?.content_reach === 'all',
+          const emailSubscribers = emailSubscribersPool.filter(
+            (subscriber) => subscriber.notifications_preferences?.[0]?.content_reach === 'all',
           );
+
           await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
             emailSubscribers,
             dbNotification,
@@ -305,7 +333,10 @@ export class NotificationsSupabaseServiceServer {
         triggered_by: profile,
       });
 
-      await this.createNotifications(dbNotification, subscribers);
+      await this.createNotifications(
+        dbNotification,
+        subscribers.map((s) => s.profile_id),
+      );
 
       await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
         emailSubscribers: subscribers,

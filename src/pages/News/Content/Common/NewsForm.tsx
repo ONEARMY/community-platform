@@ -149,7 +149,7 @@ export const NewsForm = (props: IProps) => {
 
         return (
           <FormWrapper
-            buttonLabel={LABELS.buttons[props.formAction]}
+            buttonLabel={LABELS.buttons.publish}
             errorsClientSide={errorsClientSide}
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
@@ -182,8 +182,6 @@ export const NewsForm = (props: IProps) => {
             <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
 
-            <NewsBodyField imageUpload={imageUpload} />
-
             <BadgeVisibilityField
               description={LABELS.fields.profileBadge.description as string}
               placeholder={LABELS.fields.profileBadge.placeholder as string}
@@ -197,6 +195,8 @@ export const NewsForm = (props: IProps) => {
                 !!(props.id && props.formData?.contentReach && props.formData?.isDraft === false)
               }
             />
+
+            <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>
         );
       }}

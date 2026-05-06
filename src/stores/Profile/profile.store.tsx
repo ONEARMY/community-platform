@@ -179,8 +179,6 @@ export class ProfileStore {
     const isMemberFilled = isMember && !!photo?.id;
     const isSpaceFilled = isSpace && !!coverImages && !!coverImages[0]?.publicUrl;
 
-    console.log({ name: profile.username, isBasicInfoFilled, isMemberFilled, isSpaceFilled });
-
     return isBasicInfoFilled && (isMemberFilled || isSpaceFilled);
   }
 }

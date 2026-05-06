@@ -1,7 +1,7 @@
 import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
-import { getSummaryFromMarkdown, News } from 'oa-shared';
+import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
@@ -10,7 +10,12 @@ import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
-import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';
 
@@ -29,7 +34,10 @@ export const loader = async ({ request }) => {
 
   if (claims?.data?.claims?.sub) {
     const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
-    isAdmin = !!profile?.roles?.includes('admin') || !!profile?.roles?.includes('moderator');
+    isAdmin =
+      !!profile?.roles?.includes(UserRole.ADMIN) ||
+      !!profile?.roles?.includes(UserRole.EDITOR) ||
+      !!profile?.roles?.includes(UserRole.MODERATOR);
     userProfileId = profile?.id ?? null;
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
   }
@@ -116,6 +124,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const profile = profileRequest.data[0] as DBProfile;
+
+    if (!profile.roles?.includes(UserRole.ADMIN) && !profile.roles?.includes(UserRole.EDITOR)) {
+      throw forbiddenError();
+    }
 
     if (!profile.username) {
       throw validationError('You must set a username before creating content', 'username');

@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import type { IUserImpact, Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
+import { IUserImpact, Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
 import { createContext, useContext, useEffect } from 'react';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
@@ -125,7 +125,9 @@ export class ProfileStore {
     }
 
     return (
-      this.profile.roles?.some((role) => ['admin', 'editor', 'moderator'].includes(role)) || false
+      this.profile.roles?.some((role) =>
+        [UserRole.ADMIN, UserRole.EDITOR, UserRole.MODERATOR].includes(role as UserRole),
+      ) || false
     );
   }
 

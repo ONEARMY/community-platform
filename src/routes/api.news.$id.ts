@@ -1,14 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, NewsDTO } from 'oa-shared';
-import { getSummaryFromMarkdown, News } from 'oa-shared';
+import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { hasAdminRights } from 'src/utils/helpers';
 import {
   conflictError,
   forbiddenError,
@@ -182,7 +181,11 @@ async function validateRequest(
 
   const isCreator = currentNews.created_by === profile.id;
 
-  if (!isCreator && !hasAdminRights(profile)) {
+  if (
+    !isCreator &&
+    !profile.roles?.includes(UserRole.ADMIN) &&
+    !profile.roles?.includes(UserRole.EDITOR)
+  ) {
     throw forbiddenError();
   }
 }

@@ -49,7 +49,7 @@ async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
     .eq('auth_id', userAuthId)
     .single();
 
-  return data?.roles?.includes(UserRole.ADMIN);
+  return data?.roles?.includes(UserRole.ADMIN) || data?.roles?.includes(UserRole.EDITOR);
 }
 
 export default function Index() {

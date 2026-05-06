@@ -39,7 +39,7 @@ export const NewsListHeader = (props: IProps) => {
           {headings.list}
         </Heading>
       </Flex>
-      {isUserAuthorized(UserRole.ADMIN) && (
+      {isUserAuthorized([UserRole.ADMIN, UserRole.EDITOR]) && (
         <Flex
           sx={{
             justifyContent: 'space-between',

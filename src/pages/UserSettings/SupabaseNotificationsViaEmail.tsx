@@ -1,4 +1,8 @@
-import { NotificationsPreferences, NotificationsPreferencesViaEmailFormData } from 'oa-shared';
+import {
+  NotificationsPreferences,
+  NotificationsPreferencesViaEmailFormData,
+  UserRole,
+} from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast';
 import { form } from 'src/pages/UserSettings/labels';
@@ -24,9 +28,9 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     }
 
     setShowNewsPreference(
-      preferences.roles.includes('admin') ||
-        preferences.roles.includes('editor') ||
-        preferences.roles.includes('moderator'),
+      preferences.roles.includes(UserRole.ADMIN) ||
+        preferences.roles.includes(UserRole.EDITOR) ||
+        preferences.roles.includes(UserRole.MODERATOR),
     );
 
     const asFormData = {

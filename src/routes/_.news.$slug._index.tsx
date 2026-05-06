@@ -45,7 +45,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const profile = new ProfileFactory(client).fromDB(dbProfile!);
 
   const isAdmin = !!(
-    profile.roles?.includes(UserRole.ADMIN) || profile.roles?.includes(UserRole.MODERATOR)
+    profile.roles?.includes(UserRole.ADMIN) ||
+    profile.roles?.includes(UserRole.EDITOR) ||
+    profile.roles?.includes(UserRole.MODERATOR)
   );
   const hasAnyRequiredBadge =
     profile?.badges?.some((badge) => requiredBadgeIds.includes(badge.id)) ?? false;

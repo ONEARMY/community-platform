@@ -7,14 +7,14 @@ import {
   TagList,
   useImageLightbox,
 } from 'oa-components';
-import type { News } from 'oa-shared';
+import { type News, UserRole } from 'oa-shared';
 import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import PageHeader from 'src/common/PageHeader';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
+import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
@@ -26,10 +26,13 @@ interface IProps {
 export const NewsPage = observer(({ news }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(news.subscriberCount);
   const heroImageRef = useRef<HTMLImageElement>(null);
-  const { profile } = useProfileStore();
+  const { profile, isUserAuthorized } = useProfileStore();
 
   const isEditable = useMemo(() => {
-    return hasAdminRights(profile) || news.author?.username === profile?.username;
+    return (
+      isUserAuthorized([UserRole.ADMIN, UserRole.EDITOR]) ||
+      news.author?.username === profile?.username
+    );
   }, [profile, news.author]);
 
   const allImages = useMemo(() => {

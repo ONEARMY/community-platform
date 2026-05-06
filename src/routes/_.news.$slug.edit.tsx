@@ -17,10 +17,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/news/${params.slug}/edit`, headers);
   }
 
-  if (!(await isAllowedToEdit(claims.data.claims.sub, client))) {
-    return redirect('/forbidden?page=news-edit', { headers });
-  }
-
   if (!params.slug) {
     return data({ formData: null, id: null }, { headers });
   }
@@ -29,6 +25,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   if (result.error || !result.data) {
     return data({ formData: null, id: null }, { headers });
+  }
+
+  if (!(await isAllowedToEdit(result.data.created_by, claims.data.claims.sub, client))) {
+    return redirect('/forbidden?page=news-edit', { headers });
   }
 
   const dbNews = result.data as unknown as DBNews;
@@ -42,14 +42,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return data({ formData, id: result.data.id }, { headers });
 }
 
-async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
+async function isAllowedToEdit(userProfileId: string, userAuthId: string, client: SupabaseClient) {
   const { data } = await client
     .from('profiles')
     .select('id,roles')
     .eq('auth_id', userAuthId)
     .single();
 
-  return data?.roles?.includes(UserRole.ADMIN) || data?.roles?.includes(UserRole.EDITOR);
+  return (
+    data?.roles?.includes(UserRole.ADMIN) ||
+    data?.roles?.includes(UserRole.EDITOR) ||
+    (userProfileId && data?.id === userProfileId)
+  );
 }
 
 export default function Index() {

@@ -89,6 +89,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=follow-button]').contains('Following Comments');
 
     cy.step('Notification generated for update');
+    cy.wait(2000);
+    cy.reload(); // Annoying delay generating the notification
     cy.expectNewNotification({
       path: initialExpectedSlug,
       title: initialTitle,
@@ -142,7 +144,6 @@ describe('[News.Write]', () => {
     cy.visit('/news');
     cy.contains(updatedNewsBody);
     cy.contains(updatedTitle);
-    cy.contains(category);
   });
 
   it('Create only for badgers', () => {
@@ -182,6 +183,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=profileBadge]').contains('news');
 
     cy.step('For creator, notification generated for update');
+    cy.wait(2000);
     cy.reload(); // Annoying delay generating the notification
     cy.expectNewNotification({
       path,

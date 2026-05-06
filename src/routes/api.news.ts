@@ -57,10 +57,9 @@ export const loader = async ({ request }) => {
   }
   const rows = rpcResult.data as (DBNews & { total_count: number })[];
   const total = rows[0]?.total_count ?? 0;
-  // No badge fetch needed anymore
   const items = rows.map((row) => News.fromDB(row, []));
 
-  // Populate useful votes + hero images (unchanged)
+  // Populate useful votes + hero images
   if (items.length > 0) {
     const votes = await client.rpc('get_useful_votes_count_by_content_id', {
       p_content_type: 'news',
@@ -114,7 +113,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const profileRequest = await client
       .from('profiles')
-      .select('id,username')
+      .select('id,username,roles')
       .eq('auth_id', claims.data.claims.sub)
       .limit(1);
 

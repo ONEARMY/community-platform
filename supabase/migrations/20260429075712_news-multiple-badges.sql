@@ -80,6 +80,7 @@ RETURNS TABLE (
   total_views bigint,
   hero_image json,
   content_reach "public"."content_reach",
+  profile_badges json,
   total_count bigint
 )
 LANGUAGE sql
@@ -102,6 +103,15 @@ AS $$
     n.total_views,
     n.hero_image,
     n.content_reach,
+    (
+      SELECT COALESCE(
+        json_agg(json_build_object('profile_badges', row_to_json(pb))),
+        '[]'::json
+      )
+      FROM news_badges_relations nbr
+      JOIN profile_badges pb ON pb.id = nbr.profile_badge_id
+      WHERE nbr.news_id = n.id
+    ) AS profile_badges,
     COUNT(*) OVER () AS total_count
   FROM news n
   WHERE

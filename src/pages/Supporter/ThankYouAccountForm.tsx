@@ -10,7 +10,6 @@ export const ThankYouAccountForm = () => {
   const { email, name, stripeCustomerId, accountCreated, previewMode } = useSupporterContext();
 
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,12 +24,6 @@ export const ThankYouAccountForm = () => {
 
     if (password.length < 6) {
       setError(FRIENDLY_MESSAGES['sign-up/password-short']);
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError(FRIENDLY_MESSAGES['sign-up/password-mismatch']);
       setIsSubmitting(false);
       return;
     }
@@ -120,38 +113,12 @@ export const ThankYouAccountForm = () => {
                 </Flex>
               </Box>
 
-              <Box>
-                <Text variant="quiet" sx={{ fontSize: 1, mb: 1 }}>
-                  Confirm Password
-                </Text>
-                <Flex sx={{ position: 'relative' }}>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm your password"
-                    required
-                    minLength={6}
-                    sx={{
-                      border: '1px solid',
-                      borderColor: 'offWhite',
-                      borderRadius: 1,
-                      px: 3,
-                      py: 3,
-                      bg: 'background',
-                      pr: '48px',
-                      '&:focus': { outline: 'none', borderColor: 'green' },
-                    }}
-                  />
-                </Flex>
-              </Box>
-
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}
 
               <Button
                 type="submit"
                 variant="primary"
-                disabled={isSubmitting || password.length < 6 || password !== confirmPassword}
+                disabled={isSubmitting || password.length < 6}
                 sx={{ justifyContent: 'center' }}
               >
                 {isSubmitting

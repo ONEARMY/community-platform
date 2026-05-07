@@ -63,7 +63,7 @@ export const ThankYouAccountForm = () => {
         }}
       >
         <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-          <Heading as="h1">Create your account</Heading>
+          <Heading as="h1">Setup your account</Heading>
           <Text sx={{ fontSize: 1, color: 'grey' }}>
             Set up an account to access exclusive updates and connect with the community.
           </Text>

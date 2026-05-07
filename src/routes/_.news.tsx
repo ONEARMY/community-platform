@@ -1,8 +1,5 @@
-import { useContext } from 'react';
 import { data, LoaderFunctionArgs, Outlet } from 'react-router';
-import { isModuleSupported, MODULE } from 'src/modules';
 import Main from 'src/pages/common/Layout/Main';
-import { TenantContext } from 'src/pages/common/TenantContext';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -22,12 +19,6 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const tenantContext = useContext(TenantContext);
-
-  if (!isModuleSupported(tenantContext?.supportedModules || '', MODULE.NEWS)) {
-    return null;
-  }
-
   return (
     <Main style={{ flex: 1 }}>
       <Outlet />

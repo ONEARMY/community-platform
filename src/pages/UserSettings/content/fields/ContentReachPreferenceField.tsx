@@ -11,7 +11,7 @@ export const ContentReachRadioOptions = () => {
     input.onChange(option);
   };
 
-  if (!input.value) {
+  if (!input.value?.value) {
     return null;
   }
 

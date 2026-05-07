@@ -4,7 +4,7 @@ import { Switch } from 'theme-ui';
 
 export const ContentReachSwitch = () => {
   const { input } = useField('contentReach');
-  const isEnabled = !!input.value;
+  const isEnabled = !!input.value?.value;
 
   const handleSwitchToggle = () => {
     if (isEnabled) {

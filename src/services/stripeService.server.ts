@@ -7,11 +7,12 @@ export type SupporterPrice = {
   unitAmount: number;
   currency: string;
   interval: 'month' | 'year';
+  tier: number | null;
+  tierName: string | null;
 };
 
 export class StripeServiceServer {
   private static stripeInstance: Stripe | null = null;
-  private static cachedProductIds: string[] | null = null;
 
   constructor(private client: SupabaseClient) {}
 
@@ -77,23 +78,38 @@ export class StripeServiceServer {
     return this.createCustomer(authUserId, email, tenantId);
   }
 
-  async getProducts(): Promise<string[]> {
-    if (StripeServiceServer.cachedProductIds) return StripeServiceServer.cachedProductIds;
+  async getProductTierMap(): Promise<Map<string, { tier: number; tierName: string }>> {
+    const { data } = await this.client
+      .from('stripe_badge_products')
+      .select('stripe_product_id, profile_badges:badge_id(premium_tier, display_name)');
 
-    const stripe = await this.getStripe();
-    const products = await stripe.products.list({ active: true, limit: 100 });
+    const map = new Map<string, { tier: number; tierName: string }>();
+    if (!data) return map;
 
-    if (!products.data.length) {
-      throw new Error('No active Stripe products found');
+    for (const row of data) {
+      const badge = row.profile_badges as unknown as {
+        premium_tier: number | null;
+        display_name: string;
+      } | null;
+      if (badge?.premium_tier != null) {
+        map.set(row.stripe_product_id, {
+          tier: badge.premium_tier,
+          tierName: badge.display_name,
+        });
+      }
     }
 
-    StripeServiceServer.cachedProductIds = products.data.map((p) => p.id);
-    return StripeServiceServer.cachedProductIds;
+    return map;
   }
 
   async getPrices(): Promise<SupporterPrice[]> {
     const stripe = await this.getStripe();
-    const productIds = await this.getProducts();
+    const tierMap = await this.getProductTierMap();
+    const productIds = [...tierMap.keys()];
+
+    if (!productIds.length) {
+      throw new Error('No supporter products configured');
+    }
 
     const allPrices = await Promise.all(
       productIds.map((productId) =>
@@ -108,12 +124,19 @@ export class StripeServiceServer {
     return allPrices
       .flatMap((result) => result.data)
       .filter((p) => p.recurring && p.unit_amount !== null)
-      .map((p) => ({
-        id: p.id,
-        unitAmount: p.unit_amount!,
-        currency: p.currency,
-        interval: p.recurring!.interval as 'month' | 'year',
-      }));
+      .map((p) => {
+        const productId =
+          typeof p.product === 'string' ? p.product : (p.product as { id: string })?.id;
+        const tierInfo = productId ? tierMap.get(productId) : undefined;
+        return {
+          id: p.id,
+          unitAmount: p.unit_amount!,
+          currency: p.currency,
+          interval: p.recurring!.interval as 'month' | 'year',
+          tier: tierInfo?.tier ?? null,
+          tierName: tierInfo?.tierName ?? null,
+        };
+      });
   }
 
   async createSubscriptionWithPaymentIntent(

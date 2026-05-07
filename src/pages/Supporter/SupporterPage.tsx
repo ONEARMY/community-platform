@@ -1,6 +1,7 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useToast } from 'src/common/Toast/useToast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
 import type { SupporterPrice } from 'src/services/stripeService.server';
@@ -11,7 +12,7 @@ import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
 
 export const formatPrice = (cents: number, currency: string) =>
-  new Intl.NumberFormat(undefined, {
+  new Intl.NumberFormat(navigator.language, {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
@@ -19,7 +20,7 @@ export const formatPrice = (cents: number, currency: string) =>
   }).format(cents / 100);
 
 export const getCurrencySymbol = (currency: string) =>
-  new Intl.NumberFormat(undefined, {
+  new Intl.NumberFormat(navigator.language, {
     style: 'currency',
     currency,
     currencyDisplay: 'narrowSymbol',
@@ -42,6 +43,7 @@ export const SupporterPage = ({
   const siteImage = tenantContext?.siteImage;
   const location = useLocation();
   const navigate = useNavigate();
+  const toast = useToast();
 
   // Preview mode: /supporter?step=login or ?step=create
   const [previewMode] = useState(() => {
@@ -71,7 +73,7 @@ export const SupporterPage = ({
     const unique = [...new Set(prices.map((p) => p.currency))];
     return unique.map((c) => ({
       value: c,
-      label: `${getCurrencySymbol(c)} (${c.toUpperCase()})`,
+      label: `${new Intl.DisplayNames(navigator.language, { type: 'currency' }).of(c.toUpperCase())} (${c.toUpperCase()})`,
     }));
   }, [prices]);
 
@@ -83,8 +85,13 @@ export const SupporterPage = ({
     [prices, currency, interval],
   );
 
-  const selectedPrice = availablePrices.find((p) => p.id === selectedPriceId) || availablePrices[0];
+  const selectedPrice =
+    availablePrices.find((p) => p.id === selectedPriceId) ||
+    availablePrices.find((p) => p.tier === 2) ||
+    availablePrices[0];
   const selectedAmount = selectedPrice?.unitAmount || 0;
+  const selectedTier = selectedPrice?.tier ?? null;
+  const selectedTierName = selectedPrice?.tierName ?? null;
   const symbol = currency ? getCurrencySymbol(currency) : '';
 
   useEffect(() => {
@@ -146,6 +153,11 @@ export const SupporterPage = ({
       setStripeCustomerId(result.stripeCustomerId);
       setAccountExists(result.accountExists);
       setPageState('checkout');
+    } else if (result.error.includes('active subscription')) {
+      toast.warning("You're already a supporter.", {
+        actionLink: { href: '/sign-in', label: 'Log in' },
+        description: 'Log in to manage your account.',
+      });
     } else {
       setError(result.error);
     }
@@ -197,6 +209,8 @@ export const SupporterPage = ({
     currencies,
     availablePrices,
     selectedAmount,
+    selectedTier,
+    selectedTierName,
     symbol,
     isAuthenticated,
     isLoading,

@@ -16,8 +16,15 @@ export type SupporterState = {
   setEmail: (e: string) => void;
 
   currencies: { value: string; label: string }[];
-  availablePrices: { id: string; unitAmount: number }[];
+  availablePrices: {
+    id: string;
+    unitAmount: number;
+    tier: number | null;
+    tierName: string | null;
+  }[];
   selectedAmount: number;
+  selectedTier: number | null;
+  selectedTierName: string | null;
   symbol: string;
 
   isAuthenticated: boolean;

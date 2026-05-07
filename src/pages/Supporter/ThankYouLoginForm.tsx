@@ -53,9 +53,9 @@ export const ThankYouLoginForm = () => {
             Login to your account
           </Heading>
 
-          <Text sx={{ fontSize: 1, color: 'grey' }}>
-            There is an active One Army account under the email {email}. Log in to access your perks
-            in the community platform.
+          <Text variant="auxiliary">
+            There is an active One Army account under the email <strong>{email}</strong>. Log in to
+            access your perks in the community platform.
           </Text>
 
           <Box as="form" onSubmit={handleSubmit}>
@@ -100,9 +100,7 @@ export const ThankYouLoginForm = () => {
               </Box>
 
               <Text sx={{ fontSize: 1 }}>
-                <a href="/reset-password" style={{ color: 'grey' }}>
-                  Forgot your password?
-                </a>
+                <a href="/reset-password">Forgot your password?</a>
               </Text>
 
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}
@@ -116,12 +114,8 @@ export const ThankYouLoginForm = () => {
                 {isSubmitting ? 'Logging in...' : 'Log in'}
               </Button>
 
-              <Text sx={{ fontSize: 1, color: 'grey' }}>
-                If something is not right,{' '}
-                <a href="/contact" style={{ color: 'inherit', textDecoration: 'underline' }}>
-                  contact us
-                </a>
-                .
+              <Text variant="auxiliary">
+                If something is not right, <a href="/contact">contact us</a>.
               </Text>
             </Flex>
           </Box>

@@ -74,7 +74,6 @@ import slidersSVG from '../../assets/icons/sliders.svg';
 import starterKitsSVG from '../../assets/icons/starter-kits.svg';
 import stepSVG from '../../assets/icons/step.svg';
 import successSVG from '../../assets/icons/success.svg';
-import supporterSVG from '../../assets/icons/supporter.svg';
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg';
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg';
 import utilitiesSVG from '../../assets/icons/utilities.svg';
@@ -83,6 +82,7 @@ import visitorsClosedSVG from '../../assets/icons/visitors-closed.svg';
 import visitorsOpenSVG from '../../assets/icons/visitors-open.svg';
 import volunteerSVG from '../../assets/icons/volunteer.svg';
 import warningSVG from '../../assets/icons/warning.svg';
+import { SupporterIcon } from './SupporterIcon';
 
 const imgStyle = {
   maxWidth: '100%',
@@ -164,7 +164,7 @@ export const iconMap = {
   starActive: <ImageIcon src={starActiveSVG} />,
   starterKits: <ImageIcon src={starterKitsSVG} />,
   step: <ImageIcon src={stepSVG} />,
-  supporter: <ImageIcon src={supporterSVG} />,
+  supporter: <SupporterIcon />,
   thunderbolt: <ImageIcon src={thunderboltSVG} />,
   thunderboltGrey: <ImageIcon src={thunderboltGreySVG} />,
   update: <ImageIcon src={updateSVG} />,

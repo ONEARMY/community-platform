@@ -4,6 +4,7 @@ import { type FormEvent, useState } from 'react';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
 import { formatPrice } from './SupporterPage';
+import { TIER_CONFIG } from './tierConfig';
 
 const CheckoutForm = () => {
   const {
@@ -93,7 +94,7 @@ const CheckoutForm = () => {
 };
 
 export const CheckoutView = () => {
-  const { stripeInstance, clientSecret, selectedAmount, interval, currency, onBack } =
+  const { stripeInstance, clientSecret, selectedAmount, interval, currency, selectedTier, onBack } =
     useSupporterContext();
 
   if (!stripeInstance || !clientSecret) return null;
@@ -188,7 +189,16 @@ export const CheckoutView = () => {
             <Heading as="h3" sx={{ fontSize: 3 }}>
               Summary
             </Heading>
-            <Icon glyph="supporter" size={50} />
+            <Icon
+              glyph="supporter"
+              size={50}
+              sx={{
+                color:
+                  selectedTier != null && TIER_CONFIG[selectedTier]
+                    ? TIER_CONFIG[selectedTier].color
+                    : 'green',
+              }}
+            />
             <Text sx={{ fontWeight: 'bold', fontSize: 1 }}>Support</Text>
             <Text sx={{ fontWeight: 'bold', fontSize: 3 }}>
               {formatPrice(selectedAmount, currency)} /{interval === 'month' ? 'month' : 'year'}

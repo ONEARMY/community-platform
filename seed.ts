@@ -208,7 +208,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
 const seedStripeBadgeProducts = (
   badges: profile_badgesScalars[],
 ): Partial<stripe_badge_productsScalars>[] => {
-  const tierBadges = badges.filter((b) => b.premium_tier !== null);
+  const tierBadges = badges.filter((b) => b.name?.startsWith('stripe-tier-'));
   return tierBadges.map((badge) => ({
     tenant_id,
     stripe_product_id: `prod_tier${badge.premium_tier}`,

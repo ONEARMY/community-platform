@@ -1,7 +1,10 @@
-import { Button, Icon, Select } from 'oa-components';
+import { Button, ExternalLink, Icon } from 'oa-components';
+import { useState } from 'react';
 import { Box, Card, Flex, Heading, Image, Input, Text } from 'theme-ui';
+import { CurrencyDropdown } from './CurrencyDropdown';
 import { useSupporterContext } from './SupporterContext';
 import { formatPrice } from './SupporterPage';
+import { TIER_CONFIG } from './tierConfig';
 
 export const SupporterForm = () => {
   const {
@@ -14,6 +17,7 @@ export const SupporterForm = () => {
     availablePrices,
     selectedPriceId,
     selectedAmount,
+    selectedTier,
     setSelectedPriceId,
     name,
     setName,
@@ -25,13 +29,34 @@ export const SupporterForm = () => {
     onSupport,
   } = useSupporterContext();
 
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string }>({});
   const label = interval === 'month' ? 'month' : 'year';
+
+  const validate = () => {
+    const errors: { name?: string; email?: string } = {};
+    if (!name.trim()) {
+      errors.name = 'Enter your name. It can be a nickname.';
+    }
+    if (!email.trim()) {
+      errors.email = 'Enter your email address.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "That email address doesn't look valid. Please check it and try again.";
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSupport = () => {
+    if (validate()) {
+      onSupport();
+    }
+  };
 
   return (
     <Flex
       sx={{
         flexDirection: 'column',
-        maxWidth: 480,
+        width: 450,
         mx: 'auto',
         my: [3, 5],
         px: [3, 0],
@@ -46,191 +71,165 @@ export const SupporterForm = () => {
           zIndex: 0,
         }}
       >
-        <Icon glyph="supporter" size={80} />
+        <Icon glyph="supporter" size={80} sx={{ color: '#d61f30' }} />
         {siteImage && <Image src={siteImage} sx={{ width: 90, height: 90 }} alt="Site logo" />}
       </Flex>
 
       <Card
+        variant="primary"
         sx={{
-          bg: 'white',
-          border: '2px solid',
-          borderColor: 'black',
           borderRadius: 3,
-          padding: 4,
+          px: 6,
+          pt: 5,
+          pb: 3,
           position: 'relative',
           zIndex: 1,
         }}
       >
-        <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+        <Flex sx={{ flexDirection: 'column', gap: 4 }}>
           <Heading as="h1" sx={{ fontSize: [4, 5] }}>
             Become a supporter
           </Heading>
 
-          <Box>
-            <Text variant="quiet" sx={{ fontSize: 0, mb: 1 }}>
-              Payment currency
-            </Text>
-            <Select
-              variant="form"
-              options={currencies}
-              value={currencies.find((c) => c.value === currency)}
-              onChange={(option: any) => option && setCurrency(option.value)}
-            />
-          </Box>
-
-          <Flex sx={{ gap: 0 }}>
-            <Box
-              as="button"
-              onClick={() => setInterval('month')}
-              sx={{
-                flex: 1,
-                py: 2,
-                px: 3,
-                border: '2px solid',
-                borderColor: interval === 'month' ? 'green' : 'offWhite',
-                borderRadius: '8px 0 0 8px',
-                bg: 'white',
-                color: 'black',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: 2,
-                textAlign: 'center',
-                fontFamily: 'body',
-              }}
-            >
-              Monthly
-            </Box>
-            <Box
-              as="button"
-              onClick={() => setInterval('year')}
-              sx={{
-                flex: 1,
-                py: 2,
-                px: 3,
-                border: '2px solid',
-                borderColor: interval === 'year' ? 'green' : 'offWhite',
-                borderRadius: '0 8px 8px 0',
-                bg: 'white',
-                color: 'black',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: 2,
-                textAlign: 'center',
-                fontFamily: 'body',
-              }}
-            >
-              Yearly
-            </Box>
+          <Flex sx={{ gap: 2 }}>
+            {(['month', 'year'] as const).map((i) => (
+              <Box
+                key={i}
+                as="button"
+                onClick={() => setInterval(i)}
+                sx={{
+                  flex: 1,
+                  py: 2,
+                  border: '2px solid',
+                  borderColor: interval === i ? 'green' : 'offWhite',
+                  borderRadius: 1,
+                  bg: interval === i ? 'background' : 'white',
+                  cursor: 'pointer',
+                  fontSize: 3,
+                }}
+              >
+                {i === 'month' ? 'Monthly' : 'Yearly'}
+              </Box>
+            ))}
           </Flex>
 
-          <Box>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 2,
-              }}
-            >
-              {availablePrices.map((price) => (
-                <Box
-                  key={price.id}
-                  as="button"
-                  onClick={() => setSelectedPriceId(price.id)}
-                  sx={{
-                    py: 2,
-                    px: 3,
-                    border: '2px solid',
-                    borderColor: selectedPriceId === price.id ? 'green' : 'offWhite',
-                    borderRadius: 1,
-                    bg: 'white',
-                    cursor: 'pointer',
-                    fontWeight: selectedPriceId === price.id ? 'bold' : 'normal',
-                    fontSize: 2,
-                    textAlign: 'center',
-                    fontFamily: 'body',
-                    '&:hover': { borderColor: 'green' },
-                  }}
-                >
-                  {formatPrice(price.unitAmount, currency)}
-                </Box>
-              ))}
-            </Box>
-
-            <Flex
-              sx={{
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                mt: 3,
-                bg: 'background',
-                borderRadius: 2,
-                px: 3,
-                py: 3,
-              }}
-            >
-              <Text sx={{ fontSize: 4, fontWeight: 'bold' }}>
-                {formatPrice(selectedAmount, currency)}
-              </Text>
-              <Text variant="quiet">per {label}</Text>
-            </Flex>
-          </Box>
-
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              sx={{
-                border: '1px solid',
-                borderColor: 'offWhite',
-                borderRadius: 1,
-                px: 3,
-                py: 3,
-                bg: 'background',
-                '&:focus': { outline: 'none', borderColor: 'green' },
-              }}
-            />
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              disabled={isAuthenticated}
-              sx={{
-                border: '1px solid',
-                borderColor: 'offWhite',
-                borderRadius: 1,
-                px: 3,
-                py: 3,
-                bg: 'background',
-                opacity: isAuthenticated ? 0.7 : 1,
-                '&:focus': { outline: 'none', borderColor: 'green' },
-              }}
-            />
+            <CurrencyDropdown currencies={currencies} value={currency} onChange={setCurrency} />
+
+            <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
+              {availablePrices.map((price) => {
+                const tierColor = TIER_CONFIG[price.tier!]?.color || 'green';
+                const isSelected = selectedPriceId === price.id;
+                return (
+                  <Box
+                    key={price.id}
+                    as="button"
+                    onClick={() => setSelectedPriceId(price.id)}
+                    sx={{
+                      flex: '1 1 calc(33.333% - 7px)',
+                      minWidth: 120,
+                      py: 2,
+                      border: '2px solid',
+                      borderColor: isSelected ? tierColor : 'offWhite',
+                      borderRadius: 1,
+                      bg: isSelected ? 'background' : 'white',
+                      cursor: 'pointer',
+                      fontSize: 3,
+                      '&:hover': { borderColor: tierColor },
+                    }}
+                  >
+                    {formatPrice(price.unitAmount, currency)}
+                  </Box>
+                );
+              })}
+            </Flex>
+
+            {selectedTier != null && TIER_CONFIG[selectedTier] && (
+              <Flex sx={{ flexDirection: 'column', gap: 1, py: 2 }}>
+                <Flex sx={{ alignItems: 'center', gap: 1 }}>
+                  <Icon
+                    glyph="supporter"
+                    size={25}
+                    sx={{
+                      color: TIER_CONFIG[selectedTier].color,
+                    }}
+                  />
+                  <Text sx={{ fontSize: [3, 4] }}>
+                    You're {/^[aeiou]/i.test(TIER_CONFIG[selectedTier].name) ? 'an' : 'a'}{' '}
+                    {TIER_CONFIG[selectedTier].name} supporter
+                  </Text>
+                </Flex>
+                <Text variant="auxiliary">{TIER_CONFIG[selectedTier].description}</Text>
+              </Flex>
+            )}
+
+            <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+              {fieldErrors.name && (
+                <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.name}</Text>
+              )}
+              <Input
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                }}
+                placeholder="Your name"
+                variant={fieldErrors.name ? 'textareaError' : 'textarea'}
+                sx={{ px: 3, py: 3 }}
+              />
+            </Flex>
+            <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+              {fieldErrors.email && (
+                <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.email}</Text>
+              )}
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                }}
+                placeholder="Email"
+                disabled={isAuthenticated}
+                variant={fieldErrors.email ? 'textareaError' : 'textarea'}
+                sx={{ px: 3, py: 3 }}
+              />
+            </Flex>
           </Flex>
 
           {error && <Text sx={{ color: 'red' }}>{error}</Text>}
 
-          <Button
-            type="button"
-            variant="primary"
-            onClick={onSupport}
-            disabled={isLoading || !selectedPriceId || !name.trim() || !email.trim()}
-          >
-            {isLoading
-              ? 'Processing...'
-              : `Support ${formatPrice(selectedAmount, currency)}/${label === 'month' ? 'Month' : 'Year'}`}
-          </Button>
+          <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleSupport}
+              disabled={isLoading || !selectedPriceId}
+              sx={{
+                width: '100%',
+                borderRadius: 1,
+                justifyContent: 'center',
+                '& > span': { display: 'inline-flex', alignItems: 'center', gap: 1 },
+              }}
+            >
+              {isLoading
+                ? 'Processing...'
+                : `Support ${formatPrice(selectedAmount, currency)}/${label === 'month' ? 'month' : 'year'}`}
+              {!isLoading && (
+                <Icon
+                  glyph="arrow-forward"
+                  size={20}
+                  sx={{ display: 'inline', verticalAlign: 'middle', ml: 1 }}
+                />
+              )}
+            </Button>
 
-          <Text variant="quiet" sx={{ fontSize: 0 }}>
-            By continuing, you agree to the{' '}
-            <a href="/terms" target="_blank" rel="noopener noreferrer">
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="/privacy" target="_blank" rel="noopener noreferrer">
-              Privacy Policy
-            </a>
-          </Text>
+            <Text variant="auxiliary">
+              By continuing, you agree to the{' '}
+              <ExternalLink href="/terms">Terms of Service</ExternalLink> and{' '}
+              <ExternalLink href="/privacy">Privacy Policy</ExternalLink>
+            </Text>
+          </Flex>
         </Flex>
       </Card>
     </Flex>

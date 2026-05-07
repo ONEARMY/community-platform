@@ -66,7 +66,7 @@ export const SettingsPageAccount = observer(() => {
           }}
         >
           <Flex sx={{ flexDirection: 'row', gap: [2, 4] }}>
-            <Icon glyph="supporter" size={45} />
+            <Icon glyph="supporter" size={45} sx={{ color: '#d61f30' }} />
             <Flex sx={{ flexDirection: 'column', flex: 1, gap: 2 }}>
               <Heading as="h2" variant="small">
                 {hasSubscription ? 'Manage your subscription' : 'Become a supporter'}

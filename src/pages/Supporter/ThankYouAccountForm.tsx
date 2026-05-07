@@ -63,14 +63,10 @@ export const ThankYouAccountForm = () => {
         }}
       >
         <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-          <Heading as="h2" sx={{ fontSize: [3, 4] }}>
-            Set up your account
-          </Heading>
-
+          <Heading as="h1">Create your account</Heading>
           <Text sx={{ fontSize: 1, color: 'grey' }}>
-            Set up your account to manage your subscription and join the community.
+            Set up an account to access exclusive updates and connect with the community.
           </Text>
-
           <Box as="form" onSubmit={handleSubmit}>
             <Flex sx={{ flexDirection: 'column', gap: 3 }}>
               <Box>
@@ -82,7 +78,7 @@ export const ThankYouAccountForm = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Choose a password (min 6 characters)"
+                    placeholder="Password"
                     required
                     minLength={6}
                     sx={{
@@ -129,14 +125,6 @@ export const ThankYouAccountForm = () => {
                     ? 'Set password'
                     : 'Create account'}
               </Button>
-
-              <Text sx={{ fontSize: 1, color: 'grey' }}>
-                If something is not right,{' '}
-                <a href="/contact" style={{ color: 'inherit', textDecoration: 'underline' }}>
-                  contact us
-                </a>
-                .
-              </Text>
             </Flex>
           </Box>
         </Flex>

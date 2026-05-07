@@ -1,6 +1,7 @@
+import Keyv from 'keyv';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 
-const cache = new Map<string, string>();
+const cache = new Keyv<string>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export const getSecret = async (name: string): Promise<string> => {
   const tenantId = process.env.TENANT_ID;
@@ -9,7 +10,7 @@ export const getSecret = async (name: string): Promise<string> => {
   }
 
   const prefixedName = `${name}:${tenantId}`;
-  const cached = cache.get(prefixedName);
+  const cached = await cache.get(prefixedName);
   if (cached) return cached;
 
   const client = createSupabaseAdminServerClient();

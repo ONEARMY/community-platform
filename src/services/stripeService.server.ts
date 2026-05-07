@@ -16,7 +16,7 @@ export class StripeServiceServer {
 
   constructor(private client: SupabaseClient) {}
 
-  private async getStripe(): Promise<Stripe> {
+  private static async getStripe(): Promise<Stripe> {
     if (StripeServiceServer.stripeInstance) return StripeServiceServer.stripeInstance;
 
     const key = await getSecret('STRIPE_SECRET_KEY');
@@ -52,7 +52,7 @@ export class StripeServiceServer {
   }
 
   async createCustomer(authUserId: string, email: string, tenantId: string): Promise<string> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
     const customer = await stripe.customers.create({
       email,
       metadata: {
@@ -103,7 +103,7 @@ export class StripeServiceServer {
   }
 
   async getPrices(): Promise<SupporterPrice[]> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];
 
@@ -144,7 +144,7 @@ export class StripeServiceServer {
     priceId: string,
     name?: string,
   ): Promise<string> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
 
     if (name) {
       await stripe.customers.update(customerId, { name });
@@ -176,7 +176,7 @@ export class StripeServiceServer {
   }
 
   async createBillingPortalSession(customerId: string, returnUrl: string): Promise<string> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
@@ -187,7 +187,7 @@ export class StripeServiceServer {
   }
 
   async getSubscription(customerId: string): Promise<Stripe.Subscription | null> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
 
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
@@ -198,12 +198,12 @@ export class StripeServiceServer {
     return subscriptions.data[0] || null;
   }
 
-  async constructWebhookEvent(
+  static async constructWebhookEvent(
     body: string,
     signature: string,
     secret: string,
   ): Promise<Stripe.Event> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
     return stripe.webhooks.constructEvent(body, signature, secret);
   }
 
@@ -290,7 +290,7 @@ export class StripeServiceServer {
   }
 
   async createGuestCustomer(email: string, name?: string): Promise<string> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
 
     const existing = await stripe.customers.list({ email, limit: 1 });
     if (existing.data.length > 0) {
@@ -307,7 +307,7 @@ export class StripeServiceServer {
   async getStripeCustomer(
     customerId: string,
   ): Promise<{ id: string; email: string | null } | null> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
     try {
       const customer = await stripe.customers.retrieve(customerId);
       if (customer.deleted) {
@@ -324,7 +324,7 @@ export class StripeServiceServer {
     authId: string,
     tenantId: string,
   ): Promise<void> {
-    const stripe = await this.getStripe();
+    const stripe = await StripeServiceServer.getStripe();
     await stripe.customers.update(stripeCustomerId, {
       metadata: { supabase_user_id: authId, tenant_id: tenantId },
     });

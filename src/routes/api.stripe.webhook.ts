@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   let event: Stripe.Event;
   try {
     const webhookSecret = await getSecret('STRIPE_WEBHOOK_SECRET');
-    event = await stripeService.constructWebhookEvent(body, signature, webhookSecret);
+    event = await StripeServiceServer.constructWebhookEvent(body, signature, webhookSecret);
   } catch (error) {
     console.error('Webhook signature verification failed:', error);
     return new Response('Invalid signature', { status: 400 });

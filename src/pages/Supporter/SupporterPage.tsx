@@ -9,6 +9,7 @@ import { CheckoutView } from './CheckoutView';
 import { type Interval, SupporterProvider } from './SupporterContext';
 import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
+import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
 
 export const formatPrice = (cents: number, currency: string) =>
@@ -45,10 +46,10 @@ export const SupporterPage = ({
   const navigate = useNavigate();
   const toast = useToast();
 
-  // Preview mode: /supporter?step=login or ?step=create
+  // Preview mode: /supporter?step=login or ?step=create or ?step=authenticated
   const [previewMode] = useState(() => {
     const step = new URLSearchParams(location.search).get('step');
-    return step === 'login' || step === 'create' ? step : null;
+    return step === 'login' || step === 'create' || step === 'authenticated' ? step : null;
   });
 
   const [pageState, setPageState] = useState<PageState>(previewMode ? 'thank-you' : 'form');
@@ -168,7 +169,7 @@ export const SupporterPage = ({
     if (previewMode) return;
 
     if (isAuthenticated) {
-      navigate('/settings?subscription=success');
+      setPageState('thank-you');
       return;
     }
 
@@ -229,7 +230,9 @@ export const SupporterPage = ({
 
   return (
     <SupporterProvider value={ctx}>
-      {pageState === 'thank-you' && stripeCustomerId && accountExists ? (
+      {pageState === 'thank-you' && (isAuthenticated || previewMode === 'authenticated') ? (
+        <ThankYouAuthenticatedView />
+      ) : pageState === 'thank-you' && stripeCustomerId && accountExists ? (
         <ThankYouLoginForm />
       ) : pageState === 'thank-you' && stripeCustomerId ? (
         <ThankYouAccountForm />

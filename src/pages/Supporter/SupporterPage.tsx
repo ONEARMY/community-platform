@@ -1,6 +1,6 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
@@ -42,15 +42,15 @@ export const SupporterPage = ({
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const toast = useToast();
 
   // Preview mode: /supporter?step=login or ?step=create or ?step=authenticated
-  const [previewMode] = useState(() => {
-    const step = new URLSearchParams(location.search).get('step');
+  const previewMode = useMemo(() => {
+    const step = searchParams.get('step');
     return step === 'login' || step === 'create' || step === 'authenticated' ? step : null;
-  });
+  }, [searchParams]);
 
   const [pageState, setPageState] = useState<PageState>(previewMode ? 'thank-you' : 'form');
   const [currency, setCurrency] = useState(
@@ -98,13 +98,12 @@ export const SupporterPage = ({
   useEffect(() => {
     if (previewMode) return;
 
-    const params = new URLSearchParams(location.search);
-    if (params.get('payment') !== 'success' || isAuthenticated) return;
+    if (searchParams.get('payment') !== 'success' || isAuthenticated) return;
 
-    const customerParam = params.get('customer');
-    const emailParam = params.get('email');
-    const nameParam = params.get('name');
-    const accountExistsParam = params.get('accountExists');
+    const customerParam = searchParams.get('customer');
+    const emailParam = searchParams.get('email');
+    const nameParam = searchParams.get('name');
+    const accountExistsParam = searchParams.get('accountExists');
 
     if (!customerParam || !emailParam) return;
 
@@ -134,7 +133,7 @@ export const SupporterPage = ({
     autoCreate();
     setPageState('thank-you');
     navigate('/supporter', { replace: true });
-  }, [isAuthenticated, previewMode]);
+  }, [isAuthenticated, previewMode, searchParams]);
 
   const handleSupport = async () => {
     if (previewMode) return;

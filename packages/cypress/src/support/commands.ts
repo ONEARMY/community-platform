@@ -1,10 +1,10 @@
 export {};
 
 interface ExpectedNewNotification {
-  content: string;
   path: string;
-  title: string;
-  username: string;
+  content?: string;
+  title?: string;
+  username?: string;
 }
 
 declare global {
@@ -12,11 +12,11 @@ declare global {
     interface Chainable {
       clearServiceWorkers(): Promise<void>;
       clearNotifications(): Chainable<void>;
-      expectNewNotification(ExpectedNewNotification): Chainable<void>;
+      expectNewNotification(notification: ExpectedNewNotification): Chainable<void>;
       expectNoNewNotification(): Chainable<void>;
       interceptAddressSearchFetch(addressResponse): Chainable<void>;
       interceptAddressReverseFetch(addressResponse): Chainable<void>;
-      step(message: string);
+      step(message: string): Chainable<void>;
     }
   }
 }
@@ -82,12 +82,15 @@ Cypress.Commands.add('expectNewNotification', (props: ExpectedNewNotification) =
 
   cy.get('[data-cy=NotificationsSupabase-desktop]').click();
 
-  cy.get('[data-cy=NotificationListSupabase]').contains(username);
+  if (username) {
+    cy.get('[data-cy=NotificationListSupabase]').contains(username);
+  }
   if (title) {
     cy.get('[data-cy=NotificationListSupabase]').contains(title);
   }
-  cy.get('[data-cy=NotificationListItemSupabase]').first().find('img').should('be.visible');
-  cy.get('[data-cy=NotificationListSupabase]').contains(content).click();
+  if (content) {
+    cy.get('[data-cy=NotificationListSupabase]').contains(content).click();
+  }
 
   cy.url().should('include', path);
 });

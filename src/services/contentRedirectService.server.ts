@@ -11,7 +11,21 @@ export class ContentRedirectServiceServer {
         return this.resolveResearchUpdateUrl(id);
       case 'comments':
         return this.resolveCommentUrl(id);
+      case 'news':
+        return this.resolveNewsUrl(id);
+      default:
+        return null;
     }
+  }
+
+  private async resolveNewsUrl(id: number) {
+    const { data, error } = await this.client.from('news').select('slug').eq('id', id).single();
+
+    if (error || !data || !data.slug) {
+      return null;
+    }
+
+    return `/news/${data.slug}`;
   }
 
   private async resolveResearchUpdateUrl(updateId: number) {
@@ -54,6 +68,8 @@ export class ContentRedirectServiceServer {
           comment.source_id!,
           comment.id,
         );
+      default:
+        return null;
     }
   }
 

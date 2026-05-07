@@ -12,6 +12,9 @@ export const GlobalStyles = css`
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    /* Override Radix UI's scroll-lock that breaks layout */
+    pointer-events: auto !important;
+    overflow-y: auto !important;
   }
 
   a {

@@ -35,6 +35,7 @@ const ResearchFieldCategory = () => {
             value={input.value}
             placeholder={researchForm.categories.placeholder || ''}
             categories={options}
+            id={name}
           />
         )}
       />

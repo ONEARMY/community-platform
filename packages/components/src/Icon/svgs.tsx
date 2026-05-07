@@ -37,6 +37,7 @@ import bazarSVG from '../../assets/icons/icon-bazar.svg';
 import commentSVG from '../../assets/icons/icon-comment.svg';
 import discordSVG from '../../assets/icons/icon-discord.svg';
 import emailOutlineSVG from '../../assets/icons/icon-email-outline.svg';
+import libraySVG from '../../assets/icons/icon-library.svg';
 import researchSVG from '../../assets/icons/icon-research.svg';
 import searchSVG from '../../assets/icons/icon-search.svg';
 import socialMediaSVG from '../../assets/icons/icon-social-media.svg';
@@ -60,6 +61,7 @@ import megaphoneSVG from '../../assets/icons/megaphone.svg';
 import megaphoneActiveSVG from '../../assets/icons/megaphone-active.svg';
 import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg';
 import mouldsSVG from '../../assets/icons/moulds.svg';
+import newsSVG from '../../assets/icons/news.svg';
 import otherSVG from '../../assets/icons/other.svg';
 import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
 import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
@@ -155,6 +157,8 @@ export const iconMap = {
   impact: <ImageIcon src={impactSVG} />,
   information: <ImageIcon src={informationSVG} />,
   landscape: <ImageIcon src={landscapeSVG} />,
+  loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
+  library: <ImageIcon src={libraySVG} />,
   machine: <ImageIcon src={machineSVG} />,
   machines: <ImageIcon src={machinesSVG} />,
   map: <ImageIcon src={mapSVG} />,
@@ -162,6 +166,7 @@ export const iconMap = {
   megaphoneActive: <ImageIcon src={megaphoneActiveSVG} />,
   megaphoneInactive: <ImageIcon src={megaphoneInactiveSVG} />,
   moulds: <ImageIcon src={mouldsSVG} />,
+  news: <ImageIcon src={newsSVG} />,
   other: <ImageIcon src={otherSVG} />,
   patreon: <ImageIcon src={patreonSVG} />,
   paginationSingleLeft: (
@@ -214,5 +219,4 @@ export const iconMap = {
   error: <ImageIcon src={errorSVG} />,
   warning: <ImageIcon src={warningSVG} />,
   info: <ImageIcon src={infoSVG} />,
-  loading: <ImageIcon src={loadingSVG} />,
 };

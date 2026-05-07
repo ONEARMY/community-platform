@@ -55,6 +55,7 @@ export const NotificationItemSupabase = (props: IProps) => {
   };
 
   const isDiscussion = notification.contentType === 'comments';
+  const isNews = notification.contentType === 'news';
 
   return (
     <Flex data-cy="NotificationListItemSupabase" data-testid="NotificationListItemSupabase">
@@ -63,7 +64,7 @@ export const NotificationItemSupabase = (props: IProps) => {
           {notification.sidebar.image ? (
             <Avatar
               src={notification.sidebar.image}
-              sx={{ width: 60, height: 60, objectFit: 'cover' }}
+              sx={{ width: 60, height: 60, objectFit: 'cover', borderRadius: isNews ? 2 : 99 }}
             />
           ) : (
             notification.sidebar.icon && (
@@ -72,29 +73,35 @@ export const NotificationItemSupabase = (props: IProps) => {
               </Flex>
             )
           )}
-          <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
-            <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
-              <Text sx={{ flex: 1 }}>
-                {notification.triggeredBy} {notification.title}
-              </Text>
+          <Flex sx={{ justifyItems: 'stretch', flex: 1, gap: 2 }}>
+            <Flex sx={{ flex: 1, gap: 2, flexDirection: 'column' }}>
+              <Flex sx={{ gap: 2 }}>
+                <Text sx={{ flex: 1 }}>
+                  {notification.triggeredBy} <strong>{notification.title}</strong>
+                </Text>
+              </Flex>
+              {notification.body && (
+                <Flex sx={{ ...(isDiscussion ? commentStyling : {}) }}>
+                  <Text
+                    sx={{
+                      background: 'softblue',
+                      border: '2px solid black',
+                      borderRadius: 5,
+                      padding: 2,
+
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {notification.body}
+                  </Text>
+                </Flex>
+              )}
+            </Flex>
+            <Flex sx={{ justifySelf: 'flex-end' }}>
               <Text sx={{ fontSize: 1, color: 'grey', textAlign: 'right' }}>
                 <DisplayDate createdAt={notification.date} showLabel={false} />
-              </Text>
-            </Flex>
-            <Flex sx={{ ...(isDiscussion ? commentStyling : {}) }}>
-              <Text
-                sx={{
-                  background: 'softblue',
-                  border: '2px solid black',
-                  borderRadius: 5,
-                  padding: 2,
-
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {notification.body}
               </Text>
             </Flex>
           </Flex>

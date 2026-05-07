@@ -1,7 +1,8 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import type { IUserImpact, Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
+import { IUserImpact, Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
 import { createContext, useContext, useEffect } from 'react';
 import { SessionContext } from 'src/pages/common/SessionContext';
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
 import { profileService } from 'src/services/profileService';
 import { profileTypesService } from 'src/services/profileTypesService';
 import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
@@ -78,6 +79,7 @@ export class ProfileStore {
       upgradeBadgeForCurrentUser: computed,
       isComplete: computed,
       missingFields: computed,
+      isStaff: computed,
       refresh: action,
       clear: action,
       update: action,
@@ -115,6 +117,30 @@ export class ProfileStore {
     }
 
     return this.getMissingFields(this.profile);
+  }
+
+  get isStaff() {
+    if (!this.profile) {
+      return false;
+    }
+
+    return (
+      this.profile.roles?.some((role) =>
+        [UserRole.ADMIN, UserRole.EDITOR, UserRole.MODERATOR].includes(role as UserRole),
+      ) || false
+    );
+  }
+
+  get isContactable() {
+    if (!this.profile) {
+      return false;
+    }
+
+    if (typeof this.profile.isContactable === 'boolean') {
+      return this.profile.isContactable;
+    }
+
+    return DEFAULT_PUBLIC_CONTACT_PREFERENCE;
   }
 
   getMissingFields(profile: Partial<Profile>) {

@@ -140,7 +140,10 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
     addSubscriptions(comment, profile, client);
 
-    new NotificationsSupabaseServiceServer(client).createNotificationsNewComment(comment);
+    new NotificationsSupabaseServiceServer(client).createNotificationsNewComment(
+      comment,
+      new URL(request.url).origin,
+    );
   }
 
   const commentDb = new DBComment({

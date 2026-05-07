@@ -68,7 +68,8 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   bodyHtml: faker.word.words(50),
   heroImage: null,
   isDraft: false,
-  profileBadge: null,
+  profileBadges: null,
+  contentReach: null,
   ...newsOverloads,
 });
 
@@ -81,8 +82,10 @@ export const fakeDisplayNotification = (
   email: {
     body: undefined,
     buttonLabel: 'See the full discussion',
+    displayDate: faker.date.past().toDateString(),
     preview: 'Jeff has left a new comment',
     subject: 'A new comment on something',
+    heroImage: undefined,
   },
   sidebar: {
     icon: 'discussion',

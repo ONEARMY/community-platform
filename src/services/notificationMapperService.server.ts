@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { DBNotification, Notification, NotificationDisplay } from 'oa-shared';
+import { DBMedia, DBNotification, News, Notification, NotificationDisplay } from 'oa-shared';
+import { NewsServiceServer } from './newsService.server';
 
 export class NotificationMapperServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -34,7 +35,15 @@ export class NotificationMapperServiceServer {
         throw Error('Content not found, probably deleted');
       }
 
-      return NotificationDisplay.fromNotification(notification);
+      if (notification.content && content.data?.hero_image) {
+        const heroImage = await new NewsServiceServer(this.client).getHeroImage(
+          content.data.hero_image as DBMedia,
+        );
+        (notification.content as News).heroImage = heroImage;
+      }
+
+      const notificationDisplay = NotificationDisplay.fromNotification(notification);
+      return notificationDisplay;
     } catch (error) {
       console.error(error);
       throw error;

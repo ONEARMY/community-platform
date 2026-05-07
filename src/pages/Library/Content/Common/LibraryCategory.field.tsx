@@ -47,6 +47,7 @@ export const LibraryCategoryField = () => {
               placeholder={placeholder || ''}
               categories={options}
               invalid={meta.touched && meta.error}
+              id="category"
             />
             {input?.value?.value && (
               <LibraryCategoryGuidance

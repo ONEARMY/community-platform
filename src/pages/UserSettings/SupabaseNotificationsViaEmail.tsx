@@ -1,4 +1,8 @@
-import type { DBNotificationsPreferences, DBPreferencesWithProfileContact } from 'oa-shared';
+import {
+  NotificationsPreferences,
+  NotificationsPreferencesViaEmailFormData,
+  UserRole,
+} from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast';
 import { form } from 'src/pages/UserSettings/labels';
@@ -11,13 +15,31 @@ interface IProps {
 
 export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [initialValues, setInitialValues] = useState<DBPreferencesWithProfileContact | null>(null);
+  const [initialValues, setInitialValues] =
+    useState<NotificationsPreferencesViaEmailFormData | null>(null);
+  const [showNewsPreference, setShowNewsPreference] = useState(false);
   const toast = useToast();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesViaEmailService.getPreferences(userCode);
 
-    setInitialValues(preferences);
+    if (!preferences) {
+      return null;
+    }
+
+    setShowNewsPreference(
+      preferences.roles.includes(UserRole.ADMIN) ||
+        preferences.roles.includes(UserRole.EDITOR) ||
+        preferences.roles.includes(UserRole.MODERATOR),
+    );
+
+    const asFormData = {
+      ...NotificationsPreferences.toFormData(preferences),
+      isContactable: preferences.isContactable,
+      userCode: userCode,
+    };
+
+    setInitialValues(asFormData);
     setIsLoading(false);
   };
 
@@ -25,7 +47,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     refreshPreferences();
   }, []);
 
-  const onSubmit = async (values: DBNotificationsPreferences) => {
+  const onSubmit = async (values: NotificationsPreferencesViaEmailFormData) => {
     const promise = notificationsPreferencesViaEmailService.setPreferences({
       ...values,
       userCode,
@@ -44,10 +66,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   };
 
   const onUnsubscribe = async () => {
-    const promise = notificationsPreferencesViaEmailService.setUnsubscribe(
-      userCode,
-      initialValues?.preferences.id,
-    );
+    const promise = notificationsPreferencesViaEmailService.unsubscribe(userCode);
     toast.promise(promise, {
       loading: 'Unsubscribing...',
       success: () => {
@@ -66,11 +85,12 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
 
   return (
     <SupabaseNotificationsForm
-      initialValues={initialValues?.preferences || null}
+      initialValues={initialValues || null}
       isLoading={isLoading}
-      onSubmit={onSubmit}
+      onSubmit={onSubmit as any}
       onUnsubscribe={onUnsubscribe}
-      profileIsContactable={initialValues?.is_contactable}
+      profileIsContactable={initialValues?.isContactable}
+      showNewsPreference={showNewsPreference}
     />
   );
 };

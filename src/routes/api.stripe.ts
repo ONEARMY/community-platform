@@ -23,7 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   try {
-    const subscription = await stripeService.getSubscription(customerId);
+    const subscription = await StripeServiceServer.getSubscription(customerId);
     return Response.json(
       {
         hasSubscription: !!subscription,
@@ -88,7 +88,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           claims.data!.claims!.sub,
         );
         if (existingCustomerId) {
-          const existingSub = await stripeService.getSubscription(existingCustomerId);
+          const existingSub = await StripeServiceServer.getSubscription(existingCustomerId);
           if (existingSub) {
             return Response.json(
               {
@@ -123,7 +123,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           const userId = existingUser[0].id;
           const existingCustomerId = await stripeService.getCustomerByAuthId(userId);
           if (existingCustomerId) {
-            const existingSub = await stripeService.getSubscription(existingCustomerId);
+            const existingSub = await StripeServiceServer.getSubscription(existingCustomerId);
             if (existingSub) {
               return Response.json(
                 {
@@ -135,10 +135,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           }
         }
 
-        customerId = await stripeService.createGuestCustomer(email, name);
+        customerId = await StripeServiceServer.createGuestCustomer(email, name);
       }
 
-      const clientSecret = await stripeService.createSubscriptionWithPaymentIntent(
+      const clientSecret = await StripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
         priceId,
         name,
@@ -164,7 +164,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const origin = new URL(request.url).origin;
 
     if (actionType === 'portal') {
-      const portalUrl = await stripeService.createBillingPortalSession(
+      const portalUrl = await StripeServiceServer.createBillingPortalSession(
         customerId,
         `${origin}/settings`,
       );

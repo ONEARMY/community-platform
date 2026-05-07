@@ -14,8 +14,7 @@ export class AuthServiceServer {
     const { data, error } = await this.client
       .from('profile_types')
       .select('*')
-      .eq('name', 'member')
-      .eq('tenant_id', process.env.TENANT_ID!);
+      .eq('name', 'member');
 
     if (error) {
       console.error(error);

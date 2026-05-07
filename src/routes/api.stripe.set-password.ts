@@ -25,7 +25,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const adminClient = createSupabaseAdminServerClient();
     const stripeService = new StripeServiceServer(adminClient);
 
-    const customer = await stripeService.getStripeCustomer(stripeCustomerId);
+    const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
     if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }

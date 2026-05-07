@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
-import { StripeServiceServer } from 'src/services/stripeService.server';
+import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -19,9 +19,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const adminClient = createSupabaseAdminServerClient();
-    const stripeService = new StripeServiceServer(adminClient);
+    const stripeAdmin = new StripeAdminService();
 
-    const customer = await stripeService.getStripeCustomer(stripeCustomerId);
+    const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
     if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }
@@ -40,16 +40,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Invalid email or password.' }, { status: 401 });
     }
 
-    await stripeService.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
+    await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
 
     // Assign badge based on active subscription's product
-    const subscription = await stripeService.getSubscription(stripeCustomerId);
+    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
     if (subscription) {
       const productId = subscription.items.data[0]?.price?.product as string;
       if (productId) {
-        const badgeId = await stripeService.getBadgeIdForProduct(productId);
+        const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
         if (badgeId) {
-          await stripeService.assignBadgeForSubscription(signInData.user.id, tenantId, badgeId);
+          await stripeAdmin.assignBadgeForSubscription(signInData.user.id, tenantId, badgeId);
         }
       }
     }

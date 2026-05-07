@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
 
@@ -11,18 +12,120 @@ export type SupporterPrice = {
   tierName: string | null;
 };
 
-export class StripeServiceServer {
-  private static stripeInstance: Stripe | null = null;
+let stripeInstance: Stripe | null = null;
 
+async function getStripe(): Promise<Stripe> {
+  if (stripeInstance) return stripeInstance;
+
+  const key = await getSecret('STRIPE_SECRET_KEY');
+  stripeInstance = new Stripe(key);
+  return stripeInstance;
+}
+
+export class StripeServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  private static async getStripe(): Promise<Stripe> {
-    if (StripeServiceServer.stripeInstance) return StripeServiceServer.stripeInstance;
+  // ── Static Stripe-API-only methods (no DB access) ──
 
-    const key = await getSecret('STRIPE_SECRET_KEY');
-    StripeServiceServer.stripeInstance = new Stripe(key);
-    return StripeServiceServer.stripeInstance;
+  static async getStripeCustomer(
+    customerId: string,
+  ): Promise<{ id: string; email: string | null } | null> {
+    const stripe = await getStripe();
+    try {
+      const customer = await stripe.customers.retrieve(customerId);
+      if (customer.deleted) {
+        return null;
+      }
+      return { id: customer.id, email: customer.email };
+    } catch {
+      return null;
+    }
   }
+
+  static async getSubscription(customerId: string): Promise<Stripe.Subscription | null> {
+    const stripe = await getStripe();
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: 'active',
+      limit: 1,
+    });
+
+    return subscriptions.data[0] || null;
+  }
+
+  static async createGuestCustomer(email: string, name?: string): Promise<string> {
+    const stripe = await getStripe();
+
+    const existing = await stripe.customers.list({ email, limit: 1 });
+    if (existing.data.length > 0) {
+      return existing.data[0].id;
+    }
+
+    const customer = await stripe.customers.create({
+      email,
+      ...(name && { name }),
+    });
+    return customer.id;
+  }
+
+  static async createSubscriptionWithPaymentIntent(
+    customerId: string,
+    priceId: string,
+    name?: string,
+  ): Promise<string> {
+    const stripe = await getStripe();
+
+    if (name) {
+      await stripe.customers.update(customerId, { name });
+    }
+
+    const subscription = await stripe.subscriptions.create({
+      customer: customerId,
+      items: [{ price: priceId }],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice'],
+    });
+
+    const invoice = subscription.latest_invoice as Stripe.Invoice;
+
+    const invoicePayments = await stripe.invoicePayments.list({
+      invoice: invoice.id,
+      expand: ['data.payment.payment_intent'],
+    });
+
+    const paymentIntent = invoicePayments.data[0]?.payment?.payment_intent as
+      | Stripe.PaymentIntent
+      | undefined;
+
+    if (!paymentIntent?.client_secret) {
+      throw new Error('Failed to get payment intent client secret');
+    }
+
+    return paymentIntent.client_secret;
+  }
+
+  static async createBillingPortalSession(customerId: string, returnUrl: string): Promise<string> {
+    const stripe = await getStripe();
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: returnUrl,
+    });
+
+    return session.url;
+  }
+
+  static async constructWebhookEvent(
+    body: string,
+    signature: string,
+    secret: string,
+  ): Promise<Stripe.Event> {
+    const stripe = await getStripe();
+    return stripe.webhooks.constructEvent(body, signature, secret);
+  }
+
+  // ── Instance methods (request-scoped DB reads/writes via passed client) ──
 
   async getCustomerByAuthId(authId: string): Promise<string | null> {
     const { data } = await this.client
@@ -52,7 +155,7 @@ export class StripeServiceServer {
   }
 
   async createCustomer(authUserId: string, email: string, tenantId: string): Promise<string> {
-    const stripe = await StripeServiceServer.getStripe();
+    const stripe = await getStripe();
     const customer = await stripe.customers.create({
       email,
       metadata: {
@@ -103,7 +206,7 @@ export class StripeServiceServer {
   }
 
   async getPrices(): Promise<SupporterPrice[]> {
-    const stripe = await StripeServiceServer.getStripe();
+    const stripe = await getStripe();
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];
 
@@ -139,74 +242,6 @@ export class StripeServiceServer {
       });
   }
 
-  async createSubscriptionWithPaymentIntent(
-    customerId: string,
-    priceId: string,
-    name?: string,
-  ): Promise<string> {
-    const stripe = await StripeServiceServer.getStripe();
-
-    if (name) {
-      await stripe.customers.update(customerId, { name });
-    }
-
-    const subscription = await stripe.subscriptions.create({
-      customer: customerId,
-      items: [{ price: priceId }],
-      payment_behavior: 'default_incomplete',
-      expand: ['latest_invoice'],
-    });
-
-    const invoice = subscription.latest_invoice as Stripe.Invoice;
-
-    const invoicePayments = await stripe.invoicePayments.list({
-      invoice: invoice.id,
-      expand: ['data.payment.payment_intent'],
-    });
-
-    const paymentIntent = invoicePayments.data[0]?.payment?.payment_intent as
-      | Stripe.PaymentIntent
-      | undefined;
-
-    if (!paymentIntent?.client_secret) {
-      throw new Error('Failed to get payment intent client secret');
-    }
-
-    return paymentIntent.client_secret;
-  }
-
-  async createBillingPortalSession(customerId: string, returnUrl: string): Promise<string> {
-    const stripe = await StripeServiceServer.getStripe();
-
-    const session = await stripe.billingPortal.sessions.create({
-      customer: customerId,
-      return_url: returnUrl,
-    });
-
-    return session.url;
-  }
-
-  async getSubscription(customerId: string): Promise<Stripe.Subscription | null> {
-    const stripe = await StripeServiceServer.getStripe();
-
-    const subscriptions = await stripe.subscriptions.list({
-      customer: customerId,
-      status: 'active',
-      limit: 1,
-    });
-
-    return subscriptions.data[0] || null;
-  }
-
-  static async constructWebhookEvent(
-    body: string,
-    signature: string,
-    secret: string,
-  ): Promise<Stripe.Event> {
-    const stripe = await StripeServiceServer.getStripe();
-    return stripe.webhooks.constructEvent(body, signature, secret);
-  }
-
   async getBadgeIdForProduct(productId: string): Promise<number | null> {
     const { data } = await this.client
       .from('stripe_badge_products')
@@ -226,6 +261,55 @@ export class StripeServiceServer {
       .single();
 
     return data?.id ?? null;
+  }
+
+  async getAuthIdByStripeCustomerEmail(stripeCustomerId: string): Promise<string | null> {
+    const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
+    if (!customer?.email) return null;
+
+    const { data } = await this.client.rpc('get_user_id_by_email', { email: customer.email });
+    if (!Array.isArray(data) || data.length === 0) return null;
+
+    return data[0].id;
+  }
+}
+
+// privileged DB writes that bypass RLS
+
+export class StripeAdminService {
+  private client: SupabaseClient;
+
+  constructor() {
+    this.client = createSupabaseAdminServerClient();
+  }
+
+  async linkCustomerToAuthUser(
+    stripeCustomerId: string,
+    authId: string,
+    tenantId: string,
+  ): Promise<void> {
+    const stripe = await getStripe();
+    await stripe.customers.update(stripeCustomerId, {
+      metadata: { supabase_user_id: authId, tenant_id: tenantId },
+    });
+    await this.client.from('stripe_customers').upsert(
+      {
+        auth_id: authId,
+        stripe_customer_id: stripeCustomerId,
+        tenant_id: tenantId,
+      },
+      { onConflict: 'auth_id,tenant_id' },
+    );
+  }
+
+  async getBadgeIdForProduct(productId: string): Promise<number | null> {
+    const { data } = await this.client
+      .from('stripe_badge_products')
+      .select('badge_id')
+      .eq('stripe_product_id', productId)
+      .single();
+
+    return data?.badge_id ?? null;
   }
 
   async assignBadgeForSubscription(
@@ -289,62 +373,14 @@ export class StripeServiceServer {
     }
   }
 
-  async createGuestCustomer(email: string, name?: string): Promise<string> {
-    const stripe = await StripeServiceServer.getStripe();
+  private async getProfileIdByAuthId(authId: string, tenantId: string): Promise<number | null> {
+    const { data } = await this.client
+      .from('profiles')
+      .select('id')
+      .eq('auth_id', authId)
+      .eq('tenant_id', tenantId)
+      .single();
 
-    const existing = await stripe.customers.list({ email, limit: 1 });
-    if (existing.data.length > 0) {
-      return existing.data[0].id;
-    }
-
-    const customer = await stripe.customers.create({
-      email,
-      ...(name && { name }),
-    });
-    return customer.id;
-  }
-
-  async getStripeCustomer(
-    customerId: string,
-  ): Promise<{ id: string; email: string | null } | null> {
-    const stripe = await StripeServiceServer.getStripe();
-    try {
-      const customer = await stripe.customers.retrieve(customerId);
-      if (customer.deleted) {
-        return null;
-      }
-      return { id: customer.id, email: customer.email };
-    } catch {
-      return null;
-    }
-  }
-
-  async linkCustomerToAuthUser(
-    stripeCustomerId: string,
-    authId: string,
-    tenantId: string,
-  ): Promise<void> {
-    const stripe = await StripeServiceServer.getStripe();
-    await stripe.customers.update(stripeCustomerId, {
-      metadata: { supabase_user_id: authId, tenant_id: tenantId },
-    });
-    await this.client.from('stripe_customers').upsert(
-      {
-        auth_id: authId,
-        stripe_customer_id: stripeCustomerId,
-        tenant_id: tenantId,
-      },
-      { onConflict: 'auth_id,tenant_id' },
-    );
-  }
-
-  async getAuthIdByStripeCustomerEmail(stripeCustomerId: string): Promise<string | null> {
-    const customer = await this.getStripeCustomer(stripeCustomerId);
-    if (!customer?.email) return null;
-
-    const { data } = await this.client.rpc('get_user_id_by_email', { email: customer.email });
-    if (!Array.isArray(data) || data.length === 0) return null;
-
-    return data[0].id;
+    return data?.id ?? null;
   }
 }

@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
-import { StripeServiceServer } from 'src/services/stripeService.server';
+import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import type Stripe from 'stripe';
 
@@ -19,6 +19,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const client = createSupabaseAdminServerClient();
   const stripeService = new StripeServiceServer(client);
+  const stripeAdmin = new StripeAdminService();
 
   let event: Stripe.Event;
   try {
@@ -44,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           // Guest checkout: try matching by email and auto-link
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
           if (authId && tenantId) {
-            await stripeService.linkCustomerToAuthUser(customerId, authId, tenantId);
+            await stripeAdmin.linkCustomerToAuthUser(customerId, authId, tenantId);
           }
         }
         if (!authId) {
@@ -59,15 +60,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             break;
           }
 
-          const badgeId = await stripeService.getBadgeIdForProduct(productId);
+          const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
           if (!badgeId) {
             console.warn('No badge mapping found for product:', productId);
             break;
           }
 
-          await stripeService.assignBadgeForSubscription(authId, tenantId, badgeId);
+          await stripeAdmin.assignBadgeForSubscription(authId, tenantId, badgeId);
         } else if (tenantId && !isActive) {
-          await stripeService.removeTierBadges(authId, tenantId);
+          await stripeAdmin.removeTierBadges(authId, tenantId);
         }
         break;
       }
@@ -86,7 +87,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }
 
         if (tenantId) {
-          await stripeService.removeTierBadges(authId, tenantId);
+          await stripeAdmin.removeTierBadges(authId, tenantId);
         }
         break;
       }

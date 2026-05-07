@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import thankYouLg from 'src/assets/images/thank-you-lg.svg';
-import thankYouMd from 'src/assets/images/thank-you-md.svg';
-import thankYouSm from 'src/assets/images/thank-you-sm.svg';
+import thankYouLg from 'src/assets/images/thank-you-lg.webp';
+import thankYouMd from 'src/assets/images/thank-you-md.webp';
+import thankYouSm from 'src/assets/images/thank-you-sm.webp';
 import { Flex, Image } from 'theme-ui';
 
 export const ThankYouLayout = ({ children }: { children: ReactNode }) => {

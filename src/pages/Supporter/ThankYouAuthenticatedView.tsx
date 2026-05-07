@@ -1,8 +1,8 @@
 import { Button, Icon } from 'oa-components';
 import { useNavigate } from 'react-router';
-import thankYouLg from 'src/assets/images/thank-you-lg.svg';
-import thankYouMd from 'src/assets/images/thank-you-md.svg';
-import thankYouSm from 'src/assets/images/thank-you-sm.svg';
+import thankYouLg from 'src/assets/images/thank-you-lg.webp';
+import thankYouMd from 'src/assets/images/thank-you-md.webp';
+import thankYouSm from 'src/assets/images/thank-you-sm.webp';
 import { Flex, Image, Text } from 'theme-ui';
 
 export const ThankYouAuthenticatedView = () => {

@@ -21,8 +21,17 @@ export class TenantSettings {
   showImpact: boolean;
   createResearchRoles: UserRole[];
   gaTrackingId: string;
+  pwaIcons?: PWAIcons;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);
   }
+}
+
+export interface PWAIcons {
+  16: string;
+  32: string;
+  192: string;
+  256: string;
+  512: string;
 }

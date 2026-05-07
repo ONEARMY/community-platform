@@ -62,7 +62,13 @@ export const MapCardList = (props: IProps) => {
       {isListEmpty && EMPTY_LIST}
       {!isListEmpty && (
         <>
-          <Box sx={{ columnCount: [1, 2, 2, 3], columnGap: 0, '& > *': { breakInside: 'avoid' } }}>
+          <Box
+            sx={{
+              columnWidth: '240px',
+              columnGap: 0,
+              '& > *': { breakInside: 'avoid' },
+            }}
+          >
             {displayItems}
           </Box>
           {hasMore && (

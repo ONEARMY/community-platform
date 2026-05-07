@@ -54,6 +54,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     }
 
     console.error('Error loading categories:', error);
-    return Response.json({ error: 'Error creating research', status: 500 }, { status: 500 });
+    return Response.json({ error: 'Error loading categories', status: 500 }, { status: 500 });
   }
 }

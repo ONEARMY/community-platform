@@ -3,11 +3,18 @@ import { Button } from '../Button/Button';
 interface IProps {
   hidden?: boolean;
   title: string;
-  directionIcon: 'chevron-left' | 'chevron-right' | 'double-arrow-left' | 'double-arrow-right';
+  ariaLabel: string;
+  directionIcon:
+    | 'paginationSingleLeft'
+    | 'paginationSingleRight'
+    | 'double-arrow-left'
+    | 'double-arrow-right';
   onClick: () => void;
 }
 
-export const PaginationIcons = ({ hidden, title, directionIcon, onClick }: IProps) => {
+export const PaginationIcons = ({ hidden, title, ariaLabel, directionIcon, onClick }: IProps) => {
+  if (hidden) return null;
+
   return (
     <Button
       type="button"
@@ -16,8 +23,9 @@ export const PaginationIcons = ({ hidden, title, directionIcon, onClick }: IProp
       icon={directionIcon}
       onClick={onClick}
       title={title}
+      aria-label={ariaLabel}
       sx={{
-        display: hidden ? 'none' : 'flex',
+        display: 'flex',
         minWidth: '44px',
         minHeight: '44px',
         justifyContent: 'center',

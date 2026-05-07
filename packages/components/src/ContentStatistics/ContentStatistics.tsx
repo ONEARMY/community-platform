@@ -54,7 +54,7 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
         flexDirection: alwaysShow ? 'row' : ['column', 'row', 'row'],
         pl: alwaysShow ? 0 : [2, 0, 0],
         flexWrap: 'wrap',
-        height: '44px', // fix layout shift due to useful + follow button loading
+        height: ['auto', '44px', '44px'], // fix layout shift due to useful + follow button loading
       }}
     >
       <Flex

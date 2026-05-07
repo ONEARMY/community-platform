@@ -1,23 +1,27 @@
 import { observer } from 'mobx-react';
-import type { DBNotificationsPreferences } from 'oa-shared';
+import { NotificationsPreferences, type NotificationsPreferencesFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast/useToast';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isUserContactable } from 'src/utils/helpers';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
   const [isLoading, setIsLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState<DBNotificationsPreferences | null>(null);
+  const [initialValues, setInitialValues] = useState<NotificationsPreferencesFormData | null>(null);
   const toast = useToast();
 
-  const { profile } = useProfileStore();
+  const { profile, isStaff, isContactable } = useProfileStore();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences();
-    setInitialValues(preferences);
+
+    if (preferences) {
+      const initialValues = NotificationsPreferences.toFormData(preferences);
+      setInitialValues(initialValues);
+    }
+
     setIsLoading(false);
   };
 
@@ -25,7 +29,7 @@ export const SupabaseNotifications = observer(() => {
     refreshPreferences();
   }, []);
 
-  const onSubmit = async (values: DBNotificationsPreferences) => {
+  const onSubmit = async (values: NotificationsPreferencesFormData) => {
     const promise = notificationsPreferencesService.setPreferences(values);
 
     toast.promise(promise, {
@@ -41,7 +45,7 @@ export const SupabaseNotifications = observer(() => {
   };
 
   const onUnsubscribe = async () => {
-    const promise = notificationsPreferencesService.setUnsubscribe(initialValues?.id);
+    const promise = notificationsPreferencesService.unsubscribe();
 
     toast.promise(promise, {
       loading: 'Unsubscribing...',
@@ -65,7 +69,8 @@ export const SupabaseNotifications = observer(() => {
       isLoading={isLoading}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
-      profileIsContactable={isUserContactable(profile)}
+      profileIsContactable={isContactable}
+      showNewsPreference={isStaff}
     />
   );
 });

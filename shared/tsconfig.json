@@ -8,7 +8,9 @@
     "resolveJsonModule": true,
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "declaration": true
   },
+  "include": ["**/*.ts"],
   "exclude": ["../node_modules", "./lib"]
 }

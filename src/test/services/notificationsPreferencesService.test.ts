@@ -1,3 +1,4 @@
+import { NotificationsPreferencesFormData } from 'oa-shared';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -5,6 +6,7 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+const mockEmailReachField = { value: '1', label: 'All emails' };
 
 describe('notificationsPreferencesService', () => {
   beforeEach(() => {
@@ -46,16 +48,17 @@ describe('notificationsPreferencesService', () => {
   });
 
   describe('setPreferences', () => {
-    it('sends correct FormData when id is provided', async () => {
+    it('sends correct FormData', async () => {
       const mockResponse = { ok: true };
       mockFetch.mockResolvedValue(mockResponse);
 
       const formData = {
-        id: 123,
         comments: true,
         replies: false,
-        research_updates: true,
-      };
+        researchUpdates: true,
+        contentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesFormData;
 
       const result = await notificationsPreferencesService.setPreferences(formData);
 
@@ -67,89 +70,11 @@ describe('notificationsPreferencesService', () => {
       const [, options] = mockFetch.mock.calls[0];
       const body = options.body as FormData;
 
-      expect(body.get('id')).toBe('123');
       expect(body.get('comments')).toBe('true');
       expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('true');
-      expect(body.get('is_unsubscribed')).toBe('false');
+      expect(body.get('researchUpdates')).toBe('true');
+      expect(body.get('isUnsubscribed')).toBe('false');
       expect(result).toBe(mockResponse);
-    });
-
-    it('sends correct FormData when id is not provided', async () => {
-      const mockResponse = { ok: true };
-      mockFetch.mockResolvedValue(mockResponse);
-
-      const formData = {
-        comments: false,
-        replies: true,
-        research_updates: false,
-      };
-
-      await notificationsPreferencesService.setPreferences(formData);
-      const [, options] = mockFetch.mock.calls[0];
-      const body = options.body as FormData;
-
-      expect(body.get('id')).toBeNull();
-      expect(body.get('comments')).toBe('false');
-      expect(body.get('replies')).toBe('true');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('false');
-    });
-
-    it('sends correct FormData when id is undefined', async () => {
-      mockFetch.mockResolvedValue({ ok: true });
-
-      const formData = {
-        id: undefined,
-        comments: true,
-        replies: true,
-        research_updates: true,
-      };
-
-      await notificationsPreferencesService.setPreferences(formData);
-      const [, options] = mockFetch.mock.calls[0];
-      const body = options.body as FormData;
-
-      expect(body.get('id')).toBeNull();
-    });
-  });
-
-  describe('setUnsubscribe', () => {
-    it('sends correct FormData with all preferences disabled when id is provided', async () => {
-      const mockResponse = { ok: true };
-      mockFetch.mockResolvedValue(mockResponse);
-
-      const result = await notificationsPreferencesService.setUnsubscribe(456);
-
-      expect(mockFetch).toHaveBeenCalledWith('/api/notifications-preferences', {
-        method: 'POST',
-        body: expect.any(FormData),
-      });
-
-      const [, options] = mockFetch.mock.calls[0];
-      const body = options.body as FormData;
-
-      expect(body.get('id')).toBe('456');
-      expect(body.get('comments')).toBe('false');
-      expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('true');
-      expect(result).toBe(mockResponse);
-    });
-
-    it('sends correct FormData without id when id is undefined', async () => {
-      mockFetch.mockResolvedValue({ ok: true });
-
-      await notificationsPreferencesService.setUnsubscribe(undefined);
-
-      const [, options] = mockFetch.mock.calls[0];
-      const body = options.body as FormData;
-
-      expect(body.get('id')).toBeNull();
-      expect(body.get('comments')).toBe('false');
-      expect(body.get('replies')).toBe('false');
-      expect(body.get('research_updates')).toBe('false');
-      expect(body.get('is_unsubscribed')).toBe('true');
     });
   });
 });

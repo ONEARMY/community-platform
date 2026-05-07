@@ -1,4 +1,4 @@
-import type { DBNews, NewsFormData } from 'oa-shared';
+import type { ContentReach, DBNews, NewsFormData } from 'oa-shared';
 import { DBMedia, News, NewsDTO } from 'oa-shared';
 import { createFormData } from './formDataHelper';
 
@@ -9,8 +9,9 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     category: Number(form.category?.value) || null,
     heroImage: form.heroImage ? DBMedia.fromPublicMedia(form.heroImage) : null,
     isDraft: form.isDraft,
-    profileBadge: Number(form.profileBadge?.value) || null,
+    profileBadges: form.profileBadges?.filter((pb) => pb !== null).map((pb) => Number(pb)) || null,
     tags: form.tags || null,
+    contentReach: (form.contentReach?.value || null) as ContentReach,
   });
 
   const response =

@@ -2,9 +2,26 @@
   "name": "oa-components",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/index.js",
   "type": "module",
-  "types": "dist/index.d.js",
+  "exports": {
+    ".": {
+      "bun": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "bun": "./src/*.ts",
+      "import": "./dist/*.js",
+      "default": "./dist/*.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": ["./src/index.ts", "./src/*"]
+    }
+  },
   "scripts": {
     "storybook": "bun run start",
     "start": "storybook dev -p 6006 --loglevel verbose",

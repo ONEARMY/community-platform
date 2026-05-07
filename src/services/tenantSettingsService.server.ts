@@ -1,12 +1,15 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import { TenantSettings, UserRole } from 'oa-shared';
+import { PWAIcons, TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 
 const cache = new Keyv<TenantSettings>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export class TenantSettingsService {
-  constructor(private client: SupabaseClient) {}
+  constructor(
+    private client: SupabaseClient,
+    private origin?: string,
+  ) {}
 
   async get(cacheBypass = false): Promise<TenantSettings> {
     if (!cacheBypass) {
@@ -39,14 +42,15 @@ export class TenantSettingsService {
         color_accent_hover,
         show_impact,
         create_research_roles,
-        ga_tracking_id`,
+        ga_tracking_id,
+        pwa_icons`,
       )
       .single();
 
     const settings = new TenantSettings({
       siteName: data?.site_name || 'The Community Platform',
       siteDescription: data?.site_description || 'The Community Platform',
-      siteUrl: data?.site_url || 'https://community.preciousplastic.com',
+      siteUrl: data?.site_url || this.origin || 'https://community.preciousplastic.com',
       messageSignOff: data?.message_sign_off || 'One Army',
       emailFrom: data?.email_from || 'hello@onearmy.earth',
       siteImage:
@@ -65,6 +69,7 @@ export class TenantSettingsService {
       showImpact: data?.show_impact,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
       gaTrackingId: data?.ga_tracking_id,
+      pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
     });
 
     cache.set('tenant-settings', settings);

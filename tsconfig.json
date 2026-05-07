@@ -30,7 +30,15 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
-    "paths": { "*": ["./*"] }
+    "paths": {
+      "oa-shared": ["./shared/index.ts"],
+      "oa-shared/*": ["./shared/*"],
+      "oa-components": ["./packages/components/src/index.ts"],
+      "oa-components/*": ["./packages/components/src/*"],
+      "oa-themes": ["./packages/themes/src/index.ts"],
+      "oa-themes/*": ["./packages/themes/src/*"],
+      "*": ["./*"]
+    }
   },
   "include": ["src/**/*", "types", "vite-env.d.ts"],
   "exclude": [

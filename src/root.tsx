@@ -100,16 +100,36 @@ export const links: LinksFunction = () => {
       href: '/api/favicon',
       type: 'image/x-icon',
     },
+    {
+      rel: 'manifest',
+      href: '/manifest.webmanifest',
+    },
   ];
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
   const tags = generateTags(
-    data?.siteName || '',
-    data?.siteDescription || undefined,
+    loaderData?.siteName || '',
+    loaderData?.siteDescription || undefined,
     '/social-image.jpg',
-    { siteName: data?.siteName },
+    { siteName: loaderData?.siteName },
   );
+
+  tags.push({
+    name: 'theme-color',
+    content: loaderData?.colorPrimary || '#000',
+  });
+
+  // iOS PWA meta tags
+  tags.push({ name: 'apple-mobile-web-app-capable', content: 'yes' });
+  tags.push({
+    name: 'apple-mobile-web-app-status-bar-style',
+    content: 'default',
+  });
+  tags.push({
+    name: 'apple-mobile-web-app-title',
+    content: loaderData?.siteName || '',
+  });
 
   if (import.meta.env.VITE_BRANCH !== 'production') {
     tags.push({

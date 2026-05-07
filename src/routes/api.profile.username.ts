@@ -1,4 +1,5 @@
 import { HTTPException } from 'hono/http-exception';
+import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -24,7 +25,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw validationError('Profile not found', 'id');
     }
 
-    const isAdmin = (profileData.roles || []).includes('admin');
+    const isAdmin = (profileData.roles || []).includes(UserRole.ADMIN);
     if (profileData.username && !isAdmin) {
       throw forbiddenError('Username cannot be changed once set');
     }

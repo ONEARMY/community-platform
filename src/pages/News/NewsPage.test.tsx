@@ -22,6 +22,7 @@ const mockNewsItem = FactoryNewsItem({
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: () => ({
     profile: FactoryUser(),
+    isUserAuthorized: vi.fn(() => false),
   }),
   ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
 }));

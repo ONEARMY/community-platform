@@ -69,7 +69,6 @@ export const Layout = (props: LayoutArgs) => {
               background: '#fff',
               border: '2px solid black',
               borderRadius: '15px',
-              padding: '20px',
               margin: '0 auto',
             }}
           >

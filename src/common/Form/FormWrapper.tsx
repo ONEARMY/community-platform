@@ -10,10 +10,9 @@ interface IProps {
   buttonLabel: string;
   children: React.ReactNode;
   errorsClientSide?: IErrorsListSet[];
-  errorSubmitting?: string;
   guidelines?: React.ReactNode;
   handleSubmit: () => void;
-  handleSubmitDraft: (e: React.MouseEvent) => void;
+  handleSubmitDraft?: (e: React.MouseEvent) => void;
   heading: string;
   hasValidationErrors: boolean;
   belowBody?: React.ReactNode;
@@ -24,7 +23,7 @@ interface IProps {
   unsavedChangesDialog?: React.ReactNode;
 }
 
-const DRAFT_LABEL = 'Save as draft';
+const DRAFT_LABEL = 'Save draft';
 
 export const FormWrapper = (props: IProps) => {
   const {
@@ -32,7 +31,6 @@ export const FormWrapper = (props: IProps) => {
     buttonLabel,
     children,
     errorsClientSide,
-    errorSubmitting,
     guidelines,
     handleSubmit,
     handleSubmitDraft,
@@ -118,25 +116,26 @@ export const FormWrapper = (props: IProps) => {
           {buttonLabel}
         </Button>
 
-        <Button
-          data-cy="draft"
-          onClick={handleSubmitDraft}
-          variant="secondary"
-          type="submit"
-          disabled={submitting}
-          sx={{
-            width: '100%',
-            display: 'block',
-          }}
-        >
-          {DRAFT_LABEL}
-        </Button>
+        {handleSubmitDraft && (
+          <Button
+            data-cy="draft"
+            onClick={handleSubmitDraft}
+            variant="secondary"
+            type="submit"
+            disabled={submitting}
+            sx={{
+              width: '100%',
+              display: 'block',
+            }}
+          >
+            {DRAFT_LABEL}
+          </Button>
+        )}
 
         {submitting && !hideSubmittingMessage && (
           <Loader label="Submitting, please do not close the page..." />
         )}
         {sidebar && sidebar}
-        {errorSubmitting && <ErrorsContainer serverErrors={[errorSubmitting]} />}
         {hasClientSideErrors && <ErrorsContainer clientErrors={errorsClientSide} />}
       </Flex>
     </Flex>

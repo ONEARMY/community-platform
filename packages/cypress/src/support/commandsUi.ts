@@ -1,5 +1,5 @@
 import { form } from '../../../../src/pages/UserSettings/labels';
-import { generateNewUserDetails } from '../utils/TestUtils';
+import { generateNewUserDetails, IUserSignUpDetails } from '../utils/TestUtils';
 
 // import { visitorDisplayData } from 'oa-components'
 
@@ -28,15 +28,15 @@ declare global {
       addReply(reply: string): Chainable<void>;
       addToMarkdownField(text: string): Chainable<void>;
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>;
-      deleteDiscussionItem(element: string, item: string);
+      deleteDiscussionItem(element: string, item: string): Chainable<void>;
       editDiscussionItem(element: string, oldComment: string, updatedNewComment: string): Chainable<void>;
       signIn(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
       fillSignupForm(email: string, password: string): Chainable<void>;
-      fillIntroTitle(intro: string);
-      fillSettingMapPin(pin: IMapPin);
+      fillIntroTitle(intro: string): Chainable<void>;
+      fillSettingMapPin(pin: IMapPin): Chainable<void>;
 
-      saveSettingsForm();
+      saveSettingsForm(): Chainable<void>;
       /**
        * Trigger form validation
        */
@@ -49,16 +49,17 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>;
-      setSettingVisitorPolicy(policyText: string, details?: string);
-      clearSettingVisitorPolicy();
-      setSettingBasicUserInfo(info: IInfo);
-      setSettingFocus(focus: string);
-      setSettingImage(image: string, selector: string);
-      setSettingImpactData(year: number, fields);
-      setSettingPublicContact();
+      selectByValue(value: string, selector: string): Chainable<void>;
+      setSettingVisitorPolicy(policyText: string, details?: string): Chainable<void>;
+      clearSettingVisitorPolicy(): Chainable<void>;
+      setSettingBasicUserInfo(info: IInfo): Chainable<void>;
+      setSettingFocus(focus: string): Chainable<void>;
+      setSettingImage(image: string, selector: string): Chainable<void>;
+      setSettingImpactData(year: number, fields: { name: string, value: number, visible?: boolean }[]): Chainable<void>;
+      setSettingPublicContact(): Chainable<void>;
 
-      signUpNewUser(user?): Chainable<void>;
-      signUpCompletedUser(user?): Chainable<void>;
+      signUpNewUser(user?: IUserSignUpDetails): Chainable<void>;
+      signUpCompletedUser(user?: IUserSignUpDetails): Chainable<void>;
       completeUserProfile(username: string): Chainable<void>;
       setProfileUsername(username: string): Chainable<void>;
       confirmUser(username: string): Chainable<void>;
@@ -119,19 +120,19 @@ Cypress.Commands.add('setSettingFocus', (focus: string) => {
   cy.get(`[data-cy=${focus}]`).first().click();
 });
 
-Cypress.Commands.add('setSettingImage', (image, selector) => {
+Cypress.Commands.add('setSettingImage', (image: string, selector: string) => {
   cy.get(`[data-cy=${selector}]`).find(':file').selectFile(`src/fixtures/images/${image}.jpg`, { force: true });
   cy.wait(2000);
 });
 
-Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
+Cypress.Commands.add('setSettingImpactData', (year: number, fields: { name: string, value: number, visible?: boolean }[]) => {
   cy.step('Save impact data');
   cy.get('[data-cy="tab-Impact"]').click();
 
   cy.get(`[data-cy="impactForm-${year}-button-edit"]`).click();
 
   fields.forEach((field) => {
-    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`).clear().type(field.value);
+    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`).clear().type(field.value.toString());
     field.visible === false && cy.get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`).click();
   });
   cy.get(`[data-cy="impactForm-${year}-button-save"]`).click();
@@ -212,6 +213,12 @@ Cypress.Commands.add('selectTag', (tagName: string, selector = '[data-cy=tag-sel
   cy.get(`${selector} input`).click({ force: true });
   cy.get(`${selector} input`).type(tagName, { force: true });
   cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click();
+});
+
+Cypress.Commands.add('selectByValue', (value: string, selector: string) => {
+  cy.log('Select by value', value);
+  cy.get(`${selector} input`).click({ force: true });
+  cy.get(`${selector} .data-cy__menu-list [data-value="${value}"]`).click();
 });
 
 Cypress.Commands.add('addComment', (newComment: string) => {

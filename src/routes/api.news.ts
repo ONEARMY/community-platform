@@ -1,18 +1,21 @@
-// TODO: split this in separate files once we update remix to NOT use file-based routing
-
+import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
-import { News } from 'oa-shared';
+import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
+import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { discordServiceServer } from 'src/services/discordService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
-import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
-import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';
 
@@ -25,93 +28,54 @@ export const loader = async ({ request }) => {
 
   const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
-  let currentUserBadges: number[] = [];
+
+  let userProfileId: number | null = null;
   let isAdmin = false;
+
   if (claims?.data?.claims?.sub) {
     const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
-    isAdmin = !!profile?.roles?.includes('admin');
-    currentUserBadges = profile?.badges?.map((x) => x.profile_badges.id) || [];
+    isAdmin =
+      !!profile?.roles?.includes(UserRole.ADMIN) ||
+      !!profile?.roles?.includes(UserRole.EDITOR) ||
+      !!profile?.roles?.includes(UserRole.MODERATOR);
+    userProfileId = profile?.id ?? null;
+    await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
   }
 
-  let query = client
-    .from('news')
-    .select(
-      `
-      id,
-      created_at,
-      created_by,
-      modified_at,
-      published_at,
-      is_draft,
-      comment_count,
-      body,
-      slug,
-      summary,
-      category:category(id,name),
-      profile_badge:profile_badge(*),
-      tags,
-      title,
-      total_views,
-      hero_image,
-      author:profiles(id, display_name, username, country, badges:profile_badges_relations(
-        profile_badges(
-          id,
-          name,
-          display_name,
-          image_url,
-          action_url
-        )
-      ))`,
-      { count: 'exact' },
-    )
+  const rpcResult = await client.rpc('get_news_feed', {
+    p_user_profile_id: userProfileId,
+    p_is_admin: isAdmin,
+    p_search: q || null,
+    p_sort: sort || 'Newest',
+    p_skip: skip,
+    p_limit: ITEMS_PER_PAGE,
+  });
 
-    .eq('is_draft', false);
-
-  if (!isAdmin) {
-    query = query.or(
-      `profile_badge.is.null${currentUserBadges.length > 0 ? `,profile_badge.in.(${currentUserBadges.join(',')})` : ''}`,
-    );
+  if (rpcResult.error) {
+    console.error(rpcResult.error);
+    return Response.json({ error: 'Failed to load news' }, { status: 500 });
   }
+  const rows = rpcResult.data as (DBNews & { total_count: number })[];
+  const total = rows[0]?.total_count ?? 0;
+  const items = rows.map((row) => News.fromDB(row, []));
 
-  if (q) {
-    query = query.textSearch('news_search_fields', q);
-  }
-
-  if (sort === 'Newest') {
-    query = query.order('published_at', { ascending: false });
-  } else if (sort === 'Comments') {
-    query = query.order('comment_count', { ascending: false });
-  } else if (sort === 'LeastComments') {
-    query = query.order('comment_count', { ascending: true });
-  }
-
-  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE - 1); // 0 based
-
-  const total = queryResult.count;
-  const data = queryResult.data as unknown as DBNews[];
-  const items = data.map((dbNews) => News.fromDB(dbNews, []));
-
-  if (items && items.length > 0) {
-    // Populate useful votes
+  // Populate useful votes + hero images
+  if (items.length > 0) {
     const votes = await client.rpc('get_useful_votes_count_by_content_id', {
       p_content_type: 'news',
       p_content_ids: items.map((x) => x.id),
     });
 
-    if (votes.data) {
-      const votesByContentId = votes.data.reduce((acc, current) => {
-        acc.set(current.content_id, current.count);
-        return acc;
-      }, new Map());
+    const votesByContentId = (votes.data ?? []).reduce((acc, cur) => {
+      acc.set(cur.content_id, cur.count);
+      return acc;
+    }, new Map());
 
-      for (const item of items) {
-        if (votesByContentId.has(item.id)) {
-          item.usefulCount = votesByContentId.get(item.id)!;
-        }
-        item.heroImage = await new NewsServiceServer(client).getHeroImage(
-          data.find((x) => x.id === item.id)?.hero_image || null,
-        );
-      }
+    for (const item of items) {
+      item.usefulCount = votesByContentId.get(item.id) ?? 0;
+      item.heroImage = await new NewsServiceServer(client).getHeroImage(
+        rows.find((x) => x.id === item.id)?.hero_image ?? null,
+      );
     }
   }
 
@@ -127,31 +91,29 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       body: formData.get('body') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('isDraft') === 'true',
-      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
+      profileBadges: formData.has('profileBadges')
+        ? formData.getAll('profileBadges').map((x) => Number(x))
+        : [],
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
+      contentReach: formData.has('contentReach')
+        ? (formData.get('contentReach') as ContentReach)
+        : null,
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
-
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-
-    await validateRequest(request, data);
-
     const slug = convertToSlug(data.title);
-
-    if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
-      throw conflictError('This news already exists');
-    }
+    await validateRequest(request, data, slug, claims.error, client);
 
     const profileRequest = await client
       .from('profiles')
-      .select('id,username')
+      .select('id,username,roles')
       .eq('auth_id', claims.data.claims.sub)
       .limit(1);
 
@@ -161,6 +123,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const profile = profileRequest.data[0] as DBProfile;
+
+    if (!profile.roles?.includes(UserRole.ADMIN) && !profile.roles?.includes(UserRole.EDITOR)) {
+      throw forbiddenError();
+    }
 
     if (!profile.username) {
       throw validationError('You must set a username before creating content', 'username');
@@ -174,28 +140,52 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
-        profile_badge: data.profileBadge,
         published_at: data.isDraft ? null : new Date(),
         slug,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         hero_image: data.heroImage,
-        tenant_id: process.env.TENANT_ID,
         title: data.title,
+        content_reach: data.contentReach,
+        tenant_id: process.env.TENANT_ID,
       })
-      .select();
+      .select('*');
 
     if (newsResult.error || !newsResult.data) {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], []);
-    new SubscribersServiceServer(client).add('news', news.id, profile.id);
+    const newsId = newsResult.data[0].id;
 
-    if (!news.isDraft) {
-      notifyDiscord(news, profile, new URL(request.url).origin.replace('http:', 'https:'));
+    // Insert badge relations
+    if (data.profileBadges && data.profileBadges.length > 0) {
+      const badgeRelations = data.profileBadges.map((badgeId) => ({
+        news_id: newsId,
+        profile_badge_id: badgeId,
+        tenant_id: process.env.TENANT_ID,
+      }));
+
+      const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
+
+      if (badgeResult.error) {
+        console.error('Error inserting badge relations:', badgeResult.error);
+      }
     }
 
+    // Fetch the complete news with badges for response
+    const completeNews = await client
+      .from('news')
+      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
+      .eq('id', newsId)
+      .single();
+
+    if (completeNews.error || !completeNews.data) {
+      throw completeNews.error;
+    }
+
+    const news = News.fromDB(completeNews.data, []);
+    new SubscribersServiceServer(client).add('news', news.id, profile.id);
+    new BroadcastCoordinationServiceServer(client).news(completeNews.data, profile, request);
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 201 });
@@ -209,20 +199,22 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   }
 };
 
-function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
-  const title = news.title;
-  const slug = news.slug;
+async function validateRequest(
+  request: Request,
+  data: any,
+  slug: string,
+  authError: AuthError | null,
+  client: SupabaseClient,
+) {
+  const notDraft = data.isDraft === false;
 
-  if (!profile.username) {
-    return;
+  if (authError) {
+    return {
+      status: authError?.status,
+      statusText: authError?.message || 'Unknown authentication error',
+    };
   }
 
-  discordServiceServer.postWebhookRequest(
-    `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,
-  );
-}
-
-async function validateRequest(request: Request, data: NewsDTO): Promise<void> {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
   }
@@ -231,11 +223,15 @@ async function validateRequest(request: Request, data: NewsDTO): Promise<void> {
     throw validationError('Title is required', 'title');
   }
 
-  if (!data.body) {
+  if (!data.body && notDraft) {
     throw validationError('Body is required', 'body');
   }
 
-  if (!data.heroImage) {
-    throw validationError('Hero image is required', 'body');
+  if (!data.heroImage && notDraft) {
+    throw validationError('Hero image is required', 'heroImage');
+  }
+
+  if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
+    throw conflictError('This news already exists');
   }
 }

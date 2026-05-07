@@ -15,7 +15,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
   const searchWords = [query || ''];
 
   return (
-    <Card data-cy="card" sx={{ marginX: [2, 0] }}>
+    <Card data-cy="card">
       <RouterLink to={`/library/${encodeURIComponent(item.slug)}`} style={{ display: 'block' }}>
         <Flex
           sx={{

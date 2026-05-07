@@ -67,10 +67,6 @@ export const MapView = () => {
     [fitBounds],
   );
 
-  const handlePinClose = useCallback(() => {
-    selectPin?.(null);
-  }, [selectPin]);
-
   if (!mapState) {
     return null;
   }
@@ -136,9 +132,7 @@ export const MapView = () => {
             clusterGroupRef={clusterGroupRef}
           />
         )}
-        {mapState.selectedPin && (
-          <Popup activePin={mapState.selectedPin} mapRef={mapRef} onClose={handlePinClose} />
-        )}
+        {mapState.selectedPin && <Popup activePin={mapState.selectedPin} mapRef={mapRef} />}
       </Map>
     </Box>
   );

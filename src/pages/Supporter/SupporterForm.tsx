@@ -71,7 +71,17 @@ export const SupporterForm = () => {
           zIndex: 0,
         }}
       >
-        <Icon glyph="supporter" size={80} sx={{ color: '#d61f30' }} />
+        <Icon
+          glyph="supporter"
+          size={80}
+          sx={{
+            color: '#d61f30',
+            mr: '-15px',
+            position: 'relative',
+            zIndex: 1,
+            transform: 'rotate(-7deg)',
+          }}
+        />
         {siteImage && <Image src={siteImage} sx={{ width: 90, height: 90 }} alt="Site logo" />}
       </Flex>
 
@@ -86,7 +96,7 @@ export const SupporterForm = () => {
           zIndex: 1,
         }}
       >
-        <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+        <Flex sx={{ flexDirection: 'column', gap: '30px' }}>
           <Heading as="h1" sx={{ fontSize: [4, 5] }}>
             Become a supporter
           </Heading>

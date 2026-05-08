@@ -68,7 +68,7 @@ const CheckoutForm = () => {
 
   return (
     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-      <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+      <Flex sx={{ flexDirection: 'column', gap: '30px' }}>
         <Heading as="h2">Payment checkout</Heading>
         <Box
           sx={{
@@ -81,7 +81,12 @@ const CheckoutForm = () => {
           <PaymentElement options={{ layout: 'tabs' }} />
         </Box>
         {errorMessage && <Text sx={{ color: 'red' }}>{errorMessage}</Text>}
-        <Button type="submit" variant="primary" disabled={!stripe || isSubmitting}>
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={!stripe || isSubmitting}
+          sx={{ justifyContent: 'center' }}
+        >
           {isSubmitting ? 'Processing...' : `Pay ${formatPrice(selectedAmount, currency)}/${label}`}
         </Button>
         <Text variant="quiet" sx={{ fontSize: 0 }}>
@@ -119,8 +124,8 @@ export const CheckoutView = () => {
           border: '2px solid',
           borderColor: 'black',
           borderRadius: 2,
-          px: 3,
-          py: 1,
+          px: '15px',
+          py: '10px',
           cursor: 'pointer',
           fontWeight: 'bold',
           fontSize: 1,
@@ -182,6 +187,7 @@ export const CheckoutView = () => {
             borderColor: 'black',
             borderRadius: 3,
             minWidth: 200,
+            maxWidth: 280,
             textAlign: 'center',
           }}
         >
@@ -203,7 +209,7 @@ export const CheckoutView = () => {
             <Text sx={{ fontWeight: 'bold', fontSize: 3 }}>
               {formatPrice(selectedAmount, currency)} /{interval === 'month' ? 'month' : 'year'}
             </Text>
-            <Text variant="quiet" sx={{ fontSize: 0 }}>
+            <Text variant="quiet" sx={{ fontSize: '12px' }}>
               You can cancel, pause or update your subscription at any time
             </Text>
           </Flex>

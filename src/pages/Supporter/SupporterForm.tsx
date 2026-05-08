@@ -168,34 +168,86 @@ export const SupporterForm = () => {
                 {fieldErrors.name && (
                   <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.name}</Text>
                 )}
-                <Input
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                <Box
+                  sx={{
+                    position: 'relative',
+                    '&:focus-within .floating-label, &.has-value .floating-label': {
+                      top: '6px',
+                      fontSize: '12px',
+                      color: 'grey',
+                    },
                   }}
-                  placeholder="Your name"
-                  variant={fieldErrors.name ? 'textareaError' : 'textarea'}
-                  sx={{ px: 3, py: 3 }}
-                />
+                  className={name ? 'has-value' : undefined}
+                >
+                  <Text
+                    className="floating-label"
+                    sx={{
+                      position: 'absolute',
+                      left: '16px',
+                      top: '14px',
+                      fontSize: 2,
+                      color: 'grey',
+                      pointerEvents: 'none',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    Your name
+                  </Text>
+                  <Input
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (fieldErrors.name)
+                        setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                    }}
+                    variant={fieldErrors.name ? 'textareaError' : 'textarea'}
+                    sx={{ px: 3, pt: '24px', pb: '8px' }}
+                  />
+                </Box>
               </Flex>
             )}
             <Flex sx={{ flexDirection: 'column', gap: 1 }}>
               {fieldErrors.email && (
                 <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.email}</Text>
               )}
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+              <Box
+                sx={{
+                  position: 'relative',
+                  '&:focus-within .floating-label, &.has-value .floating-label': {
+                    top: '6px',
+                    fontSize: '12px',
+                    color: 'grey',
+                  },
                 }}
-                placeholder="Email"
-                disabled={isAuthenticated}
-                variant={fieldErrors.email ? 'textareaError' : 'textarea'}
-                sx={{ px: 3, py: 3 }}
-              />
+                className={email ? 'has-value' : undefined}
+              >
+                <Text
+                  className="floating-label"
+                  sx={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '14px',
+                    fontSize: 2,
+                    color: 'grey',
+                    pointerEvents: 'none',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  Email
+                </Text>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (fieldErrors.email)
+                      setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                  }}
+                  disabled={isAuthenticated}
+                  variant={fieldErrors.email ? 'textareaError' : 'textarea'}
+                  sx={{ px: 3, pt: '24px', pb: '8px' }}
+                />
+              </Box>
             </Flex>
           </Flex>
 

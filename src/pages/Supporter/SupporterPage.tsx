@@ -1,6 +1,8 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
+import { toast as sonnerToast } from 'sonner';
+import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
@@ -154,10 +156,29 @@ export const SupporterPage = ({
       setAccountExists(result.accountExists);
       setPageState('checkout');
     } else if (result.error.includes('active subscription')) {
-      toast.warning("You're already a supporter.", {
-        actionLink: { href: '/sign-in', label: 'Log in' },
-        description: 'Log in to manage your account.',
-      });
+      if (isAuthenticated) {
+        sonnerToast.custom(
+          (toastId) => (
+            // might not need a custom one, just didn't want to apply custom styling / nowrap without knowing what all will be impacted yet
+            <CustomToast
+              message="You're already a supporter."
+              description="Manage your support"
+              type="warning"
+              actionLink={{
+                href: '/settings/account',
+                label: 'Manage',
+              }}
+              toastId={toastId}
+            />
+          ),
+          { unstyled: true, style: { whiteSpace: 'nowrap' } },
+        );
+      } else {
+        toast.warning("You're already a supporter.", {
+          actionLink: { href: '/sign-in', label: 'Log in' },
+          description: 'Log in to manage your account.',
+        });
+      }
     } else {
       setError(result.error);
     }

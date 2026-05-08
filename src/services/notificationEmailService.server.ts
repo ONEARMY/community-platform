@@ -93,7 +93,7 @@ export class NotificationEmailServiceServer {
       };
 
       sendBatchEmails({
-        from: tenantSettings.emailFrom,
+        from: `${tenantSettings.messageSignOff} <${tenantSettings.emailFrom}>`,
         subject: notification.email.subject,
         emails: [email],
       });
@@ -144,7 +144,7 @@ export class NotificationEmailServiceServer {
       });
 
       sendBatchEmails({
-        from: tenantSettings.emailFrom,
+        from: `${tenantSettings.messageSignOff} <${tenantSettings.emailFrom}>`,
         subject: fullNotification.email.subject,
         emails,
       });

@@ -109,7 +109,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
 
     const sendResult = await sendEmail({
-      from: settings.emailFrom,
+      from: `${settings.messageSignOff} <${settings.emailFrom}>`,
       to: receiver.email,
       subject: `${messenger.username} sent you a message via ${settings.siteName}!`,
       emailTemplate,

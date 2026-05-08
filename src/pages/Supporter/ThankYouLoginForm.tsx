@@ -48,28 +48,25 @@ export const ThankYouLoginForm = () => {
           textAlign: 'left',
         }}
       >
-        <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-          <Heading as="h2" sx={{ fontSize: [3, 4] }}>
+        <Flex sx={{ flexDirection: 'column', gap: '20px' }}>
+          <Heading as="h2" sx={{ fontSize: '30px' }}>
             Login to your account
           </Heading>
 
-          <Text variant="auxiliary">
+          <Text sx={{ fontSize: '14px', color: 'grey' }}>
             There is an active One Army account under the email <strong>{email}</strong>. Log in to
             access your perks in the community platform.
           </Text>
 
           <Box as="form" onSubmit={handleSubmit}>
-            <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-              <Box>
-                <Text variant="quiet" sx={{ fontSize: 1, mb: 1 }}>
-                  Password
-                </Text>
+            <Flex sx={{ flexDirection: 'column', gap: '20px' }}>
+              <Flex sx={{ flexDirection: 'column', gap: '10px' }}>
                 <Flex sx={{ position: 'relative' }}>
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
+                    placeholder="Password"
                     required
                     sx={{
                       border: '1px solid',
@@ -97,11 +94,13 @@ export const ThankYouLoginForm = () => {
                     }}
                   />
                 </Flex>
-              </Box>
 
-              <Text sx={{ fontSize: 1 }}>
-                <a href="/reset-password">Forgot your password?</a>
-              </Text>
+                <Text sx={{ fontSize: 1 }}>
+                  <a href="/reset-password" style={{ color: 'blue' }}>
+                    Forgot your password?
+                  </a>
+                </Text>
+              </Flex>
 
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}
 
@@ -114,7 +113,7 @@ export const ThankYouLoginForm = () => {
                 {isSubmitting ? 'Logging in...' : 'Log in'}
               </Button>
 
-              <Text variant="auxiliary">
+              <Text sx={{ fontSize: '14px', color: 'grey' }}>
                 If something is not right, <a href="/contact">contact us</a>.
               </Text>
             </Flex>

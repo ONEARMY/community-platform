@@ -58,13 +58,14 @@ export const ThankYouAccountForm = () => {
           border: '2px solid',
           borderColor: 'black',
           borderRadius: 3,
-          padding: 4,
+          px: '20px',
+          py: '40px',
           textAlign: 'left',
         }}
       >
-        <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+        <Flex sx={{ flexDirection: 'column', gap: '20px' }}>
           <Heading as="h1">Setup your account</Heading>
-          <Text sx={{ fontSize: 1, color: 'grey' }}>
+          <Text sx={{ fontSize: '14px', color: 'grey' }}>
             Set up an account to access exclusive updates and connect with the community.
           </Text>
           <Box as="form" onSubmit={handleSubmit}>

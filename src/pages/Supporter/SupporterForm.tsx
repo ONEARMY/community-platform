@@ -90,14 +90,14 @@ export const SupporterForm = () => {
         sx={{
           borderRadius: 3,
           px: 6,
-          pt: 5,
-          pb: 3,
+          pt: '30px',
+          pb: '30px',
           position: 'relative',
           zIndex: 1,
         }}
       >
         <Flex sx={{ flexDirection: 'column', gap: '30px' }}>
-          <Heading as="h1" sx={{ fontSize: [4, 5] }}>
+          <Heading as="h1" sx={{ fontSize: '30px' }}>
             Become a supporter
           </Heading>
 
@@ -263,15 +263,17 @@ export const SupporterForm = () => {
 
           {error && <Text sx={{ color: 'red' }}>{error}</Text>}
 
-          <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
             <Button
               type="button"
               variant="primary"
+              large
               onClick={handleSupport}
               disabled={isLoading || !selectedPriceId}
               sx={{
                 width: '100%',
-                borderRadius: 1,
+                height: '64px',
+                borderRadius: 3,
                 justifyContent: 'center',
                 '& > span': { display: 'inline-flex', alignItems: 'center', gap: 1 },
               }}

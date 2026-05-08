@@ -8,7 +8,6 @@ export class BroadcastCoordinationServiceServer {
 
   news(dbNews: DBNews, profile: DBProfile | null, request: Request, oldDBNews?: DBNews) {
     const beforeCheck = oldDBNews ? !!oldDBNews.is_draft : true;
-    const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
 
     if (!dbNews || !profile || dbNews?.is_draft) {
       return;
@@ -20,9 +19,11 @@ export class BroadcastCoordinationServiceServer {
         new URL(request.url).origin,
       );
 
-      discordServiceServer.postWebhookRequest(
-        `📰 ${profile.username} has news: ${dbNews.title}\n<${siteUrl}/news/${dbNews.slug}>`,
-      );
+      // Note: posting to discord should consider badges, maybe allow only public news.
+      // const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+      // discordServiceServer.postWebhookRequest(
+      //   `📰 ${profile.username} has news: ${dbNews.title}\n<${siteUrl}/news/${dbNews.slug}>`,
+      // );
     }
   }
 

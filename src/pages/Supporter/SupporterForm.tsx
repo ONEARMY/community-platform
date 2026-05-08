@@ -34,7 +34,7 @@ export const SupporterForm = () => {
 
   const validate = () => {
     const errors: { name?: string; email?: string } = {};
-    if (!name.trim()) {
+    if (!isAuthenticated && !name.trim()) {
       errors.name = 'Enter your name. It can be a nickname.';
     }
     if (!email.trim()) {
@@ -163,21 +163,23 @@ export const SupporterForm = () => {
               </Flex>
             )}
 
-            <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-              {fieldErrors.name && (
-                <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.name}</Text>
-              )}
-              <Input
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
-                }}
-                placeholder="Your name"
-                variant={fieldErrors.name ? 'textareaError' : 'textarea'}
-                sx={{ px: 3, py: 3 }}
-              />
-            </Flex>
+            {!isAuthenticated && (
+              <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+                {fieldErrors.name && (
+                  <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.name}</Text>
+                )}
+                <Input
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                  }}
+                  placeholder="Your name"
+                  variant={fieldErrors.name ? 'textareaError' : 'textarea'}
+                  sx={{ px: 3, py: 3 }}
+                />
+              </Flex>
+            )}
             <Flex sx={{ flexDirection: 'column', gap: 1 }}>
               {fieldErrors.email && (
                 <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.email}</Text>

@@ -1,4 +1,4 @@
-import { Text } from '@react-email/components';
+import { Container, Text } from '@react-email/components';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
 import { BoxText } from './components/box-text';
 import { Button } from './components/button';
@@ -31,12 +31,12 @@ export const InstantNotificationEmail = (props: IProps) => {
       userCode={userCode}
     >
       <Header>
-        <Heading>
+        <Heading customStyle={{ padding: '0 20px' }}>
           {notification.triggeredBy} {notification.title}
         </Heading>
       </Header>
 
-      <BoxText>
+      <Container style={{ padding: '0 20px 20px 20px', margin: 0, maxWidth: '100%' }}>
         {notification.email.body ? (
           <Text style={text}>{notification.email.body}</Text>
         ) : (
@@ -45,8 +45,8 @@ export const InstantNotificationEmail = (props: IProps) => {
             <Text style={text}>{notification.body}</Text>
           </>
         )}
-      </BoxText>
-      <Button href={buttonLink}>{notification.email.buttonLabel} →</Button>
+        <Button href={buttonLink}>{notification.email.buttonLabel} →</Button>
+      </Container>
     </Layout>
   );
 };

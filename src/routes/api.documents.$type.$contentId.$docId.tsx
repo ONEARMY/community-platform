@@ -104,6 +104,7 @@ async function resolveFileFromStorage(
   client: SupabaseClient,
 ): Promise<{ fullPath: string; name: string } | null> {
   // Query storage.objects table to get the actual file path
+  // Use RPC function to query storage.objects table (which is in storage schema)
   const { data, error } = await client
     .rpc('get_storage_object_path', {
       object_id: docId,

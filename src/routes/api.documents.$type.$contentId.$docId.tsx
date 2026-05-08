@@ -18,6 +18,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const result = await resolveUrl(params, client, headers);
 
   if (result.status === 302) {
+    // 302 status means the file is returned
     const authId = claims.data.claims.sub;
     await recordDownload(params.type!, +params.contentId!, client, authId);
     await incrementDownloadCount(params.type!, +params.contentId!, client);
@@ -102,6 +103,7 @@ async function resolveFileFromStorage(
   bucket: string,
   client: SupabaseClient,
 ): Promise<{ fullPath: string; name: string } | null> {
+  // Query storage.objects table to get the actual file path
   const { data, error } = await client
     .rpc('get_storage_object_path', {
       object_id: docId,
@@ -114,6 +116,7 @@ async function resolveFileFromStorage(
     return null;
   }
 
+  // The name field contains the full path in storage
   const fullPath = data.name;
 
   return { fullPath, name: data.name };

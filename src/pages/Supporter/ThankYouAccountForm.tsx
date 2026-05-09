@@ -70,44 +70,54 @@ export const ThankYouAccountForm = () => {
           </Text>
           <Box as="form" onSubmit={handleSubmit}>
             <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-              <Box>
-                <Text variant="quiet" sx={{ fontSize: 1, mb: 1 }}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  '&:focus-within .floating-label, &.has-value .floating-label': {
+                    top: '6px',
+                    fontSize: '12px',
+                    color: 'grey',
+                  },
+                }}
+                className={password ? 'has-value' : undefined}
+              >
+                <Text
+                  className="floating-label"
+                  sx={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '14px',
+                    fontSize: 2,
+                    color: 'grey',
+                    pointerEvents: 'none',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
                   Password
                 </Text>
-                <Flex sx={{ position: 'relative' }}>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    required
-                    minLength={6}
-                    sx={{
-                      border: '1px solid',
-                      borderColor: 'offWhite',
-                      borderRadius: 1,
-                      px: 3,
-                      py: 3,
-                      bg: 'background',
-                      pr: '48px',
-                      '&:focus': { outline: 'none', borderColor: 'green' },
-                    }}
-                  />
-                  <Icon
-                    glyph={showPassword ? 'hide' : 'show'}
-                    onClick={() => setShowPassword(!showPassword)}
-                    size="25"
-                    sx={{
-                      position: 'absolute',
-                      right: '12px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  />
-                </Flex>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  variant="textarea"
+                  sx={{ px: 3, pt: '24px', pb: '8px', pr: '48px' }}
+                />
+                <Icon
+                  glyph={showPassword ? 'hide' : 'show'}
+                  onClick={() => setShowPassword(!showPassword)}
+                  size="25"
+                  sx={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                />
               </Box>
 
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}

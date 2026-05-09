@@ -3,8 +3,10 @@ CREATE TABLE "public"."file_downloads" (
     "profile_id" bigint NOT NULL REFERENCES "public"."profiles"("id") ON DELETE CASCADE,
     "content_type" text NOT NULL,
     "content_id" integer NOT NULL,
+    "file_id" text NOT NULL,
     "downloaded_at" timestamp with time zone DEFAULT now(),
-    "tenant_id" text NOT NULL
+    "tenant_id" text NOT NULL,
+    UNIQUE ("profile_id", "content_type", "content_id", "file_id", "tenant_id")
 );
 
 ALTER TABLE "public"."file_downloads" ENABLE ROW LEVEL SECURITY;

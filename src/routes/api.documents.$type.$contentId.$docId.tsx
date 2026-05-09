@@ -20,8 +20,17 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (result.status === 302) {
     // 302 status means the file is returned
     const authId = claims.data.claims.sub;
-    await recordDownload(params.type!, +params.contentId!, client, authId);
-    await incrementDownloadCount(params.type!, +params.contentId!, client);
+    const isNewDownload = await recordDownload(
+      params.type!,
+      +params.contentId!,
+      params.docId!,
+      client,
+      authId,
+    );
+
+    if (isNewDownload) {
+      await incrementDownloadCount(params.type!, +params.contentId!, client);
+    }
   }
 
   return result;
@@ -30,6 +39,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 async function recordDownload(
   type: string,
   contentId: number,
+  fileId: string,
   client: SupabaseClient,
   authId: string,
 ) {
@@ -39,14 +49,31 @@ async function recordDownload(
     .eq('auth_id', authId)
     .single();
 
-  if (!profile) return;
+  if (!profile) return false;
+
+  const { data: existing } = await client
+    .from('file_downloads')
+    .select('id')
+    .match({
+      profile_id: profile.id,
+      content_type: type,
+      content_id: contentId,
+      file_id: fileId,
+      tenant_id: process.env.TENANT_ID,
+    })
+    .maybeSingle();
+
+  if (existing) return false;
 
   await client.from('file_downloads').insert({
     profile_id: profile.id,
     content_type: type,
     content_id: contentId,
+    file_id: fileId,
     tenant_id: process.env.TENANT_ID,
   });
+
+  return true;
 }
 
 async function resolveUrl(params: Params<string>, client: SupabaseClient, headers: Headers) {

@@ -44,7 +44,8 @@ export const ThankYouLoginForm = () => {
           border: '2px solid',
           borderColor: 'black',
           borderRadius: 3,
-          padding: 4,
+          px: '20px',
+          py: '20px',
           textAlign: 'left',
         }}
       >

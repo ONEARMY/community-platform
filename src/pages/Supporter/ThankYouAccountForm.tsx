@@ -59,7 +59,7 @@ export const ThankYouAccountForm = () => {
           borderColor: 'black',
           borderRadius: 3,
           px: '20px',
-          py: '40px',
+          py: '20px',
           textAlign: 'left',
         }}
       >

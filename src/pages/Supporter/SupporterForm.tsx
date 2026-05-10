@@ -101,30 +101,44 @@ export const SupporterForm = () => {
             Become a supporter
           </Heading>
 
-          <Flex sx={{ gap: 2 }}>
-            {(['month', 'year'] as const).map((i) => (
+          <Flex sx={{ flexDirection: 'column', gap: '10px' }}>
+            <Flex sx={{ gap: 2 }}>
               <Box
-                key={i}
                 as="button"
-                onClick={() => setInterval(i)}
+                onClick={() => setInterval('month')}
                 sx={{
                   flex: 1,
                   py: 2,
                   border: '2px solid',
-                  borderColor: interval === i ? 'green' : 'offWhite',
+                  borderColor: interval === 'month' ? 'green' : 'offWhite',
                   borderRadius: 1,
-                  bg: interval === i ? 'background' : 'white',
+                  bg: interval === 'month' ? 'background' : 'white',
                   cursor: 'pointer',
                   fontSize: 3,
                 }}
               >
-                {i === 'month' ? 'Monthly' : 'Yearly'}
+                Monthly
               </Box>
-            ))}
-          </Flex>
-
-          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            <CurrencyDropdown currencies={currencies} value={currency} onChange={setCurrency} />
+              <Box
+                as="button"
+                onClick={() => setInterval('year')}
+                sx={{
+                  flex: 1,
+                  py: 2,
+                  border: '2px solid',
+                  borderColor: interval === 'year' ? 'green' : 'offWhite',
+                  borderRadius: 1,
+                  bg: interval === 'year' ? 'background' : 'white',
+                  cursor: 'pointer',
+                  fontSize: 3,
+                }}
+              >
+                Yearly
+              </Box>
+            </Flex>
+            <Flex sx={{ justifyContent: 'flex-end' }}>
+              <CurrencyDropdown currencies={currencies} value={currency} onChange={setCurrency} />
+            </Flex>
 
             <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
               {availablePrices.map((price) => {

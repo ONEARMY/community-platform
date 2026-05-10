@@ -175,7 +175,10 @@ export const SupporterPage = ({
         );
       } else {
         toast.warning("You're already a supporter.", {
-          actionLink: { href: '/sign-in', label: 'Log in' },
+          actionLink: {
+            href: `/sign-in?returnUrl=${encodeURIComponent('/settings')}`,
+            label: 'Log in',
+          },
           description: 'Log in to manage your account.',
         });
       }

@@ -9,6 +9,8 @@ import fixingFashionLogo from 'src/assets/images/themes/fixing-fashion/fixing-fa
 import { Flex, Image, Text } from 'theme-ui';
 
 export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
+  // TODO: we discussed pulling the html from the blue section below
+
   return (
     <Flex
       sx={{

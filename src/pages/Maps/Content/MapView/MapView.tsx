@@ -4,6 +4,7 @@ import { Button, Map } from 'oa-components';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { useMapEvents } from 'react-leaflet';
 import { Box, Flex } from 'theme-ui';
+import { useDebouncedCallback } from 'use-debounce';
 import { MapContext } from '../../MapContext';
 import { ButtonZoomIn } from './ButtonZoomIn.client';
 import { Clusters } from './Cluster.client';
@@ -49,12 +50,11 @@ export const MapView = () => {
     }
   }, [clusterGroupRef.current, mapState]);
 
-  // All hooks must be declared before any early return (Rules of Hooks).
-  const handleLocationChange = useCallback(() => {
+  const handleLocationChange = useDebouncedCallback(() => {
     if (mapRef.current && setBoundaries) {
       setBoundaries(mapRef.current.getBounds());
     }
-  }, [setBoundaries]);
+  }, 150);
 
   const handleMapClick = useCallback(() => {
     selectPin?.(null);

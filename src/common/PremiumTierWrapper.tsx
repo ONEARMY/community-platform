@@ -39,5 +39,5 @@ export const userHasPremiumTier = (
     return false;
   }
 
-  return profile.badges.some((badge) => badge.premiumTier === tierRequired);
+  return profile.badges.some((badge) => badge.premiumTier && badge.premiumTier >= tierRequired);
 };

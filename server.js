@@ -86,6 +86,7 @@ app.use(
         '*.cloudfunctions.net',
         'sentry.io',
         '*.sentry.io',
+        'api.stripe.com',
         ...wsUrls,
       ],
       defaultSrc: [
@@ -107,6 +108,7 @@ app.use(
         '*.google-analytics.com',
         'www.youtube.com',
         'donorbox.org',
+        'js.stripe.com',
         "'unsafe-eval'",
         "'unsafe-inline'",
       ],
@@ -117,6 +119,7 @@ app.use(
         '*.youtube.com',
         '*.donorbox.org',
         'donorbox.org',
+        'js.stripe.com',
         '*.run.app',
         '*.netlify.app',
         'projectkamp.com',

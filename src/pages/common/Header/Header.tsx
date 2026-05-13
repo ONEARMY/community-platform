@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
 import type { NotificationDisplay } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo';
@@ -60,10 +61,18 @@ const AnimationContainer = (props: any) => {
   );
 };
 
+const HIDDEN_PATHS = ['/supporter'];
+
 const Header = observer(() => {
   const { theme } = useThemeUI();
   const { profile } = useProfileStore();
   const isLoggedIn = !!profile;
+  const location = useLocation();
+
+  const showHeader = useMemo(() => {
+    const path = location?.pathname;
+    return !HIDDEN_PATHS.some((p) => path.startsWith(p));
+  }, [location?.pathname]);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -83,6 +92,8 @@ const Header = observer(() => {
   useEffect(() => {
     updateNotifications();
   }, []);
+
+  if (!showHeader) return null;
 
   return (
     <NotificationsContext.Provider

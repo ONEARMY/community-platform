@@ -278,6 +278,10 @@ export class NotificationsSupabaseServiceServer {
         case 'important': {
           // Send to users who opted into 'important' or 'all' emails
           const emailSubscribers = emailSubscribersPool.filter((subscriber) => {
+            if (!subscriber.notifications_preferences?.[0]) {
+              return true; // include by default
+            }
+
             const reach = subscriber.notifications_preferences?.[0]?.content_reach;
             return reach === 'important' || reach === 'all';
           });
@@ -293,9 +297,12 @@ export class NotificationsSupabaseServiceServer {
         }
         case 'all': {
           // Include only the all email people
-          const emailSubscribers = emailSubscribersPool.filter(
-            (subscriber) => subscriber.notifications_preferences?.[0]?.content_reach === 'all',
-          );
+          const emailSubscribers = emailSubscribersPool.filter((subscriber) => {
+            if (!subscriber.notifications_preferences?.[0]) {
+              return true; // include by default
+            }
+            return subscriber.notifications_preferences?.[0]?.content_reach === 'all';
+          });
 
           await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
             emailSubscribers,

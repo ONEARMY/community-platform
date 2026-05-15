@@ -1,8 +1,4 @@
-import {
-  NotificationsPreferences,
-  NotificationsPreferencesViaEmailFormData,
-  UserRole,
-} from 'oa-shared';
+import { NotificationsPreferences, NotificationsPreferencesViaEmailFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useToast } from 'src/common/Toast';
 import { form } from 'src/pages/UserSettings/labels';
@@ -14,10 +10,9 @@ interface IProps {
 }
 
 export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [initialValues, setInitialValues] =
     useState<NotificationsPreferencesViaEmailFormData | null>(null);
-  const [showNewsPreference, setShowNewsPreference] = useState(false);
   const toast = useToast();
 
   const refreshPreferences = async () => {
@@ -26,12 +21,6 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     if (!preferences) {
       return null;
     }
-
-    setShowNewsPreference(
-      preferences.roles.includes(UserRole.ADMIN) ||
-        preferences.roles.includes(UserRole.EDITOR) ||
-        preferences.roles.includes(UserRole.MODERATOR),
-    );
 
     const asFormData = {
       ...NotificationsPreferences.toFormData(preferences),
@@ -90,7 +79,6 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
       onSubmit={onSubmit as any}
       onUnsubscribe={onUnsubscribe}
       profileIsContactable={initialValues?.isContactable}
-      showNewsPreference={showNewsPreference}
     />
   );
 };

@@ -217,7 +217,7 @@ jobs:
               --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN"
       - run:
           name: Set Server Secrets
-          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID PATREON_CLIENT_SECRET=$PATREON_CLIENT_SECRET TOKEN_SECRET="$TOKEN_SECRET"
+          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID TOKEN_SECRET="$TOKEN_SECRET"
   # deploy-supabase:
   #   docker:
   #     - image: cimg/node:20.7.0
@@ -339,7 +339,6 @@ workflows:
           FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
           context:
-            - circle-ci-patreon-context
             - fixing-fashion-prod
             - fly-deploy
             - supabase-deploy
@@ -352,7 +351,6 @@ workflows:
           FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
           context:
-            - circle-ci-patreon-context
             - community-platform-production
             - fly-deploy
             - supabase-deploy
@@ -365,7 +363,6 @@ workflows:
           FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml
           context:
-            - circle-ci-patreon-context
             - project-kamp-production
             - fly-deploy
             - supabase-deploy

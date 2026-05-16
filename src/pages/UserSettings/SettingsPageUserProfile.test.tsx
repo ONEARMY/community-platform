@@ -150,7 +150,6 @@ describe('UserSettings', () => {
     });
 
     const mockTenantContext: TenantSettingsContext = {
-      patreonId: '',
       siteName: 'Test Site',
       siteDescription: '',
       siteUrl: 'https://test.com',

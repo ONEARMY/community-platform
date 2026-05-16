@@ -123,7 +123,6 @@ export const glyphs: IGlyphs = {
   news: iconMap.news,
   notifications: <MdNotifications />,
   other: iconMap.other,
-  patreon: iconMap.patreon,
   pdf: <FaFilePdf />,
   plastic: iconMap.plastic,
   products: iconMap.products,

@@ -4,7 +4,6 @@ import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import { News } from './news';
-import type { IPatreonUser } from './patreon';
 import type { DBProfileBadgeJoin } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { DBProfileTagJoin } from './profileTag';
@@ -28,7 +27,6 @@ export class DBProfile {
   photo: DBMedia | null;
   cover_images: DBMedia[] | null;
   country: string;
-  patreon?: IPatreonUser;
   roles: string[] | null;
   visitor_policy: string | null;
   is_blocked_from_messaging: boolean | null;
@@ -67,7 +65,6 @@ export class Profile {
   roles: string[] | null;
   lastActive: Date | null;
   coverImages: MediaWithPublicUrl[] | null;
-  patreon: IPatreonUser | null;
   authorUsefulVotes?: AuthorVotes[];
   donationsEnabled: boolean;
 
@@ -108,7 +105,6 @@ export class Profile {
       isContactable: dbProfile.is_contactable || null,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
-      patreon: dbProfile.patreon ?? null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       donationsEnabled: dbProfile.donations_enabled,

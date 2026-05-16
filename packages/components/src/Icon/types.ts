@@ -68,7 +68,6 @@ export type availableGlyphs =
   | 'news'
   | 'notifications'
   | 'other'
-  | 'patreon'
   | 'pdf'
   | 'plastic'
   | 'profile'

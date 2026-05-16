@@ -8,7 +8,6 @@ import { stripeService } from 'src/services/stripeService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Heading, Text } from 'theme-ui';
 
-import { PatreonIntegration } from './content/fields/PatreonIntegration';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 
@@ -51,8 +50,6 @@ export const SettingsPageAccount = observer(() => {
         <Heading as="h2">{headings.accountSettings}</Heading>
         <Text variant="quiet">Here you can manage the core settings of your account.</Text>
       </Flex>
-
-      <PatreonIntegration />
 
       {isAdmin && (
         <Flex

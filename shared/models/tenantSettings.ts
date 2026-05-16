@@ -13,7 +13,6 @@ export class TenantSettings {
   profileGuidelines: string;
   questionsGuidelines: string;
   supportedModules: string;
-  patreonId: string;
   colorPrimary: string;
   colorPrimaryHover: string;
   colorAccent: string;

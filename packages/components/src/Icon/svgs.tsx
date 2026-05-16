@@ -65,7 +65,6 @@ import newsSVG from '../../assets/icons/news.svg';
 import otherSVG from '../../assets/icons/other.svg';
 import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
 import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
-import patreonSVG from '../../assets/icons/patreon.svg';
 import plasticSVG from '../../assets/icons/plastic.svg';
 import productsSVG from '../../assets/icons/products.svg';
 import profileSVG from '../../assets/icons/profile.svg';
@@ -168,7 +167,6 @@ export const iconMap = {
   moulds: <ImageIcon src={mouldsSVG} />,
   news: <ImageIcon src={newsSVG} />,
   other: <ImageIcon src={otherSVG} />,
-  patreon: <ImageIcon src={patreonSVG} />,
   paginationSingleLeft: (
     <ImageIcon
       src={paginationSingleLeftSVG}

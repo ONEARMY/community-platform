@@ -14,13 +14,15 @@ import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
 
-export const formatPrice = (cents: number, currency: string) =>
-  new Intl.NumberFormat(navigator.language, {
+export const formatPrice = (cents: number, currency: string) => {
+  const fractionDigits = cents % 100 === 0 ? 0 : 2;
+  return new Intl.NumberFormat(navigator.language, {
     style: 'currency',
     currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
   }).format(cents / 100);
+};
 
 export const getCurrencySymbol = (currency: string) =>
   new Intl.NumberFormat(navigator.language, {

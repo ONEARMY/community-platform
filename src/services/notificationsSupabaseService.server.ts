@@ -277,11 +277,8 @@ export class NotificationsSupabaseServiceServer {
       });
 
       const badgeIds = news.profile_badges?.map((pb) => pb.profile_badges.id) || [];
-      console.log('[DEBUG] News notification - badge IDs:', badgeIds);
 
       const staffProfiles = await this.getStaffProfiles();
-      console.log('[DEBUG] Staff profiles count:', staffProfiles.length);
-      console.log('[DEBUG] Staff profiles sample:', staffProfiles[0]);
 
       // Build the pool of badge holders + staff (used for emails and, when badge-restricted, platform notifications)
       const badgeSubscribers =
@@ -289,24 +286,15 @@ export class NotificationsSupabaseServiceServer {
           ? await this.getProfilesByBadgeIds(badgeIds)
           : await this.getProfilesWithAnyBadge();
 
-      console.log('[DEBUG] Badge subscribers count:', badgeSubscribers.length);
-      console.log('[DEBUG] Badge subscribers sample:', badgeSubscribers[0]);
-
       // Filter out any profiles without valid profile_id
       const validBadgeSubscribers = badgeSubscribers.filter((p) => p.profile_id != null);
       const validStaffProfiles = staffProfiles.filter((p) => p.profile_id != null);
-
-      console.log('[DEBUG] Valid badge subscribers after filtering:', validBadgeSubscribers.length);
-      console.log('[DEBUG] Valid staff profiles after filtering:', validStaffProfiles.length);
 
       const notifyPool = new Map(validBadgeSubscribers.map((p) => [p.profile_id, p]));
       for (const staff of validStaffProfiles) {
         notifyPool.set(staff.profile_id, staff);
       }
       const emailSubscribersPool = Array.from(notifyPool.values());
-
-      console.log('[DEBUG] Email subscribers pool count:', emailSubscribersPool.length);
-      console.log('[DEBUG] Email subscribers pool sample:', emailSubscribersPool[0]);
 
       if (badgeIds.length === 0) {
         // No badge restrictions - platform notification goes to all users
@@ -333,16 +321,6 @@ export class NotificationsSupabaseServiceServer {
             return reach === 'important' || reach === 'all';
           });
 
-          console.log(
-            '[DEBUG] Important news - email subscribers after filtering:',
-            emailSubscribers.length,
-          );
-          console.log('[DEBUG] Important news - email subscribers sample:', emailSubscribers[0]);
-          console.log(
-            '[DEBUG] Important news - content_reach values:',
-            emailSubscribers.map((s) => s.content_reach),
-          );
-
           await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
             emailSubscribers,
             dbNotification,
@@ -357,12 +335,6 @@ export class NotificationsSupabaseServiceServer {
           const emailSubscribers = emailSubscribersPool.filter(
             (subscriber) => subscriber.content_reach === 'all',
           );
-
-          console.log(
-            '[DEBUG] All news - email subscribers after filtering:',
-            emailSubscribers.length,
-          );
-          console.log('[DEBUG] All news - email subscribers sample:', emailSubscribers[0]);
 
           await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
             emailSubscribers,

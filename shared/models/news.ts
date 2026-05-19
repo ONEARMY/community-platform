@@ -64,7 +64,7 @@ export class DBNews implements IDBContentDoc {
       profileBadges,
       tags: news.tags,
       title: news.title,
-      contentReach: contentReachOption || null,
+      contentReach: (contentReachOption?.value || null) as ContentReach,
     } satisfies NewsFormData;
   }
 }
@@ -150,7 +150,7 @@ export type NewsFormData = {
   profileBadges: (string | null)[] | null;
   tags?: number[];
   title: string;
-  contentReach: SelectValue | null;
+  contentReach: ContentReach | null;
 };
 
 export type NewsDTO = {

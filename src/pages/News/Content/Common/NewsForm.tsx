@@ -56,7 +56,7 @@ export const NewsForm = (props: IProps) => {
       profileBadges: formValues.profileBadges || null,
       tags: formValues.tags,
       title: formValues.title!,
-      contentReach: formValues.contentReach!,
+      contentReach: formValues.contentReach || null,
     });
 
     toast.promise(promise, {

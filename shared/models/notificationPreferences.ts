@@ -105,3 +105,20 @@ export interface NotificationsPreferencesViaEmailFormData extends NotificationsP
   isContactable: undefined | boolean;
   userCode: string;
 }
+
+// Profile with email and notification preferences returned by badge/staff RPC functions
+// Used by getProfilesWithAnyBadge, getProfilesByBadgeIds, and getStaffProfiles
+export interface ProfileWithEmailAndPreferences {
+  profile_id: number;
+  profile_created_at: string;
+  display_name: string;
+  username: string;
+  roles: string[]; // Coalesced to empty array in SQL
+  email: string;
+  comments: boolean;
+  replies: boolean;
+  research_updates: boolean;
+  is_unsubscribed: boolean;
+  content_reach: ContentReach;
+  badge_ids: number[]; // Empty array by default, for compatibility with SubscribedUser
+}

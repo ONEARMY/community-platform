@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "profile_guidelines" "text",
     "questions_guidelines" "text",
     "supported_modules" "text",
+    "hidden_modules" "text",
     "patreon_id" "text",
     "ga_tracking_id" "text",
     "pwa_icons" "jsonb",

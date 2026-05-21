@@ -600,6 +600,7 @@ const main = async () => {
       questions_guidelines:
         'https://community.preciousplastic.com/academy/guides/guidelines-questions',
       supported_modules: 'library,map,research,academy,questions,news',
+      hidden_modules: null,
       donation_settings: {
         defaultDescription:
           'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',

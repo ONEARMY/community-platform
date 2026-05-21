@@ -9,6 +9,7 @@ export type SubscriptionStatus = {
 
 type ElementsSubscriptionParams = {
   priceId: string;
+  currency: string;
   name: string;
   email: string;
 };

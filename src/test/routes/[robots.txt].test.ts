@@ -13,7 +13,7 @@ vi.mock('src/services/tenantSettingsService.server', () => ({
   },
 }));
 
-import { loader } from './[robots.txt]';
+import { loader } from 'src/routes/[robots.txt]';
 
 const createRequest = (host: string) =>
   new Request('https://example.com/robots.txt', {

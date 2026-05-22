@@ -171,7 +171,6 @@ RETURNS TABLE (
   badge_ids bigint[]
 ) 
 LANGUAGE plpgsql
-SECURITY DEFINER
 AS $$
 BEGIN
   RETURN QUERY
@@ -212,7 +211,6 @@ RETURNS TABLE (
   badge_ids bigint[]
 ) 
 LANGUAGE plpgsql
-SECURITY DEFINER
 AS $$
 BEGIN
   RETURN QUERY
@@ -254,7 +252,6 @@ RETURNS TABLE (
   badge_ids bigint[]
 ) 
 LANGUAGE plpgsql
-SECURITY DEFINER
 AS $$
 BEGIN
   RETURN QUERY

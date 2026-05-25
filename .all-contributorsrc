@@ -1133,6 +1133,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mo-salah1998",
+      "name": "Mohamed Salah",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56582553?v=4",
+      "profile": "https://github.com/mo-salah1998",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

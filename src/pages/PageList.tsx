@@ -41,8 +41,14 @@ const news: IPageNavigation = {
   title: 'News',
 };
 
-export const getAvailablePageList = (supportedModules: MODULE[]): IPageNavigation[] => {
-  return COMMUNITY_PAGES.filter((pageItem) => supportedModules.includes(pageItem.module));
+export const getAvailablePageList = (
+  supportedModules: MODULE[],
+  hiddenModules?: string,
+): IPageNavigation[] => {
+  const hidden = hiddenModules ? hiddenModules.split(',').map((s) => s.trim()) : [];
+  return COMMUNITY_PAGES.filter(
+    (pageItem) => supportedModules.includes(pageItem.module) && !hidden.includes(pageItem.module),
+  );
 };
 
 export const COMMUNITY_PAGES: IPageNavigation[] = [

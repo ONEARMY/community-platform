@@ -30,6 +30,7 @@ export class NotificationsSupabaseServiceServer {
     try {
       const response = await this.client.rpc('get_profiles_by_badge', {
         p_badge_id: badgeId,
+        p_tenant_id: process.env.TENANT_ID!,
       });
       return response.data;
     } catch (error) {
@@ -40,7 +41,9 @@ export class NotificationsSupabaseServiceServer {
 
   async getStaffProfiles(): Promise<ProfileWithEmailAndPreferences[]> {
     try {
-      const response = await this.client.rpc('get_staff_profiles');
+      const response = await this.client.rpc('get_staff_profiles', {
+        p_tenant_id: process.env.TENANT_ID!,
+      });
 
       if (response.error) {
         throw response.error;
@@ -77,7 +80,9 @@ export class NotificationsSupabaseServiceServer {
 
   async getProfilesWithAnyBadge(): Promise<ProfileWithEmailAndPreferences[]> {
     try {
-      const response = await this.client.rpc('get_profiles_with_any_badge');
+      const response = await this.client.rpc('get_profiles_with_any_badge', {
+        p_tenant_id: process.env.TENANT_ID!,
+      });
 
       if (response.error) {
         throw response.error;
@@ -120,6 +125,7 @@ export class NotificationsSupabaseServiceServer {
 
       const response = await this.client.rpc('get_profiles_by_badge_ids', {
         p_badge_ids: badgeIds,
+        p_tenant_id: process.env.TENANT_ID!,
       });
 
       if (response.error) {

@@ -1,5 +1,4 @@
 import { users } from 'oa-shared/mocks/data';
-
 import { generateAlphaNumeric, getTenantUser, generateNewUserDetails } from '../../utils/TestUtils';
 
 describe('[News.Write]', () => {

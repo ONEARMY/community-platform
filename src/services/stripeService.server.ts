@@ -72,6 +72,7 @@ export class StripeServiceServer {
   static async createSubscriptionWithPaymentIntent(
     customerId: string,
     priceId: string,
+    currency: string,
     name?: string,
   ): Promise<string> {
     const stripe = await getStripe();
@@ -83,6 +84,7 @@ export class StripeServiceServer {
     const subscription = await stripe.subscriptions.create({
       customer: customerId,
       items: [{ price: priceId }],
+      currency,
       payment_behavior: 'default_incomplete',
       expand: ['latest_invoice'],
     });
@@ -220,6 +222,7 @@ export class StripeServiceServer {
           product: productId,
           active: true,
           limit: 100,
+          expand: ['data.currency_options'],
         }),
       ),
     );
@@ -227,11 +230,12 @@ export class StripeServiceServer {
     return allPrices
       .flatMap((result) => result.data)
       .filter((p) => p.recurring && p.unit_amount !== null)
-      .map((p) => {
+      .flatMap((p) => {
         const productId =
           typeof p.product === 'string' ? p.product : (p.product as { id: string })?.id;
         const tierInfo = productId ? tierMap.get(productId) : undefined;
-        return {
+
+        const baseEntry: SupporterPrice = {
           id: p.id,
           unitAmount: p.unit_amount!,
           currency: p.currency,
@@ -239,6 +243,31 @@ export class StripeServiceServer {
           tier: tierInfo?.tier ?? null,
           tierName: tierInfo?.tierName ?? null,
         };
+
+        const entries: SupporterPrice[] = [baseEntry];
+
+        // Flatten currency_options into additional entries so the frontend
+        // can filter by currency without knowing about multi-currency prices.
+        if (p.currency_options) {
+          for (const [cur, opts] of Object.entries(p.currency_options)) {
+            if (cur === p.currency) continue; // skip duplicate of base currency
+            const amount =
+              opts.unit_amount ??
+              (opts.unit_amount_decimal ? Math.round(parseFloat(opts.unit_amount_decimal)) : null);
+            if (amount != null) {
+              entries.push({
+                id: p.id,
+                unitAmount: amount,
+                currency: cur,
+                interval: p.recurring!.interval as 'month' | 'year',
+                tier: tierInfo?.tier ?? null,
+                tierName: tierInfo?.tierName ?? null,
+              });
+            }
+          }
+        }
+
+        return entries;
       });
   }
 

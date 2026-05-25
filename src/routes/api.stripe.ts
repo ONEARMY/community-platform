@@ -55,7 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const body = await request.json();
-  const { action: actionType, priceId, name, email } = body;
+  const { action: actionType, priceId, currency, name, email } = body;
 
   const claims = await client.auth.getClaims();
   const isAuthenticated = !!claims.data?.claims;
@@ -69,8 +69,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     if (actionType === 'elements_subscription') {
-      if (!priceId) {
-        return Response.json({}, { headers, status: 400, statusText: 'priceId is required' });
+      if (!priceId || !currency) {
+        return Response.json(
+          {},
+          { headers, status: 400, statusText: 'priceId and currency are required' },
+        );
       }
 
       const publishableKey = await getSecret('STRIPE_PUBLISHABLE_KEY');
@@ -141,6 +144,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const clientSecret = await StripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
         priceId,
+        currency,
         name,
       );
 

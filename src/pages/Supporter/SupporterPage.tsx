@@ -86,7 +86,7 @@ export const SupporterPage = ({
     () =>
       prices
         .filter((p) => p.currency === currency && p.interval === interval)
-        .sort((a, b) => a.unitAmount - b.unitAmount),
+        .sort((a, b) => (a.tier ?? 0) - (b.tier ?? 0) || a.unitAmount - b.unitAmount),
     [prices, currency, interval],
   );
 
@@ -147,6 +147,7 @@ export const SupporterPage = ({
 
     const result = await stripeService.createElementsSubscription({
       priceId: selectedPrice!.id,
+      currency,
       name,
       email,
     });

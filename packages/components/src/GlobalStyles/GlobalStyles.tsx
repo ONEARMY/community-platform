@@ -3,18 +3,12 @@ import { commonStyles, GlobalFonts } from 'oa-themes';
 
 export const GlobalStyles = css`
   ${GlobalFonts}
-  html {
-    overflow-y: scroll;
-  }
   body {
     font-family: 'Varela Round', Arial, sans-serif;
     background-color: ${commonStyles.colors.background};
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    /* Override Radix UI's scroll-lock that breaks layout */
-    pointer-events: auto !important;
-    overflow-y: auto !important;
   }
 
   a {

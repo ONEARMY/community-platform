@@ -29,18 +29,10 @@ interface IProps {
   onSubmit: (values: NotificationsPreferencesFormData) => Promise<void>;
   onUnsubscribe: () => Promise<void>;
   profileIsContactable?: boolean;
-  showNewsPreference?: boolean;
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const {
-    initialValues,
-    isLoading,
-    onSubmit,
-    onUnsubscribe,
-    profileIsContactable,
-    showNewsPreference,
-  } = props;
+  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable } = props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const tenantContext = useContext(TenantContext);
   const showMessagingSetting = !tenantContext?.noMessaging;
@@ -64,16 +56,14 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <Flex sx={{ flexDirection: 'column' }}>
-              {showNewsPreference && (
-                <NotificationRow
-                  index={rowIndex++}
-                  glyph="news"
-                  name="Coming soon: News updates"
-                  description="Get notified when news from HQ are posted"
-                  control={<ContentReachSwitch />}
-                  subContent={<ContentReachRadioOptions />}
-                />
-              )}
+              <NotificationRow
+                index={rowIndex++}
+                glyph="news"
+                name="Coming soon: News updates"
+                description="Get notified when news from HQ are posted"
+                control={<ContentReachSwitch />}
+                subContent={<ContentReachRadioOptions />}
+              />
 
               <NotificationRow
                 index={rowIndex++}
@@ -112,7 +102,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                   <Field
                     component={StyledFieldSwitch}
                     data-cy={`${formId}-field-research_updates`}
-                    name="research_updates"
+                    name="researchUpdates"
                   />
                 }
               />

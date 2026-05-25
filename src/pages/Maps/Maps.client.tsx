@@ -111,21 +111,9 @@ const MapsPage = () => {
 
   // Pins filtered by everything including boundaries — used by the list view.
   const filteredPins = useMemo<MapPin[]>(() => {
-    return filterPins(allPins || [], {
-      settings: activeProfileSettingFilters,
-      badges: activeBadgeFilters,
-      types: activeProfileTypeFilters,
-      tags: activeTagFilters,
-      boundaries: boundaries ?? undefined,
-    });
-  }, [
-    allPins,
-    activeProfileSettingFilters,
-    activeBadgeFilters,
-    activeProfileTypeFilters,
-    activeTagFilters,
-    boundaries,
-  ]);
+    if (!boundaries) return mapPins;
+    return filterPins(mapPins, { boundaries });
+  }, [mapPins, boundaries]);
 
   useEffect(() => {
     if (selectedPin && allPins && allPins.length > 0 && boundaries) {

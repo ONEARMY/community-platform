@@ -36,9 +36,10 @@ export const filterPins = (
   if (!allPins?.length) {
     return [];
   }
+
   const { tags, types, badges, settings, boundaries } = filters;
 
-  let filteredPins = structuredClone(allPins);
+  let filteredPins = allPins;
 
   if (tags?.length) {
     filteredPins = filteredPins.filter((x) =>

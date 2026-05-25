@@ -42,6 +42,10 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: true,
       maxClusterRadius: 54,
+      chunkedLoading: true,
+      chunkInterval: 200,
+      chunkDelay: 50,
+      animateAddingMarkers: false,
     });
 
     group.on('clusterclick', (e: any) => {

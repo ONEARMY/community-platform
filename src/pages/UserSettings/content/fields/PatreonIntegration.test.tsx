@@ -44,6 +44,7 @@ const mockTenantContext: TenantSettingsContext = {
   profileGuidelines: 'Guidelines',
   questionsGuidelines: 'Questions',
   supportedModules: 'modules',
+  hiddenModules: '',
   colorPrimary: '#fee77b',
   colorPrimaryHover: '#ffde45',
   colorAccent: '#fee77b',

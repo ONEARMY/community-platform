@@ -25,6 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     colorAccentHover: settings.colorAccentHover,
     siteName: settings.siteName,
     siteDescription: settings.siteDescription,
+    siteImage: settings.siteImage,
   };
 }
 
@@ -111,7 +112,7 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
   const tags = generateTags(
     loaderData?.siteName || '',
     loaderData?.siteDescription || undefined,
-    '/social-image.jpg',
+    loaderData?.siteImage,
     { siteName: loaderData?.siteName },
   );
 

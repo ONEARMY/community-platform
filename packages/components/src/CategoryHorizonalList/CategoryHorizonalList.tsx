@@ -1,8 +1,6 @@
 import type { Category } from 'oa-shared';
 import { Text } from 'theme-ui';
 import { CardButton } from '../CardButton/CardButton';
-import { getGlyph, Icon } from '../Icon/Icon';
-import type { availableGlyphs } from '../Icon/types';
 import { VerticalList } from '../VerticalList/VerticalList.client';
 
 export interface IProps {
@@ -30,15 +28,12 @@ export const CategoryHorizonalList = (props: IProps) => {
     <VerticalList dataCy="CategoryHorizonalList">
       {orderedCategories.map((category, index) => {
         const isSelected = isCategorySelected(category);
-        const name = category.name;
-        const glyph = name.toLowerCase() as availableGlyphs;
-        const hasGlyph = getGlyph(glyph);
 
         return (
           <CardButton
             data-cy={`CategoryHorizonalList-Item${isSelected ? '-active' : ''}`}
             data-testid="CategoryHorizonalList-Item"
-            title={name}
+            title={category.name}
             key={index}
             onClick={() => setActiveCategory(isSelected ? null : category)}
             extrastyles={{
@@ -63,10 +58,34 @@ export const CategoryHorizonalList = (props: IProps) => {
             }}
             isSelected={isSelected}
           >
-            <Icon size={40} glyph={hasGlyph ? glyph : 'category'} />
+            {category.imageUrl && (
+              <img
+                src={category.imageUrl}
+                alt={category.name}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  objectFit: 'cover',
+                  borderRadius: '4px',
+                }}
+              />
+            )}
             <Text variant="quiet" sx={{ fontSize: 1 }}>
-              {name}
+              {category.name}
             </Text>
+            {category.description && (
+              <Text
+                variant="quiet"
+                sx={{
+                  fontSize: 0,
+                  marginTop: 1,
+                  color: 'grey',
+                  lineHeight: 1.2,
+                }}
+              >
+                {category.description}
+              </Text>
+            )}
           </CardButton>
         );
       })}

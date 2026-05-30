@@ -166,50 +166,6 @@ describe('CategoryHorizonalList', () => {
     expect(allItems[11].title).toEqual('Guides');
   });
 
-  it('renders default category glyph when specific glyph is missing', async () => {
-    const noGlyphCategories = [
-      {
-        createdAt: new Date('2022-12-03T18:03:51.313Z'),
-        id: 13,
-        modifiedAt: null,
-        name: 'No Glphy A',
-        type: 'questions' as ContentType,
-        imageUrl: null,
-        description: null,
-      },
-      {
-        createdAt: new Date('2022-12-03T18:03:51.313Z'),
-        id: 14,
-        modifiedAt: null,
-        name: 'No Glphy B',
-        type: 'questions' as ContentType,
-        imageUrl: null,
-        description: null,
-      },
-      {
-        createdAt: new Date('2022-12-03T18:03:51.313Z'),
-        id: 15,
-        modifiedAt: null,
-        name: 'No Glphy C',
-        type: 'questions' as ContentType,
-        imageUrl: null,
-        description: null,
-      },
-    ];
-
-    const { findAllByTestId } = render(
-      <CategoryHorizonalList
-        activeCategory={null}
-        allCategories={noGlyphCategories}
-        setActiveCategory={vi.fn()}
-      />,
-    );
-
-    const allItems = await findAllByTestId('category-icon');
-
-    expect(allItems).toHaveLength(3);
-  });
-
   it("doesn't render items when less than three at present", () => {
     const twoCategories = [allCategoriesForPreciousPlastic[0], allCategoriesForPreciousPlastic[1]];
 

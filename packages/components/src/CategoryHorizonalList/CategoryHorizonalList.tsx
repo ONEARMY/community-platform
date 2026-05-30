@@ -12,7 +12,7 @@ export interface IProps {
 export const CategoryHorizonalList = (props: IProps) => {
   const { activeCategory, allCategories, setActiveCategory } = props;
 
-  if (!allCategories || !allCategories.length || allCategories.length < 3) {
+  if (!allCategories || !allCategories.length) {
     return null;
   }
 
@@ -65,15 +65,13 @@ export const CategoryHorizonalList = (props: IProps) => {
                 style={{
                   width: '40px',
                   height: '40px',
-                  objectFit: 'cover',
-                  borderRadius: '4px',
                 }}
               />
             )}
             <Text variant="quiet" sx={{ fontSize: 1 }}>
               {category.name}
             </Text>
-            {category.description && (
+            {/* {category.description && (
               <Text
                 variant="quiet"
                 sx={{
@@ -85,7 +83,7 @@ export const CategoryHorizonalList = (props: IProps) => {
               >
                 {category.description}
               </Text>
-            )}
+            )} */}
           </CardButton>
         );
       })}

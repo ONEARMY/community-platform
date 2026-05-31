@@ -17,6 +17,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Guides',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: 'Helpful guides and tutorials',
   },
   {
     createdAt: new Date('2022-12-01T18:03:51.313Z'),
@@ -24,6 +26,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Machines',
     type: 'questions' as ContentType,
+    imageUrl: 'https://via.placeholder.com/40?text=M',
+    description: 'Machine projects',
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -31,6 +35,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Moulds',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -38,6 +44,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Products',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -45,6 +53,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Starter Kits',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-04T18:03:51.313Z'),
@@ -52,6 +62,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Recycling',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-05T18:03:51.313Z'),
@@ -59,6 +71,8 @@ const allCategoriesForPreciousPlastic = [
     modifiedAt: null,
     name: 'Version 5',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
 ];
 
@@ -69,6 +83,8 @@ const allCategoriesForProjectKamp = [
     modifiedAt: null,
     name: 'Construction',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -76,6 +92,8 @@ const allCategoriesForProjectKamp = [
     modifiedAt: null,
     name: 'Food',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -83,6 +101,8 @@ const allCategoriesForProjectKamp = [
     modifiedAt: null,
     name: 'Landscape',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -90,6 +110,8 @@ const allCategoriesForProjectKamp = [
     modifiedAt: null,
     name: 'Other',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -97,6 +119,8 @@ const allCategoriesForProjectKamp = [
     modifiedAt: null,
     name: 'Utilities',
     type: 'questions' as ContentType,
+    imageUrl: null,
+    description: null,
   },
 ];
 
@@ -124,6 +148,8 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryHorizonalList> = () => 
       modifiedAt: null,
       name: 'No Glphy A',
       type: 'questions' as ContentType,
+      imageUrl: null,
+      description: null,
     },
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -131,6 +157,8 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryHorizonalList> = () => 
       modifiedAt: null,
       name: 'No Glphy B',
       type: 'questions' as ContentType,
+      imageUrl: null,
+      description: null,
     },
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -138,6 +166,8 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryHorizonalList> = () => 
       modifiedAt: null,
       name: 'No Glphy C',
       type: 'questions' as ContentType,
+      imageUrl: null,
+      description: null,
     },
   ];
 

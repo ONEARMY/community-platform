@@ -175,6 +175,8 @@ describe('Research Article', () => {
               createdAt: faker.date.past(),
               modifiedAt: null,
               type: 'research',
+              description: 'A category for moulds',
+             imageUrl: '',
             },
           }),
         );

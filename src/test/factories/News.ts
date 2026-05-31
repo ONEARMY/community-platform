@@ -80,6 +80,8 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
     id: faker.number.int(),
     name: faker.lorem.words(1),
     type: 'news',
+    description: 'A category for moulds',
+    imageUrl: '',
   },
   heroImage: { id: '2349-23480-34', publicUrl: '' },
   subscriberCount: faker.number.int(),

@@ -82,6 +82,8 @@ export const FactoryLibraryItem = (itemOverloads: Partial<Project> = {}): Projec
     createdAt: faker.date.past(),
     name: faker.lorem.word(),
     type: 'projects',
+    description: 'A category for moulds',
+    imageUrl: '',
   },
   id: faker.number.int(),
   isDraft: false,

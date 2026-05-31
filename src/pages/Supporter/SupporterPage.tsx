@@ -62,6 +62,11 @@ export const SupporterPage = ({
       : null;
   }, [searchParams]);
 
+  const [initialTier] = useState(() => {
+    const tier = searchParams.get('tier');
+    return tier ? parseInt(tier, 10) : null;
+  });
+
   const [pageState, setPageState] = useState<PageState>(
     previewMode === 'checkout'
       ? 'checkout'
@@ -108,6 +113,7 @@ export const SupporterPage = ({
 
   const selectedPrice =
     availablePrices.find((p) => p.id === selectedPriceId) ||
+    (initialTier != null ? availablePrices.find((p) => p.tier === initialTier) : null) ||
     availablePrices.find((p) => p.tier === 2) ||
     availablePrices[0];
   const selectedAmount = selectedPrice?.unitAmount || 0;

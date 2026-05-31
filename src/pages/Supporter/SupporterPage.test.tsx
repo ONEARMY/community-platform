@@ -228,6 +228,38 @@ describe('SupporterPage query params', () => {
     });
   });
 
+  describe('tier query param', () => {
+    it('preselects tier 1 (starter) price with ?tier=1', async () => {
+      renderPage('/supporter?tier=1');
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€8');
+      });
+    });
+
+    it('preselects tier 3 (impact) price with ?tier=3', async () => {
+      renderPage('/supporter?tier=3');
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€32');
+      });
+    });
+
+    it('falls back to default tier 2 with invalid ?tier=99', async () => {
+      renderPage('/supporter?tier=99');
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€16');
+      });
+    });
+  });
+
   describe('flow transitions', () => {
     it('updates to ?step=checkout after support submission', async () => {
       mockCreateElementsSubscription.mockResolvedValue({

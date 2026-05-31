@@ -134,6 +134,19 @@ export const glyphs: IGlyphs = {
   error: iconMap.error,
   warning: iconMap.warning,
   info: iconMap.info,
+  'nav-academy': iconMap.navAcademy,
+  'nav-library': iconMap.navLibrary,
+  'nav-logout': iconMap.navLogout,
+  'nav-map': iconMap.navMap,
+  'nav-profile': iconMap.navProfile,
+  'nav-projects': iconMap.navProjects,
+  'nav-questions': iconMap.navQuestions,
+  'nav-research': iconMap.navResearch,
+  'nav-settings': iconMap.navSettings,
+  'nav-supporter': iconMap.navSupporter,
+  'nav-updates': iconMap.navUpdates,
+  'nav-notifications': iconMap.navNotifications,
+  'nav-notifications-active': iconMap.navNotificationsActive,
 };
 
 export type IconProps = IProps & VerticalAlignProps & SpaceProps;

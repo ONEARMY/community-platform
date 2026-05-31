@@ -19,22 +19,11 @@ const Logo = () => {
           loading="lazy"
           src={logo}
           sx={{
-            // 831px and below
-            width: 60,
-            height: 60,
-            marginBottom: '-20px',
-            '@media screen and (min-width: 832px)': {
-              width: 80,
-              height: 80,
-              marginBottom: '-30px',
-              marginLeft: '20px',
-            },
-            '@media screen and (min-width: 1200px)': {
-              width: 100,
-              height: 100,
-              marginBottom: '-40px',
-              marginLeft: '20px',
-            },
+            display: 'block',
+            position: 'relative',
+            width: [40, 40, 73],
+            height: [40, 40, 73],
+            top: [0, 0, '16px'],
           }}
           alt={`${name} logo`}
           title={`${name} logo`}

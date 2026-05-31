@@ -27,6 +27,7 @@ describe('[Common]', () => {
     cy.url().should('include', '/academy');
 
     cy.step('Go to library page');
+    cy.get('[data-cy=page-link]').contains('Projects').click();
     cy.get('[data-cy=page-link]').contains('Library').click();
     cy.wait(2000);
     cy.url().should('include', '/library');

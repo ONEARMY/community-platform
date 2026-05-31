@@ -303,12 +303,14 @@ describe('[Library]', () => {
       cy.get('a[href="/library/create"]').should('be.visible');
       cy.get('[data-cy=create-project]:visible').click();
       cy.fillIntroTitle(expected.title);
+      cy.get('[data-cy=page-link]').contains('Projects').click();
       cy.get('[data-cy=page-link][href*="/library"]').click();
       cy.get('[data-cy="Confirm.modal: Cancel"]').click();
       cy.url().should('match', /\/library\/create$/);
 
       cy.step('Clear title input');
       cy.get('[data-cy=intro-title]').clear().blur({ force: true });
+      cy.get('[data-cy=page-link]').contains('Projects').click();
       cy.get('[data-cy=page-link][href*="/library"]').click();
       cy.url().should('match', /\/library?/);
     });

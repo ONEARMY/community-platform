@@ -46,17 +46,29 @@ export const SupporterPage = ({
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const toast = useToast();
 
-  // Preview mode: /supporter?step=login or ?step=create or ?step=authenticated
+  // Preview mode: /supporter?preview=form|checkout|login|create|authenticated
   const previewMode = useMemo(() => {
-    const step = searchParams.get('step');
-    return step === 'login' || step === 'create' || step === 'authenticated' ? step : null;
+    const preview = searchParams.get('preview');
+    return preview === 'form' ||
+      preview === 'checkout' ||
+      preview === 'login' ||
+      preview === 'create' ||
+      preview === 'authenticated'
+      ? preview
+      : null;
   }, [searchParams]);
 
-  const [pageState, setPageState] = useState<PageState>(previewMode ? 'thank-you' : 'form');
+  const [pageState, setPageState] = useState<PageState>(
+    previewMode === 'checkout'
+      ? 'checkout'
+      : previewMode === 'login' || previewMode === 'create' || previewMode === 'authenticated'
+        ? 'thank-you'
+        : 'form',
+  );
   const [currency, setCurrency] = useState(
     () => [...new Set(prices.map((p) => p.currency))][0] || '',
   );
@@ -66,8 +78,12 @@ export const SupporterPage = ({
   const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [stripeInstance, setStripeInstance] = useState<Promise<StripeType | null> | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(
+    previewMode === 'checkout' ? 'pi_preview_secret' : null,
+  );
+  const [stripeInstance, setStripeInstance] = useState<Promise<StripeType | null> | null>(
+    previewMode === 'checkout' ? Promise.resolve(null) : null,
+  );
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(
     previewMode ? 'cus_preview' : null,
   );
@@ -98,6 +114,12 @@ export const SupporterPage = ({
   const selectedTier = selectedPrice?.tier ?? null;
   const selectedTierName = selectedPrice?.tierName ?? null;
   const symbol = currency ? getCurrencySymbol(currency) : '';
+
+  useEffect(() => {
+    if (!previewMode && !searchParams.has('payment')) {
+      setSearchParams({ step: 'form' }, { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     if (previewMode) return;
@@ -136,7 +158,7 @@ export const SupporterPage = ({
 
     autoCreate();
     setPageState('thank-you');
-    navigate('/supporter', { replace: true });
+    navigate('/supporter?step=thank-you', { replace: true });
   }, [isAuthenticated, previewMode, searchParams]);
 
   const handleSupport = async () => {
@@ -158,6 +180,7 @@ export const SupporterPage = ({
       setStripeCustomerId(result.stripeCustomerId);
       setAccountExists(result.accountExists);
       setPageState('checkout');
+      setSearchParams({ step: 'checkout' }, { replace: true });
     } else if (result.error.includes('active subscription')) {
       if (isAuthenticated) {
         sonnerToast.custom(
@@ -196,6 +219,7 @@ export const SupporterPage = ({
 
     if (isAuthenticated) {
       setPageState('thank-you');
+      setSearchParams({ step: 'thank-you' }, { replace: true });
       return;
     }
 
@@ -214,12 +238,14 @@ export const SupporterPage = ({
     }
 
     setPageState('thank-you');
+    setSearchParams({ step: 'thank-you' }, { replace: true });
   };
 
   const handleBack = () => {
     setPageState('form');
     setClientSecret(null);
     setStripeInstance(null);
+    setSearchParams({ step: 'form' }, { replace: true });
   };
 
   const ctx = {

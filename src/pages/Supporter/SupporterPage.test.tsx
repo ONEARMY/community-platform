@@ -240,7 +240,7 @@ describe('SupporterPage query params', () => {
       const { router } = renderPage('/supporter?preview=checkout');
 
       await waitFor(() => {
-        expect(screen.getByText('Payment checkout')).toBeInTheDocument();
+        expect(screen.getByTestId('payment-element')).toBeInTheDocument();
       });
 
       expect(getPreviewParam(router)).toBe('checkout');
@@ -316,7 +316,7 @@ describe('SupporterPage query params', () => {
         expect(getStepParam(router)).toBe('checkout');
       });
 
-      expect(screen.getByText('Payment checkout')).toBeInTheDocument();
+      expect(screen.getByTestId('payment-element')).toBeInTheDocument();
     });
 
     it('resets to ?step=form when clicking back from checkout', async () => {

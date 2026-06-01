@@ -5,11 +5,6 @@ import { useSupporterContext } from './SupporterContext';
 import { formatPrice } from './SupporterPage';
 import { TierStarIcon } from './TierStarIcons';
 
-/** Strip alpha channel from 8-digit hex (#RRGGBBAA -> #RRGGBB). */
-const opaqueHex = (hex: string): string => (hex.length === 9 ? hex.slice(0, 7) : hex);
-
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 const inputSx = {
   height: '50px',
   px: '15px',
@@ -208,7 +203,9 @@ export const SupporterForm = () => {
                         border: '2px solid',
                         borderColor: isSelected ? 'black' : '#F0F0F0',
                         borderRadius: '5px',
-                        bg: isSelected ? priceTierColor : 'white',
+                        bg: isSelected
+                          ? `color-mix(in srgb, ${priceTierColor} 50%, transparent)`
+                          : 'white',
                         cursor: 'pointer',
                         fontSize: '19px',
                         lineHeight: '23px',
@@ -225,11 +222,10 @@ export const SupporterForm = () => {
               </Flex>
             </Flex>
 
-            {/* Tier info card */}
             {selectedTier != null && currentTierConfig && (
               <Flex
                 sx={{
-                  bg: tierColor,
+                  bg: `color-mix(in srgb, ${tierColor} 50%, transparent)`,
                   borderRadius: '14px',
                   px: '24px',
                   py: '12px',
@@ -242,7 +238,7 @@ export const SupporterForm = () => {
               >
                 <Flex sx={{ flexDirection: 'column', gap: '4px' }}>
                   <Text sx={{ fontWeight: 500, fontSize: '22px' }}>
-                    {capitalize(currentTierConfig.name)} Membership
+                    {currentTierConfig.name} Membership
                   </Text>
                   <Text sx={{ fontSize: '14px', lineHeight: 1.4, color: '#696969' }}>
                     {currentTierConfig.description}
@@ -251,6 +247,8 @@ export const SupporterForm = () => {
                 <Box
                   sx={{
                     flexShrink: 0,
+                    width: '100px',
+                    height: '77px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -262,7 +260,6 @@ export const SupporterForm = () => {
             )}
           </Flex>
 
-          {/* Input fields */}
           <Flex sx={{ flexDirection: 'column', gap: '10px', alignSelf: 'stretch' }}>
             {!isAuthenticated && (
               <Flex sx={{ flexDirection: 'column', gap: '5px' }}>
@@ -306,7 +303,6 @@ export const SupporterForm = () => {
 
           {error && <Text sx={{ color: 'red' }}>{error}</Text>}
 
-          {/* CTA + terms */}
           <Flex
             sx={{
               flexDirection: 'column',
@@ -323,13 +319,18 @@ export const SupporterForm = () => {
                 height: '64px',
                 borderRadius: '5px',
                 border: 'none',
-                bg: opaqueHex(tierColor),
+                bg: tierColor,
                 color: 'black',
                 fontSize: '22px',
                 fontWeight: 500,
                 fontFamily: 'inherit',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 opacity: disabled ? 0.6 : 1,
+                transition: 'background-color 0.15s, color 0.15s',
+                '&:hover:not(:disabled)': {
+                  bg: 'black',
+                  color: 'white',
+                },
               }}
             >
               {isLoading

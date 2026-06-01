@@ -6,13 +6,14 @@ import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
-import type { SupporterPrice } from 'src/services/stripeService.server';
+import type { SupporterPrice, TierConfigMap } from 'src/services/stripeService.server';
 import { CheckoutView } from './CheckoutView';
 import { type Interval, SupporterProvider } from './SupporterContext';
 import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
+import { TIER_CONFIG } from './tierConfig';
 
 export const formatPrice = (cents: number, currency: string) => {
   const fractionDigits = cents % 100 === 0 ? 0 : 2;
@@ -37,15 +38,28 @@ type PageState = 'form' | 'checkout' | 'thank-you';
 
 export const SupporterPage = ({
   prices,
+  tierConfig: dbTierConfig,
   isAuthenticated,
   userEmail,
 }: {
   prices: SupporterPrice[];
+  tierConfig?: TierConfigMap;
   isAuthenticated: boolean;
   userEmail: string;
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
+  const siteName = tenantContext?.siteName;
+
+  const tierConfig = useMemo(() => {
+    const merged = { ...TIER_CONFIG };
+    if (dbTierConfig) {
+      for (const [key, value] of Object.entries(dbTierConfig)) {
+        merged[Number(key)] = value;
+      }
+    }
+    return merged;
+  }, [dbTierConfig]);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const toast = useToast();
@@ -280,6 +294,8 @@ export const SupporterPage = ({
     stripeInstance,
     stripeCustomerId,
     siteImage,
+    tierConfig,
+    siteName,
     previewMode: !!previewMode,
     onSupport: handleSupport,
     onPaymentSuccess: handlePaymentSuccess,

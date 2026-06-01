@@ -1,14 +1,30 @@
-import { Button, ExternalLink, Icon } from 'oa-components';
 import { useState } from 'react';
-import { Box, Card, Flex, Heading, Image, Input, Text } from 'theme-ui';
+import { Box, Card, Flex, Heading, Image, Input, Link, Text } from 'theme-ui';
 import { CurrencyDropdown } from './CurrencyDropdown';
 import { useSupporterContext } from './SupporterContext';
 import { formatPrice } from './SupporterPage';
-import { TIER_CONFIG } from './tierConfig';
+import { TierStarIcon } from './TierStarIcons';
+
+/** Strip alpha channel from 8-digit hex (#RRGGBBAA -> #RRGGBB). */
+const opaqueHex = (hex: string): string => (hex.length === 9 ? hex.slice(0, 7) : hex);
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const inputSx = {
+  height: '50px',
+  px: '15px',
+  bg: '#F4F6F7',
+  border: 'none',
+  borderRadius: '5px',
+  fontSize: '16px',
+  '&:focus': { outline: 'none' },
+};
 
 export const SupporterForm = () => {
   const {
     siteImage,
+    siteName,
+    tierConfig,
     currencies,
     currency,
     setCurrency,
@@ -52,262 +68,294 @@ export const SupporterForm = () => {
     }
   };
 
+  const currentTierConfig = selectedTier != null ? tierConfig[selectedTier] : null;
+  const tierColor = currentTierConfig?.color || '#BFDEBA';
+  const disabled = isLoading || !selectedPriceId;
+
+  const toggleButtonSx = (active: boolean) => ({
+    width: '127px',
+    minWidth: '120px',
+    height: '36px',
+    py: '8px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: active ? '1px solid rgba(0, 0, 0, 0.2)' : 'none',
+    borderRadius: '44px',
+    bg: active ? 'white' : 'transparent',
+    cursor: 'pointer',
+    fontSize: '17px',
+    lineHeight: '20px',
+    fontFamily: 'body',
+    color: 'black',
+    opacity: active ? 1 : 0.6,
+  });
+
   return (
     <Flex
       sx={{
         flexDirection: 'column',
-        width: 450,
+        maxWidth: '580px',
+        width: '100%',
         mx: 'auto',
         my: [3, 5],
         px: [3, 0],
       }}
     >
-      <Flex
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          mb: '-15px',
-          position: 'relative',
-          zIndex: 0,
-        }}
-      >
-        <Icon
-          glyph="supporter"
-          size={80}
-          sx={{
-            color: '#d61f30',
-            mr: '-15px',
-            position: 'relative',
-            zIndex: 1,
-            transform: 'rotate(-7deg)',
-          }}
-        />
-        {siteImage && <Image src={siteImage} sx={{ width: 90, height: 90 }} alt="Site logo" />}
-      </Flex>
+      {siteImage && (
+        <Flex sx={{ justifyContent: 'center', mb: '-34px', position: 'relative', zIndex: 1 }}>
+          <Image
+            src={siteImage}
+            sx={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }}
+            alt="Site logo"
+          />
+        </Flex>
+      )}
 
       <Card
-        variant="primary"
         sx={{
-          borderRadius: 3,
-          px: 6,
-          pt: '30px',
-          pb: '30px',
-          position: 'relative',
-          zIndex: 1,
+          borderRadius: '15px',
+          border: '1px solid rgba(27, 27, 27, 0.09)',
+          boxShadow: '0px 44px 54px rgba(0, 0, 0, 0.06)',
+          px: ['64px'],
+          pt: siteImage ? '40px' : '50px',
+          pb: '64px',
         }}
       >
-        <Flex sx={{ flexDirection: 'column', gap: '30px' }}>
-          <Heading as="h1" sx={{ fontSize: '30px' }}>
-            Become a supporter
+        <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
+          <Heading
+            as="h1"
+            sx={{
+              fontSize: '28px',
+              textAlign: 'center',
+              letterSpacing: '-0.01em',
+              maxWidth: '300px',
+            }}
+          >
+            {siteName ? `${siteName} Membership` : 'Become a supporter'}
           </Heading>
 
-          <Flex sx={{ flexDirection: 'column', gap: '10px' }}>
-            <Flex sx={{ gap: 2 }}>
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '12px',
+              alignSelf: 'stretch',
+            }}
+          >
+            <Flex
+              sx={{
+                bg: '#E4E9EC',
+                border: '1px solid rgba(0, 0, 0, 0.11)',
+                borderRadius: '65px',
+                p: '4px',
+                height: '44px',
+                display: 'inline-flex',
+              }}
+            >
               <Box
                 as="button"
                 onClick={() => setInterval('month')}
-                sx={{
-                  flex: 1,
-                  py: 2,
-                  border: '2px solid',
-                  borderColor: interval === 'month' ? 'green' : 'offWhite',
-                  borderRadius: 1,
-                  bg: interval === 'month' ? 'background' : 'white',
-                  cursor: 'pointer',
-                  fontSize: 3,
-                }}
+                sx={toggleButtonSx(interval === 'month')}
               >
                 Monthly
               </Box>
               <Box
                 as="button"
                 onClick={() => setInterval('year')}
-                sx={{
-                  flex: 1,
-                  py: 2,
-                  border: '2px solid',
-                  borderColor: interval === 'year' ? 'green' : 'offWhite',
-                  borderRadius: 1,
-                  bg: interval === 'year' ? 'background' : 'white',
-                  cursor: 'pointer',
-                  fontSize: 3,
-                }}
+                sx={toggleButtonSx(interval === 'year')}
               >
                 Yearly
               </Box>
             </Flex>
-            <Flex sx={{ justifyContent: 'flex-end' }}>
+
+            <Flex
+              sx={{
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                gap: '10px',
+                alignSelf: 'stretch',
+              }}
+            >
               <CurrencyDropdown currencies={currencies} value={currency} onChange={setCurrency} />
+
+              <Flex
+                sx={{
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  alignContent: 'flex-start',
+                  gap: '10px',
+                  alignSelf: 'stretch',
+                }}
+              >
+                {availablePrices.map((price) => {
+                  const priceTierColor = tierConfig[price.tier!]?.color || '#BFDEBA';
+                  const isSelected = selectedPriceId === price.id;
+                  return (
+                    <Box
+                      key={price.id}
+                      as="button"
+                      onClick={() => setSelectedPriceId(price.id)}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: '1 0 0',
+                        minWidth: '120px',
+                        height: '50px',
+                        minHeight: '40px',
+                        p: '10px',
+                        border: '2px solid',
+                        borderColor: isSelected ? 'black' : '#F0F0F0',
+                        borderRadius: '5px',
+                        bg: isSelected ? priceTierColor : 'white',
+                        cursor: 'pointer',
+                        fontSize: '19px',
+                        lineHeight: '23px',
+                        fontWeight: 500,
+                        fontFamily: 'body',
+                        color: 'black',
+                        '&:hover': { borderColor: 'black' },
+                      }}
+                    >
+                      {formatPrice(price.unitAmount, currency)}
+                    </Box>
+                  );
+                })}
+              </Flex>
             </Flex>
 
-            <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
-              {availablePrices.map((price) => {
-                const tierColor = TIER_CONFIG[price.tier!]?.color || 'green';
-                const isSelected = selectedPriceId === price.id;
-                return (
-                  <Box
-                    key={price.id}
-                    as="button"
-                    onClick={() => setSelectedPriceId(price.id)}
-                    sx={{
-                      flex: '1 1 calc(33.333% - 7px)',
-                      minWidth: 120,
-                      py: 2,
-                      border: '2px solid',
-                      borderColor: isSelected ? tierColor : 'offWhite',
-                      borderRadius: 1,
-                      bg: isSelected ? 'background' : 'white',
-                      cursor: 'pointer',
-                      fontSize: 3,
-                      '&:hover': { borderColor: tierColor },
-                    }}
-                  >
-                    {formatPrice(price.unitAmount, currency)}
-                  </Box>
-                );
-              })}
-            </Flex>
-
-            {selectedTier != null && TIER_CONFIG[selectedTier] && (
-              <Flex sx={{ flexDirection: 'column', gap: 1, py: 2 }}>
-                <Flex sx={{ alignItems: 'center', gap: 1 }}>
-                  <Icon
-                    glyph="supporter"
-                    size={25}
-                    sx={{
-                      color: TIER_CONFIG[selectedTier].color,
-                    }}
-                  />
-                  <Text sx={{ fontSize: [3, 4] }}>
-                    You're {/^[aeiou]/i.test(TIER_CONFIG[selectedTier].name) ? 'an' : 'a'}{' '}
-                    {TIER_CONFIG[selectedTier].name} supporter
+            {/* Tier info card */}
+            {selectedTier != null && currentTierConfig && (
+              <Flex
+                sx={{
+                  bg: tierColor,
+                  borderRadius: '14px',
+                  px: '24px',
+                  py: '12px',
+                  minHeight: '100px',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '18px',
+                  alignSelf: 'stretch',
+                }}
+              >
+                <Flex sx={{ flexDirection: 'column', gap: '4px' }}>
+                  <Text sx={{ fontWeight: 500, fontSize: '22px' }}>
+                    {capitalize(currentTierConfig.name)} Membership
+                  </Text>
+                  <Text sx={{ fontSize: '14px', lineHeight: 1.4, color: '#696969' }}>
+                    {currentTierConfig.description}
                   </Text>
                 </Flex>
-                <Text variant="auxiliary">{TIER_CONFIG[selectedTier].description}</Text>
-              </Flex>
-            )}
-
-            {!isAuthenticated && (
-              <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                {fieldErrors.name && (
-                  <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.name}</Text>
-                )}
                 <Box
                   sx={{
-                    position: 'relative',
-                    '&:focus-within .floating-label, &.has-value .floating-label': {
-                      top: '6px',
-                      fontSize: '12px',
-                      color: 'grey',
-                    },
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
-                  className={name ? 'has-value' : undefined}
                 >
-                  <Text
-                    className="floating-label"
-                    sx={{
-                      position: 'absolute',
-                      left: '16px',
-                      top: '14px',
-                      fontSize: 2,
-                      color: 'grey',
-                      pointerEvents: 'none',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    Your name
-                  </Text>
-                  <Input
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      if (fieldErrors.name)
-                        setFieldErrors((prev) => ({ ...prev, name: undefined }));
-                    }}
-                    variant={fieldErrors.name ? 'textareaError' : 'textarea'}
-                    sx={{ px: 3, pt: '24px', pb: '8px' }}
-                  />
+                  <TierStarIcon tier={selectedTier} />
                 </Box>
               </Flex>
             )}
-            <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-              {fieldErrors.email && (
-                <Text sx={{ fontSize: 1, color: 'error' }}>{fieldErrors.email}</Text>
-              )}
-              <Box
-                sx={{
-                  position: 'relative',
-                  '&:focus-within .floating-label, &.has-value .floating-label': {
-                    top: '6px',
-                    fontSize: '12px',
-                    color: 'grey',
-                  },
-                }}
-                className={email ? 'has-value' : undefined}
-              >
-                <Text
-                  className="floating-label"
-                  sx={{
-                    position: 'absolute',
-                    left: '16px',
-                    top: '14px',
-                    fontSize: 2,
-                    color: 'grey',
-                    pointerEvents: 'none',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  Email
-                </Text>
+          </Flex>
+
+          {/* Input fields */}
+          <Flex sx={{ flexDirection: 'column', gap: '10px', alignSelf: 'stretch' }}>
+            {!isAuthenticated && (
+              <Flex sx={{ flexDirection: 'column', gap: '5px' }}>
+                {fieldErrors.name && (
+                  <Text sx={{ fontSize: '14px', color: 'error' }}>{fieldErrors.name}</Text>
+                )}
                 <Input
-                  type="email"
-                  value={email}
+                  placeholder="Your name"
+                  value={name}
                   onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (fieldErrors.email)
-                      setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                    setName(e.target.value);
+                    if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
                   }}
-                  disabled={isAuthenticated}
-                  variant={fieldErrors.email ? 'textareaError' : 'textarea'}
-                  sx={{ px: 3, pt: '24px', pb: '8px' }}
+                  sx={{
+                    ...inputSx,
+                    ...(fieldErrors.name && { boxShadow: 'inset 0 0 0 1px red' }),
+                  }}
                 />
-              </Box>
+              </Flex>
+            )}
+            <Flex sx={{ flexDirection: 'column', gap: '5px' }}>
+              {fieldErrors.email && (
+                <Text sx={{ fontSize: '14px', color: 'error' }}>{fieldErrors.email}</Text>
+              )}
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                }}
+                disabled={isAuthenticated}
+                sx={{
+                  ...inputSx,
+                  ...(fieldErrors.email && { boxShadow: 'inset 0 0 0 1px red' }),
+                }}
+              />
             </Flex>
           </Flex>
 
           {error && <Text sx={{ color: 'red' }}>{error}</Text>}
 
-          <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
-            <Button
-              type="button"
-              variant="primary"
-              large
+          {/* CTA + terms */}
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '15px',
+              alignSelf: 'stretch',
+            }}
+          >
+            <Box
+              as="button"
               onClick={handleSupport}
-              disabled={isLoading || !selectedPriceId}
               sx={{
                 width: '100%',
                 height: '64px',
-                borderRadius: 3,
-                justifyContent: 'center',
-                '& > span': { display: 'inline-flex', alignItems: 'center', gap: 1 },
+                borderRadius: '5px',
+                border: 'none',
+                bg: opaqueHex(tierColor),
+                color: 'black',
+                fontSize: '22px',
+                fontWeight: 500,
+                fontFamily: 'inherit',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.6 : 1,
               }}
             >
               {isLoading
                 ? 'Processing...'
-                : `Support ${formatPrice(selectedAmount, currency)}/${label === 'month' ? 'month' : 'year'}`}
-              {!isLoading && (
-                <Icon
-                  glyph="arrow-forward"
-                  size={20}
-                  sx={{ display: 'inline', verticalAlign: 'middle', ml: 1 }}
-                />
-              )}
-            </Button>
+                : `Support for ${formatPrice(selectedAmount, currency)}/${label}  →`}
+            </Box>
 
-            <Text variant="auxiliary">
+            <Text sx={{ fontSize: '12px', lineHeight: 1.4, color: '#696969', textAlign: 'center' }}>
               By continuing, you agree to the{' '}
-              <ExternalLink href="/terms">Terms of Service</ExternalLink> and{' '}
-              <ExternalLink href="/privacy">Privacy Policy</ExternalLink>
+              <Link
+                href="/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: 'inherit', textDecoration: 'underline' }}
+              >
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link
+                href="/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: 'inherit', textDecoration: 'underline' }}
+              >
+                Privacy Policy
+              </Link>
             </Text>
           </Flex>
         </Flex>

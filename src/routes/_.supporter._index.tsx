@@ -4,7 +4,11 @@ import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
 import { SupporterPage } from 'src/pages/Supporter/SupporterPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { StripeServiceServer, type SupporterPrice } from 'src/services/stripeService.server';
+import {
+  StripeServiceServer,
+  type SupporterPrice,
+  type TierConfigMap,
+} from 'src/services/stripeService.server';
 import { Flex, Heading, Text } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -25,8 +29,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   try {
     const stripeService = new StripeServiceServer(client);
-    const prices = await stripeService.getPrices();
-    return Response.json({ prices, isAuthenticated, userEmail });
+    const [prices, tierConfig] = await Promise.all([
+      stripeService.getPrices(),
+      stripeService.getTierConfig(),
+    ]);
+    return Response.json({ prices, tierConfig, isAuthenticated, userEmail });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);
     return Response.json({ prices: [], isAuthenticated, userEmail });
@@ -34,8 +41,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const { prices, isAuthenticated, userEmail } = useLoaderData<{
+  const { prices, tierConfig, isAuthenticated, userEmail } = useLoaderData<{
     prices: SupporterPrice[];
+    tierConfig: TierConfigMap;
     isAuthenticated: boolean;
     userEmail: string;
   }>();
@@ -63,7 +71,12 @@ export default function Index() {
     <Main style={{ flex: 1 }}>
       <ClientOnly fallback={<></>}>
         {() => (
-          <SupporterPage prices={prices} isAuthenticated={isAuthenticated} userEmail={userEmail} />
+          <SupporterPage
+            prices={prices}
+            tierConfig={tierConfig}
+            isAuthenticated={isAuthenticated}
+            userEmail={userEmail}
+          />
         )}
       </ClientOnly>
     </Main>

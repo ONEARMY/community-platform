@@ -1,24 +1,19 @@
-export const TIER_CONFIG: Record<
-  number,
-  {
-    color: string;
-    name: string;
-    description: string;
-  }
-> = {
+export type TierConfigEntry = { color: string; name: string; description: string };
+
+export const TIER_CONFIG: Record<number, TierConfigEntry> = {
   1: {
-    color: 'green',
+    color: '#BFDEBA',
     name: 'starter',
-    description: 'You help the ecosystem become more sustainable.',
+    description: 'You help us develop new features, get videos in 4K without adds!',
   },
   2: {
-    color: 'blue',
-    name: 'core',
-    description: 'You help us develop new features.',
+    color: '#77BDE380',
+    name: 'hero',
+    description: 'You help us develop new features, get videos in 4K without adds!',
   },
   3: {
-    color: '#F5C207',
-    name: 'impact',
-    description: 'You enable open source solutions to thrive and reach more people.',
+    color: '#FEE77B80',
+    name: 'legend',
+    description: 'You help us develop new features, get videos in 4K without adds!',
   },
 };

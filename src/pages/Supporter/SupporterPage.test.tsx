@@ -10,6 +10,7 @@ import {
 import { ThemeProvider } from '@theme-ui/core';
 import { theme } from 'oa-themes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { SupporterPage } from './SupporterPage';
 import type { SupporterPrice } from 'src/services/stripeService.server';
 
@@ -87,6 +88,32 @@ const mockPrices: SupporterPrice[] = [
   },
 ];
 
+const mockTierConfig = {
+  1: { color: 'green', name: 'Starter', description: 'You help us develop new features, get videos in 4K without adds!' },
+  2: { color: 'blue', name: 'Hero', description: 'You help us develop new features, get videos in 4K without adds!' },
+  3: { color: '#F5C207', name: 'Legend', description: 'You help us develop new features, get videos in 4K without adds!' },
+};
+
+const mockTenantSettings = {
+  siteName: 'Test Community',
+  siteImage: '/test-logo.png',
+  siteDescription: '',
+  siteUrl: '',
+  messageSignOff: '',
+  id: 'test',
+  beta: false,
+  authProvider: 'firebase' as const,
+  academyResource: '',
+  discordInvite: '',
+  donationBody: '',
+  socialMediaCustomLabel: '',
+  patreonUrl: '',
+  questions: {} as any,
+  modules: {} as any,
+  roles: {} as any,
+  environment: {},
+} as any;
+
 const renderPage = (
   initialUrl: string,
   overrides: { isAuthenticated?: boolean; userEmail?: string } = {},
@@ -96,11 +123,14 @@ const renderPage = (
       <Route
         path="/supporter"
         element={
-          <SupporterPage
-            prices={mockPrices}
-            isAuthenticated={overrides.isAuthenticated ?? false}
-            userEmail={overrides.userEmail ?? ''}
-          />
+          <TenantContext.Provider value={mockTenantSettings}>
+            <SupporterPage
+              prices={mockPrices}
+              tierConfig={mockTierConfig}
+              isAuthenticated={overrides.isAuthenticated ?? false}
+              userEmail={overrides.userEmail ?? ''}
+            />
+          </TenantContext.Provider>
         }
       />,
     ),
@@ -135,7 +165,7 @@ describe('SupporterPage query params', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Become a supporter')).toBeInTheDocument();
+      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
     });
 
     it('resets ?step=checkout to ?step=form on direct visit', async () => {
@@ -145,7 +175,7 @@ describe('SupporterPage query params', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Become a supporter')).toBeInTheDocument();
+      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
     });
 
     it('resets ?step=thank-you to ?step=form on direct visit', async () => {
@@ -155,7 +185,7 @@ describe('SupporterPage query params', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Become a supporter')).toBeInTheDocument();
+      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
     });
   });
 
@@ -199,7 +229,7 @@ describe('SupporterPage query params', () => {
       const { router } = renderPage('/supporter?preview=form');
 
       await waitFor(() => {
-        expect(screen.getByText('Become a supporter')).toBeInTheDocument();
+        expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
       });
 
       expect(getPreviewParam(router)).toBe('form');
@@ -224,7 +254,7 @@ describe('SupporterPage query params', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Become a supporter')).toBeInTheDocument();
+      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
     });
   });
 
@@ -319,7 +349,7 @@ describe('SupporterPage query params', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Become a supporter')).toBeInTheDocument();
+      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
     });
 
     it('updates to ?step=thank-you after payment success (authenticated)', async () => {

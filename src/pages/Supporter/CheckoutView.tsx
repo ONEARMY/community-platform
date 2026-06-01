@@ -1,10 +1,10 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { Button, Icon } from 'oa-components';
+import { Button } from 'oa-components';
 import { type FormEvent, useState } from 'react';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
 import { formatPrice } from './SupporterPage';
-import { TIER_CONFIG } from './tierConfig';
+import { TierStarIcon } from './TierStarIcons';
 
 const CheckoutForm = () => {
   const {
@@ -99,8 +99,16 @@ const CheckoutForm = () => {
 };
 
 export const CheckoutView = () => {
-  const { stripeInstance, clientSecret, selectedAmount, interval, currency, selectedTier, onBack } =
-    useSupporterContext();
+  const {
+    stripeInstance,
+    clientSecret,
+    selectedAmount,
+    interval,
+    currency,
+    selectedTier,
+    tierConfig,
+    onBack,
+  } = useSupporterContext();
 
   if (!stripeInstance || !clientSecret) return null;
 
@@ -195,16 +203,16 @@ export const CheckoutView = () => {
             <Heading as="h3" sx={{ fontSize: 3 }}>
               Summary
             </Heading>
-            <Icon
-              glyph="supporter"
-              size={50}
+            <Box
               sx={{
                 color:
-                  selectedTier != null && TIER_CONFIG[selectedTier]
-                    ? TIER_CONFIG[selectedTier].color
+                  selectedTier != null && tierConfig[selectedTier]
+                    ? tierConfig[selectedTier].color
                     : 'green',
               }}
-            />
+            >
+              <TierStarIcon tier={selectedTier ?? 1} />
+            </Box>
             <Text sx={{ fontWeight: 'bold', fontSize: 1 }}>Support</Text>
             <Text sx={{ fontWeight: 'bold', fontSize: 3 }}>
               {formatPrice(selectedAmount, currency)} /{interval === 'month' ? 'month' : 'year'}

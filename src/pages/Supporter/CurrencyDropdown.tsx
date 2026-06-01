@@ -23,7 +23,7 @@ export const CurrencyDropdown = ({
           borderRadius: 1,
           bg: open ? 'softblue' : 'white',
           cursor: 'pointer',
-          fontSize: 1,
+          fontSize: 2,
           px: 2,
           py: 1,
           display: 'flex',

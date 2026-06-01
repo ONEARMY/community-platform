@@ -4,6 +4,7 @@ import type {
   DBNews,
   DBProfile,
   DBResearchItem,
+  ProfileWithEmailAndPreferences,
   ResearchUpdate,
   SubscribableContentTypes,
   SubscribedUser,
@@ -29,6 +30,7 @@ export class NotificationsSupabaseServiceServer {
     try {
       const response = await this.client.rpc('get_profiles_by_badge', {
         p_badge_id: badgeId,
+        p_tenant_id: process.env.TENANT_ID!,
       });
       return response.data;
     } catch (error) {
@@ -37,93 +39,122 @@ export class NotificationsSupabaseServiceServer {
     }
   }
 
-  async getStaffProfiles() {
-    const profileSelect = `
-      id,
-      display_name,
-      username,
-      roles,
-      notifications_preferences (content_reach)
-    `;
-    const response = await this.client
-      .from('profiles')
-      .select(profileSelect)
-      .or('roles.cs.{admin},roles.cs.{editor},roles.cs.{moderator}');
-
-    if (response.error) {
-      throw response.error;
-    }
-
-    return response.data ?? [];
-  }
-
-  async getProfilesWithAnyBadge() {
+  async getStaffProfiles(): Promise<ProfileWithEmailAndPreferences[]> {
     try {
-      const response = await this.client.from('profile_badges_relations').select(
-        `
-          profile_id,
-          profiles!inner (
-            id,
-            display_name,
-            username,
-            roles,
-            notifications_preferences (content_reach)
-          )
-        `,
-      );
+      const response = await this.client.rpc('get_staff_profiles', {
+        p_tenant_id: process.env.TENANT_ID!,
+      });
 
       if (response.error) {
         throw response.error;
       }
 
-      const uniqueProfiles = new Map(
-        response.data
-          ?.filter((item: any) => item.profiles)
-          .map((item: any) => [item.profiles.id, item.profiles]),
-      );
-
-      return Array.from(uniqueProfiles.values());
+      // Map old structure to new structure if needed
+      const data = response.data ?? [];
+      return data.map((profile: any) => {
+        // Check if we got the old structure (with 'id' instead of 'profile_id')
+        if ('id' in profile && !('profile_id' in profile)) {
+          const prefs = profile.notifications_preferences?.[0] || {};
+          return {
+            profile_id: profile.id,
+            profile_created_at: profile.created_at || new Date().toISOString(),
+            display_name: profile.display_name,
+            username: profile.username,
+            roles: profile.roles || [],
+            email: profile.email,
+            comments: prefs.comments ?? true,
+            replies: prefs.replies ?? true,
+            research_updates: prefs.research_updates ?? true,
+            is_unsubscribed: prefs.is_unsubscribed ?? false,
+            content_reach: prefs.content_reach,
+            badge_ids: [],
+          } as ProfileWithEmailAndPreferences;
+        }
+        return profile;
+      });
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   }
 
-  async getProfilesByBadgeIds(badgeIds: number[]) {
+  async getProfilesWithAnyBadge(): Promise<ProfileWithEmailAndPreferences[]> {
     try {
-      if (badgeIds.length === 0) {
-        return [];
-      }
-
-      // Get all profiles that have ANY of the specified badges
-      const response = await this.client
-        .from('profile_badges_relations')
-        .select(
-          `
-          profile_id,
-          profiles!inner (
-            id,
-            display_name,
-            username,
-            roles,
-            notifications_preferences (content_reach)
-          )
-        `,
-        )
-        .in('profile_badge_id', badgeIds);
+      const response = await this.client.rpc('get_profiles_with_any_badge', {
+        p_tenant_id: process.env.TENANT_ID!,
+      });
 
       if (response.error) {
         throw response.error;
       }
 
-      // Deduplicate profiles (in case a user has multiple badges)
-      const uniqueProfiles = new Map(
-        response.data
-          ?.filter((item: any) => item.profiles)
-          .map((item: any) => [item.profiles.id, item.profiles]),
-      );
+      // Map old structure to new structure if needed
+      const data = response.data ?? [];
+      return data.map((profile: any) => {
+        // Check if we got the old structure (with 'id' instead of 'profile_id')
+        if ('id' in profile && !('profile_id' in profile)) {
+          const prefs = profile.notifications_preferences?.[0] || {};
+          return {
+            profile_id: profile.id,
+            profile_created_at: profile.created_at || new Date().toISOString(),
+            display_name: profile.display_name,
+            username: profile.username,
+            roles: profile.roles || [],
+            email: profile.email,
+            comments: prefs.comments ?? true,
+            replies: prefs.replies ?? true,
+            research_updates: prefs.research_updates ?? true,
+            is_unsubscribed: prefs.is_unsubscribed ?? false,
+            content_reach: prefs.content_reach,
+            badge_ids: [],
+          } as ProfileWithEmailAndPreferences;
+        }
+        return profile;
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
 
-      return Array.from(uniqueProfiles.values());
+  async getProfilesByBadgeIds(badgeIds: number[]): Promise<ProfileWithEmailAndPreferences[]> {
+    try {
+      if (badgeIds.length === 0) {
+        return [];
+      }
+
+      const response = await this.client.rpc('get_profiles_by_badge_ids', {
+        p_badge_ids: badgeIds,
+        p_tenant_id: process.env.TENANT_ID!,
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      // Map old structure to new structure if needed
+      const data = response.data ?? [];
+      return data.map((profile: any) => {
+        // Check if we got the old structure (with 'id' instead of 'profile_id')
+        if ('id' in profile && !('profile_id' in profile)) {
+          const prefs = profile.notifications_preferences?.[0] || {};
+          return {
+            profile_id: profile.id,
+            profile_created_at: profile.created_at || new Date().toISOString(),
+            display_name: profile.display_name,
+            username: profile.username,
+            roles: profile.roles || [],
+            email: profile.email,
+            comments: prefs.comments ?? true,
+            replies: prefs.replies ?? true,
+            research_updates: prefs.research_updates ?? true,
+            is_unsubscribed: prefs.is_unsubscribed ?? false,
+            content_reach: prefs.content_reach,
+            badge_ids: [],
+          } as ProfileWithEmailAndPreferences;
+        }
+        return profile;
+      });
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -151,10 +182,15 @@ export class NotificationsSupabaseServiceServer {
   }
 
   async createNotifications(notification: DBNotification, subscriberIds: number[]): Promise<void> {
-    if (!subscriberIds) return;
+    if (!subscriberIds || subscriberIds.length === 0) return;
 
     try {
-      const notificationsToInsert = subscriberIds.map(
+      // Filter out any null or undefined subscriber IDs
+      const validSubscriberIds = subscriberIds.filter((id) => id != null);
+
+      if (validSubscriberIds.length === 0) return;
+
+      const notificationsToInsert = validSubscriberIds.map(
         (subscriberId) =>
           new DBNotification({
             action_type: notification.action_type,
@@ -255,9 +291,14 @@ export class NotificationsSupabaseServiceServer {
         badgeIds.length > 0
           ? await this.getProfilesByBadgeIds(badgeIds)
           : await this.getProfilesWithAnyBadge();
-      const notifyPool = new Map(badgeSubscribers.map((p: any) => [p.id, p]));
-      for (const staff of staffProfiles) {
-        notifyPool.set(staff.id, staff);
+
+      // Filter out any profiles without valid profile_id
+      const validBadgeSubscribers = badgeSubscribers.filter((p) => p.profile_id != null);
+      const validStaffProfiles = staffProfiles.filter((p) => p.profile_id != null);
+
+      const notifyPool = new Map(validBadgeSubscribers.map((p) => [p.profile_id, p]));
+      for (const staff of validStaffProfiles) {
+        notifyPool.set(staff.profile_id, staff);
       }
       const emailSubscribersPool = Array.from(notifyPool.values());
 
@@ -270,7 +311,7 @@ export class NotificationsSupabaseServiceServer {
         // Badge restrictions - platform notification goes to badge holders + staff only
         await this.createNotifications(
           dbNotification,
-          emailSubscribersPool.map((p) => p.id),
+          emailSubscribersPool.map((p) => p.profile_id).filter((id) => id != null),
         );
       }
 
@@ -278,11 +319,11 @@ export class NotificationsSupabaseServiceServer {
         case 'important': {
           // Send to users who opted into 'important' or 'all' emails
           const emailSubscribers = emailSubscribersPool.filter((subscriber) => {
-            if (!subscriber.notifications_preferences?.[0]) {
+            if (!subscriber.content_reach) {
               return true; // include by default
             }
 
-            const reach = subscriber.notifications_preferences?.[0]?.content_reach;
+            const reach = subscriber.content_reach;
             return reach === 'important' || reach === 'all';
           });
 
@@ -297,12 +338,9 @@ export class NotificationsSupabaseServiceServer {
         }
         case 'all': {
           // Include only the all email people
-          const emailSubscribers = emailSubscribersPool.filter((subscriber) => {
-            if (!subscriber.notifications_preferences?.[0]) {
-              return true; // include by default
-            }
-            return subscriber.notifications_preferences?.[0]?.content_reach === 'all';
-          });
+          const emailSubscribers = emailSubscribersPool.filter(
+            (subscriber) => subscriber.content_reach === 'all',
+          );
 
           await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails({
             emailSubscribers,

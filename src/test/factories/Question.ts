@@ -57,6 +57,8 @@ export const FactoryQuestionItem = (questionOverloads: Partial<Question> = {}): 
     id: faker.number.int(),
     name: faker.lorem.words(1),
     type: 'questions',
+    description: 'A category for moulds',
+    imageUrl: '',
   },
   images: [],
   subscriberCount: faker.number.int(),

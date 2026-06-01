@@ -35,7 +35,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       return data(categoriesForType, { headers, status: 200 });
     }
 
-    const categoriesResult = await client.from('categories').select('id,name,created_at,type');
+    const categoriesResult = await client
+      .from('categories')
+      .select('id,name,created_at,type,image_url,description');
 
     const categories = categoriesResult.data?.map((category) =>
       Category.fromDB(category as DBCategory),

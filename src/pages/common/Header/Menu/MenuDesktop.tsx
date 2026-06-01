@@ -45,23 +45,24 @@ export const MenuDesktop = () => {
 
   return (
     <Flex sx={{ alignItems: 'center', width: '100%' }}>
-      {getAvailablePageList(getSupportedModules(tenantContext?.supportedModules || '')).map(
-        (page) => (
-          <Flex key={page.path}>
-            <MenuLink
-              to={page.path}
-              data-cy="page-link"
-              onClick={(e) => {
-                if (location.pathname === page.path) {
-                  e.preventDefault();
-                }
-              }}
-            >
-              <Flex>{page.title}</Flex>
-            </MenuLink>
-          </Flex>
-        ),
-      )}
+      {getAvailablePageList(
+        getSupportedModules(tenantContext?.supportedModules || ''),
+        tenantContext?.hiddenModules,
+      ).map((page) => (
+        <Flex key={page.path}>
+          <MenuLink
+            to={page.path}
+            data-cy="page-link"
+            onClick={(e) => {
+              if (location.pathname === page.path) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <Flex>{page.title}</Flex>
+          </MenuLink>
+        </Flex>
+      ))}
     </Flex>
   );
 };

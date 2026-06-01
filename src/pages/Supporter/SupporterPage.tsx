@@ -14,13 +14,15 @@ import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
 
-export const formatPrice = (cents: number, currency: string) =>
-  new Intl.NumberFormat(navigator.language, {
+export const formatPrice = (cents: number, currency: string) => {
+  const fractionDigits = cents % 100 === 0 ? 0 : 2;
+  return new Intl.NumberFormat(navigator.language, {
     style: 'currency',
     currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
   }).format(cents / 100);
+};
 
 export const getCurrencySymbol = (currency: string) =>
   new Intl.NumberFormat(navigator.language, {
@@ -84,7 +86,7 @@ export const SupporterPage = ({
     () =>
       prices
         .filter((p) => p.currency === currency && p.interval === interval)
-        .sort((a, b) => a.unitAmount - b.unitAmount),
+        .sort((a, b) => (a.tier ?? 0) - (b.tier ?? 0) || a.unitAmount - b.unitAmount),
     [prices, currency, interval],
   );
 
@@ -145,6 +147,7 @@ export const SupporterPage = ({
 
     const result = await stripeService.createElementsSubscription({
       priceId: selectedPrice!.id,
+      currency,
       name,
       email,
     });

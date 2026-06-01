@@ -13,6 +13,7 @@ export class TenantSettings {
   profileGuidelines: string;
   questionsGuidelines: string;
   supportedModules: string;
+  hiddenModules: string;
   colorPrimary: string;
   colorPrimaryHover: string;
   colorAccent: string;

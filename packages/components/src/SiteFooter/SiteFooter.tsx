@@ -69,8 +69,7 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
       </Text>
 
       <Text mt={[2, 2, 0]}>
-        Please <Anchor href="https://www.patreon.com/one_army">sponsor the work</Anchor> or{' '}
-        <Anchor href="https://platform.onearmy.earth/">help us build the software</Anchor>.
+        Help us build the <Anchor href="https://platform.onearmy.earth/">software</Anchor>.
       </Text>
     </FooterContainer>
   );

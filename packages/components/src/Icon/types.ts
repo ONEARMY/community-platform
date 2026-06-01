@@ -55,7 +55,6 @@ export type availableGlyphs =
   | 'more-vert'
   | 'news'
   | 'notifications'
-  | 'patreon'
   | 'pdf'
   | 'profile'
   | 'reply'

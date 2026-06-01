@@ -54,7 +54,6 @@ import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg';
 import newsSVG from '../../assets/icons/news.svg';
 import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
 import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
-import patreonSVG from '../../assets/icons/patreon.svg';
 import profileSVG from '../../assets/icons/profile.svg';
 import replySVG from '../../assets/icons/reply.svg';
 import replyOutlineSVG from '../../assets/icons/reply-outline.svg';
@@ -141,7 +140,6 @@ export const iconMap = {
   megaphoneActive: <ImageIcon src={megaphoneActiveSVG} />,
   megaphoneInactive: <ImageIcon src={megaphoneInactiveSVG} />,
   news: <ImageIcon src={newsSVG} />,
-  patreon: <ImageIcon src={patreonSVG} />,
   paginationSingleLeft: (
     <ImageIcon
       src={paginationSingleLeftSVG}

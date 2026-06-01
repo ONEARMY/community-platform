@@ -62,7 +62,7 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
           id: 1,
           name: 'supporter',
           displayName: 'Supporter',
-          actionUrl: 'https://www.patreon.com/one_army',
+          actionUrl: 'should_be_a_url',
           imageUrl: faker.image.avatar(),
         },
       ],

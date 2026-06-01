@@ -27,7 +27,16 @@ import libraryJson from './.snaplet/library.json';
 import questionsJson from './.snaplet/questions.json';
 import { profilesSeed } from './seed/profilesSeed';
 import { usersSeed } from './seed/usersSeed';
-import { convertToSlug } from './src/utils/slug';
+
+// Copied from the helper to decouple the seed script from any app builing processes
+export const convertToSlug = (text: string) => {
+  const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
+  const stripSpecialCharacters = (text: string) => {
+    return text ? text.split(' ').join('-').replace(specialCharactersPattern, '') : '';
+  };
+
+  return stripSpecialCharacters(text).toLowerCase();
+};
 
 const tenant_id = `precious-plastic`;
 

@@ -136,7 +136,7 @@ export const QuestionForm = (props: IProps) => {
               contentId={id}
               maxImages={QUESTION_MAX_IMAGES}
             />
-            <CategoryField type="questions" />
+            <CategoryField type="questions" required />
             <TagsField title={LABELS.fields.tags.title} />
           </FormWrapper>
         );

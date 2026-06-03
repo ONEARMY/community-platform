@@ -35,9 +35,11 @@ export const NotificationsSupabase = ({ device }: IProps) => {
     onClick,
     size: 24,
     sx: {
+      p: '4px',
+      boxSizing: 'content-box' as const,
+      borderRadius: 99,
       ':hover': {
         background: 'background',
-        borderRadius: 99,
       },
     },
   };

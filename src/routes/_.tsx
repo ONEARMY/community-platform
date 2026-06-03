@@ -56,7 +56,7 @@ export default function Index() {
             <UsefulVoteStoreProvider>
               <Flex
                 sx={{
-                  height: '100vh',
+                  minHeight: '100vh',
                   flexDirection: 'column',
                   paddingBottom: [`${MOBILE_NAV_HEIGHT}px`, `${MOBILE_NAV_HEIGHT}px`, 0],
                 }}

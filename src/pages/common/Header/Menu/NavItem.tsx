@@ -52,14 +52,6 @@ const NavButtonItem = styled.button`
   ${itemStyles}
 `;
 
-const TabIconBox = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-`;
-
 interface IProps {
   title: string;
   icon: NavGlyph;
@@ -92,13 +84,7 @@ export const NavItem = ({
 
   const content = (
     <>
-      {isTab ? (
-        <TabIconBox>
-          <Icon glyph={icon} size={32} />
-        </TabIconBox>
-      ) : (
-        <Icon glyph={icon} size={22} />
-      )}
+      <Icon glyph={icon} size={isTab ? 32 : 22} />
       <span>{title}</span>
       {showChevron && <Icon glyph="chevron-down" size={10} />}
     </>

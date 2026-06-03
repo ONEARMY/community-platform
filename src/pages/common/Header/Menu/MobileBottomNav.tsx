@@ -42,8 +42,8 @@ export const MobileBottomNav = () => {
         boxShadow: '0 -6px 21px rgba(0, 0, 0, 0.15)',
         justifyContent: 'space-between',
         alignItems: 'center',
-        px: '16px',
-        py: '4px',
+        px: ['8px', '16px'],
+        py: '8px',
       }}
     >
       {navigation.map((entry) => {

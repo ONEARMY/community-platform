@@ -4,13 +4,13 @@ interface IProps {
   link: string;
   text: string;
   variant: string;
-  sx?: any;
+  small?: boolean;
 }
 
-export const ProfileButtonItem = ({ link, text, variant, sx }: IProps) => {
+export const ProfileButtonItem = ({ link, text, variant, small }: IProps) => {
   return (
     <ReturnPathLink to={link} style={{ minWidth: 'auto' }}>
-      <Button type="button" variant={variant} data-cy={text.toLowerCase()} sx={sx}>
+      <Button type="button" variant={variant} small={small} data-cy={text.toLowerCase()}>
         {text}
       </Button>
     </ReturnPathLink>

@@ -1,1 +1,1 @@
-export const MOBILE_NAV_HEIGHT = 90;
+export const MOBILE_NAV_HEIGHT = 80;

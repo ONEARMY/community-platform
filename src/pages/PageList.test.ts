@@ -62,14 +62,23 @@ describe('getNavigation', () => {
     expect(titles(nav)).toEqual(['Updates', 'Academy', 'Questions']);
   });
 
-  it('keeps only the group children whose module is supported', () => {
+  it('renders a single supported group child as a top-level leaf, not a dropdown', () => {
     const nav = getNavigation([MODULE.LIBRARY]);
 
-    const projects = nav.find((entry) => entry.kind === 'group');
-    expect(projects).toBeDefined();
-    if (projects?.kind === 'group') {
-      expect(projects.group.children.map((child) => child.title)).toEqual(['Library']);
+    expect(titles(nav)).toEqual(['Library']);
+    expect(nav.some((entry) => entry.kind === 'group')).toBe(false);
+
+    const [entry] = nav;
+    if (entry.kind === 'leaf') {
+      expect(entry.leaf.module).toBe(MODULE.LIBRARY);
     }
+  });
+
+  it('collapses the Projects group to a Research leaf when only Research is supported', () => {
+    const nav = getNavigation([MODULE.ACADEMY, MODULE.RESEARCH]);
+
+    expect(titles(nav)).toEqual(['Academy', 'Research']);
+    expect(nav.some((entry) => entry.kind === 'group')).toBe(false);
   });
 
   it('drops the Projects group entirely when none of its children are visible', () => {
@@ -82,12 +91,7 @@ describe('getNavigation', () => {
   it('treats hiddenModules (comma-separated) as not visible', () => {
     const nav = getNavigation(ALL_MODULES, 'research, map');
 
-    expect(nav.some((entry) => entry.kind === 'leaf' && entry.leaf.title === 'Map')).toBe(false);
-
-    const projects = nav.find((entry) => entry.kind === 'group');
-    expect(projects).toBeDefined();
-    if (projects?.kind === 'group') {
-      expect(projects.group.children.map((child) => child.title)).toEqual(['Library']);
-    }
+    expect(titles(nav)).toEqual(['Updates', 'Academy', 'Library', 'Questions']);
+    expect(nav.some((entry) => entry.kind === 'group')).toBe(false);
   });
 });

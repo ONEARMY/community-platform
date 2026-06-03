@@ -144,6 +144,12 @@ export const getNavigation = (supportedModules: MODULE[], hiddenModules?: string
       return isVisible(entry.leaf.module) ? [entry] : [];
     }
     const children = entry.group.children.filter((child) => isVisible(child.module));
-    return children.length ? [{ kind: 'group', group: { ...entry.group, children } }] : [];
+    if (children.length === 0) {
+      return [];
+    }
+    if (children.length === 1) {
+      return [{ kind: 'leaf', leaf: children[0] }];
+    }
+    return [{ kind: 'group', group: { ...entry.group, children } }];
   });
 };

@@ -51,7 +51,9 @@ export const ProfileModal = observer(() => {
   const { profile } = useProfileStore();
   const profilePath = profile?.username ? '/u/' + profile.username : '/settings/profile';
 
-  const rawCountry = profile?.country ?? null;
+  const country = profile?.country?.trim();
+  const rawCountry =
+    country && !['null', 'undefined'].includes(country.toLowerCase()) ? country : null;
   const iso2 = rawCountry
     ? rawCountry.length === 2
       ? rawCountry.toUpperCase()
@@ -66,23 +68,22 @@ export const ProfileModal = observer(() => {
       data-cy="user-menu-list"
       sx={{
         position: 'absolute',
-        top: '-17px',
-        right: '-17px',
+        top: 'calc(100% + 8px)',
+        right: 0,
         zIndex: 900,
         minWidth: '237px',
+        maxWidth: 'calc(100vw - 16px)',
         bg: 'white',
         borderRadius: '8px',
         border: '1px solid rgba(0, 0, 0, 0.19)',
-        boxShadow: '0 -3px 12px rgba(0, 0, 0, 0.11)',
-        py: '16px',
+        boxShadow: '0 8px 28px rgba(0, 0, 0, 0.16)',
+        p: '16px',
         display: 'flex',
         flexDirection: 'column',
         gap: '24px',
       }}
     >
-      <Flex
-        sx={{ px: '16px', height: '32px', alignItems: 'center', justifyContent: 'space-between' }}
-      >
+      <Flex sx={{ gap: '8px', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ minWidth: 0 }}>
           {profile?.displayName && (
             <Text
@@ -129,7 +130,7 @@ export const ProfileModal = observer(() => {
         )}
       </Flex>
 
-      <Flex sx={{ flexDirection: 'column', gap: '16px', px: '8px' }}>
+      <Flex sx={{ flexDirection: 'column', gap: '16px' }}>
         <RowLink to={profilePath} data-cy="menu-Profile">
           <RowContent icon="nav-profile">Profile</RowContent>
         </RowLink>

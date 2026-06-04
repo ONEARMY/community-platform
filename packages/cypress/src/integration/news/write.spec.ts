@@ -55,7 +55,7 @@ describe('[News.Write]', () => {
     cy.addToMarkdownField(initialNewsBodyTwo);
     cy.addToMarkdownField(initialNewsBodyThree);
 
-    cy.selectTag(category, '[data-cy=category-select]');
+    cy.selectCard(category, '[data-cy=category-select]');
     cy.selectTag(tag1, '[data-cy="tag-select"]');
     cy.selectTag(tag2, '[data-cy="tag-select"]');
     cy.selectByValue('important', '[data-cy=contentReach-select]');

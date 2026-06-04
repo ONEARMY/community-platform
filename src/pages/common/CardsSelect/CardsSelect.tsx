@@ -74,10 +74,10 @@ export const CardsSelect = ({
               backgroundColor: 'background',
               cursor: 'pointer',
               ':hover': {
-                borderColor: error ? 'error' : '#97CDEB',
+                borderColor: error ? 'error' : 'highlightHover',
               },
               '&.selected': {
-                borderColor: '#20B7EB',
+                borderColor: 'highlight',
               },
             }}
           >
@@ -111,7 +111,7 @@ export const CardsSelect = ({
               <Text
                 sx={{
                   fontSize: 1,
-                  color: '#696969',
+                  color: 'darkGrey',
                   display: '-webkit-box',
                   WebkitBoxOrient: 'vertical',
                   WebkitLineClamp: [5, 4],

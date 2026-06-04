@@ -79,7 +79,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=edit]').click();
 
       cy.step('Add category');
-      cy.selectTag(category, '[data-cy=category-select]');
+      cy.selectCard(category, '[data-cy=category-select]');
 
       // Bug: Tags missing in test suite setup
       //

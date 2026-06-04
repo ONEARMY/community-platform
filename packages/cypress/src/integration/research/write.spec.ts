@@ -287,7 +287,7 @@ describe('[Research]', () => {
       cy.step('Enter research article details');
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
-      cy.selectTag(researchItem.category, '[data-cy=category-select]');
+      cy.selectCard(researchItem.category, '[data-cy=category-select]');
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();

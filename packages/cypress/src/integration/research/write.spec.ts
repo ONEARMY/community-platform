@@ -99,6 +99,8 @@ describe('[Research]', () => {
       cy.step('New collaborators can be assigned to research');
       cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]');
 
+      cy.selectCard('Machines', '[data-cy=category-select]');
+
       cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
       cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
@@ -228,6 +230,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').clear().type(description).blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
+      cy.selectCard('Machines', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
       cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
       cy.wait(1000);
@@ -397,6 +400,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
+      cy.selectCard('Machines', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
 
       cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');

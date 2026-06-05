@@ -53,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return data(
         {
           error: 'We need to confirm your email before logging in. Please check your inbox :)',
+          email,
         },
         { headers },
       );
@@ -62,6 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return data(
       {
         error: 'Invalid email or password.',
+        email,
       },
       { headers, status: 400 },
     );
@@ -96,6 +98,7 @@ export default function Index() {
   return (
     <Main style={{ flex: 1 }}>
       <Form
+        initialValues={{ email: actionResponse?.email }}
         onSubmit={() => {}}
         render={({ submitting, invalid }) => {
           return (

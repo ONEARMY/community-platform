@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS "public"."research" (
     "fts" "tsvector",
     "collaborators" "text"[],
     "image" "json",
-    "legacy_id" "text",
     "published_at" timestamp with time zone
 );
 
@@ -45,7 +44,6 @@ CREATE TABLE IF NOT EXISTS "public"."research_updates" (
     "file_link" "text",
     "file_download_count" integer,
     "created_by" bigint,
-    "legacy_id" "text",
     "published_at" timestamp with time zone
 );
 

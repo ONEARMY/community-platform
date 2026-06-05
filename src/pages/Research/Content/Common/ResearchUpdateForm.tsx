@@ -34,7 +34,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
         fileLink: formData?.fileLink || null,
         videoUrl: formData?.videoUrl || '',
       }) satisfies ResearchUpdateFormData,
-    [],
+    [formData, id],
   );
 
   const onSubmit = async (

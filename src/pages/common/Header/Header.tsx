@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import type { NotificationDisplay } from 'oa-shared';
 import { UserRole } from 'oa-shared';
+import { theme } from 'oa-themes';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
@@ -10,14 +11,14 @@ import MobileBottomNav from 'src/pages/common/Header/Menu/MobileBottomNav';
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
 import { notificationSupabaseService } from 'src/services/notificationsSupabaseService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Flex, Text, useThemeUI } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 import { NotificationsContext } from '../NotificationsContext';
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
+import { HEADER_HEIGHT_DESKTOP, HEADER_HEIGHT_MOBILE } from './navLayout';
 
 const HIDDEN_PATHS = ['/supporter'];
 
 const Header = observer(() => {
-  const { theme } = useThemeUI();
   const { profile } = useProfileStore();
   const isLoggedIn = !!profile;
   const location = useLocation();
@@ -60,11 +61,11 @@ const Header = observer(() => {
           backgroundColor: 'white',
           borderBottom: ['1px solid #e7e7e7', '1px solid #e7e7e7', '1px solid #ddd'],
           px: [2, 2, '24px'],
-          zIndex: (theme as any).zIndex.header,
+          zIndex: theme.zIndex.header,
           position: 'relative',
           justifyContent: 'space-between',
           alignItems: 'center',
-          minHeight: [56, 56, 74],
+          minHeight: [HEADER_HEIGHT_MOBILE, HEADER_HEIGHT_MOBILE, HEADER_HEIGHT_DESKTOP],
         }}
       >
         <Flex sx={{ alignItems: 'center' }}>

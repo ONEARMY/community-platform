@@ -27,12 +27,24 @@ export interface PlatformTheme {
     subscribed: string;
     notSubscribed: string;
     betaGreen: string;
+    popoverBorder: string;
+  };
+
+  fonts: {
+    title: string;
+    body: string;
+    nav: string;
   };
 
   fontSizes: number[];
 
   space: number[];
   radii: number[];
+
+  shadows: {
+    popover: string;
+    bottomNav: string;
+  };
 
   zIndex: {
     behind: number;

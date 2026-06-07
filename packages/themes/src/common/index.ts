@@ -71,6 +71,10 @@ export const baseTheme = {
   space: commonStyles.space,
   radii: commonStyles.space,
   fonts: commonStyles.fontFamily,
+  shadows: {
+    popover: '0 8px 28px rgba(0, 0, 0, 0.16)',
+    bottomNav: '0 -6px 21px rgba(0, 0, 0, 0.15)',
+  },
 
   forms: {
     input: {

@@ -1,3 +1,4 @@
+import type { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Icon } from 'oa-components';
 import { NavLink, useLocation } from 'react-router';
@@ -5,7 +6,7 @@ import type { NavGlyph } from 'src/pages/PageList';
 
 export type NavVariant = 'desktop' | 'tab';
 
-const itemStyles = `
+const itemStyles = ({ theme }: { theme: Theme }) => `
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -13,42 +14,42 @@ const itemStyles = `
   border: none;
   border-radius: 4px;
   font-size: 14px;
-  letter-spacing: 0.28px;
+  letter-spacing: 0.02em;
   line-height: 1.2;
-  color: #000;
+  color: ${theme.colors.black};
   background: transparent;
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
   transition: opacity 0.15s ease;
   &:hover {
-    background: #f4f6f7;
+    background: ${theme.colors.background};
   }
   &.tab {
     flex-direction: column;
     gap: 0;
     padding: 8px;
     font-size: 13px;
-    letter-spacing: 0.26px;
+    letter-spacing: 0.02em;
     text-align: center;
   }
   &.dimmed {
     opacity: 0.54;
   }
   &.active {
-    background: #f4f6f7;
+    background: ${theme.colors.background};
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
     opacity: 1;
   }
 `;
 
 const NavLinkItem = styled(NavLink)`
-  font-family: ${(props) => (props.theme as any).fonts.nav};
+  font-family: ${({ theme }) => theme.fonts.nav};
   ${itemStyles}
 `;
 
 const NavButtonItem = styled.button`
-  font-family: ${(props) => (props.theme as any).fonts.nav};
+  font-family: ${({ theme }) => theme.fonts.nav};
   ${itemStyles}
 `;
 

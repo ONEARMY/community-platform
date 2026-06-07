@@ -1,8 +1,9 @@
+import { theme } from 'oa-themes';
 import { useContext } from 'react';
 import { useLocation } from 'react-router';
 import { getSupportedModules } from 'src/modules';
 import { getNavigation, type INavEntry } from 'src/pages/PageList';
-import { Flex, useThemeUI } from 'theme-ui';
+import { Flex } from 'theme-ui';
 import { TenantContext } from '../../TenantContext';
 import { MOBILE_NAV_HEIGHT } from '../navLayout';
 import { NavDropdown } from './NavDropdown';
@@ -10,7 +11,6 @@ import { NavItem } from './NavItem';
 
 export const MobileBottomNav = () => {
   const tenantContext = useContext(TenantContext);
-  const { theme } = useThemeUI();
   const { pathname } = useLocation();
   const navigation = getNavigation(
     getSupportedModules(tenantContext?.supportedModules || ''),
@@ -36,11 +36,11 @@ export const MobileBottomNav = () => {
         left: 0,
         right: 0,
         height: MOBILE_NAV_HEIGHT,
-        zIndex: (theme as any).zIndex.header,
+        zIndex: theme.zIndex.header,
         backgroundColor: 'white',
         borderTop: '1px solid #ddd',
-        boxShadow: '0 -6px 21px rgba(0, 0, 0, 0.15)',
-        justifyContent: 'space-between',
+        boxShadow: 'bottomNav',
+        justifyContent: 'space-around',
         alignItems: 'center',
         px: ['8px', '16px'],
         py: '8px',

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Icon } from 'oa-components';
+import { theme } from 'oa-themes';
 import { useState } from 'react';
 import { NavLink } from 'react-router';
 import { useClickOutside } from 'src/common/hooks/useClickOutside';
@@ -16,9 +17,9 @@ const DropdownRow = styled(NavLink)`
   padding: 16px;
   border-radius: 8px;
   text-decoration: none;
-  color: #000;
+  color: ${({ theme }) => theme.colors.black};
   &:hover {
-    background: #f4f6f7;
+    background: ${({ theme }) => theme.colors.background};
   }
 `;
 
@@ -72,8 +73,9 @@ export const NavDropdown = ({ group, variant = 'desktop', active, dimmed }: IPro
             minWidth: '264px',
             bg: 'white',
             borderRadius: '8px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
-            filter: 'drop-shadow(0 8px 28px rgba(0, 0, 0, 0.16))',
+            border: '1px solid',
+            borderColor: 'popoverBorder',
+            filter: `drop-shadow(${theme.shadows.popover})`,
             p: '16px',
             '&::before': {
               content: '""',
@@ -99,9 +101,9 @@ export const NavDropdown = ({ group, variant = 'desktop', active, dimmed }: IPro
                   sx={{
                     fontFamily: 'nav',
                     fontSize: '14px',
-                    letterSpacing: '0.28px',
+                    letterSpacing: '0.02em',
                     lineHeight: 1.2,
-                    color: '#000',
+                    color: 'black',
                   }}
                 >
                   {child.title}
@@ -112,7 +114,7 @@ export const NavDropdown = ({ group, variant = 'desktop', active, dimmed }: IPro
                   sx={{
                     fontFamily: 'nav',
                     fontSize: '12px',
-                    letterSpacing: '0.12px',
+                    letterSpacing: '0.01em',
                     color: 'rgba(0, 0, 0, 0.59)',
                     lineHeight: 1.2,
                     textIndent: '26px',

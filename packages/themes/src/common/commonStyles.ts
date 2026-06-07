@@ -35,6 +35,7 @@ export const commonStyles = {
     subscribed: 'orange',
     notSubscribed: '#1b1b1b',
     betaGreen: '#98cc98',
+    popoverBorder: 'rgba(0, 0, 0, 0.08)',
   },
   alert: {
     borderRadius: 1,

@@ -43,7 +43,7 @@ export const errors = {
 export const intro: ILabels = {
   category: {
     placeholder: 'Select one category',
-    title: 'Category',
+    title: 'Which category fit your project?',
   },
   coverImage: {
     description: 'This image should be landscape. We advise 1280x960px',

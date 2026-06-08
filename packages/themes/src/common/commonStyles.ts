@@ -21,6 +21,8 @@ export const commonStyles = {
     red: '#eb1b1f',
     red2: '#f58d8e',
     softblue: '#e2edf7',
+    highlight: '#20b7eb',
+    highlightHover: '#97cdeb',
     bluetag: '#5683b0',
     grey: '#61646b',
     green: '#00c3a9',

@@ -111,8 +111,7 @@ export default function Index() {
               <Flex
                 bg="inherit"
                 px={2}
-                sx={{ width: '100%' }}
-                css={{ maxWidth: '620px' }}
+                sx={{ width: '100%', maxWidth: '620px' }}
                 mx={'auto'}
                 mt={[5, 10]}
                 mb={3}

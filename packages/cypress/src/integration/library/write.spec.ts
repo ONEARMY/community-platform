@@ -18,7 +18,7 @@ describe('[Library]', () => {
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks';
 
   const selectCategory = (category: Category) => {
-    cy.selectTag(category, '[data-cy=category-select]');
+    cy.selectCard(category, '[data-cy=category-select]');
   };
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]');

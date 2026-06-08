@@ -17,6 +17,8 @@ describe('LibraryCategoryGuidance', () => {
             modifiedAt: faker.date.past(),
             name: 'Moulds',
             type: 'projects',
+            description: 'A category for moulds',
+            imageUrl: '',
           }}
           type="main"
         />

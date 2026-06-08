@@ -136,7 +136,7 @@ describe('Research Article', () => {
 
     it('does show both created and edit timestamp, when different', async () => {
       const createdAt = faker.date.past({ years: 2 });
-      const modifiedAt = faker.date.past({ years: 1 });
+      const modifiedAt = faker.date.between({ from: createdAt, to: new Date() });
       const update = FactoryResearchItemUpdate({
         createdAt,
         isDraft: false,
@@ -175,6 +175,8 @@ describe('Research Article', () => {
               createdAt: faker.date.past(),
               modifiedAt: null,
               type: 'research',
+              description: 'A category for moulds',
+             imageUrl: '',
             },
           }),
         );

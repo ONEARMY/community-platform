@@ -20,13 +20,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (result.status === 302) {
     // 302 status means the file is returned
     const authId = claims.data.claims.sub;
-    await recordUserDownload(
-      params.type!,
-      +params.contentId!,
-      params.docId!,
-      client,
-      authId,
-    );
+    await recordUserDownload(params.type!, +params.contentId!, params.docId!, client, authId);
 
     await incrementDownloadCount(params.type!, +params.contentId!, client);
   }

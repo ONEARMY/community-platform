@@ -10,39 +10,39 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
     >
       Research overview
     </h2>
-    <button
-      class="css-8611sj"
-      data-cy="create-update"
-      type="button"
+    <a
+      class="css-12j6o5z"
+      data-discover="true"
+      href="/research/abc/new-update"
     >
-      <span
-        class="css-lwcnm9"
+      <button
+        class="css-1ry1u2h"
+        data-cy="create-update"
+        type="button"
       >
-        <a
-          class="css-1taq3td"
-          data-discover="true"
-          href="/research/abc/new-update"
+        <span
+          class="css-lwcnm9"
         >
           Create update
-        </a>
-      </span>
-    </button>
-    <button
-      class="css-1d5ndzo"
-      type="button"
+        </span>
+      </button>
+    </a>
+    <a
+      class="css-1yz7e9k"
+      data-discover="true"
+      href="/research/abc/edit"
     >
-      <span
-        class="css-lwcnm9"
+      <button
+        class="css-1bviyij"
+        type="button"
       >
-        <a
-          class="css-1taq3td"
-          data-discover="true"
-          href="/research/abc/edit"
+        <span
+          class="css-lwcnm9"
         >
           Back to research
-        </a>
-      </span>
-    </button>
+        </span>
+      </button>
+    </a>
   </div>
 </div>
 `;
@@ -57,39 +57,39 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
     >
       Research overview
     </h2>
-    <button
-      class="css-8611sj"
-      data-cy="create-update"
-      type="button"
+    <a
+      class="css-12j6o5z"
+      data-discover="true"
+      href="/research/abc/new-update"
     >
-      <span
-        class="css-lwcnm9"
+      <button
+        class="css-1ry1u2h"
+        data-cy="create-update"
+        type="button"
       >
-        <a
-          class="css-1taq3td"
-          data-discover="true"
-          href="/research/abc/new-update"
+        <span
+          class="css-lwcnm9"
         >
           Create update
-        </a>
-      </span>
-    </button>
-    <button
-      class="css-1d5ndzo"
-      type="button"
+        </span>
+      </button>
+    </a>
+    <a
+      class="css-1yz7e9k"
+      data-discover="true"
+      href="/research/abc/edit"
     >
-      <span
-        class="css-lwcnm9"
+      <button
+        class="css-1bviyij"
+        type="button"
       >
-        <a
-          class="css-1taq3td"
-          data-discover="true"
-          href="/research/abc/edit"
+        <span
+          class="css-lwcnm9"
         >
           Back to research
-        </a>
-      </span>
-    </button>
+        </span>
+      </button>
+    </a>
   </div>
 </div>
 `;
@@ -151,39 +151,39 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
         </span>
       </li>
     </ul>
-    <button
-      class="css-8611sj"
-      data-cy="create-update"
-      type="button"
+    <a
+      class="css-12j6o5z"
+      data-discover="true"
+      href="/research/abc/new-update"
     >
-      <span
-        class="css-lwcnm9"
+      <button
+        class="css-1ry1u2h"
+        data-cy="create-update"
+        type="button"
       >
-        <a
-          class="css-1taq3td"
-          data-discover="true"
-          href="/research/abc/new-update"
+        <span
+          class="css-lwcnm9"
         >
           Create update
-        </a>
-      </span>
-    </button>
-    <button
-      class="css-1d5ndzo"
-      type="button"
+        </span>
+      </button>
+    </a>
+    <a
+      class="css-1yz7e9k"
+      data-discover="true"
+      href="/research/abc/edit"
     >
-      <span
-        class="css-lwcnm9"
+      <button
+        class="css-1bviyij"
+        type="button"
       >
-        <a
-          class="css-1taq3td"
-          data-discover="true"
-          href="/research/abc/edit"
+        <span
+          class="css-lwcnm9"
         >
           Back to research
-        </a>
-      </span>
-    </button>
+        </span>
+      </button>
+    </a>
   </div>
 </div>
 `;

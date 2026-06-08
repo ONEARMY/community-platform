@@ -49,8 +49,8 @@ const RowContent = ({ icon, children }: { icon: ProfileGlyph; children: ReactNod
   </>
 );
 
-export const ProfileModal = observer(() => {
-  const { profile, upgradeBadgeForCurrentUser } = useProfileStore();
+export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
+  const { profile } = useProfileStore();
   const profilePath = profile?.username ? '/u/' + profile.username : '/settings/profile';
 
   const rawCountry = profile?.country?.trim() || null;
@@ -63,8 +63,8 @@ export const ProfileModal = observer(() => {
       data-cy="user-menu-list"
       sx={{
         position: 'absolute',
-        top: 'calc(100% + 8px)',
-        right: 0,
+        top: '-17px',
+        right: ['-9px', null, '-17px'],
         zIndex: theme.zIndex.modalProfile,
         minWidth: '237px',
         maxWidth: 'calc(100vw - 16px)',
@@ -73,14 +73,22 @@ export const ProfileModal = observer(() => {
         border: '1px solid',
         borderColor: 'popoverBorder',
         boxShadow: 'popover',
-        p: '16px',
+        padding: '16px 8px',
         display: 'flex',
         flexDirection: 'column',
         gap: '24px',
       }}
     >
-      <Flex sx={{ gap: '8px', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box sx={{ minWidth: 0 }}>
+      <Flex
+        sx={{
+          gap: '8px',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          pl: '8px',
+          pr: [0, null, '8px'],
+        }}
+      >
+        <Box sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {profile?.displayName && (
             <Text
               sx={{
@@ -101,14 +109,14 @@ export const ProfileModal = observer(() => {
           )}
           {rawCountry && (
             <Flex sx={{ alignItems: 'center', gap: '6px' }}>
-              {iso2 && countryData && <FlagIcon countryCode={iso2} />}
+              {iso2 && countryData && <FlagIcon countryCode={iso2} width="14px" height="9px" />}
               <Text
                 sx={{
                   fontFamily: 'nav',
                   fontSize: '12px',
                   letterSpacing: '0.02em',
                   lineHeight: 1.2,
-                  color: 'rgba(0, 0, 0, 0.7)',
+                  color: 'darkGrey',
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -117,15 +125,17 @@ export const ProfileModal = observer(() => {
             </Flex>
           )}
         </Box>
-        {profile?.photo ? (
-          <Avatar
-            src={profile.photo.publicUrl}
-            loading="lazy"
-            sx={{ width: '32px', height: '32px', objectFit: 'cover', flexShrink: 0 }}
-          />
-        ) : (
-          <MemberBadge profileType={profile?.type || undefined} size={32} useLowDetailVersion />
-        )}
+        <Box onClick={onClose} sx={{ display: 'flex', flexShrink: 0, cursor: 'pointer' }}>
+          {profile?.photo ? (
+            <Avatar
+              src={profile.photo.publicUrl}
+              loading="lazy"
+              sx={{ width: '32px', height: '32px', objectFit: 'cover' }}
+            />
+          ) : (
+            <MemberBadge profileType={profile?.type || undefined} size={32} useLowDetailVersion />
+          )}
+        </Box>
       </Flex>
 
       <Flex sx={{ flexDirection: 'column', gap: '16px' }}>
@@ -137,11 +147,9 @@ export const ProfileModal = observer(() => {
             <RowContent icon="nav-settings">Settings</RowContent>
           </RowLink>
         </AuthWrapper>
-        {upgradeBadgeForCurrentUser && (
-          <RowLink to="/supporter" data-cy="menu-Supporter">
-            <RowContent icon="nav-supporter">Become a supporter</RowContent>
-          </RowLink>
-        )}
+        <RowLink to="/supporter" data-cy="menu-Supporter">
+          <RowContent icon="nav-supporter">Become a supporter</RowContent>
+        </RowLink>
         <RowReturnLink to="/logout" data-cy="menu-Logout">
           <RowContent icon="nav-logout">Log out</RowContent>
         </RowReturnLink>

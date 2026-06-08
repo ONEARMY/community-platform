@@ -50,6 +50,7 @@ export interface PlatformTheme {
     behind: number;
     level: number;
     default: number;
+    navDropdown: number;
     modalProfile: number;
     logoContainer: number;
     header: number;

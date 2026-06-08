@@ -15,6 +15,7 @@ export const baseTheme = {
     behind: -1,
     level: 0,
     default: 1,
+    navDropdown: 10,
     modalProfile: 900,
     logoContainer: 999,
     header: 3000,

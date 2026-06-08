@@ -69,7 +69,7 @@ export const NavDropdown = ({ group, variant = 'desktop', active, dimmed }: IPro
           sx={{
             position: 'absolute',
             ...popoverPosition,
-            zIndex: 10,
+            zIndex: theme.zIndex.navDropdown,
             minWidth: '264px',
             bg: 'white',
             borderRadius: '8px',
@@ -115,7 +115,7 @@ export const NavDropdown = ({ group, variant = 'desktop', active, dimmed }: IPro
                     fontFamily: 'nav',
                     fontSize: '12px',
                     letterSpacing: '0.01em',
-                    color: 'rgba(0, 0, 0, 0.59)',
+                    color: 'darkGrey',
                     lineHeight: 1.2,
                     textIndent: '26px',
                   }}

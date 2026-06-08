@@ -12,18 +12,21 @@ const Logo = () => {
     <Box
       sx={{
         position: 'relative',
+        width: [40, 40, 73],
+        height: [40, 40, 73],
       }}
     >
-      <Link to="/">
+      <Link to="/" style={{ display: 'block', width: '100%', height: '100%' }}>
         <Image
           loading="lazy"
           src={logo}
           sx={{
             display: 'block',
-            position: 'relative',
+            position: 'absolute',
+            top: [0, 0, '16px'],
+            left: 0,
             width: [40, 40, 73],
             height: [40, 40, 73],
-            top: [0, 0, '16px'],
           }}
           alt={`${name} logo`}
           title={`${name} logo`}

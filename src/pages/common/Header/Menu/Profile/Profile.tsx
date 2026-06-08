@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import { MemberBadge } from 'oa-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -12,6 +12,15 @@ const Profile = observer(() => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const { profile } = useProfileStore();
   const modalRef = useClickOutside(() => setShowProfileModal(false));
+
+  useEffect(() => {
+    if (!showProfileModal) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowProfileModal(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showProfileModal]);
 
   if (!profile) {
     return <ProfileButtons />;
@@ -35,7 +44,7 @@ const Profile = observer(() => {
           />
         )}
       </Flex>
-      {showProfileModal && <ProfileModal />}
+      {showProfileModal && <ProfileModal onClose={() => setShowProfileModal(false)} />}
     </Box>
   );
 });

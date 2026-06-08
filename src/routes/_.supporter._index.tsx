@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json({ prices, tierConfig, isAuthenticated, userEmail });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);
-    return Response.json({ prices: [], isAuthenticated, userEmail });
+    return Response.json({ prices: [], tierConfig: {}, isAuthenticated, userEmail });
   }
 }
 

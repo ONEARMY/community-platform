@@ -4,16 +4,16 @@ export const TIER_CONFIG: Record<number, TierConfigEntry> = {
   1: {
     color: '#BFDEBA',
     name: 'Starter',
-    description: 'You help us develop new features, get videos in 4K without adds!',
+    description: 'You help us develop new features, get videos in 4K without ads!',
   },
   2: {
     color: '#77BDE3',
     name: 'Hero',
-    description: 'You help us develop new features, get videos in 4K without adds!',
+    description: 'You help us develop new features, get videos in 4K without ads!',
   },
   3: {
     color: '#FEE77B',
     name: 'Legend',
-    description: 'You help us develop new features, get videos in 4K without adds!',
+    description: 'You help us develop new features, get videos in 4K without ads!',
   },
 };

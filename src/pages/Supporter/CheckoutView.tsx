@@ -1,9 +1,11 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { type FormEvent, useState } from 'react';
-import { Box, Card, Flex, Heading, Image, Link, Text } from 'theme-ui';
+import { Box, Flex, Link, Text } from 'theme-ui';
+import { SupporterCard } from './SupporterCard';
 import { useSupporterContext } from './SupporterContext';
+import { SupporterCTA } from './SupporterCTA';
 import { formatPrice } from './SupporterPage';
-import { TierStarIcon } from './TierStarIcons';
+import { TierBanner } from './TierBanner';
 
 const CheckoutForm = () => {
   const {
@@ -74,43 +76,10 @@ const CheckoutForm = () => {
     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
       <Flex sx={{ flexDirection: 'column', gap: '30px' }}>
         {selectedTier != null && currentTierConfig && (
-          <Flex
-            sx={{
-              bg: `color-mix(in srgb, ${tierColor} 50%, transparent)`,
-              borderRadius: '14px',
-              px: '24px',
-              py: '12px',
-              minHeight: '100px',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '18px',
-              alignSelf: 'stretch',
-            }}
-          >
-            <Flex sx={{ flexDirection: 'column', gap: '4px' }}>
-              <Text sx={{ fontWeight: 500, fontSize: '22px' }}>
-                {currentTierConfig.name} Membership
-              </Text>
-              <Text sx={{ fontSize: '14px', lineHeight: 1.4, color: '#696969' }}>
-                {currentTierConfig.description}
-              </Text>
-            </Flex>
-            <Box
-              sx={{
-                flexShrink: 0,
-                width: '100px',
-                height: '77px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <TierStarIcon tier={selectedTier} />
-            </Box>
-          </Flex>
+          <TierBanner tier={selectedTier} tierConfig={currentTierConfig} tierColor={tierColor} />
         )}
 
-        <Text sx={{ fontSize: '14px', lineHeight: 1.4, color: '#696969' }}>
+        <Text sx={{ fontSize: '14px', lineHeight: 1.4, color: 'darkGrey' }}>
           You can cancel, pause or update your subscription at any time.
         </Text>
 
@@ -126,33 +95,13 @@ const CheckoutForm = () => {
             alignSelf: 'stretch',
           }}
         >
-          <Box
-            as="button"
-            sx={{
-              width: '100%',
-              height: '64px',
-              borderRadius: '5px',
-              border: 'none',
-              bg: tierColor,
-              color: 'black',
-              fontSize: '22px',
-              fontWeight: 500,
-              fontFamily: 'inherit',
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              opacity: disabled ? 0.6 : 1,
-              transition: 'background-color 0.15s, color 0.15s',
-              '&:hover:not(:disabled)': {
-                bg: 'black',
-                color: 'white',
-              },
-            }}
-          >
+          <SupporterCTA type="submit" disabled={disabled} color={tierColor}>
             {isSubmitting
               ? 'Processing...'
               : `Pay ${formatPrice(selectedAmount, currency)}/${label}  →`}
-          </Box>
+          </SupporterCTA>
 
-          <Text sx={{ fontSize: '12px', lineHeight: 1.4, color: '#696969', textAlign: 'center' }}>
+          <Text sx={{ fontSize: '12px', lineHeight: 1.4, color: 'darkGrey', textAlign: 'center' }}>
             By confirming your payment, you allow us to charge your payment method for this and
             future payments in accordance with our{' '}
             <Link
@@ -206,74 +155,44 @@ export const CheckoutView = () => {
         ← Back
       </Box>
 
-      {siteImage && (
-        <Flex sx={{ justifyContent: 'center', mb: '-34px', position: 'relative', zIndex: 1 }}>
-          <Image
-            src={siteImage}
-            sx={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }}
-            alt="Site logo"
-          />
-        </Flex>
-      )}
-
-      <Card
-        sx={{
-          borderRadius: '15px',
-          border: '1px solid rgba(27, 27, 27, 0.09)',
-          boxShadow: '0px 44px 54px rgba(0, 0, 0, 0.06)',
-          px: ['64px'],
-          pt: siteImage ? '40px' : '50px',
-          pb: '64px',
-        }}
+      <SupporterCard
+        siteImage={siteImage}
+        heading={siteName ? `${siteName} Membership` : 'Checkout'}
       >
-        <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
-          <Heading
-            as="h1"
-            sx={{
-              fontSize: '28px',
-              textAlign: 'center',
-              letterSpacing: '-0.01em',
-              maxWidth: '300px',
-            }}
-          >
-            {siteName ? `${siteName} Membership` : 'Checkout'}
-          </Heading>
-
-          <Elements
-            stripe={stripeInstance}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: 'flat',
-                variables: {
-                  colorBackground: '#ffffff',
-                  borderRadius: '4px',
+        <Elements
+          stripe={stripeInstance}
+          options={{
+            clientSecret,
+            appearance: {
+              theme: 'flat',
+              variables: {
+                colorBackground: '#ffffff',
+                borderRadius: '4px',
+              },
+              rules: {
+                '.Input': {
+                  border: '1px solid #e0e0e0',
+                  boxShadow: 'none',
                 },
-                rules: {
-                  '.Input': {
-                    border: '1px solid #e0e0e0',
-                    boxShadow: 'none',
-                  },
-                  '.Input:focus': {
-                    border: '1px solid #000',
-                    boxShadow: 'none',
-                  },
-                  '.Tab': {
-                    border: '1px solid #e0e0e0',
-                    boxShadow: 'none',
-                  },
-                  '.Tab--selected': {
-                    border: '1px solid #000',
-                    boxShadow: 'none',
-                  },
+                '.Input:focus': {
+                  border: '1px solid #000',
+                  boxShadow: 'none',
+                },
+                '.Tab': {
+                  border: '1px solid #e0e0e0',
+                  boxShadow: 'none',
+                },
+                '.Tab--selected': {
+                  border: '1px solid #000',
+                  boxShadow: 'none',
                 },
               },
-            }}
-          >
-            <CheckoutForm />
-          </Elements>
-        </Flex>
-      </Card>
+            },
+          }}
+        >
+          <CheckoutForm />
+        </Elements>
+      </SupporterCard>
     </Flex>
   );
 };

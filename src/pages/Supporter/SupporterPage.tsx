@@ -1,6 +1,6 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { toast as sonnerToast } from 'sonner';
 import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
@@ -61,7 +61,6 @@ export const SupporterPage = ({
     return merged;
   }, [dbTierConfig]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const toast = useToast();
 
   // Preview mode: /supporter?preview=form|checkout|login|create|authenticated
@@ -137,9 +136,9 @@ export const SupporterPage = ({
 
   useEffect(() => {
     if (!previewMode && !searchParams.has('payment')) {
-      setSearchParams({ step: 'form' }, { replace: true });
+      setSearchParams({ step: pageState }, { replace: true });
     }
-  }, []);
+  }, [pageState]);
 
   useEffect(() => {
     if (previewMode) return;
@@ -178,7 +177,7 @@ export const SupporterPage = ({
 
     autoCreate();
     setPageState('thank-you');
-    navigate('/supporter?step=thank-you', { replace: true });
+    setSearchParams({ step: 'thank-you' }, { replace: true });
   }, [isAuthenticated, previewMode, searchParams]);
 
   const handleSupport = async () => {
@@ -200,7 +199,6 @@ export const SupporterPage = ({
       setStripeCustomerId(result.stripeCustomerId);
       setAccountExists(result.accountExists);
       setPageState('checkout');
-      setSearchParams({ step: 'checkout' }, { replace: true });
     } else if (result.error.includes('active subscription')) {
       if (isAuthenticated) {
         sonnerToast.custom(
@@ -239,7 +237,6 @@ export const SupporterPage = ({
 
     if (isAuthenticated) {
       setPageState('thank-you');
-      setSearchParams({ step: 'thank-you' }, { replace: true });
       return;
     }
 
@@ -258,14 +255,12 @@ export const SupporterPage = ({
     }
 
     setPageState('thank-you');
-    setSearchParams({ step: 'thank-you' }, { replace: true });
   };
 
   const handleBack = () => {
     setPageState('form');
     setClientSecret(null);
     setStripeInstance(null);
-    setSearchParams({ step: 'form' }, { replace: true });
   };
 
   const ctx = {

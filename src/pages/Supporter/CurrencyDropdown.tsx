@@ -69,13 +69,13 @@ export const CurrencyDropdown = ({
                   width: '100%',
                   textAlign: 'left',
                   border: 'none',
-                  bg: c.value === value ? '#F4F6F7' : 'white',
+                  bg: c.value === value ? 'background' : 'white',
                   cursor: 'pointer',
                   fontSize: '16px',
                   fontFamily: 'body',
                   px: '16px',
                   py: '12px',
-                  '&:hover': { bg: '#F4F6F7' },
+                  '&:hover': { bg: 'background' },
                 }}
               >
                 {c.label}

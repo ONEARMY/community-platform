@@ -12,6 +12,8 @@ export type SupporterPrice = {
   tierName: string | null;
 };
 
+export type TierConfigMap = Record<number, { color: string; name: string; description: string }>;
+
 let stripeInstance: Stripe | null = null;
 
 async function getStripe(): Promise<Stripe> {
@@ -201,6 +203,31 @@ export class StripeServiceServer {
           tier: badge.premium_tier,
           tierName: badge.display_name,
         });
+      }
+    }
+
+    return map;
+  }
+
+  async getTierConfig(): Promise<TierConfigMap> {
+    const { data } = await this.client
+      .from('stripe_tier_config')
+      .select('description, color, profile_badges:badge_id(premium_tier, display_name)');
+
+    const map: TierConfigMap = {};
+    if (!data) return map;
+
+    for (const row of data) {
+      const badge = row.profile_badges as unknown as {
+        premium_tier: number | null;
+        display_name: string;
+      } | null;
+      if (badge?.premium_tier != null) {
+        map[badge.premium_tier] = {
+          color: row.color,
+          name: badge.display_name,
+          description: row.description,
+        };
       }
     }
 

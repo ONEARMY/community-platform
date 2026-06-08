@@ -58,7 +58,7 @@ export const ProfileHeader = ({ user }: IProps) => {
             }}
           />
         )}
-        <Flex sx={{ flexDirection: 'column' }}>
+        <Flex sx={{ flexDirection: 'column', flex: 1, minWidth: 0 }}>
           <Username user={user} sx={{ alignSelf: 'flex-start' }} />
           <Heading
             as="h1"

@@ -191,25 +191,25 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-1',
-    display_name: 'Supporter',
+    display_name: 'Starter',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
     premium_tier: 1,
   },
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-2',
-    display_name: 'Supporter',
+    display_name: 'Hero',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
     premium_tier: 2,
   },
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-3',
-    display_name: 'Supporter',
+    display_name: 'Legend',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
     premium_tier: 3,
   },
 ];
@@ -221,6 +221,7 @@ const seedStripeBadgeProducts = (
   return tierBadges.map((badge) => ({
     tenant_id,
     stripe_product_id: `prod_tier${badge.premium_tier}`,
+    name: `Tier ${badge.premium_tier} Membership`,
     badge_id: badge.id,
   }));
 };

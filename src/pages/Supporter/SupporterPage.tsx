@@ -1,18 +1,19 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { toast as sonnerToast } from 'sonner';
 import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
-import type { SupporterPrice } from 'src/services/stripeService.server';
+import type { SupporterPrice, TierConfigMap } from 'src/services/stripeService.server';
 import { CheckoutView } from './CheckoutView';
 import { type Interval, SupporterProvider } from './SupporterContext';
 import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
+import { TIER_CONFIG } from './tierConfig';
 
 export const formatPrice = (cents: number, currency: string) => {
   const fractionDigits = cents % 100 === 0 ? 0 : 2;
@@ -37,26 +38,55 @@ type PageState = 'form' | 'checkout' | 'thank-you';
 
 export const SupporterPage = ({
   prices,
+  tierConfig: dbTierConfig,
   isAuthenticated,
   userEmail,
 }: {
   prices: SupporterPrice[];
+  tierConfig?: TierConfigMap;
   isAuthenticated: boolean;
   userEmail: string;
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const siteName = tenantContext?.siteName;
+
+  const tierConfig = useMemo(() => {
+    const merged = { ...TIER_CONFIG };
+    if (dbTierConfig) {
+      for (const [key, value] of Object.entries(dbTierConfig)) {
+        merged[Number(key)] = value;
+      }
+    }
+    return merged;
+  }, [dbTierConfig]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const toast = useToast();
 
-  // Preview mode: /supporter?step=login or ?step=create or ?step=authenticated
+  // Preview mode: /supporter?preview=form|checkout|login|create|authenticated
   const previewMode = useMemo(() => {
-    const step = searchParams.get('step');
-    return step === 'login' || step === 'create' || step === 'authenticated' ? step : null;
+    const preview = searchParams.get('preview');
+    return preview === 'form' ||
+      preview === 'checkout' ||
+      preview === 'login' ||
+      preview === 'create' ||
+      preview === 'authenticated'
+      ? preview
+      : null;
   }, [searchParams]);
 
-  const [pageState, setPageState] = useState<PageState>(previewMode ? 'thank-you' : 'form');
+  const [initialTier] = useState(() => {
+    const tier = searchParams.get('tier');
+    return tier ? parseInt(tier, 10) : null;
+  });
+
+  const [pageState, setPageState] = useState<PageState>(
+    previewMode === 'checkout'
+      ? 'checkout'
+      : previewMode === 'login' || previewMode === 'create' || previewMode === 'authenticated'
+        ? 'thank-you'
+        : 'form',
+  );
   const [currency, setCurrency] = useState(
     () => [...new Set(prices.map((p) => p.currency))][0] || '',
   );
@@ -66,8 +96,12 @@ export const SupporterPage = ({
   const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [stripeInstance, setStripeInstance] = useState<Promise<StripeType | null> | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(
+    previewMode === 'checkout' ? 'pi_preview_secret' : null,
+  );
+  const [stripeInstance, setStripeInstance] = useState<Promise<StripeType | null> | null>(
+    previewMode === 'checkout' ? Promise.resolve(null) : null,
+  );
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(
     previewMode ? 'cus_preview' : null,
   );
@@ -86,18 +120,25 @@ export const SupporterPage = ({
     () =>
       prices
         .filter((p) => p.currency === currency && p.interval === interval)
-        .sort((a, b) => (a.tier ?? 0) - (b.tier ?? 0) || a.unitAmount - b.unitAmount),
+        .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || b.unitAmount - a.unitAmount),
     [prices, currency, interval],
   );
 
   const selectedPrice =
     availablePrices.find((p) => p.id === selectedPriceId) ||
+    (initialTier != null ? availablePrices.find((p) => p.tier === initialTier) : null) ||
     availablePrices.find((p) => p.tier === 2) ||
     availablePrices[0];
   const selectedAmount = selectedPrice?.unitAmount || 0;
   const selectedTier = selectedPrice?.tier ?? null;
   const selectedTierName = selectedPrice?.tierName ?? null;
   const symbol = currency ? getCurrencySymbol(currency) : '';
+
+  useEffect(() => {
+    if (!previewMode && !searchParams.has('payment')) {
+      setSearchParams({ step: pageState }, { replace: true });
+    }
+  }, [pageState]);
 
   useEffect(() => {
     if (previewMode) return;
@@ -136,7 +177,7 @@ export const SupporterPage = ({
 
     autoCreate();
     setPageState('thank-you');
-    navigate('/supporter', { replace: true });
+    setSearchParams({ step: 'thank-you' }, { replace: true });
   }, [isAuthenticated, previewMode, searchParams]);
 
   const handleSupport = async () => {
@@ -248,6 +289,8 @@ export const SupporterPage = ({
     stripeInstance,
     stripeCustomerId,
     siteImage,
+    tierConfig,
+    siteName,
     previewMode: !!previewMode,
     onSupport: handleSupport,
     onPaymentSuccess: handlePaymentSuccess,

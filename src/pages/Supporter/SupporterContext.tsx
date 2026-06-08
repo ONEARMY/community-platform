@@ -38,6 +38,8 @@ export type SupporterState = {
   stripeCustomerId: string | null;
 
   siteImage: string | undefined;
+  tierConfig: Record<number, { color: string; name: string; description: string }>;
+  siteName: string | undefined;
   previewMode: boolean;
 
   onSupport: () => void;

@@ -18,3 +18,11 @@ export type StripeBadgeProduct = {
   badge_id: number;
   tenant_id: string;
 };
+
+export type StripeTierConfig = {
+  id: number;
+  badge_id: number;
+  description: string;
+  color: string;
+  tenant_id: string;
+};

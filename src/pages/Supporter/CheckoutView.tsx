@@ -1,10 +1,11 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { Button, Icon } from 'oa-components';
 import { type FormEvent, useState } from 'react';
-import { Box, Card, Flex, Heading, Text } from 'theme-ui';
+import { Box, Flex, Link, Text } from 'theme-ui';
+import { SupporterCard } from './SupporterCard';
 import { useSupporterContext } from './SupporterContext';
+import { SupporterCTA } from './SupporterCTA';
 import { formatPrice } from './SupporterPage';
-import { TIER_CONFIG } from './tierConfig';
+import { TierBanner } from './TierBanner';
 
 const CheckoutForm = () => {
   const {
@@ -17,6 +18,8 @@ const CheckoutForm = () => {
     name: guestName,
     accountExists,
     onPaymentSuccess,
+    selectedTier,
+    tierConfig,
   } = useSupporterContext();
 
   const stripe = useStripe();
@@ -24,7 +27,10 @@ const CheckoutForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const label = interval === 'month' ? 'Month' : 'Year';
+  const label = interval === 'month' ? 'month' : 'year';
+  const currentTierConfig = selectedTier != null ? tierConfig[selectedTier] : null;
+  const tierColor = currentTierConfig?.color || '#BFDEBA';
+  const disabled = !stripe || isSubmitting;
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -69,38 +75,53 @@ const CheckoutForm = () => {
   return (
     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
       <Flex sx={{ flexDirection: 'column', gap: '30px' }}>
-        <Heading as="h2">Payment checkout</Heading>
-        <Box
+        {selectedTier != null && currentTierConfig && (
+          <TierBanner tier={selectedTier} tierConfig={currentTierConfig} tierColor={tierColor} />
+        )}
+
+        <Text sx={{ fontSize: '14px', lineHeight: 1.4, color: 'darkGrey' }}>
+          You can cancel, pause or update your subscription at any time.
+        </Text>
+
+        <PaymentElement options={{ layout: 'tabs' }} />
+
+        {errorMessage && <Text sx={{ color: 'red' }}>{errorMessage}</Text>}
+
+        <Flex
           sx={{
-            border: '1px solid',
-            borderColor: 'offWhite',
-            borderRadius: 2,
-            padding: 3,
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '15px',
+            alignSelf: 'stretch',
           }}
         >
-          <PaymentElement options={{ layout: 'tabs' }} />
-        </Box>
-        {errorMessage && <Text sx={{ color: 'red' }}>{errorMessage}</Text>}
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={!stripe || isSubmitting}
-          sx={{ justifyContent: 'center' }}
-        >
-          {isSubmitting ? 'Processing...' : `Pay ${formatPrice(selectedAmount, currency)}/${label}`}
-        </Button>
-        <Text variant="quiet" sx={{ fontSize: 0 }}>
-          By confirming your payment, you allow us to charge your payment method for this and future
-          payments in accordance with our terms. You can always cancel your subscription.
-        </Text>
+          <SupporterCTA type="submit" disabled={disabled} color={tierColor}>
+            {isSubmitting
+              ? 'Processing...'
+              : `Pay ${formatPrice(selectedAmount, currency)}/${label}  →`}
+          </SupporterCTA>
+
+          <Text sx={{ fontSize: '12px', lineHeight: 1.4, color: 'darkGrey', textAlign: 'center' }}>
+            By confirming your payment, you allow us to charge your payment method for this and
+            future payments in accordance with our{' '}
+            <Link
+              href="/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: 'inherit', textDecoration: 'underline' }}
+            >
+              Terms of Service
+            </Link>
+            . You can always cancel your subscription.
+          </Text>
+        </Flex>
       </Flex>
     </form>
   );
 };
 
 export const CheckoutView = () => {
-  const { stripeInstance, clientSecret, selectedAmount, interval, currency, selectedTier, onBack } =
-    useSupporterContext();
+  const { stripeInstance, clientSecret, siteImage, siteName, onBack } = useSupporterContext();
 
   if (!stripeInstance || !clientSecret) return null;
 
@@ -108,11 +129,11 @@ export const CheckoutView = () => {
     <Flex
       sx={{
         flexDirection: 'column',
-        maxWidth: 800,
+        maxWidth: '580px',
+        width: '100%',
         mx: 'auto',
         my: [3, 5],
         px: [3, 0],
-        gap: 3,
       }}
     >
       <Box
@@ -120,101 +141,58 @@ export const CheckoutView = () => {
         onClick={onBack}
         sx={{
           alignSelf: 'flex-start',
-          bg: 'white',
-          border: '2px solid',
-          borderColor: 'black',
-          borderRadius: 2,
-          px: '15px',
-          py: '10px',
+          bg: 'transparent',
+          border: 'none',
+          p: 0,
           cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: 1,
+          fontSize: '16px',
           fontFamily: 'body',
+          color: 'black',
+          mb: 3,
+          '&:hover': { opacity: 0.7 },
         }}
       >
         ← Back
       </Box>
 
-      <Flex sx={{ gap: 3, flexDirection: ['column', 'row'], alignItems: 'flex-start' }}>
-        <Card
-          sx={{
-            padding: 4,
-            flex: 1,
-            border: '2px solid',
-            borderColor: 'black',
-            borderRadius: 3,
-          }}
-        >
-          <Elements
-            stripe={stripeInstance}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: 'flat',
-                variables: {
-                  colorBackground: '#ffffff',
-                  borderRadius: '4px',
+      <SupporterCard
+        siteImage={siteImage}
+        heading={siteName ? `${siteName} Membership` : 'Checkout'}
+      >
+        <Elements
+          stripe={stripeInstance}
+          options={{
+            clientSecret,
+            appearance: {
+              theme: 'flat',
+              variables: {
+                colorBackground: '#ffffff',
+                borderRadius: '4px',
+              },
+              rules: {
+                '.Input': {
+                  border: '1px solid #e0e0e0',
+                  boxShadow: 'none',
                 },
-                rules: {
-                  '.Input': {
-                    border: '1px solid #e0e0e0',
-                    boxShadow: 'none',
-                  },
-                  '.Input:focus': {
-                    border: '1px solid #000',
-                    boxShadow: 'none',
-                  },
-                  '.Tab': {
-                    border: '1px solid #e0e0e0',
-                    boxShadow: 'none',
-                  },
-                  '.Tab--selected': {
-                    border: '1px solid #000',
-                    boxShadow: 'none',
-                  },
+                '.Input:focus': {
+                  border: '1px solid #000',
+                  boxShadow: 'none',
+                },
+                '.Tab': {
+                  border: '1px solid #e0e0e0',
+                  boxShadow: 'none',
+                },
+                '.Tab--selected': {
+                  border: '1px solid #000',
+                  boxShadow: 'none',
                 },
               },
-            }}
-          >
-            <CheckoutForm />
-          </Elements>
-        </Card>
-
-        <Card
-          sx={{
-            padding: 4,
-            border: '2px solid',
-            borderColor: 'black',
-            borderRadius: 3,
-            minWidth: 200,
-            maxWidth: 280,
-            textAlign: 'center',
+            },
           }}
         >
-          <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-            <Heading as="h3" sx={{ fontSize: 3 }}>
-              Summary
-            </Heading>
-            <Icon
-              glyph="supporter"
-              size={50}
-              sx={{
-                color:
-                  selectedTier != null && TIER_CONFIG[selectedTier]
-                    ? TIER_CONFIG[selectedTier].color
-                    : 'green',
-              }}
-            />
-            <Text sx={{ fontWeight: 'bold', fontSize: 1 }}>Support</Text>
-            <Text sx={{ fontWeight: 'bold', fontSize: 3 }}>
-              {formatPrice(selectedAmount, currency)} /{interval === 'month' ? 'month' : 'year'}
-            </Text>
-            <Text variant="quiet" sx={{ fontSize: '12px' }}>
-              You can cancel, pause or update your subscription at any time
-            </Text>
-          </Flex>
-        </Card>
-      </Flex>
+          <CheckoutForm />
+        </Elements>
+      </SupporterCard>
     </Flex>
   );
 };

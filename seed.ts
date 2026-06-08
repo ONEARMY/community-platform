@@ -212,6 +212,7 @@ const seedStripeBadgeProducts = (
   return tierBadges.map((badge) => ({
     tenant_id,
     stripe_product_id: `prod_tier${badge.premium_tier}`,
+    name: `Tier ${badge.premium_tier} Membership`,
     badge_id: badge.id,
   }));
 };

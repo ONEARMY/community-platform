@@ -121,7 +121,7 @@ export const SupporterPage = ({
     () =>
       prices
         .filter((p) => p.currency === currency && p.interval === interval)
-        .sort((a, b) => (a.tier ?? 0) - (b.tier ?? 0) || a.unitAmount - b.unitAmount),
+        .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || b.unitAmount - a.unitAmount),
     [prices, currency, interval],
   );
 

@@ -144,9 +144,10 @@ export class ResearchServiceServer {
     if (researchDb.image) {
       allImages.push(researchDb.image);
     }
+    const uniqueImages = Array.from(new Map(allImages.map((img) => [img.id, img])).values());
 
-    return allImages
-      ? new StorageServiceServer(this.client).getPublicUrls(allImages, IMAGE_SIZES.LANDSCAPE)
+    return uniqueImages.length
+      ? new StorageServiceServer(this.client).getPublicUrls(uniqueImages, IMAGE_SIZES.LANDSCAPE)
       : [];
   }
 

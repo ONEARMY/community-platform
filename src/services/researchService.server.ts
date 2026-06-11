@@ -144,7 +144,6 @@ export class ResearchServiceServer {
     if (researchDb.image) {
       allImages.push(researchDb.image);
     }
-    // Deduplicate images by ID to prevent duplicates when cover image is reused from an update
     const uniqueImages = Array.from(new Map(allImages.map((img) => [img.id, img])).values());
 
     return uniqueImages.length

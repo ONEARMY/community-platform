@@ -44,10 +44,13 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
             {displayName || username}
           </Text>
 
-          {badges &&
-            badges.map((badge) => {
-              return <UserBadge key={badge.id} badge={badge} />;
-            })}
+          {badges && badges.length > 0 && (
+            <Flex sx={{ ml: 1, gap: 1, alignItems: 'center' }}>
+              {badges.map((badge) => {
+                return <UserBadge key={badge.id} badge={badge} />;
+              })}
+            </Flex>
+          )}
         </Flex>
         {countryCode && (
           <Flex sx={{ alignItems: 'center', gap: 1, pt: 1 }}>

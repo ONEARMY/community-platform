@@ -6,6 +6,8 @@ CREATE TYPE "public"."content_types" AS ENUM (
     'comments'
 );
 
+CREATE TYPE "public"."content_reach" AS ENUM ('all', 'important');
+
 CREATE OR REPLACE FUNCTION "public"."get_user_email_by_id"("id" "uuid") RETURNS TABLE("email" character varying)
     LANGUAGE "plpgsql" SECURITY DEFINER
     SET search_path = public, pg_temp

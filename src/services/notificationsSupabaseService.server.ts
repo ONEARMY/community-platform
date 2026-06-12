@@ -26,19 +26,6 @@ export class NotificationsSupabaseServiceServer {
     }
   }
 
-  async getProfilesByBadgeId(badgeId: number) {
-    try {
-      const response = await this.client.rpc('get_profiles_by_badge', {
-        p_badge_id: badgeId,
-        p_tenant_id: process.env.TENANT_ID!,
-      });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw new Error(error);
-    }
-  }
-
   async getStaffProfiles(): Promise<ProfileWithEmailAndPreferences[]> {
     try {
       const response = await this.client.rpc('get_staff_profiles', {

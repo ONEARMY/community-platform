@@ -179,7 +179,7 @@ describe('[News.Write]', () => {
     cy.url().should('include', path);
 
     cy.step("Shows it's for PRO badgers only");
-    cy.get('[data-cy=profileBadge]').contains('news');
+    cy.get('[data-cy=profileBadge]').contains('PRO');
 
     cy.step('For creator, notification generated for update');
     cy.wait(2000);

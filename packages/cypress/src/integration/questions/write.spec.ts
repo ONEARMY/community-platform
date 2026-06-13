@@ -203,6 +203,9 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
       cy.get('[data-cy=field-description]').type(description, { delay: 5 });
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
       cy.url().should('include', '/questions/');
 
       cy.step('Navigate to edit page');

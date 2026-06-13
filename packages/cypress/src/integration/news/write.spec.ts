@@ -230,7 +230,7 @@ describe('[Delete a news item]', () => {
     const expectedSlug = title.replace(/\s/g, '-');
 
     cy.visit('/news');
-    const user = users.admin;
+    const user = getTenantUser(users.admin);
     cy.signIn(user.email, user.password);
 
     cy.step('Create a news item to delete');

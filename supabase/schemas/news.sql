@@ -132,6 +132,7 @@ AS $$
   FROM news n
   WHERE
     n.is_draft = false
+    AND (n.deleted IS NULL OR n.deleted = FALSE)
     AND (
       p_is_admin
       OR NOT EXISTS (

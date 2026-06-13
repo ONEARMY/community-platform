@@ -241,6 +241,8 @@ describe('[Delete a news item]', () => {
     cy.addToMarkdownField('This news will be deleted.');
     cy.get('[data-cy=submit]').click();
     cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('News published');
+    cy.get('[data-cy=toast-action-link]').click();
     cy.url().should('include', '/news/');
 
     cy.step('Navigate to edit page');

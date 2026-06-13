@@ -202,6 +202,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-title]', { timeout: 20000 });
       cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
       cy.get('[data-cy=field-description]').type(description, { delay: 5 });
+      cy.selectCard('Moulds', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
       cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
       cy.wait(1000);

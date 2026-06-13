@@ -26,7 +26,6 @@ export const ProfilePage = observer((props: IProps) => {
     [activeUser?.username],
   );
   const showMemberProfile = !profile?.type?.isSpace;
-
   const upgradeBadge = upgradeBadgeForCurrentUser;
   const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 

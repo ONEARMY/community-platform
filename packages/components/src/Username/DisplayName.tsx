@@ -45,7 +45,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
           </Text>
 
           {badges && badges.length > 0 && (
-            <Flex sx={{ ml: 1, gap: 1, alignItems: 'center' }}>
+            <Flex sx={{ gap: 1, alignItems: 'center' }}>
               {badges.map((badge) => {
                 return <UserBadge key={badge.id} badge={badge} />;
               })}

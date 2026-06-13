@@ -1,4 +1,5 @@
 import { FormApi } from 'node_modules/final-form/dist';
+import { Button, ConfirmModal } from 'oa-components';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
@@ -27,7 +28,22 @@ interface IProps {
 export const QuestionForm = (props: IProps) => {
   const toast = useToast();
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const id = props?.id || null;
+  const isEdit = props.formAction === 'edit';
+
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setShowDeleteModal(false);
+    try {
+      await questionService.deleteQuestion(id);
+      window.location.assign('/questions');
+    } catch (e) {
+      console.error(e.message || 'Error deleting question');
+    }
+  };
 
   const initialValues = useMemo<QuestionFormData>(
     () =>
@@ -81,66 +97,93 @@ export const QuestionForm = (props: IProps) => {
   };
 
   return (
-    <Form<QuestionFormData>
-      data-testid={props['data-testid']}
-      onSubmit={async (values, form) => await onSubmit(form, values, false)}
-      initialValues={initialValues}
-      render={({
-        errors,
-        handleSubmit,
-        hasValidationErrors,
-        submitFailed,
-        submitting,
-        form,
-        values,
-      }) => {
-        const errorsClientSide = [errorSet(errors, LABELS.fields)];
+    <>
+      <Form<QuestionFormData>
+        data-testid={props['data-testid']}
+        onSubmit={async (values, form) => await onSubmit(form, values, false)}
+        initialValues={initialValues}
+        render={({
+          errors,
+          handleSubmit,
+          hasValidationErrors,
+          submitFailed,
+          submitting,
+          form,
+          values,
+        }) => {
+          const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = async () => {
-          setIsSubmittingDraft(true);
-          try {
-            await onSubmit(form, values, true);
-            form.reset(values);
-          } finally {
-            setIsSubmittingDraft(false);
-          }
-        };
+          const handleSubmitDraft = async () => {
+            setIsSubmittingDraft(true);
+            try {
+              await onSubmit(form, values, true);
+              form.reset(values);
+            } finally {
+              setIsSubmittingDraft(false);
+            }
+          };
 
-        const validate = composeValidators(
-          required,
-          minValue(QUESTION_MIN_TITLE_LENGTH),
-          endsWithQuestionMark(),
-        );
+          const validate = composeValidators(
+            required,
+            minValue(QUESTION_MIN_TITLE_LENGTH),
+            endsWithQuestionMark(),
+          );
 
-        return (
-          <FormWrapper
-            buttonLabel={LABELS.buttons[props.formAction]}
-            errorsClientSide={errorsClientSide}
-            guidelines={<QuestionPostingGuidelines />}
-            handleSubmit={handleSubmit}
-            handleSubmitDraft={handleSubmitDraft}
-            hasValidationErrors={hasValidationErrors}
-            heading={LABELS.headings[props.formAction]}
-            submitFailed={submitFailed}
-            submitting={submitting || isSubmittingDraft}
-            hideSubmittingMessage={true}
-          >
-            <TitleField
-              placeholder={LABELS.fields.title.placeholder}
-              validate={validate}
-              title={LABELS.fields.title.title}
-            />
-            <QuestionDescriptionField />
-            <QuestionImagesField
-              contentType="questions"
-              contentId={id}
-              maxImages={QUESTION_MAX_IMAGES}
-            />
-            <CategoryField type="questions" required />
-            <TagsField title={LABELS.fields.tags.title} />
-          </FormWrapper>
-        );
-      }}
-    />
+          const sidebar = isEdit ? (
+            <Button
+              data-cy="delete"
+              onClick={(evt) => {
+                setShowDeleteModal(true);
+                evt.preventDefault();
+              }}
+              variant="destructive"
+              type="submit"
+              disabled={submitting || isSubmittingDraft}
+              sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+            >
+              {LABELS.buttons.deletion.text}
+            </Button>
+          ) : null;
+
+          return (
+            <FormWrapper
+              buttonLabel={LABELS.buttons[props.formAction]}
+              errorsClientSide={errorsClientSide}
+              guidelines={<QuestionPostingGuidelines />}
+              handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
+              hasValidationErrors={hasValidationErrors}
+              heading={LABELS.headings[props.formAction]}
+              sidebar={sidebar}
+              submitFailed={submitFailed}
+              submitting={submitting || isSubmittingDraft}
+              hideSubmittingMessage={true}
+            >
+              <TitleField
+                placeholder={LABELS.fields.title.placeholder}
+                validate={validate}
+                title={LABELS.fields.title.title}
+              />
+              <QuestionDescriptionField />
+              <QuestionImagesField
+                contentType="questions"
+                contentId={id}
+                maxImages={QUESTION_MAX_IMAGES}
+              />
+              <CategoryField type="questions" required />
+              <TagsField title={LABELS.fields.tags.title} />
+            </FormWrapper>
+          );
+        }}
+      />
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message={LABELS.buttons.deletion.message}
+        confirmButtonText={LABELS.buttons.deletion.confirm}
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={handleDelete}
+        confirmVariant="destructive"
+      />
+    </>
   );
 };

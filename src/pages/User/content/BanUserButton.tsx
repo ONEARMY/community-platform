@@ -22,7 +22,15 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
   const [isBanning, setIsBanning] = useState(false);
 
   const isViewingOwnProfile = activeUser?.username === profile?.username;
-  const canBanUser = !isViewingOwnProfile && isUserAuthorized([UserRole.ADMIN, UserRole.MODERATOR]);
+  const hasPermission = isUserAuthorized([UserRole.ADMIN, UserRole.MODERATOR]);
+
+  // Prevent banning users with ADMIN, EDITOR, or MODERATOR roles
+  const targetHasProtectedRole =
+    profile.roles?.includes(UserRole.ADMIN) ||
+    profile.roles?.includes(UserRole.EDITOR) ||
+    profile.roles?.includes(UserRole.MODERATOR);
+
+  const canBanUser = !isViewingOwnProfile && hasPermission && !targetHasProtectedRole;
 
   if (!canBanUser) {
     return null;

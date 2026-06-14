@@ -34,7 +34,7 @@ describe('[Ban User]', () => {
       cy.get('[data-cy="BanUserModal: Confirm"]').should('be.disabled');
 
       cy.step('Check confirmation checkbox');
-      cy.get('[data-cy=BanUserConfirmCheckbox]').click();
+      cy.get('[data-cy=BanUserConfirmCheckbox]').click({force: true});
 
       cy.step('Confirm button should be enabled');
       cy.get('[data-cy="BanUserModal: Confirm"]').should('not.be.disabled');

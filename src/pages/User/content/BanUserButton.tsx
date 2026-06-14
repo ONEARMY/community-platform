@@ -32,7 +32,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
     if (!profile?.id || !profile?.username) return;
 
     setIsBanning(true);
-    const promise = fetch(`/api/user/${profile.id}/ban`, {
+    const promise = fetch(`/api/profile/${profile.id}/ban`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });

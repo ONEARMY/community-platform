@@ -1,6 +1,7 @@
 import { Button, ExternalLink } from 'oa-components';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { MOBILE_NAV_HEIGHT } from 'src/pages/common/Header/navLayout';
 import { Box, Text } from 'theme-ui';
 
 export const StickyButton = () => {
@@ -17,8 +18,8 @@ export const StickyButton = () => {
     <Box
       sx={{
         position: 'fixed',
-        bottom: [2, 5],
-        right: [2, 5],
+        bottom: [`${MOBILE_NAV_HEIGHT + 8}px`, `${MOBILE_NAV_HEIGHT + 8}px`, 5],
+        right: [2, 2, 5],
         display: 'block',
         zIndex: 3000,
       }}

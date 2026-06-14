@@ -19,6 +19,7 @@ export class TenantSettings {
   colorAccent: string;
   colorAccentHover: string;
   showImpact: boolean;
+  hasMembershipTiers: boolean;
   createResearchRoles: UserRole[];
   gaTrackingId: string;
   pwaIcons?: PWAIcons;

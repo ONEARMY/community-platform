@@ -91,6 +91,19 @@ export type availableGlyphs =
   | 'success'
   | 'error'
   | 'warning'
+  | 'nav-academy'
+  | 'nav-library'
+  | 'nav-logout'
+  | 'nav-map'
+  | 'nav-profile'
+  | 'nav-projects'
+  | 'nav-questions'
+  | 'nav-research'
+  | 'nav-settings'
+  | 'nav-supporter'
+  | 'nav-updates'
+  | 'nav-notifications'
+  | 'nav-notifications-active'
   | 'info';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

@@ -5,11 +5,13 @@ import { countryToAlpha2 } from 'country-to-iso';
 import { observer } from 'mobx-react';
 import { FlagIcon, Icon, MemberBadge, ReturnPathLink } from 'oa-components';
 import { theme } from 'oa-themes';
-import type { ReactNode } from 'react';
+import { type ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Avatar, Box, Flex, Text } from 'theme-ui';
+
+import { TenantContext } from '../../../TenantContext';
 
 const rowStyles = ({ theme }: { theme: Theme }) => `
   display: flex;
@@ -51,7 +53,11 @@ const RowContent = ({ icon, children }: { icon: ProfileGlyph; children: ReactNod
 
 export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
   const { profile } = useProfileStore();
+  const tenantContext = useContext(TenantContext);
   const profilePath = profile?.username ? '/u/' + profile.username : '/settings/profile';
+
+  const isSupporter = profile?.badges?.some((badge) => !!badge.premiumTier) ?? false;
+  const showSupporter = !!tenantContext?.hasMembershipTiers && !isSupporter;
 
   const rawCountry = profile?.country?.trim() || null;
   const iso2 = rawCountry ? countryToAlpha2(rawCountry) : null;
@@ -147,9 +153,11 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
             <RowContent icon="nav-settings">Settings</RowContent>
           </RowLink>
         </AuthWrapper>
-        <RowLink to="/supporter" data-cy="menu-Supporter">
-          <RowContent icon="nav-supporter">Become a supporter</RowContent>
-        </RowLink>
+        {showSupporter && (
+          <RowLink to="/supporter" data-cy="menu-Supporter">
+            <RowContent icon="nav-supporter">Become a supporter</RowContent>
+          </RowLink>
+        )}
         <RowReturnLink to="/logout" data-cy="menu-Logout">
           <RowContent icon="nav-logout">Log out</RowContent>
         </RowReturnLink>

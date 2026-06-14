@@ -75,6 +75,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
         type="button"
         variant="destructive"
         data-cy="BanUserButton"
+        data-testid="BanUserButton"
         onClick={() => setShowBanModal(true)}
         disabled={isBanning}
       >
@@ -84,6 +85,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
       <Modal isOpen={showBanModal} onDismiss={handleCloseModal} width={500}>
         <Flex
           data-cy="BanUserModal"
+          data-testid="BanUserModal"
           sx={{
             flexDirection: 'column',
             gap: 3,
@@ -112,6 +114,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
               onChange={(e) => setIsConfirmed(e.target.checked)}
               disabled={isBanning}
               data-cy="BanUserConfirmCheckbox"
+              data-testid="BanUserConfirmCheckbox"
             />
             I understand this action is permanent and cannot be undone
           </Label>
@@ -121,6 +124,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
               type="button"
               variant="outline"
               data-cy="BanUserModal: Cancel"
+              data-testid="BanUserModal: Cancel"
               onClick={handleCloseModal}
               disabled={isBanning}
             >
@@ -131,6 +135,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
               type="button"
               variant="destructive"
               data-cy="BanUserModal: Confirm"
+              data-testid="BanUserModal: Confirm"
               onClick={handleBanUser}
               disabled={!isConfirmed || isBanning}
             >

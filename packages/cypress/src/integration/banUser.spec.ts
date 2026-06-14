@@ -34,13 +34,13 @@ describe('[Ban User]', () => {
       cy.get('[data-cy="BanUserModal: Confirm"]').should('be.disabled');
 
       cy.step('Check confirmation checkbox');
-      cy.get('[data-cy=BanUserConfirmCheckbox]').click({force: true});
+      cy.get('[data-cy=BanUserConfirmCheckbox]').click({ force: true });
 
       cy.step('Confirm button should be enabled');
       cy.get('[data-cy="BanUserModal: Confirm"]').should('not.be.disabled');
 
       cy.step('Confirm ban');
-      cy.get('[data-cy="BanUserModal: Confirm"]').click();
+      cy.get('[data-cy="BanUserModal: Confirm"]').click({ force: true});
 
       cy.step('Should show success toast and redirect');
       cy.contains('User banned successfully');

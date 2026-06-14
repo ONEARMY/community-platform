@@ -46,9 +46,10 @@ describe('[Ban User]', () => {
       cy.contains('User banned successfully');
       cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
-      cy.step('Banned user profile should not be accessible');
+      cy.step('Banned user profile should show user not found');
       cy.visit(`/u/${regularUser.username}`, { failOnStatusCode: false });
-      cy.url().should('not.include', `/u/${regularUser.username}`);
+      cy.url().should('include', `/u/${regularUser.username}`);
+      cy.contains('User not found');
     });
 
     it('[Cannot ban user with admin role]', () => {

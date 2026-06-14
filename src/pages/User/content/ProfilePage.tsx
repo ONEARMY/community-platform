@@ -6,6 +6,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Image } from 'theme-ui';
+import { BanUserButton } from './BanUserButton';
 import { UserProfile } from './UserProfile';
 
 interface IProps {
@@ -26,7 +27,6 @@ export const ProfilePage = observer((props: IProps) => {
     [activeUser?.username],
   );
   const showMemberProfile = !profile?.type?.isSpace;
-
   const upgradeBadge = upgradeBadgeForCurrentUser;
   const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 
@@ -92,6 +92,17 @@ export const ProfilePage = observer((props: IProps) => {
                 </InternalLink>
               </Flex>
             )}
+            <Flex
+              sx={{
+                alignSelf: ['center', 'flex-end'],
+                marginBottom: isViewingOwnProfile ? 0 : 6,
+                zIndex: 2,
+                gap: 2,
+                flexDirection: 'row',
+              }}
+            >
+              <BanUserButton profile={profile} />
+            </Flex>
           </>
         )}
       </ClientOnly>

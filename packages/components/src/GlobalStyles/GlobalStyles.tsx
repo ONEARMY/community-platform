@@ -27,6 +27,12 @@ export const GlobalStyles = css`
     background-color: ${commonStyles.colors.betaGreen};
   }
 
+  /* Form control focus styles - applies to Radio, Switch, Checkbox components */
+  input:focus ~ [class^='css-'],
+  input:focus ~ [class*=' css-'] {
+    background-color: ${commonStyles.colors.white};
+  }
+
   /***** Fix for Algolia search Icon *******/
   .ap-icon-pin {
     display: none;

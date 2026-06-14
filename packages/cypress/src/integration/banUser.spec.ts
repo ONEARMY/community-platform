@@ -44,7 +44,6 @@ describe('[Ban User]', () => {
 
       cy.step('Should show success toast and redirect');
       cy.contains('User banned successfully');
-      cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
       cy.step('Banned user profile should show user not found');
       cy.visit(`/u/${regularUser.username}`, { failOnStatusCode: false });

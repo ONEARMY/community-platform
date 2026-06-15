@@ -3,6 +3,7 @@ import type { ILabels } from 'src/common/Form/types';
 export const buttons = {
   changeEmail: 'Change email',
   changePassword: 'Change password',
+  deleteAccount: 'Delete account',
   deleteLink: {
     message: 'Are you sure you want to delete this link?',
     text: 'Delete',
@@ -56,8 +57,8 @@ export const fields: ILabels = {
     title: 'Add an avatar',
   },
   deleteAccount: {
-    description: 'Please reach out to support.',
-    title: 'Would you like to delete your account?',
+    description: 'Once deleted, your account cannot be recovered.',
+    title: 'Delete account',
   },
   displayName: {
     title: 'Display Name',

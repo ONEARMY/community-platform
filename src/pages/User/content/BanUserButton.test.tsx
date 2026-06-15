@@ -145,7 +145,7 @@ describe('BanUserButton', () => {
     await user.click(banButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId('BanUserModal')).toBeInTheDocument();
+      expect(screen.getByTestId('Confirm.modal: Modal')).toBeInTheDocument();
       expect(screen.getByText(/Ban User - This action will:/)).toBeInTheDocument();
     });
   });
@@ -173,15 +173,15 @@ describe('BanUserButton', () => {
     await user.click(screen.getByTestId('BanUserButton'));
 
     await waitFor(() => {
-      const confirmButton = screen.getByTestId('BanUserModal: Confirm');
+      const confirmButton = screen.getByTestId('Confirm.modal: Confirm');
       expect(confirmButton).toBeDisabled();
     });
 
-    const checkbox = screen.getByTestId('BanUserConfirmCheckbox');
+    const checkbox = screen.getByTestId('Confirm.modal: Checkbox');
     await user.click(checkbox);
 
     await waitFor(() => {
-      const confirmButton = screen.getByTestId('BanUserModal: Confirm');
+      const confirmButton = screen.getByTestId('Confirm.modal: Confirm');
       expect(confirmButton).not.toBeDisabled();
     });
   });
@@ -212,8 +212,8 @@ describe('BanUserButton', () => {
     render(<BanUserButton profile={targetUser as any} />);
     
     await user.click(screen.getByTestId('BanUserButton'));
-    await user.click(screen.getByTestId('BanUserConfirmCheckbox'));
-    await user.click(screen.getByTestId('BanUserModal: Confirm'));
+    await user.click(screen.getByTestId('Confirm.modal: Checkbox'));
+    await user.click(screen.getByTestId('Confirm.modal: Confirm'));
 
     await waitFor(() => {
       expect(mockToast.promise).toHaveBeenCalled();
@@ -250,13 +250,13 @@ describe('BanUserButton', () => {
     await user.click(screen.getByTestId('BanUserButton'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('BanUserModal')).toBeInTheDocument();
+      expect(screen.getByTestId('Confirm.modal: Modal')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('BanUserModal: Cancel'));
+    await user.click(screen.getByTestId('Confirm.modal: Cancel'));
 
     await waitFor(() => {
-      expect(screen.queryByTestId('BanUserModal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('Confirm.modal: Modal')).not.toBeInTheDocument();
     });
   });
 });

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, Modal, Tooltip } from 'oa-components';
+import { Button, ConfirmModal, Tooltip } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useState } from 'react';
@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router';
 import { useToast } from 'src/common/Toast';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Checkbox, Flex, Label, Text } from 'theme-ui';
 
 interface BanUserButtonProps {
   profile: Profile;
@@ -19,8 +18,6 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
   const navigate = useNavigate();
 
   const [showBanModal, setShowBanModal] = useState(false);
-  const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isBanning, setIsBanning] = useState(false);
 
   const isViewingOwnProfile = activeUser?.username === profile?.username;
   const hasPermission = isUserAuthorized([UserRole.ADMIN, UserRole.MODERATOR]);
@@ -50,14 +47,11 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
   const handleBanUser = async () => {
     if (!profile?.id || !profile?.username) return;
 
-    setIsBanning(true);
+    setShowBanModal(false);
 
     toast.promise(profileService.ban(profile.id), {
       loading: 'Banning user...',
       success: () => {
-        setShowBanModal(false);
-        setIsConfirmed(false);
-        setIsBanning(false);
         navigate('/');
         return {
           message: 'User banned successfully',
@@ -65,17 +59,9 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
         };
       },
       error: (error) => {
-        setIsBanning(false);
         return `Error: ${error.message || 'Failed to ban user'}`;
       },
     });
-
-    handleCloseModal();
-  };
-
-  const handleCloseModal = () => {
-    setShowBanModal(false);
-    setIsConfirmed(false);
   };
 
   return (
@@ -88,77 +74,31 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
         data-tooltip-id={tooltipId}
         data-tooltip-content={tooltipMessage}
         onClick={() => setShowBanModal(true)}
-        disabled={isBanning || isDisabled}
+        disabled={isDisabled}
       >
         Ban User
       </Button>
 
       {isDisabled && <Tooltip id={tooltipId} />}
 
-      <Modal isOpen={showBanModal} onDismiss={handleCloseModal} width={500}>
-        <Flex
-          data-cy="BanUserModal"
-          data-testid="BanUserModal"
-          sx={{
-            flexDirection: 'column',
-            gap: 3,
-          }}
-        >
-          <Text sx={{ fontWeight: 'bold', fontSize: 3 }}>Ban User - This action will:</Text>
-
-          <ul>
-            <li>Prevent the user from logging in again</li>
-            <li>Delete the user profile permanently</li>
-            <li>
-              Soft delete all content created by this user (comments, questions, research, etc.)
-            </li>
-          </ul>
-
-          <Label
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              fontSize: 2,
-            }}
-          >
-            <Checkbox
-              checked={isConfirmed}
-              onChange={(e) => setIsConfirmed(e.target.checked)}
-              disabled={isBanning}
-              data-cy="BanUserConfirmCheckbox"
-              data-testid="BanUserConfirmCheckbox"
-            />
-            I understand this action cannot be undone
-          </Label>
-
-          <Flex sx={{ gap: 2, flexWrap: 'wrap', mt: 2 }}>
-            <Button
-              type="button"
-              variant="outline"
-              data-cy="BanUserModal: Cancel"
-              data-testid="BanUserModal: Cancel"
-              onClick={handleCloseModal}
-              disabled={isBanning}
-            >
-              Cancel
-            </Button>
-
-            <Button
-              type="button"
-              variant="destructive"
-              data-cy="BanUserModal: Confirm"
-              data-testid="BanUserModal: Confirm"
-              onClick={handleBanUser}
-              disabled={!isConfirmed || isBanning}
-            >
-              Ban User
-            </Button>
-          </Flex>
-        </Flex>
-      </Modal>
+      <ConfirmModal
+        isOpen={showBanModal}
+        message="Ban User - This action will:"
+        confirmButtonText="Ban User"
+        handleCancel={() => setShowBanModal(false)}
+        handleConfirm={handleBanUser}
+        confirmVariant="destructive"
+        checkboxLabel="I understand this action cannot be undone"
+        width={500}
+      >
+        <ul>
+          <li>Prevent the user from logging in again</li>
+          <li>Delete the user profile permanently</li>
+          <li>
+            Soft delete all content created by this user (comments, questions, research, etc.)
+          </li>
+        </ul>
+      </ConfirmModal>
     </>
   );
 });

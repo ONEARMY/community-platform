@@ -49,7 +49,7 @@ describe('[User sign-up]', () => {
   });
 
   describe('[Update existing auth details]', () => {
-    it('Updates username and password', () => {
+    it('Updates email, password, and deletes account', () => {
       const user = generateNewUserDetails();
       const { email, username, password } = user;
       cy.signUpNewUser(user);
@@ -78,6 +78,31 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword);
       cy.get('[data-cy="changePasswordSubmit"]').click();
       cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['auth/password-changed']).should('be.visible');
+
+      cy.step('Open delete account section');
+      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
+
+      cy.step('Submit with wrong password');
+      cy.get('[data-cy="deleteAccountPassword"]').type('wrong_password');
+      cy.get('[data-cy="deleteAccountSubmit"]').click();
+
+      cy.step('Check confirmation checkbox and confirm deletion');
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').check();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+
+      cy.step('Shows error message');
+      cy.contains('[data-cy=toast-message]', 'Invalid password').should('be.visible');
+
+      cy.step('Clear and submit with correct password');
+      cy.get('[data-cy="deleteAccountPassword"]').clear().type(newPassword);
+      cy.get('[data-cy="deleteAccountSubmit"]').click();
+
+      cy.step('Check confirmation checkbox and confirm deletion');
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').check();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+
+      cy.step('Redirected to homepage');
+      cy.url().should('eq', Cypress.config().baseUrl + '/');
     });
   });
 });

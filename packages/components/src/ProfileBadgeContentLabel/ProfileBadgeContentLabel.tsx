@@ -22,7 +22,7 @@ export const ProfileBadgeContentLabel = ({ profileBadge }: Props) => {
       }}
     >
       <UserBadge badge={profileBadge} />
-      <Text>news</Text>
+      <Text>{profileBadge.displayName}</Text>
     </Flex>
   );
 };

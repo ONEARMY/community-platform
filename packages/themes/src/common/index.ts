@@ -118,6 +118,21 @@ export const baseTheme = {
       border: `2px solid ${commonStyles.colors.black}`,
       padding: 3,
     },
+    radio: {
+      'input:focus ~ &': {
+        backgroundColor: commonStyles.colors.white,
+      },
+    },
+    checkbox: {
+      'input:focus ~ &': {
+        backgroundColor: commonStyles.colors.white,
+      },
+    },
+    switch: {
+      'input:focus ~ &': {
+        backgroundColor: commonStyles.colors.white,
+      },
+    },
   },
   maxContainerWidth: 1280,
   sizes: {

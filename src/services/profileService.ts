@@ -152,6 +152,21 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
   return JSON.parse(impact) as IUserImpact;
 };
 
+const ban = async (profileId: number) => {
+  const response = await fetch(`/api/profile/${profileId}/ban`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to ban user' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to ban user';
+    throw new Error(errorMessage);
+  }
+
+  return;
+};
+
 export const profileService = {
   get,
   update,
@@ -159,4 +174,5 @@ export const profileService = {
   upsertPin,
   deletePin,
   updateImpact,
+  ban,
 };

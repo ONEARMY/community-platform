@@ -1,3 +1,4 @@
+import { Button, ConfirmModal } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
@@ -31,6 +32,23 @@ interface IProps {
 export const NewsForm = (props: IProps) => {
   const toast = useToast();
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const id = props?.id || null;
+  const isEdit = props.formAction === 'edit';
+
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setShowDeleteModal(false);
+    try {
+      await newsService.deleteNews(id);
+      window.location.assign('/news');
+    } catch (e) {
+      console.error(e.message || 'Error deleting news');
+    }
+  };
 
   const initialValues = useMemo<NewsFormData>(
     () =>
@@ -108,98 +126,124 @@ export const NewsForm = (props: IProps) => {
   }, []);
 
   return (
-    <Form
-      key={props.id || 'new'}
-      data-testid={props['data-testid']}
-      onSubmit={(values) => onSubmit(values, false)}
-      initialValues={initialValues}
-      validate={validateForm}
-      render={({
-        dirty,
-        errors,
-        form,
-        hasValidationErrors,
-        submitFailed,
-        submitting,
-        submitSucceeded,
-        handleSubmit,
-        values,
-      }) => {
-        const removeImage = () => {
-          form.change('heroImage', null);
-        };
+    <>
+      <Form
+        key={props.id || 'new'}
+        data-testid={props['data-testid']}
+        onSubmit={(values) => onSubmit(values, false)}
+        initialValues={initialValues}
+        validate={validateForm}
+        render={({
+          dirty,
+          errors,
+          form,
+          hasValidationErrors,
+          submitFailed,
+          submitting,
+          submitSucceeded,
+          handleSubmit,
+          values,
+        }) => {
+          const removeImage = () => {
+            form.change('heroImage', null);
+          };
 
-        const errorsClientSide = [errorSet(errors, LABELS.fields)];
+          const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = async (e: React.MouseEvent) => {
-          e.preventDefault();
-          setIsSubmittingDraft(true);
-          try {
-            await onSubmit(values, true);
-            form.reset(values);
-          } finally {
-            setIsSubmittingDraft(false);
-          }
-        };
-
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-        );
-        const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
-
-        return (
-          <FormWrapper
-            buttonLabel={LABELS.buttons.publish}
-            errorsClientSide={errorsClientSide}
-            guidelines={<NewsPostingGuidelines />}
-            handleSubmit={handleSubmit}
-            handleSubmitDraft={props.formData?.isDraft === false ? undefined : handleSubmitDraft}
-            hasValidationErrors={hasValidationErrors}
-            heading={LABELS.headings[props.formAction]}
-            sidebar={
-              <NewsPreviewEmailButton
-                submitting={submitting}
-                formValues={values}
-                isSubmittingDraft={isSubmittingDraft}
-                id={props.id || undefined}
-              />
+          const handleSubmitDraft = async (e: React.MouseEvent) => {
+            e.preventDefault();
+            setIsSubmittingDraft(true);
+            try {
+              await onSubmit(values, true);
+              form.reset(values);
+            } finally {
+              setIsSubmittingDraft(false);
             }
-            hideSubmittingMessage={true}
-            submitFailed={submitFailed}
-            submitting={submitting}
-            unsavedChangesDialog={unsavedChangesDialog}
-          >
-            <TitleField
-              placeholder={LABELS.fields.title.placeholder}
-              validate={validate}
-              title={LABELS.fields.title.title}
-            />
-            <NewsImageField
-              image={values.heroImage}
-              removeImage={removeImage}
-              contentId={props.id || null}
-            />
-            <CategoryField type="news" />
-            <TagsField title={LABELS.fields.tags.title} />
+          };
 
-            <BadgeVisibilityField
-              description={LABELS.fields.profileBadge.description as string}
-              placeholder={LABELS.fields.profileBadge.placeholder as string}
-              title={LABELS.fields.profileBadge.title}
-              showPublicBadge={true}
-            />
-            <ContentReachField
-              placeholder={LABELS.fields.contentReach.placeholder as string}
-              title={LABELS.fields.contentReach.title}
-              shouldDisableContentReach={
-                !!(props.id && props.formData?.contentReach && props.formData?.isDraft === false)
-              }
-            />
+          const unsavedChangesDialog = (
+            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+          );
+          const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
 
-            <NewsBodyField imageUpload={imageUpload} />
-          </FormWrapper>
-        );
-      }}
-    />
+          const sidebar = isEdit ? (
+            <Button
+              data-cy="delete"
+              onClick={(evt) => {
+                setShowDeleteModal(true);
+                evt.preventDefault();
+              }}
+              variant="destructive"
+              type="submit"
+              disabled={submitting}
+              sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+            >
+              {LABELS.buttons.deletion.text}
+            </Button>
+          ) : (
+            <NewsPreviewEmailButton
+              submitting={submitting}
+              formValues={values}
+              isSubmittingDraft={isSubmittingDraft}
+              id={props.id || undefined}
+            />
+          );
+
+          return (
+            <FormWrapper
+              buttonLabel={LABELS.buttons.publish}
+              errorsClientSide={errorsClientSide}
+              guidelines={<NewsPostingGuidelines />}
+              handleSubmit={handleSubmit}
+              handleSubmitDraft={props.formData?.isDraft === false ? undefined : handleSubmitDraft}
+              hasValidationErrors={hasValidationErrors}
+              heading={LABELS.headings[props.formAction]}
+              sidebar={sidebar}
+              hideSubmittingMessage={true}
+              submitFailed={submitFailed}
+              submitting={submitting}
+              unsavedChangesDialog={unsavedChangesDialog}
+            >
+              <TitleField
+                placeholder={LABELS.fields.title.placeholder}
+                validate={validate}
+                title={LABELS.fields.title.title}
+              />
+              <NewsImageField
+                image={values.heroImage}
+                removeImage={removeImage}
+                contentId={props.id || null}
+              />
+              <CategoryField type="news" />
+              <TagsField title={LABELS.fields.tags.title} />
+
+              <BadgeVisibilityField
+                description={LABELS.fields.profileBadge.description as string}
+                placeholder={LABELS.fields.profileBadge.placeholder as string}
+                title={LABELS.fields.profileBadge.title}
+                showPublicBadge={true}
+              />
+              <ContentReachField
+                placeholder={LABELS.fields.contentReach.placeholder as string}
+                title={LABELS.fields.contentReach.title}
+                shouldDisableContentReach={
+                  !!(props.id && props.formData?.contentReach && props.formData?.isDraft === false)
+                }
+              />
+
+              <NewsBodyField imageUpload={imageUpload} />
+            </FormWrapper>
+          );
+        }}
+      />
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message={LABELS.buttons.deletion.message}
+        confirmButtonText={LABELS.buttons.deletion.confirm}
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={handleDelete}
+        confirmVariant="destructive"
+      />
+    </>
   );
 };

@@ -5,6 +5,7 @@ import { UserRole } from 'oa-shared';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useToast } from 'src/common/Toast';
+import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Checkbox, Flex, Label, Text } from 'theme-ui';
 
@@ -50,12 +51,8 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
     if (!profile?.id || !profile?.username) return;
 
     setIsBanning(true);
-    const promise = fetch(`/api/profile/${profile.id}/ban`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    });
 
-    toast.promise(promise, {
+    toast.promise(profileService.ban(profile.id), {
       loading: 'Banning user...',
       success: () => {
         setShowBanModal(false);
@@ -72,6 +69,8 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
         return `Error: ${error.message || 'Failed to ban user'}`;
       },
     });
+
+    handleCloseModal();
   };
 
   const handleCloseModal = () => {

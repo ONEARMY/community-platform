@@ -28,6 +28,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
   const targetHasProtectedRole =
     profile.roles?.includes(UserRole.ADMIN) ||
     profile.roles?.includes(UserRole.EDITOR) ||
+    profile.roles?.includes(UserRole.RESEARCH_CREATOR) ||
     profile.roles?.includes(UserRole.MODERATOR);
 
   const canBanUser = !isViewingOwnProfile && hasPermission && !targetHasProtectedRole;

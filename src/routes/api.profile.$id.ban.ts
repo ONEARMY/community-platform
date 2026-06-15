@@ -56,14 +56,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw forbiddenError('You cannot ban yourself');
     }
 
-    // Prevent banning users with ADMIN, EDITOR, or MODERATOR roles
+    // Prevent banning users with protected roles
     const targetHasProtectedRole =
       targetProfile.roles?.includes(UserRole.ADMIN) ||
       targetProfile.roles?.includes(UserRole.EDITOR) ||
+      targetProfile.roles?.includes(UserRole.RESEARCH_CREATOR) ||
       targetProfile.roles?.includes(UserRole.MODERATOR);
 
     if (targetHasProtectedRole) {
-      throw forbiddenError('Users with Admin, Editor, or Moderator roles cannot be banned');
+      throw forbiddenError('Users with protected roles cannot be banned');
     }
 
     const adminClient = createSupabaseAdminServerClient();
@@ -77,14 +78,31 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw new Error('Failed to ban user');
     }
 
-    // Delete all content created by the user
+    const now = new Date();
+
+    // Mark all content created by the user as deleted
     await Promise.all([
-      client.from('questions').delete().eq('created_by', profileId),
-      client.from('projects').delete().eq('created_by', profileId),
-      client.from('research').delete().eq('created_by', profileId),
-      client.from('research_updates').delete().eq('created_by', profileId),
-      client.from('news').delete().eq('created_by', profileId),
-      client.from('comments').delete().eq('created_by', profileId),
+      client
+        .from('questions')
+        .update({ deleted: true, modified_at: now })
+        .eq('created_by', profileId),
+      client
+        .from('projects')
+        .update({ deleted: true, modified_at: now })
+        .eq('created_by', profileId),
+      client
+        .from('research')
+        .update({ deleted: true, modified_at: now })
+        .eq('created_by', profileId),
+      client
+        .from('research_updates')
+        .update({ deleted: true, modified_at: now })
+        .eq('created_by', profileId),
+      client.from('news').update({ deleted: true, modified_at: now }).eq('created_by', profileId),
+      client
+        .from('comments')
+        .update({ deleted: true, modified_at: now })
+        .eq('created_by', profileId),
     ]);
 
     await client.from('profiles').delete().eq('id', profileId);

@@ -87,8 +87,8 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="deleteAccountSubmit"]').click();
 
       cy.step('Check confirmation checkbox and confirm deletion');
-      cy.get('[data-cy="Confirm.modal: Checkbox"]').check();
-      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').check({ force: true });
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Shows error message');
       cy.contains('[data-cy=toast-message]', 'Invalid password').should('be.visible');

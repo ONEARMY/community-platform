@@ -48,6 +48,7 @@ export const ConfirmModal = (props: Props) => {
     <Modal onDismiss={handleCancel} isOpen={isOpen} width={width}>
       <Flex
         data-cy="Confirm.modal: Modal"
+        data-testid="Confirm.modal: Modal"
         sx={{
           alignItems: 'flex-start',
           flexDirection: 'column',
@@ -77,6 +78,7 @@ export const ConfirmModal = (props: Props) => {
               checked={isCheckboxChecked}
               onChange={(e) => setIsCheckboxChecked(e.target.checked)}
               data-cy="Confirm.modal: Checkbox"
+              data-testid="Confirm.modal: Checkbox"
             />
             {checkboxLabel}
           </Label>
@@ -87,6 +89,7 @@ export const ConfirmModal = (props: Props) => {
             type="button"
             variant={cancelVariant}
             data-cy="Confirm.modal: Cancel"
+            data-testid="Confirm.modal: Cancel"
             onClick={handleCancel}
           >
             Cancel
@@ -96,6 +99,7 @@ export const ConfirmModal = (props: Props) => {
             type="button"
             aria-label={`Confirm ${confirmButtonText} action`}
             data-cy="Confirm.modal: Confirm"
+            data-testid="Confirm.modal: Confirm"
             variant={confirmVariant}
             onClick={handleConfirm}
             disabled={isConfirmDisabled}

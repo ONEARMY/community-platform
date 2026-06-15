@@ -70,7 +70,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const adminClient = createSupabaseAdminServerClient();
     const { error: banError } = await adminClient.auth.admin.updateUserById(
       targetProfile.auth_id,
-      { ban_duration: '999999h' }, // Effectively a permanent ban (over 100 years), since Supabase doesn't support true permanent bans
+      { ban_duration: '876000h' }, // Effectively a permanent ban (100 years), since Supabase doesn't support true permanent bans
     );
 
     if (banError) {

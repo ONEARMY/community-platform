@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, Modal } from 'oa-components';
+import { Button, Modal, Tooltip } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useState } from 'react';
@@ -31,11 +31,20 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
     profile.roles?.includes(UserRole.RESEARCH_CREATOR) ||
     profile.roles?.includes(UserRole.MODERATOR);
 
-  const canBanUser = !isViewingOwnProfile && hasPermission && !targetHasProtectedRole;
-
-  if (!canBanUser) {
+  // Don't show button at all if user doesn't have permission
+  if (!hasPermission) {
     return null;
   }
+
+  // Determine if button should be disabled and why
+  const isDisabled = isViewingOwnProfile || targetHasProtectedRole;
+  const tooltipMessage = isViewingOwnProfile
+    ? 'Cannot ban your own profile'
+    : targetHasProtectedRole
+      ? 'Cannot ban users with protected roles (Admin, Editor, Moderator, Research Creator)'
+      : '';
+
+  const tooltipId = 'ban-user-button-tooltip';
 
   const handleBanUser = async () => {
     if (!profile?.id || !profile?.username) return;
@@ -77,11 +86,15 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
         variant="destructive"
         data-cy="BanUserButton"
         data-testid="BanUserButton"
+        data-tooltip-id={tooltipId}
+        data-tooltip-content={tooltipMessage}
         onClick={() => setShowBanModal(true)}
-        disabled={isBanning}
+        disabled={isBanning || isDisabled}
       >
         Ban User
       </Button>
+
+      {isDisabled && <Tooltip id={tooltipId} />}
 
       <Modal isOpen={showBanModal} onDismiss={handleCloseModal} width={500}>
         <Flex
@@ -97,7 +110,9 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
           <ul>
             <li>Prevent the user from logging in again</li>
             <li>Delete the user profile permanently</li>
-            <li>Delete all content created by this user (comments, questions, research, etc.)</li>
+            <li>
+              Soft delete all content created by this user (comments, questions, research, etc.)
+            </li>
           </ul>
 
           <Label
@@ -117,7 +132,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
               data-cy="BanUserConfirmCheckbox"
               data-testid="BanUserConfirmCheckbox"
             />
-            I understand this action is permanent and cannot be undone
+            I understand this action cannot be undone
           </Label>
 
           <Flex sx={{ gap: 2, flexWrap: 'wrap', mt: 2 }}>

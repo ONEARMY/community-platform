@@ -2,6 +2,7 @@ import { MOCK_DATA } from '../data';
 import { generateNewUserDetails, getTenantUser } from '../utils/TestUtils';
 
 const admin = getTenantUser(MOCK_DATA.users.admin);
+const researchCreator = getTenantUser(MOCK_DATA.users.research_creator);
 
 describe('[Ban User]', () => {
   beforeEach(() => {
@@ -51,15 +52,21 @@ describe('[Ban User]', () => {
       cy.contains('User not found');
     });
 
-    it('[Cannot ban user with admin role]', () => {
+    it('[Cannot ban own profile or users with protected role]', () => {
       cy.step('Admin logs in');
       cy.signIn(admin.email, admin.password);
 
-      cy.step('Go to another admin profile');
+      cy.step('Go to own profile');
       cy.visit(`/u/${admin.username}`);
 
-      cy.step('Ban button should not be visible on own profile');
-      cy.get('[data-cy=BanUserButton]').should('not.exist');
+      cy.step('Ban button should be visible but disabled');
+      cy.get('[data-cy=BanUserButton]').should('be.visible').and('be.disabled');
+
+      cy.step('Go to research creator profile');
+      cy.visit(`/u/${researchCreator.username}`);
+
+      cy.step('Ban button should be visible but disabled');
+      cy.get('[data-cy=BanUserButton]').should('be.visible').and('be.disabled');
     });
 
     it('[Can cancel ban modal]', () => {

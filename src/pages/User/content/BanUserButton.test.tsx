@@ -37,7 +37,7 @@ describe('BanUserButton', () => {
     (global.fetch as any).mockClear();
   });
 
-  it('should not render when viewing own profile', () => {
+  it('should show disabled button with tooltip when viewing own profile', () => {
     const currentUser = FactoryUser({
       username: 'testuser',
       roles: [UserRole.ADMIN],
@@ -48,8 +48,10 @@ describe('BanUserButton', () => {
       isUserAuthorized: vi.fn().mockReturnValue(true),
     });
 
-    const { container } = render(<BanUserButton profile={currentUser as any} />);
-    expect(container).toBeEmptyDOMElement();
+    render(<BanUserButton profile={currentUser as any} />);
+    const button = screen.getByTestId('BanUserButton');
+    expect(button).toBeInTheDocument();
+    expect(button).toBeDisabled();
   });
 
   it('should not render when user lacks permission', () => {
@@ -76,7 +78,7 @@ describe('BanUserButton', () => {
     { role: UserRole.ADMIN, roleName: 'ADMIN' },
     { role: UserRole.MODERATOR, roleName: 'MODERATOR' },
     { role: UserRole.EDITOR, roleName: 'EDITOR' },
-  ])('should not render when target has $roleName role', ({ role }) => {
+  ])('should show disabled button with tooltip when target has $roleName role', ({ role }) => {
     const currentUser = FactoryUser({
       username: 'admin',
       roles: [UserRole.ADMIN],
@@ -92,8 +94,10 @@ describe('BanUserButton', () => {
       isUserAuthorized: vi.fn().mockReturnValue(true),
     });
 
-    const { container } = render(<BanUserButton profile={targetUser as any} />);
-    expect(container).toBeEmptyDOMElement();
+    render(<BanUserButton profile={targetUser as any} />);
+    const button = screen.getByTestId('BanUserButton');
+    expect(button).toBeInTheDocument();
+    expect(button).toBeDisabled();
   });
 
   it('should render button when admin views regular user', () => {

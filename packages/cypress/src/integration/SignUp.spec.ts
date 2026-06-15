@@ -101,8 +101,8 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="Confirm.modal: Checkbox"]').check({ force: true });
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
-      cy.step('Redirected to homepage');
-      cy.url().should('eq', Cypress.config().baseUrl + '/');
+      cy.step('Account deletion successful');
+      cy.contains('[data-cy=toast-message]', 'Your account has been deleted').should('be.visible');
     });
   });
 });

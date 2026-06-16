@@ -33,11 +33,13 @@ export const NotificationsSupabase = ({ device }: IProps) => {
 
   const iconProps = {
     onClick,
-    size: 40,
+    size: 24,
     sx: {
+      p: '4px',
+      boxSizing: 'content-box' as const,
+      borderRadius: 99,
       ':hover': {
         background: 'background',
-        borderRadius: 99,
       },
     },
   };
@@ -45,10 +47,14 @@ export const NotificationsSupabase = ({ device }: IProps) => {
   return (
     <Box data-cy={`NotificationsSupabase-${device}`}>
       {!hasNewNotifications && (
-        <Icon data-cy="notifications-no-new-messages" glyph="megaphone-inactive" {...iconProps} />
+        <Icon data-cy="notifications-no-new-messages" glyph="nav-notifications" {...iconProps} />
       )}
       {hasNewNotifications && (
-        <Icon data-cy="notifications-new-messages" glyph="megaphone-active" {...iconProps} />
+        <Icon
+          data-cy="notifications-new-messages"
+          glyph="nav-notifications-active"
+          {...iconProps}
+        />
       )}
       <NotificationsModal isOpen={isOpen}>
         <NotificationListSupabase

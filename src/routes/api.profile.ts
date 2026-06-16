@@ -78,7 +78,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       displayName: String(formData.get('displayName')),
       about: String(formData.get('about')),
-      country: country === 'null' ? null : String(country),
+      country: country ? String(country) : null,
       type: String(formData.get('type')),
       isContactable: formData.get('isContactable') === 'true',
       showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',

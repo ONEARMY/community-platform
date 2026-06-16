@@ -2,6 +2,11 @@ import type { LatLngBounds, Map as LeafletMap, Marker } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import {
+  HEADER_HEIGHT_DESKTOP,
+  HEADER_HEIGHT_MOBILE,
+  MOBILE_NAV_HEIGHT,
+} from 'src/pages/common/Header/navLayout';
 import { Box, Flex } from 'theme-ui';
 import { MapList } from './Content/MapView/MapList';
 import { MapView } from './Content/MapView/MapView';
@@ -283,7 +288,17 @@ const MapsPage = () => {
 
   return (
     <MapContext.Provider value={contextValue}>
-      <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
+      <Box
+        id="mapPage"
+        sx={{
+          height: [
+            `calc(100dvh - ${HEADER_HEIGHT_MOBILE + MOBILE_NAV_HEIGHT}px)`,
+            `calc(100dvh - ${HEADER_HEIGHT_MOBILE + MOBILE_NAV_HEIGHT}px)`,
+            `calc(100dvh - ${HEADER_HEIGHT_DESKTOP}px)`,
+          ],
+          width: '100%',
+        }}
+      >
         <Flex
           sx={{
             flexDirection: 'row',

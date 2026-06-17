@@ -2,8 +2,9 @@ import { Button, HeroBanner } from 'oa-components';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import { data, redirect, useActionData, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
+import { EmailPreferences } from 'src/pages/SignUp/EmailPreferences';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
 
@@ -51,7 +52,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const navigate = useNavigate();
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData();
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -81,7 +81,7 @@ export default function Index() {
                 }}
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type={isConfirmed ? 'celebration' : 'email'} />
+                  {!isConfirmed && <HeroBanner type="email" />}
                   <Card sx={{ borderRadius: 3 }}>
                     <Flex
                       sx={{
@@ -92,9 +92,11 @@ export default function Index() {
                         width: '100%',
                       }}
                     >
-                      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>{isConfirmed ? 'Email verified!' : 'Email confirmation'}</Heading>
-                      </Flex>
+                      {!isConfirmed && (
+                        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+                          <Heading>Email confirmation</Heading>
+                        </Flex>
+                      )}
 
                       {loaderData.error ? (
                         <Text color="red">{loaderData?.error}</Text>
@@ -102,40 +104,16 @@ export default function Index() {
                         <>
                           {actionData?.error && <Text color="red">{actionData?.error}</Text>}
 
-                          <Flex
-                            sx={{
-                              flexDirection: 'column',
-                              alignItems: 'flex-start',
-                              gap: '2rem',
-                            }}
-                          >
-                            {isConfirmed ? (
-                              <>
-                                <Text
-                                  sx={{
-                                    textAlign: 'center',
-                                    color: 'grey',
-                                    gap: '2rem',
-                                  }}
-                                >
-                                  Great! You can now continue to setup your profile!
-                                </Text>
-                                <Button
-                                  large
-                                  sx={{
-                                    borderRadius: 3,
-                                    width: '100%',
-                                    justifyContent: 'center',
-                                  }}
-                                  variant="primary"
-                                  disabled={submitting}
-                                  type="button"
-                                  onClick={() => navigate('/settings/profile')}
-                                >
-                                  Setup my profile
-                                </Button>
-                              </>
-                            ) : (
+                          {isConfirmed ? (
+                            <EmailPreferences />
+                          ) : (
+                            <Flex
+                              sx={{
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '2rem',
+                              }}
+                            >
                               <Button
                                 large
                                 data-cy="submit"
@@ -150,8 +128,8 @@ export default function Index() {
                               >
                                 Confirm Email
                               </Button>
-                            )}
-                          </Flex>
+                            </Flex>
+                          )}
                         </>
                       )}
                     </Flex>

@@ -85,7 +85,7 @@ export const CardsSelect = ({
               <Image
                 src={option.image}
                 alt=""
-                sx={{ width: 32, height: 32, objectFit: 'contain', flexShrink: 0 }}
+                sx={{ width: 25, height: 25, objectFit: 'contain', flexShrink: 0 }}
               />
             )}
             <Flex
@@ -99,7 +99,7 @@ export const CardsSelect = ({
               <Heading
                 as="h3"
                 sx={{
-                  fontSize: 3,
+                  fontSize: '14px',
                   maxWidth: '100%',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',

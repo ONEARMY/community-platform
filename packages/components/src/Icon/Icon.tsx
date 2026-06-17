@@ -77,6 +77,8 @@ export const glyphs: IGlyphs = {
   'double-arrow-right': iconMap.doubleArrowRight,
   edit: iconMap.edit,
   email: iconMap.email,
+  'email-off': iconMap.emailOff,
+  'email-stack': iconMap.emailStack,
   employee: iconMap.employee,
   'email-outline': iconMap.emailOutline,
   'external-url': <ExternalUrl />,

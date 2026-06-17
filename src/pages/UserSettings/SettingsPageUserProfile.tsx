@@ -71,7 +71,7 @@ export const SettingsPageUserProfile = observer(() => {
         isContactable: isContactable(profile.isContactable),
         coverImages,
         photo: profile.photo ? toJS(profile.photo) : undefined,
-        country: profile.country,
+        country: profile.country || '',
         showVisitorPolicy: !!profile.visitorPolicy,
         visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
         visitorPreferenceDetails: profile.visitorPolicy?.details,

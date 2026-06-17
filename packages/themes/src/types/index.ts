@@ -27,6 +27,13 @@ export interface PlatformTheme {
     subscribed: string;
     notSubscribed: string;
     betaGreen: string;
+    popoverBorder: string;
+  };
+
+  fonts: {
+    title: string;
+    body: string;
+    nav: string;
   };
 
   fontSizes: number[];
@@ -34,10 +41,16 @@ export interface PlatformTheme {
   space: number[];
   radii: number[];
 
+  shadows: {
+    popover: string;
+    bottomNav: string;
+  };
+
   zIndex: {
     behind: number;
     level: number;
     default: number;
+    navDropdown: number;
     modalProfile: number;
     logoContainer: number;
     header: number;

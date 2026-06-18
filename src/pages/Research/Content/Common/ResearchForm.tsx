@@ -68,16 +68,13 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         console.error(error);
         return `Error: ${error.message}`;
       },
+      finally: () => {
+        setTimeout(() => {
+          // to avoid spam clicking
+          setIsUpdatingStatus(false);
+        }, 1000);
+      },
     });
-
-    try {
-      await promise;
-    } finally {
-      setTimeout(() => {
-        // to avoid spam clicking
-        setIsUpdatingStatus(false);
-      }, 1000);
-    }
   };
 
   const onSubmit = async (

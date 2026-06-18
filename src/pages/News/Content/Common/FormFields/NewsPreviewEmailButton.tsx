@@ -44,9 +44,11 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         console.error(error);
         return `Error: ${error.message}`;
       },
+      finally: () => {
+        setIsSendingPreview(false);
+      },
       duration: 10000,
     });
-    setIsSendingPreview(false);
   };
 
   return (

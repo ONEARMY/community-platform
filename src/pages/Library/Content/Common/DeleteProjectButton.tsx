@@ -18,6 +18,7 @@ const DeleteProjectButton = observer(({ id }: DeleteProjectButtonProps) => {
 
   const handleDelete = async () => {
     setIsDeleting(true);
+    setShowDeleteModal(false);
     const promise = libraryService.deleteProject(id);
 
     toast.promise(promise, {
@@ -29,7 +30,6 @@ const DeleteProjectButton = observer(({ id }: DeleteProjectButtonProps) => {
           label: `Project ID: ${id}`,
         });
         navigate('/library');
-        setIsDeleting(false);
         return {
           message: `Project deleted!`,
         };

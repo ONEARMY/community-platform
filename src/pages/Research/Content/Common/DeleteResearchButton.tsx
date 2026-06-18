@@ -37,7 +37,6 @@ const DeleteResearchButton = observer(({ research }: DeleteResearchButtonProps) 
           label: research.title,
         });
         navigate('/research');
-        setIsDeleting(false);
         return {
           message: `Research deleted!`,
         };

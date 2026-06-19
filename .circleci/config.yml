@@ -12,9 +12,7 @@ version: 2.1
 #  Orbs - preconfigured environments for running specific jobs
 ######################################################################################################
 
-orbs:
-  # used to track coverage
-  codecov: codecov/codecov@6.0.0
+orbs: {}
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -120,7 +118,6 @@ jobs:
           path: coverage
       - store_artifacts:
           path: packages/components/coverage
-      - codecov/upload
       - store_artifacts:
           path: packages/components/reports
       - store_test_results:

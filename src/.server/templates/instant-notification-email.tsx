@@ -1,6 +1,5 @@
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
 import { Container, Text } from 'react-email';
-import { BoxText } from './components/box-text';
 import { Button } from './components/button';
 import { Header } from './components/header';
 import { Heading } from './components/heading';

@@ -1,6 +1,5 @@
 import type { SubscribableContentTypes } from 'oa-shared';
 import ReactGA from 'react-ga4';
-import type { UaEventOptions } from 'react-ga4/types/ga4';
 import { GoogleAnalytics } from './GoogleAnalytics';
 
 export type EventAction =
@@ -14,9 +13,10 @@ export type EventAction =
 
 export type EventCategory = 'profiles' | SubscribableContentTypes;
 
-export type TrackEventOptions = Omit<UaEventOptions, 'action' | 'category'> & {
+export type TrackEventOptions = Omit<Parameters<typeof ReactGA.event>[0], 'action' | 'category'> & {
   action: EventAction;
   category: EventCategory;
+  label?: string;
 };
 
 export const trackEvent = (options: TrackEventOptions) => {

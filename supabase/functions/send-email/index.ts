@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Webhook } from 'standardwebhooks';
 import { Resend } from 'resend';
-import { render } from '@react-email/components';
+import { render } from 'react-email';
 
 import { EmailChangeNewEmail } from './_templates/email-change-new.tsx';
 import { MagicLinkEmail } from './_templates/magic-link.tsx';

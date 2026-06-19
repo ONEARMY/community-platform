@@ -1,4 +1,4 @@
-import { Section } from '@react-email/components';
+import { Section } from 'react-email';
 import { Button } from './button';
 import { Heading } from './heading';
 

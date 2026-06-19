@@ -49,13 +49,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     const categoriesForType = categories ? filterByType(categories, type) : [];
 
-    return Response.json(categoriesForType, { headers, status: 200 });
+    return data(categoriesForType, { headers, status: 200 });
   } catch (error) {
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
 
     console.error('Error loading categories:', error);
-    return Response.json({ error: 'Error loading categories', status: 500 }, { status: 500 });
+    return data({ error: 'Error loading categories', status: 500 }, { status: 500 });
   }
 }

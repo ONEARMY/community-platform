@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
 import { DBComment, DiscussionContentTypes } from 'oa-shared';
-import type { LoaderFunctionArgs, Params } from 'react-router';
+import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
@@ -13,7 +13,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
   if (!params.sourceId) {
-    return Response.json({}, { headers, status: 400, statusText: 'sourceId is required' });
+    return data({}, { headers, status: 400, statusText: 'sourceId is required' });
   }
   try {
     const claims = await client.auth.getClaims();
@@ -43,33 +43,33 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     const commentFactory = new CommentFactory(new ImageServiceServer(client));
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments);
 
-    return Response.json({ comments }, { headers });
+    return data({ comments }, { headers });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { status: 500, headers });
+    return data({}, { status: 500, headers });
   }
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {
-  const data = await request.json();
+  const requestData = await request.json();
 
   const { client, headers } = createSupabaseServerClient(request);
 
   const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
-    return Response.json({}, { headers, status: 401 });
+    return data({}, { headers, status: 401 });
   }
 
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
-    data,
+    requestData,
     params.sourceType!,
   );
 
   if (!valid) {
-    return Response.json({}, { headers, status, statusText });
+    return data({}, { headers, status, statusText });
   }
 
   const currentUser = await client
@@ -79,7 +79,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .limit(1);
 
   if (currentUser.error || !currentUser.data?.at(0)) {
-    return Response.json(
+    return data(
       {},
       {
         headers,
@@ -90,19 +90,16 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   }
 
   if (!currentUser.data.at(0)!.username) {
-    return Response.json(
-      { error: 'You must set a username before commenting' },
-      { headers, status: 403 },
-    );
+    return data({ error: 'You must set a username before commenting' }, { headers, status: 403 });
   }
 
   const newComment = {
-    comment: data.comment,
+    comment: requestData.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
     source_type: params.sourceType,
     created_by: currentUser.data[0].id,
-    parent_id: data.parentId ?? null,
+    parent_id: requestData.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
   } as Partial<DBComment>;
 
@@ -156,7 +153,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
-  return Response.json(comment, {
+  return data(comment, {
     headers,
     status: commentResult.error ? 500 : 201,
   });

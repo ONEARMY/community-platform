@@ -11,6 +11,7 @@ import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
+import { Poll } from "./poll";
 
 export class DBNews implements IDBContentDoc {
   readonly id: number;
@@ -36,6 +37,7 @@ export class DBNews implements IDBContentDoc {
   readonly body: string;
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
+  readonly poll: Poll | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null) {
     let htmlBody = marked(news.body, {
@@ -65,6 +67,7 @@ export class DBNews implements IDBContentDoc {
       tags: news.tags,
       title: news.title,
       contentReach: (contentReachOption?.value || null) as ContentReach,
+      poll: news.poll,
     } satisfies NewsFormData;
   }
 }
@@ -97,6 +100,7 @@ export class News implements IContentDoc {
   totalViews: number;
   usefulCount: number;
   contentReach: ContentReach | null;
+  poll: Poll | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
@@ -138,6 +142,7 @@ export class News implements IContentDoc {
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
       contentReach: news.content_reach || null,
+      poll: news.poll || null,
     });
   }
 }
@@ -151,6 +156,7 @@ export type NewsFormData = {
   tags?: number[];
   title: string;
   contentReach: ContentReach | null;
+  poll: Poll | null;
 };
 
 export type NewsDTO = {
@@ -162,4 +168,5 @@ export type NewsDTO = {
   profileBadges: number[] | null;
   tags: number[] | null;
   contentReach: ContentReach | null;
+  poll: Poll | null;
 };

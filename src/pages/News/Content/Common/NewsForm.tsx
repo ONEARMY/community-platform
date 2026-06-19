@@ -21,6 +21,8 @@ import { composeValidators, minValue, required } from 'src/utils/validators';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
+import { PollField } from "../../../common/FormFields/PollField";
+import arrayMutators from 'final-form-arrays';
 
 interface IProps {
   'data-testid'?: string;
@@ -61,6 +63,7 @@ export const NewsForm = (props: IProps) => {
         tags: props.formData?.tags || [],
         title: props.formData?.title || '',
         contentReach: props.formData?.contentReach || null,
+        poll: props.formData?.poll || null,
       }) satisfies NewsFormData,
     [],
   );
@@ -75,6 +78,7 @@ export const NewsForm = (props: IProps) => {
       tags: formValues.tags,
       title: formValues.title!,
       contentReach: formValues.contentReach || null,
+      poll: formValues.poll || null,
     });
 
     toast.promise(promise, {
@@ -133,6 +137,9 @@ export const NewsForm = (props: IProps) => {
         onSubmit={(values) => onSubmit(values, false)}
         initialValues={initialValues}
         validate={validateForm}
+        mutators={{
+          ...arrayMutators,
+        }}
         render={({
           dirty,
           errors,
@@ -232,6 +239,8 @@ export const NewsForm = (props: IProps) => {
               />
 
               <NewsBodyField imageUpload={imageUpload} />
+              <PollField
+                validate={validate} pollData={null}/>
             </FormWrapper>
           );
         }}

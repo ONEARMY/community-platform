@@ -14,6 +14,7 @@ import closeSVG from '../../assets/icons/cross-close.svg';
 import crossCloseModalSVG from '../../assets/icons/cross-close-modal.svg';
 import declinedSVG from '../../assets/icons/declined.svg';
 import deleteSVG from '../../assets/icons/delete.svg';
+import difficultyLevel from '../../assets/icons/icon-difficulty-level.svg';
 import discussionSVG from '../../assets/icons/discussion.svg';
 import doubleArrowLeft from '../../assets/icons/double-arrow-left.svg';
 import doubleArrowRight from '../../assets/icons/double-arrow-right.svg';
@@ -117,6 +118,7 @@ export const iconMap = {
   copyLink: <ImageIcon src={copyLinkSVG} />,
   declined: <ImageIcon src={declinedSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
+  difficultyLevel: <ImageIcon src={difficultyLevel} />,
   discussion: <ImageIcon src={discussionSVG} />,
   doubleTick: <ImageIcon src={doubleTickSVG} />,
   doubleArrowLeft: (

@@ -13,8 +13,6 @@ version: 2.1
 ######################################################################################################
 
 orbs:
-  # for use with cimg image, to install web browsers
-  browser-tools: circleci/browser-tools@2.4.2
   # used to track coverage
   codecov: codecov/codecov@6.0.0
 
@@ -244,17 +242,6 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
-      # install testing browsers are required
-      - when:
-          condition:
-            equal: ['chrome', << parameters.CI_BROWSER >>]
-          steps:
-            - browser-tools/install-chrome
-      - when:
-          condition:
-            equal: ['firefox', << parameters.CI_BROWSER >>]
-          steps:
-            - browser-tools/install-firefox
       # call main testing script
       - run:
           command: npm run test ci prod

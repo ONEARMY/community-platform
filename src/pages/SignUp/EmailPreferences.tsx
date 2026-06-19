@@ -67,11 +67,13 @@ export const EmailPreferences = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: 8, width: '100%' }}>
       <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-        <Heading>{labels.heading}</Heading>
-        <Text sx={{ color: 'grey' }}>{labels.subtitle}</Text>
+        <Heading sx={{ fontSize: [5, 6] }}>{labels.heading}</Heading>
+        <Text sx={{ color: 'darkGrey', fontFamily: 'body', lineHeight: '150%', fontSize: [2, 3] }}>
+          {labels.subtitle}
+        </Text>
       </Flex>
 
-      <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+      <Flex sx={{ flexDirection: 'column', gap: 8 }}>
         {options.map((option) => {
           const isSelected = selected === option.value;
           return (
@@ -90,7 +92,7 @@ export const EmailPreferences = () => {
               <Flex
                 sx={{
                   bg: 'palegrey',
-                  borderRadius: 1,
+                  borderRadius: 2,
                   padding: 2,
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -103,17 +105,18 @@ export const EmailPreferences = () => {
                 <Text as="h4" sx={{ display: 'block' }}>
                   {option.title}
                 </Text>
-                <Text sx={{ color: 'darkGrey', fontSize: 2 }}>{option.description}</Text>
+                <Text
+                  sx={{ color: 'darkGrey', fontSize: 2, fontFamily: 'body', lineHeight: '150%' }}
+                >
+                  {option.description}
+                </Text>
               </Box>
 
               <Radio
                 name="email-preference"
                 checked={isSelected}
                 onChange={() => setSelected(option.value)}
-                sx={{
-                  'input:checked ~ &': { color: 'highlight' },
-                  'input:focus ~ &': { backgroundColor: 'white' },
-                }}
+                sx={{ 'input:checked ~ &': { color: 'highlight' } }}
               />
             </Flex>
           );

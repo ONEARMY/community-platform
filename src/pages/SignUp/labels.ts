@@ -1,6 +1,6 @@
 export const emailPreferences = {
   heading: 'Get our news right in your email',
-  subtitle: 'Lets us know how often you want to receive our updates.',
+  subtitle: 'Let us know how often you want to receive our updates.',
   submit: 'Save and continue',
   options: {
     all: {

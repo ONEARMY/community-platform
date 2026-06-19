@@ -38,7 +38,7 @@ aliases:
   - &install_bun
     run:
       name: Install Bun
-      command: curl -fsSL https://bun.sh/install | bash && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
+      command: curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.10" && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
   - &restore_bun_cache
     restore_cache:
       name: Restore bun cache

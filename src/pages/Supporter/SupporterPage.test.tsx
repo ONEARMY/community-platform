@@ -63,7 +63,7 @@ vi.mock('src/common/Toast/CustomToast', () => ({
 
 const mockPrices: SupporterPrice[] = [
   {
-    id: 'price_1',
+    id: 'price_1a',
     unitAmount: 800,
     currency: 'eur',
     interval: 'month',
@@ -71,7 +71,15 @@ const mockPrices: SupporterPrice[] = [
     tierName: 'starter',
   },
   {
-    id: 'price_2',
+    id: 'price_1b',
+    unitAmount: 1500,
+    currency: 'eur',
+    interval: 'month',
+    tier: 1,
+    tierName: 'starter',
+  },
+  {
+    id: 'price_2a',
     unitAmount: 1600,
     currency: 'eur',
     interval: 'month',
@@ -79,8 +87,24 @@ const mockPrices: SupporterPrice[] = [
     tierName: 'core',
   },
   {
-    id: 'price_3',
+    id: 'price_2b',
+    unitAmount: 2500,
+    currency: 'eur',
+    interval: 'month',
+    tier: 2,
+    tierName: 'core',
+  },
+  {
+    id: 'price_3a',
     unitAmount: 3200,
+    currency: 'eur',
+    interval: 'month',
+    tier: 3,
+    tierName: 'impact',
+  },
+  {
+    id: 'price_3b',
+    unitAmount: 6000,
     currency: 'eur',
     interval: 'month',
     tier: 3,
@@ -259,7 +283,7 @@ describe('SupporterPage query params', () => {
   });
 
   describe('tier query param', () => {
-    it('preselects tier 1 (starter) price with ?tier=1', async () => {
+    it('preselects lowest price for tier 1 with ?tier=1', async () => {
       renderPage('/supporter?tier=1');
 
       await waitFor(() => {
@@ -269,7 +293,7 @@ describe('SupporterPage query params', () => {
       });
     });
 
-    it('preselects tier 3 (impact) price with ?tier=3', async () => {
+    it('preselects lowest price for tier 3 with ?tier=3', async () => {
       renderPage('/supporter?tier=3');
 
       await waitFor(() => {
@@ -279,7 +303,7 @@ describe('SupporterPage query params', () => {
       });
     });
 
-    it('falls back to default tier 2 with invalid ?tier=99', async () => {
+    it('falls back to lowest price for default tier 2 with invalid ?tier=99', async () => {
       renderPage('/supporter?tier=99');
 
       await waitFor(() => {

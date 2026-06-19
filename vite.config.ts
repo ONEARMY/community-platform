@@ -127,7 +127,14 @@ export default defineConfig({
   // open browser with server (note, will open at 127.0.1 not localhost on node <17)
   // https://vitejs.dev/config/server-options.html#server-options
   ssr: {
-    noExternal: ['remix-utils', '@mui/base', '@mui/utils', '@mui/types'],
+    noExternal: [
+      'remix-utils',
+      '@mui/base',
+      '@mui/utils',
+      '@mui/types',
+      '@lexical/selection',
+      'lexical',
+    ],
   },
   resolve: {
     alias: {

@@ -241,7 +241,7 @@ jobs:
           at: '.'
       # call main testing script
       - run:
-          command: npm run test ci prod
+          command: bun run --filter oa-cypress start ci prod
           environment:
             VITE_SITE_VARIANT: test-ci
             CI_BROWSER: << parameters.CI_BROWSER >>
@@ -298,7 +298,7 @@ workflows:
           matrix:
             parameters:
               CI_NODE: [1, 2, 3, 4]
-              CI_BROWSER: ['chrome']
+              CI_BROWSER: ['electron']
       #---------------------- Approval ----------------------
       - approve:
           type: approval

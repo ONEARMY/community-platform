@@ -13,7 +13,7 @@ import {
 import { emailPreferences as labels } from 'src/pages/SignUp/labels';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import Index from './_.setup-email-preferences';
+import Index from 'src/routes/_.setup-email-preferences';
 
 const mockSetPreferences = vi.fn();
 

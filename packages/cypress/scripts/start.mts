@@ -115,6 +115,7 @@ async function startAppServer(tenantId: string) {
       ...process.env,
       VITE_SITE_VARIANT: 'test-ci',
       TENANT_ID: tenantId,
+      PORT: '3456',
     },
   });
 

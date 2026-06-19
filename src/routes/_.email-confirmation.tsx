@@ -1,10 +1,8 @@
 import { Button, HeroBanner } from 'oa-components';
-import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useActionData, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
-import { EmailPreferences } from 'src/pages/SignUp/EmailPreferences';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
 
@@ -48,19 +46,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return data({ error: 'Your link has expired or is invalid' }, { status: 400, headers });
   }
 
-  return data({ success: true }, { headers });
+  return redirect('/setup-email-preferences', { headers });
 };
 
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData();
-  const [isConfirmed, setIsConfirmed] = useState(false);
-
-  useEffect(() => {
-    if (actionData?.success) {
-      setIsConfirmed(true);
-    }
-  }, [actionData?.success]);
 
   return (
     <Main style={{ flex: 1 }}>
@@ -81,7 +72,7 @@ export default function Index() {
                 }}
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  {!isConfirmed && <HeroBanner type="email" />}
+                  <HeroBanner type="email" />
                   <Card sx={{ borderRadius: 3 }}>
                     <Flex
                       sx={{
@@ -92,11 +83,9 @@ export default function Index() {
                         width: '100%',
                       }}
                     >
-                      {!isConfirmed && (
-                        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                          <Heading>Email confirmation</Heading>
-                        </Flex>
-                      )}
+                      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+                        <Heading>Email confirmation</Heading>
+                      </Flex>
 
                       {loaderData.error ? (
                         <Text color="red">{loaderData?.error}</Text>
@@ -104,32 +93,28 @@ export default function Index() {
                         <>
                           {actionData?.error && <Text color="red">{actionData?.error}</Text>}
 
-                          {isConfirmed ? (
-                            <EmailPreferences />
-                          ) : (
-                            <Flex
+                          <Flex
+                            sx={{
+                              flexDirection: 'column',
+                              alignItems: 'flex-start',
+                              gap: '2rem',
+                            }}
+                          >
+                            <Button
+                              large
+                              data-cy="submit"
                               sx={{
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                                gap: '2rem',
+                                borderRadius: 3,
+                                width: '100%',
+                                justifyContent: 'center',
                               }}
+                              variant="primary"
+                              disabled={submitting}
+                              type="submit"
                             >
-                              <Button
-                                large
-                                data-cy="submit"
-                                sx={{
-                                  borderRadius: 3,
-                                  width: '100%',
-                                  justifyContent: 'center',
-                                }}
-                                variant="primary"
-                                disabled={submitting}
-                                type="submit"
-                              >
-                                Confirm Email
-                              </Button>
-                            </Flex>
-                          )}
+                              Confirm Email
+                            </Button>
+                          </Flex>
                         </>
                       )}
                     </Flex>

@@ -4,7 +4,6 @@ import type { ContentReach } from 'oa-shared';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useToast } from 'src/common/Toast';
-import { DEFAULT_BOX_PADDING, DEFAULT_ICON_SIZE, DEFAULT_REACH } from 'src/pages/SignUp/constants';
 import { emailPreferences as labels } from 'src/pages/SignUp/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { Box, Flex, Heading, Radio, Text } from 'theme-ui';
@@ -14,8 +13,6 @@ interface EmailPreferenceOption {
   glyph: keyof IGlyphs;
   title: string;
   description: string;
-  iconSize?: number;
-  boxPadding?: number | string;
 }
 
 const options: EmailPreferenceOption[] = [
@@ -23,8 +20,6 @@ const options: EmailPreferenceOption[] = [
     value: 'all',
     glyph: 'email-stack',
     ...labels.options.all,
-    iconSize: 30,
-    boxPadding: '7px',
   },
   {
     value: 'important',
@@ -41,26 +36,19 @@ const options: EmailPreferenceOption[] = [
 export const EmailPreferences = () => {
   const navigate = useNavigate();
   const toast = useToast();
-  const [selected, setSelected] = useState<ContentReach>(DEFAULT_REACH);
+  const [selected, setSelected] = useState<ContentReach>('important');
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = () => {
     setSubmitting(true);
 
-    const promise = notificationsPreferencesService
-      .setPreferences({
-        comments: true,
-        replies: true,
-        researchUpdates: true,
-        isUnsubscribed: false,
-        contentReach: selected ? { value: selected, label: selected } : null,
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(labels.toast.error);
-        }
-      })
-      .finally(() => setSubmitting(false));
+    const promise = notificationsPreferencesService.setPreferences({
+      comments: true,
+      replies: true,
+      researchUpdates: true,
+      isUnsubscribed: false,
+      contentReach: selected ? { value: selected, label: selected } : null,
+    });
 
     toast.promise(promise, {
       loading: labels.toast.loading,
@@ -68,7 +56,11 @@ export const EmailPreferences = () => {
         navigate('/settings/profile');
         return labels.toast.success;
       },
-      error: (error) => `Error: ${error.message}`,
+      error: (error) => {
+        navigate('/settings/profile');
+        return `Error: ${error.message}`;
+      },
+      finally: () => setSubmitting(false),
     });
   };
 
@@ -99,12 +91,12 @@ export const EmailPreferences = () => {
                 sx={{
                   bg: 'palegrey',
                   borderRadius: 1,
-                  padding: option.boxPadding ?? DEFAULT_BOX_PADDING,
+                  padding: 2,
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Icon glyph={option.glyph} size={option.iconSize ?? DEFAULT_ICON_SIZE} />
+                <Icon glyph={option.glyph} size={25} />
               </Flex>
 
               <Box sx={{ flex: 1 }}>

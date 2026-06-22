@@ -20,6 +20,8 @@ import doubleArrowRight from '../../assets/icons/double-arrow-right.svg';
 import doubleTickSVG from '../../assets/icons/double-tick.svg';
 import editSVG from '../../assets/icons/edit.svg';
 import emailSVG from '../../assets/icons/email.svg';
+import emailOffSVG from '../../assets/icons/email-off.svg';
+import emailStackSVG from '../../assets/icons/email-stack.svg';
 import employeeSVG from '../../assets/icons/employee.svg';
 import errorSVG from '../../assets/icons/error.svg';
 import eyeSVG from '../../assets/icons/eye.svg';
@@ -137,6 +139,8 @@ export const iconMap = {
   ),
   edit: <ImageIcon src={editSVG} />,
   email: <ImageIcon src={emailSVG} />,
+  emailOff: <ImageIcon src={emailOffSVG} />,
+  emailStack: <ImageIcon src={emailStackSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,

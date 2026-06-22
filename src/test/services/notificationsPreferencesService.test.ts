@@ -49,7 +49,7 @@ describe('notificationsPreferencesService', () => {
 
   describe('setPreferences', () => {
     it('sends correct FormData', async () => {
-      const mockResponse = { ok: true };
+      const mockResponse = { ok: true, status: 200 };
       mockFetch.mockResolvedValue(mockResponse);
 
       const formData = {
@@ -75,6 +75,44 @@ describe('notificationsPreferencesService', () => {
       expect(body.get('researchUpdates')).toBe('true');
       expect(body.get('isUnsubscribed')).toBe('false');
       expect(result).toBe(mockResponse);
+    });
+
+    it('throws with the response error message on a non-2xx status', async () => {
+      mockFetch.mockResolvedValue({
+        status: 500,
+        json: () => Promise.resolve({ error: 'Something went wrong' }),
+      });
+
+      const formData = {
+        comments: true,
+        replies: false,
+        researchUpdates: true,
+        contentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesFormData;
+
+      await expect(
+        notificationsPreferencesService.setPreferences(formData),
+      ).rejects.toThrow('Something went wrong');
+    });
+
+    it('falls back to a default message when the body has no error', async () => {
+      mockFetch.mockResolvedValue({
+        status: 500,
+        json: () => Promise.reject(new Error('Invalid JSON')),
+      });
+
+      const formData = {
+        comments: true,
+        replies: false,
+        researchUpdates: true,
+        contentReach: mockEmailReachField,
+        isUnsubscribed: false,
+      } satisfies NotificationsPreferencesFormData;
+
+      await expect(
+        notificationsPreferencesService.setPreferences(formData),
+      ).rejects.toThrow('Error saving preferences');
     });
   });
 });

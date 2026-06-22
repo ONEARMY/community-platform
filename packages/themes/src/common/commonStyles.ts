@@ -31,6 +31,7 @@ export const commonStyles = {
     silver: '#c0c0c0',
     softgrey: '#c2c2c2',
     lightgrey: '#ababac',
+    palegrey: '#f0f0f0',
     darkGrey: '#686868',
     subscribed: 'orange',
     notSubscribed: '#1b1b1b',

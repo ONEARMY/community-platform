@@ -126,7 +126,8 @@ export const SupporterForm = () => {
               borderRadius: '65px',
               p: '4px',
               height: '44px',
-              alignSelf: 'stretch',
+              width: ['65%', 'auto'],
+              display: 'inline-flex',
             }}
           >
             <Box

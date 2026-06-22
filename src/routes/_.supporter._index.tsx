@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { useLoaderData } from 'react-router';
+import { data, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
 import { SupporterPage } from 'src/pages/Supporter/SupporterPage';
@@ -33,10 +33,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       stripeService.getPrices(),
       stripeService.getTierConfig(),
     ]);
-    return Response.json({ prices, tierConfig, isAuthenticated, userEmail });
+    return data({ prices, tierConfig, isAuthenticated, userEmail });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);
-    return Response.json({ prices: [], tierConfig: {}, isAuthenticated, userEmail });
+    return data({ prices: [], tierConfig: {}, isAuthenticated, userEmail });
   }
 }
 

@@ -1,6 +1,6 @@
-import { Column, Container, Html, Img, Markdown, Row, Text } from '@react-email/components';
 import { CSSProperties } from '@theme-ui/core';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
+import { Column, Container, Html, Img, Markdown, Row, Text } from 'react-email';
 import { BoxText } from './components/box-text';
 import { Button } from './components/button';
 import { ButtonCallToAction } from './components/button-call-to-action';

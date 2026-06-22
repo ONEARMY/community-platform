@@ -1,5 +1,5 @@
-import { Button as ButtonComp, Section } from '@react-email/components';
 import React from 'react';
+import { Button as ButtonComp, Section } from 'react-email';
 
 interface IProps {
   children: React.ReactNode;

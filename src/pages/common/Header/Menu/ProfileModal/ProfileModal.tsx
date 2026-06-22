@@ -149,7 +149,7 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
           <RowContent icon="nav-profile">Profile</RowContent>
         </RowLink>
         <AuthWrapper>
-          <RowLink to="/settings" data-cy="menu-Settings">
+          <RowLink to="/settings/profile" data-cy="menu-Settings">
             <RowContent icon="nav-settings">Settings</RowContent>
           </RowLink>
         </AuthWrapper>

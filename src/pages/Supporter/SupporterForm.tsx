@@ -7,6 +7,15 @@ import { SupporterCTA } from './SupporterCTA';
 import { formatPrice } from './SupporterPage';
 import { TierBanner } from './TierBanner';
 
+const ArrowRightIcon = () => (
+  <svg width={10} height={12} viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M4.06881 1.66897C5.03025 2.75347 6.00707 3.82259 6.96851 4.9071C4.96872 5.08656 2.96636 5.16861 0.961439 5.15322C0.706449 5.15322 0.461904 5.25452 0.281599 5.43482C0.101294 5.61513 0 5.85967 0 6.11466C0 6.36965 0.101294 6.6142 0.281599 6.7945C0.461904 6.97481 0.706449 7.0761 0.961439 7.0761C2.91508 7.0761 4.86616 6.99919 6.81468 6.84536C5.96861 7.83756 5.0764 8.81438 4.13034 9.72967C3.18428 10.645 4.59952 11.9525 5.48405 11.0911C6.99548 9.63245 8.40868 8.07536 9.71438 6.43001C9.80755 6.30985 9.87319 6.17069 9.90666 6.02236C9.96661 5.86125 9.98037 5.68661 9.94639 5.5181C9.91242 5.34959 9.83206 5.19392 9.71438 5.06862C8.29145 3.47648 6.84544 1.89972 5.43021 0.307573C4.59952 -0.615408 3.24582 0.74599 4.06881 1.66897Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 const inputSx = {
   height: '50px',
   px: '15px',
@@ -70,8 +79,7 @@ export const SupporterForm = () => {
   const disabled = isLoading || !selectedPriceId;
 
   const toggleButtonSx = (active: boolean) => ({
-    width: '127px',
-    minWidth: '120px',
+    flex: 1,
     height: '36px',
     py: '8px',
     display: 'flex',
@@ -118,7 +126,7 @@ export const SupporterForm = () => {
               borderRadius: '65px',
               p: '4px',
               height: '44px',
-              display: 'inline-flex',
+              alignSelf: 'stretch',
             }}
           >
             <Box
@@ -147,11 +155,10 @@ export const SupporterForm = () => {
           >
             <CurrencyDropdown currencies={currencies} value={currency} onChange={setCurrency} />
 
-            <Flex
+            <Box
               sx={{
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                alignContent: 'flex-start',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '10px',
                 alignSelf: 'stretch',
               }}
@@ -168,8 +175,6 @@ export const SupporterForm = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      flex: '1 0 0',
-                      minWidth: '120px',
                       height: '50px',
                       minHeight: '40px',
                       p: '10px',
@@ -192,7 +197,7 @@ export const SupporterForm = () => {
                   </Box>
                 );
               })}
-            </Flex>
+            </Box>
           </Flex>
 
           {selectedTier != null && currentTierConfig && (
@@ -252,9 +257,14 @@ export const SupporterForm = () => {
           }}
         >
           <SupporterCTA onClick={handleSupport} disabled={disabled} color={tierColor}>
-            {isLoading
-              ? 'Processing...'
-              : `Support for ${formatPrice(selectedAmount, currency)}/${label}  →`}
+            {isLoading ? (
+              'Processing...'
+            ) : (
+              <>
+                {`Support for ${formatPrice(selectedAmount, currency)}/${label} `}
+                <ArrowRightIcon />
+              </>
+            )}
           </SupporterCTA>
 
           <Text sx={{ fontSize: '12px', lineHeight: 1.4, color: 'darkGrey', textAlign: 'center' }}>

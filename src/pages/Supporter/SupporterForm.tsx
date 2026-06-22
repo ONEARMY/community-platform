@@ -81,6 +81,7 @@ export const SupporterForm = () => {
   const toggleButtonSx = (active: boolean) => ({
     flex: 1,
     height: '36px',
+    px: '24px',
     py: '8px',
     display: 'flex',
     justifyContent: 'center',

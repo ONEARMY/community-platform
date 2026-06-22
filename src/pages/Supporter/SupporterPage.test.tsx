@@ -110,6 +110,54 @@ const mockPrices: SupporterPrice[] = [
     tier: 3,
     tierName: 'impact',
   },
+  {
+    id: 'price_1a_year',
+    unitAmount: 8000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'starter',
+  },
+  {
+    id: 'price_1b_year',
+    unitAmount: 15000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'starter',
+  },
+  {
+    id: 'price_2a_year',
+    unitAmount: 16000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'core',
+  },
+  {
+    id: 'price_2b_year',
+    unitAmount: 25000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'core',
+  },
+  {
+    id: 'price_3a_year',
+    unitAmount: 32000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'impact',
+  },
+  {
+    id: 'price_3b_year',
+    unitAmount: 60000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'impact',
+  },
 ];
 
 const mockTierConfig = {
@@ -176,7 +224,7 @@ const getStepParam = (router: ReturnType<typeof createMemoryRouter>) =>
 const getPreviewParam = (router: ReturnType<typeof createMemoryRouter>) =>
   new URLSearchParams(router.state.location.search).get('preview');
 
-describe('SupporterPage query params', () => {
+describe('SupporterPage', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -405,6 +453,97 @@ describe('SupporterPage query params', () => {
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('thank-you');
+      });
+    });
+  });
+
+  describe('interval switching preserves selection index', () => {
+    it('keeps the same position when switching from monthly to yearly', async () => {
+      renderPage('/supporter');
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: '€8' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€8/month');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€80/year');
+      });
+    });
+
+    it('submits the yearly price ID after switching intervals', async () => {
+      mockCreateElementsSubscription.mockResolvedValue({
+        ok: true,
+        clientSecret: 'cs_test_123',
+        publishableKey: 'pk_test_123',
+        stripeCustomerId: 'cus_123',
+        accountExists: false,
+      });
+
+      renderPage('/supporter', { isAuthenticated: true, userEmail: 'test@test.com' });
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: '€8' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€80/year');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: /Support/ }));
+
+      await waitFor(() => {
+        expect(mockCreateElementsSubscription).toHaveBeenCalledWith(
+          expect.objectContaining({ priceId: 'price_1a_year' }),
+        );
+      });
+    });
+
+    it('keeps the same position when switching from yearly back to monthly', async () => {
+      renderPage('/supporter');
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: '€60' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€60/month');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€600/year');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Monthly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€60/month');
       });
     });
   });

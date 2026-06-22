@@ -1,5 +1,5 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { toast as sonnerToast } from 'sonner';
 import { CustomToast } from 'src/common/Toast/CustomToast';
@@ -122,6 +122,20 @@ export const SupporterPage = ({
         .filter((p) => p.currency === currency && p.interval === interval)
         .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || b.unitAmount - a.unitAmount),
     [prices, currency, interval],
+  );
+
+  const handleIntervalChange = useCallback(
+    (newInterval: Interval) => {
+      const currentIndex = availablePrices.findIndex((p) => p.id === selectedPriceId);
+      const newPrices = prices
+        .filter((p) => p.currency === currency && p.interval === newInterval)
+        .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || b.unitAmount - a.unitAmount);
+      if (currentIndex >= 0 && currentIndex < newPrices.length) {
+        setSelectedPriceId(newPrices[currentIndex].id);
+      }
+      setInterval(newInterval);
+    },
+    [availablePrices, selectedPriceId, prices, currency],
   );
 
   const selectedPrice =
@@ -267,7 +281,7 @@ export const SupporterPage = ({
     currency,
     setCurrency,
     interval,
-    setInterval,
+    setInterval: handleIntervalChange,
     selectedPriceId: selectedPrice?.id || null,
     setSelectedPriceId,
     name,

@@ -52,6 +52,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
         }}
       >
         <Avatar
+          data-cy="question-list-item-avatar"
           src={question.author?.photo?.publicUrl ?? DefaultMemberImage}
           alt={
             question.author ? `Avatar of ${question.author.username}` : 'Avatar of question author'

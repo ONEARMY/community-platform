@@ -13,6 +13,11 @@ export interface PollOption {
   description: string;
 }
 
+export interface PollOptionVotes {
+  option: PollOption;
+  votes: number;
+}
+
 interface IProps {
   pollData: PollFormData | null;
 }
@@ -20,10 +25,39 @@ interface IProps {
 export const PollForm = ({ pollData }: IProps) => {
   if (!pollData) return null;
 
+  const results: PollOptionVotes[] = [];
+  let seeResults = false; // TODO replace with check for (is admin || has already voted)
+  let activeVoting = true; // TODO replace with (is logged in && has yet to vote)
+
   const onSubmit = async (values: any) => {
-    await new Promise((r) => setTimeout(r, 500));
+    if (isFormDisabled(values)) return;
+    await new Promise((r) => setTimeout(r, 50));
+    activeVoting = false;
     console.log('submitted:', values);
+    await getResults();
   };
+
+  const getResults = async () => {
+    await new Promise((r) => setTimeout(r, 50));
+
+    pollData.options.map((option) => {
+      results.push({option: option, votes: Math.floor(Math.random() * (20)) + 1});
+    });
+    seeResults = true;
+  }
+
+  const getPercentage = (option: PollOption) => {
+    const allVotes = results.reduce((sum, r) => sum + r.votes, 0);
+    const thisResult = results.filter(r => r.option == option)[0]
+    console.log("all votes: ", allVotes);
+    let percentage = thisResult?.votes / allVotes;
+    console.log("percentage: ", percentage);
+    return Math.round((percentage * 100));
+  }
+
+  const isFormDisabled = (values: any) => {
+    return values?.selectedOptionIds?.length < 1 || !activeVoting;
+  }
 
   return (
     <>
@@ -70,6 +104,8 @@ export const PollForm = ({ pollData }: IProps) => {
                       <Label
                         key={option.id}
                         sx={{
+                          position: 'relative',
+                          overflow: 'hidden',
                           borderRadius: 1,
                           padding: 2,
                           alignItems: 'center',
@@ -77,29 +113,69 @@ export const PollForm = ({ pollData }: IProps) => {
                           backgroundColor: 'background',
                         }}
                       >
-                        {pollData.allowMultipleVotes ? (
-                          <Checkbox
-                            sx={{
-                              'input:checked ~ &': {color: 'highlight',},
-                              'input:focus ~ &': {backgroundColor: 'white', color: 'highlight'}
-                            }}
-                            onChange={() => toggle(option.id)}/>
-                        ) : (
-                          <Radio
-                            sx={{
-                              'input:checked ~ &': {color: 'highlight',},
-                              'input:focus ~ &': {backgroundColor: 'white',}
-                            }}
-                            checked={selected}
-                            onChange={() => selectSingle(option.id)}/>
-                        )}
-                        {option.description}
+                        <Flex sx={{
+                            position: 'absolute',
+                            left: 0,
+                            top: 0,
+                            bottom: 0,
+                            width: seeResults ? `${getPercentage(option)}%` : '0%',
+                            backgroundColor: 'highlight',
+                            opacity: 0.2,
+                            pointerEvents: 'none',
+                            transition: 'width 0.5s ease',
+                          }}/>
+
+                        <Flex
+                          sx={{
+                            position: 'relative',
+                            width: '100%',
+                            alignItems: 'center',
+                            gap: 1,
+                          }}
+                        >
+                          {pollData.allowMultipleVotes ? (
+                            <Checkbox
+                              disabled={!activeVoting}
+                              sx={{
+                                'input:checked ~ &': {color: 'highlight',},
+                                'input:focus ~ &': {backgroundColor: 'white', color: 'highlight'}
+                              }}
+                              onChange={() => toggle(option.id)} />
+                          ) : (
+                            <Radio
+                              disabled={!activeVoting}
+                              sx={{
+                                'input:checked ~ &': {color: 'highlight',},
+                                'input:focus ~ &': {backgroundColor: 'white',}
+                              }}
+                              checked={selected}
+                              onChange={() => selectSingle(option.id)} />
+                          )}
+
+                          <Text>{option.description}</Text>
+
+                          {seeResults && (
+                            <Text
+                              variant="quiet"
+                              sx={{
+                                fontSize: 2,
+                                ml: 'auto',
+                              }}
+                            >
+                              {getPercentage(option)}%
+                            </Text>
+                          )}
+                        </Flex>
                       </Label>
                     );
                   })}
                 </Flex>
 
-                <Button type="submit" variant="outline" sx={{width: 'fit-content'}}>
+                <Button type="submit"
+                        variant="outline"
+                        disabled={isFormDisabled(values)}
+                        sx={{width: 'fit-content'}}
+                >
                   {pollData.allowMultipleVotes ? ("Submit votes") : ("Submit vote")}
                 </Button>
 

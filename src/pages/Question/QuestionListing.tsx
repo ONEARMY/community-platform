@@ -97,7 +97,7 @@ export const QuestionListing = () => {
             padding: 0,
             margin: 0,
             marginBottom: 2,
-            gap: '2px',
+            gap: 0,
             ml: [-1, 0, 0],
             borderLeft: [0, '2px solid', '2px solid'],
             borderRight: [0, '2px solid', '2px solid'],

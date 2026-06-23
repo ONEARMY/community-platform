@@ -94,14 +94,14 @@ async function main() {
 async function startAppServer(tenantId: string) {
   const { CROSSENV_BIN } = PATHS;
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `VITE_SITE_VARIANT=test-ci`;
+  const crossEnvArgs = `VITE_SITE_VARIANT=test-ci PORT=3456`;
 
   // run local debug server for testing unless production build specified
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none bun start`;
 
   // create local build if not running on ci (which will have build already generated)
   if (isCi) {
-    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} bun run start-ci`;
+    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} NODE_ENV=production bun run start-ci`;
   }
 
   /******************* Run the main commands ******************* */
@@ -115,6 +115,7 @@ async function startAppServer(tenantId: string) {
       ...process.env,
       VITE_SITE_VARIANT: 'test-ci',
       TENANT_ID: tenantId,
+      PORT: '3456',
     },
   });
 

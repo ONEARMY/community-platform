@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 
-FROM oven/bun:1.3.10 AS base
+FROM oven/bun:1.3.14 AS base
 
 LABEL fly_launch_runtime="React Router"
 

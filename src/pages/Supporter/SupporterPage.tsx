@@ -126,8 +126,8 @@ export const SupporterPage = ({
 
   const selectedPrice =
     availablePrices.find((p) => p.id === selectedPriceId) ||
-    (initialTier != null ? availablePrices.find((p) => p.tier === initialTier) : null) ||
-    availablePrices.find((p) => p.tier === 2) ||
+    (initialTier != null ? availablePrices.findLast((p) => p.tier === initialTier) : null) ||
+    availablePrices.findLast((p) => p.tier === 2) ||
     availablePrices[0];
   const selectedAmount = selectedPrice?.unitAmount || 0;
   const selectedTier = selectedPrice?.tier ?? null;

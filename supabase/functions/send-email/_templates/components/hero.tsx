@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@react-email/components';
+import { Text } from 'react-email';
 
 const heroText = {
   color: '#27272c',

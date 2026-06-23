@@ -44,7 +44,7 @@ export class NotificationMapperServiceServer {
           (notification.content as News).heroImage = heroImage;
         }
 
-        if (content.data?.tag?.length) {
+        if (content.data?.tags?.length) {
           (notification.content as News).tags = await new TagsServiceServer(this.client).getTags(
             content.data.tags,
           );

@@ -1,4 +1,4 @@
-import { Body, Container, Head, Html, Img, Preview, Section } from '@react-email/components';
+import { Body, Container, Head, Html, Img, Preview, Section } from 'react-email';
 import { MessageSettings } from '../models/messageSettings';
 
 type ReceiverMessageArgs = {

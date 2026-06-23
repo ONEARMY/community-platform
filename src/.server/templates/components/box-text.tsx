@@ -1,5 +1,5 @@
-import { Section } from '@react-email/components';
 import React from 'react';
+import { Section } from 'react-email';
 
 const section = {
   backgroundColor: '#f4f4f4',

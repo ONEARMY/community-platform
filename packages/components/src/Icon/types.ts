@@ -32,6 +32,8 @@ export type availableGlyphs =
   | 'download-cloud'
   | 'edit'
   | 'email'
+  | 'email-off'
+  | 'email-stack'
   | 'email-outline'
   | 'employee'
   | 'external-url'

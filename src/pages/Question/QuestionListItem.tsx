@@ -46,7 +46,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
     >
       <Flex
         sx={{
-          gap: [2, 3],
+          gap: '5px',
           paddingX: ['10px', '20px', '40px'],
           paddingY: '20px',
         }}
@@ -121,6 +121,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
+                fontFamily: 'body',
+                lineHeight: '1.5',
               }}
             >
               <Highlighter searchWords={searchWords} textToHighlight={question.description} />

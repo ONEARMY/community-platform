@@ -46,9 +46,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
     >
       <Flex
         sx={{
-          gap: '5px',
-          paddingX: ['10px', '20px', '40px'],
-          paddingY: '20px',
+          gap: '20px',
+          padding: '30px',
         }}
       >
         <Avatar
@@ -60,8 +59,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
           loading="lazy"
           sx={{
             objectFit: 'cover',
-            width: ['25px', '35px'],
-            height: ['25px', '35px'],
+            width: '50px',
+            height: '50px',
             flexShrink: 0,
           }}
         />
@@ -139,7 +138,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             }}
           >
             {question.category ? (
-              <Category category={question.category} sx={{ fontSize: 2 }} />
+              <Category category={question.category} sx={{ fontSize: 1 }} />
             ) : (
               <Box />
             )}

@@ -46,8 +46,9 @@ export const QuestionListItem = ({ question, query }: IProps) => {
     >
       <Flex
         sx={{
-          gap: '20px',
-          padding: '30px',
+          gap: ['10px', '15px', '20px'],
+          paddingX: ['10px', '20px', '30px'],
+          paddingY: '20px',
         }}
       >
         <Avatar
@@ -59,8 +60,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
           loading="lazy"
           sx={{
             objectFit: 'cover',
-            width: '50px',
-            height: '50px',
+            width: ['25px', '50px', '50px'],
+            height: ['25px', '50px', '50px'],
             flexShrink: 0,
           }}
         />
@@ -68,7 +69,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
         <Flex
           sx={{
             flexDirection: 'column',
-            gap: 1,
+            gap: 0,
             flex: 1,
             minWidth: 0,
           }}
@@ -84,7 +85,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             as="h2"
             sx={{
               color: 'black',
-              fontSize: [3, 3, 4],
+              fontSize: [3, 4, 4],
             }}
           >
             <InternalLink
@@ -134,7 +135,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
               alignItems: 'center',
               gap: 2,
               flexWrap: 'wrap',
-              marginTop: 1,
+              marginTop: '10px',
             }}
           >
             {question.category ? (

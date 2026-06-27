@@ -53,7 +53,7 @@ const CheckoutForm = () => {
         ...(guestName && { name: guestName }),
         ...(accountExists && { accountExists: 'true' }),
       });
-      returnUrl = `${window.location.origin}/supporter?${params.toString()}`;
+      returnUrl = `${window.location.origin}/support?${params.toString()}`;
     }
 
     const { error } = await stripe.confirmPayment({

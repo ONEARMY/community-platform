@@ -16,7 +16,7 @@ import { NotificationsContext } from '../NotificationsContext';
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
 import { HEADER_HEIGHT_DESKTOP, HEADER_HEIGHT_MOBILE } from './navLayout';
 
-const HIDDEN_PATHS = ['/supporter'];
+const HIDDEN_PATHS = ['/support'];
 
 const Header = observer(() => {
   const { profile } = useProfileStore();

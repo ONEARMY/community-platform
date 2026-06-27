@@ -193,7 +193,7 @@ const renderPage = (
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route
-        path="/supporter"
+        path="/support"
         element={
           <TenantContext.Provider value={mockTenantSettings}>
             <SupporterPage
@@ -231,7 +231,7 @@ describe('SupporterPage', () => {
 
   describe('step param tracking', () => {
     it('sets ?step=form on initial page load', async () => {
-      const { router } = renderPage('/supporter');
+      const { router } = renderPage('/support');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -241,7 +241,7 @@ describe('SupporterPage', () => {
     });
 
     it('resets ?step=checkout to ?step=form on direct visit', async () => {
-      const { router } = renderPage('/supporter?step=checkout');
+      const { router } = renderPage('/support?step=checkout');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -251,7 +251,7 @@ describe('SupporterPage', () => {
     });
 
     it('resets ?step=thank-you to ?step=form on direct visit', async () => {
-      const { router } = renderPage('/supporter?step=thank-you');
+      const { router } = renderPage('/support?step=thank-you');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -263,7 +263,7 @@ describe('SupporterPage', () => {
 
   describe('preview mode uses ?preview= param', () => {
     it('renders login form for ?preview=login and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=login');
+      const { router } = renderPage('/support?preview=login');
 
       await waitFor(() => {
         expect(screen.getByText('Login to your account')).toBeInTheDocument();
@@ -274,7 +274,7 @@ describe('SupporterPage', () => {
     });
 
     it('renders account form for ?preview=create and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=create');
+      const { router } = renderPage('/support?preview=create');
 
       await waitFor(() => {
         expect(screen.getByText('Setup your account')).toBeInTheDocument();
@@ -285,7 +285,7 @@ describe('SupporterPage', () => {
     });
 
     it('renders authenticated view for ?preview=authenticated and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=authenticated');
+      const { router } = renderPage('/support?preview=authenticated');
 
       await waitFor(() => {
         expect(
@@ -298,7 +298,7 @@ describe('SupporterPage', () => {
     });
 
     it('renders form for ?preview=form and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=form');
+      const { router } = renderPage('/support?preview=form');
 
       await waitFor(() => {
         expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
@@ -309,7 +309,7 @@ describe('SupporterPage', () => {
     });
 
     it('renders checkout layout for ?preview=checkout and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=checkout');
+      const { router } = renderPage('/support?preview=checkout');
 
       await waitFor(() => {
         expect(screen.getByTestId('payment-element')).toBeInTheDocument();
@@ -320,7 +320,7 @@ describe('SupporterPage', () => {
     });
 
     it('does not treat old ?step=login as preview mode', async () => {
-      const { router } = renderPage('/supporter?step=login');
+      const { router } = renderPage('/support?step=login');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -332,7 +332,7 @@ describe('SupporterPage', () => {
 
   describe('tier query param', () => {
     it('preselects lowest price for tier 1 with ?tier=1', async () => {
-      renderPage('/supporter?tier=1');
+      renderPage('/support?tier=1');
 
       await waitFor(() => {
         expect(
@@ -342,7 +342,7 @@ describe('SupporterPage', () => {
     });
 
     it('preselects lowest price for tier 3 with ?tier=3', async () => {
-      renderPage('/supporter?tier=3');
+      renderPage('/support?tier=3');
 
       await waitFor(() => {
         expect(
@@ -352,7 +352,7 @@ describe('SupporterPage', () => {
     });
 
     it('falls back to lowest price for default tier 2 with invalid ?tier=99', async () => {
-      renderPage('/supporter?tier=99');
+      renderPage('/support?tier=99');
 
       await waitFor(() => {
         expect(
@@ -372,7 +372,7 @@ describe('SupporterPage', () => {
         accountExists: false,
       });
 
-      const { router } = renderPage('/supporter', {
+      const { router } = renderPage('/support', {
         isAuthenticated: true,
         userEmail: 'test@test.com',
       });
@@ -400,7 +400,7 @@ describe('SupporterPage', () => {
         accountExists: false,
       });
 
-      const { router } = renderPage('/supporter', {
+      const { router } = renderPage('/support', {
         isAuthenticated: true,
         userEmail: 'test@test.com',
       });
@@ -433,7 +433,7 @@ describe('SupporterPage', () => {
         accountExists: false,
       });
 
-      const { router } = renderPage('/supporter', {
+      const { router } = renderPage('/support', {
         isAuthenticated: true,
         userEmail: 'test@test.com',
       });
@@ -459,7 +459,7 @@ describe('SupporterPage', () => {
 
   describe('interval switching preserves selection index', () => {
     it('keeps the same position when switching from monthly to yearly', async () => {
-      renderPage('/supporter');
+      renderPage('/support');
 
       await waitFor(() => {
         expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
@@ -491,7 +491,7 @@ describe('SupporterPage', () => {
         accountExists: false,
       });
 
-      renderPage('/supporter', { isAuthenticated: true, userEmail: 'test@test.com' });
+      renderPage('/support', { isAuthenticated: true, userEmail: 'test@test.com' });
 
       await waitFor(() => {
         expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
@@ -516,7 +516,7 @@ describe('SupporterPage', () => {
     });
 
     it('keeps the same position when switching from yearly back to monthly', async () => {
-      renderPage('/supporter');
+      renderPage('/support');
 
       await waitFor(() => {
         expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
@@ -553,7 +553,7 @@ describe('SupporterPage', () => {
       mockCreateSupporterAccount.mockResolvedValue({ ok: true });
 
       const { router } = renderPage(
-        '/supporter?payment=success&customer=cus_123&email=test@test.com&name=Test',
+        '/support?payment=success&customer=cus_123&email=test@test.com&name=Test',
       );
 
       await waitFor(() => {

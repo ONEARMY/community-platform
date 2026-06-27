@@ -63,7 +63,7 @@ export const SupporterPage = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const toast = useToast();
 
-  // Preview mode: /supporter?preview=form|checkout|login|create|authenticated
+  // Preview mode: /support?preview=form|checkout|login|create|authenticated
   const previewMode = useMemo(() => {
     const preview = searchParams.get('preview');
     return preview === 'form' ||

@@ -7,11 +7,11 @@ import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
 import { DBMedia, Image, MediaWithPublicUrl } from './media';
 import { ContentReach, contentReachSettings } from './notificationPreferences';
+import { PollDTO } from './poll';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
-import { Poll } from "./poll";
 
 export class DBNews implements IDBContentDoc {
   readonly id: number;
@@ -37,9 +37,9 @@ export class DBNews implements IDBContentDoc {
   readonly body: string;
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
-  readonly poll: Poll | null;
+  readonly poll: number | null;
 
-  static toFormData(news: DBNews, publicHeroImage: Image | null) {
+  static toFormData(news: DBNews, publicHeroImage: Image | null, poll: PollDTO | null) {
     let htmlBody = marked(news.body, {
       breaks: true,
       gfm: true,
@@ -67,7 +67,7 @@ export class DBNews implements IDBContentDoc {
       tags: news.tags,
       title: news.title,
       contentReach: (contentReachOption?.value || null) as ContentReach,
-      poll: news.poll,
+      poll,
     } satisfies NewsFormData;
   }
 }
@@ -100,13 +100,13 @@ export class News implements IContentDoc {
   totalViews: number;
   usefulCount: number;
   contentReach: ContentReach | null;
-  poll: Poll | null;
+  poll: PollDTO | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
   }
 
-  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null) {
+  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null, poll?: PollDTO | null) {
     let htmlBody = marked(news.body, {
       breaks: true,
       gfm: true,
@@ -142,7 +142,7 @@ export class News implements IContentDoc {
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
       contentReach: news.content_reach || null,
-      poll: news.poll || null,
+      poll: poll,
     });
   }
 }
@@ -156,7 +156,7 @@ export type NewsFormData = {
   tags?: number[];
   title: string;
   contentReach: ContentReach | null;
-  poll: Poll | null;
+  poll: PollDTO | null;
 };
 
 export type NewsDTO = {
@@ -168,5 +168,5 @@ export type NewsDTO = {
   profileBadges: number[] | null;
   tags: number[] | null;
   contentReach: ContentReach | null;
-  poll: Poll | null;
+  poll?: PollDTO | null;
 };

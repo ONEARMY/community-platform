@@ -18,7 +18,7 @@ import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
-import { PollForm } from "../common/PollForm";
+import { PollDisplay } from '../common/PollDisplay';
 
 interface IProps {
   news: News;
@@ -182,15 +182,7 @@ export const NewsPage = observer(({ news }: IProps) => {
             <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
           </Box>
 
-          <PollForm pollData={{
-            title: 'Which option do you prefer?',
-            options: [
-              {id: 1, description: 'Option 1'},
-              {id: 2, description: 'Option 2 (select this)'},
-              {id: 3, description: 'Option 3'},
-            ],
-            allowMultipleVotes: true,
-          }} />
+          {news.poll && <PollDisplay pollData={news.poll} profile={profile} />}
 
           <Divider />
 

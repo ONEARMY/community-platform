@@ -1,3 +1,4 @@
+import arrayMutators from 'final-form-arrays';
 import { Button, ConfirmModal } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
@@ -18,11 +19,10 @@ import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
+import { PollField } from '../../../common/FormFields/PollField';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
-import { PollField } from "../../../common/FormFields/PollField";
-import arrayMutators from 'final-form-arrays';
 
 interface IProps {
   'data-testid'?: string;
@@ -240,7 +240,9 @@ export const NewsForm = (props: IProps) => {
 
               <NewsBodyField imageUpload={imageUpload} />
               <PollField
-                validate={validate} pollData={null}/>
+                validate={validate}
+                pollData={props.formData ? props.formData.poll : null}
+              />
             </FormWrapper>
           );
         }}

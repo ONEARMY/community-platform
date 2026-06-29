@@ -75,7 +75,9 @@ export const QuestionListing = () => {
   };
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
+    <Flex
+      sx={{ flexDirection: 'column', gap: [2, 3], width: '100%', maxWidth: '900px', mx: 'auto' }}
+    >
       <QuestionListHeader
         itemCount={isFetching ? undefined : total}
         draftCount={isFetchingDrafts ? undefined : draftCount}
@@ -97,7 +99,7 @@ export const QuestionListing = () => {
             padding: 0,
             margin: 0,
             marginBottom: 2,
-            gap: '2px',
+            gap: 0,
             ml: [-1, 0, 0],
             borderLeft: [0, '2px solid', '2px solid'],
             borderRight: [0, '2px solid', '2px solid'],

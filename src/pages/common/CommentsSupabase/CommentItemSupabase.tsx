@@ -168,7 +168,9 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                     disabled={acceptedAnswer.isLoading}
                     sx={{ fontSize: 1 }}
                   >
-                    {acceptedAnswer.isAccepted ? '✓ Mark as answer' : 'Mark as answer'}
+                    {acceptedAnswer.isAccepted
+                      ? 'Unmark as accepted answer'
+                      : 'Mark as accepted answer'}
                   </Button>
                 )}
               </ActionSet>

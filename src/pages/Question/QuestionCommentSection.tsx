@@ -51,6 +51,7 @@ export const QuestionCommentSection = observer(
             borderTop: 0,
             padding: [3, 4],
             marginTop: [0, 2, 4],
+            overflow: 'unset',
           }}
         >
           <CommentSectionSupabase

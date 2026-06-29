@@ -46,7 +46,7 @@ export const CardDetailsMemberProfile = ({ variant, item, isLink }: IProps) => {
           >
             <Avatar
               src={photoUrl || defaultProfileImage}
-              sx={{ width: '60px', height: '60px', objectFit: 'cover', flexShrink: 0 }}
+              sx={{ width: '60px', height: '60px', objectFit: 'cover' }}
               loading="lazy"
             />
             <MemberBadge

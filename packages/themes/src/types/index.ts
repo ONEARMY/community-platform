@@ -46,6 +46,12 @@ export interface PlatformTheme {
     bottomNav: string;
   };
 
+  images: {
+    avatar: {
+      flexShrink: number;
+    };
+  };
+
   zIndex: {
     behind: number;
     level: number;

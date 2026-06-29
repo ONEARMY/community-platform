@@ -61,7 +61,6 @@ export const CardDetailsSpaceProfile = ({ item, isLink, variant }: IProps) => {
                 width: '80px',
                 height: '80px',
                 objectFit: 'cover',
-                flexShrink: 0,
                 border: '3px solid white',
                 boxSizing: 'border-box',
               }}

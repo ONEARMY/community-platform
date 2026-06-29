@@ -26,6 +26,7 @@ export class DBQuestion implements IDBContentDoc {
   readonly slug: string;
   readonly tags: number[];
   readonly useful_count?: number;
+  readonly accepted_answer_id?: number | null;
 
   readonly description: string;
   readonly images: DBMedia[] | null;
@@ -73,6 +74,7 @@ export class Question implements IContentDoc {
   title: string;
   totalViews: number;
   usefulCount: number;
+  acceptedAnswerId?: number | null;
 
   description: string;
   images: Image[] | null;
@@ -102,6 +104,7 @@ export class Question implements IContentDoc {
       title: obj.title,
       totalViews: obj.total_views || 0,
       usefulCount: obj.useful_count || 0,
+      acceptedAnswerId: obj.accepted_answer_id,
     });
   }
 }

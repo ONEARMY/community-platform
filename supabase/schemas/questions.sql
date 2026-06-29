@@ -42,7 +42,8 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "images" "json"[],
     "legacy_id" "text",
     "is_draft" boolean DEFAULT false NOT NULL,
-    "published_at" timestamp with time zone
+    "published_at" timestamp with time zone,
+    "accepted_answer_id" bigint REFERENCES "public"."comments"("id") ON DELETE SET NULL
 );
 
 CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."questions") RETURNS "text"
@@ -186,6 +187,7 @@ ALTER TABLE ONLY "public"."questions"
 
 CREATE INDEX "questions_category_idx" ON "public"."questions" USING "btree" ("category");
 CREATE INDEX "questions_created_by_idx" ON "public"."questions" USING "btree" ("created_by");
+CREATE INDEX "questions_accepted_answer_id_idx" ON "public"."questions" USING "btree" ("accepted_answer_id");
 CREATE INDEX "questions_deleted_moderation_category_total_views_tags_crea_idx" ON "public"."questions" USING "btree" ("deleted", "moderation", "category", "total_views", "tags", "created_at", "comment_count", "created_by");
 CREATE INDEX "questions_tags_idx" ON "public"."questions" USING "gin" ("tags");
 

@@ -16,9 +16,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
-import { Card, Flex } from 'theme-ui';
+import { Box, Card, Flex } from 'theme-ui';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
+import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
 export interface ICommentItemProps {
@@ -66,6 +67,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     );
   }, [profile]);
 
+  const acceptedAnswer = useAcceptedAnswer(comment.id);
+
   const item = 'CommentItem';
 
   // Update parent component with new vote count when it changes
@@ -91,7 +94,13 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
       sx={{ flexDirection: 'column' }}
     >
       <Card
-        sx={{ flexDirection: 'column', padding: 3, overflow: 'inherit' }}
+        sx={{
+          flexDirection: 'column',
+          padding: 3,
+          overflow: 'inherit',
+          borderLeft: acceptedAnswer?.isAccepted ? '4px solid green' : '1px solid grey',
+          backgroundColor: acceptedAnswer?.isAccepted ? 'rgba(144, 238, 144, 0.1)' : undefined,
+        }}
         ref={commentRef as any}
         variant="borderless"
       >
@@ -150,7 +159,37 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                     Delete
                   </Button>
                 )}
+                {acceptedAnswer?.canMarkAsAccepted && (
+                  <Button
+                    type="button"
+                    data-cy="CommentItem: mark-as-accepted button"
+                    variant="subtle"
+                    onClick={acceptedAnswer.onAccept}
+                    disabled={acceptedAnswer.isLoading}
+                    sx={{ fontSize: 1 }}
+                  >
+                    {acceptedAnswer.isAccepted ? '✓ Mark as answer' : 'Mark as answer'}
+                  </Button>
+                )}
               </ActionSet>
+
+              {acceptedAnswer?.isAccepted && (
+                <Flex sx={{ alignItems: 'center', gap: 1, marginLeft: 'auto', paddingRight: 2 }}>
+                  <Box
+                    as="span"
+                    sx={{
+                      fontSize: 0,
+                      fontWeight: 'bold',
+                      color: 'green',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                    }}
+                  >
+                    ✓ Accepted
+                  </Box>
+                </Flex>
+              )}
             </>
           }
           usefulButtonConfig={{

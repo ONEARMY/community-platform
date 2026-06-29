@@ -111,24 +111,25 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                             gap: 1,
                           }}
                         >
-                          {!poll.singleChoice ? (
-                            <Checkbox
-                              disabled={!activeVoting()}
-                              sx={{
-                                'input:checked ~ &': { color: 'highlight' },
-                                'input:focus ~ &': { backgroundColor: 'white', color: 'highlight' },
-                              }}
-                              onChange={() => toggle(option)}
-                            />
-                          ) : (
+                          {poll.singleChoice ? (
                             <Radio
                               disabled={!activeVoting()}
                               sx={{
                                 'input:checked ~ &': { color: 'highlight' },
                                 'input:focus ~ &': { backgroundColor: 'white' },
                               }}
-                              checked={selected}
+                              checked={selected || option.wasVotedByUser}
                               onChange={() => selectSingle(option)}
+                            />
+                          ) : (
+                            <Checkbox
+                              disabled={!activeVoting()}
+                              checked={selected || option.wasVotedByUser}
+                              sx={{
+                                'input:checked ~ &': { color: 'highlight' },
+                                'input:focus ~ &': { backgroundColor: 'white', color: 'highlight' },
+                              }}
+                              onChange={() => toggle(option)}
                             />
                           )}
 
@@ -166,7 +167,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
       </Form>
       {seeResults() && (
         <Text variant="quiet" sx={{ fontSize: 2, marginTop: 2, marginBottom: 3 }}>
-          {allVotes()} votes
+          {allVotes()} {allVotes() > 1 ? 'votes' : 'vote'}
         </Text>
       )}
     </>

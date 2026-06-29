@@ -48,4 +48,5 @@ export type PollOptionDTO = {
   id?: number;
   description: string;
   voteCount?: number;
+  wasVotedByUser?: boolean;
 };

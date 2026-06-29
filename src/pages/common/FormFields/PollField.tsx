@@ -1,4 +1,4 @@
-import { Card, Flex, Heading, Label } from '@theme-ui/components';
+import { Card, Checkbox, Flex, Heading, Label, Text } from '@theme-ui/components';
 import { FieldValidator } from 'final-form';
 import { Button, FieldInput } from 'oa-components';
 import { PollDTO } from 'oa-shared/models/poll';
@@ -113,14 +113,17 @@ export const PollField = ({ validate }: IProps) => {
               <Label sx={{ mt: 3, gap: 1 }}>
                 <Field name="poll.singleChoice">
                   {({ input }) => (
-                    <>
-                      <input
-                        type="checkbox"
+                    <Flex sx={{ alignItems: 'center' }}>
+                      <Checkbox
+                        sx={{
+                          'input:checked ~ &': { color: 'highlight' },
+                          'input:focus ~ &': { backgroundColor: 'white', color: 'highlight' },
+                        }}
                         checked={!input.value}
                         onChange={() => input.onChange(!input.value)}
                       />
-                      Allow users to vote on more than one option
-                    </>
+                      <Text> Allow users to vote on more than one option </Text>
+                    </Flex>
                   )}
                 </Field>
               </Label>

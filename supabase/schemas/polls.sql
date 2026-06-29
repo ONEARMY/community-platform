@@ -112,7 +112,14 @@ CREATE OR REPLACE FUNCTION "public"."get_poll_with_permissions"(
                                                   'voteCount',
                                                   CASE
                                                       WHEN p_is_admin OR v_has_voted THEN o.vote_count
-                                                  END
+                                                  END,
+                                                  'wasVotedByUser',
+                                                  EXISTS (
+                                                      SELECT 1
+                                                      FROM poll_votes v
+                                                      WHERE v.poll_option_id = o.id
+                                                        AND v.profile_id = p_profile_id
+                                                  )
                                           )
                                   )
                            FROM poll_options o
@@ -200,16 +207,6 @@ CREATE POLICY "Admins can delete poll options"
     TO authenticated
     USING (is_poll_admin());
 
-CREATE POLICY "Users can read own votes"
-    ON poll_votes
-    FOR SELECT
-    USING (
-    profile_id = (
-        SELECT id FROM profiles WHERE auth_id = auth.uid()
-    )
-        OR is_poll_admin()
-    );
-
 CREATE POLICY "Authenticated users can vote"
     ON poll_votes
     FOR INSERT
@@ -219,6 +216,18 @@ CREATE POLICY "Authenticated users can vote"
         SELECT id FROM profiles WHERE auth_id = auth.uid()
     )
     );
+
+CREATE POLICY "Users can read votes (for update_vote_count)"
+    ON poll_votes
+    FOR SELECT
+    TO authenticated
+    USING (true);
+
+CREATE POLICY "Users can update poll options (for vote count)"
+    ON poll_options
+    FOR UPDATE
+    TO authenticated
+    USING (true);
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON TABLE polls

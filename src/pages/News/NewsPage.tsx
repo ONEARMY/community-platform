@@ -3,6 +3,7 @@ import {
   Category,
   ContentStatistics,
   DisplayDate,
+  PollDisplay,
   ProfileBadgeContentLabel,
   TagList,
   useImageLightbox,
@@ -18,7 +19,6 @@ import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
-import { PollDisplay } from '../common/PollDisplay';
 
 interface IProps {
   news: News;

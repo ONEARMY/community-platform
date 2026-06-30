@@ -19,7 +19,7 @@ import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
-import { PollField } from '../../../common/FormFields/PollField';
+import { PollForm } from '../../../common/FormFields/PollForm';
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
@@ -125,6 +125,9 @@ export const NewsForm = (props: IProps) => {
     }
     if (values.heroImage == null && values.existingHeroImage === null) {
       errors['heroImage'] = 'An image is required (either new or existing).';
+    }
+    if (values.poll && values.poll.options.length < 2) {
+      errors['poll'] = 'There needs to be at least 2 options in the poll.';
     }
     return errors;
   }, []);
@@ -239,7 +242,7 @@ export const NewsForm = (props: IProps) => {
               />
 
               <NewsBodyField imageUpload={imageUpload} />
-              <PollField
+              <PollForm
                 validate={validate}
                 pollData={props.formData ? props.formData.poll : null}
               />

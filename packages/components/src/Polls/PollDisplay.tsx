@@ -1,9 +1,9 @@
 import { Checkbox, Flex, Heading, Label, Radio, Text } from '@theme-ui/components';
-import { Button } from 'oa-components';
 import { Profile } from 'oa-shared';
 import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
+import { Button } from '../index';
 import { pollService } from './poll.service';
 
 interface IProps {
@@ -18,11 +18,6 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
   const activeVoting = () => !!(profile && !poll.hasVoted);
   const ableToSubmit = (values: any) => !activeVoting() || values?.selectedOptionIds?.length < 1;
   const allVotes = () => poll.options.reduce((sum, o) => sum + (o.voteCount ?? 0), 0);
-
-  const sortedOptions = useMemo(
-    () => [...poll.options].sort((a, b) => (a.id ?? 0) - (b.id ?? 0)),
-    [poll.options],
-  );
 
   const onSubmit = async (values: any) => {
     if (ableToSubmit(values)) return;
@@ -54,7 +49,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
             const current = values.selectedOptionIds || [];
 
             const updated = current.includes(option.id)
-              ? current.filter((x) => x !== option.id)
+              ? current.filter((x: number | undefined) => x !== option.id)
               : [...current, option.id];
 
             form.change('selectedOptionIds', updated);
@@ -73,7 +68,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                   </Text>
                 )}
                 <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                  {sortedOptions.map((option) => {
+                  {poll.options.map((option) => {
                     const selected = values.selectedOptionIds?.includes(option.id);
 
                     return (

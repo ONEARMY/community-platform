@@ -10,6 +10,14 @@ export class PollServiceServer {
       throw conflictError('Poll already exists with this id! Id: ' + dto.id);
     }
 
+    if (dto.options.length < 2) {
+      throw conflictError('Poll has to have at least 2 options!');
+    }
+
+    if (dto.options.some((o) => !o.description)) {
+      throw conflictError('Every poll option has to have a description!');
+    }
+
     const pollResult = await this.client
       .from('polls')
       .insert({
@@ -44,6 +52,14 @@ export class PollServiceServer {
   async updatePoll(dto: PollDTO): Promise<number> {
     if (!dto.id) {
       throw conflictError('Cannot update non-existing poll!');
+    }
+
+    if (dto.options.length < 2) {
+      throw conflictError('Poll has to have at least 2 options!');
+    }
+
+    if (dto.options.some((o) => !o.description)) {
+      throw conflictError('Every poll option has to have a description!');
     }
 
     const pollResult = await this.client
@@ -139,7 +155,13 @@ export class PollServiceServer {
       throw result.error;
     }
 
-    return result.data as PollDTO | null;
+    const poll = result.data as PollDTO | null;
+
+    if (poll) {
+      poll.options = [...poll.options].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+    }
+
+    return poll;
   }
 
   async deletePoll(id: number): Promise<void> {

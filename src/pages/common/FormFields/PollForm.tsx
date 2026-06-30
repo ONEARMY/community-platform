@@ -12,16 +12,19 @@ interface IProps {
   pollData: PollDTO | null;
 }
 
-export interface PollData {
-  title: string;
-  options: { description: string }[];
-  allowMultipleVotes: boolean;
-}
-
-export const PollField = ({ validate }: IProps) => {
+export const PollForm = ({ validate }: IProps) => {
   const name = 'poll';
   const form = useForm();
   const poll: PollDTO = form.getState().values?.poll;
+
+  const validatePollOptions = (options?: { description: string }[]) => {
+    if (!options || options.length < 2) {
+      return 'A poll must have at least 2 options.';
+    }
+    if (options.some((o) => !o.description)) {
+      return 'Every options has to have a description.';
+    }
+  };
 
   return (
     <>
@@ -72,8 +75,8 @@ export const PollField = ({ validate }: IProps) => {
             </FormFieldWrapper>
 
             <FormFieldWrapper htmlFor="poll.options" text="Poll options">
-              <FieldArray name="poll.options">
-                {({ fields }) => (
+              <FieldArray name="poll.options" validate={validatePollOptions}>
+                {({ fields, meta }) => (
                   <>
                     {fields.map((name, index) => (
                       <div
@@ -98,6 +101,17 @@ export const PollField = ({ validate }: IProps) => {
                         />
                       </div>
                     ))}
+                    {(meta.dirty || meta.submitFailed) && meta.error && (
+                      <Text
+                        sx={{
+                          color: 'error',
+                          fontSize: 1,
+                          mt: 1,
+                        }}
+                      >
+                        {meta.error}
+                      </Text>
+                    )}
                     <Button
                       variant="outline"
                       type="button"

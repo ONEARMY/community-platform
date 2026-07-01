@@ -4,7 +4,7 @@ import { useLocation } from 'react-router';
 
 import { TenantContext } from '../TenantContext';
 
-const HIDDEN_PATHS = ['/', '/map', '/academy', '/supporter'];
+const HIDDEN_PATHS = ['/', '/map', '/academy', '/support'];
 
 const GlobalSiteFooter = () => {
   const tenantContext = useContext(TenantContext);

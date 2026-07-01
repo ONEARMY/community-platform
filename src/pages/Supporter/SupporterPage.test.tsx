@@ -110,6 +110,54 @@ const mockPrices: SupporterPrice[] = [
     tier: 3,
     tierName: 'impact',
   },
+  {
+    id: 'price_1a_year',
+    unitAmount: 8000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'starter',
+  },
+  {
+    id: 'price_1b_year',
+    unitAmount: 15000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'starter',
+  },
+  {
+    id: 'price_2a_year',
+    unitAmount: 16000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'core',
+  },
+  {
+    id: 'price_2b_year',
+    unitAmount: 25000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'core',
+  },
+  {
+    id: 'price_3a_year',
+    unitAmount: 32000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'impact',
+  },
+  {
+    id: 'price_3b_year',
+    unitAmount: 60000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'impact',
+  },
 ];
 
 const mockTierConfig = {
@@ -145,7 +193,7 @@ const renderPage = (
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route
-        path="/supporter"
+        path="/support"
         element={
           <TenantContext.Provider value={mockTenantSettings}>
             <SupporterPage
@@ -176,14 +224,14 @@ const getStepParam = (router: ReturnType<typeof createMemoryRouter>) =>
 const getPreviewParam = (router: ReturnType<typeof createMemoryRouter>) =>
   new URLSearchParams(router.state.location.search).get('preview');
 
-describe('SupporterPage query params', () => {
+describe('SupporterPage', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   describe('step param tracking', () => {
     it('sets ?step=form on initial page load', async () => {
-      const { router } = renderPage('/supporter');
+      const { router } = renderPage('/support');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -193,7 +241,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('resets ?step=checkout to ?step=form on direct visit', async () => {
-      const { router } = renderPage('/supporter?step=checkout');
+      const { router } = renderPage('/support?step=checkout');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -203,7 +251,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('resets ?step=thank-you to ?step=form on direct visit', async () => {
-      const { router } = renderPage('/supporter?step=thank-you');
+      const { router } = renderPage('/support?step=thank-you');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -215,7 +263,7 @@ describe('SupporterPage query params', () => {
 
   describe('preview mode uses ?preview= param', () => {
     it('renders login form for ?preview=login and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=login');
+      const { router } = renderPage('/support?preview=login');
 
       await waitFor(() => {
         expect(screen.getByText('Login to your account')).toBeInTheDocument();
@@ -226,7 +274,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('renders account form for ?preview=create and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=create');
+      const { router } = renderPage('/support?preview=create');
 
       await waitFor(() => {
         expect(screen.getByText('Setup your account')).toBeInTheDocument();
@@ -237,7 +285,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('renders authenticated view for ?preview=authenticated and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=authenticated');
+      const { router } = renderPage('/support?preview=authenticated');
 
       await waitFor(() => {
         expect(
@@ -250,7 +298,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('renders form for ?preview=form and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=form');
+      const { router } = renderPage('/support?preview=form');
 
       await waitFor(() => {
         expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
@@ -261,7 +309,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('renders checkout layout for ?preview=checkout and does not set step', async () => {
-      const { router } = renderPage('/supporter?preview=checkout');
+      const { router } = renderPage('/support?preview=checkout');
 
       await waitFor(() => {
         expect(screen.getByTestId('payment-element')).toBeInTheDocument();
@@ -272,7 +320,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('does not treat old ?step=login as preview mode', async () => {
-      const { router } = renderPage('/supporter?step=login');
+      const { router } = renderPage('/support?step=login');
 
       await waitFor(() => {
         expect(getStepParam(router)).toBe('form');
@@ -284,7 +332,7 @@ describe('SupporterPage query params', () => {
 
   describe('tier query param', () => {
     it('preselects lowest price for tier 1 with ?tier=1', async () => {
-      renderPage('/supporter?tier=1');
+      renderPage('/support?tier=1');
 
       await waitFor(() => {
         expect(
@@ -294,7 +342,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('preselects lowest price for tier 3 with ?tier=3', async () => {
-      renderPage('/supporter?tier=3');
+      renderPage('/support?tier=3');
 
       await waitFor(() => {
         expect(
@@ -304,7 +352,7 @@ describe('SupporterPage query params', () => {
     });
 
     it('falls back to lowest price for default tier 2 with invalid ?tier=99', async () => {
-      renderPage('/supporter?tier=99');
+      renderPage('/support?tier=99');
 
       await waitFor(() => {
         expect(
@@ -324,7 +372,7 @@ describe('SupporterPage query params', () => {
         accountExists: false,
       });
 
-      const { router } = renderPage('/supporter', {
+      const { router } = renderPage('/support', {
         isAuthenticated: true,
         userEmail: 'test@test.com',
       });
@@ -352,7 +400,7 @@ describe('SupporterPage query params', () => {
         accountExists: false,
       });
 
-      const { router } = renderPage('/supporter', {
+      const { router } = renderPage('/support', {
         isAuthenticated: true,
         userEmail: 'test@test.com',
       });
@@ -385,7 +433,7 @@ describe('SupporterPage query params', () => {
         accountExists: false,
       });
 
-      const { router } = renderPage('/supporter', {
+      const { router } = renderPage('/support', {
         isAuthenticated: true,
         userEmail: 'test@test.com',
       });
@@ -409,12 +457,103 @@ describe('SupporterPage query params', () => {
     });
   });
 
+  describe('interval switching preserves selection index', () => {
+    it('keeps the same position when switching from monthly to yearly', async () => {
+      renderPage('/support');
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: '€8' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€8/month');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€80/year');
+      });
+    });
+
+    it('submits the yearly price ID after switching intervals', async () => {
+      mockCreateElementsSubscription.mockResolvedValue({
+        ok: true,
+        clientSecret: 'cs_test_123',
+        publishableKey: 'pk_test_123',
+        stripeCustomerId: 'cus_123',
+        accountExists: false,
+      });
+
+      renderPage('/support', { isAuthenticated: true, userEmail: 'test@test.com' });
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: '€8' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€80/year');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: /Support/ }));
+
+      await waitFor(() => {
+        expect(mockCreateElementsSubscription).toHaveBeenCalledWith(
+          expect.objectContaining({ priceId: 'price_1a_year' }),
+        );
+      });
+    });
+
+    it('keeps the same position when switching from yearly back to monthly', async () => {
+      renderPage('/support');
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Support/ })).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: '€60' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€60/month');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€600/year');
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Monthly' }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Support/ }),
+        ).toHaveTextContent('€60/month');
+      });
+    });
+  });
+
   describe('Stripe redirect', () => {
     it('sets ?step=thank-you after payment=success redirect', async () => {
       mockCreateSupporterAccount.mockResolvedValue({ ok: true });
 
       const { router } = renderPage(
-        '/supporter?payment=success&customer=cus_123&email=test@test.com&name=Test',
+        '/support?payment=success&customer=cus_123&email=test@test.com&name=Test',
       );
 
       await waitFor(() => {

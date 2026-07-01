@@ -3,7 +3,6 @@ import { data, LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { PollServiceServer } from '../services/pollService.server';
-import { forbiddenError } from '../utils/httpException';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

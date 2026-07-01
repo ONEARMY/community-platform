@@ -30,13 +30,6 @@ ALTER TABLE ONLY "public"."poll_votes"
     ADD CONSTRAINT "voted_by_fkey" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY "public"."news"
-    ADD COLUMN "poll" bigint;
-
-ALTER TABLE "public"."news"
-    ADD CONSTRAINT "news_poll_unique"
-        UNIQUE ("poll");
-
-ALTER TABLE ONLY "public"."news"
     ADD CONSTRAINT "news_poll_fkey" FOREIGN KEY ("poll") REFERENCES "public"."polls"("id") ON UPDATE CASCADE ON DELETE SET NULL;
 
 CREATE UNIQUE INDEX "poll_vote_unique"
@@ -44,6 +37,10 @@ CREATE UNIQUE INDEX "poll_vote_unique"
 
 CREATE INDEX IF NOT EXISTS "poll_options_poll_id_idx"
     ON "public"."poll_options"(poll_id);
+
+CREATE POLICY "tenant_isolation" ON "public"."polls" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE POLICY "tenant_isolation" ON "public"."poll_options" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE POLICY "tenant_isolation" ON "public"."poll_votes" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 
 CREATE OR REPLACE FUNCTION update_vote_count()
     RETURNS TRIGGER AS $$
@@ -157,77 +154,6 @@ CREATE OR REPLACE FUNCTION is_poll_admin()
     );
 $$;
 
--- TODO check if no longer needed:
-
-CREATE POLICY "Polls are readable"
-    ON polls
-    FOR SELECT
-    USING (true);
-
-CREATE POLICY "Admins can create polls"
-    ON polls
-    FOR INSERT
-    TO authenticated
-    WITH CHECK (is_poll_admin());
-
-CREATE POLICY "Admins can update polls"
-    ON polls
-    FOR UPDATE
-    TO authenticated
-    USING (is_poll_admin())
-    WITH CHECK (is_poll_admin());
-
-CREATE POLICY "Admins can delete polls"
-    ON polls
-    FOR DELETE
-    TO authenticated
-    USING (is_poll_admin());
-
-CREATE POLICY "Poll options are readable"
-    ON poll_options
-    FOR SELECT
-    USING (true);
-
-CREATE POLICY "Admins can create options"
-    ON poll_options
-    FOR INSERT
-    TO authenticated
-    WITH CHECK (is_poll_admin());
-
-CREATE POLICY "Admins can update options"
-    ON poll_options
-    FOR UPDATE
-    TO authenticated
-    USING (is_poll_admin())
-    WITH CHECK (is_poll_admin());
-
-CREATE POLICY "Admins can delete poll options"
-    ON poll_options
-    FOR DELETE
-    TO authenticated
-    USING (is_poll_admin());
-
-CREATE POLICY "Authenticated users can vote"
-    ON poll_votes
-    FOR INSERT
-    TO authenticated
-    WITH CHECK (
-    profile_id = (
-        SELECT id FROM profiles WHERE auth_id = auth.uid()
-    )
-    );
-
-CREATE POLICY "Users can read votes (for update_vote_count)"
-    ON poll_votes
-    FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Users can update poll options (for vote count)"
-    ON poll_options
-    FOR UPDATE
-    TO authenticated
-    USING (true);
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON TABLE polls
@@ -252,8 +178,6 @@ GRANT USAGE, SELECT
 GRANT USAGE, SELECT
     ON SEQUENCE poll_votes_id_seq
     TO authenticated;
-
-
 
 
 GRANT SELECT, INSERT, UPDATE, DELETE

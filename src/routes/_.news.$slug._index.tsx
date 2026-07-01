@@ -80,13 +80,17 @@ async function loadNews(client: SupabaseClient, dbNews: DBNews) {
     const dbProfile = await new ProfileServiceServer(client).getByAuthId(
       claims?.data?.claims.sub ?? '',
     );
-    const profile = new ProfileFactory(client).fromDB(dbProfile!);
-    const isAdmin = !!(
-      profile.roles?.includes(UserRole.ADMIN) ||
-      profile.roles?.includes(UserRole.EDITOR) ||
-      profile.roles?.includes(UserRole.MODERATOR)
-    );
-    poll = await new PollServiceServer(client).getPoll(dbNews.poll, profile.id, isAdmin);
+    if (dbProfile) {
+      const profile = new ProfileFactory(client).fromDB(dbProfile!);
+      const isAdmin = !!(
+        profile.roles?.includes(UserRole.ADMIN) ||
+        profile.roles?.includes(UserRole.EDITOR) ||
+        profile.roles?.includes(UserRole.MODERATOR)
+      );
+      poll = await new PollServiceServer(client).getPoll(dbNews.poll, profile.id, isAdmin);
+    } else {
+      poll = await new PollServiceServer(client).getPoll(dbNews.poll);
+    }
   }
 
   const news = News.fromDB(dbNews, tags, heroImage, poll);

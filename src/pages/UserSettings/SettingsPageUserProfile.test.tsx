@@ -151,6 +151,7 @@ describe('UserSettings', () => {
 
     const mockTenantContext: TenantSettingsContext = {
       siteName: 'Test Site',
+      siteNameShort: '',
       siteDescription: '',
       siteUrl: 'https://test.com',
       messageSignOff: 'Test',

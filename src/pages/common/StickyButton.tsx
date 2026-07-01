@@ -14,6 +14,10 @@ export const StickyButton = () => {
 
   const href = `/feedback/#page=${page}`;
 
+  if (location.pathname.startsWith('/support')) {
+    return null;
+  }
+
   return (
     <Box
       sx={{

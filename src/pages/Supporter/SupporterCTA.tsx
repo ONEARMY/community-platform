@@ -20,12 +20,12 @@ export const SupporterCTA = ({
     onClick={onClick}
     sx={{
       width: '100%',
-      height: '64px',
+      height: ['64px', '64px'],
       borderRadius: '5px',
       border: 'none',
       bg: color,
       color: 'black',
-      fontSize: '22px',
+      fontSize: ['17px', '22px'],
       fontWeight: 500,
       fontFamily: 'inherit',
       cursor: disabled ? 'not-allowed' : 'pointer',

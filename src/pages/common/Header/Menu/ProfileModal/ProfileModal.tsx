@@ -154,7 +154,7 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
           </RowLink>
         </AuthWrapper>
         {showSupporter && (
-          <RowLink to="/supporter" data-cy="menu-Supporter">
+          <RowLink to="/support" data-cy="menu-Supporter">
             <RowContent icon="nav-supporter">Become a supporter</RowContent>
           </RowLink>
         )}

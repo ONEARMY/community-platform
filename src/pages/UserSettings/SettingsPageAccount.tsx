@@ -100,7 +100,7 @@ export const SettingsPageAccount = observer(() => {
               </Text>
             </Flex>
           </Flex>
-          <InternalLink to="/supporter">
+          <InternalLink to="/support">
             <Button type="button" variant="primary">
               Support us
             </Button>

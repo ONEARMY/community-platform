@@ -7,7 +7,7 @@ import { Flex } from 'theme-ui';
 export const AlertIncompleteProfile = observer(() => {
   const { isComplete } = useProfileStore();
   const { pathname } = useLocation();
-  const isOnSupporterPage = pathname.startsWith('/supporter');
+  const isOnSupporterPage = pathname.startsWith('/support');
 
   if (isComplete !== false || isOnSupporterPage) {
     return null;

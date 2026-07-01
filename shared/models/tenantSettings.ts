@@ -2,6 +2,7 @@ import { UserRole } from './user';
 
 export class TenantSettings {
   siteName: string;
+  siteNameShort: string;
   siteDescription: string;
   siteUrl: string;
   messageSignOff: string;

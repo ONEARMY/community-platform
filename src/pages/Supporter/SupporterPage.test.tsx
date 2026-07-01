@@ -168,6 +168,7 @@ const mockTierConfig = {
 
 const mockTenantSettings = {
   siteName: 'Test Community',
+  siteNameShort: 'Test',
   siteImage: '/test-logo.png',
   siteDescription: '',
   siteUrl: '',
@@ -237,7 +238,7 @@ describe('SupporterPage', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
+      expect(screen.getByText('Test Membership')).toBeInTheDocument();
     });
 
     it('resets ?step=checkout to ?step=form on direct visit', async () => {
@@ -247,7 +248,7 @@ describe('SupporterPage', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
+      expect(screen.getByText('Test Membership')).toBeInTheDocument();
     });
 
     it('resets ?step=thank-you to ?step=form on direct visit', async () => {
@@ -257,7 +258,7 @@ describe('SupporterPage', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
+      expect(screen.getByText('Test Membership')).toBeInTheDocument();
     });
   });
 
@@ -301,7 +302,7 @@ describe('SupporterPage', () => {
       const { router } = renderPage('/support?preview=form');
 
       await waitFor(() => {
-        expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
+        expect(screen.getByText('Test Membership')).toBeInTheDocument();
       });
 
       expect(getPreviewParam(router)).toBe('form');
@@ -326,7 +327,7 @@ describe('SupporterPage', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
+      expect(screen.getByText('Test Membership')).toBeInTheDocument();
     });
   });
 
@@ -421,7 +422,7 @@ describe('SupporterPage', () => {
         expect(getStepParam(router)).toBe('form');
       });
 
-      expect(screen.getByText('Test Community Membership')).toBeInTheDocument();
+      expect(screen.getByText('Test Membership')).toBeInTheDocument();
     });
 
     it('updates to ?step=thank-you after payment success (authenticated)', async () => {

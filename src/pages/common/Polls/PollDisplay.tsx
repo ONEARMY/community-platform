@@ -1,9 +1,9 @@
 import { Checkbox, Flex, Heading, Label, Radio, Text } from '@theme-ui/components';
+import { Button } from 'oa-components';
 import { Profile } from 'oa-shared';
 import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Form } from 'react-final-form';
-import { Button } from '../index';
 import { pollService } from './poll.service';
 
 interface IProps {
@@ -57,7 +57,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
 
           return (
             <form onSubmit={handleSubmit}>
-              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+              <Flex sx={{ flexDirection: 'column', gap: 2 }} data-testid="pollDisplay">
                 <Heading as="h3" variant="small">
                   {poll.title}
                 </Heading>
@@ -105,6 +105,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                             alignItems: 'center',
                             gap: 1,
                           }}
+                          data-testid="pollOption"
                         >
                           {poll.singleChoice ? (
                             <Radio

@@ -3,13 +3,14 @@ import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } f
 import { act, render, waitFor, within } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
 import { Provider } from 'mobx-react';
+import type { News } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { FactoryNewsItem } from 'src/test/factories/News';
 import { FactoryUser } from 'src/test/factories/User';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NewsPage } from './NewsPage';
-import type { News } from 'oa-shared';
 import { theme } from 'oa-themes';
+import { FactoryPollData, FactoryPollOption } from "../../test/factories/Poll";
 
 const activeUser = FactoryUser({
   roles: [UserRole.BETA_TESTER],
@@ -84,6 +85,34 @@ describe('News', () => {
         // Assert: Check for the correct number of chevrons
         const chevrons = wrapper.getAllByTestId('breadcrumbsChevron');
         expect(chevrons).toHaveLength(1);
+      });
+    });
+  });
+
+  describe('Polls', () => {
+    it('displays poll when present', async () => {
+      // Arrange
+      mockNewsItem.poll = FactoryPollData("Which is best?");
+      mockNewsItem.poll.options = [
+        FactoryPollOption(),
+        FactoryPollOption(),
+        FactoryPollOption(),
+      ]
+
+
+      // Act
+      let wrapper;
+      act(() => {
+        wrapper = getWrapper(mockNewsItem);
+      });
+
+      // Assert: Check the breadcrumb items and chevrons
+      await waitFor(() => {
+        const pollDisplay = wrapper.getAllByTestId('pollDisplay');
+        expect(pollDisplay).toHaveLength(1);
+        expect(pollDisplay[0]).toHaveTextContent('Which is best?');
+        const pollOptions = wrapper.getAllByTestId('pollOption');
+        expect(pollOptions).toHaveLength(3);
       });
     });
   });

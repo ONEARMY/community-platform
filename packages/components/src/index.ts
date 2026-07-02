@@ -68,7 +68,6 @@ export { OsmGeocoding } from './OsmGeocoding/OsmGeocoding';
 export { Pagination } from './Pagination/Pagination';
 export { PaginationIcons } from './PaginationIcons/PaginationIcons';
 export { PinProfile } from './PinProfile/PinProfile';
-export { PollDisplay } from './Polls/PollDisplay';
 export { ProfileBadgeContentLabel } from './ProfileBadgeContentLabel/ProfileBadgeContentLabel';
 export { ProfileLink } from './ProfileLink/ProfileLink';
 export { ProfileList } from './ProfileList/ProfileList';

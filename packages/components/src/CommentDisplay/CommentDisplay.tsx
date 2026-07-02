@@ -82,7 +82,7 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
-                <Box sx={{ display: ['flex', 'none'], position: 'relative' }}>
+                <Box sx={{ display: ['flex', 'none'], position: 'relative', flexShrink: 0 }}>
                   <CommentAvatar
                     displayName={comment.createdBy?.displayName}
                     photo={comment.createdBy?.photo?.publicUrl}

@@ -189,6 +189,7 @@ describe('[Questions.Discussions]', () => {
     cy.step('Admin marks the existing comment as the accepted answer');
     cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
     cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Mark as accepted answer').click();
+    cy.wait(1000);
     cy.get('[data-cy=OwnCommentItem]').contains('Accepted answer').should('be.visible');
 
     cy.step('Accepted answer persists after reload');
@@ -198,6 +199,7 @@ describe('[Questions.Discussions]', () => {
     cy.step('Admin can unmark the accepted answer');
     cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
     cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Unmark as accepted answer').click();
+    cy.wait(1000);
     cy.get('[data-cy=OwnCommentItem]').should('not.contain', 'Accepted answer');
 
     cy.step('Unmarked state persists after reload');

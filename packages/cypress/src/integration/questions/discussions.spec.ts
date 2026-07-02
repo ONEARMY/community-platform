@@ -1,8 +1,9 @@
 // This is basically an identical set of steps to the discussion tests for
 // projects, research and news. Any changes here should be replicated there.
 
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
+import { generateAlphaNumeric, generateNewUserDetails, getTenantUser } from '../../utils/TestUtils';
 
 let randomId;
 
@@ -179,5 +180,36 @@ describe('[Questions.Discussions]', () => {
       path: questionPath,
       username: commenter.username,
     });
+  });
+
+  it('allows the question author or admins to mark an answer as accepted', () => {
+    const demoAdmin = getTenantUser(users.admin);
+    const question = MOCK_DATA.questions[0];
+    const questionPath = `/questions/${question.slug}`;
+
+    cy.step('Sign in as an admin (not the question author)');
+    cy.signIn(demoAdmin.email, demoAdmin.password);
+    cy.visit(questionPath);
+
+    cy.step('No accepted answer initially');
+    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('not.exist');
+
+    cy.step('Admin marks the existing comment as the accepted answer');
+    cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
+    cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Mark as accepted answer').click();
+    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('be.visible');
+
+    cy.step('Accepted answer persists after reload');
+    cy.reload();
+    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('be.visible');
+
+    cy.step('Admin can unmark the accepted answer');
+    cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
+    cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Unmark as accepted answer').click();
+    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('not.exist');
+
+    cy.step('Unmarked state persists after reload');
+    cy.reload();
+    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('not.exist');
   });
 });

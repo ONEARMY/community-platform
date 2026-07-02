@@ -49,7 +49,7 @@ export const SupporterPage = ({
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
-  const siteName = tenantContext?.siteName;
+  const siteName = tenantContext?.siteNameShort || tenantContext?.siteName;
 
   const tierConfig = useMemo(() => {
     const merged = { ...TIER_CONFIG };

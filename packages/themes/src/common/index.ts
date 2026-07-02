@@ -77,6 +77,12 @@ export const baseTheme = {
     bottomNav: '0 -6px 21px rgba(0, 0, 0, 0.15)',
   },
 
+  images: {
+    avatar: {
+      flexShrink: 0,
+    },
+  },
+
   forms: {
     input: {
       ...commonStyles.input,

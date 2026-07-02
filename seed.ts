@@ -594,6 +594,7 @@ const main = async () => {
   await seed.tenant_settings([
     {
       site_name: 'Local Development Community',
+      site_name_short: 'Local Dev',
       site_description:
         'A series of tools to collaborate around the world. Connect, share and meet each other to tackle problems.',
       site_url: 'http://localhost:3000',

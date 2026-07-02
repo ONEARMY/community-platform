@@ -257,6 +257,7 @@ export class SupabaseTestsService {
       tenant_settings: [
         {
           site_name: 'Test Site',
+          site_name_short: 'Test',
           site_description: 'Test description',
           site_url: 'https://community.preciousplastic.com',
           academy_resource: 'https://onearmy.github.io/academy/',

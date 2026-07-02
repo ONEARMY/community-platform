@@ -30,6 +30,7 @@ export class TenantSettingsService {
 
     const settings = new TenantSettings({
       siteName: data?.site_name || 'The Community Platform',
+      siteNameShort: data?.site_name_short || '',
       siteDescription: data?.site_description || 'The Community Platform',
       siteUrl: data?.site_url || this.origin || 'https://community.preciousplastic.com',
       messageSignOff: data?.message_sign_off || 'One Army',
@@ -64,6 +65,7 @@ export class TenantSettingsService {
       .from('tenant_settings')
       .select(
         `site_name,
+        site_name_short,
         site_description,
         site_url,
         message_sign_off,

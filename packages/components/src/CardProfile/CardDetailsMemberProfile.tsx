@@ -36,7 +36,7 @@ export const CardDetailsMemberProfile = ({ variant, item, isLink }: IProps) => {
       }}
     >
       <Flex sx={{ gap: 2, alignItems: 'center' }}>
-        <Box sx={{ aspectRatio: 1, width: '60px', height: '60px' }}>
+        <Box sx={{ aspectRatio: 1, width: '60px', height: '60px', flexShrink: 0 }}>
           <Flex
             sx={{
               alignContent: 'flex-start',

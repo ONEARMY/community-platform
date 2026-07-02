@@ -180,8 +180,10 @@ describe('[Questions.Discussions]', () => {
     cy.step('Sign in as an admin (not the question author)');
     cy.signIn(demoAdmin.email, demoAdmin.password);
     cy.visit(questionPath);
+    cy.wait(1000);
 
     cy.step('No accepted answer initially');
+    cy.get('[data-cy=OwnCommentItem]').should('be.visible');
     cy.get('[data-cy=OwnCommentItem]').should('not.contain', 'Accepted answer');
 
     cy.step('Admin marks the existing comment as the accepted answer');

@@ -18,6 +18,9 @@ export const QuestionCommentSection = observer(
     const [acceptedAnswerId, setAcceptedAnswerId] = useState(
       question.acceptedAnswerId || undefined,
     );
+    const [acceptedAnswerDate, setAcceptedAnswerDate] = useState(
+      question.acceptedAnswerDate || undefined,
+    );
     const [isLoading, setIsLoading] = useState(false);
 
     const canMarkAsAccepted =
@@ -28,6 +31,7 @@ export const QuestionCommentSection = observer(
       try {
         const newAcceptedId = acceptedAnswerId === commentId ? undefined : commentId;
         setAcceptedAnswerId(newAcceptedId);
+        setAcceptedAnswerDate(newAcceptedId ? new Date() : undefined);
         await onAcceptAnswerChange?.(newAcceptedId);
       } finally {
         setIsLoading(false);
@@ -38,6 +42,7 @@ export const QuestionCommentSection = observer(
       <QuestionCommentContext.Provider
         value={{
           acceptedAnswerId,
+          acceptedAnswerDate,
           canMarkAsAccepted,
           onAcceptAnswer: handleAcceptAnswer,
           isLoading,

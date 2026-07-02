@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "legacy_id" "text",
     "is_draft" boolean DEFAULT false NOT NULL,
     "published_at" timestamp with time zone,
-    "accepted_answer_id" bigint REFERENCES "public"."comments"("id") ON DELETE SET NULL
+    "accepted_answer_id" bigint REFERENCES "public"."comments"("id") ON DELETE SET NULL,
+    "accepted_answer_date" timestamp with time zone
 );
 
 CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."questions") RETURNS "text"

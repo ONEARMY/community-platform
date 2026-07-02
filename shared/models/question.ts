@@ -27,6 +27,7 @@ export class DBQuestion implements IDBContentDoc {
   readonly tags: number[];
   readonly useful_count?: number;
   readonly accepted_answer_id?: number | null;
+  readonly accepted_answer_date?: string | null;
 
   readonly description: string;
   readonly images: DBMedia[] | null;
@@ -75,6 +76,7 @@ export class Question implements IContentDoc {
   totalViews: number;
   usefulCount: number;
   acceptedAnswerId?: number | null;
+  acceptedAnswerDate?: Date | null;
 
   description: string;
   images: Image[] | null;
@@ -105,6 +107,7 @@ export class Question implements IContentDoc {
       totalViews: obj.total_views || 0,
       usefulCount: obj.useful_count || 0,
       acceptedAnswerId: obj.accepted_answer_id,
+      acceptedAnswerDate: obj.accepted_answer_date ? new Date(obj.accepted_answer_date) : null,
     });
   }
 }

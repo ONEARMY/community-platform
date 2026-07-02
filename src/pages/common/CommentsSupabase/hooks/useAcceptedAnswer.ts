@@ -2,6 +2,7 @@ import { useQuestionCommentContext } from 'src/pages/Question/QuestionCommentCon
 
 interface UseAcceptedAnswerReturn {
   isAccepted: boolean;
+  acceptedDate?: Date;
   canMarkAsAccepted: boolean;
   onAccept: () => Promise<void>;
   isLoading: boolean;
@@ -14,6 +15,7 @@ export const useAcceptedAnswer = (commentId: number): UseAcceptedAnswerReturn | 
 
   return {
     isAccepted: context.acceptedAnswerId === commentId,
+    acceptedDate: context.acceptedAnswerId === commentId ? context.acceptedAnswerDate : undefined,
     canMarkAsAccepted: context.canMarkAsAccepted,
     onAccept: () => context.onAcceptAnswer(commentId),
     isLoading: context.isLoading,

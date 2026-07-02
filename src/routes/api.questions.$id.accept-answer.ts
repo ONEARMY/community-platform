@@ -65,9 +65,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     }
 
     // Update the question with the accepted answer
+    const acceptedAnswerDate = acceptedAnswerId ? new Date().toISOString() : null;
+
     const { error: updateError } = await supabase.client
       .from('questions')
-      .update({ accepted_answer_id: acceptedAnswerId || null })
+      .update({
+        accepted_answer_id: acceptedAnswerId || null,
+        accepted_answer_date: acceptedAnswerDate,
+      })
       .eq('id', questionId);
 
     if (updateError) {

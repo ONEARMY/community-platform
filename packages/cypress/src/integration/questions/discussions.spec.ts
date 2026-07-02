@@ -57,20 +57,10 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=comment-sort-select]').should('be.visible');
 
     cy.step('Mark first and third comments as useful');
-    cy.get('[data-cy=comment-text]')
-      .contains(comment1)
-      .parents('[data-cy=OwnCommentItem]')
-      .find('[data-cy=vote-useful]')
-      .first()
-      .click();
+    cy.get('[data-cy=comment-text]').contains(comment1).parents('[data-cy=OwnCommentItem]').find('[data-cy=vote-useful]').first().click();
     cy.wait(1000);
 
-    cy.get('[data-cy=comment-text]')
-      .contains(comment3)
-      .parents('[data-cy=OwnCommentItem]')
-      .find('[data-cy=vote-useful]')
-      .first()
-      .click();
+    cy.get('[data-cy=comment-text]').contains(comment3).parents('[data-cy=OwnCommentItem]').find('[data-cy=vote-useful]').first().click();
     cy.wait(1000);
 
     cy.reload();
@@ -192,24 +182,24 @@ describe('[Questions.Discussions]', () => {
     cy.visit(questionPath);
 
     cy.step('No accepted answer initially');
-    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('not.exist');
+    cy.get('[data-cy=OwnCommentItem]').should('not.contain', 'Accepted answer');
 
     cy.step('Admin marks the existing comment as the accepted answer');
     cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
     cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Mark as accepted answer').click();
-    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('be.visible');
+    cy.get('[data-cy=OwnCommentItem]').contains('Accepted answer').should('be.visible');
 
     cy.step('Accepted answer persists after reload');
     cy.reload();
-    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('be.visible');
+    cy.get('[data-cy=OwnCommentItem]').contains('Accepted answer').should('be.visible');
 
     cy.step('Admin can unmark the accepted answer');
     cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
     cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Unmark as accepted answer').click();
-    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('not.exist');
+    cy.get('[data-cy=OwnCommentItem]').should('not.contain', 'Accepted answer');
 
     cy.step('Unmarked state persists after reload');
     cy.reload();
-    cy.get('[data-cy=CommentItem]').contains('Accepted answer').should('not.exist');
+    cy.get('[data-cy=OwnCommentItem]').should('not.contain', 'Accepted answer');
   });
 });

@@ -99,7 +99,9 @@ describe('CommentDisplay', () => {
       return Promise.resolve();
     });
 
-      const mockUsefulButton = <UsefulButtonLite hasUserVotedUseful={false} votedUsefulCount={count} isLoggedIn={true} onUsefulClick={handleUsefulClick} />;
+    const renderUsefulButton = () => (
+      <UsefulButtonLite hasUserVotedUseful={false} votedUsefulCount={count} isLoggedIn={true} onUsefulClick={handleUsefulClick} />
+    );
 
     const { getByTestId, rerender } = render(
       <CommentDisplay
@@ -107,7 +109,7 @@ describe('CommentDisplay', () => {
         itemType="CommentItem"
         isEditable={false}
         menuActions={<></>}
-        footerActions={mockUsefulButton}
+        footerActions={renderUsefulButton()}
       />,
     );
 
@@ -123,7 +125,7 @@ describe('CommentDisplay', () => {
         itemType="CommentItem"
         isEditable={false}
         menuActions={<></>}
-        footerActions={mockUsefulButton}
+        footerActions={renderUsefulButton()}
       />,
     );
 

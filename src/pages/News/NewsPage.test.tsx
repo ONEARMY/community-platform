@@ -99,14 +99,13 @@ describe('News', () => {
         FactoryPollOption(),
       ]
 
-
       // Act
       let wrapper;
       act(() => {
         wrapper = getWrapper(mockNewsItem);
       });
 
-      // Assert: Check the breadcrumb items and chevrons
+      // Assert
       await waitFor(() => {
         const pollDisplay = wrapper.getAllByTestId('pollDisplay');
         expect(pollDisplay).toHaveLength(1);

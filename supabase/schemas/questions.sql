@@ -55,7 +55,7 @@ CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."question
 $_$;
 
 CREATE OR REPLACE FUNCTION public.get_questions(search_query text DEFAULT NULL::text, category_id bigint DEFAULT NULL::bigint, sort_by text DEFAULT 'Newest'::text, limit_val integer DEFAULT 20, offset_val integer DEFAULT 0)
- RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, published_at timestamp with time zone, description text, slug text, category json, tags bigint[], title text, total_views bigint, is_draft boolean, comment_count bigint, images json[], author json)
+ RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, published_at timestamp with time zone, description text, slug text, category json, tags bigint[], title text, total_views bigint, is_draft boolean, comment_count bigint, images json[], author json, accepted_answer_id bigint, accepted_answer_date timestamp with time zone)
  LANGUAGE plpgsql
  SET search_path TO 'public', 'pg_temp'
 AS $function$
@@ -115,7 +115,9 @@ BEGIN
         WHERE pbr.profile_id = p.id),
         '[]'::json
       )
-    ) FROM profiles p WHERE p.id = q.created_by) AS author
+    ) FROM profiles p WHERE p.id = q.created_by) AS author,
+    q.accepted_answer_id,
+    q.accepted_answer_date
   FROM questions q
   JOIN profiles prof ON prof.id = q.created_by
   WHERE

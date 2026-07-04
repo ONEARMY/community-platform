@@ -6,6 +6,7 @@ interface UseAcceptedAnswerReturn {
   canMarkAsAccepted: boolean;
   onAccept: () => Promise<void>;
   isLoading: boolean;
+  hasAcceptedAnswer: boolean;
 }
 
 export const useAcceptedAnswer = (commentId: number): UseAcceptedAnswerReturn | null => {
@@ -19,5 +20,6 @@ export const useAcceptedAnswer = (commentId: number): UseAcceptedAnswerReturn | 
     canMarkAsAccepted: context.canMarkAsAccepted,
     onAccept: () => context.onAcceptAnswer(commentId),
     isLoading: context.isLoading,
+    hasAcceptedAnswer: !!context.acceptedAnswerId,
   };
 };

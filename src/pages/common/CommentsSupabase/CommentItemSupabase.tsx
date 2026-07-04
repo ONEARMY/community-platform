@@ -16,6 +16,8 @@ import {
 import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import CheckmarkEmptyIcon from 'src/assets/icons/checkmark-empty.svg?react';
+import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
@@ -192,6 +194,9 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                   acceptedDate={acceptedAnswer.acceptedDate}
                 />
               )}
+              {!acceptedAnswer?.hasAcceptedAnswer && acceptedAnswer?.canMarkAsAccepted && (
+                <AcceptAnswerButton onAccept={acceptedAnswer.onAccept} />
+              )}
               <UsefulButtonLite
                 onUsefulClick={async () => await toggleVote()}
                 hasUserVotedUseful={hasVoted}
@@ -289,24 +294,28 @@ const AcceptedAnswerLabel = ({ commentId, acceptedDate }: IAcceptedAnswerLabelPr
           backgroundColor: '#00C3A933',
         }}
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M15.9894 2.48934C16.4431 1.65802 17.496 1.34575 18.3413 1.7919C19.1867 2.23816 19.5043 3.2735 19.0506 4.10485C18.699 4.74894 18.4938 5.07868 17.061 7.22741C15.6145 9.39669 13.1278 12.6567 11.6139 14.5957C10.8998 15.5298 10.2393 16.1551 10.0337 16.4746C9.98102 16.5565 9.79063 16.8719 9.67907 17.0219C9.60698 17.1188 9.42333 17.3578 9.11748 17.5508C8.73143 17.7944 8.26544 17.8958 7.79577 17.8195C7.32963 17.7437 7.00056 17.5106 6.87958 17.4223C6.72056 17.3063 6.57569 17.1735 6.4588 17.0619C6.22425 16.8381 5.91799 16.5181 5.55957 16.1426C3.92687 14.4322 2.899 13.4321 2.27144 12.8607C2.04828 12.6574 1.79384 12.5157 1.55375 12.2517C1.31366 11.9876 0.458734 10.8648 0.839454 10.0542C1.24181 9.19804 2.27437 8.82483 3.14522 9.21998C3.39185 9.332 3.6223 9.50253 3.79504 9.6371C4.00538 9.80099 4.27861 10.0317 4.63319 10.3546C5.31228 10.973 6.33813 11.972 7.88061 13.5814C8.17214 13.2264 8.4509 13.0463 8.84866 12.527L8.85885 12.5139C10.3743 10.573 12.7212 7.50479 14.1553 5.35398C15.603 3.18284 15.7223 2.97856 15.9894 2.48934Z"
-            fill="#00C3A9"
-            stroke="#1B1B1B"
-            stroke-width="1.25"
-            stroke-linecap="round"
-          />
-        </svg>
+        <CheckmarkSuccessIcon width={20} height={20} aria-hidden="true" />
         Accepted answer
       </Flex>
       {acceptedDate && <Tooltip id={tooltipId} />}
     </>
+  );
+};
+
+const AcceptAnswerButton = ({ onAccept }: { onAccept: () => Promise<void> }) => {
+  return (
+    <Button
+      onClick={onAccept}
+      variant="subtle"
+      sx={{
+        padding: 1,
+        borderRadius: 1,
+        height: 'fit-content',
+        span: { display: 'flex', alignItems: 'center', gap: 1, fontSize: '12px' },
+      }}
+    >
+      <CheckmarkEmptyIcon width={20} height={20} aria-hidden="true" />
+      Accept answer
+    </Button>
   );
 };

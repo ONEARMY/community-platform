@@ -13,7 +13,6 @@ interface IProps {
 }
 
 export const PollForm = ({ validate }: IProps) => {
-  const name = 'poll';
   const form = useForm();
   const poll: PollDTO = form.getState().values?.poll;
 
@@ -30,6 +29,7 @@ export const PollForm = ({ validate }: IProps) => {
     <>
       {!poll ? (
         <Button
+          data-cy={`add-news`}
           type="button"
           sx={{ width: 'fit-content ', marginTop: 3 }}
           variant="outline"
@@ -52,6 +52,7 @@ export const PollForm = ({ validate }: IProps) => {
                 Add poll
               </Heading>
               <Button
+                data-cy={`delete-poll`}
                 type="button"
                 variant="subtle"
                 icon="close"
@@ -61,7 +62,7 @@ export const PollForm = ({ validate }: IProps) => {
             </Flex>
             <FormFieldWrapper htmlFor="poll.title" text="Poll title" required>
               <Field
-                data-cy={`field-${name}`}
+                data-cy={`field-poll-title`}
                 name="poll.title"
                 id="poll.title"
                 validate={validate}
@@ -88,11 +89,13 @@ export const PollForm = ({ validate }: IProps) => {
                         }}
                       >
                         <Field
+                          data-cy={`field-poll-option-${index}`}
                           name={`${name}.description`}
                           component={FieldInput}
                           placeholder={`Option ${index + 1}`}
                         />
                         <Button
+                          data-cy={`remove-poll-option-${index}`}
                           type="button"
                           variant="subtle"
                           icon="close-modal"
@@ -115,6 +118,7 @@ export const PollForm = ({ validate }: IProps) => {
                     <Button
                       variant="outline"
                       type="button"
+                      data-cy={`poll-add-option`}
                       sx={{ width: 'fit-content ', marginTop: 3 }}
                       icon="add"
                       onClick={() => fields.push({ description: '' })}

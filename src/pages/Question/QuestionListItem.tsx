@@ -1,11 +1,6 @@
-import {
-  Category,
-  DisplayDate,
-  IconCountWithTooltip,
-  InternalLink,
-  // ModerationStatus,
-} from 'oa-components';
+import { Category, DisplayDate, IconCountWithTooltip, InternalLink, Tooltip } from 'oa-components';
 import type { Question } from 'oa-shared';
+import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
 import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { Highlighter } from 'src/common/Highlighter';
 import { Avatar, Box, Card, Flex, Heading, Text } from 'theme-ui';
@@ -74,12 +69,6 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             minWidth: 0,
           }}
         >
-          {/* {moderation !== 'accepted' && (
-            <Box>
-              <ModerationStatus status={moderation} contentType="question" />
-            </Box>
-          )} */}
-
           <Heading
             data-cy="question-list-item-title"
             as="h2"
@@ -152,6 +141,18 @@ export const QuestionListItem = ({ question, query }: IProps) => {
                   publishedAt={question.publishedAt}
                 />
               </Text>
+              {question.acceptedAnswerId && (
+                <>
+                  <CheckmarkSuccessIcon
+                    data-tooltip-id={question.acceptedAnswerId.toString()}
+                    data-tooltip-content="Answered"
+                    width={20}
+                    height={20}
+                    aria-label="Answered"
+                  />
+                  <Tooltip id={question.acceptedAnswerId.toString()} />
+                </>
+              )}
               <IconCountWithTooltip
                 count={question.commentCount || 0}
                 icon="comment"

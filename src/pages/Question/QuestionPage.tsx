@@ -23,8 +23,8 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
-import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
+import { QuestionCommentSection } from './QuestionCommentSection';
 
 interface IProps {
   question: Question;
@@ -42,6 +42,18 @@ export const QuestionPage = observer(({ question }: IProps) => {
   const isEditable = useMemo(() => {
     return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
   }, [activeUser, question.author]);
+
+  const handleAcceptAnswerChange = async (commentId?: number) => {
+    try {
+      await fetch(`/api/questions/${question.id}/accept-answer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ acceptedAnswerId: commentId }),
+      });
+    } catch (error) {
+      console.error('Failed to update accepted answer:', error);
+    }
+  };
 
   return (
     <Flex
@@ -184,23 +196,12 @@ export const QuestionPage = observer(({ question }: IProps) => {
 
       <ClientOnly fallback={<></>}>
         {() => (
-          <Card
-            data-cy="comments-section"
-            variant="responsive"
-            sx={{
-              background: 'softblue',
-              borderTop: 0,
-              padding: [3, 4],
-              marginTop: [0, 2, 4],
-            }}
-          >
-            <CommentSectionSupabase
-              authors={question.author?.id ? [question.author.id] : []}
-              setSubscribersCount={setSubscribersCount}
-              sourceId={question.id}
-              sourceType="questions"
-            />
-          </Card>
+          <QuestionCommentSection
+            question={question}
+            activeUser={activeUser}
+            setSubscribersCount={setSubscribersCount}
+            onAcceptAnswerChange={handleAcceptAnswerChange}
+          />
         )}
       </ClientOnly>
     </Flex>

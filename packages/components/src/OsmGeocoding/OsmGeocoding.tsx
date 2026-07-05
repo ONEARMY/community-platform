@@ -48,7 +48,9 @@ export const OsmGeocoding = ({
   };
 
   function getGeocoding(address = '') {
-    if (address.length === 0) return;
+    if (address.length === 0) {
+      return;
+    }
 
     setShowLoader(true);
 

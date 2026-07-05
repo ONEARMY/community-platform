@@ -21,7 +21,7 @@ export class SubscribersServiceServer {
         .select('id')
         .eq('username', username)
         .single();
-      if (data && !!Number(data.id)) {
+      if (data && Number(data.id)) {
         profilesToSubscribe.push(Number(data.id));
       }
     }

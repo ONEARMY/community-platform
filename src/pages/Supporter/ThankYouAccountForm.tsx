@@ -17,7 +17,9 @@ export const ThankYouAccountForm = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (previewMode) return;
+    if (previewMode) {
+      return;
+    }
 
     setIsSubmitting(true);
     setError(null);

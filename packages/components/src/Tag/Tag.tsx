@@ -11,7 +11,9 @@ export interface Props {
 }
 
 export const Tag = ({ tag, sx }: Props) => {
-  if (!tag || !tag.label) return null;
+  if (!tag || !tag.label) {
+    return null;
+  }
 
   return (
     <Text

@@ -28,7 +28,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
         <Box as="ul" sx={{ margin: 0, marginBottom: 4, padding: 0, paddingLeft: 3 }}>
           {updates.map((update, index) => (
             <Box as="li" key={index} sx={{ marginBottom: 1 }}>
-              <Text variant={'quiet'}>
+              <Text variant="quiet">
                 {update.isDraft ? (
                   <Text
                     sx={{

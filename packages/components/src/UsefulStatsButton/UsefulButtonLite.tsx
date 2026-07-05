@@ -43,8 +43,8 @@ export const UsefulButtonLite = ({
       {votedUsefulCount > 0 && (
         <Flex
           sx={{
-            position: 'absolute',
-            left: -6,
+            position: 'relative',
+            marginRight: '-14px',
             backgroundColor,
             lineHeight: '1rem',
             minWidth: '2.75rem',

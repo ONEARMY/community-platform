@@ -145,7 +145,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   };
 
   useLayoutEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
 
     const img = imageRef.current;
     if (img && img.complete && img.naturalWidth > 0) {
@@ -159,7 +161,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   }, [activeImage?.downloadUrl]);
 
   const triggerLightbox = (): void => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
     open(state.activeImageIndex);
   };
 
@@ -200,7 +204,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
         {showNextPrevButton ? (
           <>
             <NavButton
-              aria-label={'Next image'}
+              aria-label="Next image"
               style={{
                 right: 0,
                 zIndex: 2,
@@ -212,7 +216,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
               <Arrow direction="right" sx={{ marginRight: '10px' }} />
             </NavButton>
             <NavButton
-              aria-label={'Previous image'}
+              aria-label="Previous image"
               style={{
                 left: 0,
                 zIndex: 2,

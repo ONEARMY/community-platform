@@ -218,7 +218,9 @@ export const SupporterForm = () => {
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
-                  if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                  if (fieldErrors.name) {
+                    setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                  }
                 }}
                 sx={{
                   ...inputSx,
@@ -237,7 +239,9 @@ export const SupporterForm = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                if (fieldErrors.email) {
+                  setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                }
               }}
               disabled={isAuthenticated}
               sx={{

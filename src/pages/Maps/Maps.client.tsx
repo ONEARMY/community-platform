@@ -116,7 +116,9 @@ const MapsPage = () => {
 
   // Pins filtered by everything including boundaries — used by the list view.
   const filteredPins = useMemo<MapPin[]>(() => {
-    if (!boundaries) return mapPins;
+    if (!boundaries) {
+      return mapPins;
+    }
     return filterPins(mapPins, { boundaries });
   }, [mapPins, boundaries]);
 

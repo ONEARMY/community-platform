@@ -62,7 +62,7 @@ export const ProfileHeader = ({ user }: IProps) => {
           <Username user={user} sx={{ alignSelf: 'flex-start' }} />
           <Heading
             as="h1"
-            color={'black'}
+            color="black"
             style={{ wordBreak: 'break-word' }}
             data-cy="userDisplayName"
           >

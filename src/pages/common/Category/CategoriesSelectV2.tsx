@@ -13,7 +13,9 @@ export type CategoriesSelectProps = {
 };
 
 const getVariant = (isForm: boolean, invalid: boolean) => {
-  if (!isForm) return undefined;
+  if (!isForm) {
+    return undefined;
+  }
   return invalid ? 'formError' : 'form';
 };
 

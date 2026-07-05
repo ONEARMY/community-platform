@@ -38,7 +38,9 @@ export const numberWithCommas = (number: number) => {
 // Take a string and capitalises the first letter
 // hello world => Hello world
 export const capitalizeFirstLetter = (str: string) => {
-  if (!str || typeof str !== 'string') return '';
+  if (!str || typeof str !== 'string') {
+    return '';
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 

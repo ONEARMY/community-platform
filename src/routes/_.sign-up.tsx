@@ -112,7 +112,7 @@ export default function Index() {
                 bg="inherit"
                 px={2}
                 sx={{ width: '100%', maxWidth: '620px' }}
-                mx={'auto'}
+                mx="auto"
                 mt={[5, 10]}
                 mb={3}
               >
@@ -130,7 +130,7 @@ export default function Index() {
                     >
                       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                         <Heading>Create an account</Heading>
-                        <Text color={'grey'} sx={{ fontSize: 1 }}>
+                        <Text color="grey" sx={{ fontSize: 1 }}>
                           <Link
                             to="/sign-in"
                             style={{
@@ -155,7 +155,7 @@ export default function Index() {
                         }}
                       >
                         <Label htmlFor="email">Email</Label>
-                        <Text color={'grey'} sx={{ fontSize: 1 }}>
+                        <Text color="grey" sx={{ fontSize: 1 }}>
                           It can be personal or work email.
                         </Text>
                         <Field

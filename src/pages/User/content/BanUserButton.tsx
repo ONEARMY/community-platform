@@ -45,7 +45,9 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
   const tooltipId = 'ban-user-button-tooltip';
 
   const handleBanUser = async () => {
-    if (!profile?.id || !profile?.username) return;
+    if (!profile?.id || !profile?.username) {
+      return;
+    }
 
     setShowBanModal(false);
 

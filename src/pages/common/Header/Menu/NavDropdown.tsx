@@ -51,7 +51,9 @@ export const NavDropdown = ({ group, variant = 'desktop', active, dimmed }: IPro
       ref={containerRef}
       sx={{ position: 'relative', display: 'inline-flex' }}
       onKeyDown={(e) => {
-        if (e.key === 'Escape') setIsOpen(false);
+        if (e.key === 'Escape') {
+          setIsOpen(false);
+        }
       }}
     >
       <NavItem

@@ -45,7 +45,9 @@ const Header = observer(() => {
     updateNotifications();
   }, []);
 
-  if (!showHeader) return null;
+  if (!showHeader) {
+    return null;
+  }
 
   return (
     <NotificationsContext.Provider

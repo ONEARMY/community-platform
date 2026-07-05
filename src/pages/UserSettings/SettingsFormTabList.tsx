@@ -77,7 +77,9 @@ export const SettingsFormTabList = (props: IProps) => {
     [tabs],
   );
 
-  if (tabs.length === 1) return null;
+  if (tabs.length === 1) {
+    return null;
+  }
 
   return (
     <>

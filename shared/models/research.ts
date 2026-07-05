@@ -221,6 +221,11 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   }
 
   static fromDB(obj: DBResearchUpdate, images?: Image[]) {
+    // Sort images according to the order in obj.images
+    const orderedImages =
+      obj.images?.map((dbImage) => images?.find((img) => img.id === dbImage.id)).filter(Boolean) ||
+      [];
+
     return new ResearchUpdate({
       id: obj.id,
       createdAt: new Date(obj.created_at),
@@ -229,7 +234,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       author: obj.update_author ? Author.fromDB(obj.update_author) : null,
       title: obj.title,
       description: obj.description,
-      images: images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) || [],
+      images: orderedImages as Image[],
       files: obj.files,
       // no fileLink as it must be shown only for authenticated users
       hasFileLink: !!obj.file_link,

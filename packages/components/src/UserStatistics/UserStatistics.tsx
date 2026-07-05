@@ -110,7 +110,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.questionCount > 0 && (
             <InternalLink
-              to={'/questions'}
+              to="/questions"
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="questions-link"
             >

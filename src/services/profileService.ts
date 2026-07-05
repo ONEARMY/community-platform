@@ -17,7 +17,9 @@ const get = async (): Promise<Profile | undefined> => {
 
     const response = await fetch(url);
 
-    if (!response.ok) return undefined;
+    if (!response.ok) {
+      return undefined;
+    }
 
     return (await response.json()) as Profile;
   } catch (error) {

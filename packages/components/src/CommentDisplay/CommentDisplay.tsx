@@ -5,21 +5,20 @@ import { CommentAvatar } from '../CommentAvatar/CommentAvatar';
 import { CommentBody } from '../CommentBody/CommentBody';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { AuthorsContext } from '../providers/AuthorsContext';
-import { UsefulButtonLite, UsefulConfig } from '../UsefulStatsButton/UsefulButtonLite';
 import { Username } from '../Username/Username';
 
 export interface IProps {
   comment: Comment;
   itemType: 'ReplyItem' | 'CommentItem';
   isEditable: boolean | undefined;
-  actions: React.ReactNode;
-  usefulButtonConfig: UsefulConfig;
+  menuActions: React.ReactNode;
+  footerActions: React.ReactNode;
 }
 
 const DELETED_COMMENT = 'The original comment got deleted';
 
 export const CommentDisplay = (props: IProps) => {
-  const { comment, actions, usefulButtonConfig } = props;
+  const { comment, menuActions, footerActions } = props;
 
   const { authors } = useContext(AuthorsContext);
   const border = `${comment.highlighted ? '2px dashed black' : 'none'}`;
@@ -97,7 +96,7 @@ export const CommentDisplay = (props: IProps) => {
                 </Text>
               </Flex>
 
-              {actions && <Flex sx={{ alignItems: 'center', gap: 1 }}>{actions}</Flex>}
+              {menuActions && <Flex sx={{ alignItems: 'center', gap: 1 }}>{menuActions}</Flex>}
             </Flex>
             <Flex
               sx={{
@@ -105,7 +104,12 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <CommentBody body={comment.comment} />
-              <UsefulButtonLite {...usefulButtonConfig} />
+
+              {footerActions && (
+                <Flex sx={{ gap: 2, alignItems: 'center', justifyContent: 'flex-end' }}>
+                  {footerActions}
+                </Flex>
+              )}
             </Flex>
           </Flex>
         </Flex>

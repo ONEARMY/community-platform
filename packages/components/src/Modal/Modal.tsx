@@ -18,7 +18,9 @@ export const Modal = (props: Props) => {
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog) return;
+    if (!dialog) {
+      return;
+    }
 
     if (isOpen) {
       dialog.showModal();
@@ -29,7 +31,9 @@ export const Modal = (props: Props) => {
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDialogElement>) => {
     const dialog = dialogRef.current;
-    if (!dialog) return;
+    if (!dialog) {
+      return;
+    }
 
     const rect = dialog.getBoundingClientRect();
     mouseDownOutsideRef.current =
@@ -41,7 +45,9 @@ export const Modal = (props: Props) => {
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     const dialog = dialogRef.current;
-    if (!dialog) return;
+    if (!dialog) {
+      return;
+    }
 
     // Only close if both mousedown and mouseup happened outside the modal
     const rect = dialog.getBoundingClientRect();
@@ -60,7 +66,9 @@ export const Modal = (props: Props) => {
     onDismiss?.();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <dialog

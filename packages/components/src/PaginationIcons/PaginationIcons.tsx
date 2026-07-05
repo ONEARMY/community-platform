@@ -13,7 +13,9 @@ interface IProps {
 }
 
 export const PaginationIcons = ({ hidden, title, ariaLabel, directionIcon, onClick }: IProps) => {
-  if (hidden) return null;
+  if (hidden) {
+    return null;
+  }
 
   return (
     <Button

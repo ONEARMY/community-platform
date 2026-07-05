@@ -88,11 +88,12 @@ export const MapWithPin = (props: Props) => {
                 markerIcon={markerIcon}
                 onClick={onClickMapPin}
                 onDrag={(evt: any) => {
-                  if (evt.lat && evt.lng)
+                  if (evt.lat && evt.lng) {
                     props.updatePosition({
                       lat: evt.lat,
                       lng: evt.lng,
                     });
+                  }
                 }}
               />
             )}

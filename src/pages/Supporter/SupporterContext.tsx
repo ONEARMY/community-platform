@@ -53,6 +53,8 @@ export const SupporterProvider = SupporterContext.Provider;
 
 export const useSupporterContext = () => {
   const ctx = useContext(SupporterContext);
-  if (!ctx) throw new Error('useSupporterContext must be used within SupporterProvider');
+  if (!ctx) {
+    throw new Error('useSupporterContext must be used within SupporterProvider');
+  }
   return ctx;
 };

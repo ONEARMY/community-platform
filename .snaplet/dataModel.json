@@ -1104,6 +1104,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "questions",
+          "type": "questions",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "questionsTocomments",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -8456,12 +8470,40 @@
           "maxLength": null
         },
         {
+          "id": "public.questions.accepted_answer_id",
+          "name": "accepted_answer_id",
+          "columnName": "accepted_answer_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
           "kind": "object",
           "relationName": "questionsTocategories",
           "relationFromFields": ["category"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "comments",
+          "type": "comments",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "questionsTocomments",
+          "relationFromFields": ["accepted_answer_id"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,

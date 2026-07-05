@@ -22,7 +22,7 @@
     "build:vite": "react-router build",
     "build:shared": "bun run --filter oa-shared build",
     "build": "bun run build:shared && bun run build:themes && bun run build:components && bun run build:vite && tsc",
-    "lint": "biome lint --write",
+    "lint": "biome lint --write --unsafe",
     "format": "biome check --write",
     "serve": "npx serve -s build",
     "test": "bun run --filter oa-cypress start",

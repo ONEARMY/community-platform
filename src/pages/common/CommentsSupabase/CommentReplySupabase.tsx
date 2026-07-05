@@ -7,6 +7,7 @@ import {
   EditComment,
   Icon,
   Modal,
+  UsefulButtonLite,
 } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
@@ -88,7 +89,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
               isEditable={isEditable}
               itemType={item}
               comment={comment}
-              actions={
+              menuActions={
                 <ActionSet itemType="ReplyItem">
                   {isEditable && (
                     <Button
@@ -126,12 +127,14 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
                   )}
                 </ActionSet>
               }
-              usefulButtonConfig={{
-                onUsefulClick: async () => await toggleVote(),
-                hasUserVotedUseful: hasVoted,
-                votedUsefulCount: usefulCount,
-                isLoggedIn: !!loggedInUser,
-              }}
+              footerActions={
+                <UsefulButtonLite
+                  onUsefulClick={async () => await toggleVote()}
+                  hasUserVotedUseful={hasVoted}
+                  votedUsefulCount={usefulCount}
+                  isLoggedIn={!!loggedInUser}
+                />
+              }
             />
           )}
         </Flex>

@@ -59,7 +59,9 @@ export const usePhotoSwipeLightbox = ({
 
   // Prevent native hash scrolling and handle it ourselves
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
 
     let originalHash = '';
 

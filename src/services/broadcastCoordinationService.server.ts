@@ -41,7 +41,7 @@ export class BroadcastCoordinationServiceServer {
       return;
     }
 
-    if (beforeCheck && update.isDraft === false && !!update.research) {
+    if (beforeCheck && update.isDraft === false && update.research) {
       new NotificationsSupabaseServiceServer(this.client).createNotificationsResearchUpdate(
         research,
         update,

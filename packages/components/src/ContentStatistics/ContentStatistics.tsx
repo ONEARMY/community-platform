@@ -20,7 +20,9 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
   };
 
   const handleOpenModal = useCallback(async (stat: IStatistic) => {
-    if (!stat.modalComponent) return;
+    if (!stat.modalComponent) {
+      return;
+    }
 
     let data = undefined;
     if (stat.onOpen) {

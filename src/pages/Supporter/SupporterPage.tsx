@@ -155,20 +155,28 @@ export const SupporterPage = ({
   }, [pageState]);
 
   useEffect(() => {
-    if (previewMode) return;
+    if (previewMode) {
+      return;
+    }
 
-    if (searchParams.get('payment') !== 'success' || isAuthenticated) return;
+    if (searchParams.get('payment') !== 'success' || isAuthenticated) {
+      return;
+    }
 
     const customerParam = searchParams.get('customer');
     const emailParam = searchParams.get('email');
     const nameParam = searchParams.get('name');
     const accountExistsParam = searchParams.get('accountExists');
 
-    if (!customerParam || !emailParam) return;
+    if (!customerParam || !emailParam) {
+      return;
+    }
 
     setStripeCustomerId(customerParam);
     setEmail(emailParam);
-    if (nameParam) setName(nameParam);
+    if (nameParam) {
+      setName(nameParam);
+    }
 
     const autoCreate = async () => {
       if (accountExistsParam === 'true') {
@@ -183,7 +191,9 @@ export const SupporterPage = ({
           name: nameParam || emailParam.split('@')[0],
           stripeCustomerId: customerParam,
         });
-        if (result.ok) setAccountCreated(true);
+        if (result.ok) {
+          setAccountCreated(true);
+        }
       } catch (err) {
         console.error('Auto-create account failed:', err);
       }
@@ -195,7 +205,9 @@ export const SupporterPage = ({
   }, [isAuthenticated, previewMode, searchParams]);
 
   const handleSupport = async () => {
-    if (previewMode) return;
+    if (previewMode) {
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -247,7 +259,9 @@ export const SupporterPage = ({
   };
 
   const handlePaymentSuccess = async () => {
-    if (previewMode) return;
+    if (previewMode) {
+      return;
+    }
 
     if (isAuthenticated) {
       setPageState('thank-you');
@@ -262,7 +276,9 @@ export const SupporterPage = ({
           name: name || email.split('@')[0],
           stripeCustomerId,
         });
-        if (result.ok) setAccountCreated(true);
+        if (result.ok) {
+          setAccountCreated(true);
+        }
       } catch (err) {
         console.error('Auto-create account failed:', err);
       }

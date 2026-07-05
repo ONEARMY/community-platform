@@ -12,7 +12,9 @@ interface UseAcceptedAnswerReturn {
 export const useAcceptedAnswer = (commentId: number): UseAcceptedAnswerReturn | null => {
   const context = useQuestionCommentContext();
 
-  if (!context) return null;
+  if (!context) {
+    return null;
+  }
 
   return {
     isAccepted: context.acceptedAnswerId === commentId,

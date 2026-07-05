@@ -138,7 +138,7 @@ export const SettingsPageMapPin = observer(() => {
                     </Text>
                     {mapPin.moderationFeedback && (
                       <>
-                        {' - '}
+                        -
                         <Text sx={{ fontSize: 1 }}>
                           Moderator feedback:{' '}
                           <Text sx={{ fontWeight: 'bold' }}>{mapPin.moderationFeedback}</Text>
@@ -296,7 +296,7 @@ export const SettingsPageMapPin = observer(() => {
                 sx={{ borderRadius: 3 }}
               >
                 <Flex sx={{ gap: 2 }}>
-                  <Icon glyph={'profile'} size={20} />
+                  <Icon glyph="profile" size={20} />
                   <Text variant="paragraph">Complete your profile</Text>
                 </Flex>
               </Button>

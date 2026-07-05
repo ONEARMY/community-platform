@@ -2,7 +2,7 @@ import { Checkbox, Flex, Heading, Label, Radio, Text } from '@theme-ui/component
 import { Button } from 'oa-components';
 import { Profile } from 'oa-shared';
 import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { pollService } from './poll.service';
 
@@ -14,12 +14,21 @@ interface IProps {
 export const PollDisplay = ({ pollData, profile }: IProps) => {
   const [poll, setPoll] = useState(pollData);
 
-  const seeResults = () => poll.options.some((o) => (o.voteCount ?? 0) > 0);
-  const activeVoting = () => !!(profile && !poll.hasVoted);
-  const ableToSubmit = (values: any) => !activeVoting() || values?.selectedOptionIds?.length < 1;
-  const allVotes = () => poll.options.reduce((sum, o) => sum + (o.voteCount ?? 0), 0);
+  const seeResults = useMemo(() => {
+    return poll.options.some((o) => (o.voteCount ?? 0) > 0);
+  }, poll.options);
 
-  const onSubmit = async (values: any) => {
+  const activeVoting = useMemo(() => {
+    return !!(profile && !poll.hasVoted);
+  }, [profile, poll.hasVoted]);
+
+  const totalVotes = useMemo(() => {
+    return poll.options.reduce((sum, o) => sum + (o.voteCount ?? 0), 0);
+  }, poll.options);
+
+  const ableToSubmit = (values: any) => !activeVoting || values?.selectedOptionIds?.length < 1;
+
+  const onSubmit = async (values: { selectedOptionIds: number[] }) => {
     if (ableToSubmit(values)) return;
     await pollService.voteOnPoll(poll!, values.selectedOptionIds);
     const updatedPoll = await pollService.getPoll(poll!);
@@ -29,7 +38,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
 
   const getPercentage = (option: PollOptionDTO) => {
     const thisResult = poll.options.find((o) => o.id == option.id)?.voteCount ?? 0;
-    return Math.round((thisResult / allVotes()) * 100);
+    return Math.round((thisResult / totalVotes) * 100);
   };
 
   return (
@@ -42,10 +51,12 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
       >
         {({ handleSubmit, form, values }) => {
           const selectSingle = (option: PollOptionDTO) => {
+            if (!option.id) return;
             form.change('selectedOptionIds', [option.id]);
           };
 
           const toggle = (option: PollOptionDTO) => {
+            if (!option.id) return;
             const current = values.selectedOptionIds || [];
 
             const updated = current.includes(option.id)
@@ -69,6 +80,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                 )}
                 <Flex sx={{ flexDirection: 'column', gap: 1 }}>
                   {poll.options.map((option) => {
+                    if (!option.id) return;
                     const selected = values.selectedOptionIds?.includes(option.id);
 
                     return (
@@ -90,7 +102,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                             left: 0,
                             top: 0,
                             bottom: 0,
-                            width: seeResults() ? `${getPercentage(option)}%` : '0%',
+                            width: seeResults ? `${getPercentage(option)}%` : '0%',
                             backgroundColor: 'highlight',
                             opacity: 0.2,
                             pointerEvents: 'none',
@@ -109,7 +121,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                         >
                           {poll.singleChoice ? (
                             <Radio
-                              disabled={!activeVoting()}
+                              disabled={!activeVoting}
                               sx={{
                                 'input:checked ~ &': { color: 'highlight' },
                                 'input:focus ~ &': { backgroundColor: 'white' },
@@ -119,7 +131,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                             />
                           ) : (
                             <Checkbox
-                              disabled={!activeVoting()}
+                              disabled={!activeVoting}
                               checked={selected || option.wasVotedByUser}
                               sx={{
                                 'input:checked ~ &': { color: 'highlight' },
@@ -131,7 +143,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
 
                           <Text>{option.description}</Text>
 
-                          {seeResults() && (
+                          {seeResults && (
                             <Text
                               variant="quiet"
                               sx={{
@@ -161,9 +173,9 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
           );
         }}
       </Form>
-      {seeResults() && (
+      {seeResults && (
         <Text variant="quiet" sx={{ fontSize: 2, marginTop: 2, marginBottom: 3 }}>
-          {allVotes()} {allVotes() > 1 ? 'votes' : 'vote'}
+          {totalVotes} {totalVotes > 1 ? 'votes' : 'vote'}
         </Text>
       )}
     </>

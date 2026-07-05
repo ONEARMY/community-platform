@@ -76,7 +76,9 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         newPollId = await pollService.createPoll(data.poll);
       }
 
-    if (oldPollId && oldPollId != newPollId) await pollService.deletePoll(oldPollId);
+    if (oldPollId && oldPollId != newPollId) {
+      await pollService.deletePoll(oldPollId);
+    }
 
     const poll = newPollId ? await pollService.getPoll(newPollId) : null;
 

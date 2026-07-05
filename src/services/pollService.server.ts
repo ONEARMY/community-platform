@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { PollDTO } from 'oa-shared/models/poll';
-import { conflictError } from '../utils/httpException';
+import { conflictError, validationError } from '../utils/httpException';
 
 export class PollServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -11,11 +11,11 @@ export class PollServiceServer {
     }
 
     if (dto.options.length < 2) {
-      throw conflictError('Poll has to have at least 2 options!');
+      throw validationError('Poll has to have at least 2 options!');
     }
 
     if (dto.options.some((o) => !o.description)) {
-      throw conflictError('Every poll option has to have a description!');
+      throw validationError('Every poll option has to have a description!');
     }
 
     const pollResult = await this.client
@@ -51,15 +51,15 @@ export class PollServiceServer {
 
   async updatePoll(dto: PollDTO): Promise<number> {
     if (!dto.id) {
-      throw conflictError('Cannot update non-existing poll!');
+      throw validationError('Id is required to update poll!');
     }
 
     if (dto.options.length < 2) {
-      throw conflictError('Poll has to have at least 2 options!');
+      throw validationError('Poll has to have at least 2 options!');
     }
 
     if (dto.options.some((o) => !o.description)) {
-      throw conflictError('Every poll option has to have a description!');
+      throw validationError('Every poll option has to have a description!');
     }
 
     const pollResult = await this.client

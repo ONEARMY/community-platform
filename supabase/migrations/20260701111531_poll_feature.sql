@@ -63,15 +63,15 @@ alter table "public"."news" validate constraint "news_poll_fkey";
 
 alter table "public"."news" add constraint "news_poll_unique" UNIQUE using index "news_poll_unique";
 
-alter table "public"."poll_options" add constraint "poll_option_of_fkey" FOREIGN KEY (poll_id) REFERENCES public.polls(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+alter table "public"."poll_options" add constraint "poll_option_of_fkey" FOREIGN KEY (poll_id) REFERENCES public.polls(id) ON UPDATE CASCADE ON DELETE SET NULL not valid;
 
 alter table "public"."poll_options" validate constraint "poll_option_of_fkey";
 
-alter table "public"."poll_votes" add constraint "vote_for_fkey" FOREIGN KEY (poll_option_id) REFERENCES public.poll_options(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+alter table "public"."poll_votes" add constraint "vote_for_fkey" FOREIGN KEY (poll_option_id) REFERENCES public.poll_options(id) ON UPDATE CASCADE ON DELETE SET NULL not valid;
 
 alter table "public"."poll_votes" validate constraint "vote_for_fkey";
 
-alter table "public"."poll_votes" add constraint "voted_by_fkey" FOREIGN KEY (profile_id) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+alter table "public"."poll_votes" add constraint "voted_by_fkey" FOREIGN KEY (profile_id) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE SET NULL not valid;
 
 alter table "public"."poll_votes" validate constraint "voted_by_fkey";
 

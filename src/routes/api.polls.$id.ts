@@ -9,11 +9,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
   const claims = await client.auth.getClaims();
 
-  if (!claims.data?.claims) return Response.json({}, { status: 401, headers });
+  if (!claims.data?.claims) {
+    return Response.json({}, { status: 401, headers });
+  }
 
   const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
 
-  if (!profile) return Response.json({}, { status: 401, headers });
+  if (!profile) {
+    return Response.json({}, { status: 401, headers });
+  }
 
   const body = await request.json();
 

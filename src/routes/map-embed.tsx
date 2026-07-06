@@ -21,6 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const zoomParam = url.searchParams.get('zoom');
   const latParam = url.searchParams.get('lat');
   const lngParam = url.searchParams.get('lng');
+  const clustersParam = url.searchParams.get('clusters');
 
   try {
     const [tenantSettings, pins] = await Promise.all([
@@ -35,6 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         initialZoom: zoomParam ? parseFloat(zoomParam) : undefined,
         initialLat: latParam ? parseFloat(latParam) : undefined,
         initialLng: lngParam ? parseFloat(lngParam) : undefined,
+        enableClusters: clustersParam === 'true',
       },
       { headers },
     );
@@ -85,7 +87,7 @@ function MapEmbed() {
   return (
     <MapContext.Provider value={mapContextValue}>
       <Box sx={{ width: '100vw', height: '100vh' }}>
-        <MapView disableListView={true} disableClusters={true} />
+        <MapView disableListView={true} disableClusters={!loaderData.enableClusters} />
       </Box>
     </MapContext.Provider>
   );

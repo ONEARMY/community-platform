@@ -4,6 +4,7 @@ import { Profile } from 'oa-shared';
 import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
+import { useToast } from '../../../common/Toast';
 import { pollService } from './poll.service';
 
 interface IProps {
@@ -13,6 +14,7 @@ interface IProps {
 
 export const PollDisplay = ({ pollData, profile }: IProps) => {
   const [poll, setPoll] = useState(pollData);
+  const toast = useToast();
 
   const seeResults = useMemo(() => {
     return poll.options.some((o) => (o.voteCount ?? 0) > 0);
@@ -32,12 +34,17 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
     if (ableToSubmit(values)) {
       return;
     }
-    await pollService.voteOnPoll(poll!, values.selectedOptionIds);
-    const updatedPoll = await pollService.getPoll(poll!);
-    if (!updatedPoll) {
-      return;
+    try {
+      await pollService.voteOnPoll(pollData, values.selectedOptionIds);
+
+      const updatedPoll = await pollService.getPoll(pollData);
+      if (updatedPoll) {
+        setPoll(updatedPoll);
+      }
+    } catch (error) {
+      toast.error('Oops! Your vote didn’t go through');
+      console.error({ error });
     }
-    setPoll(updatedPoll);
   };
 
   const getPercentage = (option: PollOptionDTO) => {

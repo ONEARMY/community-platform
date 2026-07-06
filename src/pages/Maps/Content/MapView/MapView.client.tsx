@@ -27,7 +27,7 @@ function MapEventsHandler({
   return null;
 }
 
-export const MapView = () => {
+export const MapView = ({ disableListView }: { disableListView?: boolean }) => {
   const mapState = useContext(MapContext);
   const mapRef = useRef<LeafletMap>(null);
   const clusterGroupRef = useRef<any>(null);
@@ -106,24 +106,26 @@ export const MapView = () => {
           />
         </Box>
 
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: 2,
-            gap: 2,
-          }}
-        >
-          <Button
-            data-cy="ShowMobileListButton"
-            icon="step"
-            sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
-            onClick={() => mapState.setIsMobile(true)}
-            small
+        {!disableListView && (
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: 2,
+              gap: 2,
+            }}
           >
-            Show list view
-          </Button>
-        </Flex>
+            <Button
+              data-cy="ShowMobileListButton"
+              icon="step"
+              sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
+              onClick={() => mapState.setIsMobile(true)}
+              small
+            >
+              Show list view
+            </Button>
+          </Flex>
+        )}
         {mapState.mapPins && mapState.mapPins.length > 0 && (
           <Clusters
             pins={mapState.mapPins}

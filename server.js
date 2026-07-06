@@ -140,7 +140,6 @@ const sharedSecurityOptions = {
   xDnsPrefetchControl: 'on',
 };
 
-// Apply permissive CSP to /map-embed route (allows iframe embedding from any origin)
 app.use(
   '/map-embed',
   secureHeaders({
@@ -149,11 +148,10 @@ app.use(
       frameAncestors: ['*'],
     },
     ...sharedSecurityOptions,
-    xFrameOptions: false, // Disable X-Frame-Options for this route
+    xFrameOptions: false,
   }),
 );
 
-// Apply strict CSP to all other routes (blocks iframe embedding except same-origin)
 app.use(
   '*',
   secureHeaders({

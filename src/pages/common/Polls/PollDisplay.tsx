@@ -29,10 +29,14 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
   const ableToSubmit = (values: any) => !activeVoting || values?.selectedOptionIds?.length < 1;
 
   const onSubmit = async (values: { selectedOptionIds: number[] }) => {
-    if (ableToSubmit(values)) return;
+    if (ableToSubmit(values)) {
+      return;
+    }
     await pollService.voteOnPoll(poll!, values.selectedOptionIds);
     const updatedPoll = await pollService.getPoll(poll!);
-    if (!updatedPoll) return;
+    if (!updatedPoll) {
+      return;
+    }
     setPoll(updatedPoll);
   };
 
@@ -51,12 +55,16 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
       >
         {({ handleSubmit, form, values }) => {
           const selectSingle = (option: PollOptionDTO) => {
-            if (!option.id) return;
+            if (!option.id) {
+              return;
+            }
             form.change('selectedOptionIds', [option.id]);
           };
 
           const toggle = (option: PollOptionDTO) => {
-            if (!option.id) return;
+            if (!option.id) {
+              return;
+            }
             const current = values.selectedOptionIds || [];
 
             const updated = current.includes(option.id)
@@ -79,12 +87,15 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                   </Text>
                 )}
                 <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                  {poll.options.map((option) => {
-                    if (!option.id) return;
+                  {poll.options.map((option, index) => {
+                    if (!option.id) {
+                      return;
+                    }
                     const selected = values.selectedOptionIds?.includes(option.id);
 
                     return (
                       <Label
+                        data-cy={`poll-option-${index}`}
                         key={option.id}
                         sx={{
                           position: 'relative',
@@ -161,6 +172,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                 </Flex>
 
                 <Button
+                  data-cy={`submit-vote`}
                   type="submit"
                   variant="outline"
                   disabled={ableToSubmit(values)}

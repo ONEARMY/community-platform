@@ -8,6 +8,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { MapContext } from '../../MapContext';
 import { ButtonZoomIn } from './ButtonZoomIn.client';
 import { Clusters } from './Cluster.client';
+import { Markers } from './Markers.client';
 import { Popup } from './Popup.client';
 
 // Component to handle map events
@@ -27,7 +28,13 @@ function MapEventsHandler({
   return null;
 }
 
-export const MapView = () => {
+export const MapView = ({
+  disableListView,
+  disableClusters,
+}: {
+  disableListView?: boolean;
+  disableClusters?: boolean;
+}) => {
   const mapState = useContext(MapContext);
   const mapRef = useRef<LeafletMap>(null);
   const clusterGroupRef = useRef<any>(null);
@@ -45,7 +52,7 @@ export const MapView = () => {
   }, [mapRef.current, mapState]);
 
   useEffect(() => {
-    if (clusterGroupRef.current && mapState) {
+    if (clusterGroupRef.current && mapState && mapState.setClusterGroupRef) {
       mapState.setClusterGroupRef(clusterGroupRef.current);
     }
   }, [clusterGroupRef.current, mapState]);
@@ -77,7 +84,7 @@ export const MapView = () => {
     : [0, 0];
 
   return (
-    <Box className="markercluster-map" sx={{ flex: 1 }}>
+    <Box className="markercluster-map" sx={{ flex: 1, width: '100%', height: '100%' }}>
       <Map
         ref={mapRef}
         center={mapCenter}
@@ -106,31 +113,39 @@ export const MapView = () => {
           />
         </Box>
 
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: 2,
-            gap: 2,
-          }}
-        >
-          <Button
-            data-cy="ShowMobileListButton"
-            icon="step"
-            sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
-            onClick={() => mapState.setIsMobile(true)}
-            small
+        {!disableListView && (
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: 2,
+              gap: 2,
+            }}
           >
-            Show list view
-          </Button>
-        </Flex>
+            <Button
+              data-cy="ShowMobileListButton"
+              icon="step"
+              sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
+              onClick={() => mapState.setIsMobile?.(true)}
+              small
+            >
+              Show list view
+            </Button>
+          </Flex>
+        )}
         {mapState.mapPins && mapState.mapPins.length > 0 && (
-          <Clusters
-            pins={mapState.mapPins}
-            onPinClick={mapState.selectPinWithClusterCheck}
-            onClusterClick={handleClusterClick}
-            clusterGroupRef={clusterGroupRef}
-          />
+          <>
+            {disableClusters || !mapState.selectPinWithClusterCheck ? (
+              <Markers pins={mapState.mapPins} onPinClick={mapState.selectPin} />
+            ) : (
+              <Clusters
+                pins={mapState.mapPins}
+                onPinClick={mapState.selectPinWithClusterCheck}
+                onClusterClick={handleClusterClick}
+                clusterGroupRef={clusterGroupRef}
+              />
+            )}
+          </>
         )}
         {mapState.selectedPin && <Popup activePin={mapState.selectedPin} mapRef={mapRef} />}
       </Map>

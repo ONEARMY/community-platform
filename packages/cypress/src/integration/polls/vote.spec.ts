@@ -2,9 +2,9 @@ import { users } from 'oa-shared/mocks/data';
 import { getTenantUser } from '../../utils/TestUtils';
 
 describe('[Polls.Vote]', () => {
-  it('User votes on poll and sees the results after voting', () => {
+  it('Different users vote on poll and see the results after voting', () => {
     const newsTitle = "Poll to vote on!";
-    const newsBody = "Yo. This one has a Poll!";
+    const newsBody = "Yo. This one has a poll to vote on!";
 
     const pollTitle = "What do you prefer?";
     const option1 = "This one!";
@@ -35,6 +35,7 @@ describe('[Polls.Vote]', () => {
     cy.get('[data-cy=toast]').contains('News published');
 
     cy.step('Log in as first user and vote on poll');
+    cy.logout();
     const user1 = getTenantUser(users.subscriber)
     cy.signIn(user1.email, user1.password);
     cy.visit('/news');
@@ -48,6 +49,7 @@ describe('[Polls.Vote]', () => {
     cy.contains("1 vote");
 
     cy.step('Log in as second user and vote on poll');
+    cy.logout();
     const user2 = getTenantUser(users.research_creator)
     cy.signIn(user2.email, user2.password);
     cy.visit('/news');
@@ -64,6 +66,7 @@ describe('[Polls.Vote]', () => {
     cy.contains("2 votes");
 
     cy.step('Log in as admin and be able to see results without voting');
+    cy.logout();
     cy.signIn(admin.email, admin.password);
     cy.visit('/news');
     cy.get('[data-cy=news-list-item]').contains(newsTitle).click();

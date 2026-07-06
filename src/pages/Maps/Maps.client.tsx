@@ -9,7 +9,7 @@ import {
 } from 'src/pages/common/Header/navLayout';
 import { Box, Flex } from 'theme-ui';
 import { MapList } from './Content/MapView/MapList';
-import { MapView } from './Content/MapView/MapView';
+import { MapView } from './Content/MapView/MapView.client';
 import { MapContext } from './MapContext';
 import { mapPinService } from './map.service';
 import { filterPins, sortPinsByBadgeThenLastActive } from './utils/pinUtils';
@@ -116,7 +116,9 @@ const MapsPage = () => {
 
   // Pins filtered by everything including boundaries — used by the list view.
   const filteredPins = useMemo<MapPin[]>(() => {
-    if (!boundaries) return mapPins;
+    if (!boundaries) {
+      return mapPins;
+    }
     return filterPins(mapPins, { boundaries });
   }, [mapPins, boundaries]);
 

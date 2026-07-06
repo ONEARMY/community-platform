@@ -47,7 +47,9 @@ export const CategoryField = ({ type, required = false }: IProps) => {
         id={name}
         validate={required ? requiredValidator : undefined}
         isEqual={(a, b) => {
-          if (!a && !b) return true; // both null/undefined = equal
+          if (!a && !b) {
+            return true; // both null/undefined = equal
+          }
           return !!a && a?.value === b?.value;
         }}
         render={({ input, meta }) => (

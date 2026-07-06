@@ -9,7 +9,9 @@ interface Props {
 export const ImpactIcon = ({ id }: Props) => {
   const question = impactQuestions.find((question) => question.id === id);
 
-  if (!question || !question.icon) return null;
+  if (!question || !question.icon) {
+    return null;
+  }
 
   const glyph = question.icon;
 

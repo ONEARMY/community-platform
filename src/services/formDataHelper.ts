@@ -2,7 +2,9 @@ export function createFormData<T extends Record<string, unknown>>(data: T): Form
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(data)) {
-    if (value === null || value === undefined) continue;
+    if (value === null || value === undefined) {
+      continue;
+    }
 
     if (Array.isArray(value)) {
       if (value[0] && typeof value[0] === 'object') {

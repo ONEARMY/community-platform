@@ -123,7 +123,9 @@ const CheckoutForm = () => {
 export const CheckoutView = () => {
   const { stripeInstance, clientSecret, siteImage, siteName, onBack } = useSupporterContext();
 
-  if (!stripeInstance || !clientSecret) return null;
+  if (!stripeInstance || !clientSecret) {
+    return null;
+  }
 
   return (
     <Flex

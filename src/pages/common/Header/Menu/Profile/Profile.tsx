@@ -14,9 +14,13 @@ const Profile = observer(() => {
   const modalRef = useClickOutside(() => setShowProfileModal(false));
 
   useEffect(() => {
-    if (!showProfileModal) return;
+    if (!showProfileModal) {
+      return;
+    }
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setShowProfileModal(false);
+      if (event.key === 'Escape') {
+        setShowProfileModal(false);
+      }
     };
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);

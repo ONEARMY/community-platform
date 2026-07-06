@@ -23,7 +23,9 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   const { profile: activeUser } = useProfileStore();
 
   const scrollIntoRelevantSection = () => {
-    if (getResearchCommentId(location.hash) === '') return;
+    if (getResearchCommentId(location.hash) === '') {
+      return;
+    }
     const section = document.getElementById(`update_${getResearchUpdateId(location.hash)}`);
     section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };

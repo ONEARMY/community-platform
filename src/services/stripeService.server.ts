@@ -18,8 +18,12 @@ let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
 
 async function getStripe(): Promise<Stripe | null> {
-  if (stripeInstance) return stripeInstance;
-  if (stripeUnavailable) return null;
+  if (stripeInstance) {
+    return stripeInstance;
+  }
+  if (stripeUnavailable) {
+    return null;
+  }
 
   try {
     const key = await getSecret('STRIPE_SECRET_KEY');
@@ -40,7 +44,9 @@ export class StripeServiceServer {
     customerId: string,
   ): Promise<{ id: string; email: string | null } | null> {
     const stripe = await getStripe();
-    if (!stripe) return null;
+    if (!stripe) {
+      return null;
+    }
     try {
       const customer = await stripe.customers.retrieve(customerId);
       if (customer.deleted) {
@@ -54,7 +60,9 @@ export class StripeServiceServer {
 
   static async getSubscription(customerId: string): Promise<Stripe.Subscription | null> {
     const stripe = await getStripe();
-    if (!stripe) return null;
+    if (!stripe) {
+      return null;
+    }
 
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
@@ -67,7 +75,9 @@ export class StripeServiceServer {
 
   static async createGuestCustomer(email: string, name?: string): Promise<string> {
     const stripe = await getStripe();
-    if (!stripe) throw new Error('Stripe is not configured');
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
 
     const existing = await stripe.customers.list({ email, limit: 1 });
     if (existing.data.length > 0) {
@@ -88,7 +98,9 @@ export class StripeServiceServer {
     name?: string,
   ): Promise<string> {
     const stripe = await getStripe();
-    if (!stripe) throw new Error('Stripe is not configured');
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
 
     if (name) {
       await stripe.customers.update(customerId, { name });
@@ -122,7 +134,9 @@ export class StripeServiceServer {
 
   static async createBillingPortalSession(customerId: string, returnUrl: string): Promise<string> {
     const stripe = await getStripe();
-    if (!stripe) throw new Error('Stripe is not configured');
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
@@ -138,7 +152,9 @@ export class StripeServiceServer {
     secret: string,
   ): Promise<Stripe.Event> {
     const stripe = await getStripe();
-    if (!stripe) throw new Error('Stripe is not configured');
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
     return stripe.webhooks.constructEvent(body, signature, secret);
   }
 
@@ -173,7 +189,9 @@ export class StripeServiceServer {
 
   async createCustomer(authUserId: string, email: string, tenantId: string): Promise<string> {
     const stripe = await getStripe();
-    if (!stripe) throw new Error('Stripe is not configured');
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
     const customer = await stripe.customers.create({
       email,
       metadata: {
@@ -205,7 +223,9 @@ export class StripeServiceServer {
       .select('stripe_product_id, profile_badges:badge_id(premium_tier, display_name)');
 
     const map = new Map<string, { tier: number; tierName: string }>();
-    if (!data) return map;
+    if (!data) {
+      return map;
+    }
 
     for (const row of data) {
       const badge = row.profile_badges as unknown as {
@@ -229,7 +249,9 @@ export class StripeServiceServer {
       .select('description, color, profile_badges:badge_id(premium_tier, display_name)');
 
     const map: TierConfigMap = {};
-    if (!data) return map;
+    if (!data) {
+      return map;
+    }
 
     for (const row of data) {
       const badge = row.profile_badges as unknown as {
@@ -250,7 +272,9 @@ export class StripeServiceServer {
 
   async getPrices(): Promise<SupporterPrice[]> {
     const stripe = await getStripe();
-    if (!stripe) return [];
+    if (!stripe) {
+      return [];
+    }
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];
 
@@ -292,7 +316,9 @@ export class StripeServiceServer {
         // can filter by currency without knowing about multi-currency prices.
         if (p.currency_options) {
           for (const [cur, opts] of Object.entries(p.currency_options)) {
-            if (cur === p.currency) continue; // skip duplicate of base currency
+            if (cur === p.currency) {
+              continue; // skip duplicate of base currency
+            }
             const amount =
               opts.unit_amount ??
               (opts.unit_amount_decimal ? Math.round(parseFloat(opts.unit_amount_decimal)) : null);
@@ -336,10 +362,14 @@ export class StripeServiceServer {
 
   async getAuthIdByStripeCustomerEmail(stripeCustomerId: string): Promise<string | null> {
     const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
-    if (!customer?.email) return null;
+    if (!customer?.email) {
+      return null;
+    }
 
     const { data } = await this.client.rpc('get_user_id_by_email', { email: customer.email });
-    if (!Array.isArray(data) || data.length === 0) return null;
+    if (!Array.isArray(data) || data.length === 0) {
+      return null;
+    }
 
     return data[0].id;
   }
@@ -360,7 +390,9 @@ export class StripeAdminService {
     tenantId: string,
   ): Promise<void> {
     const stripe = await getStripe();
-    if (!stripe) throw new Error('Stripe is not configured');
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
     await stripe.customers.update(stripeCustomerId, {
       metadata: { supabase_user_id: authId, tenant_id: tenantId },
     });

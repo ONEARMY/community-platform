@@ -14,6 +14,75 @@ export type SupporterPrice = {
 
 export type TierConfigMap = Record<number, { color: string; name: string; description: string }>;
 
+const STUB_PRICES: SupporterPrice[] = [
+  {
+    id: 'stub_starter_month',
+    unitAmount: 800,
+    currency: 'eur',
+    interval: 'month',
+    tier: 1,
+    tierName: 'Starter',
+  },
+  {
+    id: 'stub_starter_year',
+    unitAmount: 8000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'Starter',
+  },
+  {
+    id: 'stub_hero_month',
+    unitAmount: 1600,
+    currency: 'eur',
+    interval: 'month',
+    tier: 2,
+    tierName: 'Hero',
+  },
+  {
+    id: 'stub_hero_year',
+    unitAmount: 16000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'Hero',
+  },
+  {
+    id: 'stub_legend_month',
+    unitAmount: 3200,
+    currency: 'eur',
+    interval: 'month',
+    tier: 3,
+    tierName: 'Legend',
+  },
+  {
+    id: 'stub_legend_year',
+    unitAmount: 32000,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'Legend',
+  },
+];
+
+const STUB_TIER_CONFIG: TierConfigMap = {
+  1: {
+    color: '#BFDEBA',
+    name: 'Starter',
+    description: 'You help us develop new features, get videos in 4K without ads!',
+  },
+  2: {
+    color: '#77BDE3',
+    name: 'Hero',
+    description: 'You help us develop new features, get videos in 4K without ads!',
+  },
+  3: {
+    color: '#FEE77B',
+    name: 'Legend',
+    description: 'You help us develop new features, get videos in 4K without ads!',
+  },
+};
+
 let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
 
@@ -244,6 +313,11 @@ export class StripeServiceServer {
   }
 
   async getTierConfig(): Promise<TierConfigMap> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return process.env.NODE_ENV === 'development' ? STUB_TIER_CONFIG : {};
+    }
+
     const { data } = await this.client
       .from('stripe_tier_config')
       .select('description, color, profile_badges:badge_id(premium_tier, display_name)');
@@ -273,7 +347,7 @@ export class StripeServiceServer {
   async getPrices(): Promise<SupporterPrice[]> {
     const stripe = await getStripe();
     if (!stripe) {
-      return [];
+      return process.env.NODE_ENV === 'development' ? STUB_PRICES : [];
     }
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];

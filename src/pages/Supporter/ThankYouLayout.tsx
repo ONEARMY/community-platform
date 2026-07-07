@@ -16,7 +16,7 @@ export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
       sx={{
         maxWidth: 1200,
         mx: 'auto',
-        my: [3, 5],
+        my: 'auto',
         px: [3, 0],
         flex: 1,
         flexDirection: ['column', 'column', 'row'],

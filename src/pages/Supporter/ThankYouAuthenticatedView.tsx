@@ -14,10 +14,12 @@ export const ThankYouAuthenticatedView = () => {
         flexDirection: 'column',
         alignItems: 'center',
         mx: 'auto',
-        my: [3, 5],
+        my: 'auto',
         px: [3, 0],
         gap: 3,
         maxWidth: 450,
+        flex: 1,
+        justifyContent: 'center',
       }}
     >
       <picture>
@@ -25,8 +27,6 @@ export const ThankYouAuthenticatedView = () => {
         <source media="(min-width: 52em)" srcSet={thankYouMd} />
         <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
       </picture>
-
-      <Text variant="auxiliary">Check what we prepared for you</Text>
 
       <Button
         type="button"

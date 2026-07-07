@@ -4,6 +4,7 @@ import { Profile } from 'oa-shared';
 import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
+import { useLocation } from 'react-router';
 import { useToast } from '../../../common/Toast';
 import { pollService } from './poll.service';
 
@@ -15,6 +16,7 @@ interface IProps {
 export const PollDisplay = ({ pollData, profile }: IProps) => {
   const [poll, setPoll] = useState(pollData);
   const toast = useToast();
+  const location = useLocation();
 
   const seeResults = useMemo(() => {
     return poll.options.some((o) => (o.voteCount ?? 0) > 0);
@@ -44,6 +46,17 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
     } catch (error) {
       toast.error('Oops! Your vote didn’t go through');
       console.error({ error });
+    }
+  };
+
+  const checkForLogin = () => {
+    if (!profile) {
+      toast.info('Please log in to vote.', {
+        actionLink: {
+          href: `/sign-up?returnUrl=${encodeURIComponent(location.pathname)}`,
+          label: 'Create account',
+        },
+      });
     }
   };
 
@@ -113,6 +126,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                           gap: 1,
                           backgroundColor: 'background',
                         }}
+                        onClick={() => checkForLogin()}
                       >
                         <Flex
                           sx={{
@@ -191,7 +205,13 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                   disabled={ableToSubmit(values)}
                   sx={{ width: 'fit-content' }}
                 >
-                  {poll.singleChoice ? 'Submit vote' : 'Submit votes'}
+                  {poll.hasVoted
+                    ? poll.singleChoice
+                      ? 'Vote submitted'
+                      : 'Votes submitted'
+                    : poll.singleChoice
+                      ? 'Submit vote'
+                      : 'Submit votes'}
                 </Button>
               </Flex>
             </form>

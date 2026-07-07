@@ -26,6 +26,7 @@ describe('Focus', () => {
           profileTypes={[
             {
               id: 1,
+              backgroundColor: '#f090b3',
               name: 'member',
               displayName: 'Member',
               description: 'Member desc',
@@ -50,6 +51,7 @@ describe('Focus', () => {
           profileTypes={[
             {
               id: 1,
+              backgroundColor: '#f090b3',
               name: 'member',
               displayName: 'Member',
               description: 'Member desc',
@@ -61,6 +63,7 @@ describe('Focus', () => {
             },
             {
               id: 2,
+              backgroundColor: '#97cdeb',
               name: 'space',
               displayName: 'Space',
               description: 'space desc',

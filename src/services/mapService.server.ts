@@ -64,6 +64,7 @@ export class MapServiceServer {
             ),
             type:profile_types(
               id,
+              background_color,
               name,
               display_name,
               image_url,
@@ -128,6 +129,7 @@ export class MapServiceServer {
             ),
             type:profile_types(
               id,
+              background_color,
               name,
               display_name,
               image_url,

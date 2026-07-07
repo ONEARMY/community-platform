@@ -20,6 +20,7 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   impact: null,
   type: {
     id: faker.number.int(),
+    background_color: '#f090b3',
     name: faker.word.noun(),
     display_name: faker.word.noun(),
     description: faker.word.noun(),

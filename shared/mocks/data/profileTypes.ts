@@ -3,6 +3,7 @@ import type { DBProfileType } from '../../models/profileType';
 export const profileTypes: Partial<DBProfileType>[] = [
   {
     name: 'member',
+    background_color: '#f090b3',
     display_name: 'Member',
     is_space: false,
     description: '',
@@ -15,6 +16,7 @@ export const profileTypes: Partial<DBProfileType>[] = [
   },
   {
     name: 'machine-builder',
+    background_color: '#f29195',
     display_name: 'Machine Builder',
     order: 3,
     description: '',
@@ -27,6 +29,7 @@ export const profileTypes: Partial<DBProfileType>[] = [
   },
   {
     name: 'workspace',
+    background_color: '#97cdeb',
     display_name: 'Workspace',
     order: 2,
     description: '',
@@ -39,6 +42,7 @@ export const profileTypes: Partial<DBProfileType>[] = [
   },
   {
     name: 'community-point',
+    background_color: '#8ec685',
     display_name: 'Community Point',
     order: 4,
     description: '',
@@ -51,6 +55,7 @@ export const profileTypes: Partial<DBProfileType>[] = [
   },
   {
     name: 'collection-point',
+    background_color: '#baa0cc',
     display_name: 'Collection Point',
     order: 5,
     description: '',

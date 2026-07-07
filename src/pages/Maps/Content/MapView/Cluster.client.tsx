@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import { type MarkerCluster, MarkerClusterGroup } from 'leaflet.markercluster';
 import type { MapPin } from 'oa-shared';
-import { type RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import { useMap } from 'react-leaflet';
 import { createClusterIcon, createMarkerIcon } from './Sprites';
 
@@ -10,6 +10,7 @@ interface IProps {
   onPinClick: (pin: MapPin) => void;
   onClusterClick: (cluster: MarkerCluster) => void;
   clusterGroupRef?: RefObject<any>;
+  selectedPin?: MapPin | null;
 }
 
 /**
@@ -19,7 +20,12 @@ interface IProps {
  *
  * @see https://github.com/Leaflet/Leaflet.markercluster#clusters-methods
  */
-export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: IProps) => {
+export const Clusters = (props: IProps) => {
+  const { pins, onPinClick, onClusterClick, clusterGroupRef, selectedPin } = props;
+  const [previousSelectedPin, setPreviousSelectedPin] = useState<MapPin | null>(
+    selectedPin || null,
+  );
+
   const map = useMap();
   const groupRef = useRef<MarkerClusterGroup | null>(null);
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
@@ -69,6 +75,42 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
     };
   }, [map, clusterGroupRef]);
 
+  useEffect(() => {
+    const setSelectedPin = (selectedPin) => {
+      const currentMarkers = markersRef.current;
+      const id = String(selectedPin?.id);
+
+      if (currentMarkers.has(id) && selectedPin) {
+        console.log('hello');
+        currentMarkers.get(id)?.setIcon(createMarkerIcon(selectedPin, true));
+      }
+    };
+
+    const clearSelectedPin = () => {
+      const currentMarkers = markersRef.current;
+      const id = String(previousSelectedPin?.id);
+
+      if (currentMarkers.has(id)) {
+        previousSelectedPin &&
+          currentMarkers.get(id)?.setIcon(createMarkerIcon(previousSelectedPin, false));
+      }
+    };
+
+    if (selectedPin && !previousSelectedPin) {
+      setSelectedPin(selectedPin);
+      setPreviousSelectedPin(selectedPin);
+    }
+    if (selectedPin && selectedPin.id !== previousSelectedPin?.id) {
+      clearSelectedPin();
+      setSelectedPin(selectedPin);
+      setPreviousSelectedPin(selectedPin);
+    }
+    if (!selectedPin && previousSelectedPin) {
+      clearSelectedPin();
+      setPreviousSelectedPin(null);
+    }
+  }, [selectedPin]);
+
   // Differential marker updates — only add/remove changed pins.
   useEffect(() => {
     const group = groupRef.current;
@@ -93,9 +135,11 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
     const toAdd: L.Marker[] = [];
     for (const pin of validPins) {
       const id = String(pin.id);
+      const isSelectedPin = pin.id === selectedPin?.id;
+
       if (!currentMarkers.has(id)) {
         const marker = L.marker([pin.lat, pin.lng], {
-          icon: createMarkerIcon(pin),
+          icon: createMarkerIcon(pin, isSelectedPin),
         });
         marker.on('click', () => onPinClickRef.current(pin));
         currentMarkers.set(id, marker);

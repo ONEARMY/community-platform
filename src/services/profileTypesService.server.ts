@@ -24,6 +24,7 @@ export class ProfileTypesServiceServer {
 
     const profileTypesResult = await this.client.from('profile_types').select(`
       id,
+      background_color,
       name,
       display_name,
       order,

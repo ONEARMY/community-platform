@@ -175,6 +175,7 @@ export const fakeResearchUpdate = (
 
 export const fakeProfileType = (profileTypeOverLoads: Partial<ProfileType> = {}): ProfileType => ({
   id: faker.number.int(),
+  backgroundColor: '#f090b3',
   description: '',
   displayName: '',
   imageUrl: faker.image.avatar(),

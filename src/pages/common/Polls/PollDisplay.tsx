@@ -142,7 +142,10 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                               disabled={!activeVoting}
                               sx={{
                                 'input:checked ~ &': { color: 'highlight' },
-                                'input:focus ~ &': { backgroundColor: 'white' },
+                                'input:focus ~ &': {
+                                  backgroundColor: 'transparent',
+                                  color: 'highlight',
+                                },
                               }}
                               checked={selected || option.wasVotedByUser}
                               onChange={() => selectSingle(option)}
@@ -153,7 +156,10 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
                               checked={selected || option.wasVotedByUser}
                               sx={{
                                 'input:checked ~ &': { color: 'highlight' },
-                                'input:focus ~ &': { backgroundColor: 'white', color: 'highlight' },
+                                'input:focus ~ &': {
+                                  backgroundColor: 'transparent',
+                                  color: 'highlight',
+                                },
                               }}
                               onChange={() => toggle(option)}
                             />

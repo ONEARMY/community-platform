@@ -126,8 +126,15 @@ export const NewsForm = (props: IProps) => {
     if (values.heroImage == null && values.existingHeroImage === null) {
       errors['heroImage'] = 'An image is required (either new or existing).';
     }
-    if (values.poll && values.poll.options.length < 2) {
-      errors['poll'] = 'There needs to be at least 2 options in the poll.';
+
+    if (values.poll) {
+      const { title, options } = values.poll;
+      const hasTitle = title?.trim();
+      const validOptions = options?.filter((o) => o.description?.trim()) ?? [];
+
+      if (!hasTitle || validOptions.length < 2) {
+        errors['pollError'] = 'A poll must have a title and at least two options.';
+      }
     }
     return errors;
   }, []);

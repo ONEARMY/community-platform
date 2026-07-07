@@ -10,6 +10,7 @@ import { FactoryPollData, FactoryPollOption } from "../../../test/factories/Poll
 import { PollDTO } from "oa-shared/models/poll";
 import { PollDisplay } from "./PollDisplay";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router";
 
 
 const activeUser = FactoryUser({
@@ -137,7 +138,7 @@ describe('Poll', () => {
       // Assert: The button is disabled
       await waitFor(() => {
         const submitButton = wrapper.getByRole('button', {
-          name: /submit vote/i,
+          name: /Votes submitted/i,
         });
         expect(submitButton).toBeDisabled();
       });
@@ -153,7 +154,9 @@ const getWrapper = (poll: PollDTO, profile: Profile) => {
       }}
     >
       <ThemeProvider theme={theme}>
-        <PollDisplay pollData={poll} profile={profile} />
+        <MemoryRouter>
+          <PollDisplay pollData={poll} profile={profile} />
+        </MemoryRouter>
       </ThemeProvider>
     </Provider>,
   );

@@ -1,9 +1,10 @@
 import { users } from 'oa-shared/mocks/data';
-import { getTenantUser } from '../../utils/TestUtils';
+import { generateAlphaNumeric, getTenantUser } from '../../utils/TestUtils';
 
 describe('[Polls.Vote]', () => {
   it('Different users vote on poll and see the results after voting', () => {
-    const newsTitle = "Poll to vote on!";
+    const randomId = generateAlphaNumeric(8).toLowerCase();
+    const newsTitle = `${randomId} Poll to vote on!`;
     const newsBody = "Yo. This one has a poll to vote on!";
 
     const pollTitle = "What do you prefer?";

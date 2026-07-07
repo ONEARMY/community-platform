@@ -4,7 +4,7 @@ import { Profile } from 'oa-shared';
 import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useToast } from '../../../common/Toast';
 import { pollService } from './poll.service';
 
@@ -17,6 +17,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
   const [poll, setPoll] = useState(pollData);
   const toast = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const seeResults = useMemo(() => {
     return poll.options.some((o) => (o.voteCount ?? 0) > 0);
@@ -51,12 +52,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
 
   const checkForLogin = () => {
     if (!profile) {
-      toast.info('Please log in to vote.', {
-        actionLink: {
-          href: `/sign-up?returnUrl=${encodeURIComponent(location.pathname)}`,
-          label: 'Create account',
-        },
-      });
+      navigate(`/sign-up?returnUrl=${encodeURIComponent(location.pathname)}`);
     }
   };
 

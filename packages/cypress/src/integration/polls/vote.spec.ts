@@ -76,6 +76,7 @@ describe('[Polls.Vote]', () => {
     cy.contains("50%");
     cy.contains("0%");
     cy.contains("2 votes");
+    cy.wait(2000);
 
     cy.step('Poll results change after voting')
     cy.get('[data-cy=poll-option-1]').click();

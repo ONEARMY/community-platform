@@ -57,6 +57,9 @@ ALTER TABLE "public"."stripe_tier_config" ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "tenant_isolation" ON "public"."stripe_tier_config" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 
+GRANT SELECT ON TABLE "public"."stripe_tier_config" TO "anon";
+GRANT SELECT ON TABLE "public"."stripe_tier_config" TO "authenticated";
+
 CREATE OR REPLACE FUNCTION "public"."read_secret"("secret_name" "text")
 RETURNS "text"
 LANGUAGE "plpgsql" SECURITY DEFINER

@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS "public"."stripe_tier_config" (
     "badge_id" bigint NOT NULL,
     "description" "text" NOT NULL,
     "color" "text" NOT NULL,
+    "thank_you_image_url" "text",
     "tenant_id" "text" NOT NULL,
     CONSTRAINT "stripe_tier_config_badge_id_tenant_id_key" UNIQUE ("badge_id", "tenant_id"),
     CONSTRAINT "stripe_tier_config_badge_id_fkey"
@@ -56,6 +57,9 @@ CREATE INDEX "idx_stripe_tier_config_tenant_id" ON "public"."stripe_tier_config"
 ALTER TABLE "public"."stripe_tier_config" ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "tenant_isolation" ON "public"."stripe_tier_config" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+
+GRANT SELECT ON TABLE "public"."stripe_tier_config" TO "anon";
+GRANT SELECT ON TABLE "public"."stripe_tier_config" TO "authenticated";
 
 CREATE OR REPLACE FUNCTION "public"."read_secret"("secret_name" "text")
 RETURNS "text"

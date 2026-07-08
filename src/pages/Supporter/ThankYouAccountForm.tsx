@@ -146,7 +146,7 @@ export const ThankYouAccountForm = () => {
       <form
         ref={signInFormRef}
         method="post"
-        action={`/sign-in?returnUrl=${encodeURIComponent('/settings?subscription=success')}`}
+        action={`/sign-in?returnUrl=${encodeURIComponent('/settings/account')}`}
         style={{ display: 'none' }}
       >
         <input type="hidden" name="email" value={email} />

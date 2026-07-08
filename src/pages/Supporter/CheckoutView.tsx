@@ -44,7 +44,7 @@ const CheckoutForm = () => {
 
     let returnUrl: string;
     if (isAuthenticated) {
-      returnUrl = `${window.location.origin}/settings?subscription=success`;
+      returnUrl = `${window.location.origin}/settings/account`;
     } else {
       const params = new URLSearchParams({
         payment: 'success',

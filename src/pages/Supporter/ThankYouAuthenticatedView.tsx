@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import thankYouLg from 'src/assets/images/thank-you-lg.webp';
 import thankYouMd from 'src/assets/images/thank-you-md.webp';
 import thankYouSm from 'src/assets/images/thank-you-sm.webp';
-import { Flex, Image, Text } from 'theme-ui';
+import { Flex, Image } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
 
 export const ThankYouAuthenticatedView = () => {

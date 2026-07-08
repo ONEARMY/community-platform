@@ -333,7 +333,9 @@ export class StripeServiceServer {
     }
 
     const map: TierConfigMap = {};
-    for (const row of data) {
+    for (const row of data as Array<
+      (typeof data)[number] & { thank_you_image_url: string | null }
+    >) {
       const badge = row.profile_badges as unknown as {
         premium_tier: number | null;
         display_name: string;
@@ -345,8 +347,8 @@ export class StripeServiceServer {
           description: row.description,
         };
       }
-      if (!thankYouImageUrl && (row as any).thank_you_image_url) {
-        thankYouImageUrl = (row as any).thank_you_image_url;
+      if (!thankYouImageUrl && row.thank_you_image_url) {
+        thankYouImageUrl = row.thank_you_image_url;
       }
     }
 

@@ -104,7 +104,7 @@ export const PollForm = ({ validate }: IProps) => {
                         />
                       </div>
                     ))}
-                    {(meta.dirty || meta.submitFailed) && meta.error && (
+                    {meta.submitFailed && meta.error && (
                       <Text
                         sx={{
                           color: 'error',

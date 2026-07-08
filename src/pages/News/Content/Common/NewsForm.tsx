@@ -129,10 +129,12 @@ export const NewsForm = (props: IProps) => {
 
     if (values.poll) {
       const { title, options } = values.poll;
-      const hasTitle = title?.trim();
-      const validOptions = options?.filter((o) => o.description?.trim()) ?? [];
-
-      if (!hasTitle || validOptions.length < 2) {
+      if (
+        !title ||
+        title.length < NEWS_MIN_TITLE_LENGTH ||
+        options.length < 2 ||
+        options.some((o) => !o.description)
+      ) {
         errors['pollError'] = 'A poll must have a title and at least two options.';
       }
     }

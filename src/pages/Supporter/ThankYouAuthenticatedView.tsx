@@ -1,8 +1,6 @@
 import { Button, Icon } from 'oa-components';
 import { useNavigate } from 'react-router';
-import thankYouLg from 'src/assets/images/thank-you-lg.webp';
-import thankYouMd from 'src/assets/images/thank-you-md.webp';
-import thankYouSm from 'src/assets/images/thank-you-sm.webp';
+import thankYouDefault from 'src/assets/images/thank-you-lg.webp';
 import { Flex, Image } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
 
@@ -24,15 +22,11 @@ export const ThankYouAuthenticatedView = () => {
         justifyContent: 'center',
       }}
     >
-      {thankYouImageUrl ? (
-        <Image src={thankYouImageUrl} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
-      ) : (
-        <picture>
-          <source media="(min-width: 70em)" srcSet={thankYouLg} />
-          <source media="(min-width: 52em)" srcSet={thankYouMd} />
-          <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
-        </picture>
-      )}
+      <Image
+        src={thankYouImageUrl || thankYouDefault}
+        alt="Thank you for your support"
+        sx={{ maxWidth: '100%' }}
+      />
 
       <Button
         type="button"

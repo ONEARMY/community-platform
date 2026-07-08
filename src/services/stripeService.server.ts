@@ -316,25 +316,23 @@ export class StripeServiceServer {
   }
 
   async getTierConfig(): Promise<{ tiers: TierConfigMap; thankYouImageUrl: string | null }> {
-    const stripe = await getStripe();
-    if (!stripe) {
-      return process.env.NODE_ENV === 'development'
-        ? STUB_TIER_CONFIG
-        : { tiers: {}, thankYouImageUrl: null };
-    }
-
     const { data } = await this.client
       .from('stripe_tier_config')
       .select(
         'description, color, thank_you_image_url, profile_badges:badge_id(premium_tier, display_name)',
       );
 
-    const map: TierConfigMap = {};
     let thankYouImageUrl: string | null = null;
-    if (!data) {
-      return { tiers: map, thankYouImageUrl };
+
+    if (!data || data.length === 0) {
+      const stripe = await getStripe();
+      if (!stripe && process.env.NODE_ENV === 'development') {
+        return STUB_TIER_CONFIG;
+      }
+      return { tiers: {}, thankYouImageUrl };
     }
 
+    const map: TierConfigMap = {};
     for (const row of data) {
       const badge = row.profile_badges as unknown as {
         premium_tier: number | null;

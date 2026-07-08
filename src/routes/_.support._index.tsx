@@ -29,21 +29,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   try {
     const stripeService = new StripeServiceServer(client);
-    const [prices, tierConfig] = await Promise.all([
+    const [prices, tierConfigResult] = await Promise.all([
       stripeService.getPrices(),
       stripeService.getTierConfig(),
     ]);
-    return data({ prices, tierConfig, isAuthenticated, userEmail });
+    const { tiers: tierConfig, thankYouImageUrl } = tierConfigResult;
+    return data({ prices, tierConfig, thankYouImageUrl, isAuthenticated, userEmail });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);
-    return data({ prices: [], tierConfig: {}, isAuthenticated, userEmail });
+    return data({ prices: [], tierConfig: {}, thankYouImageUrl: null, isAuthenticated, userEmail });
   }
 }
 
 export default function Index() {
-  const { prices, tierConfig, isAuthenticated, userEmail } = useLoaderData<{
+  const { prices, tierConfig, thankYouImageUrl, isAuthenticated, userEmail } = useLoaderData<{
     prices: SupporterPrice[];
     tierConfig: TierConfigMap;
+    thankYouImageUrl: string | null;
     isAuthenticated: boolean;
     userEmail: string;
   }>();
@@ -74,6 +76,7 @@ export default function Index() {
           <SupporterPage
             prices={prices}
             tierConfig={tierConfig}
+            thankYouImageUrl={thankYouImageUrl}
             isAuthenticated={isAuthenticated}
             userEmail={userEmail}
           />

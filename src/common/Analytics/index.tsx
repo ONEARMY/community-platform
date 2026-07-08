@@ -3,6 +3,7 @@ import ReactGA from 'react-ga4';
 import { GoogleAnalytics } from './GoogleAnalytics';
 
 export type EventAction =
+  | 'clickSupport'
   | 'donationModalOpened'
   | 'unsubscribed'
   | 'subscribed'

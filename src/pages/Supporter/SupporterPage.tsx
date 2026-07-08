@@ -39,11 +39,13 @@ type PageState = 'form' | 'checkout' | 'thank-you';
 export const SupporterPage = ({
   prices,
   tierConfig: dbTierConfig,
+  thankYouImageUrl,
   isAuthenticated,
   userEmail,
 }: {
   prices: SupporterPrice[];
   tierConfig?: TierConfigMap;
+  thankYouImageUrl?: string | null;
   isAuthenticated: boolean;
   userEmail: string;
 }) => {
@@ -74,6 +76,9 @@ export const SupporterPage = ({
       ? preview
       : null;
   }, [searchParams]);
+
+  // In preview mode, override server-side isAuthenticated so that ?preview=create always shows the create form, etc.
+  const effectiveIsAuthenticated = previewMode ? previewMode === 'authenticated' : isAuthenticated;
 
   const [initialTier] = useState(() => {
     const tier = searchParams.get('tier');
@@ -310,7 +315,7 @@ export const SupporterPage = ({
     selectedTier,
     selectedTierName,
     symbol,
-    isAuthenticated,
+    isAuthenticated: effectiveIsAuthenticated,
     isLoading,
     error,
     accountExists,
@@ -321,6 +326,7 @@ export const SupporterPage = ({
     siteImage,
     tierConfig,
     siteName,
+    thankYouImageUrl: thankYouImageUrl ?? null,
     previewMode: !!previewMode,
     onSupport: handleSupport,
     onPaymentSuccess: handlePaymentSuccess,
@@ -329,7 +335,7 @@ export const SupporterPage = ({
 
   return (
     <SupporterProvider value={ctx}>
-      {pageState === 'thank-you' && (isAuthenticated || previewMode === 'authenticated') ? (
+      {pageState === 'thank-you' && effectiveIsAuthenticated ? (
         <ThankYouAuthenticatedView />
       ) : pageState === 'thank-you' && stripeCustomerId && accountExists ? (
         <ThankYouLoginForm />

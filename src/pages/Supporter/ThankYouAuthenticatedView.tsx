@@ -4,9 +4,11 @@ import thankYouLg from 'src/assets/images/thank-you-lg.webp';
 import thankYouMd from 'src/assets/images/thank-you-md.webp';
 import thankYouSm from 'src/assets/images/thank-you-sm.webp';
 import { Flex, Image, Text } from 'theme-ui';
+import { useSupporterContext } from './SupporterContext';
 
 export const ThankYouAuthenticatedView = () => {
   const navigate = useNavigate();
+  const { thankYouImageUrl } = useSupporterContext();
 
   return (
     <Flex
@@ -22,11 +24,15 @@ export const ThankYouAuthenticatedView = () => {
         justifyContent: 'center',
       }}
     >
-      <picture>
-        <source media="(min-width: 70em)" srcSet={thankYouLg} />
-        <source media="(min-width: 52em)" srcSet={thankYouMd} />
-        <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
-      </picture>
+      {thankYouImageUrl ? (
+        <Image src={thankYouImageUrl} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
+      ) : (
+        <picture>
+          <source media="(min-width: 70em)" srcSet={thankYouLg} />
+          <source media="(min-width: 52em)" srcSet={thankYouMd} />
+          <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
+        </picture>
+      )}
 
       <Button
         type="button"

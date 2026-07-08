@@ -40,6 +40,7 @@ export type SupporterState = {
   siteImage: string | undefined;
   tierConfig: Record<number, { color: string; name: string; description: string }>;
   siteName: string | undefined;
+  thankYouImageUrl: string | null;
   previewMode: boolean;
 
   onSupport: () => void;

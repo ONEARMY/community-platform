@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS "public"."stripe_tier_config" (
     "badge_id" bigint NOT NULL,
     "description" "text" NOT NULL,
     "color" "text" NOT NULL,
+    "thank_you_image_url" "text",
     "tenant_id" "text" NOT NULL,
     CONSTRAINT "stripe_tier_config_badge_id_tenant_id_key" UNIQUE ("badge_id", "tenant_id"),
     CONSTRAINT "stripe_tier_config_badge_id_fkey"

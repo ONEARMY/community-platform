@@ -7,8 +7,10 @@ import thankYouMd from 'src/assets/images/thank-you-md.webp';
 import thankYouSm from 'src/assets/images/thank-you-sm.webp';
 import fixingFashionLogo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png';
 import { Flex, Image, Text } from 'theme-ui';
+import { useSupporterContext } from './SupporterContext';
 
 export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
+  const { thankYouImageUrl } = useSupporterContext();
   // TODO: we discussed pulling the html from the blue section below
 
   return (
@@ -32,11 +34,19 @@ export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
           justifyContent: 'center',
         }}
       >
-        <picture>
-          <source media="(min-width: 70em)" srcSet={thankYouLg} />
-          <source media="(min-width: 52em)" srcSet={thankYouMd} />
-          <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
-        </picture>
+        {thankYouImageUrl ? (
+          <Image
+            src={thankYouImageUrl}
+            alt="Thank you for your support"
+            sx={{ maxWidth: '100%' }}
+          />
+        ) : (
+          <picture>
+            <source media="(min-width: 70em)" srcSet={thankYouLg} />
+            <source media="(min-width: 52em)" srcSet={thankYouMd} />
+            <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
+          </picture>
+        )}
       </Flex>
 
       <Flex

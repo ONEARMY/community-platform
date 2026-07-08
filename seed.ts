@@ -229,6 +229,7 @@ const seedStripeTierConfig = (
     badge_id: badge.id,
     description: 'You help us develop new features, get videos in 4K without ads!',
     color: TIER_COLORS[badge.premium_tier ?? 0] ?? '#BFDEBA',
+    thank_you_image_url: null,
   }));
 };
 

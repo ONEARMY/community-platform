@@ -65,22 +65,25 @@ const STUB_PRICES: SupporterPrice[] = [
   },
 ];
 
-const STUB_TIER_CONFIG: TierConfigMap = {
-  1: {
-    color: '#BFDEBA',
-    name: 'Starter',
-    description: 'You help us develop new features, get videos in 4K without ads!',
+const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null } = {
+  tiers: {
+    1: {
+      color: '#BFDEBA',
+      name: 'Starter',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+    2: {
+      color: '#77BDE3',
+      name: 'Hero',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+    3: {
+      color: '#FEE77B',
+      name: 'Legend',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
   },
-  2: {
-    color: '#77BDE3',
-    name: 'Hero',
-    description: 'You help us develop new features, get videos in 4K without ads!',
-  },
-  3: {
-    color: '#FEE77B',
-    name: 'Legend',
-    description: 'You help us develop new features, get videos in 4K without ads!',
-  },
+  thankYouImageUrl: null,
 };
 
 let stripeInstance: Stripe | null = null;
@@ -312,19 +315,24 @@ export class StripeServiceServer {
     return map;
   }
 
-  async getTierConfig(): Promise<TierConfigMap> {
+  async getTierConfig(): Promise<{ tiers: TierConfigMap; thankYouImageUrl: string | null }> {
     const stripe = await getStripe();
     if (!stripe) {
-      return process.env.NODE_ENV === 'development' ? STUB_TIER_CONFIG : {};
+      return process.env.NODE_ENV === 'development'
+        ? STUB_TIER_CONFIG
+        : { tiers: {}, thankYouImageUrl: null };
     }
 
     const { data } = await this.client
       .from('stripe_tier_config')
-      .select('description, color, profile_badges:badge_id(premium_tier, display_name)');
+      .select(
+        'description, color, thank_you_image_url, profile_badges:badge_id(premium_tier, display_name)',
+      );
 
     const map: TierConfigMap = {};
+    let thankYouImageUrl: string | null = null;
     if (!data) {
-      return map;
+      return { tiers: map, thankYouImageUrl };
     }
 
     for (const row of data) {
@@ -339,9 +347,12 @@ export class StripeServiceServer {
           description: row.description,
         };
       }
+      if (!thankYouImageUrl && (row as any).thank_you_image_url) {
+        thankYouImageUrl = (row as any).thank_you_image_url;
+      }
     }
 
-    return map;
+    return { tiers: map, thankYouImageUrl };
   }
 
   async getPrices(): Promise<SupporterPrice[]> {

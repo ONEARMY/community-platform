@@ -14,6 +14,78 @@ export type SupporterPrice = {
 
 export type TierConfigMap = Record<number, { color: string; name: string; description: string }>;
 
+const STUB_PRICES: SupporterPrice[] = [
+  {
+    id: 'stub_starter_month',
+    unitAmount: 100,
+    currency: 'eur',
+    interval: 'month',
+    tier: 1,
+    tierName: 'Starter',
+  },
+  {
+    id: 'stub_starter_year',
+    unitAmount: 100,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'Starter',
+  },
+  {
+    id: 'stub_hero_month',
+    unitAmount: 200,
+    currency: 'eur',
+    interval: 'month',
+    tier: 2,
+    tierName: 'Hero',
+  },
+  {
+    id: 'stub_hero_year',
+    unitAmount: 200,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'Hero',
+  },
+  {
+    id: 'stub_legend_month',
+    unitAmount: 300,
+    currency: 'eur',
+    interval: 'month',
+    tier: 3,
+    tierName: 'Legend',
+  },
+  {
+    id: 'stub_legend_year',
+    unitAmount: 300,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'Legend',
+  },
+];
+
+const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null } = {
+  tiers: {
+    1: {
+      color: '#BFDEBA',
+      name: 'Starter',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+    2: {
+      color: '#77BDE3',
+      name: 'Hero',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+    3: {
+      color: '#FEE77B',
+      name: 'Legend',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+  },
+  thankYouImageUrl: null,
+};
+
 let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
 
@@ -243,17 +315,27 @@ export class StripeServiceServer {
     return map;
   }
 
-  async getTierConfig(): Promise<TierConfigMap> {
+  async getTierConfig(): Promise<{ tiers: TierConfigMap; thankYouImageUrl: string | null }> {
     const { data } = await this.client
       .from('stripe_tier_config')
-      .select('description, color, profile_badges:badge_id(premium_tier, display_name)');
+      .select(
+        'description, color, thank_you_image_url, profile_badges:badge_id(premium_tier, display_name)',
+      );
 
-    const map: TierConfigMap = {};
-    if (!data) {
-      return map;
+    let thankYouImageUrl: string | null = null;
+
+    if (!data || data.length === 0) {
+      const stripe = await getStripe();
+      if (!stripe && process.env.NODE_ENV === 'development') {
+        return STUB_TIER_CONFIG;
+      }
+      return { tiers: {}, thankYouImageUrl };
     }
 
-    for (const row of data) {
+    const map: TierConfigMap = {};
+    for (const row of data as Array<
+      (typeof data)[number] & { thank_you_image_url: string | null }
+    >) {
       const badge = row.profile_badges as unknown as {
         premium_tier: number | null;
         display_name: string;
@@ -265,15 +347,18 @@ export class StripeServiceServer {
           description: row.description,
         };
       }
+      if (!thankYouImageUrl && row.thank_you_image_url) {
+        thankYouImageUrl = row.thank_you_image_url;
+      }
     }
 
-    return map;
+    return { tiers: map, thankYouImageUrl };
   }
 
   async getPrices(): Promise<SupporterPrice[]> {
     const stripe = await getStripe();
     if (!stripe) {
-      return [];
+      return process.env.NODE_ENV === 'development' ? STUB_PRICES : [];
     }
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];

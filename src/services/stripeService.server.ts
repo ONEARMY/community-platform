@@ -17,7 +17,7 @@ export type TierConfigMap = Record<number, { color: string; name: string; descri
 const STUB_PRICES: SupporterPrice[] = [
   {
     id: 'stub_starter_month',
-    unitAmount: 800,
+    unitAmount: 100,
     currency: 'eur',
     interval: 'month',
     tier: 1,
@@ -25,7 +25,7 @@ const STUB_PRICES: SupporterPrice[] = [
   },
   {
     id: 'stub_starter_year',
-    unitAmount: 8000,
+    unitAmount: 100,
     currency: 'eur',
     interval: 'year',
     tier: 1,
@@ -33,7 +33,7 @@ const STUB_PRICES: SupporterPrice[] = [
   },
   {
     id: 'stub_hero_month',
-    unitAmount: 1600,
+    unitAmount: 200,
     currency: 'eur',
     interval: 'month',
     tier: 2,
@@ -41,7 +41,7 @@ const STUB_PRICES: SupporterPrice[] = [
   },
   {
     id: 'stub_hero_year',
-    unitAmount: 16000,
+    unitAmount: 200,
     currency: 'eur',
     interval: 'year',
     tier: 2,
@@ -49,7 +49,7 @@ const STUB_PRICES: SupporterPrice[] = [
   },
   {
     id: 'stub_legend_month',
-    unitAmount: 3200,
+    unitAmount: 300,
     currency: 'eur',
     interval: 'month',
     tier: 3,
@@ -57,7 +57,7 @@ const STUB_PRICES: SupporterPrice[] = [
   },
   {
     id: 'stub_legend_year',
-    unitAmount: 32000,
+    unitAmount: 300,
     currency: 'eur',
     interval: 'year',
     tier: 3,

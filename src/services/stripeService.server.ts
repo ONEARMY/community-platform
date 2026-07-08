@@ -155,7 +155,7 @@ export class StripeServiceServer {
     if (!stripe) {
       throw new Error('Stripe is not configured');
     }
-    return stripe.webhooks.constructEvent(body, signature, secret);
+    return stripe.webhooks.constructEventAsync(body, signature, secret);
   }
 
   // ── Instance methods (request-scoped DB reads/writes via passed client) ──

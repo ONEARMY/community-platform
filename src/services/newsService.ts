@@ -12,6 +12,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     profileBadges: form.profileBadges?.filter((pb) => pb !== null).map((pb) => Number(pb)) || null,
     tags: form.tags || null,
     contentReach: form.contentReach,
+    poll: form.poll || null,
   });
 
   const response =

@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS "public"."news" (
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", ((("title" || ' '::"text") || "body") || ("summary" || ''::"text")))) STORED,
     "is_draft" boolean DEFAULT false NOT NULL,
     "published_at" timestamp with time zone,
-    "content_reach" "public"."content_reach"
+    "content_reach" "public"."content_reach",
+    "poll" bigint
 );
 
 CREATE OR REPLACE FUNCTION "public"."news_search_fields"("public"."news") RETURNS "text"
@@ -31,6 +32,10 @@ $_$;
 
 ALTER TABLE ONLY "public"."news"
     ADD CONSTRAINT "news_tenant_id_slug_key" UNIQUE ("tenant_id", "slug");
+
+ALTER TABLE "public"."news"
+    ADD CONSTRAINT "news_poll_unique"
+        UNIQUE ("poll");
 
 CREATE INDEX "news_category_idx" ON "public"."news" USING "btree" ("category");
 CREATE INDEX "news_created_by_idx" ON "public"."news" USING "btree" ("created_by");

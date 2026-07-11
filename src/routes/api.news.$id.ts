@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
+import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
@@ -17,6 +18,7 @@ import {
   validationError,
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
+import { PollServiceServer } from '../services/pollService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const id = Number(params.id);
@@ -44,6 +46,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       contentReach: formData.has('contentReach')
         ? (formData.get('contentReach') as ContentReach)
         : null,
+      poll: formData.has('poll') ? (JSON.parse(formData.get('poll') as string) as PollDTO) : null,
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
@@ -61,6 +64,24 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const now = new Date();
 
+    const pollService = new PollServiceServer(client);
+    const oldPollId = (await new NewsServiceServer(client).getById(id)).poll;
+
+    let newPollId: number | null = null;
+
+    if (data.poll)
+      if (oldPollId && oldPollId == data.poll.id) {
+        newPollId = await pollService.updatePoll(data.poll);
+      } else {
+        newPollId = await pollService.createPoll(data.poll);
+      }
+
+    if (oldPollId && oldPollId != newPollId) {
+      await pollService.deletePoll(oldPollId);
+    }
+
+    const poll = newPollId ? await pollService.getPoll(newPollId) : null;
+
     const newsResult = await client
       .from('news')
       .update({
@@ -75,6 +96,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         title: data.title,
         hero_image: data.heroImage,
         content_reach: data.contentReach,
+        poll: newPollId,
         ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', id)
@@ -112,7 +134,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw completeNews.error;
     }
 
-    const news = News.fromDB(completeNews.data, []);
+    const news = News.fromDB(completeNews.data, [], null, poll);
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 

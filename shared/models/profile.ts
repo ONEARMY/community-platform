@@ -37,7 +37,7 @@ export class DBProfile {
   website: string | null;
   total_views: number;
   auth_id: string;
-  profile_type: number;
+  profile_type: number | null;
   donations_enabled: boolean;
 
   constructor(obj: DBProfile) {
@@ -412,6 +412,15 @@ export type ProfileFormData = {
   showVisitorPolicy: boolean;
   visitorPreferencePolicy?: UserVisitorPreference['policy'];
   visitorPreferenceDetails?: UserVisitorPreference['details'];
+};
+
+export type OrganisationApplicationFormData = {
+  type: string;
+  username: string;
+  displayName: string;
+  about: string;
+  website: string;
+  coverImages: MediaWithPublicUrl[];
 };
 
 export type ProfileDTO = {

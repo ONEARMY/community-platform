@@ -14,6 +14,7 @@ export * from './messages';
 export * from './moderation';
 export * from './news';
 export * from './notificationPreferences';
+export * from './organisationSignupSettings';
 export * from './profile';
 export * from './profileBadge';
 export * from './profileTag';

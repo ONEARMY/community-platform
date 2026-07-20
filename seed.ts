@@ -176,7 +176,7 @@ const seedOrganisationSignupSettings = (): Partial<organisation_signup_settingsS
   {
     tenant_id,
     description:
-      'Register your organisation to get a verified space on the map and connect with the community.',
+      'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](https://preciousplastic.com/universe)? Then apply as an organisation here. It usually takes a day or two to get approved.',
     image_url: null,
   },
 ];

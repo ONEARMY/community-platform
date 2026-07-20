@@ -3,6 +3,7 @@ import type {
   categoriesScalars,
   map_pinsChildInputs,
   newsScalars,
+  organisation_signup_settingsScalars,
   profile_badges_relationsScalars,
   profile_badgesScalars,
   profile_typesScalars,
@@ -168,6 +169,15 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
     order: 5,
     small_image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-collection-small.svg',
+  },
+];
+
+const seedOrganisationSignupSettings = (): Partial<organisation_signup_settingsScalars>[] => [
+  {
+    tenant_id,
+    description:
+      'Register your organisation to get a verified space on the map and connect with the community.',
+    image_url: null,
   },
 ];
 
@@ -648,6 +658,8 @@ const main = async () => {
   const { users } = await seed.users(usersSeed());
   // await seed.profile_tags(seedProfileTags())
   const { profile_types } = await seed.profile_types(seedProfileTypes());
+
+  await seed.organisation_signup_settings(seedOrganisationSignupSettings());
 
   const { profiles } = await seed.profiles(
     (profilesSeed(tenant_id) as any[]).map((profile: profilesInputs, index) => ({

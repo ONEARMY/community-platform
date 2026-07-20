@@ -1,8 +1,6 @@
 CREATE TYPE "public"."notification_action_types" AS ENUM (
     'newComment',
-    'newContent',
-    'newReply',
-    'newNews'
+    'newContent'
 );
 ALTER TYPE "public"."notification_action_types" OWNER TO "postgres";
 
@@ -13,10 +11,7 @@ CREATE TYPE "public"."notification_content_types" AS ENUM (
     'library',
     'questions',
     'comment',
-    'reply',
-    'research_updates',
-    'comments',
-    'projects'
+    'reply'
 );
 ALTER TYPE "public"."notification_content_types" OWNER TO "postgres";
 
@@ -25,9 +20,7 @@ CREATE TYPE "public"."notification_source_content_type" AS ENUM (
     'research',
     'researchUpdate',
     'library',
-    'questions',
-    'projects',
-    'research_updates'
+    'questions'
 );
 ALTER TYPE "public"."notification_source_content_type" OWNER TO "postgres";
 
@@ -110,127 +103,3 @@ BEGIN
 END;
 $function$
 ;
-
-CREATE OR REPLACE FUNCTION public.get_profiles_by_badge_ids(p_badge_ids bigint[])
-RETURNS TABLE(
-    profile_id bigint,
-    profile_created_at timestamp with time zone,
-    display_name text,
-    username text,
-    roles text[],
-    email text,
-    comments boolean,
-    replies boolean,
-    research_updates boolean,
-    is_unsubscribed boolean,
-    content_reach public.content_reach,
-    badge_ids bigint[]
-)
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, pg_temp
-AS $function$
-BEGIN
-    RETURN QUERY
-    SELECT DISTINCT
-        p.id AS profile_id,
-        p.created_at AS profile_created_at,
-        p.display_name,
-        p.username,
-        COALESCE(p.roles, ARRAY[]::text[]) AS roles,
-        au.email::text,
-        COALESCE(np.comments, true) AS comments,
-        COALESCE(np.replies, true) AS replies,
-        COALESCE(np.research_updates, true) AS research_updates,
-        COALESCE(np.is_unsubscribed, false) AS is_unsubscribed,
-        np.content_reach,
-        ARRAY[]::bigint[] AS badge_ids
-    FROM profile_badges_relations pbr
-    INNER JOIN profiles p ON pbr.profile_id = p.id
-    LEFT JOIN auth.users au ON p.auth_id = au.id
-    LEFT JOIN notifications_preferences np ON p.id = np.user_id
-    WHERE pbr.profile_badge_id = ANY(p_badge_ids);
-END;
-$function$;
-
-CREATE OR REPLACE FUNCTION public.get_profiles_with_any_badge()
-RETURNS TABLE(
-    profile_id bigint,
-    profile_created_at timestamp with time zone,
-    display_name text,
-    username text,
-    roles text[],
-    email text,
-    comments boolean,
-    replies boolean,
-    research_updates boolean,
-    is_unsubscribed boolean,
-    content_reach public.content_reach,
-    badge_ids bigint[]
-)
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, pg_temp
-AS $function$
-BEGIN
-    RETURN QUERY
-    SELECT DISTINCT
-        p.id AS profile_id,
-        p.created_at AS profile_created_at,
-        p.display_name,
-        p.username,
-        COALESCE(p.roles, ARRAY[]::text[]) AS roles,
-        au.email::text,
-        COALESCE(np.comments, true) AS comments,
-        COALESCE(np.replies, true) AS replies,
-        COALESCE(np.research_updates, true) AS research_updates,
-        COALESCE(np.is_unsubscribed, false) AS is_unsubscribed,
-        np.content_reach,
-        ARRAY[]::bigint[] AS badge_ids
-    FROM profile_badges_relations pbr
-    INNER JOIN profiles p ON pbr.profile_id = p.id
-    LEFT JOIN auth.users au ON p.auth_id = au.id
-    LEFT JOIN notifications_preferences np ON p.id = np.user_id;
-END;
-$function$;
-
-CREATE OR REPLACE FUNCTION public.get_staff_profiles()
-RETURNS TABLE(
-    profile_id bigint,
-    profile_created_at timestamp with time zone,
-    display_name text,
-    username text,
-    roles text[],
-    email text,
-    comments boolean,
-    replies boolean,
-    research_updates boolean,
-    is_unsubscribed boolean,
-    content_reach public.content_reach,
-    badge_ids bigint[]
-)
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, pg_temp
-AS $function$
-BEGIN
-    RETURN QUERY
-    SELECT DISTINCT
-        p.id AS profile_id,
-        p.created_at AS profile_created_at,
-        p.display_name,
-        p.username,
-        COALESCE(p.roles, ARRAY[]::text[]) AS roles,
-        au.email::text,
-        COALESCE(np.comments, true) AS comments,
-        COALESCE(np.replies, true) AS replies,
-        COALESCE(np.research_updates, true) AS research_updates,
-        COALESCE(np.is_unsubscribed, false) AS is_unsubscribed,
-        np.content_reach,
-        ARRAY[]::bigint[] AS badge_ids
-    FROM profiles p
-    LEFT JOIN auth.users au ON p.auth_id = au.id
-    LEFT JOIN notifications_preferences np ON p.id = np.user_id
-    WHERE p.roles && ARRAY['admin', 'editor', 'moderator']::text[];
-END;
-$function$;

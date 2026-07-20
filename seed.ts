@@ -627,6 +627,13 @@ const main = async () => {
           'Support this space so they can continue to help recycling plastic and share more Open Source information. Your support fuels the small scale network of plastic recyclers.',
         defaultImageUrl: '/assets/img/precious-plastic/donation-banner.jpg',
       },
+      tenant_id,
+      color_primary: '#fee77b',
+      color_primary_hover: '#ffde45',
+      color_accent: '#fee77b',
+      color_accent_hover: '#ffde45',
+      show_impact: true,
+      create_research_roles: ['admin', 'research_creator'],
       ga_tracking_id: 'test_ga_id',
       pwa_icons: {
         '16': '',
@@ -635,7 +642,6 @@ const main = async () => {
         '256': '',
         '512': '',
       },
-      tenant_id,
     },
   ]);
 

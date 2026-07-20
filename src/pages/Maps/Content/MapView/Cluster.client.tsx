@@ -42,6 +42,10 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: true,
       maxClusterRadius: 54,
+      chunkedLoading: true,
+      chunkInterval: 200,
+      chunkDelay: 50,
+      animateAddingMarkers: false,
     });
 
     group.on('clusterclick', (e: any) => {
@@ -68,7 +72,9 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
   // Differential marker updates — only add/remove changed pins.
   useEffect(() => {
     const group = groupRef.current;
-    if (!group) return;
+    if (!group) {
+      return;
+    }
 
     const currentMarkers = markersRef.current;
     const validPins = pins.filter((p) => Boolean(p.lat));
@@ -97,8 +103,12 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
       }
     }
 
-    if (toRemove.length) group.removeLayers(toRemove);
-    if (toAdd.length) group.addLayers(toAdd);
+    if (toRemove.length) {
+      group.removeLayers(toRemove);
+    }
+    if (toAdd.length) {
+      group.addLayers(toAdd);
+    }
   }, [pins]);
 
   // No React children — markers are managed imperatively above.

@@ -29,7 +29,7 @@
     "build:sb": "bun run build --build && storybook build",
     "build": "tsc --build --verbose",
     "dev": "tsc --watch",
-    "lint": "biome lint --write",
+    "lint": "biome lint --write --unsafe",
     "test": "vitest",
     "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml"
   },
@@ -37,12 +37,11 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@faker-js/faker": "^10.1.0",
-    "@mdxeditor/editor": "^3.52.0",
     "@mui/base": "next",
-    "@react-spring/web": "^10.0.3",
+    "@react-spring/web": "^10.1.1",
     "@theme-ui/core": "^0.17.4",
     "country-to-iso": "^1.6.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^4.4.0",
     "linkify-plugin-mention": "^4.3.2",
     "linkify-react": "^4.3.2",
     "linkifyjs": "^4.3.2",
@@ -60,14 +59,14 @@
     "storybook": "10.1.4",
     "styled-system": "^5.1.5",
     "theme-ui": "^0.17.2",
-    "use-debounce": "^10.1.0",
+    "use-debounce": "^10.1.1",
     "yup": "^1.7.1"
   },
   "peerDependencies": {
     "react": "19.2.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.14",
+    "@biomejs/biome": "2.5.0",
     "@react-router/dev": "^7.13.1",
     "@storybook/addon-docs": "10.1.4",
     "@storybook/addon-links": "^10.1.4",
@@ -85,7 +84,7 @@
     "jsdom": "^21.1.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "typescript": "^5.7.2",
-    "vitest": "^4.0.5"
+    "typescript": "5.7.2",
+    "vitest": "4.0.5"
   }
 }

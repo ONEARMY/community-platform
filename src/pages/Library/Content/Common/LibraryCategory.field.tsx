@@ -1,7 +1,8 @@
-import type { Category, SelectValue } from 'oa-shared';
+import type { Category } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Field } from 'react-final-form';
-import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2';
+import type { CardSelectOption } from 'src/pages/common/CardsSelect/CardsSelect';
+import { CardsSelect } from 'src/pages/common/CardsSelect/CardsSelect';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { intro } from 'src/pages/Library/labels';
 import { categoryService } from 'src/services/categoryService';
@@ -10,11 +11,17 @@ import { Box, Text } from 'theme-ui';
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance';
 
 export const LibraryCategoryField = () => {
-  const { placeholder, title } = intro.category;
+  const { title } = intro.category;
 
   const [categories, setCategories] = useState<Category[]>([]);
-  const options = useMemo<SelectValue[]>(
-    () => categories.map((x) => ({ label: x.name, value: x.id.toString() })),
+  const options = useMemo<CardSelectOption[]>(
+    () =>
+      categories.map((x) => ({
+        value: x.id.toString(),
+        label: x.name,
+        image: x.imageUrl ?? undefined,
+        paragraph: x.description ?? '',
+      })),
     [categories],
   );
 
@@ -40,14 +47,15 @@ export const LibraryCategoryField = () => {
             {meta.touched && meta.error && (
               <Text sx={{ color: 'error', fontSize: 1 }}>{meta.error}</Text>
             )}
-            <CategoriesSelectV2
-              isForm={true}
-              onChange={(category) => input.onChange(category)}
-              value={input.value}
-              placeholder={placeholder || ''}
-              categories={options}
-              invalid={meta.touched && meta.error}
-              id="category"
+            <CardsSelect
+              data-cy="category-select"
+              options={options}
+              error={meta.touched && !!meta.error}
+              selectedValue={input.value?.value}
+              onChange={(value) => {
+                const category = categories.find((x) => x.id.toString() === value);
+                input.onChange(category ? { label: category.name, value } : '');
+              }}
             />
             {input?.value?.value && (
               <LibraryCategoryGuidance

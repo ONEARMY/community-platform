@@ -1,12 +1,15 @@
 import { observer } from 'mobx-react';
 import { Banner, InternalLink } from 'oa-components';
+import { useLocation } from 'react-router';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex } from 'theme-ui';
 
 export const AlertIncompleteProfile = observer(() => {
   const { isComplete } = useProfileStore();
+  const { pathname } = useLocation();
+  const isOnSupporterPage = pathname.startsWith('/support');
 
-  if (isComplete !== false) {
+  if (isComplete !== false || isOnSupporterPage) {
     return null;
   }
 

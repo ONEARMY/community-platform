@@ -60,7 +60,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
           }}
         >
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
-            <Heading as="h2" variant="small" color={'black'}>
+            <Heading as="h2" variant="small" color="black">
               <Highlighter
                 searchWords={searchWords}
                 textToHighlight={capitalizeFirstLetter(item.title)}

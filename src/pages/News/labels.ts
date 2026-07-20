@@ -1,6 +1,11 @@
 import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
+  deletion: {
+    text: 'Delete this news',
+    confirm: 'Delete',
+    message: 'Are you sure you want to delete this news?',
+  },
   publish: 'Publish',
   update: 'Update',
 };
@@ -44,6 +49,9 @@ export const fields: ILabels = {
   heroImage: {
     title: 'Cover image',
     description: 'This image should be landscape with 2:1 aspect ratio. We advise 1240x620px',
+  },
+  pollError: {
+    title: 'Poll',
   },
 };
 

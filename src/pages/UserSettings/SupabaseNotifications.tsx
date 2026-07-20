@@ -12,7 +12,7 @@ export const SupabaseNotifications = observer(() => {
   const [initialValues, setInitialValues] = useState<NotificationsPreferencesFormData | null>(null);
   const toast = useToast();
 
-  const { profile, isStaff, isContactable } = useProfileStore();
+  const { profile, isContactable } = useProfileStore();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences();
@@ -70,7 +70,6 @@ export const SupabaseNotifications = observer(() => {
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
       profileIsContactable={isContactable}
-      showNewsPreference={isStaff}
     />
   );
 });

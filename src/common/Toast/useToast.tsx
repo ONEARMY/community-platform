@@ -19,6 +19,7 @@ interface PromiseOptions<T>
         actionButton?: CustomToastProps['actionButton'];
       });
   error: string | ((error: any) => string);
+  finally?: () => void;
   duration?: number;
 }
 
@@ -201,6 +202,11 @@ export const useToast = () => {
               unstyled: true,
             },
           );
+        })
+        .finally(() => {
+          if (options.finally) {
+            options.finally();
+          }
         });
 
       return toastId;

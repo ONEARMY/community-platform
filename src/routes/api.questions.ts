@@ -9,6 +9,7 @@ import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
+import { ImageServiceServer } from 'src/services/imageService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
@@ -50,7 +51,17 @@ export const loader = async ({ request }) => {
     return Response.json({ items: [], total: 0 }, { headers });
   }
 
-  const items = dbItems.map((x) => Question.fromDB(x, [], []));
+  const imageService = new ImageServiceServer(client);
+
+  const items = dbItems.map((x) => {
+    const question = Question.fromDB(x, [], []);
+
+    if (question.author && x.author?.photo) {
+      question.author.photo = imageService.getPublicUrl(x.author.photo) ?? null;
+    }
+
+    return question;
+  });
 
   if (items && items.length > 0) {
     // Populate useful votes

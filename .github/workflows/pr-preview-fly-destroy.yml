@@ -13,7 +13,7 @@ jobs:
   label_removed:
     if: |
       (github.event.action == 'unlabeled' && github.event.label.name == 'Review allow-preview ✅') ||
-      (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅'))
+      github.event.action == 'closed'
     runs-on: ubuntu-latest
     continue-on-error: true
     concurrency:

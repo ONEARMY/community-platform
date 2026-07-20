@@ -12,6 +12,8 @@ export interface PlatformTheme {
     red: string;
     red2: string;
     softblue: string;
+    highlight: string;
+    highlightHover: string;
     bluetag: string;
     grey: string;
     green: string;
@@ -25,6 +27,13 @@ export interface PlatformTheme {
     subscribed: string;
     notSubscribed: string;
     betaGreen: string;
+    popoverBorder: string;
+  };
+
+  fonts: {
+    title: string;
+    body: string;
+    nav: string;
   };
 
   fontSizes: number[];
@@ -32,10 +41,22 @@ export interface PlatformTheme {
   space: number[];
   radii: number[];
 
+  shadows: {
+    popover: string;
+    bottomNav: string;
+  };
+
+  images: {
+    avatar: {
+      flexShrink: number;
+    };
+  };
+
   zIndex: {
     behind: number;
     level: number;
     default: number;
+    navDropdown: number;
     modalProfile: number;
     logoContainer: number;
     header: number;

@@ -16,8 +16,10 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "profile_guidelines" "text",
     "questions_guidelines" "text",
     "supported_modules" "text",
+    "hidden_modules" "text",
     "patreon_id" "text",
     "ga_tracking_id" "text",
+    "site_name_short" "text",
     "pwa_icons" "jsonb",
     CONSTRAINT "check_pwa_icons_schema" CHECK (
         "pwa_icons" IS NULL

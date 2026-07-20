@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from 'react-router';
+import { data, type LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -8,5 +8,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const result = await client.from('comments').select('source_id').eq('id', id).single();
 
-  return Response.json({ sourceId: result.data?.source_id }, { headers });
+  return data({ sourceId: result.data?.source_id }, { headers });
 }

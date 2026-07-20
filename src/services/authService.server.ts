@@ -2,6 +2,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 type CreateProfileArgs = {
   user: User;
+  displayName?: string;
 };
 
 export class AuthServiceServer {
@@ -22,7 +23,7 @@ export class AuthServiceServer {
 
     return await this.client.from('profiles').insert({
       auth_id: args.user.id,
-      display_name: '',
+      display_name: args.displayName || '',
       tenant_id: process.env.TENANT_ID,
       profile_type: data[0].id,
     });

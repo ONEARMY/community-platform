@@ -23,10 +23,10 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
   }
 
   const hasFiltersSelected =
-    !!mapState.activeBadgeFilters.length ||
-    !!mapState.activeProfileSettingFilters.length ||
-    !!mapState.activeProfileTypeFilters.length ||
-    !!mapState.activeTagFilters.length;
+    !!mapState.activeBadgeFilters?.length ||
+    !!mapState.activeProfileSettingFilters?.length ||
+    !!mapState.activeProfileTypeFilters?.length ||
+    !!mapState.activeTagFilters?.length;
 
   if (mapState.loadingMessage) {
     return (
@@ -67,7 +67,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
                 );
                 mapState.selectPin(null);
                 mapState.fitBounds(bounds);
-                mapState.setIsMobile(false);
+                mapState.setIsMobile?.(false);
               }
             }}
             countrycodes=""
@@ -89,9 +89,9 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       </Flex>
       {mapState && (
         <MapCardList
-          list={mapState.filteredPins}
+          list={mapState.filteredPins || []}
           onPinClick={(pin) => {
-            mapState.selectPinWithClusterCheck(pin);
+            mapState.selectPinWithClusterCheck?.(pin);
           }}
           selectedPin={mapState.selectedPin}
           viewport={viewport}

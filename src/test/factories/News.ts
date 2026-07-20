@@ -19,6 +19,7 @@ export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): News
   profileBadges: null,
   tags: [faker.number.int(), faker.number.int()],
   title: faker.lorem.sentence(),
+  poll: null,
   ...overloads,
 });
 
@@ -80,6 +81,8 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
     id: faker.number.int(),
     name: faker.lorem.words(1),
     type: 'news',
+    description: 'A category for moulds',
+    imageUrl: '',
   },
   heroImage: { id: '2349-23480-34', publicUrl: '' },
   subscriberCount: faker.number.int(),
@@ -88,5 +91,6 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   usefulCount: faker.number.int(),
   profileBadges: null,
   publishedAt: faker.date.past(),
+  poll: null,
   ...newsOverloads,
 });

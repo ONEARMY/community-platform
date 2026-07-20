@@ -25,8 +25,8 @@ describe('[Questions]', () => {
         .within(() => {
           cy.get('[data-cy=question-list-item-title]');
           cy.get('[data-cy=category]');
-          cy.get('[data-cy=Username]');
-          cy.get('[data-tooltip-content="How useful it is"]');
+          cy.get('[data-cy=question-list-item-avatar]');
+          cy.get('[data-cy=question-list-item-description]');
           cy.get('[data-tooltip-content="Total comments"]');
         });
     });

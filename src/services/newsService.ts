@@ -1,4 +1,4 @@
-import type { ContentReach, DBNews, NewsFormData } from 'oa-shared';
+import type { DBNews, NewsFormData } from 'oa-shared';
 import { DBMedia, News, NewsDTO } from 'oa-shared';
 import { createFormData } from './formDataHelper';
 
@@ -11,7 +11,8 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     isDraft: form.isDraft,
     profileBadges: form.profileBadges?.filter((pb) => pb !== null).map((pb) => Number(pb)) || null,
     tags: form.tags || null,
-    contentReach: (form.contentReach?.value || null) as ContentReach,
+    contentReach: form.contentReach,
+    poll: form.poll || null,
   });
 
   const response =
@@ -37,6 +38,19 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   return news;
 };
 
+const deleteNews = async (id: number) => {
+  const response = await fetch(`/api/news/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting news' }));
+    const errorMessage = errorData.error || 'Error deleting news';
+    throw new Error(errorMessage, { cause: response.status });
+  }
+};
+
 export const newsService = {
+  deleteNews,
   upsert,
 };

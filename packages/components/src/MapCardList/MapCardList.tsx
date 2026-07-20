@@ -1,10 +1,11 @@
 import type { MapPin } from 'oa-shared';
 import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 import { Button } from '../Button/Button';
 import { CardListItem } from '../CardListItem/CardListItem';
 import { Icon } from '../Icon/Icon';
+import { MasonryLayout } from '../MasonryLayout/MasonryLayout';
 
 export interface IProps {
   list: MapPin[];
@@ -62,15 +63,7 @@ export const MapCardList = (props: IProps) => {
       {isListEmpty && EMPTY_LIST}
       {!isListEmpty && (
         <>
-          <Box
-            sx={{
-              columnWidth: '240px',
-              columnGap: 0,
-              '& > *': { breakInside: 'avoid' },
-            }}
-          >
-            {displayItems}
-          </Box>
+          <MasonryLayout>{displayItems}</MasonryLayout>
           {hasMore && (
             <Flex sx={{ justifyContent: 'center' }}>
               <Button onClick={addRenderItems}>Show more</Button>

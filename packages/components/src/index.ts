@@ -83,6 +83,7 @@ export { Tag } from './Tag/Tag';
 export { TagList } from './TagList/TagList';
 export { TextNotification } from './TextNotification/TextNotification';
 export { Tooltip } from './Tooltip/Tooltip';
+export { UsefulButtonLite } from './UsefulStatsButton/UsefulButtonLite';
 export { UsefulStatsButton } from './UsefulStatsButton/UsefulStatsButton';
 export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWrapper';
 export { DisplayName } from './Username/DisplayName';

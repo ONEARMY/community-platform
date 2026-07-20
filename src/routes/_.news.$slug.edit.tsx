@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
+import { PollServiceServer } from '../services/pollService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -37,7 +38,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ? new StorageServiceServer(client).getPublicUrl(dbNews.hero_image)
     : null;
 
-  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage);
+  const pollService = new PollServiceServer(client);
+  const poll = dbNews.poll ? await pollService.getPoll(dbNews.poll) : null;
+
+  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage, poll);
 
   return data({ formData, id: result.data.id }, { headers });
 }

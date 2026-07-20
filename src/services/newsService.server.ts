@@ -39,6 +39,7 @@ export class NewsServiceServer {
        tenant_id,
        hero_image,
        content_reach,
+       poll,
        author:profiles(id, display_name, username, country, badges:profile_badges_relations(
           profile_badges(
             id,

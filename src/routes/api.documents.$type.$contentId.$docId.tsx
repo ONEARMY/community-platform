@@ -19,10 +19,45 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   if (result.status === 302) {
     // 302 status means the file is returned
+    const authId = claims.data.claims.sub;
+    await recordUserDownload(params.type!, +params.contentId!, params.docId!, client, authId);
+
     await incrementDownloadCount(params.type!, +params.contentId!, client);
   }
 
   return result;
+}
+
+async function recordUserDownload(
+  type: string,
+  contentId: number,
+  fileId: string,
+  client: SupabaseClient,
+  authId: string,
+) {
+  const { data: profile } = await client
+    .from('profiles')
+    .select('id')
+    .eq('auth_id', authId)
+    .single();
+
+  if (!profile) {
+    return;
+  }
+
+  await client.from('file_downloads').upsert(
+    {
+      profile_id: profile.id,
+      content_type: type,
+      content_id: contentId,
+      file_id: fileId,
+      tenant_id: process.env.TENANT_ID,
+    },
+    {
+      onConflict: 'profile_id,content_type,content_id,file_id,tenant_id',
+      ignoreDuplicates: true,
+    },
+  );
 }
 
 async function resolveUrl(params: Params<string>, client: SupabaseClient, headers: Headers) {
@@ -40,7 +75,6 @@ async function resolveUrl(params: Params<string>, client: SupabaseClient, header
 
   const bucket = `${process.env.TENANT_ID}-documents`;
 
-  // Query storage.objects table to get the actual file path
   const fileMetadata = await resolveFileFromStorage(docId, bucket, client);
 
   if (!fileMetadata) {
@@ -80,6 +114,7 @@ async function resolveFileFromStorage(
   bucket: string,
   client: SupabaseClient,
 ): Promise<{ fullPath: string; name: string } | null> {
+  // Query storage.objects table to get the actual file path
   // Use RPC function to query storage.objects table (which is in storage schema)
   const { data, error } = await client
     .rpc('get_storage_object_path', {

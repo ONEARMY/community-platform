@@ -17,16 +17,21 @@ export const loader = async ({ request }: { request: Request }) => {
 
     const allModules = ['library', 'map', 'research', 'academy', 'questions', 'news'];
     const availableModules = settings.supportedModules?.split(',');
+    const hiddenModules = settings.hiddenModules?.split(',').map((s) => s.trim()) || [];
 
     robotText = 'User-agent: *';
 
     allModules.forEach((x) => {
       let pagePath = `/${x}/`;
 
-      const permission = availableModules?.includes(x) ? 'Allow' : 'Disallow';
+      const isSupported = availableModules?.includes(x);
+      const isHidden = hiddenModules.includes(x);
+      const permission = isSupported && !isHidden ? 'Allow' : 'Disallow';
 
       robotText += `\n${permission}: ${pagePath}`;
     });
+
+    robotText += `Disallow: /map-embed/`;
   }
 
   return new Response(robotText, {

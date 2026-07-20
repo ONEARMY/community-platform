@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNews } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
+import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
@@ -13,6 +14,7 @@ import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { ContentServiceServer } from '../services/contentService.server';
+import { PollServiceServer } from '../services/pollService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -72,7 +74,26 @@ async function loadNews(client: SupabaseClient, dbNews: DBNews) {
 
   const heroImage = await new NewsServiceServer(client).getHeroImage(dbNews.hero_image);
 
-  const news = News.fromDB(dbNews, tags, heroImage);
+  let poll: PollDTO | null = null;
+  if (dbNews.poll) {
+    const claims = await client.auth.getClaims();
+    const dbProfile = await new ProfileServiceServer(client).getByAuthId(
+      claims?.data?.claims.sub ?? '',
+    );
+    if (dbProfile) {
+      const profile = new ProfileFactory(client).fromDB(dbProfile!);
+      const isAdmin = !!(
+        profile.roles?.includes(UserRole.ADMIN) ||
+        profile.roles?.includes(UserRole.EDITOR) ||
+        profile.roles?.includes(UserRole.MODERATOR)
+      );
+      poll = await new PollServiceServer(client).getPoll(dbNews.poll, profile.id, isAdmin);
+    } else {
+      poll = await new PollServiceServer(client).getPoll(dbNews.poll);
+    }
+  }
+
+  const news = News.fromDB(dbNews, tags, heroImage, poll);
   news.usefulCount = usefulVotes.count || 0;
   news.subscriberCount = subscribers.count || 0;
 

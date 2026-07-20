@@ -53,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return data(
         {
           error: 'We need to confirm your email before logging in. Please check your inbox :)',
+          email,
         },
         { headers },
       );
@@ -62,6 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return data(
       {
         error: 'Invalid email or password.',
+        email,
       },
       { headers, status: 400 },
     );
@@ -96,6 +98,7 @@ export default function Index() {
   return (
     <Main style={{ flex: 1 }}>
       <Form
+        initialValues={{ email: actionResponse?.email }}
         onSubmit={() => {}}
         render={({ submitting, invalid }) => {
           return (
@@ -133,7 +136,7 @@ export default function Index() {
                       </Flex>
 
                       {actionResponse?.error && (
-                        <TextNotification isVisible={true} variant={'failure'}>
+                        <TextNotification isVisible={true} variant="failure">
                           <Text>{actionResponse?.error}</Text>
                         </TextNotification>
                       )}
@@ -158,7 +161,7 @@ export default function Index() {
                         />
                       </Flex>
                       <Flex sx={{ justifyContent: 'space-between' }}>
-                        <Text sx={{ fontSize: 1 }} color={'grey'}>
+                        <Text sx={{ fontSize: 1 }} color="grey">
                           <Link to="/reset-password" data-cy="lost-password">
                             Forgotten password?
                           </Link>

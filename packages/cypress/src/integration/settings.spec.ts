@@ -34,7 +34,8 @@ describe('[Settings]', () => {
     cy.get('[data-cy=displayName').clear().type('Wrong user');
 
     cy.step('Confirm shown when attempting to go to another page');
-    cy.get('[data-cy=page-link]').contains('Library').click();
+    cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+    cy.get('[data-cy=page-link]:visible').contains('Library').click();
     cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
   });
 

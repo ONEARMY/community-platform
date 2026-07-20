@@ -4,14 +4,15 @@ import { useLocation } from 'react-router';
 
 import { TenantContext } from '../TenantContext';
 
+const HIDDEN_PATHS = ['/', '/map', '/academy', '/support'];
+
 const GlobalSiteFooter = () => {
   const tenantContext = useContext(TenantContext);
   const location = useLocation();
 
   const showFooter = useMemo(() => {
     const path = location?.pathname;
-
-    return !path.startsWith('/map') && !path.startsWith('/academy') && path !== '/';
+    return !HIDDEN_PATHS.some((p) => (p === '/' ? path === p : path.startsWith(p)));
   }, [location?.pathname]);
 
   return showFooter ? (

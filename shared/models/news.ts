@@ -7,6 +7,7 @@ import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
 import { DBMedia, Image, MediaWithPublicUrl } from './media';
 import { ContentReach, contentReachSettings } from './notificationPreferences';
+import { PollDTO } from './poll';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
@@ -36,8 +37,9 @@ export class DBNews implements IDBContentDoc {
   readonly body: string;
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
+  readonly poll: number | null;
 
-  static toFormData(news: DBNews, publicHeroImage: Image | null) {
+  static toFormData(news: DBNews, publicHeroImage: Image | null, poll: PollDTO | null) {
     let htmlBody = marked(news.body, {
       breaks: true,
       gfm: true,
@@ -64,7 +66,8 @@ export class DBNews implements IDBContentDoc {
       profileBadges,
       tags: news.tags,
       title: news.title,
-      contentReach: contentReachOption || null,
+      contentReach: (contentReachOption?.value || null) as ContentReach,
+      poll,
     } satisfies NewsFormData;
   }
 }
@@ -97,12 +100,13 @@ export class News implements IContentDoc {
   totalViews: number;
   usefulCount: number;
   contentReach: ContentReach | null;
+  poll: PollDTO | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
   }
 
-  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null) {
+  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null, poll?: PollDTO | null) {
     let htmlBody = marked(news.body, {
       breaks: true,
       gfm: true,
@@ -138,6 +142,7 @@ export class News implements IContentDoc {
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
       contentReach: news.content_reach || null,
+      poll: poll,
     });
   }
 }
@@ -150,7 +155,8 @@ export type NewsFormData = {
   profileBadges: (string | null)[] | null;
   tags?: number[];
   title: string;
-  contentReach: SelectValue | null;
+  contentReach: ContentReach | null;
+  poll: PollDTO | null;
 };
 
 export type NewsDTO = {
@@ -162,4 +168,5 @@ export type NewsDTO = {
   profileBadges: number[] | null;
   tags: number[] | null;
   contentReach: ContentReach | null;
+  poll?: PollDTO | null;
 };

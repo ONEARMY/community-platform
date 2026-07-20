@@ -1,5 +1,5 @@
 import { WebAppManifest } from 'oa-shared';
-import { type LoaderFunctionArgs } from 'react-router';
+import { data, type LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 
@@ -20,6 +20,36 @@ export async function loader({ request }: LoaderFunctionArgs) {
       start_url: '/',
       icons: settings.pwaIcons
         ? [
+            {
+              src: settings.pwaIcons[16],
+              sizes: '16x16',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+            {
+              src: settings.pwaIcons[32],
+              sizes: '32x32',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+            {
+              src: settings.pwaIcons[192],
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+            {
+              src: settings.pwaIcons[256],
+              sizes: '256x256',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+            {
+              src: settings.pwaIcons[512],
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
             {
               src: settings.pwaIcons[16],
               sizes: '16x16',
@@ -63,5 +93,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } catch (error) {
     console.error(error);
   }
-  return Response.json(null, { status: 500 });
+  return data(null, { status: 500 });
 }

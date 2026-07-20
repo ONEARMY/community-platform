@@ -45,35 +45,22 @@ export const MapWithPin = (props: Props) => {
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      <Box
-        sx={{
-          position: 'absolute',
-          zIndex: 2,
-          padding: 4,
-          top: 0,
-          right: 0,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Flex style={{ width: '280px' }}>
-          <OsmGeocoding
-            placeholder="Type your address"
-            callback={(data: Result) => {
-              if (data.lat && data.lon) {
-                props.updatePosition({
-                  lat: Number(data.lat),
-                  lng: Number(data.lon),
-                });
-                setCenter([data.lat, data.lon]);
-                setZoom(15);
-              }
-            }}
-            acceptLanguage="en"
-          />
-        </Flex>
-      </Box>
+      <Flex style={{ width: '280px' }}>
+        <OsmGeocoding
+          placeholder="Type your address"
+          callback={(data: Result) => {
+            if (data.lat && data.lon) {
+              props.updatePosition({
+                lat: Number(data.lat),
+                lng: Number(data.lon),
+              });
+              setCenter([data.lat, data.lon]);
+              setZoom(15);
+            }
+          }}
+          acceptLanguage="en"
+        />
+      </Flex>
 
       <Box
         className="markercluster-map settings-page"
@@ -101,11 +88,12 @@ export const MapWithPin = (props: Props) => {
                 markerIcon={markerIcon}
                 onClick={onClickMapPin}
                 onDrag={(evt: any) => {
-                  if (evt.lat && evt.lng)
+                  if (evt.lat && evt.lng) {
                     props.updatePosition({
                       lat: evt.lat,
                       lng: evt.lng,
                     });
+                  }
                 }}
               />
             )}

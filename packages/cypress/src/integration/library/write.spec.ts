@@ -18,7 +18,7 @@ describe('[Library]', () => {
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks';
 
   const selectCategory = (category: Category) => {
-    cy.selectTag(category, '[data-cy=category-select]');
+    cy.selectCard(category, '[data-cy=category-select]');
   };
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]');
@@ -303,13 +303,15 @@ describe('[Library]', () => {
       cy.get('a[href="/library/create"]').should('be.visible');
       cy.get('[data-cy=create-project]:visible').click();
       cy.fillIntroTitle(expected.title);
-      cy.get('[data-cy=page-link][href*="/library"]').click();
+      cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+      cy.get('[data-cy=page-link][href*="/library"]:visible').click();
       cy.get('[data-cy="Confirm.modal: Cancel"]').click();
       cy.url().should('match', /\/library\/create$/);
 
       cy.step('Clear title input');
       cy.get('[data-cy=intro-title]').clear().blur({ force: true });
-      cy.get('[data-cy=page-link][href*="/library"]').click();
+      cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+      cy.get('[data-cy=page-link][href*="/library"]:visible').click();
       cy.url().should('match', /\/library?/);
     });
 

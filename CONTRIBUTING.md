@@ -25,7 +25,7 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 ### Prerequisites
 
-- [Bun 1.3.10+](https://bun.sh/docs/installation)
+- [Bun 1.3.10](https://bun.sh/docs/installation)
 
 ### One time setup
 
@@ -58,7 +58,7 @@ We try to document some important [Technical Decisions](./docs/technical-decisio
 - **`src`**
   - **`routes`** : app routes, including api routes.
   - **`pages`** : Main components for each page are located here. Each folder should correspond to a **feature** of the platform.
-  - **`services`** : client-side services to interact with our api and server-side services to interact with supabase or other external service like patreon.
+  - **`services`** : client-side services to interact with our api and server-side services to interact with supabase or other external service.
   - **`assets`** : contains assets such as icons/images.
   - **`utils`** : contains utility functions.
 - **`packages/components/`**: - general stateless components that compose the app.

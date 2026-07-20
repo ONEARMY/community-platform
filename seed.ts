@@ -13,6 +13,7 @@ import type {
   questionsChildInputs,
   questionsScalars,
   researchScalars,
+  stripe_tier_configScalars,
   subscribersChildInputs,
   subscribersScalars,
   tagsChildInputs,
@@ -26,7 +27,16 @@ import libraryJson from './.snaplet/library.json';
 import questionsJson from './.snaplet/questions.json';
 import { profilesSeed } from './seed/profilesSeed';
 import { usersSeed } from './seed/usersSeed';
-import { convertToSlug } from './src/utils/slug';
+
+// Copied from the helper to decouple the seed script from any app builing processes
+export const convertToSlug = (text: string) => {
+  const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
+  const stripSpecialCharacters = (text: string) => {
+    return text ? text.split(' ').join('-').replace(specialCharactersPattern, '') : '';
+  };
+
+  return stripSpecialCharacters(text).toLowerCase();
+};
 
 const tenant_id = `precious-plastic`;
 
@@ -168,6 +178,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     display_name: 'Supporter',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    premium_tier: null,
   },
   {
     ..._BADGES_BASE,
@@ -177,7 +188,50 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
     premium_tier: 1,
   },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-1',
+    display_name: 'Starter',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
+    premium_tier: 1,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-2',
+    display_name: 'Hero',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
+    premium_tier: 2,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-3',
+    display_name: 'Legend',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
+    premium_tier: 3,
+  },
 ];
+
+const TIER_COLORS: Record<number, string> = {
+  1: '#BFDEBA',
+  2: '#77BDE3',
+  3: '#FEE77B',
+};
+
+const seedStripeTierConfig = (
+  badges: profile_badgesScalars[],
+): Partial<stripe_tier_configScalars>[] => {
+  const tierBadges = badges.filter((b) => b.name?.startsWith('stripe-tier-'));
+  return tierBadges.map((badge) => ({
+    tenant_id,
+    badge_id: badge.id,
+    description: 'You help us develop new features, get videos in 4K without ads!',
+    color: TIER_COLORS[badge.premium_tier ?? 0] ?? '#BFDEBA',
+    thank_you_image_url: null,
+  }));
+};
 
 const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_badgeScalars>[] => {
   const proBadge = badges.find((badge) => badge.name === 'pro');
@@ -547,6 +601,7 @@ const main = async () => {
   await seed.tenant_settings([
     {
       site_name: 'Local Development Community',
+      site_name_short: 'Local Dev',
       site_description:
         'A series of tools to collaborate around the world. Connect, share and meet each other to tackle problems.',
       site_url: 'http://localhost:3000',
@@ -563,6 +618,7 @@ const main = async () => {
       questions_guidelines:
         'https://community.preciousplastic.com/academy/guides/guidelines-questions',
       supported_modules: 'library,map,research,academy,questions,news',
+      hidden_modules: null,
       donation_settings: {
         defaultDescription:
           'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',
@@ -606,6 +662,7 @@ const main = async () => {
   const { profile_badges } = await seed.profile_badges(seedBadges());
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
   await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
+  await seed.stripe_tier_config(seedStripeTierConfig(profile_badges));
 
   await seed.map_pins(seedMapPins(profiles));
   const { tags } = await seed.tags(seedTags());

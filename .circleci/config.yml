@@ -12,11 +12,7 @@ version: 2.1
 #  Orbs - preconfigured environments for running specific jobs
 ######################################################################################################
 
-orbs:
-  # for use with cimg image, to install web browsers
-  browser-tools: circleci/browser-tools@1.4.5
-  # used to track coverage
-  codecov: codecov/codecov@3.2.5
+orbs: {}
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -25,7 +21,7 @@ aliases:
   # use a base image running node v18 with chrome/firefox browsers preinstalled
   # This can be applied to any job via `docker: *docker` syntax
   - &docker
-    - image: cimg/node:22.18.0-browsers
+    - image: cimg/node:24.16.0-browsers
 
   # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
@@ -33,7 +29,7 @@ aliases:
       parameters:
         node-version:
           type: string
-          default: 22.18.0-browsers
+          default: 24.16.0-browsers
       docker:
         - image: cimg/node:<< parameters.node-version >>
 
@@ -42,7 +38,7 @@ aliases:
   - &install_bun
     run:
       name: Install Bun
-      command: curl -fsSL https://bun.sh/install | bash && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
+      command: curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.10" && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
   - &restore_bun_cache
     restore_cache:
       name: Restore bun cache
@@ -122,7 +118,6 @@ jobs:
           path: coverage
       - store_artifacts:
           path: packages/components/coverage
-      - codecov/upload
       - store_artifacts:
           path: packages/components/reports
       - store_test_results:
@@ -217,7 +212,7 @@ jobs:
               --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN"
       - run:
           name: Set Server Secrets
-          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID PATREON_CLIENT_SECRET=$PATREON_CLIENT_SECRET TOKEN_SECRET="$TOKEN_SECRET"
+          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID TOKEN_SECRET="$TOKEN_SECRET"
   # deploy-supabase:
   #   docker:
   #     - image: cimg/node:20.7.0
@@ -244,20 +239,9 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
-      # install testing browsers are required
-      - when:
-          condition:
-            equal: ['chrome', << parameters.CI_BROWSER >>]
-          steps:
-            - browser-tools/install-chrome
-      - when:
-          condition:
-            equal: ['firefox', << parameters.CI_BROWSER >>]
-          steps:
-            - browser-tools/install-firefox
       # call main testing script
       - run:
-          command: npm run test ci prod
+          command: bun run --filter oa-cypress start ci prod
           environment:
             VITE_SITE_VARIANT: test-ci
             CI_BROWSER: << parameters.CI_BROWSER >>
@@ -314,7 +298,7 @@ workflows:
           matrix:
             parameters:
               CI_NODE: [1, 2, 3, 4]
-              CI_BROWSER: ['chrome']
+              CI_BROWSER: ['electron']
       #---------------------- Approval ----------------------
       - approve:
           type: approval
@@ -339,7 +323,6 @@ workflows:
           FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
           context:
-            - circle-ci-patreon-context
             - fixing-fashion-prod
             - fly-deploy
             - supabase-deploy
@@ -352,7 +335,6 @@ workflows:
           FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
           context:
-            - circle-ci-patreon-context
             - community-platform-production
             - fly-deploy
             - supabase-deploy
@@ -365,7 +347,6 @@ workflows:
           FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml
           context:
-            - circle-ci-patreon-context
             - project-kamp-production
             - fly-deploy
             - supabase-deploy

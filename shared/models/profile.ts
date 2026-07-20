@@ -37,7 +37,7 @@ export class DBProfile {
   website: string | null;
   total_views: number;
   auth_id: string;
-  profile_type: number | null;
+  profile_type: number;
   donations_enabled: boolean;
 
   constructor(obj: DBProfile) {
@@ -406,7 +406,6 @@ export type ProfileFormData = {
   country: string;
   website: string;
   isContactable: boolean;
-  type: string;
   photo?: MediaWithPublicUrl;
   coverImages?: MediaWithPublicUrl[];
   showVisitorPolicy: boolean;
@@ -427,7 +426,6 @@ export type ProfileDTO = {
   displayName: string;
   about: string;
   isContactable: boolean;
-  type: string;
   country: string | null;
   website: string | null;
   photo: DBMedia | null;

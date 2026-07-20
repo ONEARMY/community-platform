@@ -33,7 +33,6 @@ const update = async (value: ProfileFormData) => {
     displayName: value.displayName,
     about: value.about,
     country: value.country,
-    type: value.type.toString(),
     isContactable: value.isContactable,
     website: value.website,
     showVisitorPolicy: value.showVisitorPolicy,

@@ -1,7 +1,6 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBProfile, ProfileDTO, ProfileType } from 'oa-shared';
+import type { DBAuthorVotes, DBProfile, ProfileDTO } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
-import { ProfileTypesServiceServer } from './profileTypesService.server';
 
 export class ProfileServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -214,11 +213,6 @@ export class ProfileServiceServer {
   }
 
   async updateProfile(id: number, values: ProfileDTO) {
-    const types = await new ProfileTypesServiceServer(this.client).get();
-    const typeId = types.find((x) => x.name === values.type)!.id;
-    const existingProfile = await this.getById(id);
-    const pinModeration = this.determinePinModeration(types, existingProfile!, values.type);
-
     await this.updateTags(id, values.tagIds || []);
 
     const { data, error } = await this.client
@@ -229,7 +223,6 @@ export class ProfileServiceServer {
         display_name: values.displayName,
         website: values.website,
         is_contactable: values.isContactable,
-        profile_type: typeId,
         photo: values.photo,
         cover_images: values.coverImages,
         visitor_policy: values.visitorPreferencePolicy
@@ -262,10 +255,6 @@ export class ProfileServiceServer {
       .single();
     if (error) {
       throw error;
-    }
-
-    if (pinModeration) {
-      await this.client.from('map_pins').update({ moderation: pinModeration }).eq('profile_id', id);
     }
 
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
@@ -346,37 +335,5 @@ export class ProfileServiceServer {
       .from('profiles')
       .update({ last_active: new Date().toISOString() })
       .eq('auth_id', userId);
-  }
-
-  /**
-   * Calculate the moderation status for a profile's map pin based on profile type changes.
-   *    If a profile changes from a space to 'member', the pin is automatically accepted.
-   *    If it changes from 'member' to a space, the pin requires moderation.
-   */
-  private determinePinModeration(types: ProfileType[], profile: DBProfile, type: string) {
-    if (!profile.pin) {
-      return undefined;
-    }
-
-    const selectedType = types.find((x) => x.name === type);
-    const currentType = types.find((x) => x.id === profile.profile_type);
-
-    let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined;
-
-    if (!selectedType || !currentType) {
-      return undefined;
-    }
-    if (currentType.isSpace && !selectedType.isSpace) {
-      newValue = 'accepted';
-    }
-    if (!currentType.isSpace && selectedType.isSpace) {
-      newValue = 'awaiting-moderation';
-    }
-
-    if (newValue === profile.pin.moderation) {
-      return undefined;
-    }
-
-    return newValue;
   }
 }

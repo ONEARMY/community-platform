@@ -37,7 +37,9 @@ export default defineConfig({
 
         async 'seed database'() {
           if (!supabaseUrl || !supabaseKey) {
-            throw new Error('SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required');
+            throw new Error(
+              'SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required',
+            );
           }
 
           const supabaseService = new SupabaseTestsService(supabaseUrl, supabaseKey, tenantId);
@@ -63,6 +65,7 @@ export default defineConfig({
           await supabaseService.seedResearch(profiles, tags);
           await supabaseService.seedLibrary(profiles, tags);
           await supabaseService.seedTenantSettings();
+          await supabaseService.seedOrganisationSignupSettings();
           return null;
         },
         async 'clear database'() {
@@ -93,6 +96,8 @@ export default defineConfig({
               'profile_types',
               'upgrade_badge',
               'tenant_settings',
+              'organisation_signup_settings',
+              'organisation_applications',
               'notification_preferences',
               'news_badges_relations',
             ],

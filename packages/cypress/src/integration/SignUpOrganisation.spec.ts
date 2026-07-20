@@ -36,6 +36,11 @@ describe('[Organisation sign-up]', () => {
         'Are you working with small-scale plastic recycling?',
       );
 
+      cy.step('The description renders its inline link');
+      cy.get('[data-cy=organisation-signup-description] a')
+        .should('contain', 'our universe')
+        .and('have.attr', 'href', 'https://preciousplastic.com/universe');
+
       cy.step('Organisation sign-up links back to member sign-up');
       cy.get('[data-cy=sign-up-member]').click();
       cy.url().should('include', '/sign-up');

@@ -1,4 +1,11 @@
-import { Button, ExternalLink, FieldInput, Stepper, TextNotification } from 'oa-components';
+import {
+  Button,
+  ExternalLink,
+  FieldInput,
+  MemberBadge,
+  Stepper,
+  TextNotification,
+} from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
@@ -34,8 +41,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const tenantSettings = await new TenantSettingsService(client).get();
+  const spaceProfileTypes = profileTypes.filter((type) => type.isSpace);
 
-  return data({ siteName: tenantSettings.siteName, organisationSignupSettings }, { headers });
+  return data(
+    { siteName: tenantSettings.siteName, organisationSignupSettings, spaceProfileTypes },
+    { headers },
+  );
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -98,7 +109,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
-  const { organisationSignupSettings } = useLoaderData<typeof loader>();
+  const { organisationSignupSettings, spaceProfileTypes } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -147,22 +158,32 @@ export default function Index() {
                       alignItems: 'center',
                     }}
                   >
-                    {organisationSignupSettings.imageUrl && (
+                    {organisationSignupSettings.imageUrl ? (
                       <Image
                         src={organisationSignupSettings.imageUrl}
                         alt=""
                         data-cy="organisation-signup-image"
                         sx={{ maxWidth: '200px', maxHeight: '120px' }}
                       />
+                    ) : (
+                      <Flex
+                        data-cy="organisation-signup-badges"
+                        sx={{ gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}
+                      >
+                        {spaceProfileTypes.map((profileType) => (
+                          <MemberBadge key={profileType.name} size={60} profileType={profileType} />
+                        ))}
+                      </Flex>
                     )}
                     <Heading>Create an organisation account</Heading>
                     <Text
                       color="grey"
                       data-cy="organisation-signup-description"
                       sx={{ fontSize: 2 }}
-                    >
-                      {organisationSignupSettings.description}
-                    </Text>
+                      dangerouslySetInnerHTML={{
+                        __html: organisationSignupSettings.descriptionHtml,
+                      }}
+                    />
                   </Flex>
                   <Card sx={{ borderRadius: 3 }}>
                     <Flex

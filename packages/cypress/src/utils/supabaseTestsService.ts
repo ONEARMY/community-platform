@@ -280,7 +280,7 @@ export class SupabaseTestsService {
       organisation_signup_settings: [
         {
           description:
-            'Are you working with small-scale plastic recycling? Do you wish to become part of our universe? Then apply as an organisation here. It usually takes a day or two to get approved.',
+            'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](https://preciousplastic.com/universe)? Then apply as an organisation here. It usually takes a day or two to get approved.',
           image_url: null,
           tenant_id: this.tenantId,
         },

@@ -1,19 +1,20 @@
-import { Button, ExternalLink, FieldInput, HeroBanner, TextNotification } from 'oa-components';
+import { Button, ExternalLink, FieldInput, Stepper, TextNotification } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
+import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { AuthServiceServer } from 'src/services/authService.server';
+import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { OrganisationSignupSettingsServiceServer } from 'src/services/organisationSignupSettingsService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { Card, Flex, Heading, Label, Text } from 'theme-ui';
-import { bool, object, ref, string } from 'yup';
+import { Alert, Card, Flex, Heading, Image, Label, Text } from 'theme-ui';
+import { bool, object, string } from 'yup';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -22,20 +23,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (claims.data?.claims) {
     return redirect('/', { headers });
   }
-  const tenantSettings = await new TenantSettingsService(client).get();
+
   const profileTypes = await new ProfileTypesServiceServer(client).get();
   const organisationSignupSettings = await new OrganisationSignupSettingsServiceServer(
     client,
   ).get();
 
-  const showOrganisationSignup =
-    !!organisationSignupSettings && profileTypes.some((type) => type.isSpace);
+  if (!organisationSignupSettings || !profileTypes.some((type) => type.isSpace)) {
+    return redirect('/sign-up', { headers });
+  }
 
-  return data({ ...tenantSettings, showOrganisationSignup }, { headers });
+  const tenantSettings = await new TenantSettingsService(client).get();
+
+  return data({ siteName: tenantSettings.siteName, organisationSignupSettings }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
-  const title = `Sign Up - ${loaderData?.siteName}`;
+  const title = `Create an organisation account - ${loaderData?.siteName}`;
 
   return generateTags(title);
 });
@@ -45,9 +49,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const url = new URL(request.url);
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
+  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation?flow=organisation`;
 
-  const authServiceServer = new AuthServiceServer(client);
+  const profileTypes = await new ProfileTypesServiceServer(client).get();
+  const organisationSignupSettings = await new OrganisationSignupSettingsServiceServer(
+    client,
+  ).get();
+
+  if (!organisationSignupSettings || !profileTypes.some((type) => type.isSpace)) {
+    return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+  }
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -69,23 +80,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
-    const response = await authServiceServer.createUserProfile({
-      user: signupResult.data.user,
-    });
+    const response = await new OrganisationApplicationsServiceServer(client).create(
+      signupResult.data.user.id,
+    );
 
-    // This will error if there is already a profile with this auth_id + tenant_id
+    // This will error if there is already an application for this auth_id + tenant_id
     if (response.error) {
       return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
     }
   }
 
-  return redirect(`/sign-up-message?email=${email}`, { headers });
+  return redirect(`/sign-up-message?email=${email}&flow=organisation`, {
+    headers,
+  });
 };
 
 const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
-  const loaderData = useLoaderData<typeof loader>();
+  const { organisationSignupSettings } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -93,9 +106,6 @@ export default function Index() {
     password: string()
       .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])
       .required(FRIENDLY_MESSAGES['sign-up/password-required']),
-    'confirm-password': string()
-      .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
-      .required(FRIENDLY_MESSAGES['sign-up/email-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
   });
 
@@ -128,8 +138,32 @@ export default function Index() {
                 mt={[5, 10]}
                 mb={3}
               >
-                <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type="celebration" />
+                <Flex sx={{ flexDirection: 'column', width: '100%', gap: 3 }}>
+                  <Flex
+                    sx={{
+                      flexDirection: 'column',
+                      gap: 2,
+                      textAlign: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {organisationSignupSettings.imageUrl && (
+                      <Image
+                        src={organisationSignupSettings.imageUrl}
+                        alt=""
+                        data-cy="organisation-signup-image"
+                        sx={{ maxWidth: '200px', maxHeight: '120px' }}
+                      />
+                    )}
+                    <Heading>Create an organisation account</Heading>
+                    <Text
+                      color="grey"
+                      data-cy="organisation-signup-description"
+                      sx={{ fontSize: 2 }}
+                    >
+                      {organisationSignupSettings.description}
+                    </Text>
+                  </Flex>
                   <Card sx={{ borderRadius: 3 }}>
                     <Flex
                       sx={{
@@ -140,32 +174,9 @@ export default function Index() {
                         width: '100%',
                       }}
                     >
-                      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                        <Heading>Create an account</Heading>
-                        <Text color="grey" sx={{ fontSize: 1 }}>
-                          <Link
-                            to="/sign-in"
-                            style={{
-                              textDecoration: 'underline',
-                            }}
-                          >
-                            Already have an account? Sign-in here
-                          </Link>
-                        </Text>
-                        {loaderData?.showOrganisationSignup && (
-                          <Text color="grey" sx={{ fontSize: 1 }}>
-                            <Link
-                              to="/sign-up/organisation"
-                              data-cy="sign-up-organisation"
-                              style={{
-                                textDecoration: 'underline',
-                              }}
-                            >
-                              Are you an organisation? Create an organisation account
-                            </Link>
-                          </Text>
-                        )}
-                      </Flex>
+                      <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={0} />
+
+                      <Heading>Create an account</Heading>
 
                       {actionResponse?.error && pristine && (
                         <TextNotification variant="failure" isVisible>
@@ -179,16 +190,16 @@ export default function Index() {
                           width: rowWidth,
                         }}
                       >
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">Organisation's email</Label>
                         <Text color="grey" sx={{ fontSize: 1 }}>
-                          It can be personal or work email.
+                          Email that the organisation uses.
                         </Text>
                         <Field
                           data-cy="email"
                           name="email"
                           type="email"
                           component={FieldInput}
-                          placeholder="yourname@domain.com"
+                          placeholder="Email"
                           validate={required}
                         />
                       </Flex>
@@ -199,6 +210,9 @@ export default function Index() {
                         }}
                       >
                         <Label htmlFor="password">Password</Label>
+                        <Text color="grey" sx={{ fontSize: 1 }}>
+                          We recommend a strong password.
+                        </Text>
                         <PasswordField
                           data-cy="password"
                           name="password"
@@ -207,21 +221,15 @@ export default function Index() {
                           validate={required}
                         />
                       </Flex>
-                      <Flex
-                        sx={{
-                          flexDirection: 'column',
-                          width: rowWidth,
-                        }}
-                      >
-                        <Label htmlFor="confirm-password">Confirm Password</Label>
-                        <PasswordField
-                          data-cy="confirm-password"
-                          name="confirm-password"
-                          placeholder="Confirm your Password"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
+
+                      <Alert variant="info" sx={{ textAlign: 'left', fontWeight: 'normal' }}>
+                        <Text sx={{ fontSize: 1 }}>
+                          Heads up. After this you need to fill in some information: a{' '}
+                          <strong>link to your website</strong> or social media and{' '}
+                          <strong>pictures</strong> to verify your organisation.
+                        </Text>
+                      </Alert>
+
                       <Flex>
                         <Label
                           sx={{
@@ -262,11 +270,21 @@ export default function Index() {
                           disabled={disabled}
                           type="submit"
                         >
-                          Create account
+                          Continue with the application form
                         </Button>
                       </Flex>
                     </Flex>
                   </Card>
+                  <Text color="grey" sx={{ fontSize: 1, textAlign: 'center' }}>
+                    Not an organisation?{' '}
+                    <Link
+                      to="/sign-up"
+                      data-cy="sign-up-member"
+                      style={{ textDecoration: 'underline' }}
+                    >
+                      Sign-up as a member
+                    </Link>
+                  </Text>
                 </Flex>
               </Flex>
             </form>

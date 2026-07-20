@@ -1,6 +1,16 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBProfile, ProfileDTO } from 'oa-shared';
+import type { DBAuthorVotes, DBMedia, DBProfile, ProfileDTO } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+
+type CreateOrganisationProfileArgs = {
+  authId: string;
+  username: string;
+  displayName: string;
+  about: string;
+  website: string | null;
+  coverImages: DBMedia[] | null;
+  profileTypeId: number;
+};
 
 export class ProfileServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -210,6 +220,35 @@ export class ProfileServiceServer {
     }
 
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
+  }
+
+  async createOrganisationProfile(values: CreateOrganisationProfileArgs) {
+    return await this.client
+      .from('profiles')
+      .insert({
+        auth_id: values.authId,
+        tenant_id: process.env.TENANT_ID,
+        username: values.username,
+        display_name: values.displayName,
+        about: values.about,
+        website: values.website,
+        cover_images: values.coverImages,
+        profile_type: values.profileTypeId,
+      })
+      .select(
+        `*,
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
+        )`,
+      )
+      .single();
   }
 
   async updateProfile(id: number, values: ProfileDTO) {

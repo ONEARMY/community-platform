@@ -27,7 +27,7 @@ interface SignUpEmailProps {
 export const SignUpEmail = (props: SignUpEmailProps) => {
   const { username, redirect_to, settings, token_hash } = props;
 
-  const href = `${redirect_to}?token=${token_hash}`;
+  const href = `${redirect_to}${redirect_to.includes('?') ? '&' : '?'}token=${token_hash}`;
 
   return (
     <Layout emailType="service" preview={copy.preview} settings={settings}>

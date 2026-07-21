@@ -10,8 +10,9 @@ CREATE TABLE IF NOT EXISTS "public"."stripe_tier_config" (
     "badge_id" bigint
 );
 
+ALTER TABLE "public"."stripe_tier_config" DROP CONSTRAINT IF EXISTS "stripe_tier_config_badge_id_fkey";
 ALTER TABLE "public"."stripe_tier_config"
-    ADD CONSTRAINT IF NOT EXISTS "stripe_tier_config_badge_id_fkey"
+    ADD CONSTRAINT "stripe_tier_config_badge_id_fkey"
     FOREIGN KEY ("badge_id") REFERENCES "public"."profile_badges"("id") ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE "public"."stripe_tier_config" ENABLE ROW LEVEL SECURITY;

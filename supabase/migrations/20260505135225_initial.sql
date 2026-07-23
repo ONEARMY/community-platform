@@ -261,6 +261,7 @@ CREATE OR REPLACE FUNCTION "public"."get_news_feed"("p_user_profile_id" bigint D
   FROM news n
   WHERE
     n.is_draft = false
+    AND (n.deleted IS NULL OR n.deleted = FALSE)
     AND (
       p_is_admin
       OR NOT EXISTS (
@@ -294,63 +295,6 @@ CREATE OR REPLACE FUNCTION "public"."get_news_feed"("p_user_profile_id" bigint D
   OFFSET p_skip;
 $$;
 ALTER FUNCTION "public"."get_news_feed"("p_user_profile_id" bigint, "p_is_admin" boolean, "p_search" "text", "p_sort" "text", "p_skip" integer, "p_limit" integer) OWNER TO "postgres";
-
-CREATE OR REPLACE FUNCTION "public"."get_profiles_by_badge"("p_badge_id" bigint) RETURNS TABLE("profile_id" bigint, "badges" "jsonb", "notification_preferences" "jsonb", "email" "text")
-    LANGUAGE "sql" STABLE SECURITY DEFINER
-    SET "search_path" TO 'public', 'auth'
-    AS $$
-  select
-    p.id as profile_id,
-    coalesce(
-      jsonb_agg(
-        distinct jsonb_build_object(
-          'id', pb.id,
-          'name', pb.name,
-          'display_name', pb.display_name
-        )
-      ) filter (where pb.id is not null),
-      '[]'::jsonb
-    ) as badges,
-    jsonb_build_object(
-      'comments', np.comments,
-      'replies', np.replies,
-      'research_updates', np.research_updates,
-      'is_unsubscribed', np.is_unsubscribed,
-      'content_reach', np.content_reach
-    ) as notification_preferences,
-    u.email::text as email
-  from public.profiles p
-  left join public.profile_badges_relations pbr_all
-    on pbr_all.profile_id = p.id
-  left join public.profile_badges pb
-    on pb.id = pbr_all.profile_badge_id
-  left join public.notifications_preferences np
-    on np.user_id = p.id
-  left join auth.users u
-    on u.id = p.auth_id
-  where exists (
-    select 1
-    from public.profile_badges_relations pbr_filter
-    where pbr_filter.profile_id = p.id
-      and pbr_filter.profile_badge_id = p_badge_id
-  )
-  group by
-    p.id,
-    np.comments,
-    np.replies,
-    np.research_updates,
-    np.is_unsubscribed,
-    ecr.id,
-    ecr.name,
-    ecr.preferences_label,
-    ecr.preferences_description,
-    ecr.create_content_label,
-    ecr.default_option,
-    ecr.tenant_id,
-    ecr.created_at,
-    u.email;
-$$;
-ALTER FUNCTION "public"."get_profiles_by_badge"("p_badge_id" bigint) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_profiles_by_badge_ids"("p_badge_ids" bigint[], "p_tenant_id" "text") RETURNS TABLE("profile_id" bigint, "profile_created_at" timestamp with time zone, "display_name" "text", "username" "text", "roles" "text"[], "email" "text", "comments" boolean, "replies" boolean, "research_updates" boolean, "is_unsubscribed" boolean, "content_reach" "public"."content_reach", "badge_ids" bigint[])
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -554,7 +498,7 @@ END;
 $$;
 ALTER FUNCTION "public"."get_projects_count"("search_query" "text", "category_id" integer, "current_username" "text") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_questions"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 20, "offset_val" integer DEFAULT 0) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "published_at" timestamp with time zone, "description" "text", "slug" "text", "category" "json", "tags" bigint[], "title" "text", "total_views" bigint, "is_draft" boolean, "comment_count" bigint, "images" "json"[], "author" "json")
+CREATE OR REPLACE FUNCTION "public"."get_questions"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 20, "offset_val" integer DEFAULT 0) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "published_at" timestamp with time zone, "description" "text", "slug" "text", "category" "json", "tags" bigint[], "title" "text", "total_views" bigint, "is_draft" boolean, "comment_count" bigint, "images" "json"[], "author" "json", "accepted_answer_id" bigint, "accepted_answer_date" timestamp with time zone)
     LANGUAGE "plpgsql"
     SET "search_path" TO 'public', 'pg_temp'
     AS $$
@@ -564,12 +508,12 @@ BEGIN
   IF search_query IS NOT NULL THEN
     -- Split search query into words and create prefix-matching tsquery with AND logic
     -- Sanitize each word to prevent tsquery injection
-    ts_query := to_tsquery('english', 
+    ts_query := to_tsquery('english',
       array_to_string(
         ARRAY(
           SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
           FROM unnest(string_to_array(trim(search_query), ' ')) AS word
-          WHERE word != '' 
+          WHERE word != ''
             AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
         ),
         ' & '
@@ -614,7 +558,9 @@ BEGIN
         WHERE pbr.profile_id = p.id),
         '[]'::json
       )
-    ) FROM profiles p WHERE p.id = q.created_by) AS author
+    ) FROM profiles p WHERE p.id = q.created_by) AS author,
+    q.accepted_answer_id,
+    q.accepted_answer_date
   FROM questions q
   JOIN profiles prof ON prof.id = q.created_by
   WHERE
@@ -1083,9 +1029,9 @@ CREATE TABLE IF NOT EXISTS "public"."news" (
     "summary" "text",
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", ((("title" || ' '::"text") || "body") || ("summary" || ''::"text")))) STORED,
     "is_draft" boolean DEFAULT false NOT NULL,
-    "profile_badge" bigint,
     "published_at" timestamp with time zone,
-    "content_reach" "public"."content_reach"
+    "content_reach" "public"."content_reach",
+    "poll" bigint
 );
 ALTER TABLE "public"."news" OWNER TO "postgres";
 
@@ -1116,7 +1062,9 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", (("title" || ' '::"text") || "description"))) STORED,
     "images" "json"[],
     "is_draft" boolean DEFAULT false NOT NULL,
-    "published_at" timestamp with time zone
+    "published_at" timestamp with time zone,
+    "accepted_answer_id" bigint,
+    "accepted_answer_date" timestamp with time zone
 );
 ALTER TABLE "public"."questions" OWNER TO "postgres";
 
@@ -1739,7 +1687,8 @@ CREATE TABLE IF NOT EXISTS "public"."stripe_badge_products" (
     "id" bigint NOT NULL,
     "stripe_product_id" "text" NOT NULL,
     "badge_id" bigint NOT NULL,
-    "tenant_id" "text" NOT NULL
+    "tenant_id" "text" NOT NULL,
+    "name" "text" NOT NULL DEFAULT ''
 );
 ALTER TABLE "public"."stripe_badge_products" OWNER TO "postgres";
 ALTER TABLE "public"."stripe_badge_products" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -1831,6 +1780,7 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "ga_tracking_id" "text",
     "pwa_icons" "jsonb",
     "hidden_modules" "text",
+    "site_name_short" "text",
     CONSTRAINT "check_pwa_icons_schema" CHECK ((("pwa_icons" IS NULL) OR (("jsonb_typeof"("pwa_icons") = 'object'::"text") AND (("pwa_icons" - ARRAY['16'::"text", '32'::"text", '192'::"text", '256'::"text", '512'::"text"]) = '{}'::"jsonb") AND (("pwa_icons" ->> '16'::"text") IS NOT NULL) AND (("pwa_icons" ->> '32'::"text") IS NOT NULL) AND (("pwa_icons" ->> '192'::"text") IS NOT NULL) AND (("pwa_icons" ->> '256'::"text") IS NOT NULL) AND (("pwa_icons" ->> '512'::"text") IS NOT NULL) AND ("jsonb_typeof"(("pwa_icons" -> '16'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '32'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '192'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '256'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '512'::"text")) = 'string'::"text"))))
 );
 ALTER TABLE "public"."tenant_settings" OWNER TO "postgres";
@@ -2031,9 +1981,9 @@ ALTER TABLE ONLY "public"."news"
 ALTER TABLE ONLY "public"."news"
     ADD CONSTRAINT "news_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE SET NULL;
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_owned_by_id_fkey" FOREIGN KEY ("owned_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "notifications_owned_by_id_fkey" FOREIGN KEY ("owned_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY "public"."notifications_preferences"
-    ADD CONSTRAINT "notifications_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id");
+    ADD CONSTRAINT "notifications_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_triggered_by_id_fkey" FOREIGN KEY ("triggered_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE;
 ALTER TABLE ONLY "public"."profile_badges_relations"
@@ -2174,10 +2124,6 @@ GRANT ALL ON FUNCTION "public"."get_comments_with_votes"("p_source_type" "text",
 GRANT ALL ON FUNCTION "public"."get_news_feed"("p_user_profile_id" bigint, "p_is_admin" boolean, "p_search" "text", "p_sort" "text", "p_skip" integer, "p_limit" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_news_feed"("p_user_profile_id" bigint, "p_is_admin" boolean, "p_search" "text", "p_sort" "text", "p_skip" integer, "p_limit" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_news_feed"("p_user_profile_id" bigint, "p_is_admin" boolean, "p_search" "text", "p_sort" "text", "p_skip" integer, "p_limit" integer) TO "service_role";
-
-GRANT ALL ON FUNCTION "public"."get_profiles_by_badge"("p_badge_id" bigint) TO "anon";
-GRANT ALL ON FUNCTION "public"."get_profiles_by_badge"("p_badge_id" bigint) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_profiles_by_badge"("p_badge_id" bigint) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."get_profiles_by_badge_ids"("p_badge_ids" bigint[], "p_tenant_id" "text") TO "anon";
 GRANT ALL ON FUNCTION "public"."get_profiles_by_badge_ids"("p_badge_ids" bigint[], "p_tenant_id" "text") TO "authenticated";
@@ -2529,5 +2475,194 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 
 CREATE POLICY "tenant_isolation" ON "storage"."objects" USING ((("bucket_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")) OR ("bucket_id" = ((("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text") || '-documents'::"text"))));
 
+-- stripe_tier_config (squashed from 20260601000000, 20260708033232, 20260708122625)
+CREATE TABLE "public"."stripe_tier_config" (
+    "id" bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    "badge_id" bigint NOT NULL REFERENCES "public"."profile_badges"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+    "description" "text" NOT NULL,
+    "color" "text" NOT NULL,
+    "tenant_id" "text" NOT NULL,
+    "thank_you_image_url" "text",
+    UNIQUE ("badge_id", "tenant_id")
+);
+ALTER TABLE "public"."stripe_tier_config" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "tenant_isolation" ON "public"."stripe_tier_config"
+    AS PERMISSIVE FOR ALL TO public
+    USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE INDEX idx_stripe_tier_config_badge_id ON "public"."stripe_tier_config" USING btree ("badge_id");
+CREATE INDEX idx_stripe_tier_config_tenant_id ON "public"."stripe_tier_config" USING btree ("tenant_id");
+GRANT SELECT ON TABLE "public"."stripe_tier_config" TO "anon";
+GRANT SELECT ON TABLE "public"."stripe_tier_config" TO "authenticated";
 
+-- polls, poll_options, poll_votes (squashed from 20260701111531)
+CREATE TABLE "public"."polls" (
+    "id" bigint GENERATED BY DEFAULT AS IDENTITY NOT NULL,
+    "tenant_id" "text" NOT NULL DEFAULT ''::"text",
+    "title" "text" NOT NULL,
+    "single_choice" boolean NOT NULL DEFAULT true
+);
+ALTER TABLE "public"."polls" ADD CONSTRAINT "polls_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."polls" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "tenant_isolation" ON "public"."polls"
+    AS PERMISSIVE FOR ALL TO public
+    USING (("tenant_id" = ((( SELECT "current_setting"('request.headers'::"text", true) AS "current_setting"))::"json" ->> 'x-tenant-id'::"text")));
+GRANT DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON TABLE "public"."polls" TO "anon";
+GRANT DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON TABLE "public"."polls" TO "authenticated";
+GRANT REFERENCES, TRIGGER, TRUNCATE ON TABLE "public"."polls" TO "service_role";
 
+CREATE TABLE "public"."poll_options" (
+    "id" bigint GENERATED BY DEFAULT AS IDENTITY NOT NULL,
+    "tenant_id" "text" NOT NULL DEFAULT ''::"text",
+    "description" "text" NOT NULL,
+    "poll_id" bigint,
+    "vote_count" bigint NOT NULL DEFAULT 0
+);
+ALTER TABLE "public"."poll_options" ADD CONSTRAINT "poll_options_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."poll_options" ADD CONSTRAINT "poll_option_of_fkey" FOREIGN KEY ("poll_id") REFERENCES "public"."polls"("id") ON UPDATE CASCADE ON DELETE SET NULL NOT VALID;
+ALTER TABLE "public"."poll_options" VALIDATE CONSTRAINT "poll_option_of_fkey";
+CREATE INDEX poll_options_poll_id_idx ON "public"."poll_options" USING btree ("poll_id");
+ALTER TABLE "public"."poll_options" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "tenant_isolation" ON "public"."poll_options"
+    AS PERMISSIVE FOR ALL TO public
+    USING (("tenant_id" = ((( SELECT "current_setting"('request.headers'::"text", true) AS "current_setting"))::"json" ->> 'x-tenant-id'::"text")));
+GRANT DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON TABLE "public"."poll_options" TO "anon";
+GRANT DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON TABLE "public"."poll_options" TO "authenticated";
+GRANT REFERENCES, TRIGGER, TRUNCATE ON TABLE "public"."poll_options" TO "service_role";
+
+CREATE TABLE "public"."poll_votes" (
+    "id" bigint GENERATED BY DEFAULT AS IDENTITY NOT NULL,
+    "tenant_id" "text" NOT NULL DEFAULT ''::"text",
+    "poll_option_id" bigint,
+    "profile_id" bigint
+);
+ALTER TABLE "public"."poll_votes" ADD CONSTRAINT "poll_votes_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."poll_votes" ADD CONSTRAINT "vote_for_fkey" FOREIGN KEY ("poll_option_id") REFERENCES "public"."poll_options"("id") ON UPDATE CASCADE ON DELETE SET NULL NOT VALID;
+ALTER TABLE "public"."poll_votes" VALIDATE CONSTRAINT "vote_for_fkey";
+ALTER TABLE "public"."poll_votes" ADD CONSTRAINT "voted_by_fkey" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE SET NULL NOT VALID;
+ALTER TABLE "public"."poll_votes" VALIDATE CONSTRAINT "voted_by_fkey";
+CREATE UNIQUE INDEX poll_vote_unique ON "public"."poll_votes" USING btree ("profile_id", "poll_option_id");
+ALTER TABLE "public"."poll_votes" ADD CONSTRAINT "poll_vote_unique" UNIQUE USING INDEX "poll_vote_unique";
+CREATE INDEX poll_votes_option_idx ON "public"."poll_votes" USING btree ("poll_option_id");
+CREATE INDEX poll_votes_profile_idx ON "public"."poll_votes" USING btree ("profile_id");
+ALTER TABLE "public"."poll_votes" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "tenant_isolation" ON "public"."poll_votes"
+    AS PERMISSIVE FOR ALL TO public
+    USING (("tenant_id" = ((( SELECT "current_setting"('request.headers'::"text", true) AS "current_setting"))::"json" ->> 'x-tenant-id'::"text")));
+GRANT DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON TABLE "public"."poll_votes" TO "anon";
+GRANT DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON TABLE "public"."poll_votes" TO "authenticated";
+GRANT REFERENCES, TRIGGER, TRUNCATE ON TABLE "public"."poll_votes" TO "service_role";
+
+-- news.poll FK (column added inline above)
+ALTER TABLE "public"."news" ADD CONSTRAINT "news_poll_fkey" FOREIGN KEY ("poll") REFERENCES "public"."polls"("id") ON UPDATE CASCADE ON DELETE SET NULL NOT VALID;
+ALTER TABLE "public"."news" VALIDATE CONSTRAINT "news_poll_fkey";
+CREATE UNIQUE INDEX news_poll_unique ON "public"."news" USING btree ("poll");
+ALTER TABLE "public"."news" ADD CONSTRAINT "news_poll_unique" UNIQUE USING INDEX "news_poll_unique";
+
+-- news_badges_relations RLS (from 20260701111531)
+ALTER TABLE "public"."news_badges_relations" ENABLE ROW LEVEL SECURITY;
+
+-- questions.accepted_answer FK and index (column added inline above, from 20260702160000)
+ALTER TABLE "public"."questions" ADD CONSTRAINT "questions_accepted_answer_id_fkey" FOREIGN KEY ("accepted_answer_id") REFERENCES "public"."comments"("id") ON DELETE SET NULL;
+CREATE INDEX questions_accepted_answer_id_idx ON "public"."questions" USING btree ("accepted_answer_id");
+
+-- poll functions (from 20260701111531)
+set check_function_bodies = off;
+
+CREATE OR REPLACE FUNCTION public.get_poll_with_permissions(p_poll_id bigint, p_profile_id bigint DEFAULT NULL::bigint, p_is_admin boolean DEFAULT false)
+ RETURNS json
+ LANGUAGE plpgsql
+AS $function$
+    DECLARE
+        result json;
+        v_has_voted boolean := false;
+    BEGIN
+
+        -- 1. Check if user has voted in this poll
+        IF p_profile_id IS NOT NULL THEN
+            SELECT EXISTS (
+                SELECT 1
+                FROM poll_votes v
+                         JOIN poll_options o ON o.id = v.poll_option_id
+                WHERE v.profile_id = p_profile_id
+                  AND o.poll_id = p_poll_id
+            )
+            INTO v_has_voted;
+        END IF;
+
+        -- 2. Build result
+        SELECT json_build_object(
+                       'id', p.id,
+                       'title', p.title,
+                       'singleChoice', p.single_choice,
+                       'hasVoted', COALESCE(v_has_voted, false),
+
+                       'options',
+                       (
+                           SELECT json_agg(
+                                          json_build_object(
+                                                  'id', o.id,
+                                                  'description', o.description,
+                                                  'voteCount',
+                                                  CASE
+                                                      WHEN p_is_admin OR v_has_voted THEN o.vote_count
+                                                  END,
+                                                  'wasVotedByUser',
+                                                  EXISTS (
+                                                      SELECT 1
+                                                      FROM poll_votes v
+                                                      WHERE v.poll_option_id = o.id
+                                                        AND v.profile_id = p_profile_id
+                                                  )
+                                          )
+                                  )
+                           FROM poll_options o
+                           WHERE o.poll_id = p.id
+                       )
+
+               )
+        INTO result
+        FROM polls p
+        WHERE p.id = p_poll_id;
+
+        RETURN result;
+    END;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.is_poll_admin()
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE
+AS $function$
+    SELECT EXISTS (
+        SELECT 1
+        FROM profiles p
+        WHERE p.auth_id = auth.uid()
+          AND (
+            'admin' = ANY(p.roles)
+                OR 'editor' = ANY(p.roles)
+            )
+    );
+$function$;
+
+CREATE OR REPLACE FUNCTION public.update_vote_count()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+    DECLARE
+        option_id bigint;
+    BEGIN
+        option_id := COALESCE(NEW.poll_option_id, OLD.poll_option_id);
+
+        UPDATE poll_options
+        SET vote_count = (
+            SELECT COUNT(*)
+            FROM poll_votes
+            WHERE poll_option_id = option_id
+        )
+        WHERE id = option_id;
+
+        RETURN COALESCE(NEW, OLD);
+    END;
+$function$;
+
+CREATE TRIGGER update_vote_count AFTER INSERT OR DELETE ON "public"."poll_votes" FOR EACH ROW EXECUTE FUNCTION public.update_vote_count();

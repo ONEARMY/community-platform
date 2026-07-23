@@ -816,20 +816,6 @@
           "maxLength": null
         },
         {
-          "id": "public.categories.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.categories.type",
           "name": "type",
           "columnName": "type",
@@ -1100,20 +1086,6 @@
           "maxLength": null
         },
         {
-          "id": "public.comments.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "profiles",
           "type": "profiles",
           "isRequired": false,
@@ -1122,6 +1094,20 @@
           "relationFromFields": ["created_by"],
           "relationToFields": ["id"],
           "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "questions",
+          "type": "questions",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "questionsTocomments",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
           "isId": false,
           "isGenerated": false,
           "sequence": false,
@@ -1476,6 +1462,20 @@
           "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "auth.custom_oauth_providers.custom_claims_allowlist",
+          "name": "custom_claims_allowlist",
+          "columnName": "custom_claims_allowlist",
+          "type": "text[]",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [
@@ -1599,6 +1599,90 @@
         {
           "name": "extensions_tenant_external_id_type_index",
           "fields": ["tenant_external_id", "type"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "feature_flags": {
+      "id": "_realtime.feature_flags",
+      "schemaName": "_realtime",
+      "tableName": "feature_flags",
+      "fields": [
+        {
+          "id": "_realtime.feature_flags.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.feature_flags.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "varchar",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": 255
+        },
+        {
+          "id": "_realtime.feature_flags.enabled",
+          "name": "enabled",
+          "columnName": "enabled",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.feature_flags.inserted_at",
+          "name": "inserted_at",
+          "columnName": "inserted_at",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.feature_flags.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "feature_flags_name_index",
+          "fields": ["name"],
           "nullNotDistinct": false
         }
       ]
@@ -3582,6 +3666,20 @@
           "hasDefaultValue": true,
           "isId": true,
           "maxLength": null
+        },
+        {
+          "id": "realtime.messages.binary_payload",
+          "name": "binary_payload",
+          "columnName": "binary_payload",
+          "type": "bytea",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [
@@ -4453,20 +4551,6 @@
           "maxLength": null
         },
         {
-          "id": "public.news.profile_badge",
-          "name": "profile_badge",
-          "columnName": "profile_badge",
-          "type": "int8",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.news.published_at",
           "name": "published_at",
           "columnName": "published_at",
@@ -4495,12 +4579,40 @@
           "maxLength": null
         },
         {
+          "id": "public.news.poll",
+          "name": "poll",
+          "columnName": "poll",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
           "kind": "object",
           "relationName": "newsTocategories",
           "relationFromFields": ["category"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "polls",
+          "type": "polls",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "newsTopolls",
+          "relationFromFields": ["poll"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,
@@ -4541,6 +4653,11 @@
         {
           "name": "news_pkey",
           "fields": ["id"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "news_poll_unique",
+          "fields": ["poll"],
           "nullNotDistinct": false
         },
         {
@@ -6141,6 +6258,331 @@
         }
       ]
     },
+    "poll_options": {
+      "id": "public.poll_options",
+      "schemaName": "public",
+      "tableName": "poll_options",
+      "fields": [
+        {
+          "id": "public.poll_options.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"poll_options_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_options.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_options.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_options.poll_id",
+          "name": "poll_id",
+          "columnName": "poll_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_options.vote_count",
+          "name": "vote_count",
+          "columnName": "vote_count",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "polls",
+          "type": "polls",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "poll_optionsTopolls",
+          "relationFromFields": ["poll_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "poll_votes",
+          "type": "poll_votes",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "poll_votesTopoll_options",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "poll_options_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "poll_votes": {
+      "id": "public.poll_votes",
+      "schemaName": "public",
+      "tableName": "poll_votes",
+      "fields": [
+        {
+          "id": "public.poll_votes.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"poll_votes_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_votes.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_votes.poll_option_id",
+          "name": "poll_option_id",
+          "columnName": "poll_option_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.poll_votes.profile_id",
+          "name": "profile_id",
+          "columnName": "profile_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "poll_options",
+          "type": "poll_options",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "poll_votesTopoll_options",
+          "relationFromFields": ["poll_option_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "profiles",
+          "type": "profiles",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "poll_votesToprofiles",
+          "relationFromFields": ["profile_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "poll_vote_unique",
+          "fields": ["poll_option_id", "profile_id"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "poll_votes_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "polls": {
+      "id": "public.polls",
+      "schemaName": "public",
+      "tableName": "polls",
+      "fields": [
+        {
+          "id": "public.polls.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"polls_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.polls.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.polls.title",
+          "name": "title",
+          "columnName": "title",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.polls.single_choice",
+          "name": "single_choice",
+          "columnName": "single_choice",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "news",
+          "type": "news",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "newsTopolls",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "poll_options",
+          "type": "poll_options",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "poll_optionsTopolls",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "polls_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "profile_badges": {
       "id": "public.profile_badges",
       "schemaName": "public",
@@ -6282,6 +6724,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "stripe_badge_productsToprofile_badges",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "stripe_tier_config",
+          "type": "stripe_tier_config",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "stripe_tier_configToprofile_badges",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -7333,6 +7789,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "poll_votes",
+          "type": "poll_votes",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "poll_votesToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "profile_badges_relations",
           "type": "profile_badges_relations",
           "isRequired": false,
@@ -7967,20 +8437,6 @@
           "maxLength": null
         },
         {
-          "id": "public.projects.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.projects.published_at",
           "name": "published_at",
           "columnName": "published_at",
@@ -8303,20 +8759,6 @@
           "maxLength": null
         },
         {
-          "id": "public.questions.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.questions.is_draft",
           "name": "is_draft",
           "columnName": "is_draft",
@@ -8345,12 +8787,54 @@
           "maxLength": null
         },
         {
+          "id": "public.questions.accepted_answer_id",
+          "name": "accepted_answer_id",
+          "columnName": "accepted_answer_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.questions.accepted_answer_date",
+          "name": "accepted_answer_date",
+          "columnName": "accepted_answer_date",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
           "kind": "object",
           "relationName": "questionsTocategories",
           "relationFromFields": ["category"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "comments",
+          "type": "comments",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "questionsTocomments",
+          "relationFromFields": ["accepted_answer_id"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,
@@ -8825,20 +9309,6 @@
           "maxLength": null
         },
         {
-          "id": "public.research.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.research.published_at",
           "name": "published_at",
           "columnName": "published_at",
@@ -9127,20 +9597,6 @@
           "name": "created_by",
           "columnName": "created_by",
           "type": "int8",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.research_updates.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -10786,6 +11242,20 @@
           "maxLength": null
         },
         {
+          "id": "public.stripe_badge_products.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "profile_badges",
           "type": "profile_badges",
           "isRequired": true,
@@ -10921,6 +11391,127 @@
         {
           "name": "stripe_customers_stripe_customer_id_tenant_id_key",
           "fields": ["stripe_customer_id", "tenant_id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "stripe_tier_config": {
+      "id": "public.stripe_tier_config",
+      "schemaName": "public",
+      "tableName": "stripe_tier_config",
+      "fields": [
+        {
+          "id": "public.stripe_tier_config.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"stripe_tier_config_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.stripe_tier_config.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.stripe_tier_config.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.stripe_tier_config.color",
+          "name": "color",
+          "columnName": "color",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.stripe_tier_config.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.stripe_tier_config.thank_you_image_url",
+          "name": "thank_you_image_url",
+          "columnName": "thank_you_image_url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "profile_badges",
+          "type": "profile_badges",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "stripe_tier_configToprofile_badges",
+          "relationFromFields": ["badge_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "stripe_tier_config_badge_id_tenant_id_key",
+          "fields": ["badge_id", "tenant_id"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "stripe_tier_config_pkey",
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -11147,12 +11738,40 @@
           "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "realtime.subscription.action_filter",
+          "name": "action_filter",
+          "columnName": "action_filter",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "realtime.subscription.selected_columns",
+          "name": "selected_columns",
+          "columnName": "selected_columns",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [
         {
-          "name": "subscription_subscription_id_entity_filters_key",
-          "fields": ["entity", "filters", "subscription_id"],
+          "name": "subscription_subscription_id_entity_filters_action_filter_selec",
+          "fields": ["action_filter", "entity", "filters", "subscription_id"],
           "nullNotDistinct": false
         }
       ]
@@ -11214,20 +11833,6 @@
           "columnName": "tenant_id",
           "type": "text",
           "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.tags.legacy_id",
-          "name": "legacy_id",
-          "columnName": "legacy_id",
-          "type": "text",
-          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -11645,6 +12250,20 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.site_name_short",
+          "name": "site_name_short",
+          "columnName": "site_name_short",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [
@@ -11932,6 +12551,62 @@
           "columnName": "max_payload_size_in_kb",
           "type": "int4",
           "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.tenants.max_client_presence_events_per_window",
+          "name": "max_client_presence_events_per_window",
+          "columnName": "max_client_presence_events_per_window",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.tenants.client_presence_window_ms",
+          "name": "client_presence_window_ms",
+          "columnName": "client_presence_window_ms",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.tenants.presence_enabled",
+          "name": "presence_enabled",
+          "columnName": "presence_enabled",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "_realtime.tenants.feature_flags",
+          "name": "feature_flags",
+          "columnName": "feature_flags",
+          "type": "jsonb",
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,

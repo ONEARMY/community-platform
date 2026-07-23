@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS "public"."projects" (
     "fts" "tsvector",
     "total_views" bigint,
     "comment_count" integer,
-    "legacy_id" "text",
     "published_at" timestamp with time zone
 );
 

@@ -69,12 +69,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     let newPollId: number | null = null;
 
-    if (data.poll)
+    if (data.poll) {
       if (oldPollId && oldPollId == data.poll.id) {
         newPollId = await pollService.updatePoll(data.poll);
       } else {
         newPollId = await pollService.createPoll(data.poll);
       }
+    }
 
     if (oldPollId && oldPollId != newPollId) {
       await pollService.deletePoll(oldPollId);

@@ -17,7 +17,9 @@ export const MasonryLayout = ({ children, breakpoints = DEFAULT_BREAKPOINTS }: I
   const [colCount, setColCount] = useState(1);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) {
+      return;
+    }
     const observer = new ResizeObserver(([entry]) => {
       const width = entry.contentRect.width;
       const cols = breakpoints.find(([minWidth]) => width >= minWidth)?.[1] ?? 1;

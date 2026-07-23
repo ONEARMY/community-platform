@@ -136,7 +136,7 @@ export default function Index() {
                       </Flex>
 
                       {actionResponse?.error && (
-                        <TextNotification isVisible={true} variant={'failure'}>
+                        <TextNotification isVisible={true} variant="failure">
                           <Text>{actionResponse?.error}</Text>
                         </TextNotification>
                       )}
@@ -161,7 +161,7 @@ export default function Index() {
                         />
                       </Flex>
                       <Flex sx={{ justifyContent: 'space-between' }}>
-                        <Text sx={{ fontSize: 1 }} color={'grey'}>
+                        <Text sx={{ fontSize: 1 }} color="grey">
                           <Link to="/reset-password" data-cy="lost-password">
                             Forgotten password?
                           </Link>

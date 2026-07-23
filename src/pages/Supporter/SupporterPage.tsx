@@ -1,18 +1,19 @@
 import { loadStripe, type Stripe as StripeType } from '@stripe/stripe-js';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { toast as sonnerToast } from 'sonner';
 import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
-import type { SupporterPrice } from 'src/services/stripeService.server';
+import type { SupporterPrice, TierConfigMap } from 'src/services/stripeService.server';
 import { CheckoutView } from './CheckoutView';
 import { type Interval, SupporterProvider } from './SupporterContext';
 import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
+import { TIER_CONFIG } from './tierConfig';
 
 export const formatPrice = (cents: number, currency: string) => {
   const fractionDigits = cents % 100 === 0 ? 0 : 2;
@@ -37,26 +38,60 @@ type PageState = 'form' | 'checkout' | 'thank-you';
 
 export const SupporterPage = ({
   prices,
+  tierConfig: dbTierConfig,
+  thankYouImageUrl,
   isAuthenticated,
   userEmail,
 }: {
   prices: SupporterPrice[];
+  tierConfig?: TierConfigMap;
+  thankYouImageUrl?: string | null;
   isAuthenticated: boolean;
   userEmail: string;
 }) => {
   const tenantContext = useContext(TenantContext);
   const siteImage = tenantContext?.siteImage;
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const siteName = tenantContext?.siteNameShort || tenantContext?.siteName;
+
+  const tierConfig = useMemo(() => {
+    const merged = { ...TIER_CONFIG };
+    if (dbTierConfig) {
+      for (const [key, value] of Object.entries(dbTierConfig)) {
+        merged[Number(key)] = value;
+      }
+    }
+    return merged;
+  }, [dbTierConfig]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const toast = useToast();
 
-  // Preview mode: /supporter?step=login or ?step=create or ?step=authenticated
+  // Preview mode: /support?preview=form|checkout|login|create|authenticated
   const previewMode = useMemo(() => {
-    const step = searchParams.get('step');
-    return step === 'login' || step === 'create' || step === 'authenticated' ? step : null;
+    const preview = searchParams.get('preview');
+    return preview === 'form' ||
+      preview === 'checkout' ||
+      preview === 'login' ||
+      preview === 'create' ||
+      preview === 'authenticated'
+      ? preview
+      : null;
   }, [searchParams]);
 
-  const [pageState, setPageState] = useState<PageState>(previewMode ? 'thank-you' : 'form');
+  // In preview mode, override server-side isAuthenticated so that ?preview=create always shows the create form, etc.
+  const effectiveIsAuthenticated = previewMode ? previewMode === 'authenticated' : isAuthenticated;
+
+  const [initialTier] = useState(() => {
+    const tier = searchParams.get('tier');
+    return tier ? parseInt(tier, 10) : null;
+  });
+
+  const [pageState, setPageState] = useState<PageState>(
+    previewMode === 'checkout'
+      ? 'checkout'
+      : previewMode === 'login' || previewMode === 'create' || previewMode === 'authenticated'
+        ? 'thank-you'
+        : 'form',
+  );
   const [currency, setCurrency] = useState(
     () => [...new Set(prices.map((p) => p.currency))][0] || '',
   );
@@ -66,8 +101,12 @@ export const SupporterPage = ({
   const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [stripeInstance, setStripeInstance] = useState<Promise<StripeType | null> | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(
+    previewMode === 'checkout' ? 'pi_preview_secret' : null,
+  );
+  const [stripeInstance, setStripeInstance] = useState<Promise<StripeType | null> | null>(
+    previewMode === 'checkout' ? Promise.resolve(null) : null,
+  );
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(
     previewMode ? 'cus_preview' : null,
   );
@@ -86,13 +125,28 @@ export const SupporterPage = ({
     () =>
       prices
         .filter((p) => p.currency === currency && p.interval === interval)
-        .sort((a, b) => (a.tier ?? 0) - (b.tier ?? 0) || a.unitAmount - b.unitAmount),
+        .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || b.unitAmount - a.unitAmount),
     [prices, currency, interval],
+  );
+
+  const handleIntervalChange = useCallback(
+    (newInterval: Interval) => {
+      const currentIndex = availablePrices.findIndex((p) => p.id === selectedPriceId);
+      const newPrices = prices
+        .filter((p) => p.currency === currency && p.interval === newInterval)
+        .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || b.unitAmount - a.unitAmount);
+      if (currentIndex >= 0 && currentIndex < newPrices.length) {
+        setSelectedPriceId(newPrices[currentIndex].id);
+      }
+      setInterval(newInterval);
+    },
+    [availablePrices, selectedPriceId, prices, currency],
   );
 
   const selectedPrice =
     availablePrices.find((p) => p.id === selectedPriceId) ||
-    availablePrices.find((p) => p.tier === 2) ||
+    (initialTier != null ? availablePrices.findLast((p) => p.tier === initialTier) : null) ||
+    availablePrices.findLast((p) => p.tier === 2) ||
     availablePrices[0];
   const selectedAmount = selectedPrice?.unitAmount || 0;
   const selectedTier = selectedPrice?.tier ?? null;
@@ -100,20 +154,34 @@ export const SupporterPage = ({
   const symbol = currency ? getCurrencySymbol(currency) : '';
 
   useEffect(() => {
-    if (previewMode) return;
+    if (!previewMode && !searchParams.has('payment')) {
+      setSearchParams({ step: pageState }, { replace: true });
+    }
+  }, [pageState]);
 
-    if (searchParams.get('payment') !== 'success' || isAuthenticated) return;
+  useEffect(() => {
+    if (previewMode) {
+      return;
+    }
+
+    if (searchParams.get('payment') !== 'success' || isAuthenticated) {
+      return;
+    }
 
     const customerParam = searchParams.get('customer');
     const emailParam = searchParams.get('email');
     const nameParam = searchParams.get('name');
     const accountExistsParam = searchParams.get('accountExists');
 
-    if (!customerParam || !emailParam) return;
+    if (!customerParam || !emailParam) {
+      return;
+    }
 
     setStripeCustomerId(customerParam);
     setEmail(emailParam);
-    if (nameParam) setName(nameParam);
+    if (nameParam) {
+      setName(nameParam);
+    }
 
     const autoCreate = async () => {
       if (accountExistsParam === 'true') {
@@ -128,7 +196,9 @@ export const SupporterPage = ({
           name: nameParam || emailParam.split('@')[0],
           stripeCustomerId: customerParam,
         });
-        if (result.ok) setAccountCreated(true);
+        if (result.ok) {
+          setAccountCreated(true);
+        }
       } catch (err) {
         console.error('Auto-create account failed:', err);
       }
@@ -136,11 +206,13 @@ export const SupporterPage = ({
 
     autoCreate();
     setPageState('thank-you');
-    navigate('/supporter', { replace: true });
+    setSearchParams({ step: 'thank-you' }, { replace: true });
   }, [isAuthenticated, previewMode, searchParams]);
 
   const handleSupport = async () => {
-    if (previewMode) return;
+    if (previewMode) {
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -192,7 +264,9 @@ export const SupporterPage = ({
   };
 
   const handlePaymentSuccess = async () => {
-    if (previewMode) return;
+    if (previewMode) {
+      return;
+    }
 
     if (isAuthenticated) {
       setPageState('thank-you');
@@ -207,7 +281,9 @@ export const SupporterPage = ({
           name: name || email.split('@')[0],
           stripeCustomerId,
         });
-        if (result.ok) setAccountCreated(true);
+        if (result.ok) {
+          setAccountCreated(true);
+        }
       } catch (err) {
         console.error('Auto-create account failed:', err);
       }
@@ -226,7 +302,7 @@ export const SupporterPage = ({
     currency,
     setCurrency,
     interval,
-    setInterval,
+    setInterval: handleIntervalChange,
     selectedPriceId: selectedPrice?.id || null,
     setSelectedPriceId,
     name,
@@ -239,7 +315,7 @@ export const SupporterPage = ({
     selectedTier,
     selectedTierName,
     symbol,
-    isAuthenticated,
+    isAuthenticated: effectiveIsAuthenticated,
     isLoading,
     error,
     accountExists,
@@ -248,6 +324,9 @@ export const SupporterPage = ({
     stripeInstance,
     stripeCustomerId,
     siteImage,
+    tierConfig,
+    siteName,
+    thankYouImageUrl: thankYouImageUrl ?? null,
     previewMode: !!previewMode,
     onSupport: handleSupport,
     onPaymentSuccess: handlePaymentSuccess,
@@ -256,7 +335,7 @@ export const SupporterPage = ({
 
   return (
     <SupporterProvider value={ctx}>
-      {pageState === 'thank-you' && (isAuthenticated || previewMode === 'authenticated') ? (
+      {pageState === 'thank-you' && effectiveIsAuthenticated ? (
         <ThankYouAuthenticatedView />
       ) : pageState === 'thank-you' && stripeCustomerId && accountExists ? (
         <ThankYouLoginForm />

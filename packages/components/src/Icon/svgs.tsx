@@ -20,6 +20,8 @@ import doubleArrowRight from '../../assets/icons/double-arrow-right.svg';
 import doubleTickSVG from '../../assets/icons/double-tick.svg';
 import editSVG from '../../assets/icons/edit.svg';
 import emailSVG from '../../assets/icons/email.svg';
+import emailOffSVG from '../../assets/icons/email-off.svg';
+import emailStackSVG from '../../assets/icons/email-stack.svg';
 import employeeSVG from '../../assets/icons/employee.svg';
 import errorSVG from '../../assets/icons/error.svg';
 import eyeSVG from '../../assets/icons/eye.svg';
@@ -30,6 +32,7 @@ import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg';
 import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg';
 import bazarSVG from '../../assets/icons/icon-bazar.svg';
 import commentSVG from '../../assets/icons/icon-comment.svg';
+import difficultyLevel from '../../assets/icons/icon-difficulty-level.svg';
 import emailOutlineSVG from '../../assets/icons/icon-email-outline.svg';
 import libraySVG from '../../assets/icons/icon-library.svg';
 import researchSVG from '../../assets/icons/icon-research.svg';
@@ -51,6 +54,19 @@ import gpsLocation from '../../assets/icons/map-gpsLocation.svg';
 import megaphoneSVG from '../../assets/icons/megaphone.svg';
 import megaphoneActiveSVG from '../../assets/icons/megaphone-active.svg';
 import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg';
+import navAcademySVG from '../../assets/icons/nav-academy.svg';
+import navLibrarySVG from '../../assets/icons/nav-library.svg';
+import navLogoutSVG from '../../assets/icons/nav-logout.svg';
+import navMapSVG from '../../assets/icons/nav-map.svg';
+import navNotificationsSVG from '../../assets/icons/nav-notifications.svg';
+import navNotificationsActiveSVG from '../../assets/icons/nav-notifications-active.svg';
+import navProfileSVG from '../../assets/icons/nav-profile.svg';
+import navProjectsSVG from '../../assets/icons/nav-projects.svg';
+import navQuestionsSVG from '../../assets/icons/nav-questions.svg';
+import navResearchSVG from '../../assets/icons/nav-research.svg';
+import navSettingsSVG from '../../assets/icons/nav-settings.svg';
+import navSupporterSVG from '../../assets/icons/nav-supporter.svg';
+import navUpdatesSVG from '../../assets/icons/nav-updates.svg';
 import newsSVG from '../../assets/icons/news.svg';
 import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
 import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
@@ -104,6 +120,7 @@ export const iconMap = {
   copyLink: <ImageIcon src={copyLinkSVG} />,
   declined: <ImageIcon src={declinedSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
+  difficultyLevel: <ImageIcon src={difficultyLevel} />,
   discussion: <ImageIcon src={discussionSVG} />,
   doubleTick: <ImageIcon src={doubleTickSVG} />,
   doubleArrowLeft: (
@@ -124,6 +141,8 @@ export const iconMap = {
   ),
   edit: <ImageIcon src={editSVG} />,
   email: <ImageIcon src={emailSVG} />,
+  emailOff: <ImageIcon src={emailOffSVG} />,
+  emailStack: <ImageIcon src={emailStackSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
@@ -185,4 +204,17 @@ export const iconMap = {
   error: <ImageIcon src={errorSVG} />,
   warning: <ImageIcon src={warningSVG} />,
   info: <ImageIcon src={infoSVG} />,
+  navAcademy: <ImageIcon src={navAcademySVG} />,
+  navLibrary: <ImageIcon src={navLibrarySVG} />,
+  navLogout: <ImageIcon src={navLogoutSVG} />,
+  navMap: <ImageIcon src={navMapSVG} />,
+  navProfile: <ImageIcon src={navProfileSVG} />,
+  navProjects: <ImageIcon src={navProjectsSVG} />,
+  navQuestions: <ImageIcon src={navQuestionsSVG} />,
+  navResearch: <ImageIcon src={navResearchSVG} />,
+  navSettings: <ImageIcon src={navSettingsSVG} />,
+  navSupporter: <ImageIcon src={navSupporterSVG} />,
+  navUpdates: <ImageIcon src={navUpdatesSVG} />,
+  navNotifications: <ImageIcon src={navNotificationsSVG} />,
+  navNotificationsActive: <ImageIcon src={navNotificationsActiveSVG} />,
 };

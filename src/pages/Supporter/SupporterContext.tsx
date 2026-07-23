@@ -38,6 +38,9 @@ export type SupporterState = {
   stripeCustomerId: string | null;
 
   siteImage: string | undefined;
+  tierConfig: Record<number, { color: string; name: string; description: string }>;
+  siteName: string | undefined;
+  thankYouImageUrl: string | null;
   previewMode: boolean;
 
   onSupport: () => void;
@@ -51,6 +54,8 @@ export const SupporterProvider = SupporterContext.Provider;
 
 export const useSupporterContext = () => {
   const ctx = useContext(SupporterContext);
-  if (!ctx) throw new Error('useSupporterContext must be used within SupporterProvider');
+  if (!ctx) {
+    throw new Error('useSupporterContext must be used within SupporterProvider');
+  }
   return ctx;
 };

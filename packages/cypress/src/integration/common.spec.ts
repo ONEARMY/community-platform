@@ -22,12 +22,13 @@ describe('[Common]', () => {
     cy.wait(2000);
 
     cy.step('Go to Academy page');
-    cy.get('[data-cy=page-link]').contains('Academy').click();
+    cy.get('[data-cy=page-link]:visible').contains('Academy').click();
     cy.wait(2000);
     cy.url().should('include', '/academy');
 
     cy.step('Go to library page');
-    cy.get('[data-cy=page-link]').contains('Library').click();
+    cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+    cy.get('[data-cy=page-link]:visible').contains('Library').click();
     cy.wait(2000);
     cy.url().should('include', '/library');
   });

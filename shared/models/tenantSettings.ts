@@ -2,6 +2,7 @@ import { UserRole } from './user';
 
 export class TenantSettings {
   siteName: string;
+  siteNameShort: string;
   siteDescription: string;
   siteUrl: string;
   messageSignOff: string;
@@ -19,6 +20,7 @@ export class TenantSettings {
   colorAccent: string;
   colorAccentHover: string;
   showImpact: boolean;
+  hasMembershipTiers: boolean;
   createResearchRoles: UserRole[];
   gaTrackingId: string;
   pwaIcons?: PWAIcons;

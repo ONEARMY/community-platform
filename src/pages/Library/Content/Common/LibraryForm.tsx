@@ -146,13 +146,11 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
                 <LibraryTitleField />
                 <LibraryDescriptionField />
                 <LibraryCategoryField />
+                <ImageField title="Cover Image" contentType="projects" contentId={id ?? null} />
                 <LibraryTimeField />
                 <LibraryDifficultyField />
                 <TagsField title={intro.tags.title} />
                 <FilesFields contentType="projects" contentId={id ?? null} />
-              </Flex>
-              <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
-                <ImageField title="Cover Image" contentType="projects" contentId={id ?? null} />
               </Flex>
             </Flex>
           </FormWrapper>

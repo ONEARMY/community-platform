@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as ButtonComp, Section } from '@react-email/components';
+import { Button as ButtonComp, Section } from 'react-email';
 
 const button = {
   backgroundColor: '#E2EDF7',

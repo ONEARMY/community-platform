@@ -169,13 +169,17 @@ export class NotificationsSupabaseServiceServer {
   }
 
   async createNotifications(notification: DBNotification, subscriberIds: number[]): Promise<void> {
-    if (!subscriberIds || subscriberIds.length === 0) return;
+    if (!subscriberIds || subscriberIds.length === 0) {
+      return;
+    }
 
     try {
       // Filter out any null or undefined subscriber IDs
       const validSubscriberIds = subscriberIds.filter((id) => id != null);
 
-      if (validSubscriberIds.length === 0) return;
+      if (validSubscriberIds.length === 0) {
+        return;
+      }
 
       const notificationsToInsert = validSubscriberIds.map(
         (subscriberId) =>

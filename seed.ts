@@ -13,7 +13,7 @@ import type {
   questionsChildInputs,
   questionsScalars,
   researchScalars,
-  stripe_badge_productsScalars,
+  stripe_tier_configScalars,
   subscribersChildInputs,
   subscribersScalars,
   tagsChildInputs,
@@ -191,37 +191,45 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-1',
-    display_name: 'Supporter',
+    display_name: 'Starter',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
     premium_tier: 1,
   },
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-2',
-    display_name: 'Supporter',
+    display_name: 'Hero',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
     premium_tier: 2,
   },
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-3',
-    display_name: 'Supporter',
+    display_name: 'Legend',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
     premium_tier: 3,
   },
 ];
 
-const seedStripeBadgeProducts = (
+const TIER_COLORS: Record<number, string> = {
+  1: '#BFDEBA',
+  2: '#77BDE3',
+  3: '#FEE77B',
+};
+
+const seedStripeTierConfig = (
   badges: profile_badgesScalars[],
-): Partial<stripe_badge_productsScalars>[] => {
+): Partial<stripe_tier_configScalars>[] => {
   const tierBadges = badges.filter((b) => b.name?.startsWith('stripe-tier-'));
   return tierBadges.map((badge) => ({
     tenant_id,
-    stripe_product_id: `prod_tier${badge.premium_tier}`,
     badge_id: badge.id,
+    description: 'You help us develop new features, get videos in 4K without ads!',
+    color: TIER_COLORS[badge.premium_tier ?? 0] ?? '#BFDEBA',
+    thank_you_image_url: null,
   }));
 };
 
@@ -593,6 +601,7 @@ const main = async () => {
   await seed.tenant_settings([
     {
       site_name: 'Local Development Community',
+      site_name_short: 'Local Dev',
       site_description:
         'A series of tools to collaborate around the world. Connect, share and meet each other to tackle problems.',
       site_url: 'http://localhost:3000',
@@ -659,7 +668,7 @@ const main = async () => {
   const { profile_badges } = await seed.profile_badges(seedBadges());
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
   await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
-  await seed.stripe_badge_products(seedStripeBadgeProducts(profile_badges));
+  await seed.stripe_tier_config(seedStripeTierConfig(profile_badges));
 
   await seed.map_pins(seedMapPins(profiles));
   const { tags } = await seed.tags(seedTags());

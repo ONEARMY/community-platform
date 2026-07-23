@@ -15,6 +15,7 @@ export const baseTheme = {
     behind: -1,
     level: 0,
     default: 1,
+    navDropdown: 10,
     modalProfile: 900,
     logoContainer: 999,
     header: 3000,
@@ -71,6 +72,16 @@ export const baseTheme = {
   space: commonStyles.space,
   radii: commonStyles.space,
   fonts: commonStyles.fontFamily,
+  shadows: {
+    popover: '0 8px 28px rgba(0, 0, 0, 0.16)',
+    bottomNav: '0 -6px 21px rgba(0, 0, 0, 0.15)',
+  },
+
+  images: {
+    avatar: {
+      flexShrink: 0,
+    },
+  },
 
   forms: {
     input: {
@@ -112,6 +123,21 @@ export const baseTheme = {
       ...commonStyles.input,
       border: `2px solid ${commonStyles.colors.black}`,
       padding: 3,
+    },
+    radio: {
+      'input:focus ~ &': {
+        backgroundColor: commonStyles.colors.white,
+      },
+    },
+    checkbox: {
+      'input:focus ~ &': {
+        backgroundColor: commonStyles.colors.white,
+      },
+    },
+    switch: {
+      'input:focus ~ &': {
+        backgroundColor: commonStyles.colors.white,
+      },
     },
   },
   maxContainerWidth: 1280,

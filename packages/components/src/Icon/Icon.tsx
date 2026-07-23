@@ -3,7 +3,7 @@
 import styled from '@emotion/styled';
 import type { Colors } from 'oa-themes';
 import { IconContext } from 'react-icons';
-import { FaCloudUploadAlt, FaFilePdf, FaFilter, FaSignal } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaFilePdf, FaFilter } from 'react-icons/fa';
 import {
   MdAccessTime,
   MdAccountCircle,
@@ -68,7 +68,7 @@ export const glyphs: IGlyphs = {
   'close-modal': iconMap.crossCloseModal,
   declined: iconMap.declined,
   delete: iconMap.delete,
-  difficulty: <FaSignal />,
+  difficulty: iconMap.difficultyLevel,
   discussion: iconMap.discussion,
   doubleTick: iconMap.doubleTick,
   download: <MdFileDownload />,
@@ -77,6 +77,8 @@ export const glyphs: IGlyphs = {
   'double-arrow-right': iconMap.doubleArrowRight,
   edit: iconMap.edit,
   email: iconMap.email,
+  'email-off': iconMap.emailOff,
+  'email-stack': iconMap.emailStack,
   employee: iconMap.employee,
   'email-outline': iconMap.emailOutline,
   'external-url': <ExternalUrl />,
@@ -134,6 +136,19 @@ export const glyphs: IGlyphs = {
   error: iconMap.error,
   warning: iconMap.warning,
   info: iconMap.info,
+  'nav-academy': iconMap.navAcademy,
+  'nav-library': iconMap.navLibrary,
+  'nav-logout': iconMap.navLogout,
+  'nav-map': iconMap.navMap,
+  'nav-profile': iconMap.navProfile,
+  'nav-projects': iconMap.navProjects,
+  'nav-questions': iconMap.navQuestions,
+  'nav-research': iconMap.navResearch,
+  'nav-settings': iconMap.navSettings,
+  'nav-supporter': iconMap.navSupporter,
+  'nav-updates': iconMap.navUpdates,
+  'nav-notifications': iconMap.navNotifications,
+  'nav-notifications-active': iconMap.navNotificationsActive,
 };
 
 export type IconProps = IProps & VerticalAlignProps & SpaceProps;

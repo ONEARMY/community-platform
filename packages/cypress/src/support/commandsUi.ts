@@ -49,6 +49,7 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>;
+      selectCard(label: string, selector?: string): Chainable<void>;
       selectByValue(value: string, selector: string): Chainable<void>;
       setSettingVisitorPolicy(policyText: string, details?: string): Chainable<void>;
       clearSettingVisitorPolicy(): Chainable<void>;
@@ -213,6 +214,11 @@ Cypress.Commands.add('selectTag', (tagName: string, selector = '[data-cy=tag-sel
   cy.get(`${selector} input`).click({ force: true });
   cy.get(`${selector} input`).type(tagName, { force: true });
   cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click();
+});
+
+Cypress.Commands.add('selectCard', (label: string, selector = '[data-cy=category-select]') => {
+  cy.log('Select card', label);
+  cy.get(selector).contains('h3', label).click();
 });
 
 Cypress.Commands.add('selectByValue', (value: string, selector: string) => {

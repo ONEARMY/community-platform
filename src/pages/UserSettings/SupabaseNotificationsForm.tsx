@@ -59,7 +59,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
               <NotificationRow
                 index={rowIndex++}
                 glyph="news"
-                name="Coming soon: News updates"
+                name="News updates"
                 description="Get notified when news from HQ are posted"
                 control={<ContentReachSwitch />}
                 subContent={<ContentReachRadioOptions />}

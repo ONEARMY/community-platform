@@ -16,6 +16,8 @@ export class QuestionServiceServer {
       .select(
         `
          id,
+         accepted_answer_id,
+         accepted_answer_date,
          created_at,
          created_by,
          is_draft,

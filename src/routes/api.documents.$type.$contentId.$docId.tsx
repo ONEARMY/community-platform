@@ -41,7 +41,9 @@ async function recordUserDownload(
     .eq('auth_id', authId)
     .single();
 
-  if (!profile) return;
+  if (!profile) {
+    return;
+  }
 
   await client.from('file_downloads').upsert(
     {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section, Text } from '@react-email/components';
+import { Section, Text } from 'react-email';
 
 const text = {
   alignText: 'center',

@@ -11,7 +11,9 @@ export const getSecret = async (name: string): Promise<string> => {
 
   const prefixedName = `${name}:${tenantId}`;
   const cached = await cache.get(prefixedName);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   const client = createSupabaseAdminServerClient();
   const { data } = await client.rpc('read_secret', { secret_name: prefixedName });

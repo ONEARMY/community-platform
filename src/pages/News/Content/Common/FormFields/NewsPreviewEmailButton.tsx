@@ -29,6 +29,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         tags: formValues.tags,
         title: formValues.title || '',
         contentReach: null,
+        poll: formValues.poll || null,
       },
       props.id,
     );
@@ -44,9 +45,11 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         console.error(error);
         return `Error: ${error.message}`;
       },
+      finally: () => {
+        setIsSendingPreview(false);
+      },
       duration: 10000,
     });
-    setIsSendingPreview(false);
   };
 
   return (

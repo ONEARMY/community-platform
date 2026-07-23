@@ -101,7 +101,7 @@ export const LibraryStepField = ({
             <Button
               data-cy="move-step-up"
               data-testid="move-step-up"
-              variant={'secondary'}
+              variant="secondary"
               icon="arrow-full-up"
               showIconOnly={true}
               sx={{ mx: '5px' }}
@@ -112,7 +112,7 @@ export const LibraryStepField = ({
           <Button
             data-cy="move-step-down"
             data-testid="move-step-down"
-            variant={'secondary'}
+            variant="secondary"
             icon="arrow-full-down"
             sx={{ mx: '5px' }}
             showIconOnly={true}
@@ -123,7 +123,7 @@ export const LibraryStepField = ({
             <Button
               data-cy="delete-step"
               data-testid="delete-step"
-              variant={'outline'}
+              variant="outline"
               showIconOnly={true}
               icon="delete"
               type="button"
@@ -135,7 +135,7 @@ export const LibraryStepField = ({
             <Text>{deleteButton.warning}</Text>
             <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
               <Flex px={1}>
-                <Button variant={'outline'} onClick={() => toggleDeleteModal()}>
+                <Button variant="outline" onClick={() => toggleDeleteModal()}>
                   {deleteButton.cancel}
                 </Button>
               </Flex>

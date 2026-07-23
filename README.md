@@ -218,6 +218,10 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://botho.cc"><img src="https://avatars.githubusercontent.com/u/1258870?v=4?s=60" width="60px;" alt="Botho"/><br /><sub><b>Botho</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=elbotho" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mo-salah1998"><img src="https://avatars.githubusercontent.com/u/56582553?v=4?s=60" width="60px;" alt="Mohamed Salah"/><br /><sub><b>Mohamed Salah</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mo-salah1998" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/daphne951207-bit"><img src="https://avatars.githubusercontent.com/u/261492264?v=4?s=60" width="60px;" alt="daphne951207-bit"/><br /><sub><b>daphne951207-bit</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=daphne951207-bit" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/danielfayo"><img src="https://avatars.githubusercontent.com/u/98162647?v=4?s=60" width="60px;" alt="danielfayo"/><br /><sub><b>danielfayo</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=danielfayo" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://theantiquesouls.com/"><img src="https://avatars.githubusercontent.com/u/49906335?v=4?s=60" width="60px;" alt="Leo Ebeling"/><br /><sub><b>Leo Ebeling</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=SirLeoIV" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

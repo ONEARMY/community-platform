@@ -21,6 +21,8 @@ export const commonStyles = {
     red: '#eb1b1f',
     red2: '#f58d8e',
     softblue: '#e2edf7',
+    highlight: '#20b7eb',
+    highlightHover: '#97cdeb',
     bluetag: '#5683b0',
     grey: '#61646b',
     green: '#00c3a9',
@@ -29,10 +31,12 @@ export const commonStyles = {
     silver: '#c0c0c0',
     softgrey: '#c2c2c2',
     lightgrey: '#ababac',
+    palegrey: '#f0f0f0',
     darkGrey: '#686868',
     subscribed: 'orange',
     notSubscribed: '#1b1b1b',
     betaGreen: '#98cc98',
+    popoverBorder: 'rgba(0, 0, 0, 0.08)',
   },
   alert: {
     borderRadius: 1,
@@ -44,6 +48,7 @@ export const commonStyles = {
   fontFamily: {
     title: `"Varela Round", Arial, sans-serif`,
     body: `'Inter', Arial, sans-serif`,
+    nav: `'Klima', 'Inter', Arial, sans-serif`,
   },
   space: [
     0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110,

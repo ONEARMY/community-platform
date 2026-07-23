@@ -1,16 +1,15 @@
 import { observer } from 'mobx-react';
-import { Button, ExternalLink, Icon, InternalLink } from 'oa-components';
+import { Button, Icon } from 'oa-components';
 import { useEffect, useState } from 'react';
-import { DISCORD_INVITE_URL } from 'src/constants';
-import { fields, headings } from 'src/pages/UserSettings/labels';
+import { headings } from 'src/pages/UserSettings/labels';
 import { stripeService } from 'src/services/stripeService';
 import { Flex, Heading, Text } from 'theme-ui';
 
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
+import { DeleteAccountForm } from './content/sections/DeleteAccount.form';
 
 export const SettingsPageAccount = observer(() => {
-  const { description, title } = fields.deleteAccount;
   const [hasSubscription, setHasSubscription] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -101,7 +100,7 @@ export const SettingsPageAccount = observer(() => {
               </Text>
             </Flex>
           </Flex>
-          <InternalLink to="/supporter">
+          <InternalLink to="/support">
             <Button type="button" variant="primary">
               Support us
             </Button>
@@ -112,13 +111,7 @@ export const SettingsPageAccount = observer(() => {
 
       <ChangePasswordForm />
       <ChangeEmailForm />
-
-      <Text variant="body">
-        {title}{' '}
-        <ExternalLink sx={{ ml: 1, textDecoration: 'underline' }} href={DISCORD_INVITE_URL}>
-          {description}
-        </ExternalLink>
-      </Text>
+      <DeleteAccountForm />
     </Flex>
   );
 });

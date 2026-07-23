@@ -1,6 +1,6 @@
 import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, ProfileDTO, UserVisitorPreference } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
+import { type ActionFunctionArgs, data } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -19,7 +19,7 @@ export const loader = async ({ request }) => {
 
     const nowUtc = new Date().toISOString();
 
-    const { data, error } = await client
+    const { data: profileData, error } = await client
       .from('profiles')
       .update({ last_active: nowUtc })
       .eq('auth_id', claims.data.claims.sub)
@@ -59,9 +59,9 @@ export const loader = async ({ request }) => {
     }
 
     const profileFactory = new ProfileFactory(client);
-    const profile = profileFactory.fromDB(data);
+    const profile = profileFactory.fromDB(profileData);
 
-    return Response.json(profile, { headers, status: 200 });
+    return data(profile, { headers, status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json({ error }, { headers, status: 500 });
@@ -75,10 +75,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const country = formData.get('country');
 
-    const data = {
+    const submissionData = {
       displayName: String(formData.get('displayName')),
       about: String(formData.get('about')),
-      country: country === 'null' ? null : String(country),
+      country: country ? String(country) : null,
       type: String(formData.get('type')),
       isContactable: formData.get('isContactable') === 'true',
       showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
@@ -111,7 +111,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      data,
+      submissionData,
       profileData,
       memberTypes,
     );
@@ -125,10 +125,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profileService = new ProfileServiceServer(client);
-    const profile = await profileService.updateProfile(profileData?.id, data);
+    const profile = await profileService.updateProfile(profileData?.id, submissionData);
     profileService.updateUserActivity(claims.data.claims.sub);
 
-    return Response.json(profile, { headers, status: 200 });
+    return data(profile, { headers, status: 200 });
   } catch (error) {
     if (error instanceof HTTPException) {
       return error.getResponse();

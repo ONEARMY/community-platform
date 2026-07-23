@@ -70,6 +70,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   isDraft: false,
   profileBadges: null,
   contentReach: null,
+  poll: null,
   ...newsOverloads,
 });
 

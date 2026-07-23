@@ -24,10 +24,18 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
     body.append('contentReach', data.contentReach.value.toString());
   }
 
-  return fetch('/api/notifications-preferences', {
+  const response = await fetch('/api/notifications-preferences', {
     method: 'POST',
     body,
   });
+
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error saving preferences' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving preferences';
+    throw new Error(errorMessage, { cause: response.status });
+  }
+
+  return response;
 };
 
 const unsubscribe = async () => {

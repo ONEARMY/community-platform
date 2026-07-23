@@ -68,10 +68,13 @@ export const Username = (props: IProps) => {
         {username}
       </Text>
 
-      {badges &&
-        badges.map((badge) => {
-          return <UserBadge key={badge.id} badge={badge} />;
-        })}
+      {badges && badges.length > 0 && (
+        <Flex sx={{ gap: 1, alignItems: 'center' }}>
+          {badges.map((badge) => {
+            return <UserBadge key={badge.id} badge={badge} />;
+          })}
+        </Flex>
+      )}
     </Flex>
   );
 

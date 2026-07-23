@@ -12,6 +12,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     profileBadges: form.profileBadges?.filter((pb) => pb !== null).map((pb) => Number(pb)) || null,
     tags: form.tags || null,
     contentReach: form.contentReach,
+    poll: form.poll || null,
   });
 
   const response =
@@ -37,6 +38,19 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   return news;
 };
 
+const deleteNews = async (id: number) => {
+  const response = await fetch(`/api/news/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting news' }));
+    const errorMessage = errorData.error || 'Error deleting news';
+    throw new Error(errorMessage, { cause: response.status });
+  }
+};
+
 export const newsService = {
+  deleteNews,
   upsert,
 };

@@ -1,10 +1,14 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { useLoaderData } from 'react-router';
+import { data, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
 import { SupporterPage } from 'src/pages/Supporter/SupporterPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { StripeServiceServer, type SupporterPrice } from 'src/services/stripeService.server';
+import {
+  StripeServiceServer,
+  type SupporterPrice,
+  type TierConfigMap,
+} from 'src/services/stripeService.server';
 import { Flex, Heading, Text } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -25,17 +29,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   try {
     const stripeService = new StripeServiceServer(client);
-    const prices = await stripeService.getPrices();
-    return Response.json({ prices, isAuthenticated, userEmail });
+    const [prices, tierConfigResult] = await Promise.all([
+      stripeService.getPrices(),
+      stripeService.getTierConfig(),
+    ]);
+    const { tiers: tierConfig, thankYouImageUrl } = tierConfigResult;
+    return data({ prices, tierConfig, thankYouImageUrl, isAuthenticated, userEmail });
   } catch (error) {
     console.error('Failed to load supporter prices:', error);
-    return Response.json({ prices: [], isAuthenticated, userEmail });
+    return data({ prices: [], tierConfig: {}, thankYouImageUrl: null, isAuthenticated, userEmail });
   }
 }
 
 export default function Index() {
-  const { prices, isAuthenticated, userEmail } = useLoaderData<{
+  const { prices, tierConfig, thankYouImageUrl, isAuthenticated, userEmail } = useLoaderData<{
     prices: SupporterPrice[];
+    tierConfig: TierConfigMap;
+    thankYouImageUrl: string | null;
     isAuthenticated: boolean;
     userEmail: string;
   }>();
@@ -63,7 +73,13 @@ export default function Index() {
     <Main style={{ flex: 1 }}>
       <ClientOnly fallback={<></>}>
         {() => (
-          <SupporterPage prices={prices} isAuthenticated={isAuthenticated} userEmail={userEmail} />
+          <SupporterPage
+            prices={prices}
+            tierConfig={tierConfig}
+            thankYouImageUrl={thankYouImageUrl}
+            isAuthenticated={isAuthenticated}
+            userEmail={userEmail}
+          />
         )}
       </ClientOnly>
     </Main>

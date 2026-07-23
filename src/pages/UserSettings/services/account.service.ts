@@ -34,7 +34,25 @@ const changePassword = async (oldPassword: string, newPassword: string) => {
   return response;
 };
 
+const deleteAccount = async (password: string) => {
+  const data = new FormData();
+  data.append('password', password);
+
+  const response = await fetch('/api/account/delete', {
+    method: 'POST',
+    body: data,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || 'Failed to delete account');
+  }
+
+  return response;
+};
+
 export const accountService = {
   changeEmail,
   changePassword,
+  deleteAccount,
 };

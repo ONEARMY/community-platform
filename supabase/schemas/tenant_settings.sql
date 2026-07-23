@@ -20,6 +20,12 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "patreon_id" "text",
     "ga_tracking_id" "text",
     "site_name_short" "text",
+    "color_primary" "text",
+    "color_primary_hover" "text",
+    "color_accent" "text",
+    "color_accent_hover" "text",
+    "show_impact" boolean,
+    "create_research_roles" text[],
     "pwa_icons" "jsonb",
     CONSTRAINT "check_pwa_icons_schema" CHECK (
         "pwa_icons" IS NULL

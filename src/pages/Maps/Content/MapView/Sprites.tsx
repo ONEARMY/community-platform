@@ -70,18 +70,24 @@ export const createClusterIcon = () => {
   };
 };
 
-export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
+export const createMarkerIcon = (pin: MapPin, isSelectedPin: boolean) => {
   const icon =
     pin.moderation === 'accepted'
       ? pin.profile!.type?.smallImageUrl || clusterIcon
       : AwaitingModerationHighlight;
+  let className = `icon-marker icon-${pin.profile!.type?.name}`;
+  const shouldShowAnimationStyle = isSelectedPin && pin.profile.type?.backgroundColor;
+
   return divIcon({
-    className: `icon-marker icon-${pin.profile!.type}`,
-    html: `<img 
-      data-cy="pin-${pin.profile.username}" 
-      src="${icon}" 
-      style="width: 100%; height: 100%; ${draggable ? 'cursor: grab' : ''}" 
-    />`,
+    className,
+    html: `<div class="${isSelectedPin ? 'icon-marker-selected' : ''}">
+      <img 
+        data-cy="pin-${pin.profile.username}" 
+        src="${icon}" 
+        style="width: 100%; height: 100%;"
+      />
+      <div class="${shouldShowAnimationStyle ? 'icon-marker-selected-after' : ''}" style="background-color: ${pin.profile.type?.backgroundColor}"></div>
+    </div>`,
     iconSize: point(38, 38, true),
   });
 };

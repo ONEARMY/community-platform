@@ -2,14 +2,6 @@
   line-height: 26px;
   text-align: center;
   color: white;
-  padding-left: 1px;
-  border-radius: 50%;
-}
-
-/* To make sure images are not
-bigger than image container */
-.icon-marker img {
-  width: 100%;
 }
 
 .icon-cluster-text {
@@ -18,4 +10,18 @@ bigger than image container */
   text-align: center;
   width: 100%;
   height: 100%;
+}
+
+.icon-marker .icon-marker-selected {
+  transform: translateY(-5px);
+}
+
+.icon-marker-selected-after {
+  position: relative;
+  top: -47px;
+  bottom: 0;
+  padding-bottom: 10px;
+  height: 48px !important;
+  clip-path: polygon(85% 69%, 51% 100%, 15% 69%, 50% 20%);
+  z-index: -1;
 }

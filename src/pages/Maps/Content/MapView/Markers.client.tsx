@@ -7,12 +7,13 @@ import { createMarkerIcon } from './Sprites';
 interface IProps {
   pins: MapPin[];
   onPinClick: (pin: MapPin) => void;
+  selectedPin?: MapPin | null;
 }
 
 /**
  * Renders individual map pins without clustering.
  */
-export const Markers = ({ pins, onPinClick }: IProps) => {
+export const Markers = ({ pins, onPinClick, selectedPin }: IProps) => {
   const map = useMap();
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
   const onPinClickRef = useRef(onPinClick);
@@ -39,9 +40,11 @@ export const Markers = ({ pins, onPinClick }: IProps) => {
     // Add new markers
     for (const pin of validPins) {
       const id = String(pin.id);
+      const isSelectedPin = pin.id === selectedPin?.id;
+
       if (!currentMarkers.has(id)) {
         const marker = L.marker([pin.lat, pin.lng], {
-          icon: createMarkerIcon(pin),
+          icon: createMarkerIcon(pin, isSelectedPin),
         });
         marker.on('click', () => onPinClickRef.current(pin));
         marker.addTo(map);

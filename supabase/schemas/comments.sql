@@ -9,8 +9,7 @@ CREATE TABLE IF NOT EXISTS "public"."comments" (
     "source_type" "text" NOT NULL,
     "modified_at" timestamp with time zone,
     "source_id_legacy" "text",
-    "deleted" boolean,
-    "legacy_id" "text"
+    "deleted" boolean
 );
 
 CREATE INDEX "comments_created_by_idx" ON "public"."comments" USING "btree" ("created_by");

@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS "public"."tags" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "name" "text" NOT NULL,
     "tenant_id" "text" NOT NULL,
-    "legacy_id" "text",
     "modified_at" "date"
 );
 

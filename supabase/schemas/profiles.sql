@@ -238,7 +238,7 @@ END;
 $$;
 
 -- RPC function to get staff profiles (admin, editor, moderator), including email from auth.users
-CREATE OR REPLACE FUNCTION get_staff_profiles()
+CREATE OR REPLACE FUNCTION get_staff_profiles(p_tenant_id text)
 RETURNS TABLE (
   profile_id bigint,
   profile_created_at timestamp with time zone,
@@ -252,7 +252,7 @@ RETURNS TABLE (
   is_unsubscribed boolean,
   content_reach content_reach,
   badge_ids bigint[]
-) 
+)
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
@@ -274,6 +274,7 @@ BEGIN
   FROM profiles p
   LEFT JOIN auth.users au ON p.auth_id = au.id
   LEFT JOIN notifications_preferences np ON p.id = np.user_id
-  WHERE p.roles && ARRAY['admin', 'editor', 'moderator']::text[];
+  WHERE p.roles && ARRAY['admin', 'editor', 'moderator']::text[]
+  AND p.tenant_id = p_tenant_id;
 END;
 $$;

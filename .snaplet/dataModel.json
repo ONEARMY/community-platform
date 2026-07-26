@@ -4853,7 +4853,7 @@
           "name": "triggered_by_id",
           "columnName": "triggered_by_id",
           "type": "int8",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -5033,7 +5033,7 @@
         {
           "name": "profiles_notifications_triggered_by_idToprofiles",
           "type": "profiles",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "object",
           "relationName": "notifications_triggered_by_idToprofiles",
           "relationFromFields": ["triggered_by_id"],

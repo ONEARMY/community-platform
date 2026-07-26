@@ -1383,7 +1383,7 @@ CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
     "modified_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text"),
     "owned_by_id" bigint NOT NULL,
-    "triggered_by_id" bigint NOT NULL,
+    "triggered_by_id" bigint,
     "content_type" "public"."notification_content_types" NOT NULL,
     "content_id" bigint NOT NULL,
     "is_read" boolean DEFAULT false,
@@ -1985,7 +1985,7 @@ ALTER TABLE ONLY "public"."notifications"
 ALTER TABLE ONLY "public"."notifications_preferences"
     ADD CONSTRAINT "notifications_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_triggered_by_id_fkey" FOREIGN KEY ("triggered_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE;
+    ADD CONSTRAINT "notifications_triggered_by_id_fkey" FOREIGN KEY ("triggered_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE SET NULL;
 ALTER TABLE ONLY "public"."profile_badges_relations"
     ADD CONSTRAINT "profile_badges_relations_profile_badge_id_fkey" FOREIGN KEY ("profile_badge_id") REFERENCES "public"."profile_badges"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY "public"."profile_badges_relations"

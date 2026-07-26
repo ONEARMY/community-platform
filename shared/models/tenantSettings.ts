@@ -24,6 +24,7 @@ export class TenantSettings {
   createResearchRoles: UserRole[];
   gaTrackingId: string;
   pwaIcons?: PWAIcons;
+  organisationSignupDescriptionHtml?: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

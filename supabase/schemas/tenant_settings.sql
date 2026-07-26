@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "ga_tracking_id" "text",
     "site_name_short" "text",
     "pwa_icons" "jsonb",
+    "organisation_signup_description" "text",
     CONSTRAINT "check_pwa_icons_schema" CHECK (
         "pwa_icons" IS NULL
         OR (

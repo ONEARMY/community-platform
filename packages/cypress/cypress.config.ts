@@ -65,7 +65,6 @@ export default defineConfig({
           await supabaseService.seedResearch(profiles, tags);
           await supabaseService.seedLibrary(profiles, tags);
           await supabaseService.seedTenantSettings();
-          await supabaseService.seedOrganisationSignupSettings();
           return null;
         },
         async 'clear database'() {
@@ -96,7 +95,6 @@ export default defineConfig({
               'profile_types',
               'upgrade_badge',
               'tenant_settings',
-              'organisation_signup_settings',
               'organisation_applications',
               'notification_preferences',
               'news_badges_relations',

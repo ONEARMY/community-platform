@@ -15,12 +15,11 @@ import Main from 'src/pages/common/Layout/Main';
 import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
-import { OrganisationSignupSettingsServiceServer } from 'src/services/organisationSignupSettingsService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { Alert, Card, Flex, Heading, Image, Label, Text } from 'theme-ui';
+import { Alert, Card, Flex, Heading, Label, Text } from 'theme-ui';
 import { bool, object, string } from 'yup';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -32,19 +31,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const profileTypes = await new ProfileTypesServiceServer(client).get();
-  const organisationSignupSettings = await new OrganisationSignupSettingsServiceServer(
-    client,
-  ).get();
+  const tenantSettings = await new TenantSettingsService(client).get();
 
-  if (!organisationSignupSettings || !profileTypes.some((type) => type.isSpace)) {
+  if (
+    !tenantSettings.organisationSignupDescriptionHtml ||
+    !profileTypes.some((type) => type.isSpace)
+  ) {
     return redirect('/sign-up', { headers });
   }
 
-  const tenantSettings = await new TenantSettingsService(client).get();
   const spaceProfileTypes = profileTypes.filter((type) => type.isSpace);
 
   return data(
-    { siteName: tenantSettings.siteName, organisationSignupSettings, spaceProfileTypes },
+    {
+      siteName: tenantSettings.siteName,
+      descriptionHtml: tenantSettings.organisationSignupDescriptionHtml,
+      spaceProfileTypes,
+    },
     { headers },
   );
 };
@@ -63,11 +66,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const emailRedirectTo = `${protocol}//${url.host}/email-confirmation?flow=organisation`;
 
   const profileTypes = await new ProfileTypesServiceServer(client).get();
-  const organisationSignupSettings = await new OrganisationSignupSettingsServiceServer(
-    client,
-  ).get();
+  const tenantSettings = await new TenantSettingsService(client).get();
 
-  if (!organisationSignupSettings || !profileTypes.some((type) => type.isSpace)) {
+  if (
+    !tenantSettings.organisationSignupDescriptionHtml ||
+    !profileTypes.some((type) => type.isSpace)
+  ) {
     return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
   }
 
@@ -109,7 +113,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
-  const { organisationSignupSettings, spaceProfileTypes } = useLoaderData<typeof loader>();
+  const { descriptionHtml, spaceProfileTypes } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -158,30 +162,21 @@ export default function Index() {
                       alignItems: 'center',
                     }}
                   >
-                    {organisationSignupSettings.imageUrl ? (
-                      <Image
-                        src={organisationSignupSettings.imageUrl}
-                        alt=""
-                        data-cy="organisation-signup-image"
-                        sx={{ maxWidth: '200px', maxHeight: '120px' }}
-                      />
-                    ) : (
-                      <Flex
-                        data-cy="organisation-signup-badges"
-                        sx={{ gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}
-                      >
-                        {spaceProfileTypes.map((profileType) => (
-                          <MemberBadge key={profileType.name} size={60} profileType={profileType} />
-                        ))}
-                      </Flex>
-                    )}
+                    <Flex
+                      data-cy="organisation-signup-badges"
+                      sx={{ gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}
+                    >
+                      {spaceProfileTypes.map((profileType) => (
+                        <MemberBadge key={profileType.name} size={60} profileType={profileType} />
+                      ))}
+                    </Flex>
                     <Heading>Create an organisation account</Heading>
                     <Text
                       color="grey"
                       data-cy="organisation-signup-description"
                       sx={{ fontSize: 2 }}
                       dangerouslySetInnerHTML={{
-                        __html: organisationSignupSettings.descriptionHtml,
+                        __html: descriptionHtml ?? '',
                       }}
                     />
                   </Flex>

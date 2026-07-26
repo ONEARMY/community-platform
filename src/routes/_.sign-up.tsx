@@ -7,7 +7,6 @@ import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
-import { OrganisationSignupSettingsServiceServer } from 'src/services/organisationSignupSettingsService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -24,12 +23,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
   const tenantSettings = await new TenantSettingsService(client).get();
   const profileTypes = await new ProfileTypesServiceServer(client).get();
-  const organisationSignupSettings = await new OrganisationSignupSettingsServiceServer(
-    client,
-  ).get();
 
   const showOrganisationSignup =
-    !!organisationSignupSettings && profileTypes.some((type) => type.isSpace);
+    !!tenantSettings.organisationSignupDescriptionHtml && profileTypes.some((type) => type.isSpace);
 
   return data({ ...tenantSettings, showOrganisationSignup }, { headers });
 };

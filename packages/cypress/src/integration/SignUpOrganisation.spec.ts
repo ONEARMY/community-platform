@@ -39,7 +39,7 @@ describe('[Organisation sign-up]', () => {
       cy.step('The description renders its inline link');
       cy.get('[data-cy=organisation-signup-description] a')
         .should('contain', 'our universe')
-        .and('have.attr', 'href', 'https://preciousplastic.com/universe');
+        .and('have.attr', 'href', '/academy');
 
       cy.step('Organisation sign-up links back to member sign-up');
       cy.get('[data-cy=sign-up-member]').click();

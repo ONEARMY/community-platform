@@ -275,19 +275,6 @@ export class SupabaseTestsService {
     });
   }
 
-  async seedOrganisationSignupSettings() {
-    return await this.seedDatabase({
-      organisation_signup_settings: [
-        {
-          description:
-            'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](https://preciousplastic.com/universe)? Then apply as an organisation here. It usually takes a day or two to get approved.',
-          image_url: null,
-          tenant_id: this.tenantId,
-        },
-      ],
-    });
-  }
-
   async seedTenantSettings() {
     return await this.seedDatabase({
       tenant_settings: [
@@ -304,6 +291,8 @@ export class SupabaseTestsService {
           show_impact: true,
           create_research_roles: undefined,
           ga_tracking_id: 'G-TEST123456',
+          organisation_signup_description:
+            'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](/academy)? Then apply as an organisation here. It usually takes a day or two to get approved.',
           tenant_id: this.tenantId,
         },
       ],

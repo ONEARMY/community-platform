@@ -2,6 +2,7 @@ import type { JSX } from 'react';
 import type { BoxProps, ThemeUIStyleObject } from 'theme-ui';
 import { Flex } from 'theme-ui';
 import { Button } from '../Button/Button';
+import type { IGlyphs } from '../Icon/types';
 
 const alignCenterWrapperStyles: ThemeUIStyleObject = {
   height: '100%',
@@ -36,9 +37,10 @@ const UploadImageOverlay = (props: BoxProps): JSX.Element => (
 
 interface IProps {
   onClick: (event: React.MouseEvent) => void;
+  icon?: keyof IGlyphs;
 }
 
-export const ImageInputDeleteOverlay = ({ onClick }: IProps) => {
+export const ImageInputDeleteOverlay = ({ onClick, icon = 'delete' }: IProps) => {
   return (
     <UploadImageOverlay>
       <Button
@@ -46,7 +48,7 @@ export const ImageInputDeleteOverlay = ({ onClick }: IProps) => {
         data-testid="delete-image"
         small
         variant="secondary"
-        icon="delete"
+        icon={icon}
         type="button"
         onClick={(event: any) => onClick(event)}
       >

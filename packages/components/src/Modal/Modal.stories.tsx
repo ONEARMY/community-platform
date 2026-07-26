@@ -26,3 +26,16 @@ export const Sized: StoryFn<typeof Modal> = () => (
     Sized Modal
   </Modal>
 );
+
+export const CustomBoundsAndBackdrop: StoryFn<typeof Modal> = () => (
+  <Modal
+    isOpen={true}
+    onDismiss={dismissed}
+    width={500}
+    maxWidth="100vw"
+    maxHeight={['50vh', '95vh']}
+    backdropColor="rgba(0, 0, 0, 0.6)"
+  >
+    Modal with custom max bounds and a darker backdrop
+  </Modal>
+);

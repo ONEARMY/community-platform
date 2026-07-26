@@ -24,6 +24,7 @@ interface IProps {
   commentsCount: number;
   item: Project;
   loggedInUser: Profile | undefined;
+  remakeCount: number;
   votedUsefulCount?: number;
   hasUserVotedUseful: boolean;
   onUsefulClick: () => Promise<void>;
@@ -35,6 +36,7 @@ export const LibraryDescription = ({
   item,
   loggedInUser,
   onUsefulClick,
+  remakeCount,
   votedUsefulCount,
 }: IProps) => {
   const isEditable = useMemo(() => {
@@ -258,6 +260,15 @@ export const LibraryDescription = ({
                 usePlural: true,
               }),
               stat: commentsCount || 0,
+            },
+            {
+              icon: 'remake',
+              label: buildStatisticsLabel({
+                stat: remakeCount,
+                statUnit: 'remake',
+                usePlural: true,
+              }),
+              stat: remakeCount,
             },
             {
               icon: 'update',

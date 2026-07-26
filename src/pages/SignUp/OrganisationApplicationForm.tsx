@@ -2,6 +2,7 @@ import {
   Button,
   FieldInput,
   FieldTextarea,
+  MemberBadge,
   MultipleImageInput,
   Stepper,
   TextNotification,
@@ -105,11 +106,29 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
               mb={3}
             >
               <Flex sx={{ flexDirection: 'column', width: '100%', gap: 3 }}>
-                <Flex sx={{ flexDirection: 'column', gap: 2, textAlign: 'center' }}>
+                <Flex
+                  sx={{
+                    flexDirection: 'column',
+                    gap: 2,
+                    textAlign: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Flex data-cy="organisation-application-badges" sx={{ justifyContent: 'center' }}>
+                    {profileTypes.map((profileType, index) => (
+                      <MemberBadge
+                        key={profileType.name}
+                        size={60}
+                        profileType={profileType}
+                        sx={{ marginLeft: index === 0 ? 0 : '-12px' }}
+                      />
+                    ))}
+                  </Flex>
                   <Heading>One last step!</Heading>
                   <Text color="grey" sx={{ fontSize: 2 }}>
-                    This info will help us verify your organisation. It usually takes a day or two
-                    to get approved.
+                    This info will help us verify your organisation.
+                    <br />
+                    It usually takes a day or two to get approved.
                   </Text>
                 </Flex>
                 <Card sx={{ borderRadius: 3 }}>

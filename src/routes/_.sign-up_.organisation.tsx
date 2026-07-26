@@ -162,12 +162,14 @@ export default function Index() {
                       alignItems: 'center',
                     }}
                   >
-                    <Flex
-                      data-cy="organisation-signup-badges"
-                      sx={{ gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}
-                    >
-                      {spaceProfileTypes.map((profileType) => (
-                        <MemberBadge key={profileType.name} size={60} profileType={profileType} />
+                    <Flex data-cy="organisation-signup-badges" sx={{ justifyContent: 'center' }}>
+                      {spaceProfileTypes.map((profileType, index) => (
+                        <MemberBadge
+                          key={profileType.name}
+                          size={60}
+                          profileType={profileType}
+                          sx={{ marginLeft: index === 0 ? 0 : '-12px' }}
+                        />
                       ))}
                     </Flex>
                     <Heading>Create an organisation account</Heading>
@@ -277,7 +279,7 @@ export default function Index() {
                         <Button
                           large
                           sx={{
-                            borderRadius: 3,
+                            borderRadius: 1,
                             width: '100%',
                             justifyContent: 'center',
                           }}

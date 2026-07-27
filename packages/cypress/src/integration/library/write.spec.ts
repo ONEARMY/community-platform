@@ -338,6 +338,12 @@ describe('[Library]', () => {
       fillStep(2, 'Second step', stepDescription, stepImage);
       fillStep(3, 'Third step', stepDescription, stepImage);
 
+      cy.step('Wait for every step image to register before publishing');
+      cy.get('[data-cy=step_0]').find('[data-cy=delete-image]').should('exist');
+      cy.get('[data-cy=step_1]').find('[data-cy=delete-image]').should('exist');
+      cy.get('[data-cy=step_2]').find('[data-cy=delete-image]').should('exist');
+
+      cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
       cy.wait(1000);
       cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();

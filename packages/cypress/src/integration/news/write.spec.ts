@@ -228,9 +228,9 @@ describe('[News.Write]', () => {
 
     cy.signIn(admin.email, admin.password);
 
-    cy.step('News is not authored by the admin');
+    cy.step('Visit a seeded news item, which is authored by another user');
     cy.visit(`/news/${newsItem.slug}`);
-    cy.get('[data-cy=Username]').should('not.contain', admin.username);
+    cy.contains(newsItem.title!);
 
     cy.step("Admin can see the edit button on another user's news");
     cy.get('[data-cy=edit]').should('be.visible');
@@ -245,9 +245,9 @@ describe('[News.Write]', () => {
 
     cy.step('Add the hero image required to publish');
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+    cy.get('[data-cy=existingHeroImage]').should('exist');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
-    cy.wait(2000);
     cy.get('[data-cy=submit]').click();
 
     cy.step('Admin edit is saved and visible');

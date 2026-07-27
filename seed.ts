@@ -620,7 +620,7 @@ const main = async () => {
       supported_modules: 'library,map,research,academy,questions,news',
       hidden_modules: null,
       organisation_signup_description:
-        'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](/academy)? Then apply as an organisation here. It usually takes a day or two to get approved.',
+        'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](/academy)? Then apply as an organisation here.\nIt usually takes a day or two to get approved.',
       donation_settings: {
         defaultDescription:
           'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',
@@ -654,6 +654,8 @@ const main = async () => {
   const { profiles } = await seed.profiles(
     (profilesSeed(tenant_id) as any[]).map((profile: profilesInputs, index) => ({
       ...profile,
+      moderation: null,
+      moderation_feedback: null,
       auth_id: users[index].id,
       profile_type: (
         profile_types.find(

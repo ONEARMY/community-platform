@@ -22,7 +22,7 @@ describe('[Organisation sign-up]', () => {
       cy.contains(FRIENDLY_MESSAGES['sign-up/password-short']).should('be.visible');
     });
 
-    it('Links between member and organisation sign-up', () => {
+    it('Renders the organisation sign-up entry page', () => {
       cy.visit('/sign-up');
 
       cy.step('Member sign-up links to organisation sign-up');
@@ -30,15 +30,27 @@ describe('[Organisation sign-up]', () => {
       cy.url().should('include', '/sign-up/organisation');
       cy.get('[data-cy=Stepper]').should('be.visible');
 
-      cy.step('The tenant-configured description is shown');
+      cy.step('The space profile-type badges render in the header');
+      cy.get('[data-cy=organisation-signup-badges] [data-cy^="MemberBadge-"]').should(
+        'have.length',
+        4,
+      );
+
+      cy.step('The tenant-configured description + inline link are shown');
       cy.get('[data-cy=organisation-signup-description]').should(
         'contain',
         'Are you working with small-scale plastic recycling?',
       );
-
-      cy.step('The description renders its inline link');
       cy.get('[data-cy=organisation-signup-description] a')
         .should('contain', 'our universe')
+        .and('have.attr', 'href', '/academy');
+
+      cy.step('The heads-up info box + Learn more link are shown');
+      cy.contains('Heads up. After this you need to fill in some information.').should(
+        'be.visible',
+      );
+      cy.get('[data-cy=organisation-signup-learn-more]')
+        .should('contain', 'Learn more')
         .and('have.attr', 'href', '/academy');
 
       cy.step('Organisation sign-up links back to member sign-up');
@@ -48,19 +60,25 @@ describe('[Organisation sign-up]', () => {
   });
 
   describe('[Application flow]', () => {
-    it('Can apply as an organisation', () => {
+    it('Completes the full organisation sign-up journey', () => {
       const user = generateNewUserDetails();
       const displayName = 'The Machine Shop';
       const description = 'We build machines for the local recycling network.';
       const website = 'https://machines.example.org';
       const profileType = 'machine-builder';
 
-      cy.step('Sign up via the organisation page');
+      cy.step('Create the organisation account (step 1)');
       cy.signUpNewOrganisation(user);
 
-      cy.step('The application form requires all mandatory fields');
-      cy.visit('/organisation-application');
+      cy.step('Lands on the verify-email message (step 2)');
+      cy.url().should('include', 'sign-up-message');
       cy.get('[data-cy=Stepper]').should('be.visible');
+
+      cy.step('The application form is gated until all mandatory fields are filled (step 3)');
+      cy.visit('/organisation-application');
+      cy.contains('One last step!').should('be.visible');
+      cy.get('[data-cy=Stepper]').should('be.visible');
+      cy.get('[data-cy=FocusSection]').should('contain', 'Check out our guidelines');
       cy.get('[data-cy=submit]').should('be.disabled');
 
       cy.step('Fill and submit the application');
@@ -77,6 +95,12 @@ describe('[Organisation sign-up]', () => {
       cy.url().should('include', `/u/${user.username}`);
       cy.contains(displayName);
       cy.get(`[data-cy="MemberBadge-${profileType}"]`);
+
+      cy.step('The new organisation profile is created awaiting moderation');
+      cy.task('getProfileByUsername', user.username).then((profile) => {
+        expect(profile, 'created profile row').to.be.an('object');
+        expect((profile as { moderation: string }).moderation).to.eq('awaiting-moderation');
+      });
 
       cy.step('The application form cannot be submitted twice');
       cy.visit('/organisation-application');

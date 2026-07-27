@@ -75,6 +75,8 @@ export class ProfileFactory {
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       donationsEnabled: !!dbProfile.donations_enabled,
+      moderation: dbProfile.moderation ?? null,
+      moderationFeedback: dbProfile.moderation_feedback ?? null,
       tags: dbProfile.tags ? dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)) : [],
       badges: dbProfile.badges ? dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)) : [],
     });

@@ -234,6 +234,7 @@ export class ProfileServiceServer {
         website: values.website,
         cover_images: values.coverImages,
         profile_type: values.profileTypeId,
+        moderation: 'awaiting-moderation',
       })
       .select(
         `*,

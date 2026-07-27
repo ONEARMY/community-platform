@@ -55,7 +55,10 @@ export class TenantSettingsService {
       gaTrackingId: data?.ga_tracking_id,
       pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
       organisationSignupDescriptionHtml: data?.organisation_signup_description
-        ? (marked.parseInline(data.organisation_signup_description, { gfm: true }) as string)
+        ? (marked.parseInline(data.organisation_signup_description, {
+            gfm: true,
+            breaks: true,
+          }) as string)
         : undefined,
     });
 

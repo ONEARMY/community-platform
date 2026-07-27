@@ -10,7 +10,7 @@ import {
 import type { OrganisationApplicationFormData, ProfileType } from 'oa-shared';
 import { useState } from 'react';
 import { Field, Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import {
   MAX_ORGANISATION_COVER_IMAGES,
   ORGANISATION_DESCRIPTION_MAX_LENGTH,
@@ -125,8 +125,8 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     ))}
                   </Flex>
                   <Heading>One last step!</Heading>
-                  <Text color="grey" sx={{ fontSize: 2 }}>
-                    This info will help us verify your organisation.
+                  <Text color="grey" sx={{ fontSize: 3 }}>
+                    This info will help us verify that you work with small-scale recycling.
                     <br />
                     It usually takes a day or two to get approved.
                   </Text>
@@ -159,6 +159,12 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     <Flex data-cy="FocusSection" sx={{ flexDirection: 'column', gap: 2 }}>
                       <Text>
                         Your focus <Text color="red">*</Text>
+                      </Text>
+                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                        Not sure?{' '}
+                        <Link to="/academy" style={{ textDecoration: 'underline' }}>
+                          Check out our guidelines.
+                        </Link>
                       </Text>
                       <Grid columns={[2, 4]} gap={2}>
                         {profileTypes.map((profileType) => (
@@ -228,6 +234,10 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                       <Text>
                         Tell us a bit about your organisation <Text color="red">*</Text>
                       </Text>
+                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                        Describe your organisation and why you want to join Precious Plastic
+                        Universe.
+                      </Text>
                       <Field
                         data-cy="about"
                         name="about"
@@ -260,8 +270,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                         Upload pictures of your workspace <Text color="red">*</Text>
                       </Text>
                       <Text variant="quiet" sx={{ fontSize: 1 }}>
-                        They help us to evaluate your organisation. Upload 1-
-                        {MAX_ORGANISATION_COVER_IMAGES} pictures.
+                        They help us to evaluate that you work with small-scale recycling.
                       </Text>
                       {coverError && (
                         <Text data-cy="cover-error" sx={{ color: 'error', fontSize: 1 }}>

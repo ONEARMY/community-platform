@@ -153,7 +153,15 @@ export default function Index() {
                 mt={[5, 10]}
                 mb={3}
               >
-                <Flex sx={{ flexDirection: 'column', width: '100%', gap: 3 }}>
+                <Flex
+                  sx={{
+                    flexDirection: 'column',
+                    width: '100%',
+                    maxWidth: '548px',
+                    mx: 'auto',
+                    gap: 3,
+                  }}
+                >
                   <Flex
                     sx={{
                       flexDirection: 'column',
@@ -176,7 +184,7 @@ export default function Index() {
                     <Text
                       color="grey"
                       data-cy="organisation-signup-description"
-                      sx={{ fontSize: 2 }}
+                      sx={{ fontSize: 3, maxWidth: '508px' }}
                       dangerouslySetInnerHTML={{
                         __html: descriptionHtml ?? '',
                       }}
@@ -240,12 +248,39 @@ export default function Index() {
                         />
                       </Flex>
 
-                      <Alert variant="info" sx={{ textAlign: 'left', fontWeight: 'normal' }}>
-                        <Text sx={{ fontSize: 1 }}>
-                          Heads up. After this you need to fill in some information: a{' '}
-                          <strong>link to your website</strong> or social media and{' '}
-                          <strong>pictures</strong> to verify your organisation.
+                      <Alert
+                        variant="info"
+                        sx={{
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: 3,
+                          textAlign: 'left',
+                          fontWeight: 'normal',
+                        }}
+                      >
+                        <Text sx={{ fontSize: 2 }}>
+                          Heads up. After this you need to fill in some information.
                         </Text>
+                        <Text sx={{ fontSize: 2 }}>
+                          A <strong>link to your website</strong> or social media and{' '}
+                          <strong>pictures</strong> to verify that you work with small-scale
+                          recycling.
+                        </Text>
+                        <Link
+                          to="/academy"
+                          data-cy="organisation-signup-learn-more"
+                          style={{
+                            display: 'inline-block',
+                            border: '2px solid #1b1b1b',
+                            borderRadius: '5px',
+                            padding: '5px 15px',
+                            fontSize: '14px',
+                            color: '#1b1b1b',
+                            textDecoration: 'none',
+                          }}
+                        >
+                          Learn more
+                        </Link>
                       </Alert>
 
                       <Flex>

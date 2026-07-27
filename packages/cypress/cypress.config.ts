@@ -35,6 +35,18 @@ export default defineConfig({
           return null;
         },
 
+        async 'getProfileByUsername'(username: string) {
+          if (!supabaseUrl || !supabaseKey) {
+            throw new Error(
+              'SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required',
+            );
+          }
+
+          const supabaseService = new SupabaseTestsService(supabaseUrl, supabaseKey, tenantId);
+          const profile = await supabaseService.getUserProfileByUsername(username);
+          return profile ?? null;
+        },
+
         async 'seed database'() {
           if (!supabaseUrl || !supabaseKey) {
             throw new Error(

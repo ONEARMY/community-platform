@@ -12,7 +12,6 @@ export interface Props {
   height?: number;
   maxWidth?: string;
   maxHeight?: string | string[];
-  backdropColor?: string;
   sx?: ThemeUIStyleObject;
 }
 
@@ -24,7 +23,6 @@ export const Modal = (props: Props) => {
     isOpen,
     maxWidth = '90vw',
     maxHeight = '95vh',
-    backdropColor,
     sx,
     onDismiss,
   } = props;
@@ -97,7 +95,6 @@ export const Modal = (props: Props) => {
         borderRadius: '10px',
         maxWidth,
         maxHeight,
-        ...(backdropColor ? { '&::backdrop': { background: backdropColor } } : {}),
       }}
     >
       <Box

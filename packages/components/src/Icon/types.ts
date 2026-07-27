@@ -76,7 +76,6 @@ export type availableGlyphs =
   | 'thunderbolt'
   | 'thunderbolt-grey'
   | 'time'
-  | 'trash'
   | 'turned-in'
   | 'update'
   | 'upload'

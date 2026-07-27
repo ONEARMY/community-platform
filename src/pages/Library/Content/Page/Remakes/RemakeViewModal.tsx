@@ -126,7 +126,6 @@ export const RemakeViewModal = (props: IProps) => {
       onDismiss={onClose}
       maxWidth="100vw"
       maxHeight={['calc(100vh - 112px)', '95vh', '95vh']}
-      backdropColor="rgba(0, 0, 0, 0.6)"
       sx={{
         padding: 0,
         width: ['100vw', 'calc(100vw - 112px)', '1072px'],
@@ -242,7 +241,7 @@ export const RemakeViewModal = (props: IProps) => {
                   type="button"
                   data-cy="remake-delete"
                   variant="subtle"
-                  icon="trash"
+                  icon="delete"
                   iconSize={18}
                   onClick={() => onDelete(remake)}
                   sx={{ fontSize: 2 }}

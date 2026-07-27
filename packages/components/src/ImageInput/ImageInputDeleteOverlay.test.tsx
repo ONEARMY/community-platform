@@ -7,16 +7,10 @@ import { render } from '../test/utils';
 import { ImageInputDeleteOverlay } from './ImageInputDeleteOverlay';
 
 describe('ImageInputDeleteOverlay', () => {
-  it('renders the delete glyph when no icon is provided', () => {
+  it('renders the delete glyph', () => {
     const { getByRole } = render(<ImageInputDeleteOverlay onClick={vi.fn()} />);
 
     expect(getByRole('img', { hidden: true }).getAttribute('src')).toContain('delete.svg');
-  });
-
-  it('renders the given glyph when an icon is provided', () => {
-    const { getByRole } = render(<ImageInputDeleteOverlay onClick={vi.fn()} icon="trash" />);
-
-    expect(getByRole('img', { hidden: true }).getAttribute('src')).toContain('trash.svg');
   });
 
   it('calls onClick when the delete button is pressed', () => {

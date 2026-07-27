@@ -248,7 +248,7 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
       )}
 
       {showRemakesGrid && totalPages > 1 && (
-        <Flex sx={{ justifyContent: 'center', '& input': { backgroundColor: 'softblue' } }}>
+        <Flex sx={{ justifyContent: 'center' }}>
           <Pagination page={currentPage} totalPages={totalPages} onPageChange={setPage} />
         </Flex>
       )}

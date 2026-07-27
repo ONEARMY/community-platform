@@ -82,7 +82,6 @@ import stepSVG from '../../assets/icons/step.svg';
 import successSVG from '../../assets/icons/success.svg';
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg';
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg';
-import trashSVG from '../../assets/icons/trash.svg';
 import visitorsAppointmentSVG from '../../assets/icons/visitors-appointment.svg';
 import visitorsClosedSVG from '../../assets/icons/visitors-closed.svg';
 import visitorsOpenSVG from '../../assets/icons/visitors-open.svg';
@@ -195,7 +194,6 @@ export const iconMap = {
   supporter: <SupporterIcon />,
   thunderbolt: <ImageIcon src={thunderboltSVG} />,
   thunderboltGrey: <ImageIcon src={thunderboltGreySVG} />,
-  trash: <ImageIcon src={trashSVG} />,
   update: <ImageIcon src={updateSVG} />,
   useful: <ImageIcon src={usefulSVG} />,
   verified: <ImageIcon src={verifiedSVG} />,

@@ -132,14 +132,14 @@ export const ImageInputV2 = (props: IProps) => {
             <ImageInputDeleteOverlay onClick={handleImageDelete} />
           ) : (
             <Box sx={{ display: ['none', 'none', 'block'] }}>
-              <ImageInputDeleteOverlay onClick={handleImageDelete} icon="trash" />
+              <ImageInputDeleteOverlay onClick={handleImageDelete} />
             </Box>
           )}
           {deleteVariant === 'cornerIcon' && (
             <Button
               type="button"
               variant="secondary"
-              icon="trash"
+              icon="delete"
               iconSize={20}
               showIconOnly
               data-cy="image-delete-corner"

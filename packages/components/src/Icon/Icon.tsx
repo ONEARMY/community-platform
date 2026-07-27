@@ -121,7 +121,6 @@ export const glyphs: IGlyphs = {
   thunderbolt: iconMap.thunderbolt,
   'thunderbolt-grey': iconMap.thunderboltGrey,
   time: <MdAccessTime />,
-  trash: iconMap.trash,
   'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,
   supporter: iconMap.supporter,

@@ -13,14 +13,6 @@ const styleSheetText = () =>
     .map((style) => style.textContent ?? '')
     .join('');
 
-const backdropStyleFor = (dialog: HTMLElement) => {
-  const match = styleSheetText().match(
-    new RegExp(`\\.${dialog.className}::backdrop\\{([^}]*)\\}`),
-  );
-
-  return match ? match[1] : null;
-};
-
 const breakpointStyleFor = (dialog: HTMLElement) => {
   const match = styleSheetText().match(new RegExp(`@media[^{]*\\{\\.${dialog.className}\\{([^}]*)\\}`));
 
@@ -65,25 +57,5 @@ describe('Modal', () => {
 
     expect(dialog).toHaveStyle('max-height: 50vh');
     expect(breakpointStyleFor(dialog)).toContain('max-height:70vh');
-  });
-
-  it('does not style the backdrop when backdropColor is omitted', () => {
-    const { getByRole } = render(
-      <Modal isOpen={true} onDismiss={vi.fn()}>
-        <div>Content</div>
-      </Modal>,
-    );
-
-    expect(backdropStyleFor(getByRole('dialog'))).toBeNull();
-  });
-
-  it('styles the backdrop when backdropColor is provided', () => {
-    const { getByRole } = render(
-      <Modal isOpen={true} onDismiss={vi.fn()} backdropColor="rgba(0, 0, 0, 0.8)">
-        <div>Content</div>
-      </Modal>,
-    );
-
-    expect(backdropStyleFor(getByRole('dialog'))).toContain('rgba(0, 0, 0, 0.8)');
   });
 });

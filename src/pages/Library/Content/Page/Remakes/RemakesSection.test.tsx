@@ -10,16 +10,26 @@ import { FactoryUser } from 'src/test/factories/User';
 import { ThemeProvider } from '@theme-ui/core';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
+import { SessionContext } from 'src/pages/common/SessionContext';
+
 import { RemakesSection } from './RemakesSection';
 
+import type { JwtPayload } from '@supabase/supabase-js';
 import type { Project, Remake } from 'oa-shared';
 
 const mockUseProfileStore = vi.hoisted(() => vi.fn());
 const mockGetRemakes = vi.hoisted(() => vi.fn());
+const mockNavigate = vi.hoisted(() => vi.fn());
 
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: mockUseProfileStore,
 }));
+
+vi.mock('react-router', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router')>();
+
+  return { ...actual, useNavigate: () => mockNavigate };
+});
 
 vi.mock('src/services/remakeService', () => ({
   remakeService: {
@@ -44,11 +54,16 @@ vi.mock('./RemakeFormModal', () => ({
 
 const project = FactoryLibraryItem() as Project;
 
-const getWrapper = (onRemakeCountChange?: (count: number) => void) =>
+const getWrapper = (
+  onRemakeCountChange?: (count: number) => void,
+  claims: JwtPayload | null = { sub: 'auth-id' } as JwtPayload,
+) =>
   render(
     <ThemeProvider theme={theme}>
       <MemoryRouter>
-        <RemakesSection project={project} onRemakeCountChange={onRemakeCountChange} />
+        <SessionContext.Provider value={claims}>
+          <RemakesSection project={project} onRemakeCountChange={onRemakeCountChange} />
+        </SessionContext.Provider>
       </MemoryRouter>
     </ThemeProvider>,
   );
@@ -343,6 +358,44 @@ describe('RemakesSection', () => {
     expect(onRemakeCountChange).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
+  });
+
+  it('opens the add form for a signed in user whose profile has not loaded yet', async () => {
+    mockUseProfileStore.mockReturnValue({ profile: undefined });
+    mockGetRemakes.mockResolvedValue([]);
+
+    let wrapper;
+    act(() => {
+      wrapper = getWrapper();
+    });
+
+    await waitFor(() => {
+      expect(wrapper.container.querySelector('[data-cy=remakes-empty-state]')).toBeInTheDocument();
+    });
+
+    await userEvent.click(wrapper.container.querySelector('[data-cy=upload-remake]'));
+
+    expect(wrapper.container.querySelector('[data-cy=stub-remake-created]')).toBeInTheDocument();
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('sends signed out users to sign in when uploading', async () => {
+    mockUseProfileStore.mockReturnValue({ profile: undefined });
+    mockGetRemakes.mockResolvedValue([]);
+
+    let wrapper;
+    act(() => {
+      wrapper = getWrapper(undefined, null);
+    });
+
+    await waitFor(() => {
+      expect(wrapper.container.querySelector('[data-cy=remakes-empty-state]')).toBeInTheDocument();
+    });
+
+    await userEvent.click(wrapper.container.querySelector('[data-cy=upload-remake]'));
+
+    expect(mockNavigate).toHaveBeenCalledWith(expect.stringContaining('/sign-in?returnUrl='));
+    expect(wrapper.container.querySelector('[data-cy=stub-remake-created]')).not.toBeInTheDocument();
   });
 
   it('opens the view modal when a card is clicked', async () => {

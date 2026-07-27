@@ -1,11 +1,10 @@
-import { observer } from 'mobx-react';
 import { Button, ConfirmModal, Pagination } from 'oa-components';
 import type { Project, Remake } from 'oa-shared';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import remakesEmptyStateImage from 'src/assets/images/remakes-empty-state.png';
+import { SessionContext } from 'src/pages/common/SessionContext';
 import { remakeService } from 'src/services/remakeService';
-import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { Box, Flex, Image, Text } from 'theme-ui';
 import { REMAKE_DELETE_CONFIRM_MESSAGE, REMAKES_PER_PAGE } from './constants';
@@ -19,10 +18,12 @@ interface IProps {
   onRemakeCountChange?: (count: number) => void;
 }
 
-export const RemakesSection = observer(({ project, onRemakeCountChange }: IProps) => {
-  const { profile } = useProfileStore();
+export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
+  const claims = useContext(SessionContext);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const isLoggedIn = !!claims?.sub;
 
   const [remakes, setRemakes] = useState<Remake[]>([]);
   const [page, setPage] = useState(1);
@@ -94,7 +95,7 @@ export const RemakesSection = observer(({ project, onRemakeCountChange }: IProps
   }, [remakes, currentPage]);
 
   const openAddForm = () => {
-    if (!profile) {
+    if (!isLoggedIn) {
       navigate(`/sign-in?returnUrl=${encodeURIComponent(location.pathname)}`);
       return;
     }
@@ -301,4 +302,4 @@ export const RemakesSection = observer(({ project, onRemakeCountChange }: IProps
       </ConfirmModal>
     </Flex>
   );
-});
+};

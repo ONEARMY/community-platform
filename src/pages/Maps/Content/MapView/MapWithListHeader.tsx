@@ -2,7 +2,6 @@ import { LatLngBounds } from 'leaflet';
 import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components';
 import { useContext, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
-
 import { MapContext } from '../../MapContext';
 import { MapFilterList } from '../../MapFilterList';
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client';
@@ -24,14 +23,16 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
   }
 
   const hasFiltersSelected =
-    !!mapState.activeBadgeFilters.length ||
-    !!mapState.activeProfileSettingFilters.length ||
-    !!mapState.activeProfileTypeFilters.length ||
-    !!mapState.activeTagFilters.length;
+    !!mapState.activeBadgeFilters?.length ||
+    !!mapState.activeProfileSettingFilters?.length ||
+    !!mapState.activeProfileTypeFilters?.length ||
+    !!mapState.activeTagFilters?.length;
 
   if (mapState.loadingMessage) {
     return (
-      <Flex sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}>
+      <Flex
+        sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
+      >
         <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
       </Flex>
     );
@@ -66,7 +67,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
                 );
                 mapState.selectPin(null);
                 mapState.fitBounds(bounds);
-                mapState.setIsMobile(false);
+                mapState.setIsMobile?.(false);
               }
             }}
             countrycodes=""
@@ -78,6 +79,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
             icon="sliders"
             onClick={toggleFilterModal}
             variant={hasFiltersSelected ? 'primary' : 'outline'}
+            sx={{ backgroundColor: '#fff' }}
           >
             <Text sx={{ paddingRight: 2 }}>Filter</Text>
           </Button>
@@ -87,9 +89,9 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       </Flex>
       {mapState && (
         <MapCardList
-          list={mapState.filteredPins}
+          list={mapState.filteredPins || []}
           onPinClick={(pin) => {
-            mapState.selectPinWithClusterCheck(pin);
+            mapState.selectPinWithClusterCheck?.(pin);
           }}
           selectedPin={mapState.selectedPin}
           viewport={viewport}

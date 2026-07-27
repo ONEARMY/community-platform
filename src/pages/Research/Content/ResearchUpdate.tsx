@@ -142,7 +142,7 @@ const ResearchUpdate = (props: IProps) => {
             </Flex>
 
             <Flex sx={{ padding: 4, paddingBottom: 4, paddingTop: 2 }}>
-              <Text variant="paragraph" color={'grey'} sx={{ whiteSpace: 'pre-line' }}>
+              <Text variant="paragraph" color="grey" sx={{ whiteSpace: 'pre-line' }}>
                 <LinkifyText>{update.description}</LinkifyText>
               </Text>
             </Flex>

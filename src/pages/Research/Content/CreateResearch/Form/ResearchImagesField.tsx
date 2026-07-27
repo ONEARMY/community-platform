@@ -6,7 +6,7 @@ import { useForm, useFormState } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { ImageInputFieldWrapper } from 'src/pages/common/FormFields/ImageInputFieldWrapper';
 import { storageService } from 'src/services/storageService';
-import { Spinner, Text } from 'theme-ui';
+import { Flex, Spinner, Text } from 'theme-ui';
 
 interface IProps {
   contentId: number;
@@ -57,37 +57,39 @@ export const ResearchImagesField = (props: IProps) => {
   };
 
   return (
-    <FormFieldWrapper htmlFor="images" text="Images" flexDirection="row" flexWrap="wrap">
+    <FormFieldWrapper htmlFor="images" text="Images">
       {uploadError && (
         <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
       )}
 
-      {state.values.images?.map((image: MediaWithPublicUrl, i: number) => (
-        <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
-          <ImageInputV2
-            image={image}
-            onFilesChange={(file) => {
-              if (!file) {
-                removeImage(i);
-              }
-            }}
-            onError={setUploadError}
-          />
-        </ImageInputFieldWrapper>
-      ))}
-
-      {currentImages.length < 10 && (
-        <ImageInputFieldWrapper data-cy="new-image-upload">
-          {uploadingIndex === currentImages.length ? (
-            <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
-          ) : (
+      <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
+        {state.values.images?.map((image: MediaWithPublicUrl, i: number) => (
+          <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
             <ImageInputV2
-              onFilesChange={(file) => handleImageSelect(file, currentImages.length)}
-              onError={handleImageError}
+              image={image}
+              onFilesChange={(file) => {
+                if (!file) {
+                  removeImage(i);
+                }
+              }}
+              onError={setUploadError}
             />
-          )}
-        </ImageInputFieldWrapper>
-      )}
+          </ImageInputFieldWrapper>
+        ))}
+
+        {currentImages.length < 10 && (
+          <ImageInputFieldWrapper data-cy="new-image-upload">
+            {uploadingIndex === currentImages.length ? (
+              <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
+            ) : (
+              <ImageInputV2
+                onFilesChange={(file) => handleImageSelect(file, currentImages.length)}
+                onError={handleImageError}
+              />
+            )}
+          </ImageInputFieldWrapper>
+        )}
+      </Flex>
     </FormFieldWrapper>
   );
 };

@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS "public"."research" (
     "fts" "tsvector",
     "collaborators" "text"[],
     "image" "json",
-    "legacy_id" "text",
     "published_at" timestamp with time zone
 );
 
@@ -45,7 +44,6 @@ CREATE TABLE IF NOT EXISTS "public"."research_updates" (
     "file_link" "text",
     "file_download_count" integer,
     "created_by" bigint,
-    "legacy_id" "text",
     "published_at" timestamp with time zone
 );
 
@@ -92,7 +90,19 @@ DECLARE
 BEGIN
   -- Parse the search query once if provided, using prefix matching for partial words
   IF search_query IS NOT NULL THEN
-    ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
+    -- Split search query into words and create prefix-matching tsquery with AND logic
+    -- Sanitize each word to prevent tsquery injection
+    ts_query := to_tsquery('english', 
+      array_to_string(
+        ARRAY(
+          SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
+          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
+          WHERE word != '' 
+            AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
+        ),
+        ' & '
+      )
+    );
   END IF;
  
   RETURN QUERY
@@ -209,7 +219,19 @@ DECLARE
   ts_query tsquery;
 BEGIN
   IF search_query IS NOT NULL THEN
-    ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
+    -- Split search query into words and create prefix-matching tsquery with AND logic
+    -- Sanitize each word to prevent tsquery injection
+    ts_query := to_tsquery('english', 
+      array_to_string(
+        ARRAY(
+          SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
+          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
+          WHERE word != '' 
+            AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
+        ),
+        ' & '
+      )
+    );
   END IF;
 
   RETURN (

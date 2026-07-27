@@ -15,7 +15,7 @@ export const ImageInputWrapper = forwardRef<HTMLElement, BoxProps & ITitleProps>
 
     return (
       <Flex
-        className={'image-input__wrapper'}
+        className="image-input__wrapper"
         ref={ref}
         sx={{
           overflow: 'hidden',

@@ -1,13 +1,14 @@
 import { DifficultyLevelRecord } from 'oa-shared';
 import { users } from 'oa-shared/mocks/data';
-
 import { MOCK_DATA } from '../../data';
+import { getTenantUser } from '../../utils/TestUtils';
 
 const library = MOCK_DATA.projects;
 const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items';
 
 describe('[Library]', () => {
-  const demoAdmin = users.admin;
+  const demoAdmin = getTenantUser(users.admin);
+  const demoUser = getTenantUser(users.subscriber);
 
   beforeEach(() => {
     cy.visit('/library');
@@ -156,41 +157,6 @@ describe('[Library]', () => {
           cy.contains(item.title);
         });
       });
-
-      it('[Delete button should not be visible to everyone', () => {
-        cy.step('Delete button should not be visible');
-        cy.get('[data-cy="Library: delete button"]').should('not.exist');
-      });
-    });
-
-    describe('[By Owner]', () => {
-      const owner = users.settings_workplace_new;
-
-      beforeEach(() => {
-        cy.signIn(owner.email, owner.password);
-        cy.visit(itemUrl);
-      });
-
-      it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the how-to');
-        cy.get('[data-cy="Library: delete button"]').should('be.visible');
-
-        cy.step('Edit button is available to the owner');
-        cy.get('[data-cy=edit]').should('have.attr', 'href', `${itemUrl}/edit`);
-      });
-    });
-
-    describe('[By Admin]', () => {
-      beforeEach(() => {
-        cy.signIn(demoAdmin.email, demoAdmin.password);
-        cy.visit(itemUrl);
-      });
-
-      it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the article');
-
-        cy.get('[data-cy="Library: delete button"]').should('be.visible');
-      });
     });
   });
 
@@ -203,7 +169,7 @@ describe('[Library]', () => {
       cy.get('[data-cy="moderationFeedback"]').should('not.exist');
 
       cy.step('Feedback is visible to content owner');
-      cy.signIn('demo_user@example.com', 'demo_user');
+      cy.signIn(demoUser.email, demoUser.password);
       cy.visit('/library/rubbish-title');
       cy.get('[data-cy="moderationFeedback"]');
 

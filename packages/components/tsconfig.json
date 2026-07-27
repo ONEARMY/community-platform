@@ -12,7 +12,14 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "oa-shared": ["../../shared/index.ts"],
+      "oa-shared/*": ["../../shared/*"],
+      "oa-themes": ["../themes/src/index.ts"],
+      "oa-themes/*": ["../themes/src/*"]
+    }
   },
-  "include": ["src", "types"]
+  "include": ["src", "types"],
+  "references": [{ "path": "../../shared" }, { "path": "../themes" }]
 }

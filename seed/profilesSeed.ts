@@ -5,7 +5,6 @@ const _PROFILES_BASE: (tenant_id: string) => Partial<profilesScalars> = (tenant_
   type: 'member',
   roles: [],
   photo: null,
-  patreon: null,
   impact: null,
   is_blocked_from_messaging: false,
   is_contactable: true,

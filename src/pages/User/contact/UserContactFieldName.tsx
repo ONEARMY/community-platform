@@ -1,14 +1,15 @@
 import { FieldInput } from 'oa-components';
 import { Field } from 'react-final-form';
 import { contact } from 'src/pages/User/labels';
-import { Box, Label } from 'theme-ui';
+import { required } from 'src/utils/validators';
+import { Flex, Label } from 'theme-ui';
 
 export const UserContactFieldName = () => {
   const { title, placeholder } = contact.name;
   const name = 'name';
 
   return (
-    <Box>
+    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       <Label htmlFor={name}>{title}</Label>
       <Field
         component={FieldInput}
@@ -17,8 +18,9 @@ export const UserContactFieldName = () => {
         name={name}
         placeholder={placeholder}
         sx={{ backgroundColor: 'white' }}
+        validate={required}
         validateFields={[]}
       />
-    </Box>
+    </Flex>
   );
 };

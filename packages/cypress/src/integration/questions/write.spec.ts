@@ -1,9 +1,11 @@
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
+import { generateAlphaNumeric, generateNewUserDetails, getTenantUser } from '../../utils/TestUtils';
 
 let initialRandomId;
 
 describe('[Question]', () => {
+  const demoAdmin = getTenantUser(users.admin);
   beforeEach(() => {
     initialRandomId = generateAlphaNumeric(8).toLowerCase();
   });
@@ -59,6 +61,10 @@ describe('[Question]', () => {
       });
 
       cy.get('[data-cy=draft]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
+
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
 
       cy.step('Can get to drafts');
@@ -73,7 +79,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=edit]').click();
 
       cy.step('Add category');
-      cy.selectTag(category, '[data-cy=category-select]');
+      cy.selectCard(category, '[data-cy=category-select]');
 
       // Bug: Tags missing in test suite setup
       //
@@ -83,6 +89,9 @@ describe('[Question]', () => {
 
       cy.step('Submit question');
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
 
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
 
@@ -102,13 +111,21 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]').clear().type(updatedQuestionDescription, { delay: 5 });
 
       cy.step('Updated question details shown');
-      cy.get('[data-cy=submit]').click().url().should('include', `/questions/${initialExpectedSlug}`);
+      cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.url().should('include', `/questions/${initialExpectedSlug}`);
       cy.contains(updatedQuestionDescription);
 
       cy.step('Updating the title changes the slug');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
-      cy.get('[data-cy=submit]').click().url().should('include', `/questions/${updatedExpectedSlug}`);
+      cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.url().should('include', `/questions/${updatedExpectedSlug}`);
       cy.contains(updatedTitle);
 
       cy.step('Can access the question with the previous slug');
@@ -143,13 +160,13 @@ describe('[Question]', () => {
     it('[By Admin]', () => {
       const question = MOCK_DATA.questions[0];
 
-      cy.signIn('demo_admin@example.com', 'demo_admin');
+      cy.signIn(demoAdmin.email, demoAdmin.password);
 
       cy.step('Question is not authored by the admin');
       cy.visit(`/questions/${question.slug}`);
       cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
 
-      cy.step('Admin can see the edit button on another user\'s question');
+      cy.step("Admin can see the edit button on another user's question");
       cy.get('[data-cy=edit]').should('be.visible');
 
       cy.step('Admin can access the edit page');
@@ -166,6 +183,44 @@ describe('[Question]', () => {
       cy.step('Updated content is visible');
       cy.url().should('include', `/questions/${question.slug}`);
       cy.contains(adminEdit);
+    });
+  });
+
+  describe('[Delete a question]', () => {
+    it('[By Author]', () => {
+      const title = generateAlphaNumeric(8).toLowerCase() + ' Deletable question?';
+      const expectedSlug = title.replace(/\s/g, '-').replace(/\?/g, '');
+      const description = 'This question will be deleted shortly after creation.';
+
+      cy.visit('/questions');
+      const user = generateNewUserDetails();
+      cy.signUpNewUser(user);
+      cy.completeUserProfile(user.username);
+
+      cy.step('Create a question to delete');
+      cy.visit('/questions/create');
+      cy.get('[data-cy=field-title]', { timeout: 20000 });
+      cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
+      cy.get('[data-cy=field-description]').type(description, { delay: 5 });
+      cy.selectCard('Moulds', '[data-cy=category-select]');
+      cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.url().should('include', '/questions/');
+
+      cy.step('Navigate to edit page');
+      cy.get('[data-cy=edit]').click();
+
+      cy.step('Click delete button');
+      cy.get('[data-cy=delete]').click();
+
+      cy.step('Confirm deletion');
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+
+      cy.step('Redirected to questions listing');
+      cy.url().should('include', '/questions');
+      cy.contains(title).should('not.exist');
     });
   });
 });

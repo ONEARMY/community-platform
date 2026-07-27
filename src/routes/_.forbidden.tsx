@@ -64,16 +64,27 @@ export default function Index() {
                   {page ? (
                     <>
                       <p>
-                        <strong>This is a new feature and we are currently rolling it out to a small group of people.</strong>
+                        <strong>
+                          This is a new feature and we are currently rolling it out to a small group
+                          of people.
+                        </strong>
                       </p>
-                      <p>Let us know if you have a project to share and want to be an early tester. We'd love to set you up.</p>
+                      <p>
+                        Let us know if you have a project to share and want to be an early tester.
+                        We'd love to set you up.
+                      </p>
                     </>
                   ) : (
                     <p>
-                      <strong>You don't have the right permissions to go here right now. If this is wrong, please let us know.</strong>
+                      <strong>
+                        You don't have the right permissions to go here right now. If this is wrong,
+                        please let us know.
+                      </strong>
                     </p>
                   )}
-                  <ExternalLink href={`mailto:${settings.emailFrom}&subject:Cannot access ${page || url}`}>
+                  <ExternalLink
+                    href={`mailto:${settings.emailFrom}&subject:Cannot access ${page || url}`}
+                  >
                     <Button>{actionLabel}</Button>
                   </ExternalLink>
                 </Text>

@@ -1,8 +1,8 @@
 // Similar to src/.server/templates/Layout.tsx
 
-import { Body, Container, Head, Html, Img, Link, Preview, Section } from '@react-email/components';
 import type { TenantSettings } from 'oa-shared';
 import React from 'react';
+import { Body, Container, Head, Html, Img, Link, Preview, Section } from 'react-email';
 import { Footer } from './components/footer';
 
 const link = {
@@ -69,7 +69,6 @@ export const Layout = (props: LayoutArgs) => {
               background: '#fff',
               border: '2px solid black',
               borderRadius: '15px',
-              padding: '20px',
               margin: '0 auto',
             }}
           >

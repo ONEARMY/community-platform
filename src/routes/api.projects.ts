@@ -17,11 +17,10 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -36,7 +35,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
 
-  const username = claims.data?.claims?.user_metadata?.username || null;
+  let username: string | null = null;
+  if (claims.data?.claims) {
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+    username = profile?.username || null;
+  }
 
   const { data, error } = await client.rpc('get_projects', {
     search_query: q || null,
@@ -137,6 +140,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
+    if (!profile.username) {
+      return Response.json(
+        { error: 'You must set a username before creating content' },
+        { headers, status: 403 },
+      );
+    }
+
     const projectDb = await createProject(client, data, slug, moderation, profile);
     const project = Project.fromDB(projectDb, []);
 
@@ -145,9 +155,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       : null;
 
     project.steps = await uploadSteps(data, formData, projectDb, client);
-    subscribersServiceServer.add('projects', project.id, profile.id, client, headers);
+    new SubscribersServiceServer(client).add('projects', project.id, profile.id);
 
-    updateUserActivity(client, claims.data.claims.sub);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
@@ -214,7 +224,7 @@ async function validateRequest(
     throw validationError('3 steps are required', 'stepCount');
   }
 
-  if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects')) {
+  if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'projects')) {
     throw conflictError('A project with this name already exists');
   }
 

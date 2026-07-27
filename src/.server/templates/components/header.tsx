@@ -1,5 +1,5 @@
-import { Section } from '@react-email/components';
 import React from 'react';
+import { Section } from 'react-email';
 
 interface IProps {
   children: React.ReactNode;

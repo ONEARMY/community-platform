@@ -2,6 +2,7 @@ import { UserRole } from './user';
 
 export class TenantSettings {
   siteName: string;
+  siteNameShort: string;
   siteDescription: string;
   siteUrl: string;
   messageSignOff: string;
@@ -13,15 +14,26 @@ export class TenantSettings {
   profileGuidelines: string;
   questionsGuidelines: string;
   supportedModules: string;
-  patreonId: string;
+  hiddenModules: string;
   colorPrimary: string;
   colorPrimaryHover: string;
   colorAccent: string;
   colorAccentHover: string;
   showImpact: boolean;
+  hasMembershipTiers: boolean;
   createResearchRoles: UserRole[];
+  gaTrackingId: string;
+  pwaIcons?: PWAIcons;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);
   }
+}
+
+export interface PWAIcons {
+  16: string;
+  32: string;
+  192: string;
+  256: string;
+  512: string;
 }

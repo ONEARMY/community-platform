@@ -38,9 +38,11 @@ export const LibraryStepsContainerField = ({
   return (
     <FieldArray name="steps" isEqual={COMPARISONS.step}>
       {({ fields }) => (
-        <>
-          <Box paddingTop={5}>
-            <Heading as="h2">{stepsLabel.heading.title}</Heading>
+        <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+          <Box>
+            <Heading as="h2" variant="h2">
+              Steps
+            </Heading>
             <Text
               sx={{ fontSize: 2 }}
               dangerouslySetInnerHTML={{
@@ -78,8 +80,6 @@ export const LibraryStepsContainerField = ({
               icon="add"
               data-cy="add-step"
               mx="auto"
-              mt={[10, 10, 20]}
-              mb={[5, 5, 20]}
               variant="secondary"
               onClick={() => {
                 fields.push({
@@ -92,7 +92,7 @@ export const LibraryStepsContainerField = ({
               {buttonsLabel.steps.add}
             </Button>
           </Flex>
-        </>
+        </Flex>
       )}
     </FieldArray>
   );

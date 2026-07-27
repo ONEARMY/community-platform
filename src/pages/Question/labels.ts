@@ -2,6 +2,11 @@ import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
   create: 'Publish',
+  deletion: {
+    text: 'Delete this question',
+    confirm: 'Delete',
+    message: 'Are you sure you want to delete this question?',
+  },
   draft: { create: 'Save as draft', update: 'Save to draft' },
   edit: 'Update',
 };
@@ -37,7 +42,6 @@ export const listing = {
   create: 'Ask a question',
   filterCategory: 'Filter by category',
   incompleteProfile: 'Complete your profile to ask your question',
-  join: 'Sign up to ask your question',
   loadMore: 'Load More',
   loggedOut: 'Gotta log in please for that sweet sweet question asking...',
   noQuestions: 'No questions have been asked yet',

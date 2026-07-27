@@ -27,6 +27,10 @@ export function validationError(message: string, field?: string) {
   return createHTTPException(400, message, { field });
 }
 
+export function unauthorizedError() {
+  return createHTTPException(401, 'Unauthorized');
+}
+
 export function methodNotAllowedError() {
   return createHTTPException(405, 'Method not allowed');
 }
@@ -41,4 +45,8 @@ export function forbiddenError(message = 'Forbidden') {
 
 export function conflictError(message: string) {
   return createHTTPException(409, message);
+}
+
+export function tooManyRequestsError(message: string) {
+  return createHTTPException(429, message);
 }

@@ -26,7 +26,9 @@ export const ActionSet = ({ children, itemType }: IProps) => {
       }
     };
 
-    if (show) document.addEventListener('mousedown', handleClickOutsideDropdownCard);
+    if (show) {
+      document.addEventListener('mousedown', handleClickOutsideDropdownCard);
+    }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideDropdownCard);

@@ -10,13 +10,12 @@ import './popup.css';
 interface IProps {
   activePin: MapPin;
   mapRef: React.RefObject<LeafletMap | null>;
-  onClose?: () => void;
   customPosition?: ILatLng;
 }
 
 export const Popup = (props: IProps) => {
   const leafletRef = useRef<LeafletPopupType>(null);
-  const { mapRef, onClose, customPosition } = props;
+  const { mapRef, customPosition } = props;
 
   useEffect(() => {
     openPopup();
@@ -43,10 +42,10 @@ export const Popup = (props: IProps) => {
       closeOnEscapeKey={false}
       closeButton={false}
       minWidth={250}
-      maxWidth={300}
+      maxWidth={325}
       autoPan={false}
     >
-      {onClose && <PinProfile item={props.activePin} onClose={onClose} />}
+      <PinProfile item={props.activePin} />
     </LeafletPopup>
   );
 };

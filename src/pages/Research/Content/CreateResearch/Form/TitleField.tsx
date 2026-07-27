@@ -1,17 +1,14 @@
 import { FieldInput } from 'oa-components';
 import { Field } from 'react-final-form';
 import { COMPARISONS } from 'src/utils/comparisons';
-import { composeValidators, minValue, required, validateTitle } from 'src/utils/validators';
+import { composeValidators, minValue, required } from 'src/utils/validators';
 import { Flex, Label } from 'theme-ui';
 
 import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_TITLE_MIN_LENGTH } from '../../../constants';
-import { update as updateLabels } from '../../../labels';
+import { updateForm as updateLabels } from '../../../labels';
 
 export const TitleField = () => {
   const { title, placeholder } = updateLabels.title;
-
-  const titleValidator = () =>
-    composeValidators(required, minValue(RESEARCH_TITLE_MIN_LENGTH), validateTitle());
 
   return (
     <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -23,7 +20,7 @@ export const TitleField = () => {
         name="title"
         data-cy="intro-title"
         validateFields={[]}
-        validate={titleValidator()}
+        validate={composeValidators(required, minValue(RESEARCH_TITLE_MIN_LENGTH))}
         isEqual={COMPARISONS.textInput}
         component={FieldInput}
         maxLength={RESEARCH_TITLE_MAX_LENGTH}

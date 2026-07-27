@@ -12,7 +12,9 @@ export const ImpactField = ({ field }: Props) => {
   const { id, isVisible, value } = field;
 
   const impactQuestion = impactQuestions.find((question) => question.id === id);
-  if (!impactQuestion || !isVisible) return null;
+  if (!impactQuestion || !isVisible) {
+    return null;
+  }
 
   const sx = {
     alignItems: 'center',

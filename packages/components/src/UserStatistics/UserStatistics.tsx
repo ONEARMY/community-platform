@@ -44,7 +44,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         }}
       >
         <Flex sx={{ gap: 4, flexDirection: 'column' }}>
-          {props.pin && (
+          {props.pin && props.profile.username && (
             <InternalLink
               to={'/map#' + props.profile.username}
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
@@ -82,7 +82,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
             </Flex>
           )}
 
-          {props.libraryCount > 0 && (
+          {props.libraryCount > 0 && props.profile.username && (
             <InternalLink
               to={'/library?q=' + props.profile.username}
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
@@ -95,7 +95,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
             </InternalLink>
           )}
 
-          {props.researchCount > 0 && (
+          {props.researchCount > 0 && props.profile.username && (
             <InternalLink
               to={'/research?q=' + props.profile.username}
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
@@ -110,7 +110,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.questionCount > 0 && (
             <InternalLink
-              to={'/questions'}
+              to="/questions"
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="questions-link"
             >

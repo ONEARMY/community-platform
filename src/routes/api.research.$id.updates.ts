@@ -3,11 +3,15 @@ import type { DBMedia, DBProfile, DBResearchItem, IMediaFile, ResearchUpdateDTO 
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
-import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
+import {
+  forbiddenError,
+  methodNotAllowedError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -32,7 +36,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const researchResult = await client
@@ -45,7 +49,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found', 'profile');
+    }
+
+    if (!profile.username) {
+      throw forbiddenError('You must set a username before creating content');
     }
 
     validateRequest(request, data, research, profile);
@@ -75,22 +83,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, []);
     researchUpdate.research = updateResult.data.research;
 
-    await subscribersServiceServer.addResearchUpdateSubscribers(
+    await new SubscribersServiceServer(client).addResearchUpdateSubscribers(
       researchUpdate,
       profile.id,
-      client,
-      headers,
     );
 
-    broadcastCoordinationServiceServer.researchUpdate(
-      researchUpdate,
-      profile,
-      client,
-      headers,
-      request,
-    );
-
-    updateUserActivity(client, claims.data.claims.sub);
+    new BroadcastCoordinationServiceServer(client).researchUpdate(researchUpdate, profile, request);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {
@@ -121,7 +120,7 @@ function validateRequest(
     throw validationError('description is required', 'description');
   }
 
-  if (!data.images && !data.videoUrl) {
+  if (!data.isDraft && !data.images && !data.videoUrl) {
     throw validationError('images or video URL are required', 'images');
   }
 
@@ -135,7 +134,7 @@ function validateRequest(
 
   if (
     profile.id !== research.author?.id &&
-    !research.collaborators?.includes(profile.username) &&
+    !(profile.username && research.collaborators?.includes(profile.username)) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
     throw forbiddenError('You do not have permission to add updates to this research');

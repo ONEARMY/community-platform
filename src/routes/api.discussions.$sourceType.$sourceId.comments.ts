@@ -1,19 +1,19 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
 import { DBComment, DiscussionContentTypes } from 'oa-shared';
-import type { LoaderFunctionArgs, Params } from 'react-router';
+import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
-import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { NotificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
   if (!params.sourceId) {
-    return Response.json({}, { headers, status: 400, statusText: 'sourceId is required' });
+    return data({}, { headers, status: 400, statusText: 'sourceId is required' });
   }
   try {
     const claims = await client.auth.getClaims();
@@ -43,33 +43,33 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     const commentFactory = new CommentFactory(new ImageServiceServer(client));
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments);
 
-    return Response.json({ comments }, { headers });
+    return data({ comments }, { headers });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { status: 500, headers });
+    return data({}, { status: 500, headers });
   }
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {
-  const data = await request.json();
+  const requestData = await request.json();
 
   const { client, headers } = createSupabaseServerClient(request);
 
   const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
-    return Response.json({}, { headers, status: 401 });
+    return data({}, { headers, status: 401 });
   }
 
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
-    data,
+    requestData,
     params.sourceType!,
   );
 
   if (!valid) {
-    return Response.json({}, { headers, status, statusText });
+    return data({}, { headers, status, statusText });
   }
 
   const currentUser = await client
@@ -79,7 +79,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .limit(1);
 
   if (currentUser.error || !currentUser.data?.at(0)) {
-    return Response.json(
+    return data(
       {},
       {
         headers,
@@ -89,13 +89,17 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     );
   }
 
+  if (!currentUser.data.at(0)!.username) {
+    return data({ error: 'You must set a username before commenting' }, { headers, status: 403 });
+  }
+
   const newComment = {
-    comment: data.comment,
+    comment: requestData.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
     source_type: params.sourceType,
     created_by: currentUser.data[0].id,
-    parent_id: data.parentId ?? null,
+    parent_id: requestData.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
   } as Partial<DBComment>;
 
@@ -131,9 +135,12 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     const comment = commentResult.data as DBComment;
     const profile = currentUser.data[0] as DBProfile;
 
-    addSubscriptions(comment, profile, client, headers);
+    addSubscriptions(comment, profile, client);
 
-    notificationsSupabaseServiceServer.createNotificationsNewComment(comment, client, headers);
+    new NotificationsSupabaseServiceServer(client).createNotificationsNewComment(
+      comment,
+      new URL(request.url).origin,
+    );
   }
 
   const commentDb = new DBComment({
@@ -144,36 +151,26 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const commentFactory = new CommentFactory(new ImageServiceServer(client));
   const comment = await commentFactory.fromDBWithAuthor(commentDb);
 
-  updateUserActivity(client, claims.data.claims.sub);
+  new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
-  return Response.json(comment, {
+  return data(comment, {
     headers,
     status: commentResult.error ? 500 : 201,
   });
 }
 
-function addSubscriptions(
-  comment: DBComment,
-  profile: DBProfile,
-  client: SupabaseClient,
-  headers: Headers,
-) {
+function addSubscriptions(comment: DBComment, profile: DBProfile, client: SupabaseClient) {
+  const subscribersServiceServer = new SubscribersServiceServer(client);
   if (comment.source_id && !comment.parent_id) {
     // Subscribe to peer comments...
-    subscribersServiceServer.add(
-      comment.source_type,
-      comment.source_id,
-      profile.id,
-      client,
-      headers,
-    );
+    subscribersServiceServer.add(comment.source_type, comment.source_id, profile.id);
     // ...add replies to this comment
-    subscribersServiceServer.add('comments', comment.id, profile.id, client, headers);
+    subscribersServiceServer.add('comments', comment.id, profile.id);
   }
 
   if (comment.source_id && comment.parent_id) {
     // Subscribe to the parent of this reply
-    subscribersServiceServer.add('comments', comment.parent_id, profile.id, client, headers);
+    subscribersServiceServer.add('comments', comment.parent_id, profile.id);
   }
 }
 

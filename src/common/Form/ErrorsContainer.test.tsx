@@ -8,14 +8,14 @@ describe('ErrorsContainer', () => {
     const descriptionError = 'Fill this in correctly';
 
     const errorsListSet = [descriptionError];
-    render(<ErrorsContainer saving={errorsListSet} />);
+    render(<ErrorsContainer serverErrors={errorsListSet} />);
 
     await screen.findByText(descriptionError, { exact: false });
   });
 
   it('renders nothing when not visible', async () => {
     const errorsListSet = [];
-    const { container } = render(<ErrorsContainer saving={errorsListSet} />);
+    const { container } = render(<ErrorsContainer serverErrors={errorsListSet} />);
 
     expect(container.innerHTML).toBe('');
   });

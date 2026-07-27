@@ -93,11 +93,14 @@ export default defineConfig({
               'profile_types',
               'upgrade_badge',
               'tenant_settings',
+              'notification_preferences',
+              'news_badges_relations',
             ],
             tenantId,
           );
 
           await supabaseService.clearStorage(tenantId);
+          await supabaseService.deleteAccounts();
 
           return null;
         },

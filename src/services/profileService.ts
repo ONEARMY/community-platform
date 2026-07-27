@@ -17,6 +17,10 @@ const get = async (): Promise<Profile | undefined> => {
 
     const response = await fetch(url);
 
+    if (!response.ok) {
+      return undefined;
+    }
+
     return (await response.json()) as Profile;
   } catch (error) {
     logger.error('Failed to fetch profile', { error });
@@ -63,6 +67,30 @@ const update = async (value: ProfileFormData) => {
   return result;
 };
 
+const updateUsername = async (username: string): Promise<Profile> => {
+  const url = new URL('/api/profile/username', window.location.origin);
+
+  const response = await fetch(url, {
+    body: JSON.stringify({ username }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to update username' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update username';
+    throw new Error(errorMessage);
+  }
+
+  const result = (await response.json()) as Profile | null;
+
+  if (!result) {
+    throw new Error('Failed to update username');
+  }
+
+  return result;
+};
+
 const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
   const data = createFormData<MapPinFormData>({
     name: pin.name,
@@ -79,10 +107,10 @@ const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
     body: data,
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ error: 'Failed to save map pin' }));
-    const errorMessage = errorData.error || errorData.message || 'Failed to save map pin';
-    throw new Error(errorMessage);
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   const { mapPin } = await response.json();
@@ -115,22 +143,38 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
     body: data,
   });
 
-  if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({ error: 'Failed to update impact data' }));
-    const errorMessage = errorData.error || errorData.message || 'Failed to update impact data';
-    throw new Error(errorMessage);
+  if (response.status !== 200 && response.status !== 201) {
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    throw new Error(errorMessage, { cause: response.status });
   }
+
   const { impact } = await response.json();
 
   return JSON.parse(impact) as IUserImpact;
 };
 
+const ban = async (profileId: number) => {
+  const response = await fetch(`/api/profile/${profileId}/ban`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to ban user' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to ban user';
+    throw new Error(errorMessage);
+  }
+
+  return;
+};
+
 export const profileService = {
   get,
   update,
+  updateUsername,
   upsertPin,
   deletePin,
   updateImpact,
+  ban,
 };

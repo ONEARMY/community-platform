@@ -16,8 +16,9 @@ export const fireConfetti = (options: confetti.Options = {}) => {
   if (
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  ) {
     return;
+  }
 
   const config: confetti.Options = { ...defaultConfig, ...options };
 

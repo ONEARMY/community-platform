@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading as HeadingComp } from '@react-email/components';
+import { Heading as HeadingComp } from 'react-email';
 
 const h1 = {
   color: '#2e2e2e',

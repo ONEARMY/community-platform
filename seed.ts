@@ -1,6 +1,7 @@
 import type {
   categoriesChildInputs,
   categoriesScalars,
+  map_pinsChildInputs,
   newsScalars,
   profile_badges_relationsScalars,
   profile_badgesScalars,
@@ -12,6 +13,7 @@ import type {
   questionsChildInputs,
   questionsScalars,
   researchScalars,
+  stripe_tier_configScalars,
   subscribersChildInputs,
   subscribersScalars,
   tagsChildInputs,
@@ -25,7 +27,16 @@ import libraryJson from './.snaplet/library.json';
 import questionsJson from './.snaplet/questions.json';
 import { profilesSeed } from './seed/profilesSeed';
 import { usersSeed } from './seed/usersSeed';
-import { convertToSlug } from './src/utils/slug';
+
+// Copied from the helper to decouple the seed script from any app builing processes
+export const convertToSlug = (text: string) => {
+  const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
+  const stripSpecialCharacters = (text: string) => {
+    return text ? text.split(' ').join('-').replace(specialCharactersPattern, '') : '';
+  };
+
+  return stripSpecialCharacters(text).toLowerCase();
+};
 
 const tenant_id = `precious-plastic`;
 
@@ -98,24 +109,65 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
     name: 'member',
     display_name: 'Member',
     is_space: false,
-    description: 'test',
+    description: '',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
-    map_pin_name: '',
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-member.svg',
+    map_pin_name: 'Want to get started',
     order: 1,
     small_image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
   },
   {
     ..._TYPES_BASE,
-    name: 'space',
-    display_name: 'Space',
+    name: 'workspace',
+    display_name: 'Workspace',
     is_space: true,
-    description: 'test',
-    image_url: '',
-    map_pin_name: '',
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-workspace.svg',
+    map_pin_name: 'Workspace',
     order: 2,
-    small_image_url: '',
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-workspace-small.svg',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'machine-builder',
+    display_name: 'Machine Builder',
+    is_space: true,
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-machine.svg',
+    map_pin_name: 'Machine Builder',
+    order: 3,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-machine-small.svg',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'community-point',
+    display_name: 'Community Point',
+    is_space: true,
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-community.svg',
+    map_pin_name: 'Community Point',
+    order: 4,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-community-small.svg',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'collection-point',
+    display_name: 'Collection Point',
+    is_space: true,
+    description: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-collection.svg',
+    map_pin_name: 'Collection Point',
+    order: 5,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-collection-small.svg',
   },
 ];
 
@@ -126,6 +178,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     display_name: 'Supporter',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    premium_tier: null,
   },
   {
     ..._BADGES_BASE,
@@ -135,7 +188,50 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
     premium_tier: 1,
   },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-1',
+    display_name: 'Starter',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
+    premium_tier: 1,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-2',
+    display_name: 'Hero',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
+    premium_tier: 2,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-3',
+    display_name: 'Legend',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
+    premium_tier: 3,
+  },
 ];
+
+const TIER_COLORS: Record<number, string> = {
+  1: '#BFDEBA',
+  2: '#77BDE3',
+  3: '#FEE77B',
+};
+
+const seedStripeTierConfig = (
+  badges: profile_badgesScalars[],
+): Partial<stripe_tier_configScalars>[] => {
+  const tierBadges = badges.filter((b) => b.name?.startsWith('stripe-tier-'));
+  return tierBadges.map((badge) => ({
+    tenant_id,
+    badge_id: badge.id,
+    description: 'You help us develop new features, get videos in 4K without ads!',
+    color: TIER_COLORS[badge.premium_tier ?? 0] ?? '#BFDEBA',
+    thank_you_image_url: null,
+  }));
+};
 
 const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_badgeScalars>[] => {
   const proBadge = badges.find((badge) => badge.name === 'pro');
@@ -366,6 +462,114 @@ const baseResearch: Partial<researchScalars> = {
   collaborators: [],
 };
 
+const mapPins = [
+  {
+    lat: 38.7223,
+    lng: -9.1393,
+    administrative: 'Lisbon',
+    country: 'Portugal',
+    country_code: 'pt',
+    moderation: 'accepted',
+    name: 'Lisbon',
+    post_code: '1700',
+  },
+  {
+    lat: 40.7128,
+    lng: -74.006,
+    administrative: 'New York',
+    country: 'United States',
+    country_code: 'us',
+    moderation: 'accepted',
+    name: 'New York City',
+    post_code: '10001',
+  },
+  {
+    lat: 51.5074,
+    lng: -0.1278,
+    administrative: 'London',
+    country: 'United Kingdom',
+    country_code: 'gb',
+    moderation: 'accepted',
+    name: 'London',
+    post_code: 'SW1A',
+  },
+  {
+    lat: 48.8566,
+    lng: 2.3522,
+    administrative: 'Paris',
+    country: 'France',
+    country_code: 'fr',
+    moderation: 'accepted',
+    name: 'Paris',
+    post_code: '75001',
+  },
+  {
+    lat: 35.6762,
+    lng: 139.6503,
+    administrative: 'Tokyo',
+    country: 'Japan',
+    country_code: 'jp',
+    moderation: 'accepted',
+    name: 'Tokyo',
+    post_code: '100-0001',
+  },
+  {
+    lat: -33.8688,
+    lng: 151.2093,
+    administrative: 'Sydney',
+    country: 'Australia',
+    country_code: 'au',
+    moderation: 'accepted',
+    name: 'Sydney',
+    post_code: '2000',
+  },
+  {
+    lat: 52.52,
+    lng: 13.405,
+    administrative: 'Berlin',
+    country: 'Germany',
+    country_code: 'de',
+    moderation: 'accepted',
+    name: 'Berlin',
+    post_code: '10115',
+  },
+  {
+    lat: 19.4326,
+    lng: -99.1332,
+    administrative: 'Mexico City',
+    country: 'Mexico',
+    country_code: 'mx',
+    moderation: 'accepted',
+    name: 'Mexico City',
+    post_code: '06000',
+  },
+  {
+    lat: -22.9068,
+    lng: -43.1729,
+    administrative: 'Rio de Janeiro',
+    country: 'Brazil',
+    country_code: 'br',
+    moderation: 'accepted',
+    name: 'Rio de Janeiro',
+    post_code: '20040',
+  },
+];
+
+const seedMapPins = (profiles: profilesScalars[]): map_pinsChildInputs =>
+  mapPins.slice(0, profiles.length).map((pin, index) => ({
+    tenant_id,
+    profile_id: profiles[index].id,
+    lat: String(pin.lat),
+    lng: String(pin.lng),
+    country: pin.country!,
+    country_code: pin.country_code!,
+    moderation: pin.moderation!,
+    administrative: pin.administrative,
+    post_code: pin.post_code,
+    moderation_feedback: (pin as any).moderation_feedback,
+    name: pin.name,
+  }));
+
 const seedResearch: Partial<researchScalars>[] = [
   {
     ...baseResearch,
@@ -397,6 +601,7 @@ const main = async () => {
   await seed.tenant_settings([
     {
       site_name: 'Local Development Community',
+      site_name_short: 'Local Dev',
       site_description:
         'A series of tools to collaborate around the world. Connect, share and meet each other to tackle problems.',
       site_url: 'http://localhost:3000',
@@ -413,6 +618,7 @@ const main = async () => {
       questions_guidelines:
         'https://community.preciousplastic.com/academy/guides/guidelines-questions',
       supported_modules: 'library,map,research,academy,questions,news',
+      hidden_modules: null,
       donation_settings: {
         defaultDescription:
           'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',
@@ -428,6 +634,14 @@ const main = async () => {
       color_accent_hover: '#ffde45',
       show_impact: true,
       create_research_roles: ['admin', 'research_creator'],
+      ga_tracking_id: 'test_ga_id',
+      pwa_icons: {
+        '16': '',
+        '32': '',
+        '192': '',
+        '256': '',
+        '512': '',
+      },
     },
   ]);
 
@@ -439,15 +653,24 @@ const main = async () => {
     (profilesSeed(tenant_id) as any[]).map((profile: profilesInputs, index) => ({
       ...profile,
       auth_id: users[index].id,
-      profile_type: profile_types[0].id,
+      profile_type: (
+        profile_types.find(
+          (t) =>
+            t.name ===
+            (['member', 'workspace', 'machine-builder', 'community-point', 'collection-point'][
+              index
+            ] ?? 'member'),
+        ) ?? profile_types[0]
+      ).id,
     })),
   );
 
   const { profile_badges } = await seed.profile_badges(seedBadges());
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
   await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
+  await seed.stripe_tier_config(seedStripeTierConfig(profile_badges));
 
-  // await seed.map_pins(seedMapPins(profiles))
+  await seed.map_pins(seedMapPins(profiles));
   const { tags } = await seed.tags(seedTags());
   const { categories } = await seed.categories(seedCategories());
 

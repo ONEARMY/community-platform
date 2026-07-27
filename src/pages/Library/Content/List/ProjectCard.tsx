@@ -15,8 +15,8 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
   const searchWords = [query || ''];
 
   return (
-    <Card data-cy="card" sx={{ marginX: [2, 0] }}>
-      <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
+    <Card data-cy="card">
+      <RouterLink to={`/library/${encodeURIComponent(item.slug)}`} style={{ display: 'block' }}>
         <Flex
           sx={{
             background: 'background',
@@ -60,7 +60,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
           }}
         >
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
-            <Heading as="h2" variant="small" color={'black'}>
+            <Heading as="h2" variant="small" color="black">
               <Highlighter
                 searchWords={searchWords}
                 textToHighlight={capitalizeFirstLetter(item.title)}

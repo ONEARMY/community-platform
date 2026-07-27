@@ -2,11 +2,12 @@ import { faker } from '@faker-js/faker';
 import { DifficultyLevelRecord } from 'oa-shared';
 
 import { MOCK_DATA } from '../../data';
-import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
+import { generateAlphaNumeric, generateNewUserDetails, getTenantUser } from '../../utils/TestUtils';
 
 import type { DifficultyLevel } from 'oa-shared';
 
 let randomId;
+const admin = getTenantUser(MOCK_DATA.users.admin);
 
 describe('[Library]', () => {
   beforeEach(() => {
@@ -17,7 +18,7 @@ describe('[Library]', () => {
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks';
 
   const selectCategory = (category: Category) => {
-    cy.selectTag(category, '[data-cy=category-select]');
+    cy.selectCard(category, '[data-cy=category-select]');
   };
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]');
@@ -79,7 +80,7 @@ describe('[Library]', () => {
   };
 
   describe('[Create a project]', () => {
-    const creator = MOCK_DATA.users.howto_creator;
+    const creator = getTenantUser(MOCK_DATA.users.howto_creator);
 
     const expected = {
       _createdBy: creator.username,
@@ -169,14 +170,15 @@ describe('[Library]', () => {
       cy.get('[data-cy=draft]').click();
 
       cy.wait(1000);
-      cy.get('[data-cy=errors-container]').should('be.visible');
-      cy.contains('A project with this name already exists').should('be.visible');
+      cy.contains('Error: A project with this name already exists').should('be.visible');
 
       cy.step('A basic draft is created');
       cy.fillIntroTitle(`qwerty ${randomId}`);
 
       cy.get('[data-cy=draft]').click();
-      cy.get('[data-cy=errors-container]').should('not.exist');
+      cy.contains('Draft saved!').should('be.visible');
+      cy.wait(1000);
+      cy.contains('View draft').should('be.visible').click();
 
       const firstSlug = `/library/qwerty-${randomId}`;
       cy.url().should('include', firstSlug);
@@ -209,7 +211,6 @@ describe('[Library]', () => {
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
       cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
 
-
       fillStep(1, steps[0].title, steps[0].text, imagePaths);
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL);
 
@@ -228,10 +229,16 @@ describe('[Library]', () => {
       cy.get('[data-cy=draft]').click();
       cy.get('[data-cy=errors-container]').should('not.exist');
 
+      cy.contains('View draft').should('be.visible').click();
+
       cy.step('A full draft can be submitted for review');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
       cy.url().should('include', `/library/${slug}`);
 
       cy.step('Project was created correctly');
@@ -296,44 +303,73 @@ describe('[Library]', () => {
       cy.get('a[href="/library/create"]').should('be.visible');
       cy.get('[data-cy=create-project]:visible').click();
       cy.fillIntroTitle(expected.title);
-      cy.get('[data-cy=page-link][href*="/library"]').click();
+      cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+      cy.get('[data-cy=page-link][href*="/library"]:visible').click();
       cy.get('[data-cy="Confirm.modal: Cancel"]').click();
       cy.url().should('match', /\/library\/create$/);
 
       cy.step('Clear title input');
       cy.get('[data-cy=intro-title]').clear().blur({ force: true });
-      cy.get('[data-cy=page-link][href*="/library"]').click();
+      cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+      cy.get('[data-cy=page-link][href*="/library"]:visible').click();
       cy.url().should('match', /\/library?/);
     });
 
     it('[By Admin]', () => {
-      const project = MOCK_DATA.projects[0];
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const title = `${randomId} Project edited by an admin`;
+      const slug = `${randomId}-project-edited-by-an-admin`;
+      const adminEdit = 'Edited by admin';
+      const stepDescription = 'Description for the step. This description should be between the minimum and maximum description length';
 
-      cy.signIn('demo_admin@example.com', 'demo_admin');
+      cy.step('Another user creates a project');
+      cy.signIn(creator.email, creator.password);
+      cy.visit('/library/create');
+      cy.fillIntroTitle(title);
+      cy.get('[data-cy=intro-description]').type('Written by someone other than the admin');
+      selectCategory('Moulds' as Category);
+      selectTimeDuration('1-2 weeks' as Duration);
+      selectDifficultLevel('Medium' as DifficultyLevel);
+      cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
+
+      const stepImage = ['src/fixtures/images/howto-step-pic1.jpg'];
+      fillStep(1, 'First step', stepDescription, stepImage);
+      fillStep(2, 'Second step', stepDescription, stepImage);
+      fillStep(3, 'Third step', stepDescription, stepImage);
+
+      cy.get('[data-cy=submit]').click();
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.url().should('include', `/library/${slug}`);
 
       cy.step('Project is not authored by the admin');
-      cy.visit(`/library/${project.slug}`);
-      cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
+      cy.logout();
+      cy.signIn(admin.email, admin.password);
+      cy.visit(`/library/${slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', admin.username);
 
       cy.step("Admin can see the edit button on another user's project");
       cy.get('[data-cy=edit]').should('be.visible');
 
       cy.step('Admin can access the edit page');
       cy.get('[data-cy=edit]').click();
-      cy.url().should('include', `/library/${project.slug}/edit`);
+      cy.url().should('include', `/library/${slug}/edit`);
 
       cy.step('Admin can edit the project description');
-      cy.get('[data-cy=intro-description]').should('be.visible');
+      cy.get('[data-cy=intro-description]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-cy=intro-description]').clear().type(adminEdit).blur({ force: true });
 
-      const adminEdit = ' [edited by admin]';
-      cy.get('[data-cy=intro-description]').type(adminEdit, { delay: 5 });
+      cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
 
-      cy.step('Updated content is visible');
-      cy.url().should('include', `/library/${project.slug}`);
+      cy.step('Admin edit is saved and visible');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.url().should('include', `/library/${slug}`);
       cy.contains(adminEdit);
     });
-    
+
     it('[Edit project - Replace images]', () => {
       const randomId = generateAlphaNumeric(8).toLowerCase();
       const initialTitle = `${randomId} Project for image edit`;
@@ -352,54 +388,70 @@ describe('[Library]', () => {
       selectCategory(category as Category);
       selectTimeDuration(time as Duration);
       selectDifficultLevel(difficulty as DifficultyLevel);
-      
+
       cy.step('Upload cover image');
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
       cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
-      
+
       cy.step('Add step with images');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Step with images').blur();
-        cy.get('[data-cy=step-description]').clear().type('Description for step 2. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type('Description for step 2. This description should be between the minimum and maximum description length')
+          .blur();
         cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
 
       cy.get('[data-cy=step_1]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Second step').blur();
-        cy.get('[data-cy=step-description]').clear().type('Description for step 2. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type('Description for step 2. This description should be between the minimum and maximum description length')
+          .blur();
         cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
 
       cy.get('[data-cy=step_2]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Third step').blur();
-        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type('Description for step 3. This description should be between the minimum and maximum description length')
+          .blur();
         cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
-      
-      
+
       cy.get('[data-cy=submit]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
       cy.url().should('include', `/library/${slug}`);
 
       cy.step('Edit project and replace images');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=intro-description]').clear().type(updatedDescription);
-      
+
       cy.step('Replace cover image');
-      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').click({force: true});
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').click({ force: true });
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
-      
+
       cy.step('Replace step image');
       cy.get('[data-cy=step_0]').within(() => {
-        cy.get('[data-cy=delete-image]').first().click({force: true});
+        cy.get('[data-cy=delete-image]').first().click({ force: true });
         cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
-      
+
       cy.get('[data-cy=submit]').click();
+
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
       cy.url().should('include', `/library/${slug}`);
       cy.contains(updatedDescription);
     });
@@ -421,48 +473,72 @@ describe('[Library]', () => {
       selectCategory(category as Category);
       selectTimeDuration(time as Duration);
       selectDifficultLevel(difficulty as DifficultyLevel);
-      
+
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
       cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
-      
+
       cy.step('Upload a file');
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       cy.get('[data-cy=remove-file]').should('exist');
-      
+
       cy.step('Add steps with video URLs');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('First step').blur();
-        cy.get('[data-cy=step-description]').clear().type('Description for step 1. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type('Description for step 1. This description should be between the minimum and maximum description length')
+          .blur();
         cy.get('[data-cy=step-videoUrl]').clear().type('https://www.youtube.com/watch?v=Os7dREQ00l4');
       });
 
       cy.get('[data-cy=step_1]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Second step').blur();
-        cy.get('[data-cy=step-description]').clear().type('Description for step 2. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type('Description for step 2. This description should be between the minimum and maximum description length')
+          .blur();
         cy.get('[data-cy=step-videoUrl]').clear().type('https://www.youtube.com/watch?v=Os7dREQ00l4');
       });
 
       cy.get('[data-cy=step_2]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Third step').blur();
-        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type('Description for step 3. This description should be between the minimum and maximum description length')
+          .blur();
         cy.get('[data-cy=step-videoUrl]').clear().type('https://www.youtube.com/watch?v=Os7dREQ00l4');
       });
-      
+
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
       cy.url().should('include', `/library/${slug}`);
       cy.get('[data-cy=downloadButton]').should('be.visible');
 
       cy.step('Edit project and replace file');
       cy.get('[data-cy=edit]').click();
-      
+
       cy.step('Remove old file and upload new one');
       cy.get('[data-cy=remove-file]').click();
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       cy.get('[data-cy=remove-file]').should('exist');
-      
+
       cy.get('[data-cy=submit]').click();
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
       cy.url().should('include', `/library/${slug}`);
       cy.get('[data-cy=downloadButton]').should('be.visible');
+    });
+
+    it('[Delete button is visible]', () => {
+      cy.signIn(admin.email, admin.password);
+
+      cy.visit('/library/qwerty/edit');
+
+      cy.step('Delete button should be visible to project author');
+      cy.get('[data-cy="Project: delete button"]').should('be.visible');
     });
   });
 });

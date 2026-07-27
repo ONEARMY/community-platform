@@ -13,7 +13,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const cachedUpgradeBadges = await cache.get('upgradeBadges');
 
-    if (cachedUpgradeBadges && Array.isArray(cachedUpgradeBadges) && cachedUpgradeBadges.length && isProductionEnvironment()) {
+    if (
+      cachedUpgradeBadges &&
+      Array.isArray(cachedUpgradeBadges) &&
+      cachedUpgradeBadges.length &&
+      isProductionEnvironment()
+    ) {
       return Response.json(cachedUpgradeBadges, { headers, status: 200 });
     }
 

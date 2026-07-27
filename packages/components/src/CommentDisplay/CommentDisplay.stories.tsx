@@ -1,3 +1,4 @@
+import { UsefulButtonLite } from '../UsefulStatsButton/UsefulButtonLite';
 import { fakeCommentSB } from '../utils';
 import { CommentDisplay } from './CommentDisplay';
 
@@ -18,33 +19,32 @@ const mockHandleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Co
   return new Promise<void>((resolve) => setTimeout(() => resolve(), 300));
 };
 
-// Common useful button config
-const usefulButtonConfig = {
-  votedUsefulCount,
-  hasUserVotedUseful,
-  isLoggedIn,
-  onUsefulClick: mockHandleUsefulClick,
-};
+const usefulButton = <UsefulButtonLite
+  votedUsefulCount={votedUsefulCount}
+  hasUserVotedUseful={hasUserVotedUseful}
+  isLoggedIn={isLoggedIn}
+  onUsefulClick={mockHandleUsefulClick}
+/>;
 
 export const Default: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB();
 
   return (
-    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} usefulButtonConfig={usefulButtonConfig} actions={<></>} />
+    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} footerActions={usefulButton} menuActions={<></>} />
   );
 };
 
 export const Editable: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB();
 
-  return <CommentDisplay comment={comment} itemType={itemType} isEditable={true} usefulButtonConfig={usefulButtonConfig} actions={<></>} />;
+  return <CommentDisplay comment={comment} itemType={itemType} isEditable={true} footerActions={usefulButton} menuActions={<></>} />;
 };
 
 export const Edited: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB({ modifiedAt: new Date() });
 
   return (
-    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} usefulButtonConfig={usefulButtonConfig} actions={<></>} />
+    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} footerActions={usefulButton} menuActions={<></>} />
   );
 };
 
@@ -53,7 +53,7 @@ export const LongText: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB({ comment: commentText });
 
   return (
-    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} usefulButtonConfig={usefulButtonConfig} actions={<></>} />
+    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} footerActions={usefulButton} menuActions={<></>} />
   );
 };
 
@@ -63,17 +63,19 @@ export const ShortTextWithLink: StoryFn<typeof CommentDisplay> = () => {
   });
 
   return (
-    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} usefulButtonConfig={usefulButtonConfig} actions={<></>} />
+    <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} footerActions={usefulButton} menuActions={<></>} />
   );
 };
 
 export const UserVotedUseful: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB();
-  const votedConfig = {
-    ...usefulButtonConfig,
-    hasUserVotedUseful: true,
-    votedUsefulCount: 5,
-  };
 
-  return <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} usefulButtonConfig={votedConfig} actions={<></>} />;
+ const button = <UsefulButtonLite
+    votedUsefulCount={5}
+    hasUserVotedUseful={true}
+    isLoggedIn={isLoggedIn}
+    onUsefulClick={mockHandleUsefulClick}
+  />;
+
+  return <CommentDisplay comment={comment} itemType={itemType} isEditable={isEditable} footerActions={button} menuActions={<></>} />;
 };

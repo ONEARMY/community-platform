@@ -72,7 +72,6 @@ export class ProfileFactory {
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
-      patreon: dbProfile.patreon || null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       donationsEnabled: !!dbProfile.donations_enabled,

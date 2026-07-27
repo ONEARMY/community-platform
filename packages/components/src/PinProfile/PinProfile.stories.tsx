@@ -36,7 +36,7 @@ export const DefaultMember: StoryFn<typeof PinProfile> = () => {
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
-      <PinProfile item={item} onClose={() => console.log()} />
+      <PinProfile item={item} />
     </div>
   );
 };
@@ -62,7 +62,7 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
           id: 1,
           name: 'supporter',
           displayName: 'Supporter',
-          actionUrl: 'https://www.patreon.com/one_army',
+          actionUrl: 'should_be_a_url',
           imageUrl: faker.image.avatar(),
         },
       ],
@@ -79,7 +79,7 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
-      <PinProfile item={item} onClose={() => console.log()} />
+      <PinProfile item={item} />
     </div>
   );
 };

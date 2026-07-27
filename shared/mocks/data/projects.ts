@@ -14,6 +14,8 @@ export const projects = [
       modifiedAt: new Date('2018-11-29T12:56:47.901Z'),
       id: 1,
       type: 'projects',
+      imageUrl: null,
+      description: null,
     },
     previousSlugs: [],
     moderation: 'accepted',

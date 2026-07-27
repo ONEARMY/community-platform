@@ -1,8 +1,13 @@
 import { observer } from 'mobx-react';
-import { ArticleCallToActionSupabase, Button, ConfirmModal, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import {
+  ArticleCallToActionSupabase,
+  Button,
+  UsefulStatsButton,
+  UserEngagementWrapper,
+} from 'oa-components';
 import type { Project, ProjectStep } from 'oa-shared';
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
@@ -13,7 +18,6 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card, Flex } from 'theme-ui';
-import { libraryService } from '../../library.service';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 
@@ -23,30 +27,17 @@ interface ProjectPageProps {
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const { profile: activeUser } = useProfileStore();
-  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('projects', item.id, item.usefulCount);
+  const {
+    hasVoted,
+    usefulCount,
+    toggle: toggleVote,
+  } = useUsefulVote('projects', item.id, item.usefulCount);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleDelete = async () => {
-    try {
-      await libraryService.deleteProject(item.id);
-      trackEvent({
-        category: 'projects',
-        action: 'deleted',
-        label: item.title,
-      });
-
-      navigate('/library');
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const isEditable = useMemo(() => {
-    return !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username);
+    return (
+      !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
+    );
   }, [activeUser, item.author]);
 
   return (
@@ -54,39 +45,20 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
       <PageHeader
         actions={
           isEditable && (
-            <Flex sx={{ gap: 2, width: ['100%', 'auto', 'auto'], justifyContent: 'flex-end' }}>
-              <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
-                <Button type="button" variant="primary">
-                  Edit
-                </Button>
-              </Link>
-
-              <Button
-                type="button"
-                data-cy="Library: delete button"
-                variant="destructive"
-                disabled={item.deleted}
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Delete
+            <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
+              <Button type="button" variant="primary">
+                Edit
               </Button>
-
-              <ConfirmModal
-                isOpen={showDeleteModal}
-                message="Are you sure you want to delete this project?"
-                confirmButtonText="Delete"
-                handleCancel={() => setShowDeleteModal(false)}
-                handleConfirm={() => handleDelete()}
-                confirmVariant="destructive"
-              />
-            </Flex>
+            </Link>
           )
         }
       >
         <Breadcrumbs
           steps={[
             { text: 'Library', link: '/library' },
-            ...(item.category ? [{ text: item.category.name, link: `/library?category=${item.category.id}` }] : []),
+            ...(item.category
+              ? [{ text: item.category.name, link: `/library?category=${item.category.id}` }]
+              : []),
             { text: item.title },
           ]}
         />
@@ -115,10 +87,14 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 type="button"
                 sx={{ fontSize: 2, justifyContent: 'center' }}
                 onClick={() => {
-                  document.querySelector('[data-target="create-comment-container"]')?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                  (document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement)?.focus();
+                  document
+                    .querySelector('[data-target="create-comment-container"]')
+                    ?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  (
+                    document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement
+                  )?.focus();
 
                   return false;
                 }}
@@ -126,7 +102,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 Leave a comment
               </Button>
               {item.moderation === 'accepted' && (
-                <UsefulStatsButton hasUserVotedUseful={hasVoted} isLoggedIn={!!activeUser} onUsefulClick={toggleVote} />
+                <UsefulStatsButton
+                  hasUserVotedUseful={hasVoted}
+                  isLoggedIn={!!activeUser}
+                  onUsefulClick={toggleVote}
+                />
               )}
               {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
                 <>
@@ -164,7 +144,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 mt: 5,
               }}
             >
-              <CommentSectionSupabase authors={item.author?.id ? [item.author?.id] : []} sourceId={item.id} sourceType="projects" />
+              <CommentSectionSupabase
+                authors={item.author?.id ? [item.author?.id] : []}
+                sourceId={item.id}
+                sourceType="projects"
+              />
             </Card>
           </UserEngagementWrapper>
         )}

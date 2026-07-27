@@ -15,7 +15,11 @@ type TooltipProps = {
 
 export const Tooltip = ({ children, id }: TooltipProps) => {
   return (
-    <StyledTooltip id={id} openEvents={{ mouseenter: true, focus: true }} closeEvents={{ mouseleave: true, blur: true }}>
+    <StyledTooltip
+      id={id}
+      openEvents={{ mouseenter: true, focus: true }}
+      closeEvents={{ mouseleave: true, blur: true }}
+    >
       {children}
     </StyledTooltip>
   );

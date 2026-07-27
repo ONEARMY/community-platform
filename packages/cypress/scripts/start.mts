@@ -66,13 +66,15 @@ main()
 
 async function main() {
   // copy endpoints for use in testing
-
-  const tenantId = generateAlphaNumeric(8);
+  const tenantId = process.env.CI_NODE
+  ? `${generateAlphaNumeric(8).toLowerCase()}-node-${process.env.CI_NODE}`
+  : generateAlphaNumeric(8).toLowerCase();
 
   fs.writeFileSync(
     'cypress.env.json',
     JSON.stringify({
       TENANT_ID: tenantId,
+      CI_NODE: process.env.CI_NODE,
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       SUPABASE_API_URL: process.env.SUPABASE_API_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY,
@@ -92,14 +94,14 @@ async function main() {
 async function startAppServer(tenantId: string) {
   const { CROSSENV_BIN } = PATHS;
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `VITE_SITE_VARIANT=test-ci`;
+  const crossEnvArgs = `VITE_SITE_VARIANT=test-ci PORT=3456`;
 
   // run local debug server for testing unless production build specified
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none bun start`;
 
   // create local build if not running on ci (which will have build already generated)
   if (isCi) {
-    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} bun run start-ci`;
+    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} NODE_ENV=production bun run start-ci`;
   }
 
   /******************* Run the main commands ******************* */
@@ -113,6 +115,7 @@ async function startAppServer(tenantId: string) {
       ...process.env,
       VITE_SITE_VARIANT: 'test-ci',
       TENANT_ID: tenantId,
+      PORT: '3456',
     },
   });
 

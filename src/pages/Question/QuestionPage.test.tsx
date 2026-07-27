@@ -88,6 +88,8 @@ describe('Questions', () => {
         name: 'Preference',
         id: faker.number.int(),
         type: 'questions',
+        description: 'A category for moulds',
+        imageUrl: '',
       };
 
       // Act

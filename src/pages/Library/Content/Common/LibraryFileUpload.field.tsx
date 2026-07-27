@@ -22,7 +22,7 @@ export const LibraryFileUploadField = () => {
             fallback={
               <FormFieldWrapper htmlFor={name} text={title}>
                 <Field id={name} name={name} data-cy={name} component={FileInputField} />
-                <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+                <Text color="grey" mt={4} sx={{ fontSize: 1 }}>
                   {description}
                 </Text>
               </FormFieldWrapper>
@@ -30,8 +30,8 @@ export const LibraryFileUploadField = () => {
           >
             <FormFieldWrapper htmlFor={name} text={title}>
               <Field id={name} name={name} data-cy={name} admin={true} component={FileInputField} />
-              <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-                {'Maximum file size 300MB'}
+              <Text color="grey" mt={4} sx={{ fontSize: 1 }}>
+                Maximum file size 300MB
               </Text>
             </FormFieldWrapper>
           </AuthWrapper>

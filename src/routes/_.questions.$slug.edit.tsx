@@ -4,7 +4,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { questionServiceServer } from 'src/services/questionService.server';
+import { QuestionServiceServer } from 'src/services/questionService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 
@@ -21,7 +21,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ formData: null, id: null }, { headers });
   }
 
-  const result = await questionServiceServer.getBySlug(client, params.slug!);
+  const result = await new QuestionServiceServer(client).getBySlug(params.slug!);
 
   if (result.error || !result.data) {
     return data({ formData: null, id: null }, { headers });

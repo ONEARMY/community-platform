@@ -1,5 +1,6 @@
 import type { ResearchUpdate } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router';
 import { Box, Button } from 'theme-ui';
 import { CommentSectionSupabase } from './CommentSectionSupabase';
 
@@ -14,6 +15,7 @@ const CollapsableCommentSection = (props: Props) => {
   const { authors, open, total, researchUpdate } = props;
 
   const [isOpen, setIsOpen] = useState(() => open || false);
+  const location = useLocation();
 
   const buttonText = useMemo(() => {
     if (!isOpen) {

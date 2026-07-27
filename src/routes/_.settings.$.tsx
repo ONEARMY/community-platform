@@ -6,6 +6,14 @@ import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 
+const incompletePathname = (pathname) => {
+  const incompletePathnameList = ['/settings', '/settings/', '/settings.data'];
+  if (incompletePathnameList.includes(pathname)) {
+    return true;
+  }
+  return false;
+};
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
@@ -15,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   const url = new URL(request.url);
-  if (url.pathname === '/settings' || url.pathname === '/settings/') {
+  if (incompletePathname(url.pathname)) {
     return redirect('/settings/profile', { headers });
   }
 

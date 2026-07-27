@@ -15,7 +15,6 @@ describe('[News.Read]', () => {
         .within(() => {
           cy.get('[data-cy=news-list-item-title]');
           cy.get('[data-cy=news-list-item-summary]');
-          cy.get('[data-cy=category]');
         });
     });
   });

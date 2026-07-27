@@ -17,7 +17,11 @@ type ResearchFooterProps = {
 const ResearchFooter = observer(({ research }: ResearchFooterProps) => {
   const { profile } = useProfileStore();
   const { isSubscribed, toggle: toggleSubscription } = useSubscription('research', research.id);
-  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('research', research.id, research.usefulCount || 0);
+  const {
+    hasVoted,
+    usefulCount,
+    toggle: toggleVote,
+  } = useUsefulVote('research', research.id, research.usefulCount || 0);
 
   return (
     <Flex
@@ -33,7 +37,11 @@ const ResearchFooter = observer(({ research }: ResearchFooterProps) => {
         <ClientOnly fallback={<></>}>
           {() => (
             <>
-              <UsefulStatsButton hasUserVotedUseful={hasVoted} isLoggedIn={!!profile} onUsefulClick={toggleVote} />
+              <UsefulStatsButton
+                hasUserVotedUseful={hasVoted}
+                isLoggedIn={!!profile}
+                onUsefulClick={toggleVote}
+              />
               <FollowButton
                 isFollowing={isSubscribed}
                 isLoggedIn={!!profile}
@@ -66,7 +74,12 @@ const ResearchFooter = observer(({ research }: ResearchFooterProps) => {
             }),
             stat: research.subscriberCount || 0,
           },
-          createUsefulStatistic('research', research.id, usefulCount, userHasPremiumTier(profile, PremiumTier.ONE)),
+          createUsefulStatistic(
+            'research',
+            research.id,
+            usefulCount,
+            userHasPremiumTier(profile, PremiumTier.ONE),
+          ),
           {
             icon: 'comment-outline',
             label: buildStatisticsLabel({

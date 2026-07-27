@@ -1,20 +1,13 @@
-import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import type { ProjectFormData } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
-import { useForm, useFormState } from 'react-final-form';
+import { Field, useForm } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { storageService } from 'src/services/storageService';
-import { Spinner, Text } from 'theme-ui';
-
-const ImageInputFieldWrapper = styled.div`
-  height: 200px;
-  width: 370px;
-  max-width: 100%;
-  margin-bottom: 6px;
-`;
+import { required } from 'src/utils/validators';
+import { Box, Spinner, Text } from 'theme-ui';
 
 type ImageFieldProps = {
   title: string;
@@ -24,7 +17,6 @@ type ImageFieldProps = {
 
 export const ImageField = (props: ImageFieldProps) => {
   const { title, contentType, contentId = null } = props;
-  const state = useFormState<ProjectFormData>();
   const form = useForm<ProjectFormData>();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -57,33 +49,50 @@ export const ImageField = (props: ImageFieldProps) => {
   };
 
   return (
-    <FormFieldWrapper htmlFor="image" text={title} required>
-      {uploadError && <Text sx={{ color: 'error', fontSize: 1, mb: 2 }}>{uploadError}</Text>}
-
-      <ImageInputFieldWrapper data-cy={isUploading ? 'image-uploading' : 'image-input'}>
-        <FieldContainer
-          style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {isUploading ? (
-            <>
-              <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
-              <Text sx={{ ml: 2 }}>Uploading image...</Text>
-            </>
-          ) : (
-            <ImageInputV2
-              onFilesChange={handleImageSelect}
-              onError={setUploadError}
-              image={state.values.coverImage || undefined}
-            />
+    <Field name="coverImage" validate={required}>
+      {({ input, meta }) => (
+        <FormFieldWrapper htmlFor="image" text={title} required>
+          {uploadError && <Text sx={{ color: 'error', fontSize: 1, mb: 2 }}>{uploadError}</Text>}
+          {meta.touched && meta.error && (
+            <Text sx={{ color: 'error', fontSize: 1, mb: 2 }}>{meta.error}</Text>
           )}
-        </FieldContainer>
-      </ImageInputFieldWrapper>
-    </FormFieldWrapper>
+
+          <Box
+            sx={{
+              height: '200px',
+              width: '370px',
+              maxWidth: '100%',
+              ...(meta.touched && meta.error
+                ? { '.image-input__wrapper': { borderColor: 'error' } }
+                : {}),
+            }}
+            data-cy={isUploading ? 'image-uploading' : 'image-input'}
+          >
+            <FieldContainer
+              style={{
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {isUploading ? (
+                <>
+                  <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
+                  <Text sx={{ ml: 2 }}>Uploading image...</Text>
+                </>
+              ) : (
+                <ImageInputV2
+                  onFilesChange={handleImageSelect}
+                  onError={setUploadError}
+                  image={input.value || undefined}
+                />
+              )}
+            </FieldContainer>
+          </Box>
+        </FormFieldWrapper>
+      )}
+    </Field>
   );
 };

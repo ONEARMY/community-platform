@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
+import { PollServiceServer } from '../services/pollService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -15,10 +16,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(`/news/${params.slug}/edit`, headers);
-  }
-
-  if (!(await isAllowedToEdit(claims.data.claims.sub, client))) {
-    return redirect('/forbidden?page=news-edit', { headers });
   }
 
   if (!params.slug) {
@@ -31,25 +28,36 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ formData: null, id: null }, { headers });
   }
 
+  if (!(await isAllowedToEdit(result.data.created_by, claims.data.claims.sub, client))) {
+    return redirect('/forbidden?page=news-edit', { headers });
+  }
+
   const dbNews = result.data as unknown as DBNews;
 
   const publicImage = dbNews.hero_image
     ? new StorageServiceServer(client).getPublicUrl(dbNews.hero_image)
     : null;
 
-  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage);
+  const pollService = new PollServiceServer(client);
+  const poll = dbNews.poll ? await pollService.getPoll(dbNews.poll) : null;
+
+  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage, poll);
 
   return data({ formData, id: result.data.id }, { headers });
 }
 
-async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
+async function isAllowedToEdit(userProfileId: string, userAuthId: string, client: SupabaseClient) {
   const { data } = await client
     .from('profiles')
     .select('id,roles')
     .eq('auth_id', userAuthId)
     .single();
 
-  return data?.roles?.includes(UserRole.ADMIN);
+  return (
+    data?.roles?.includes(UserRole.ADMIN) ||
+    data?.roles?.includes(UserRole.EDITOR) ||
+    (userProfileId && data?.id === userProfileId)
+  );
 }
 
 export default function Index() {

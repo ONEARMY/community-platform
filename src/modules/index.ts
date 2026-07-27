@@ -8,7 +8,10 @@ export enum MODULE {
 }
 
 export const getSupportedModules = (supportedModules: string): MODULE[] => {
-  const envModules: string[] = (supportedModules || 'library,map,research,academy,questions,news').split(',').map((s) => s.trim()) || [];
+  const envModules: string[] =
+    (supportedModules || 'library,map,research,academy,questions,news')
+      .split(',')
+      .map((s) => s.trim()) || [];
   return Object.values(MODULE).filter((module) => envModules.includes(module));
 };
 

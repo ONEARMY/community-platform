@@ -15,7 +15,9 @@ export const FRIENDLY_MESSAGES = {
   'auth/password-changed': 'All done. Password changed',
   'auth/user-not-found': 'No account found, typo maybe?',
   'auth/wrong-password': 'Password does not match the user account',
-  'generic-error': 'Oops, something went wrong!',
+  'generic-error':
+    "We couldn't complete your registration. If you already have an account, try logging in or resetting your password.",
+  'supporter/already-subscribed': 'This account already has an active subscription.',
   required: 'Required field',
   'reset email sent': 'Reset email sent, check your inbox/spam',
   'profile saved': 'Profile Saved',
@@ -41,7 +43,6 @@ export const getFriendlyMessage = (systemMessage = '') => {
   if (Object.hasOwn(FRIENDLY_MESSAGES, messageKey)) {
     return FRIENDLY_MESSAGES[messageKey];
   } else {
-    console.log(`%c No friendly message for [${messageKey}]`, 'background: #222; color: #bada55');
     return systemMessage;
   }
 };

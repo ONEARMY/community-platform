@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Toaster } from 'sonner';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { FactoryUser } from 'src/test/factories/User';
 import { describe, expect, it, vi } from 'vitest';
@@ -12,7 +13,7 @@ import type { Profile } from 'oa-shared';
 vi.mock('src/services/messageService', () => {
   return {
     messageService: {
-      sendMessage: () => new Response(null, { status: 200, statusText: 'ALLL good!' }),
+      sendMessage: () => Promise.resolve(new Response(null, { status: 200, statusText: 'ALLL good!' })),
     },
   };
 });
@@ -25,6 +26,7 @@ describe('UserContactForm', () => {
 
     render(
       <ProfileStoreProvider>
+        <Toaster />
         <UserContactForm user={profileUser as Profile} />
       </ProfileStoreProvider>,
     );

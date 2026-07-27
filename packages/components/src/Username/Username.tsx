@@ -22,8 +22,13 @@ const getCountryCode = (country: string | undefined) => {
   return countryToAlpha2(country);
 };
 
-export const Username = ({ user, sx, target, isLink = true }: IProps) => {
+export const Username = (props: IProps) => {
+  const { user, sx = {}, target = '_self', isLink = true } = props;
   const { username, badges } = user;
+
+  if (!username) {
+    return null;
+  }
 
   const countryCode = user.country ? getCountryCode(user.country) : null;
 
@@ -63,10 +68,13 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
         {username}
       </Text>
 
-      {badges &&
-        badges.map((badge) => {
-          return <UserBadge key={badge.id} badge={badge} />;
-        })}
+      {badges && badges.length > 0 && (
+        <Flex sx={{ gap: 1, alignItems: 'center' }}>
+          {badges.map((badge) => {
+            return <UserBadge key={badge.id} badge={badge} />;
+          })}
+        </Flex>
+      )}
     </Flex>
   );
 
@@ -77,18 +85,18 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
   return (
     <InternalLink
       to={`/u/${username}`}
-      target={target || '_self'}
+      target={target}
       sx={{
         border: '1px solid transparent',
         display: 'inline-flex',
         minWidth: 0,
-        overflow: 'hidden',
         paddingX: 1,
         paddingY: '3px',
         borderRadius: 1,
         marginLeft: -1,
         color: 'black',
         fontSize: 2,
+        maxWidth: '100%',
         transition: '80ms ease-out all',
         '&:focus': {
           borderColor: '#20B7EB',
@@ -101,7 +109,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
           background: 'softblue',
           textcolor: 'bluetag',
         },
-        ...(sx || {}),
+        ...sx,
       }}
     >
       {UserNameBody}

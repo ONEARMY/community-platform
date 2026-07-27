@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const profileBadges = data?.map((badge) => ProfileBadge.fromDB(badge as DBProfileBadge));
 
   if (profileBadges && profileBadges.length > 0) {
-    cache.set('profileBadges', data, 3600000);
+    cache.set('profileBadges', profileBadges, 3600000);
   }
 
   return Response.json(profileBadges, { headers, status: 200 });

@@ -47,7 +47,7 @@ export const FieldMarkdown = (props: IProps) => {
 
   const mainPluginList = useMemo(
     () => [
-      headingsPlugin({ allowedHeadingLevels: [1, 2] }),
+      headingsPlugin({ allowedHeadingLevels: [2, 3, 4] }),
       listsPlugin(),
       quotePlugin(),
       imagePlugin({
@@ -94,10 +94,6 @@ export const FieldMarkdown = (props: IProps) => {
             textDecoration: 'underline',
             '&:hover': { textDecoration: 'none' },
           },
-          h3: { fontSize: 2 },
-          h4: { fontSize: 2 },
-          h5: { fontSize: 2 },
-          h6: { fontSize: 2 },
           img: {
             borderRadius: 2,
             maxWidth: '100%',

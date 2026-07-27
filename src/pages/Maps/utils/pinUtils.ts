@@ -14,8 +14,12 @@ export const sortPinsByBadgeThenLastActive = (pins: MapPin[], badgeName: string)
     const aHasBadge = a.profile?.badges?.some((badge) => badge.name === badgeName) ?? false;
     const bHasBadge = b.profile?.badges?.some((badge) => badge.name === badgeName) ?? false;
 
-    if (aHasBadge && !bHasBadge) return -1;
-    if (!aHasBadge && bHasBadge) return 1;
+    if (aHasBadge && !bHasBadge) {
+      return -1;
+    }
+    if (!aHasBadge && bHasBadge) {
+      return 1;
+    }
 
     const aTime = a.profile?.lastActive ? new Date(a.profile.lastActive).getTime() : 0;
     const bTime = b.profile?.lastActive ? new Date(b.profile.lastActive).getTime() : 0;
@@ -36,9 +40,10 @@ export const filterPins = (
   if (!allPins?.length) {
     return [];
   }
+
   const { tags, types, badges, settings, boundaries } = filters;
 
-  let filteredPins = structuredClone(allPins);
+  let filteredPins = allPins;
 
   if (tags?.length) {
     filteredPins = filteredPins.filter((x) =>

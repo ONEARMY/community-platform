@@ -3,6 +3,8 @@ import InterRegular_woff from '../../assets/fonts/Inter-Regular.woff';
 import InterRegular_woff2 from '../../assets/fonts/Inter-Regular.woff2';
 import InterSemiBold_ttf from '../../assets/fonts/Inter-SemiBold.ttf';
 import InterSemiBold_woff2 from '../../assets/fonts/Inter-SemiBold.woff2';
+import KlimaRegular_woff from '../../assets/fonts/Klima-Regular.woff';
+import KlimaRegular_woff2 from '../../assets/fonts/Klima-Regular.woff2';
 import VarelaRound_ttf from '../../assets/fonts/VarelaRound-Regular.ttf';
 import VarelaRound_woff from '../../assets/fonts/VarelaRound-Regular.woff';
 
@@ -34,6 +36,15 @@ export const GlobalFonts = `
     src:  url("${InterSemiBold_woff2}") format('woff2'),
           url("${InterSemiBold_ttf}") format('truetype');
     font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Klima';
+    font-display: auto;
+    src:  url("${KlimaRegular_woff2}") format('woff2'),
+          url("${KlimaRegular_woff}") format('woff');
+    font-weight: normal;
     font-style: normal;
   }
 `;

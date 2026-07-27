@@ -180,12 +180,42 @@ export class ProfileServiceServer {
     return data as DBAuthorVotes[];
   }
 
+  async updateUsername(id: number, username: string) {
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ username })
+      .eq('id', id)
+      .select(
+        `*,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url,
+            premium_tier
+          )
+        )`,
+      )
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
+  }
+
   async updateProfile(id: number, values: ProfileDTO) {
     const types = await new ProfileTypesServiceServer(this.client).get();
-    console.log({ types });
-    console.log({ values });
     const typeId = types.find((x) => x.name === values.type)!.id;
-    console.log({ typeId });
     const existingProfile = await this.getById(id);
     const pinModeration = this.determinePinModeration(types, existingProfile!, values.type);
 
@@ -292,11 +322,7 @@ export class ProfileServiceServer {
       return;
     }
 
-    if (!user.user_metadata.username) {
-      console.error('Cannot create profile without username in user metadata');
-    }
-
-    // Doesn't exist - create it
+    // Doesn't exist - create it (without username; user sets it in settings)
     const profileType = await this.client
       .from('profile_types')
       .select('id')
@@ -304,8 +330,8 @@ export class ProfileServiceServer {
       .limit(1);
     const { error } = await this.client.from('profiles').insert({
       auth_id: user.id,
-      display_name: user.user_metadata.username,
-      username: user.user_metadata.username,
+      display_name: '',
+      is_contactable: true,
       profile_type: profileType.data?.at(0)?.id || null,
       tenant_id: process.env.TENANT_ID,
     });
@@ -313,6 +339,13 @@ export class ProfileServiceServer {
     if (error) {
       console.error('Error creating profile for user:', error);
     }
+  }
+
+  async updateUserActivity(userId: string) {
+    return await this.client
+      .from('profiles')
+      .update({ last_active: new Date().toISOString() })
+      .eq('auth_id', userId);
   }
 
   /**

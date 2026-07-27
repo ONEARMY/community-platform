@@ -22,7 +22,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .eq('auth_id', claims.data.claims.sub)
     .limit(1);
 
-  if (!data!.at(0)!.roles?.includes(UserRole.ADMIN)) {
+  if (
+    !data!.at(0)!.roles?.includes(UserRole.ADMIN) &&
+    !data!.at(0)!.roles?.includes(UserRole.EDITOR)
+  ) {
     return redirect('/forbidden?page=news-create', { headers });
   }
 

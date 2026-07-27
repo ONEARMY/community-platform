@@ -1,11 +1,11 @@
+import { FormApi } from 'node_modules/final-form/dist';
+import { Button, ConfirmModal } from 'oa-components';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
-import { logger } from 'src/logger';
+import { useToast } from 'src/common/Toast';
 import { CategoryField, TagsField, TitleField } from 'src/pages/common/FormFields';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common';
@@ -15,7 +15,6 @@ import {
 } from 'src/pages/Question/Content/Common/FormFields';
 import * as LABELS from 'src/pages/Question/labels';
 import { questionService } from 'src/services/questionService';
-import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, endsWithQuestionMark, minValue, required } from 'src/utils/validators';
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants';
 
@@ -27,11 +26,24 @@ interface IProps {
 }
 
 export const QuestionForm = (props: IProps) => {
-  const navigate = useNavigate();
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const toast = useToast();
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const id = props?.id || null;
+  const isEdit = props.formAction === 'edit';
+
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setShowDeleteModal(false);
+    try {
+      await questionService.deleteQuestion(id);
+      window.location.assign('/questions');
+    } catch (e) {
+      console.error(e.message || 'Error deleting question');
+    }
+  };
 
   const initialValues = useMemo<QuestionFormData>(
     () =>
@@ -46,100 +58,132 @@ export const QuestionForm = (props: IProps) => {
     [],
   );
 
-  const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
-    setIntentionalNavigation(true);
-    setSaveErrorMessage(null);
-    setIsSubmitting(true);
+  const onSubmit = async (
+    form: FormApi<QuestionFormData, Partial<QuestionFormData>>,
+    values: QuestionFormData,
+    isDraft: boolean = false,
+  ) => {
+    const promise = questionService.upsert(id, {
+      title: values.title!,
+      description: values.description!,
+      tags: values.tags || null,
+      category: values.category || null,
+      images: values.images || null,
+      isDraft: isDraft,
+    });
 
-    try {
-      const result = await questionService.upsert(id, {
-        title: formValues.title!,
-        description: formValues.description!,
-        tags: formValues.tags || null,
-        category: formValues.category || null,
-        images: formValues.images || null,
-        isDraft: isDraft,
-      });
+    toast.promise(promise, {
+      loading: isDraft ? 'Saving draft...' : 'Submitting question...',
+      success: (data) => {
+        form.reset(values);
+        return {
+          message: isDraft ? 'Draft saved!' : 'Question submitted!',
+          actionLink: {
+            href: `/questions/${data.slug}`,
+            label: isDraft ? 'View draft' : 'View question',
+          },
+        };
+      },
+      error: (error) => {
+        console.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
 
-      if (result) {
-        fireConfetti();
-        navigate('/questions/' + result.slug);
-      }
-    } catch (e) {
-      if (e.cause && e.message) {
-        setSaveErrorMessage(e.message);
-      }
-      logger.error(e);
-      setIsSubmitting(false);
-      throw e;
-    } finally {
-      setIsSubmitting(false);
-    }
+    await promise;
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
   };
 
   return (
-    <Form
-      data-testid={props['data-testid']}
-      onSubmit={(values) => onSubmit(values, false)}
-      initialValues={initialValues}
-      render={({
-        errors,
-        dirty,
-        handleSubmit,
-        hasValidationErrors,
-        submitFailed,
-        submitting,
-        submitSucceeded,
-        values,
-      }) => {
-        const errorsClientSide = [errorSet(errors, LABELS.fields)];
+    <>
+      <Form<QuestionFormData>
+        data-testid={props['data-testid']}
+        onSubmit={async (values, form) => await onSubmit(form, values, false)}
+        initialValues={initialValues}
+        render={({
+          errors,
+          handleSubmit,
+          hasValidationErrors,
+          submitFailed,
+          submitting,
+          form,
+          values,
+        }) => {
+          const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = async (e: React.MouseEvent) => {
-          e.preventDefault();
-          await onSubmit(values, true);
-        };
+          const handleSubmitDraft = async () => {
+            setIsSubmittingDraft(true);
+            try {
+              await onSubmit(form, values, true);
+              form.reset(values);
+            } finally {
+              setIsSubmittingDraft(false);
+            }
+          };
 
-        const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
-        );
+          const validate = composeValidators(
+            required,
+            minValue(QUESTION_MIN_TITLE_LENGTH),
+            endsWithQuestionMark(),
+          );
 
-        const validate = composeValidators(
-          required,
-          minValue(QUESTION_MIN_TITLE_LENGTH),
-          endsWithQuestionMark(),
-        );
+          const sidebar = isEdit ? (
+            <Button
+              data-cy="delete"
+              onClick={(evt) => {
+                setShowDeleteModal(true);
+                evt.preventDefault();
+              }}
+              variant="destructive"
+              type="submit"
+              disabled={submitting || isSubmittingDraft}
+              sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+            >
+              {LABELS.buttons.deletion.text}
+            </Button>
+          ) : null;
 
-        return (
-          <FormWrapper
-            buttonLabel={LABELS.buttons[props.formAction]}
-            contentType="questions"
-            errorsClientSide={errorsClientSide}
-            errorSubmitting={saveErrorMessage}
-            guidelines={<QuestionPostingGuidelines />}
-            handleSubmit={handleSubmit}
-            handleSubmitDraft={handleSubmitDraft}
-            hasValidationErrors={hasValidationErrors}
-            heading={LABELS.headings[props.formAction]}
-            submitFailed={submitFailed}
-            submitting={submitting || isSubmitting}
-            unsavedChangesDialog={unsavedChangesDialog}
-          >
-            <TitleField
-              placeholder={LABELS.fields.title.placeholder}
-              validate={validate}
-              title={LABELS.fields.title.title}
-            />
-            <QuestionDescriptionField />
-            <QuestionImagesField
-              contentType="questions"
-              contentId={id}
-              maxImages={QUESTION_MAX_IMAGES}
-            />
-            <CategoryField type="questions" />
-            <TagsField title={LABELS.fields.tags.title} />
-          </FormWrapper>
-        );
-      }}
-    />
+          return (
+            <FormWrapper
+              buttonLabel={LABELS.buttons[props.formAction]}
+              errorsClientSide={errorsClientSide}
+              guidelines={<QuestionPostingGuidelines />}
+              handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
+              hasValidationErrors={hasValidationErrors}
+              heading={LABELS.headings[props.formAction]}
+              sidebar={sidebar}
+              submitFailed={submitFailed}
+              submitting={submitting || isSubmittingDraft}
+              hideSubmittingMessage={true}
+            >
+              <TitleField
+                placeholder={LABELS.fields.title.placeholder}
+                validate={validate}
+                title={LABELS.fields.title.title}
+              />
+              <QuestionDescriptionField />
+              <QuestionImagesField
+                contentType="questions"
+                contentId={id}
+                maxImages={QUESTION_MAX_IMAGES}
+              />
+              <CategoryField type="questions" required />
+              <TagsField title={LABELS.fields.tags.title} />
+            </FormWrapper>
+          );
+        }}
+      />
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message={LABELS.buttons.deletion.message}
+        confirmButtonText={LABELS.buttons.deletion.confirm}
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={handleDelete}
+        confirmVariant="destructive"
+      />
+    </>
   );
 };

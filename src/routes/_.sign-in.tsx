@@ -53,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return data(
         {
           error: 'We need to confirm your email before logging in. Please check your inbox :)',
+          email,
         },
         { headers },
       );
@@ -62,22 +63,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return data(
       {
         error: 'Invalid email or password.',
+        email,
       },
       { headers, status: 400 },
     );
   }
 
-  const fallbackPath = signInResult.data.user?.user_metadata.username
-    ? `/u/${signInResult.data.user?.user_metadata.username}`
-    : '/';
-  const path = getReturnUrl(request, fallbackPath);
+  const profileService = new ProfileServiceServer(client);
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user);
+    await profileService.ensureProfile(signInResult.data.user);
   } catch (error) {
     console.error(error);
   }
+
+  const profile = await profileService.getByAuthId(signInResult.data.user.id);
+
+  const fallbackPath = profile?.username ? `/u/${profile.username}` : '/';
+  const path = getReturnUrl(request, fallbackPath);
 
   return redirect(path, { headers });
 };
@@ -94,6 +98,7 @@ export default function Index() {
   return (
     <Main style={{ flex: 1 }}>
       <Form
+        initialValues={{ email: actionResponse?.email }}
         onSubmit={() => {}}
         render={({ submitting, invalid }) => {
           return (
@@ -131,7 +136,7 @@ export default function Index() {
                       </Flex>
 
                       {actionResponse?.error && (
-                        <TextNotification isVisible={true} variant={'failure'}>
+                        <TextNotification isVisible={true} variant="failure">
                           <Text>{actionResponse?.error}</Text>
                         </TextNotification>
                       )}
@@ -156,7 +161,7 @@ export default function Index() {
                         />
                       </Flex>
                       <Flex sx={{ justifyContent: 'space-between' }}>
-                        <Text sx={{ fontSize: 1 }} color={'grey'}>
+                        <Text sx={{ fontSize: 1 }} color="grey">
                           <Link to="/reset-password" data-cy="lost-password">
                             Forgotten password?
                           </Link>

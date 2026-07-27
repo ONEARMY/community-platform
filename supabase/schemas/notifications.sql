@@ -50,14 +50,15 @@ CREATE TABLE IF NOT EXISTS "public"."notifications_preferences" (
     "replies" boolean NOT NULL,
     "tenant_id" "text" NOT NULL,
     "research_updates" boolean NOT NULL,
-    "is_unsubscribed" boolean DEFAULT false NOT NULL
+    "is_unsubscribed" boolean DEFAULT false NOT NULL,
+    "content_reach" "public"."content_reach"
 );
 
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_owned_by_id_fkey" FOREIGN KEY ("owned_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "notifications_owned_by_id_fkey" FOREIGN KEY ("owned_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY "public"."notifications_preferences"
-    ADD CONSTRAINT "notifications_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id");
+    ADD CONSTRAINT "notifications_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_triggered_by_id_fkey" FOREIGN KEY ("triggered_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE;

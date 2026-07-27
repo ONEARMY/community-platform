@@ -1,5 +1,4 @@
 import type { DBProfile, IModeration, Profile } from 'oa-shared';
-import { UserRole } from 'oa-shared';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
@@ -10,7 +9,8 @@ export const stripSpecialCharacters = (text: string) => {
 };
 
 // get special characters from string using the same pattern as stripSpecialCharacters
-export const getSpecialCharacters = (text: string): string[] => Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
+export const getSpecialCharacters = (text: string): string[] =>
+  Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
 
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {
@@ -38,7 +38,9 @@ export const numberWithCommas = (number: number) => {
 // Take a string and capitalises the first letter
 // hello world => Hello world
 export const capitalizeFirstLetter = (str: string) => {
-  if (!str || typeof str !== 'string') return '';
+  if (!str || typeof str !== 'string') {
+    return '';
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
@@ -59,7 +61,7 @@ export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   }
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
 
-  return roles.includes(UserRole.ADMIN);
+  return roles.includes('admin');
 };
 
 export const needsModeration = (doc: IModeration, user?: Profile) => {
@@ -76,8 +78,8 @@ export const isUserBlockedFromMessaging = (user: Partial<Profile> | null | undef
   return user.isBlockedFromMessaging;
 };
 
-export const isUserContactable = (user: Partial<Profile>) => {
-  if (typeof user.isContactable === 'boolean') {
+export const isUserContactable = (user: Partial<Profile> | null) => {
+  if (typeof user?.isContactable === 'boolean') {
     return isContactable(user.isContactable);
   }
 

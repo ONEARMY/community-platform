@@ -6,11 +6,10 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants';
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -112,7 +111,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const slug = convertToSlug(data.title);
 
-    if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'research')) {
+    if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'research')) {
       throw conflictError('This research already exists');
     }
 
@@ -121,6 +120,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (!profile) {
       throw validationError('User not found');
+    }
+
+    if (!profile.username) {
+      throw validationError('You must set a username before creating content', 'username');
     }
 
     const researchStatus: ResearchStatus = 'in-progress';
@@ -154,9 +157,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       researchResult.data.collaborators,
     );
 
-    await subscribersServiceServer.addResearchSubscribers(research, profile.id, client, headers);
-
-    updateUserActivity(client, claims.data.claims.sub);
+    await new SubscribersServiceServer(client).addResearchSubscribers(research, profile.id);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {

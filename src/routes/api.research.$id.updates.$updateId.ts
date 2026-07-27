@@ -3,10 +3,9 @@ import type { DBMedia, DBResearchUpdate, IMediaFile, ResearchUpdateDTO } from 'o
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -84,16 +83,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const researchUpdate = ResearchUpdate.fromDB(researchUpdateAfterUpdating.data, []);
     researchUpdate.research = researchUpdateAfterUpdating.data.research;
 
-    broadcastCoordinationServiceServer.researchUpdate(
+    new BroadcastCoordinationServiceServer(client).researchUpdate(
       researchUpdate,
       profile,
-      client,
-      headers,
       request,
       oldResearchUpdate,
     );
-
-    updateUserActivity(client, claims.data.claims.sub);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {

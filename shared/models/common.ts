@@ -12,7 +12,7 @@ export interface ILatLng {
 
 export type Collaborator = {
   countryCode?: string | null;
-  userName: string;
+  userName: string | null;
   isVerified: boolean;
 };
 

@@ -32,7 +32,7 @@ export const errors = {
   },
 };
 
-export const overview: ILabels = {
+export const researchForm = {
   categories: {
     placeholder: 'Select category',
     title: 'Which category fit your research?',
@@ -56,12 +56,12 @@ export const overview: ILabels = {
     placeholder: `Can we make a chair from... (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`,
     title: 'Research Title',
   },
-  image: {
+  coverImage: {
     title: 'Cover image',
   },
-};
+} satisfies ILabels;
 
-export const update: ILabels = {
+export const updateForm = {
   description: {
     placeholder: `Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`,
     title: 'Description of this update',
@@ -77,7 +77,7 @@ export const update: ILabels = {
     title: 'Or embed a YouTube video',
     placeholder: 'https://youtube.com/watch?v=',
   },
-};
+} satisfies ILabels;
 
 export const listing = {
   author: 'Filter by author',
@@ -85,11 +85,8 @@ export const listing = {
   filterCategory: 'Filter by category',
   heading: 'Help out with Research & Development',
   incompleteProfile: 'Complete your profile to add your research',
-  join: 'Sign up to add your research',
   loadMore: 'Load More',
   loggedOut: 'Oh we really want your research knowledge. Trust us. But a login is needed first.',
-  noItems: 'No research to show',
-  search: 'Search for a research',
   sort: 'Sort by',
   status: 'Filter by status',
 };

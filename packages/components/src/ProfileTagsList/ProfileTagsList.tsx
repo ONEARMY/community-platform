@@ -32,7 +32,7 @@ const Tag = ({ color, dataCy, label, large, onClick }: TagProps) => {
     : {
         fontSize: 1,
         paddingX: '7.5px',
-        paddingY: '5px',
+        paddingY: '2px',
       };
   return (
     <Text

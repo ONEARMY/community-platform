@@ -7,10 +7,11 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { ImageServiceServer } from 'src/services/imageService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -50,7 +51,17 @@ export const loader = async ({ request }) => {
     return Response.json({ items: [], total: 0 }, { headers });
   }
 
-  const items = dbItems.map((x) => Question.fromDB(x, [], []));
+  const imageService = new ImageServiceServer(client);
+
+  const items = dbItems.map((x) => {
+    const question = Question.fromDB(x, [], []);
+
+    if (question.author && x.author?.photo) {
+      question.author.photo = imageService.getPublicUrl(x.author.photo) ?? null;
+    }
+
+    return question;
+  });
 
   if (items && items.length > 0) {
     // Populate useful votes
@@ -101,7 +112,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title);
 
-    if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'questions')) {
+    if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'questions')) {
       throw conflictError('This question already exists');
     }
 
@@ -117,6 +128,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const profile = profileRequest.data[0] as DBProfile;
+
+    if (!profile.username) {
+      throw validationError('You must set a username before creating content', 'username');
+    }
 
     const questionResult = await client
       .from('questions')
@@ -140,13 +155,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const question = Question.fromDB(questionResult.data[0], []);
-    subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
+    new SubscribersServiceServer(client).add('questions', question.id, profile.id);
 
     if (!question.isDraft) {
       notifyDiscord(question, profile, new URL(request.url).origin.replace('http:', 'https:'));
     }
 
-    updateUserActivity(client, claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ question }, { headers, status: 201 });
   } catch (error) {
@@ -163,6 +178,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) {
   const title = question.title;
   const slug = question.slug;
+
+  if (!profile?.username) {
+    console.warn(`Profile ${profile?.id} has no username, skipping Discord notification`);
+    return;
+  }
 
   discordServiceServer.postWebhookRequest(
     `❓ ${profile.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,

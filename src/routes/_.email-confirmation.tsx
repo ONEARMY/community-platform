@@ -1,8 +1,7 @@
 import { Button, HeroBanner } from 'oa-components';
-import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import { data, redirect, useActionData, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
@@ -47,20 +46,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return data({ error: 'Your link has expired or is invalid' }, { status: 400, headers });
   }
 
-  return data({ success: true }, { headers });
+  return redirect('/setup-email-preferences', { headers });
 };
 
 export default function Index() {
-  const navigate = useNavigate();
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData();
-  const [isConfirmed, setIsConfirmed] = useState(false);
-
-  useEffect(() => {
-    if (actionData?.success) {
-      setIsConfirmed(true);
-    }
-  }, [actionData?.success]);
 
   return (
     <Main style={{ flex: 1 }}>
@@ -81,7 +72,7 @@ export default function Index() {
                 }}
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type={isConfirmed ? 'celebration' : 'email'} />
+                  <HeroBanner type="email" />
                   <Card sx={{ borderRadius: 3 }}>
                     <Flex
                       sx={{
@@ -93,7 +84,7 @@ export default function Index() {
                       }}
                     >
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>{isConfirmed ? 'Email verified!' : 'Email confirmation'}</Heading>
+                        <Heading>Email confirmation</Heading>
                       </Flex>
 
                       {loaderData.error ? (
@@ -109,48 +100,20 @@ export default function Index() {
                               gap: '2rem',
                             }}
                           >
-                            {isConfirmed ? (
-                              <>
-                                <Text
-                                  sx={{
-                                    textAlign: 'center',
-                                    color: 'grey',
-                                    gap: '2rem',
-                                  }}
-                                >
-                                  Great! You can now continue to setup your profile!
-                                </Text>
-                                <Button
-                                  large
-                                  sx={{
-                                    borderRadius: 3,
-                                    width: '100%',
-                                    justifyContent: 'center',
-                                  }}
-                                  variant="primary"
-                                  disabled={submitting}
-                                  type="button"
-                                  onClick={() => navigate('/settings/profile')}
-                                >
-                                  Setup my profile
-                                </Button>
-                              </>
-                            ) : (
-                              <Button
-                                large
-                                data-cy="submit"
-                                sx={{
-                                  borderRadius: 3,
-                                  width: '100%',
-                                  justifyContent: 'center',
-                                }}
-                                variant="primary"
-                                disabled={submitting}
-                                type="submit"
-                              >
-                                Confirm Email
-                              </Button>
-                            )}
+                            <Button
+                              large
+                              data-cy="submit"
+                              sx={{
+                                borderRadius: 3,
+                                width: '100%',
+                                justifyContent: 'center',
+                              }}
+                              variant="primary"
+                              disabled={submitting}
+                              type="submit"
+                            >
+                              Confirm Email
+                            </Button>
                           </Flex>
                         </>
                       )}

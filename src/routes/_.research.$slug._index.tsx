@@ -5,8 +5,9 @@ import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -23,21 +24,23 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const claims = await client.auth.getClaims();
-  const currentUsername = claims.data?.claims?.user_metadata?.username;
+  let currentUser: { id: number; username: string | null } | undefined;
+  if (claims.data?.claims) {
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+    if (profile) {
+      currentUser = { id: profile.id, username: profile.username };
+    }
+  }
 
   const dbResearch = result.item;
 
+  const contentService = new ContentServiceServer(client);
+
   if (dbResearch.id) {
-    await contentServiceServer.incrementViewCount(
-      client,
-      'research',
-      dbResearch.total_views,
-      dbResearch.id,
-    );
+    await contentService.incrementViewCount('research', dbResearch.total_views, dbResearch.id);
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
-    client,
+  const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
     dbResearch.id,
     'research',
     dbResearch.tags,
@@ -45,13 +48,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const images = researchClient.getResearchPublicMedia(dbResearch);
 
-  const research = ResearchItem.fromDB(
-    dbResearch,
-    tags,
-    images,
-    result.collaborators,
-    currentUsername,
-  );
+  const research = ResearchItem.fromDB(dbResearch, tags, images, result.collaborators, currentUser);
   research.usefulCount = usefulVotes.count || 0;
   research.subscriberCount = subscribers.count || 0;
 

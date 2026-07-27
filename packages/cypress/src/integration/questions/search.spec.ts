@@ -50,9 +50,28 @@ describe('[Questions]', () => {
     });
 
     it('should load more questions', () => {
-      cy.get('[data-cy=question-list-item]:eq(21)').should('not.exist');
-      cy.get('[data-cy=load-more]').click();
-      cy.get('[data-cy=question-list-item]:eq(21)').should('exist');
+      // Initially on page 1 with 22 items
+      cy.get('[data-cy=question-list-item]').should('have.length', 20);
+      cy.url().should('not.include', 'page=');
+
+      // Click next page
+      cy.get('[data-cy=pagination-icon-paginationSingleRight]').click();
+
+      // Now on page 2 with 2 remaining items
+      cy.get('[data-cy=question-list-item]').should('have.length', 3);
+      cy.url().should('include', 'page=2');
+    });
+
+    it('should show previous questions', () => {
+      // First navigate to the next page
+      cy.get('[data-cy=pagination-icon-paginationSingleRight]').click();
+      cy.get('[data-cy=question-list-item]').should('have.length', 3);
+      cy.url().should('include', 'page=2');
+
+      // Then go back to previous page
+      cy.get('[data-cy=pagination-icon-paginationSingleLeft]').click();
+      cy.get('[data-cy=question-list-item]').should('have.length', 20);
+      cy.url().should('include', 'page=1');
     });
   });
 });

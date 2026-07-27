@@ -11,6 +11,7 @@ import { Spinner, Text } from 'theme-ui';
 
 const ImageInputFieldWrapper = styled.div`
   width: 620px;
+  max-width: 100%;
   height: 310px;
 `;
 
@@ -58,8 +59,6 @@ export const NewsImageField = (props: IProps) => {
       description={fields.heroImage.description}
       htmlFor="images"
       text={fields.heroImage.title}
-      flexDirection="row"
-      flexWrap="wrap"
       required
     >
       {uploadError && (

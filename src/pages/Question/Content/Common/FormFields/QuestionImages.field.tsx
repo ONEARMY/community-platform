@@ -7,7 +7,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { ImageInputFieldWrapper } from 'src/pages/common/FormFields/ImageInputFieldWrapper';
 import { fields } from 'src/pages/Question/labels';
 import { storageService } from 'src/services/storageService';
-import { Spinner, Text } from 'theme-ui';
+import { Flex, Spinner, Text } from 'theme-ui';
 
 interface IProps {
   contentType: 'questions';
@@ -56,40 +56,37 @@ export const QuestionImagesField = (props: IProps) => {
   };
 
   return (
-    <FormFieldWrapper
-      htmlFor="images"
-      text={fields.images.title}
-      flexDirection="row"
-      flexWrap="wrap"
-    >
+    <FormFieldWrapper htmlFor="images" text={fields.images.title}>
       {uploadError && (
         <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
       )}
 
-      {/* Show existing images in order */}
-      {images.map((image, index) => (
-        <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
-          <ImageInputV2
-            image={image}
-            onFilesChange={(file) => handleImageSelect(file, index)}
-            onError={setUploadError}
-          />
-        </ImageInputFieldWrapper>
-      ))}
-
-      {/* Show upload slot at the end if under the limit */}
-      {images.length < maxImages && (
-        <ImageInputFieldWrapper data-cy="new-image-upload">
-          {uploadingIndex === images.length ? (
-            <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
-          ) : (
+      <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
+        {/* Show existing images in order */}
+        {images.map((image, index) => (
+          <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
             <ImageInputV2
-              onFilesChange={(file) => handleImageSelect(file, images.length)}
+              image={image}
+              onFilesChange={(file) => handleImageSelect(file, index)}
               onError={setUploadError}
             />
-          )}
-        </ImageInputFieldWrapper>
-      )}
+          </ImageInputFieldWrapper>
+        ))}
+
+        {/* Show upload slot at the end if under the limit */}
+        {images.length < maxImages && (
+          <ImageInputFieldWrapper data-cy="new-image-upload">
+            {uploadingIndex === images.length ? (
+              <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
+            ) : (
+              <ImageInputV2
+                onFilesChange={(file) => handleImageSelect(file, images.length)}
+                onError={setUploadError}
+              />
+            )}
+          </ImageInputFieldWrapper>
+        )}
+      </Flex>
     </FormFieldWrapper>
   );
 };

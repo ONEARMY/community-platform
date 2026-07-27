@@ -11,11 +11,10 @@ import type {
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
@@ -125,7 +124,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       await libraryService.deleteStepsById([...stepsToDelete]);
     }
 
-    updateUserActivity(client, claims.data.claims.sub);
+    profileService.updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
@@ -149,6 +148,9 @@ async function validateRequest(
   if (!profile) {
     throw validationError('User not found');
   }
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
   }
@@ -167,10 +169,9 @@ async function validateRequest(
 
   if (
     currentProject.slug !== slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(
+    (await new ContentServiceServer(client).isDuplicateExistingSlug(
       slug,
       currentProject.id,
-      client,
       'projects',
     ))
   ) {
@@ -185,7 +186,7 @@ async function updateProject(
   data: ProjectDTO,
   slug: string,
 ) {
-  const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, slug);
+  const previousSlugs = ContentServiceServer.updatePreviousSlugs(currentProject, slug);
 
   let moderation = currentProject.moderation;
 
@@ -235,10 +236,13 @@ async function deleteProject(request: Request, id: number) {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const canEdit = await new LibraryServiceServer(client).isAllowedToEditProjectById(
-    id,
-    claims.data.claims.user_metadata?.username,
-  );
+  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+  if (!profile) {
+    return Response.json({}, { headers, status: 401 });
+  }
+
+  const canEdit = await new LibraryServiceServer(client).isAllowedToEditProjectById(id, profile);
 
   if (canEdit) {
     await client

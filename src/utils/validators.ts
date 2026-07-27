@@ -1,3 +1,4 @@
+import { FieldValidator } from 'final-form';
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers';
 import { isUrl } from './urlHelper';
 
@@ -5,50 +6,56 @@ import { isUrl } from './urlHelper';
  *            General Validation Methods
  * **************************************************************************/
 
-const required = (value: any) => {
-  return value ? undefined : 'Make sure this field is filled correctly';
+const required = (value: any, allValues?: any, meta?: any): string | undefined => {
+  return value ? undefined : 'This field is required';
 };
 
-const noSpecialCharacters = (value: string) => {
+const noSpecialCharacters = (value: string): string | undefined => {
   const specialCharacters = value ? getSpecialCharacters(value) : '';
   return specialCharacters.length > 0 ? 'Only letters and numbers are allowed' : undefined;
 };
 
-const maxValue = (max: number) => (value) => {
-  const strippedString = stripSpecialCharacters(value);
+const maxValue =
+  (max: number) =>
+  (value: string): string | undefined => {
+    const strippedString = stripSpecialCharacters(value);
 
-  return strippedString.length > max ? `Should be less or equal to ${max} characters` : undefined;
-};
+    return strippedString.length > max ? `Should be less or equal to ${max} characters` : undefined;
+  };
 
-const minValue = (min: number) => (value) => {
-  const strippedString = stripSpecialCharacters(value);
+const minValue =
+  (min: number) =>
+  (value: string): string | undefined => {
+    const strippedString = stripSpecialCharacters(value);
 
-  return strippedString.length < min ? `Should be more than ${min} characters` : undefined;
-};
+    return strippedString.length < min ? `Should be more than ${min} characters` : undefined;
+  };
 
-const endsWithQuestionMark = () => (value) => {
-  const lastCharacter = value ? value.slice(-1) : '';
-  return lastCharacter !== '?' ? 'Needs to end with a question mark' : undefined;
-};
+const endsWithQuestionMark =
+  () =>
+  (value: string): string | undefined => {
+    const lastCharacter = value ? value.slice(-1) : '';
+    return lastCharacter !== '?' ? 'Needs to end with a question mark' : undefined;
+  };
 
-const composeValidators =
-  (...validators) =>
-  async (value) => {
-    const allResponse = await Promise.all(validators.map((validator) => validator(value)));
+const composeValidators = (...validators: FieldValidator<any>[]): FieldValidator<any> => {
+  return (value, allValues, meta) => {
+    const allResponse = validators.map((validator) => validator(value, allValues, meta));
 
     return allResponse.reduce(
       (message, value) => (typeof value === 'string' ? (message += value + '. ') : message),
       '',
     );
   };
+};
 
-const validateUrl = (value: any) => {
+const validateUrl = (value: string) => {
   if (value) {
     return isUrl(value) ? undefined : 'Invalid url';
   }
 };
 
-const validateUrlAcceptEmpty = (value: any) => {
+const validateUrlAcceptEmpty = (value: string) => {
   if (value) {
     return isUrl(value) ? undefined : 'Invalid url';
   }
@@ -68,22 +75,12 @@ const isEmail = (email: string) => {
   return re.test(String(email).toLowerCase());
 };
 
-/** Validator method to pass to react-final-form. Takes a given title,
- *  converts to corresponding slug and checks uniqueness.
- *  Provide originalId to prevent matching against own entry.
- *  NOTE - return value represents the error, so FALSE actually means valid
- */
-const validateTitle = () => (title?: string) => {
-  if (!title) {
-    // if no title submitted, simply return message to say that it is required
-    return 'Required';
-  }
-
-  return false;
-};
-
-const draftValidationWrapper = (value, allValues, validator) => {
-  return allValues.allowDraftSave ? undefined : validator(value);
+const draftValidationWrapper = (
+  value: string,
+  allValues: any,
+  validator: FieldValidator<string>,
+) => {
+  return allValues.allowDraftSave ? undefined : validator(value, allValues);
 };
 
 /****************************************************************************
@@ -111,7 +108,6 @@ export {
   maxValue,
   minValue,
   composeValidators,
-  validateTitle,
   noSpecialCharacters,
   endsWithQuestionMark,
 };

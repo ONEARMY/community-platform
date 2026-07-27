@@ -1,7 +1,36 @@
 {
   "name": "oa-shared",
   "version": "1.0.0",
-  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "bun": "./index.ts",
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./mocks/data": {
+      "bun": "./mocks/data/index.ts",
+      "types": "./lib/mocks/data/index.d.ts",
+      "import": "./lib/mocks/data/index.js",
+      "require": "./lib/mocks/data/index.js",
+      "default": "./lib/mocks/data/index.js"
+    },
+    "./*": {
+      "bun": "./*.ts",
+      "types": "./lib/*.d.ts",
+      "import": "./lib/*.js",
+      "require": "./lib/*.js",
+      "default": "./lib/*.js"
+    }
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": ["./index.ts", "./*"]
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"

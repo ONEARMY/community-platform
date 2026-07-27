@@ -3,7 +3,6 @@ import { SelectField } from 'src/common/Form/Select.field';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { draftValidationWrapper, required } from 'src/utils/validators';
-
 import { intro } from '../../labels';
 import { TIME_OPTIONS } from './FormSettings';
 

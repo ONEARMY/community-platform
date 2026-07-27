@@ -1,8 +1,8 @@
 import type { ResearchStatus } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -28,9 +28,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
     const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
       id,
-      claims.data.claims.user_metadata?.username,
+      profile,
     );
 
     if (!canEdit) {
@@ -43,7 +49,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw result.error;
     }
 
-    updateUserActivity(client, claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json(null, { headers, status: 200 });
   } catch (error) {

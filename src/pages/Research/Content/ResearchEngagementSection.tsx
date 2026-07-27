@@ -1,5 +1,11 @@
 import { observer } from 'mobx-react';
-import { ArticleCallToActionSupabase, Button, FollowButton, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import {
+  ArticleCallToActionSupabase,
+  Button,
+  FollowButton,
+  UsefulStatsButton,
+  UserEngagementWrapper,
+} from 'oa-components';
 import type { ResearchItem } from 'oa-shared';
 import { useState } from 'react';
 import { trackEvent } from 'src/common/Analytics';
@@ -17,7 +23,11 @@ const ResearchEngagementSection = observer(({ research }: ResearchEngagementSect
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
   const { profile } = useProfileStore();
   const { isSubscribed, toggle: toggleSubscription } = useSubscription('research', research.id);
-  const { hasVoted, toggle: toggleVote } = useUsefulVote('research', research.id, research.usefulCount || 0);
+  const { hasVoted, toggle: toggleVote } = useUsefulVote(
+    'research',
+    research.id,
+    research.usefulCount || 0,
+  );
 
   return (
     <UserEngagementWrapper>
@@ -27,8 +37,15 @@ const ResearchEngagementSection = observer(({ research }: ResearchEngagementSect
         }}
       >
         {research.author && (
-          <ArticleCallToActionSupabase author={research.author} contributors={research.collaborators}>
-            <UsefulStatsButton isLoggedIn={!!profile} hasUserVotedUseful={hasVoted} onUsefulClick={toggleVote} />
+          <ArticleCallToActionSupabase
+            author={research.author}
+            contributors={research.collaborators}
+          >
+            <UsefulStatsButton
+              isLoggedIn={!!profile}
+              hasUserVotedUseful={hasVoted}
+              onUsefulClick={toggleVote}
+            />
             <FollowButton
               isLoggedIn={!!profile}
               onFollowClick={() => toggleSubscription()}

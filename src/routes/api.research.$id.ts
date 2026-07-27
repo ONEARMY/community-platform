@@ -4,11 +4,10 @@ import type { DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { contentServiceServer } from 'src/services/contentService.server';
+import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
-import { subscribersServiceServer } from 'src/services/subscribersService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
+import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import {
   conflictError,
   forbiddenError,
@@ -53,7 +52,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     await validateRequest(request, claims.data.claims.sub, data, oldResearch, slug, client);
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, slug);
+    const previousSlugs = ContentServiceServer.updatePreviousSlugs(oldResearch, slug);
 
     const isFirstPublish = oldResearch.is_draft && !data.isDraft && !oldResearch.published_at;
 
@@ -82,14 +81,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const research = ResearchItem.fromDB(researchResult.data, []);
 
-    await subscribersServiceServer.updateResearchSubscribers(
-      oldResearch,
-      research,
-      client,
-      headers,
-    );
-
-    updateUserActivity(client, claims.data.claims.sub);
+    await new SubscribersServiceServer(client).updateResearchSubscribers(oldResearch, research);
+    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
@@ -112,9 +105,15 @@ async function deleteResearch(request, id: number) {
       return Response.json({}, { headers, status: 401 });
     }
 
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
     const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
       id,
-      claims.data.claims.user_metadata?.username,
+      profile,
     );
 
     if (canEdit) {
@@ -161,7 +160,7 @@ async function validateRequest(
 
   if (
     research.slug !== slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(slug, research.id, client, 'research'))
+    (await new ContentServiceServer(client).isDuplicateExistingSlug(slug, research.id, 'research'))
   ) {
     throw conflictError('This research already exists');
   }
@@ -172,11 +171,18 @@ async function validateRequest(
     throw validationError('User not found');
   }
 
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
+
   if (profile.roles?.includes(UserRole.ADMIN)) {
     return;
   }
 
-  if (research.created_by !== profile.id && !research.collaborators?.includes(profile.username)) {
+  if (
+    research.created_by !== profile.id &&
+    !(profile.username && research.collaborators?.includes(profile.username))
+  ) {
     throw forbiddenError();
   }
 }

@@ -2,15 +2,17 @@
 
 - [ ] - Unit and/or e2e tests for the changes that have been added (for bug fixes / features)
 
-## PR Type
+## What kind of change does this PR introduce?
 
-What kind of change does this PR introduce?
-
-- [ ] Bugfix
-- [ ] Feature
-- [ ] Refactoring (no functional changes)
-- [ ] Documentation
-- [ ] Other:
+- [ ] 🐛 Bugfix — fixes incorrect behavior without changing functionality
+- [ ] ✨ Feature — adds new functionality
+- [ ] ♻️ Refactoring — improves code structure with no functional changes
+- [ ] ⚡️ Performance — improves speed, memory, or efficiency
+- [ ] 🧪 Tests — adds or updates tests only
+- [ ] 🔧 Tools / CI — changes to build, deploy, or developer tooling
+- [ ] 📝 Documentation — updates docs, comments, or READMEs
+- [ ] 📦 Dependencies — upgrades, downgrades, or removes packages
+- [ ] 🔖 Other:
 
 ## What is the new behavior?
 

@@ -1,7 +1,7 @@
 // Similar to src/.server/templates/Layout.tsx
 
 import React from 'react';
-import { Body, Container, Head, Html, Img, Link, Preview, Section } from '@react-email/components';
+import { Body, Container, Head, Html, Img, Link, Preview, Section } from 'react-email';
 
 import { Footer } from './components/footer.tsx';
 

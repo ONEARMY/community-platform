@@ -1,4 +1,4 @@
-import { Button, Loader, MoreContainer } from 'oa-components';
+import { Loader, MoreContainer, Pagination } from 'oa-components';
 import type { Project } from 'oa-shared';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -6,7 +6,7 @@ import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { Flex, Grid, Heading } from 'theme-ui';
-import { listing } from '../../labels';
+import { ITEMS_PER_PAGE } from '../../constants';
 import { LibrarySearchParams, libraryService } from '../../library.service';
 import { LibraryListHeader } from './LibraryListHeader';
 import type { LibrarySortOption } from './LibrarySortOptions';
@@ -17,15 +17,18 @@ export const LibraryList = () => {
   const [isFetching, setIsFetching] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
   const [total, setTotal] = useState(0);
-  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>({
-    getDraftCount: libraryService.getDraftCount,
-    getDrafts: libraryService.getDrafts,
-  });
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>(
+    {
+      getDraftCount: libraryService.getDraftCount,
+      getDrafts: libraryService.getDrafts,
+    },
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(LibrarySearchParams.q) || '';
   const category = searchParams.get(LibrarySearchParams.category) || '';
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
+  const pageNumber = parseInt(searchParams.get('page') || '1');
 
   useEffect(() => {
     if (!sort) {
@@ -40,9 +43,10 @@ export const LibraryList = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchProjects();
+      const skip = (pageNumber - 1) * ITEMS_PER_PAGE;
+      fetchProjects(skip);
     }
-  }, [q, category, sort]);
+  }, [q, category, sort, pageNumber]);
 
   const fetchProjects = async (skip: number = 0) => {
     setIsFetching(true);
@@ -51,13 +55,7 @@ export const LibraryList = () => {
       const result = await libraryService.search(q?.toLocaleLowerCase(), category, sort, skip);
 
       if (result) {
-        if (skip) {
-          // if skipFrom is set, means we are requesting another page that should be appended
-          setProjects((items) => [...items, ...result.items]);
-        } else {
-          setProjects(result.items);
-        }
-
+        setProjects(result.items);
         setTotal(result.total);
       }
     } catch (error) {
@@ -67,7 +65,14 @@ export const LibraryList = () => {
     setIsFetching(false);
   };
 
-  const showLoadMore = !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
+  const updatePageNumber = (value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', value.toString());
+    setSearchParams(params, { replace: true });
+  };
+
+  const showLoadMore =
+    !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
@@ -78,13 +83,17 @@ export const LibraryList = () => {
         showDrafts={showDrafts}
       />
 
-      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]} sx={{ paddingTop: 1, marginBottom: 3 }}>
+      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]} sx={{ px: [2, 0, 0] }}>
         {showDrafts ? (
           drafts.map((item) => {
             return <ProjectCard key={item.id} item={item} />;
           })
         ) : (
-          <>{projects && projects.length > 0 && projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}</>
+          <>
+            {projects &&
+              projects.length > 0 &&
+              projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}
+          </>
         )}
       </Grid>
 
@@ -94,9 +103,11 @@ export const LibraryList = () => {
             justifyContent: 'center',
           }}
         >
-          <Button type="button" onClick={() => fetchProjects(projects.length)}>
-            {listing.loadMore}
-          </Button>
+          <Pagination
+            totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
+            onPageChange={updatePageNumber}
+            page={pageNumber}
+          />
         </Flex>
       )}
 

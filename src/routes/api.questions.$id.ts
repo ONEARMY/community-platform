@@ -1,30 +1,35 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBQuestion, QuestionDTO } from 'oa-shared';
-import { Question } from 'oa-shared';
+import { Question, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { questionServiceServer } from 'src/services/questionService.server';
+import { QuestionServiceServer } from 'src/services/questionService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { updateUserActivity } from 'src/utils/activity.server';
 import { hasAdminRights } from 'src/utils/helpers';
 import {
   conflictError,
   forbiddenError,
   methodNotAllowedError,
+  notFoundError,
+  unauthorizedError,
   validationError,
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { contentServiceServer } from '../services/contentService.server';
+import { ContentServiceServer } from '../services/contentService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const id = Number(params.id);
+
+  if (request.method === 'DELETE') {
+    return await deleteQuestion(request, id);
+  }
+
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id);
-
     const formData = await request.formData();
 
     const data = {
@@ -43,14 +48,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
-    const currentQuestion = await questionServiceServer.getById(id, client);
+    const currentQuestion = await new QuestionServiceServer(client).getById(id);
 
     await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, slug);
+    const previousSlugs = ContentServiceServer.updatePreviousSlugs(currentQuestion, slug);
 
     const isFirstPublish =
       currentQuestion.is_draft && !data.isDraft && !currentQuestion.published_at;
@@ -84,7 +89,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     );
 
     const question = Question.fromDB(questionResult.data[0], [], newImages);
-    updateUserActivity(client, claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ question }, { headers, status: 200 });
   } catch (error) {
@@ -96,6 +101,59 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({ error: 'Error updating question' }, { headers, status: 500 });
   }
 };
+
+async function deleteQuestion(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      throw unauthorizedError();
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      throw validationError('User not found');
+    }
+
+    const question = await new QuestionServiceServer(client).getById(id);
+
+    if (!question) {
+      throw notFoundError('Question');
+    }
+
+    const isCreator = question.created_by === profile.id;
+
+    if (
+      !isCreator &&
+      !profile.roles?.includes(UserRole.ADMIN) &&
+      !profile.roles?.includes(UserRole.EDITOR) &&
+      !profile.roles?.includes(UserRole.MODERATOR)
+    ) {
+      throw forbiddenError();
+    }
+
+    await client
+      .from('questions')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    console.error('Delete question error:', error);
+    return Response.json({}, { status: 500, headers });
+  }
+}
 
 async function validateRequest(
   params: Params<string>,
@@ -129,10 +187,9 @@ async function validateRequest(
 
   if (
     currentQuestion.slug !== slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(
+    (await new ContentServiceServer(client).isDuplicateExistingSlug(
       slug,
       currentQuestion.id,
-      client,
       'questions',
     ))
   ) {
@@ -146,9 +203,13 @@ async function validateRequest(
     throw validationError('User not found');
   }
 
+  if (!profile.username) {
+    throw validationError('You must set a username before editing content', 'username');
+  }
+
   const isCreator = currentQuestion.created_by === profile.id;
 
   if (!isCreator && !hasAdminRights(profile)) {
-    throw forbiddenError('Forbidden');
+    throw forbiddenError();
   }
 }

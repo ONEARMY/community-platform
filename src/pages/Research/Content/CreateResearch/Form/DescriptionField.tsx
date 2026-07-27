@@ -5,7 +5,7 @@ import { draftValidationWrapper, required } from 'src/utils/validators';
 import { Flex, Label } from 'theme-ui';
 
 import { RESEARCH_MAX_LENGTH } from '../../../constants';
-import { update as updateLabels } from '../../../labels';
+import { updateForm as updateLabels } from '../../../labels';
 
 export const DescriptionField = () => {
   const { title, placeholder } = updateLabels.description;
@@ -23,11 +23,7 @@ export const DescriptionField = () => {
         validateFields={[]}
         isEqual={COMPARISONS.textInput}
         component={FieldTextarea}
-        style={{
-          resize: 'none',
-          flex: 1,
-          minHeight: '150px',
-        }}
+        rows={10}
         maxLength={RESEARCH_MAX_LENGTH}
         showCharacterCount
         placeholder={placeholder}

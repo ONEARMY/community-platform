@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthorsContext } from '../providers/AuthorsContext';
 import { render } from '../test/utils';
 import { CommentDisplay } from './CommentDisplay';
-import { UsefulConfig } from '../UsefulStatsButton/UsefulButtonLite';
+import { UsefulButtonLite, UsefulConfig } from '../UsefulStatsButton/UsefulButtonLite';
 
 vi.mock('../UsefulStatsButton/UsefulButtonLite', () => ({
   UsefulButtonLite: ({ onUsefulClick, votedUsefulCount }: UsefulConfig) => (
@@ -49,12 +49,7 @@ describe('CommentDisplay', () => {
     hasVoted: false,
   };
 
-  const mockUsefulButtonConfig = {
-    hasUserVotedUseful: false,
-    votedUsefulCount: 5,
-    isLoggedIn: true,
-    onUsefulClick: mockOnUsefulClick,
-  };
+  const mockUsefulButton = <UsefulButtonLite hasUserVotedUseful={false} votedUsefulCount={5} isLoggedIn={true} onUsefulClick={mockOnUsefulClick} />;
 
   const mockAuthorsContextValue = {
     authors: [0],
@@ -72,8 +67,8 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        actions={<></>}
-        usefulButtonConfig={mockUsefulButtonConfig}
+        menuActions={<></>}
+        footerActions={mockUsefulButton}
       />,
     );
 
@@ -88,8 +83,8 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        actions={<></>}
-        usefulButtonConfig={mockUsefulButtonConfig}
+        menuActions={<></>}
+        footerActions={mockUsefulButton}
       />,
     );
 
@@ -104,17 +99,17 @@ describe('CommentDisplay', () => {
       return Promise.resolve();
     });
 
+    const renderUsefulButton = () => (
+      <UsefulButtonLite hasUserVotedUseful={false} votedUsefulCount={count} isLoggedIn={true} onUsefulClick={handleUsefulClick} />
+    );
+
     const { getByTestId, rerender } = render(
       <CommentDisplay
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        actions={<></>}
-        usefulButtonConfig={{
-          ...mockUsefulButtonConfig,
-          votedUsefulCount: count,
-          onUsefulClick: handleUsefulClick,
-        }}
+        menuActions={<></>}
+        footerActions={renderUsefulButton()}
       />,
     );
 
@@ -129,12 +124,8 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        actions={<></>}
-        usefulButtonConfig={{
-          ...mockUsefulButtonConfig,
-          votedUsefulCount: count,
-          onUsefulClick: handleUsefulClick,
-        }}
+        menuActions={<></>}
+        footerActions={renderUsefulButton()}
       />,
     );
 

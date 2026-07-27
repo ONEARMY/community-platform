@@ -27,5 +27,5 @@ export const Option = (props: OptionProps) => {
     );
   }
 
-  return <components.Option {...props}>{props.label}</components.Option>;
+  return <components.Option {...props}>{props.children}</components.Option>;
 };

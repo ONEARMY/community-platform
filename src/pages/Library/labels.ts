@@ -43,7 +43,7 @@ export const errors = {
 export const intro: ILabels = {
   category: {
     placeholder: 'Select one category',
-    title: 'Category',
+    title: 'Which category fit your project?',
   },
   coverImage: {
     description: 'This image should be landscape. We advise 1280x960px',
@@ -58,7 +58,7 @@ export const intro: ILabels = {
     title: 'Difficulty level?',
   },
   fileLink: {
-    title: 'Add a download link',
+    title: 'Or add a download link',
     description: 'Link to Google Drive, Dropbox, Grabcad etc',
   },
   files: {
@@ -157,7 +157,6 @@ export const listing = {
   empty: 'No projects to show!',
   filterCategory: 'Filter by category',
   incompleteProfile: 'Complete your profile to add your project',
-  join: 'Sign up to add your project',
   loadMore: 'Load More',
   loggedOut: 'We need that password of yours before learning about your awesome project...',
   totalComments: 'Total comments',

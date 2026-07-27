@@ -6,7 +6,7 @@ import { Link } from 'theme-ui';
 
 export type Props = RouterLinkProps & ThemedUILinkProps;
 
-export const InternalLink = forwardRef<HTMLButtonElement, Props>((props: Props, ref) => (
+export const InternalLink = forwardRef<HTMLAnchorElement, Props>((props: Props, ref) => (
   <Link as={RouterLink} ref={ref as any} {...props}>
     {props.children}
   </Link>

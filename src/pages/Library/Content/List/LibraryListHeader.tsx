@@ -163,7 +163,7 @@ export const LibraryListHeader = (props: IProps) => {
       sx={{
         gap: 2,
         flexDirection: ['column', 'row', 'row'],
-        display: ['none', 'flex', 'flex'],
+        display: ['none', 'none', 'flex'],
       }}
     >
       <Flex sx={{ width: ['100%', '100%', '220px'] }}>
@@ -212,7 +212,7 @@ export const LibraryListHeader = (props: IProps) => {
         </>
       }
       loggedIn={
-        <>
+        <Flex sx={{ gap: 2 }}>
           <DraftButton
             showDrafts={showDrafts}
             draftCount={draftCount}
@@ -223,12 +223,12 @@ export const LibraryListHeader = (props: IProps) => {
               {listing.create}
             </Button>
           </Link>
-        </>
+        </Flex>
       }
       loggedOut={
         <ReturnPathLink to="/sign-up">
           <Button type="button" sx={{ width: '100%' }} variant="primary" data-cy="sign-up">
-            {listing.join}
+            {listing.create}
           </Button>
         </ReturnPathLink>
       }
@@ -236,7 +236,7 @@ export const LibraryListHeader = (props: IProps) => {
   );
 
   const mobileFilteringComponents = (
-    <Flex sx={{ display: ['flex', 'none', 'none'], gap: '5px' }}>
+    <Flex sx={{ display: ['flex', 'flex', 'none'], gap: '5px' }}>
       <Flex sx={{ position: 'relative' }}>
         <ButtonIcon
           onClick={handleOpenSortModal}
@@ -286,7 +286,7 @@ export const LibraryListHeader = (props: IProps) => {
   );
 
   const mobileSearchBar = (
-    <Flex sx={{ display: ['flex', 'none', 'none'], width: '100%' }}>
+    <Flex sx={{ display: ['flex', 'flex', 'none'], width: '100%' }}>
       <div ref={formRef} style={{ width: '100%' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <SearchField

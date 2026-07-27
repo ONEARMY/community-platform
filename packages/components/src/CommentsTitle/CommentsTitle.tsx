@@ -27,7 +27,7 @@ export const CommentsTitle = ({ comments }: IProps) => {
   }, [comments]);
 
   return (
-    <Heading as="h3" data-cy="DiscussionTitle" sx={{ whiteSpace: 'nowrap' }}>
+    <Heading as="h3" variant="h3" data-cy="DiscussionTitle" sx={{ whiteSpace: 'nowrap' }}>
       {title}
     </Heading>
   );

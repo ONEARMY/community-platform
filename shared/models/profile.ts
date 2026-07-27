@@ -3,8 +3,7 @@ import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
-import type { News } from './news';
-import type { IPatreonUser } from './patreon';
+import { News } from './news';
 import type { DBProfileBadgeJoin } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { DBProfileTagJoin } from './profileTag';
@@ -13,6 +12,7 @@ import type { DBProfileType } from './profileType';
 import { ProfileType } from './profileType';
 import type { Question } from './question';
 import type { ResearchUpdate } from './research';
+import { Tag } from './tag';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
 export class DBProfile {
@@ -22,12 +22,11 @@ export class DBProfile {
   readonly badges?: DBProfileBadgeJoin[];
   readonly pin?: DBMapPin;
   readonly type?: DBProfileType;
-  username: string;
+  username: string | null;
   display_name: string;
   photo: DBMedia | null;
   cover_images: DBMedia[] | null;
   country: string;
-  patreon?: IPatreonUser;
   roles: string[] | null;
   visitor_policy: string | null;
   is_blocked_from_messaging: boolean | null;
@@ -49,7 +48,7 @@ export class DBProfile {
 export class Profile {
   id: number;
   createdAt: Date;
-  username: string;
+  username: string | null;
   displayName: string;
   country: string;
   about: string | null;
@@ -66,7 +65,6 @@ export class Profile {
   roles: string[] | null;
   lastActive: Date | null;
   coverImages: MediaWithPublicUrl[] | null;
-  patreon: IPatreonUser | null;
   authorUsefulVotes?: AuthorVotes[];
   donationsEnabled: boolean;
 
@@ -107,7 +105,6 @@ export class Profile {
       isContactable: dbProfile.is_contactable || null,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
-      patreon: dbProfile.patreon ?? null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       donationsEnabled: dbProfile.donations_enabled,
@@ -119,8 +116,8 @@ export class Profile {
 
 // Notifications here to avoid circular dependencies
 
-export type NotificationActionType = 'newContent' | 'newComment' | 'newReply';
-export const NotificationContentTypes = ['research_updates', 'comments'] as const;
+export type NotificationActionType = 'newContent' | 'newComment' | 'newReply' | 'newNews';
+export const NotificationContentTypes = ['comments', 'news', 'research_updates'] as const;
 export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
 export type ProfileListItem = Pick<
@@ -204,8 +201,10 @@ export class NotificationDisplay {
   email: {
     body: string | undefined;
     buttonLabel: string;
+    displayDate: string | undefined;
     preview: string;
     subject: string;
+    heroImage: string | undefined;
   };
   link: string;
   sidebar: {
@@ -214,6 +213,7 @@ export class NotificationDisplay {
   };
   title: string;
   triggeredBy: string;
+  tags?: Tag[];
 
   constructor(obj: NotificationDisplay) {
     Object.assign(this, obj);
@@ -223,6 +223,9 @@ export class NotificationDisplay {
     switch (notification.contentType) {
       case 'research_updates': {
         return `${(notification.content as ResearchUpdate)?.title}:\n\n${(notification.content as ResearchUpdate)?.description}`;
+      }
+      case 'news': {
+        return (notification.content as News).body;
       }
       default: {
         return this.setBody(notification) || '';
@@ -235,6 +238,9 @@ export class NotificationDisplay {
       case 'research_updates': {
         return 'Join the discussion';
       }
+      case 'news': {
+        return 'View on platform';
+      }
       case 'comments': {
         return 'See the full discussion';
       }
@@ -244,10 +250,17 @@ export class NotificationDisplay {
     }
   }
 
+  static setEmailDate(notification: Notification) {
+    return notification.content?.createdAt?.toDateString() || undefined;
+  }
+
   static setEmailPreview(notification: Notification) {
     switch (notification.actionType) {
       case 'newContent': {
         return `New research update on ${notification.title}`;
+      }
+      case 'newNews': {
+        return `News: ${notification.title}`;
       }
       case 'newComment': {
         if (notification.triggeredBy && notification.triggeredBy.username) {
@@ -278,6 +291,9 @@ export class NotificationDisplay {
       case 'newReply': {
         return `You have a new comment reply!`;
       }
+      case 'newNews': {
+        return notification.title;
+      }
       default: {
         return 'You have a new notification!';
       }
@@ -299,9 +315,7 @@ export class NotificationDisplay {
   }
 
   static setDate(notification: Notification) {
-    return notification.modifiedAt
-      ? new Date(notification.modifiedAt)
-      : new Date(notification.createdAt);
+    return new Date(notification.createdAt);
   }
 
   static setTitle(notification: Notification) {
@@ -321,6 +335,12 @@ export class NotificationDisplay {
     }
   }
 
+  static setHeroImage(notification: Notification) {
+    return (
+      (notification.content && (notification.content as News).heroImage?.publicUrl) || undefined
+    );
+  }
+
   static setSidebarIcon(contentType: NotificationContentType): string {
     switch (contentType) {
       case 'comments': {
@@ -335,12 +355,20 @@ export class NotificationDisplay {
     }
   }
 
-  static setSidebarImage(author: BasicAuthorDetails | undefined): string {
-    return author?.photo?.publicUrl || '';
+  static setSidebarImage(notification: Notification): string {
+    const heroImage = this.setHeroImage(notification);
+    return heroImage || notification.triggeredBy?.photo?.publicUrl || '';
   }
 
   static setLink(notification: Notification) {
     return `/redirect?id=${notification.contentId}&ct=${notification.contentType}`;
+  }
+
+  static setTriggeredBy(notification: Notification) {
+    if (notification.actionType === 'newNews') {
+      return 'Check the latest news update: ';
+    }
+    return notification.triggeredBy?.username || '';
   }
 
   static fromNotification(notification: Notification): NotificationDisplay {
@@ -353,21 +381,25 @@ export class NotificationDisplay {
       email: {
         body: this.setEmailBody(notification),
         buttonLabel: this.setEmailButtonLabel(notification),
+        displayDate: this.setEmailDate(notification),
         preview: this.setEmailPreview(notification),
         subject: this.setEmailSubject(notification),
+        heroImage: this.setHeroImage(notification),
       },
       sidebar: {
         icon: this.setSidebarIcon(notification.contentType),
-        image: this.setSidebarImage(notification.triggeredBy),
+        image: this.setSidebarImage(notification),
       },
       title: this.setTitle(notification),
-      triggeredBy: notification.triggeredBy?.username || '',
+      triggeredBy: this.setTriggeredBy(notification),
       link: this.setLink(notification),
+      tags: (notification.content as any)?.tags ? (notification.content as any).tags : undefined,
     });
   }
 }
 
 export type ProfileFormData = {
+  username: string;
   displayName: string;
   tagIds: number[] | null;
   about: string;
@@ -501,6 +533,8 @@ export type SubscribedUser = {
   profile_created_at: string;
   email: string;
   is_unsubscribed: boolean;
+  badge_ids: number[];
+  roles: string[];
   replies: boolean;
   comments: boolean;
   research_updates: boolean;

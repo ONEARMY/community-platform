@@ -145,7 +145,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   };
 
   useLayoutEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
 
     const img = imageRef.current;
     if (img && img.complete && img.naturalWidth > 0) {
@@ -159,7 +161,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   }, [activeImage?.downloadUrl]);
 
   const triggerLightbox = (): void => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
     open(state.activeImageIndex);
   };
 
@@ -170,7 +174,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
   // Detect images wider than 16:9 and remove aspect ratio constraint to prevent letterboxing
   const ASPECT_RATIO_16_9 = 16 / 9;
-  const isWideImage = state.activeImageAspectRatio ? state.activeImageAspectRatio > ASPECT_RATIO_16_9 : false;
+  const isWideImage = state.activeImageAspectRatio
+    ? state.activeImageAspectRatio > ASPECT_RATIO_16_9
+    : false;
   const useFlexibleAspectRatio = isWideImage && !!props.allowPortrait;
   const allowPortrait = !!props.allowPortrait;
 
@@ -198,22 +204,26 @@ export const ImageGallery = (props: ImageGalleryProps) => {
         {showNextPrevButton ? (
           <>
             <NavButton
-              aria-label={'Next image'}
+              aria-label="Next image"
               style={{
                 right: 0,
                 zIndex: 2,
               }}
-              onClick={() => setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)}
+              onClick={() =>
+                setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)
+              }
             >
               <Arrow direction="right" sx={{ marginRight: '10px' }} />
             </NavButton>
             <NavButton
-              aria-label={'Previous image'}
+              aria-label="Previous image"
               style={{
                 left: 0,
                 zIndex: 2,
               }}
-              onClick={() => setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)}
+              onClick={() =>
+                setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)
+              }
             >
               <Arrow direction="left" sx={{ marginLeft: '10px' }} />
             </NavButton>

@@ -32,7 +32,7 @@ export const Accordion = (props: IProps) => {
         }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <Heading as="h3" variant="small">
+        <Heading as="h3" variant="h3">
           {title}
         </Heading>
         <Icon glyph={isExpanded ? 'arrow-full-up' : 'arrow-full-down'} />

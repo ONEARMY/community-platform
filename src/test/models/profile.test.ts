@@ -6,6 +6,10 @@ import { FactoryResearchItemUpdate } from '../factories/ResearchItem';
 import { factorySupabaseNotification, factoryTriggeredBy } from '../factories/supabaseNotification';
 
 describe('NotificationDisplay', () => {
+  const createdAt = new Date()
+  const displayDate = createdAt.toDateString()
+  const heroImage = undefined;
+
   describe('fromNotification', () => {
     describe('when a new comment', () => {
       it('on news', () => {
@@ -14,7 +18,7 @@ describe('NotificationDisplay', () => {
           contentId: 101,
           contentType: 'comments',
           title: 'New thing coming',
-          content: FactoryComment({ id: 101, comment: 'Great work' }),
+          content: FactoryComment({ id: 101, comment: 'Great work', createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'dave0',
           }),
@@ -31,6 +35,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'dave0 has left a new comment',
           subject: 'New comment on New thing coming',
+          displayDate ,
+          heroImage,
         });
       });
 
@@ -40,7 +46,7 @@ describe('NotificationDisplay', () => {
           contentId: 102,
           contentType: 'comments',
           title: 'Best Guide',
-          content: FactoryComment({ id: 102, comment: 'Amazing' }),
+          content: FactoryComment({ id: 102, comment: 'Amazing', createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'JEFF123',
           }),
@@ -57,6 +63,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'JEFF123 has left a new comment',
           subject: 'New comment on Best Guide',
+          displayDate ,
+          heroImage: undefined,
         });
       });
 
@@ -66,7 +74,7 @@ describe('NotificationDisplay', () => {
           contentId: 103,
           contentType: 'comments',
           title: 'Where to start?',
-          content: FactoryComment({ id: 103, comment: "I'm not sure." }),
+          content: FactoryComment({ id: 103, comment: "I'm not sure.", createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'Ben',
           }),
@@ -83,6 +91,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'Ben has left a new comment',
           subject: 'New comment on Where to start?',
+          displayDate,
+          heroImage,
         });
       });
 
@@ -92,7 +102,7 @@ describe('NotificationDisplay', () => {
           contentId: 104,
           contentType: 'comments',
           title: 'New Buildings: Digging',
-          content: FactoryComment({ id: 104, comment: "I'm not sure." }),
+          content: FactoryComment({ id: 104, comment: "I'm not sure.", createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'Mario',
           }),
@@ -109,6 +119,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'Mario has left a new comment',
           subject: 'New comment on New Buildings: Digging',
+          displayDate ,
+          heroImage: undefined,
         });
       });
     });
@@ -119,7 +131,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newReply',
           contentId: 101,
           contentType: 'comments',
-          content: FactoryComment({ id: 101, comment: 'Great work' }),
+          content: FactoryComment({ id: 101, comment: 'Great work', createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'dave0',
           }),
@@ -136,6 +148,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'dave0 has left a new reply',
           subject: 'You have a new comment reply!',
+          displayDate,
+          heroImage: undefined,
         });
       });
 
@@ -144,7 +158,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newReply',
           contentId: 102,
           contentType: 'comments',
-          content: FactoryComment({ id: 102, comment: 'Amazing' }),
+          content: FactoryComment({ id: 102, comment: 'Amazing', createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'JEFF123',
           }),
@@ -161,6 +175,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'JEFF123 has left a new reply',
           subject: 'You have a new comment reply!',
+          displayDate,
+          heroImage: undefined,
         });
       });
 
@@ -169,7 +185,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newReply',
           contentId: 103,
           contentType: 'comments',
-          content: FactoryComment({ id: 103, comment: "I'm not sure." }),
+          content: FactoryComment({ id: 103, comment: "I'm not sure.", createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'Ben',
           }),
@@ -186,6 +202,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'Ben has left a new reply',
           subject: 'You have a new comment reply!',
+          displayDate,
+          heroImage: undefined,
         });
       });
 
@@ -194,7 +212,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newReply',
           contentId: 104,
           contentType: 'comments',
-          content: FactoryComment({ id: 104, comment: "I'm not sure." }),
+          content: FactoryComment({ id: 104, comment: "I'm not sure.", createdAt }),
           triggeredBy: factoryTriggeredBy({
             username: 'Mario',
           }),
@@ -211,6 +229,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'See the full discussion',
           preview: 'Mario has left a new reply',
           subject: 'You have a new comment reply!',
+          displayDate,
+          heroImage: undefined,
         });
       });
     });
@@ -225,6 +245,7 @@ describe('NotificationDisplay', () => {
             id: 654,
             title: 'Foundations',
             description: 'We put some tiles down.',
+            createdAt,
           }),
           triggeredBy: factoryTriggeredBy({
             username: 'Julie',
@@ -242,6 +263,8 @@ describe('NotificationDisplay', () => {
           buttonLabel: 'Join the discussion',
           preview: 'New research update on Second Building',
           subject: 'New update on Second Building',
+          displayDate,
+          heroImage: undefined,
         });
       });
     });

@@ -1,5 +1,5 @@
 import { form } from '../../../../src/pages/UserSettings/labels';
-import { generateNewUserDetails } from '../utils/TestUtils';
+import { generateNewUserDetails, IUserSignUpDetails } from '../utils/TestUtils';
 
 // import { visitorDisplayData } from 'oa-components'
 
@@ -28,19 +28,15 @@ declare global {
       addReply(reply: string): Chainable<void>;
       addToMarkdownField(text: string): Chainable<void>;
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>;
-      deleteDiscussionItem(element: string, item: string);
-      editDiscussionItem(
-        element: string,
-        oldComment: string,
-        updatedNewComment: string,
-      ): Chainable<void>;
+      deleteDiscussionItem(element: string, item: string): Chainable<void>;
+      editDiscussionItem(element: string, oldComment: string, updatedNewComment: string): Chainable<void>;
       signIn(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
-      fillSignupForm(username: string, email: string, password: string): Chainable<void>;
-      fillIntroTitle(intro: string);
-      fillSettingMapPin(pin: IMapPin);
+      fillSignupForm(email: string, password: string): Chainable<void>;
+      fillIntroTitle(intro: string): Chainable<void>;
+      fillSettingMapPin(pin: IMapPin): Chainable<void>;
 
-      saveSettingsForm();
+      saveSettingsForm(): Chainable<void>;
       /**
        * Trigger form validation
        */
@@ -53,17 +49,20 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>;
-      setSettingVisitorPolicy(policyText: string, details?: string);
-      clearSettingVisitorPolicy();
-      setSettingBasicUserInfo(info: IInfo);
-      setSettingFocus(focus: string);
-      setSettingImage(image: string, selector: string);
-      setSettingImpactData(year: number, fields);
-      setSettingPublicContact();
+      selectCard(label: string, selector?: string): Chainable<void>;
+      selectByValue(value: string, selector: string): Chainable<void>;
+      setSettingVisitorPolicy(policyText: string, details?: string): Chainable<void>;
+      clearSettingVisitorPolicy(): Chainable<void>;
+      setSettingBasicUserInfo(info: IInfo): Chainable<void>;
+      setSettingFocus(focus: string): Chainable<void>;
+      setSettingImage(image: string, selector: string): Chainable<void>;
+      setSettingImpactData(year: number, fields: { name: string, value: number, visible?: boolean }[]): Chainable<void>;
+      setSettingPublicContact(): Chainable<void>;
 
-      signUpNewUser(user?): Chainable<void>;
-      signUpCompletedUser(user?): Chainable<void>;
+      signUpNewUser(user?: IUserSignUpDetails): Chainable<void>;
+      signUpCompletedUser(user?: IUserSignUpDetails): Chainable<void>;
       completeUserProfile(username: string): Chainable<void>;
+      setProfileUsername(username: string): Chainable<void>;
       confirmUser(username: string): Chainable<void>;
 
       toggleUserMenuOn(): Chainable<void>;
@@ -80,26 +79,18 @@ declare global {
  */
 
 Cypress.Commands.add('addToMarkdownField', (text: string) => {
-  cy.get('[aria-label="editable markdown"]')
-    .click()
-    .type('{moveToEnd}')
-    .type('{enter}')
-    .type('{enter}');
+  cy.get('[aria-label="editable markdown"]').click().type('{moveToEnd}').type('{enter}').type('{enter}');
 
   for (let i = 0; i < text.length; i++) {
     // This is a very slow way to do this, but avoidable currently.
-    cy.get('[aria-label="editable markdown"]')
-      .click()
-      .type('{moveToEnd}')
-      .type(text[i], { delay: 0 });
+    cy.get('[aria-label="editable markdown"]').click().type('{moveToEnd}').type(text[i], { delay: 0 });
   }
 });
 
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click({ force: true });
 
-  cy.get('[data-cy=errors-container]').should('not.exist');
-  cy.get('[data-cy="TextNotification: success"]').should('be.visible');
+  cy.contains('[data-cy=toast-message]', 'Profile updated!').should('be.visible');
 });
 
 Cypress.Commands.add('setSettingVisitorPolicy', (policyText: string, details?: string) => {
@@ -130,26 +121,23 @@ Cypress.Commands.add('setSettingFocus', (focus: string) => {
   cy.get(`[data-cy=${focus}]`).first().click();
 });
 
-Cypress.Commands.add('setSettingImage', (image, selector) => {
-  cy.get(`[data-cy=${selector}]`)
-    .find(':file')
-    .selectFile(`src/fixtures/images/${image}.jpg`, { force: true });
+Cypress.Commands.add('setSettingImage', (image: string, selector: string) => {
+  cy.get(`[data-cy=${selector}]`).find(':file').selectFile(`src/fixtures/images/${image}.jpg`, { force: true });
   cy.wait(2000);
 });
 
-Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
+Cypress.Commands.add('setSettingImpactData', (year: number, fields: { name: string, value: number, visible?: boolean }[]) => {
   cy.step('Save impact data');
   cy.get('[data-cy="tab-Impact"]').click();
 
   cy.get(`[data-cy="impactForm-${year}-button-edit"]`).click();
 
   fields.forEach((field) => {
-    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`).clear().type(field.value);
-    field.visible === false &&
-      cy.get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`).click();
+    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`).clear().type(field.value.toString());
+    field.visible === false && cy.get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`).click();
   });
   cy.get(`[data-cy="impactForm-${year}-button-save"]`).click();
-  cy.contains(form.saveSuccess);
+  cy.contains('Impact updated!').should('be.visible');
 });
 
 Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
@@ -166,11 +154,10 @@ Cypress.Commands.add('setSettingPublicContact', () => {
   cy.get('[data-cy=isContactable').click({ force: true });
 });
 
-Cypress.Commands.add('fillSignupForm', (username: string, email: string, password: string) => {
+Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.log('Fill in sign-up form');
   cy.visit('/sign-up');
   cy.wait(2000);
-  cy.get('[data-cy=username]').clear().type(username);
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=confirm-password]').clear().type(password);
@@ -229,6 +216,17 @@ Cypress.Commands.add('selectTag', (tagName: string, selector = '[data-cy=tag-sel
   cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click();
 });
 
+Cypress.Commands.add('selectCard', (label: string, selector = '[data-cy=category-select]') => {
+  cy.log('Select card', label);
+  cy.get(selector).contains('h3', label).click();
+});
+
+Cypress.Commands.add('selectByValue', (value: string, selector: string) => {
+  cy.log('Select by value', value);
+  cy.get(`${selector} input`).click({ force: true });
+  cy.get(`${selector} .data-cy__menu-list [data-value="${value}"]`).click();
+});
+
 Cypress.Commands.add('addComment', (newComment: string) => {
   cy.get('[data-cy=comments-form]').last().type(newComment);
   cy.get('[data-cy=comment-submit]').last().click();
@@ -270,9 +268,9 @@ Cypress.Commands.add('addReply', (reply: string) => {
 
 Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.log('Generate new user details');
-  const { username, email, password } = user || generateNewUserDetails();
+  const { email, password } = user || generateNewUserDetails();
 
-  cy.fillSignupForm(username, email, password);
+  cy.fillSignupForm(email, password);
   cy.get('[data-cy=submit]').click();
   cy.url().should('include', 'sign-up-message');
 });
@@ -280,11 +278,28 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 Cypress.Commands.add('completeUserProfile', (username) => {
   cy.log('Complete user profile');
   cy.visit('/settings');
+  cy.get('[data-cy=username]').then(($el) => {
+    if (!$el.prop('disabled')) {
+      cy.wrap($el).clear().type(username);
+    }
+  });
   cy.setSettingImage('avatar', 'userImage');
   cy.setSettingBasicUserInfo({
+    displayName: username,
     description: `${username} profile description.`,
   });
   cy.saveSettingsForm();
+});
+
+Cypress.Commands.add('setProfileUsername', (username: string) => {
+  cy.log('Set profile username (without completing profile)');
+  cy.visit('/settings');
+  cy.get('[data-cy=username]').clear().type(username);
+  cy.get('[data-cy=displayName').clear().type(username);
+  cy.get('[data-cy=info-about').clear().type(`${username} profile`);
+  cy.get('[data-cy=save]').click({ force: true });
+  cy.get('[data-cy=errors-container]').should('not.exist');
+  cy.contains('[data-cy=toast-message]', 'Username updated!').should('be.visible');
 });
 
 Cypress.Commands.add('signUpCompletedUser', (user?) => {

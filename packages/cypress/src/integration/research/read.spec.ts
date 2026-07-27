@@ -1,4 +1,6 @@
+import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
+import { getTenantUser } from '../../utils/TestUtils';
 
 const article = Object.values(MOCK_DATA.research)[0];
 const label = MOCK_DATA.research.length === 1 ? 'item' : 'items';
@@ -12,6 +14,9 @@ describe('[Research]', () => {
   const researchArticleUrl = `/research/${slug}`;
 
   describe('[Read a research article]', () => {
+    const demoAdmin = getTenantUser(users.admin);
+    const demoUser = getTenantUser(users.subscriber);
+
     describe('[By Everyone]', () => {
       it('[List View]', () => {
         cy.visit('/research');
@@ -105,9 +110,6 @@ describe('[Research]', () => {
         //   image,
         // )
 
-        cy.step('Delete button should not be visible');
-        cy.get('[data-cy="Research: delete button"]').should('not.exist');
-
         cy.step('Breadcrumbs work');
         cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Research');
         cy.get('[data-cy=breadcrumbsItem]').first().children().should('have.attr', 'href').and('equal', `/research`);
@@ -122,32 +124,6 @@ describe('[Research]', () => {
             cy.contains(article.title);
           });
         });
-      });
-    });
-
-    describe('[By Author]', () => {
-      beforeEach(() => {
-        cy.signIn('demo_user@example.com', 'demo_user');
-        cy.visit(authoredResearchArticleUrl);
-      });
-
-      it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the article');
-
-        cy.get('[data-cy="Research: delete button"]').should('be.visible');
-      });
-    });
-
-    describe('[By Admin]', () => {
-      beforeEach(() => {});
-
-      it('[Delete button is visible]', () => {
-        cy.signIn('demo_admin@example.com', 'demo_admin');
-        cy.visit(researchArticleUrl);
-        cy.wait(1000);
-
-        cy.step('Delete button should be visible to the author of the article');
-        cy.get('[data-cy="Research: delete button"]').should('be.visible');
       });
     });
   });

@@ -1,34 +1,17 @@
 import { Button, ReturnPathLink } from 'oa-components';
-import React, { useContext } from 'react';
-
-import { MobileMenuContext } from '../../MobileMenuContext';
 
 interface IProps {
   link: string;
   text: string;
   variant: string;
-  style?: React.CSSProperties;
-  isMobile?: boolean;
-  sx?: any;
+  small?: boolean;
 }
 
-export const ProfileButtonItem = (props: IProps) => {
-  const mobileMenuContext = useContext(MobileMenuContext);
-
+export const ProfileButtonItem = ({ link, text, variant, small }: IProps) => {
   return (
-    <ReturnPathLink to={props.link} style={{ minWidth: 'auto' }}>
-      <Button
-        type="button"
-        onClick={() => props.isMobile && mobileMenuContext.setIsVisible(false)}
-        variant={props.variant}
-        {...(props.isMobile ? { large: true } : {})}
-        data-cy={props.text.toLowerCase()}
-        sx={{
-          ...props.sx,
-          display: props.isMobile ? ['flex', 'flex', 'none'] : ['none', 'none', 'flex'],
-        }}
-      >
-        {props.text}
+    <ReturnPathLink to={link} style={{ minWidth: 'auto' }}>
+      <Button type="button" variant={variant} small={small} data-cy={text.toLowerCase()}>
+        {text}
       </Button>
     </ReturnPathLink>
   );

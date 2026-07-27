@@ -6,4 +6,6 @@ export const FactoryCategory: Category = {
   id: 3465,
   name: 'Moulds',
   type: 'questions',
+  description: 'A category for moulds',
+  imageUrl: '',
 };

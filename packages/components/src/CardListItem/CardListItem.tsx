@@ -16,8 +16,11 @@ export const CardListItem = (props: IProps) => {
   const testProp = `CardListItem${isSelectedPin ? '-selected' : ''}`;
 
   const Card = (
-    <CardButton isSelected={isSelectedPin}>
-      <CardProfile item={item} />
+    <CardButton
+      isSelected={isSelectedPin}
+      extrastyles={{ minWidth: '250px', maxWidth: '500px', mx: 'auto' }}
+    >
+      <CardProfile item={item} variant="list" />
     </CardButton>
   );
 
@@ -26,13 +29,18 @@ export const CardListItem = (props: IProps) => {
     'data-testid': testProp,
     sx: {
       borderRadius: 2,
-      padding: 2,
+      paddingY: 2,
+      paddingX: 0,
     },
   };
 
   if (viewport === 'mobile') {
     return (
-      <InternalLink target="_blank" to={`/u/${item.profile!.username}`} {...wrapperProps}>
+      <InternalLink
+        target="_blank"
+        to={item.profile?.username ? `/u/${item.profile.username}` : '/settings/profile'}
+        {...wrapperProps}
+      >
         {Card}
       </InternalLink>
     );
@@ -45,7 +53,8 @@ export const CardListItem = (props: IProps) => {
       onClick={() => onPinClick(item)}
       sx={{
         borderRadius: 2,
-        padding: 2,
+        paddingY: 2,
+        paddingX: 0,
       }}
     >
       {Card}

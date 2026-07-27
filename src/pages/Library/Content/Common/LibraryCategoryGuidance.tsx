@@ -20,12 +20,16 @@ export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
   }
 
   return (
-    <Alert variant="info" marginY={2}>
+    <Alert variant="info">
       <Text
         dangerouslySetInnerHTML={{ __html: guidance[label][type] }}
         sx={{
-          fontSize: 1,
+          fontSize: 2,
           textAlign: 'left',
+          ol: {
+            marginTop: 1,
+            marginBottom: 0,
+          },
         }}
       />
     </Alert>

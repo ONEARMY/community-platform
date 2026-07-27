@@ -34,7 +34,9 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
             }}
           >
             <BreadcrumbItem text={step.text} link={step.link} isLast={isLast} />
-            {!isLast && <Icon glyph="chevron-right" color="black" data-testid="breadcrumbsChevron" />}
+            {!isLast && (
+              <Icon glyph="chevron-right" color="black" data-testid="breadcrumbsChevron" />
+            )}
           </Flex>
         );
       })}

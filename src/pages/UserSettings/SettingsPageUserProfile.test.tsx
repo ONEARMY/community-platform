@@ -72,6 +72,7 @@ describe('UserSettings', () => {
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
+      isUserAuthorized: vi.fn().mockReturnValue(false),
     });
 
     // Act
@@ -115,6 +116,7 @@ describe('UserSettings', () => {
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
+      isUserAuthorized: vi.fn().mockReturnValue(false),
     });
 
     // Act
@@ -144,11 +146,12 @@ describe('UserSettings', () => {
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
+      isUserAuthorized: vi.fn().mockReturnValue(false),
     });
 
     const mockTenantContext: TenantSettingsContext = {
-      patreonId: '',
       siteName: 'Test Site',
+      siteNameShort: '',
       siteDescription: '',
       siteUrl: 'https://test.com',
       messageSignOff: 'Test',
@@ -160,11 +163,14 @@ describe('UserSettings', () => {
       profileGuidelines: 'Guidelines',
       questionsGuidelines: 'Questions',
       supportedModules: 'modules',
+      hiddenModules: '',
       colorPrimary: '#fee77b',
       colorPrimaryHover: '#ffde45',
       colorAccent: '#fee77b',
       colorAccentHover: '#ffde45',
+      gaTrackingId: 'mock-ga-tracking-id',
       showImpact: true,
+      hasMembershipTiers: false,
       createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
       environment: {},
     };

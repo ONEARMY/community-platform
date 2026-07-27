@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { subscribersServiceServer } from '../../services/subscribersService.server';
+import { SubscribersServiceServer } from '../../services/subscribersService.server';
 import {
   FactoryDBResearchItem,
   FactoryResearchItem,
@@ -17,8 +17,6 @@ describe('subscribersServiceServer', () => {
 
   describe('addResearchSubscribers', () => {
     it('calls add once when no collaborators are present', async () => {
-      const mockAdd = vi.fn();
-      const mockHeaders = new Headers();
       const { client } = createMockSupabaseClient();
 
       const research: ResearchItem = FactoryResearchItem({
@@ -27,21 +25,19 @@ describe('subscribersServiceServer', () => {
       });
       const profileId = 456;
 
-      await subscribersServiceServer.addResearchSubscribers(
+      const service = new SubscribersServiceServer(client);
+      const mockAdd = vi.spyOn(service, 'add').mockImplementation(vi.fn());
+
+      await service.addResearchSubscribers(
         research,
         profileId,
-        client,
-        mockHeaders,
-        mockAdd,
       );
 
       expect(mockAdd).toHaveBeenCalledTimes(1);
-      expect(mockAdd).toHaveBeenCalledWith('research', 123, 456, client, mockHeaders);
+      expect(mockAdd).toHaveBeenCalledWith('research', 123, 456);
     });
 
     it('calls add right number of times for unique collaborators', async () => {
-      const mockAdd = vi.fn();
-      const mockHeaders = new Headers();
       const { client, mocks } = createMockSupabaseClient();
       mocks.single.mockResolvedValueOnce({ data: { id: 55 } });
       mocks.single.mockResolvedValueOnce({ data: { id: 55 } });
@@ -53,23 +49,21 @@ describe('subscribersServiceServer', () => {
       });
       const profileId = 456;
 
-      await subscribersServiceServer.addResearchSubscribers(
+      const service = new SubscribersServiceServer(client);
+      const mockAdd = vi.spyOn(service, 'add').mockImplementation(vi.fn());
+
+      await service.addResearchSubscribers(
         research,
         profileId,
-        client,
-        mockHeaders,
-        mockAdd,
       );
 
       expect(mockAdd).toHaveBeenCalledTimes(3);
-      expect(mockAdd).toHaveBeenCalledWith('research', 123, 456, client, mockHeaders);
+      expect(mockAdd).toHaveBeenCalledWith('research', 123, 456);
     });
   });
 
   describe('addResearchUpdateSubscribers', () => {
     it('calls add twice when no collaborators are present', async () => {
-      const mockAdd = vi.fn();
-      const mockHeaders = new Headers();
       const { client } = createMockSupabaseClient();
 
       const update: ResearchUpdate = FactoryResearchItemUpdate({
@@ -81,24 +75,22 @@ describe('subscribersServiceServer', () => {
       });
       const profileId = 456;
 
-      await subscribersServiceServer.addResearchUpdateSubscribers(
+      const service = new SubscribersServiceServer(client);
+      const mockAdd = vi.spyOn(service, 'add').mockImplementation(vi.fn());
+
+      await service.addResearchUpdateSubscribers(
         update,
         profileId,
-        client,
-        mockHeaders,
-        mockAdd,
       );
 
       expect(mockAdd).toHaveBeenCalledTimes(2);
-      expect(mockAdd).toHaveBeenCalledWith('research_updates', 789, 456, client, mockHeaders);
-      expect(mockAdd).toHaveBeenCalledWith('research_updates', 789, 88, client, mockHeaders);
+      expect(mockAdd).toHaveBeenCalledWith('research_updates', 789, 456);
+      expect(mockAdd).toHaveBeenCalledWith('research_updates', 789, 88);
     });
   });
 
   describe('updateResearchSubscribers', () => {
     it('does not call add when no new collaborators are present', async () => {
-      const mockAdd = vi.fn();
-      const mockHeaders = new Headers();
       const { client } = createMockSupabaseClient();
 
       const oldResearch: DBResearchItem = FactoryDBResearchItem({
@@ -111,20 +103,18 @@ describe('subscribersServiceServer', () => {
         collaboratorsUsernames: ['luke', 'leia'],
       });
 
-      await subscribersServiceServer.updateResearchSubscribers(
+      const service = new SubscribersServiceServer(client);
+      const mockAdd = vi.spyOn(service, 'add').mockImplementation(vi.fn());
+
+      await service.updateResearchSubscribers(
         oldResearch,
         newResearch,
-        client,
-        mockHeaders,
-        mockAdd,
       );
 
       expect(mockAdd).toHaveBeenCalledTimes(0);
     });
 
     it('calls add for each new unique collaborator', async () => {
-      const mockAdd = vi.fn();
-      const mockHeaders = new Headers();
       const { client, mocks } = createMockSupabaseClient();
 
       mocks.single.mockResolvedValueOnce({ data: { id: 99 } });
@@ -140,17 +130,17 @@ describe('subscribersServiceServer', () => {
         collaboratorsUsernames: ['luke', 'leia', 'han', 'chewie'],
       });
 
-      await subscribersServiceServer.updateResearchSubscribers(
+      const service = new SubscribersServiceServer(client);
+      const mockAdd = vi.spyOn(service, 'add').mockImplementation(vi.fn());
+
+      await service.updateResearchSubscribers(
         oldResearch,
         newResearch,
-        client,
-        mockHeaders,
-        mockAdd,
       );
 
       expect(mockAdd).toHaveBeenCalledTimes(2);
-      expect(mockAdd).toHaveBeenCalledWith('research', 789, 99, client, mockHeaders);
-      expect(mockAdd).toHaveBeenCalledWith('research', 789, 100, client, mockHeaders);
+      expect(mockAdd).toHaveBeenCalledWith('research', 789, 99);
+      expect(mockAdd).toHaveBeenCalledWith('research', 789, 100);
     });
   });
 });

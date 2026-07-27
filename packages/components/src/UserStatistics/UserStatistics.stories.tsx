@@ -25,7 +25,7 @@ export const Default: Story = {
           id: 2,
           displayName: 'Supporter',
           name: 'supporter',
-          actionUrl: 'https://www.patreon.com/one_army',
+          actionUrl: 'should_be_a_url',
           imageUrl: '',
         },
       ],

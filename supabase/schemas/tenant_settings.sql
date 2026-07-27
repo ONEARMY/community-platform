@@ -16,7 +16,34 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "profile_guidelines" "text",
     "questions_guidelines" "text",
     "supported_modules" "text",
-    "patreon_id" "text"
+    "hidden_modules" "text",
+    "patreon_id" "text",
+    "ga_tracking_id" "text",
+    "site_name_short" "text",
+    "color_primary" "text",
+    "color_primary_hover" "text",
+    "color_accent" "text",
+    "color_accent_hover" "text",
+    "show_impact" boolean,
+    "create_research_roles" text[],
+    "pwa_icons" "jsonb",
+    CONSTRAINT "check_pwa_icons_schema" CHECK (
+        "pwa_icons" IS NULL
+        OR (
+            jsonb_typeof("pwa_icons") = 'object'
+            AND "pwa_icons" - ARRAY['16','32','192','256','512'] = '{}'::jsonb
+            AND ("pwa_icons"->>'16')  IS NOT NULL
+            AND ("pwa_icons"->>'32')  IS NOT NULL
+            AND ("pwa_icons"->>'192') IS NOT NULL
+            AND ("pwa_icons"->>'256') IS NOT NULL
+            AND ("pwa_icons"->>'512') IS NOT NULL
+            AND jsonb_typeof("pwa_icons"->'16')  = 'string'
+            AND jsonb_typeof("pwa_icons"->'32')  = 'string'
+            AND jsonb_typeof("pwa_icons"->'192') = 'string'
+            AND jsonb_typeof("pwa_icons"->'256') = 'string'
+            AND jsonb_typeof("pwa_icons"->'512') = 'string'
+        )
+    )
 );
 
 ALTER TABLE "public"."tenant_settings" ENABLE ROW LEVEL SECURITY;

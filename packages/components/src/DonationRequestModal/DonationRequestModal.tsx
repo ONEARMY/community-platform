@@ -48,7 +48,12 @@ export const DonationRequestModal = (props: IProps) => {
         data-cy="DonationRequest"
         data-testid="DonationRequest"
       >
-        <script src="https://donorbox.org/widget.js" type="module" data-paypalexpress="false" async></script>
+        <script
+          src="https://donorbox.org/widget.js"
+          type="module"
+          data-paypalexpress="false"
+          async
+        ></script>
         <Flex
           sx={{
             flexDirection: ['column', 'row'],
@@ -57,7 +62,13 @@ export const DonationRequestModal = (props: IProps) => {
           <Flex sx={{ flexDirection: 'column', flex: 1 }}>
             {imageUrl && (
               <Flex sx={{ display: ['none', 'inline'] }}>
-                <AspectImage loading="lazy" ratio={16 / 9} src={imageUrl} alt={title} data-testid="donationRequestImage" />
+                <AspectImage
+                  loading="lazy"
+                  ratio={16 / 9}
+                  src={imageUrl}
+                  alt={title}
+                  data-testid="donationRequestImage"
+                />
               </Flex>
             )}
 
@@ -75,7 +86,11 @@ export const DonationRequestModal = (props: IProps) => {
               width: ['100%', '350px', '400px'],
             }}
           >
-            <iframe {...iframeArgs} loading="lazy" style={{ border: '0', overflow: 'scroll', width: '100%' }}></iframe>
+            <iframe
+              {...iframeArgs}
+              loading="lazy"
+              style={{ border: '0', overflow: 'scroll', width: '100%' }}
+            ></iframe>
           </Flex>
         </Flex>
       </Card>

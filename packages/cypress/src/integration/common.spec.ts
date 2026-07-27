@@ -1,5 +1,6 @@
 import { MOCK_DATA } from '../data';
 import { UserMenuItem } from '../support/commandsUi';
+import { getTenantUser } from '../utils/TestUtils';
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
@@ -21,12 +22,13 @@ describe('[Common]', () => {
     cy.wait(2000);
 
     cy.step('Go to Academy page');
-    cy.get('[data-cy=page-link]').contains('Academy').click();
+    cy.get('[data-cy=page-link]:visible').contains('Academy').click();
     cy.wait(2000);
     cy.url().should('include', '/academy');
 
     cy.step('Go to library page');
-    cy.get('[data-cy=page-link]').contains('Library').click();
+    cy.get('[data-cy=page-link]:visible').contains('Projects').click();
+    cy.get('[data-cy=page-link]:visible').contains('Library').click();
     cy.wait(2000);
     cy.url().should('include', '/library');
   });
@@ -75,8 +77,10 @@ describe('[Common]', () => {
     });
 
     it('[By Authenticated]', () => {
+      const subscriber = getTenantUser(MOCK_DATA.users.subscriber);
+      
       cy.step('Login and Join buttons are unavailable to logged-in users');
-      cy.signIn(MOCK_DATA.users.subscriber.email, MOCK_DATA.users.subscriber.password);
+      cy.signIn(subscriber.email, subscriber.password);
       cy.visit('/library');
       cy.wait(2000);
       cy.get('[data-cy=login]', { timeout: 20000 }).should('not.exist');
@@ -90,7 +94,7 @@ describe('[Common]', () => {
 
       cy.step('Go to Profile');
       cy.clickMenuItem(UserMenuItem.Profile);
-      cy.url().should('include', `/u/${MOCK_DATA.users.subscriber.username}`);
+      cy.url().should('include', `/u/${subscriber.username}`);
 
       cy.step('Go to Settings');
       cy.toggleUserMenuOn();

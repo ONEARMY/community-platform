@@ -1,6 +1,6 @@
-import type { DBNotificationsPreferences, DBPreferencesWithProfileContact } from 'oa-shared';
+import { NotificationsPreferences, NotificationsPreferencesViaEmailFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
+import { useToast } from 'src/common/Toast';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
@@ -10,14 +10,25 @@ interface IProps {
 }
 
 export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [initialValues, setInitialValues] = useState<DBPreferencesWithProfileContact | null>(null);
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [initialValues, setInitialValues] =
+    useState<NotificationsPreferencesViaEmailFormData | null>(null);
+  const toast = useToast();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesViaEmailService.getPreferences(userCode);
 
-    setInitialValues(preferences);
+    if (!preferences) {
+      return null;
+    }
+
+    const asFormData = {
+      ...NotificationsPreferences.toFormData(preferences),
+      isContactable: preferences.isContactable,
+      userCode: userCode,
+    };
+
+    setInitialValues(asFormData);
     setIsLoading(false);
   };
 
@@ -25,54 +36,49 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     refreshPreferences();
   }, []);
 
-  const onSubmit = async (values: DBNotificationsPreferences) => {
-    setIsLoading(true);
-    setSubmitResults(null);
+  const onSubmit = async (values: NotificationsPreferencesViaEmailFormData) => {
+    const promise = notificationsPreferencesViaEmailService.setPreferences({
+      ...values,
+      userCode,
+    });
 
-    try {
-      await notificationsPreferencesViaEmailService.setPreferences({
-        ...values,
-        userCode,
-      });
-      await refreshPreferences();
-      setSubmitResults({
-        type: 'success',
-        message: form.saveNotificationPreferences,
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    toast.promise(promise, {
+      loading: 'Saving your notification preferences...',
+      success: () => {
+        refreshPreferences();
+        return form.saveNotificationPreferences;
+      },
+      error: (error) => {
+        return `Error: ${error.message}`;
+      },
+    });
   };
 
   const onUnsubscribe = async () => {
-    setIsLoading(true);
-    setSubmitResults(null);
-
-    try {
-      await notificationsPreferencesViaEmailService.setUnsubscribe(
-        userCode,
-        initialValues?.preferences.id,
-      );
-      await refreshPreferences();
-      setSubmitResults({
-        type: 'success',
-        message: form.saveNotificationPreferences,
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    const promise = notificationsPreferencesViaEmailService.unsubscribe(userCode);
+    toast.promise(promise, {
+      loading: 'Unsubscribing...',
+      success: () => {
+        refreshPreferences();
+        return form.saveNotificationPreferences;
+      },
+      error: (error) => {
+        return `Error: ${error.message}`;
+      },
+    });
   };
 
-  if (!userCode) return null;
+  if (!userCode) {
+    return null;
+  }
 
   return (
     <SupabaseNotificationsForm
-      initialValues={initialValues?.preferences || null}
+      initialValues={initialValues || null}
       isLoading={isLoading}
-      onSubmit={onSubmit}
+      onSubmit={onSubmit as any}
       onUnsubscribe={onUnsubscribe}
-      profileIsContactable={initialValues?.is_contactable}
-      submitResults={submitResults}
+      profileIsContactable={initialValues?.isContactable}
     />
   );
 };

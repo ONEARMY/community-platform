@@ -1,1 +1,1 @@
-export type SelectValue = { label: string; value: string };
+export type SelectValue = { label: string; value: string | null };

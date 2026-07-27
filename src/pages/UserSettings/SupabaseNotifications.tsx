@@ -1,23 +1,27 @@
 import { observer } from 'mobx-react';
-import type { DBNotificationsPreferences } from 'oa-shared';
+import { NotificationsPreferences, type NotificationsPreferencesFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
+import { useToast } from 'src/common/Toast/useToast';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isUserContactable } from 'src/utils/helpers';
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
 export const SupabaseNotifications = observer(() => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [initialValues, setInitialValues] = useState<DBNotificationsPreferences | null>(null);
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [initialValues, setInitialValues] = useState<NotificationsPreferencesFormData | null>(null);
+  const toast = useToast();
 
-  const { profile } = useProfileStore();
+  const { profile, isContactable } = useProfileStore();
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences();
-    setInitialValues(preferences);
+
+    if (preferences) {
+      const initialValues = NotificationsPreferences.toFormData(preferences);
+      setInitialValues(initialValues);
+    }
+
     setIsLoading(false);
   };
 
@@ -25,36 +29,34 @@ export const SupabaseNotifications = observer(() => {
     refreshPreferences();
   }, []);
 
-  const onSubmit = async (values: DBNotificationsPreferences) => {
-    setIsLoading(true);
-    setSubmitResults(null);
+  const onSubmit = async (values: NotificationsPreferencesFormData) => {
+    const promise = notificationsPreferencesService.setPreferences(values);
 
-    try {
-      await notificationsPreferencesService.setPreferences(values);
-      await refreshPreferences();
-      setSubmitResults({
-        type: 'success',
-        message: form.saveNotificationPreferences,
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    toast.promise(promise, {
+      loading: 'Saving your notification preferences...',
+      success: () => {
+        refreshPreferences();
+        return form.saveNotificationPreferences;
+      },
+      error: (error) => {
+        return `Error: ${error.message}`;
+      },
+    });
   };
 
   const onUnsubscribe = async () => {
-    setIsLoading(true);
-    setSubmitResults(null);
+    const promise = notificationsPreferencesService.unsubscribe();
 
-    try {
-      await notificationsPreferencesService.setUnsubscribe(initialValues?.id);
-      await refreshPreferences();
-      setSubmitResults({
-        type: 'success',
-        message: form.saveNotificationPreferences,
-      });
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
-    }
+    toast.promise(promise, {
+      loading: 'Unsubscribing...',
+      success: () => {
+        refreshPreferences();
+        return form.saveNotificationPreferences;
+      },
+      error: (error) => {
+        return `Error: ${error.message}`;
+      },
+    });
   };
 
   if (!profile) {
@@ -67,8 +69,7 @@ export const SupabaseNotifications = observer(() => {
       isLoading={isLoading}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
-      profileIsContactable={isUserContactable(profile)}
-      submitResults={submitResults}
+      profileIsContactable={isContactable}
     />
   );
 });

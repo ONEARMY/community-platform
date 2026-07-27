@@ -3,6 +3,7 @@ import { Button, CommentAvatar, MemberBadge, ReturnPathLink } from 'oa-component
 import type { DiscussionContentType } from 'oa-shared';
 import type { ChangeEvent } from 'react';
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router';
 import { UserAction } from 'src/common/UserAction';
 import { MAX_COMMENT_LENGTH } from 'src/constants';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -183,15 +184,15 @@ const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-incomplete-profile-prompt">
         {isReply ? 'Before replying' : 'Hi there!'}{' '}
-        <ReturnPathLink
-          to="/settings"
+        <Link
+          to="/settings/profile"
           style={{
             textDecoration: 'underline',
             color: 'inherit',
           }}
         >
           {isReply ? 'complete your profile' : 'Complete your profile to leave a comment'}
-        </ReturnPathLink>
+        </Link>
       </Text>
     </Box>
   );

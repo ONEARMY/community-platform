@@ -91,10 +91,15 @@ describe('[Organisation sign-up]', () => {
       });
       cy.get('[data-cy=submit]').click();
 
-      cy.step('Lands on the newly created profile');
+      cy.step('Lands on the newly created profile (visible to its owner)');
       cy.url().should('include', `/u/${user.username}`);
       cy.contains(displayName);
       cy.get(`[data-cy="MemberBadge-${profileType}"]`);
+
+      cy.step('The owner sees the under-review banner');
+      cy.get('[data-cy=organisation-moderation-banner]')
+        .should('be.visible')
+        .and('contain', 'being reviewed');
 
       cy.step('The new organisation profile is created awaiting moderation');
       cy.task('getProfileByUsername', user.username).then((profile) => {
@@ -106,11 +111,11 @@ describe('[Organisation sign-up]', () => {
       cy.visit('/organisation-application');
       cy.url().should('include', `/u/${user.username}`);
 
-      cy.step('The profile is public');
+      cy.step('The profile is hidden from the public while under review');
       cy.logout();
       cy.visit(`/u/${user.username}`);
-      cy.contains(displayName).should('be.visible');
-      cy.get(`[data-cy="MemberBadge-${profileType}"]`);
+      cy.contains('User not found').should('be.visible');
+      cy.contains(displayName).should('not.exist');
     });
 
     it('Sign-in funnels an applicant back to the application form', () => {

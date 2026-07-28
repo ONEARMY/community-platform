@@ -104,7 +104,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-async function validateRequest(
+export async function validateRequest(
   client: ReturnType<typeof createSupabaseServerClient>['client'],
   data: OrganisationApplicationData,
   profileTypes: ProfileType[],

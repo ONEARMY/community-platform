@@ -222,6 +222,49 @@ export class ProfileServiceServer {
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
   }
 
+  async updateProfileType(id: number, profileTypeId: number) {
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ profile_type: profileTypeId })
+      .eq('id', id)
+      .select(
+        `*,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url,
+            premium_tier
+          )
+        ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
+        )`,
+      )
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
+  }
+
   async createOrganisationProfile(values: CreateOrganisationProfileArgs) {
     return await this.client
       .from('profiles')
@@ -252,7 +295,7 @@ export class ProfileServiceServer {
       .single();
   }
 
-  async updateProfile(id: number, values: ProfileDTO) {
+  async updateProfile(id: number, values: ProfileDTO, resendApplication = false) {
     await this.updateTags(id, values.tagIds || []);
 
     const { data, error } = await this.client
@@ -271,6 +314,7 @@ export class ProfileServiceServer {
               details: values.visitorPreferenceDetails,
             })
           : null,
+        ...(resendApplication ? { moderation: 'awaiting-moderation' } : {}),
       })
       .eq('id', id)
       .select(

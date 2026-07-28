@@ -122,6 +122,30 @@ const updateUsername = async (username: string): Promise<Profile> => {
   return result;
 };
 
+const updateProfileType = async (profileTypeId: number): Promise<Profile> => {
+  const url = new URL('/api/profile/type', window.location.origin);
+
+  const response = await fetch(url, {
+    body: JSON.stringify({ type: profileTypeId }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to update focus' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update focus';
+    throw new Error(errorMessage);
+  }
+
+  const result = (await response.json()) as Profile | null;
+
+  if (!result) {
+    throw new Error('Failed to update focus');
+  }
+
+  return result;
+};
+
 const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
   const data = createFormData<MapPinFormData>({
     name: pin.name,
@@ -205,6 +229,7 @@ export const profileService = {
   update,
   applyAsOrganisation,
   updateUsername,
+  updateProfileType,
   upsertPin,
   deletePin,
   updateImpact,

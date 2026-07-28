@@ -1,5 +1,6 @@
 import {
   Button,
+  ExternalLink,
   FieldInput,
   FieldTextarea,
   MemberBadge,
@@ -8,9 +9,10 @@ import {
   TextNotification,
 } from 'oa-components';
 import type { OrganisationApplicationFormData, ProfileType } from 'oa-shared';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import {
   MAX_ORGANISATION_COVER_IMAGES,
   ORGANISATION_DESCRIPTION_MAX_LENGTH,
@@ -42,6 +44,7 @@ const initialValues: Partial<OrganisationApplicationFormData> = { coverImages: [
 export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
   const navigate = useNavigate();
   const profileStore = useProfileStore();
+  const tenantContext = useContext(TenantContext);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [coverError, setCoverError] = useState<string | null>(null);
@@ -162,9 +165,12 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                       </Text>
                       <Text variant="quiet" sx={{ fontSize: 1 }}>
                         Not sure?{' '}
-                        <Link to="/academy" style={{ textDecoration: 'underline' }}>
+                        <ExternalLink
+                          href={tenantContext?.profileGuidelines}
+                          sx={{ textDecoration: 'underline' }}
+                        >
                           Check out our guidelines.
-                        </Link>
+                        </ExternalLink>
                       </Text>
                       <Grid columns={[2, 4]} gap={2}>
                         {profileTypes.map((profileType) => (

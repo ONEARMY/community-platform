@@ -16,6 +16,8 @@ export const buttons = {
     save: 'Save impact data',
   },
   guidelines: 'Check out our guidelines',
+  change: 'Change',
+  saveFocus: 'Save focus',
   link: {
     add: 'Add link',
     type: 'type',
@@ -25,6 +27,7 @@ export const buttons = {
   editPin: 'Save map pin',
   removePin: 'Remove map pin',
   save: 'Save profile',
+  saveAndResend: 'Save profile and resend the application',
   success: 'Profile saved successfully',
   submit: 'Submit',
   submitNewEmail: 'Save new email address',
@@ -136,6 +139,39 @@ export const form = {
   defaultError: 'This field is required',
   saveSuccess: 'Yay! Impact data saved.',
   saveNotificationPreferences: 'Whoop. Preferences updated.',
+  focusChanging: 'Updating focus...',
+  focusChanged: 'Profile focus changed.',
+};
+
+export const focusSection = {
+  currentLabel: 'CURRENT PROFILE TYPE:',
+};
+
+type OrganisationModerationMessage = {
+  title: string;
+  body: string;
+  contactPrefix: string;
+  afterContact?: string;
+  background: 'softblue' | 'softorange';
+};
+
+export const organisationModeration: Record<
+  'awaiting-moderation' | 'improvements-needed',
+  OrganisationModerationMessage
+> = {
+  'awaiting-moderation': {
+    title: 'Your application as an organisation is being reviewed.',
+    body: 'Until approved, your profile is not visible to others. In the meantime, you can add more details to your profile. The review should not take more than 3 days.',
+    contactPrefix: 'If something is wrong, contact us at',
+    background: 'softblue',
+  },
+  'improvements-needed': {
+    title: 'Your application as an organisation needs changes.',
+    body: 'Check your email for further information from the moderator to see what is missing. Change the information below accordingly, save your profile and send the application again.',
+    contactPrefix: 'If you did not receive a message from a moderator, contact us at',
+    afterContact: 'Until approved, your profile is not visible to others.',
+    background: 'softorange',
+  },
 };
 
 export const headings = {

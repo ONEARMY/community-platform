@@ -118,6 +118,59 @@ describe('[Organisation sign-up]', () => {
       cy.contains(displayName).should('not.exist');
     });
 
+    it('Lets an organisation change its focus from profile settings', () => {
+      const user = generateNewUserDetails();
+      const displayName = 'The Focus Org';
+
+      cy.step('Create the organisation and submit its application as a Workspace');
+      cy.signUpNewOrganisation(user);
+      cy.fillOrganisationApplicationForm({
+        profileType: 'workspace',
+        username: user.username,
+        displayName,
+        description: 'We transform plastic waste into new products.',
+        website: 'https://focus.example.org',
+      });
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', `/u/${user.username}`);
+
+      cy.step('Open the profile settings');
+      cy.visit('/settings/profile');
+      cy.get('[data-cy=FocusSection]').should('be.visible');
+
+      cy.step('The richer under-review notice and the global banner both show here');
+      cy.get('[data-cy=organisation-moderation-details]')
+        .should('be.visible')
+        .and('contain', 'being reviewed');
+      cy.get('[data-cy=organisation-moderation-banner]').should('be.visible');
+
+      cy.step('The current focus is shown and the picker is hidden');
+      cy.get('[data-cy=focus-current]')
+        .should('contain', 'Workspace')
+        .find('[data-cy="MemberBadge-workspace"]')
+        .should('exist');
+      cy.get('[data-cy=focus-save]').should('not.exist');
+
+      cy.step('Change the focus to Machine Builder');
+      cy.get('[data-cy=focus-change]').click();
+      cy.get('[data-cy=machine-builder]').click();
+      cy.get('[data-cy=focus-save]').click();
+
+      cy.step('The success toast shows and the card reflects the new focus');
+      cy.contains('Profile focus changed').should('be.visible');
+      cy.get('[data-cy=focus-current]').should('contain', 'Machine Builder');
+      cy.get('[data-cy=focus-save]').should('not.exist');
+
+      cy.step('The new focus persists across a reload');
+      cy.reload();
+      cy.get('[data-cy=focus-current]').should('contain', 'Machine Builder');
+
+      cy.step('Changing focus did not clear the moderation status');
+      cy.task('getProfileByUsername', user.username).then((profile) => {
+        expect((profile as { moderation: string }).moderation).to.eq('awaiting-moderation');
+      });
+    });
+
     it('Sign-in funnels an applicant back to the application form', () => {
       const user = generateNewUserDetails();
 

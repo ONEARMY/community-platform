@@ -12,6 +12,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
 import { Flex } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
+import { FocusSection } from './content/sections/Focus.section';
 import { PublicContactSection } from './content/sections/PublicContact.section';
 import { UserImagesSection } from './content/sections/UserImages.section';
 import { UserInfosSection } from './content/sections/UserInfos.section';
@@ -29,6 +30,7 @@ export const SettingsPageUserProfile = observer(() => {
   }
 
   const isMember = !profile.type?.isSpace;
+  const needsResend = profile.moderation === 'improvements-needed';
 
   const saveProfile = async (values: ProfileFormData) => {
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || [];
@@ -104,6 +106,7 @@ export const SettingsPageUserProfile = observer(() => {
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
             {submitting && <Loader sx={{ alignSelf: 'center' }} />}
+            <FocusSection />
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <UserInfosSection formValues={values} />
@@ -139,7 +142,7 @@ export const SettingsPageUserProfile = observer(() => {
               disabled={submitting}
               sx={{ alignSelf: 'flex-start' }}
             >
-              {buttons.save}
+              {needsResend ? buttons.saveAndResend : buttons.save}
             </Button>
           </Flex>
         );

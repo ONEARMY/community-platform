@@ -119,7 +119,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profileService = new ProfileServiceServer(client);
-    const profile = await profileService.updateProfile(profileData?.id, submissionData);
+    const resendApplication =
+      !!profileData.type?.is_space && profileData.moderation === 'improvements-needed';
+    const profile = await profileService.updateProfile(
+      profileData?.id,
+      submissionData,
+      resendApplication,
+    );
     profileService.updateUserActivity(claims.data.claims.sub);
 
     return data(profile, { headers, status: 200 });

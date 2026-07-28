@@ -23,9 +23,7 @@ alter table "public"."remakes" add constraint "remakes_created_by_fkey" FOREIGN 
 
 alter table "public"."remakes" validate constraint "remakes_created_by_fkey";
 
-CREATE INDEX remakes_project_id_idx ON public.remakes USING btree (project_id);
-
-CREATE INDEX remakes_created_by_idx ON public.remakes USING btree (created_by);
+CREATE INDEX remakes_project_id_created_at_idx ON public.remakes USING btree (project_id, created_at DESC);
 
 create policy "tenant_isolation" on "public"."remakes" as permissive for all to public using ((tenant_id = ((SELECT current_setting('request.headers', true))::json ->> 'x-tenant-id')));
 

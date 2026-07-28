@@ -1,6 +1,6 @@
 import { Button, ConfirmModal, Pagination } from 'oa-components';
 import type { Project, Remake } from 'oa-shared';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import remakesEmptyStateImage from 'src/assets/images/remakes-empty-state.png';
 import { SessionContext } from 'src/pages/common/SessionContext';
@@ -8,6 +8,7 @@ import { remakeService } from 'src/services/remakeService';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { Box, Flex, Image, Text } from 'theme-ui';
 import { REMAKE_DELETE_CONFIRM_MESSAGE, REMAKES_PER_PAGE } from './constants';
+import { useRemakes } from './hooks/useRemakes';
 import { RemakeCard } from './RemakeCard';
 import { RemakeFormModal } from './RemakeFormModal';
 import { RemakeGhostCard } from './RemakeGhostCard';
@@ -18,6 +19,8 @@ interface IProps {
   onRemakeCountChange?: (count: number) => void;
 }
 
+const DELETE_ERROR_MESSAGE = 'Error deleting remake. Please try again.';
+
 export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
   const claims = useContext(SessionContext);
   const location = useLocation();
@@ -25,74 +28,26 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
 
   const isLoggedIn = !!claims?.sub;
 
-  const [remakes, setRemakes] = useState<Remake[]>([]);
+  const { remakes, isLoading, error, refetch, addRemake, replaceRemake, removeRemake } = useRemakes(
+    project.id,
+    onRemakeCountChange,
+  );
+
   const [page, setPage] = useState(1);
   const [viewIndex, setViewIndex] = useState<number | null>(null);
-  const [formRemake, setFormRemake] = useState<Remake | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formRemake, setFormRemake] = useState<Remake | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Remake | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [reloadKey, setReloadKey] = useState(0);
 
-  useEffect(() => {
-    let ignore = false;
+  const totalPages = Math.max(1, Math.ceil(remakes.length / REMAKES_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
 
-    setIsLoading(true);
-    setFetchError(null);
-    setRemakes([]);
-    setPage(1);
-    setViewIndex(null);
-    setIsFormOpen(false);
-    setFormRemake(null);
-    setDeleteTarget(null);
-    setDeleteError(null);
-
-    const fetchRemakes = async () => {
-      try {
-        const result = await remakeService.getRemakes(project.id);
-
-        if (!ignore) {
-          setRemakes(result);
-        }
-      } catch (error) {
-        console.error(error);
-
-        if (!ignore) {
-          setFetchError('Error loading remakes. Please try again later.');
-        }
-      } finally {
-        if (!ignore) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchRemakes();
-
-    return () => {
-      ignore = true;
-    };
-  }, [project.id, reloadKey]);
-
-  const refetchRemakes = () => setReloadKey((current) => current + 1);
-
-  useEffect(() => {
-    if (isLoading || fetchError) {
-      return;
-    }
-
-    onRemakeCountChange?.(remakes.length);
-  }, [remakes.length, isLoading, fetchError, onRemakeCountChange]);
-
-  const totalPages = Math.ceil(remakes.length / REMAKES_PER_PAGE);
-  const currentPage = Math.min(page, Math.max(totalPages, 1));
-
-  const displayedRemakes = useMemo(() => {
-    return remakes.slice((currentPage - 1) * REMAKES_PER_PAGE, currentPage * REMAKES_PER_PAGE);
-  }, [remakes, currentPage]);
+  const displayedRemakes = useMemo(
+    () => remakes.slice((currentPage - 1) * REMAKES_PER_PAGE, currentPage * REMAKES_PER_PAGE),
+    [remakes, currentPage],
+  );
 
   const openAddForm = () => {
     if (!isLoggedIn) {
@@ -118,22 +73,22 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
   const handleCreated = (remake: Remake) => {
     closeForm();
 
-    if (isLoading || fetchError) {
-      refetchRemakes();
+    if (isLoading || error) {
+      refetch();
       return;
     }
 
-    setRemakes((current) => [remake, ...current]);
+    addRemake(remake);
     setPage(1);
   };
 
   const handleUpdated = (remake: Remake) => {
-    setRemakes((current) => current.map((x) => (x.id === remake.id ? remake : x)));
+    replaceRemake(remake);
     closeForm();
   };
 
   const handleDeleted = (remakeId: number) => {
-    setRemakes((current) => current.filter((x) => x.id !== remakeId));
+    removeRemake(remakeId);
     setViewIndex(null);
     setDeleteTarget(null);
     closeForm();
@@ -154,16 +109,16 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
     try {
       const response = await remakeService.deleteRemake(project.id, deleteTarget.id);
 
-      if (response.status === 204) {
-        setDeleteError(null);
-        handleDeleted(deleteTarget.id);
+      if (response.status !== 204) {
+        setDeleteError(DELETE_ERROR_MESSAGE);
         return;
       }
 
-      setDeleteError('Error deleting remake. Please try again.');
-    } catch (error) {
-      console.error(error);
-      setDeleteError('Error deleting remake. Please try again.');
+      setDeleteError(null);
+      handleDeleted(deleteTarget.id);
+    } catch (err) {
+      console.error(err);
+      setDeleteError(DELETE_ERROR_MESSAGE);
     } finally {
       setIsDeleting(false);
     }
@@ -178,7 +133,7 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
           usePlural: true,
         })}`;
 
-  const hasLoadedRemakes = !isLoading && !fetchError;
+  const hasLoadedRemakes = !isLoading && !error;
   const showEmptyState = hasLoadedRemakes && remakes.length === 0;
   const showRemakesGrid = hasLoadedRemakes && remakes.length > 0;
 
@@ -193,15 +148,15 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
         </Button>
       </Flex>
 
-      {fetchError && (
+      {error && (
         <Flex sx={{ alignItems: 'center', gap: 3 }}>
           <Text
             data-cy="remakes-fetch-error"
             sx={{ fontFamily: 'body', fontSize: 2, color: 'red' }}
           >
-            {fetchError}
+            {error}
           </Text>
-          <Button type="button" variant="outline" data-cy="remakes-retry" onClick={refetchRemakes}>
+          <Button type="button" variant="outline" data-cy="remakes-retry" onClick={refetch}>
             Try again
           </Button>
         </Flex>
@@ -236,11 +191,11 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
             rowGap: 4,
           }}
         >
-          {displayedRemakes.map((remake) => (
+          {displayedRemakes.map((remake, index) => (
             <RemakeCard
               key={remake.id}
               remake={remake}
-              onClick={() => setViewIndex(remakes.indexOf(remake))}
+              onClick={() => setViewIndex((currentPage - 1) * REMAKES_PER_PAGE + index)}
             />
           ))}
           {remakes.length === 1 && <RemakeGhostCard onUploadClick={openAddForm} />}

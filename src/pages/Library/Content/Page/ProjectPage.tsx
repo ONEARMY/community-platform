@@ -154,7 +154,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
               />
             </Card>
             <Card sx={engagementCardSx}>
-              <RemakesSection project={item} onRemakeCountChange={setRemakeCount} />
+              <RemakesSection key={item.id} project={item} onRemakeCountChange={setRemakeCount} />
             </Card>
           </UserEngagementWrapper>
         )}

@@ -315,6 +315,67 @@ describe('[Library]', () => {
       cy.url().should('match', /\/library?/);
     });
 
+    it('[By Admin]', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const title = `${randomId} Project edited by an admin`;
+      const slug = `${randomId}-project-edited-by-an-admin`;
+      const adminEdit = 'Edited by admin';
+      const stepDescription = 'Description for the step. This description should be between the minimum and maximum description length';
+
+      cy.step('Another user creates a project');
+      cy.signIn(creator.email, creator.password);
+      cy.visit('/library/create');
+      cy.fillIntroTitle(title);
+      cy.get('[data-cy=intro-description]').type('Written by someone other than the admin');
+      selectCategory('Moulds' as Category);
+      selectTimeDuration('1-2 weeks' as Duration);
+      selectDifficultLevel('Medium' as DifficultyLevel);
+      cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
+
+      const stepImage = ['src/fixtures/images/howto-step-pic1.jpg'];
+      fillStep(1, 'First step', stepDescription, stepImage);
+      fillStep(2, 'Second step', stepDescription, stepImage);
+      fillStep(3, 'Third step', stepDescription, stepImage);
+
+      cy.step('Wait for every step image to register before publishing');
+      cy.get('[data-cy=step_0]').find('[data-cy=delete-image]').should('exist');
+      cy.get('[data-cy=step_1]').find('[data-cy=delete-image]').should('exist');
+      cy.get('[data-cy=step_2]').find('[data-cy=delete-image]').should('exist');
+
+      cy.get('[data-cy=errors-container]').should('not.exist');
+      cy.get('[data-cy=submit]').click();
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.url().should('include', `/library/${slug}`);
+
+      cy.step('Project is not authored by the admin');
+      cy.logout();
+      cy.signIn(admin.email, admin.password);
+      cy.visit(`/library/${slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', admin.username);
+
+      cy.step("Admin can see the edit button on another user's project");
+      cy.get('[data-cy=edit]').should('be.visible');
+
+      cy.step('Admin can access the edit page');
+      cy.get('[data-cy=edit]').click();
+      cy.url().should('include', `/library/${slug}/edit`);
+
+      cy.step('Admin can edit the project description');
+      cy.get('[data-cy=intro-description]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-cy=intro-description]').clear().type(adminEdit).blur({ force: true });
+
+      cy.get('[data-cy=errors-container]').should('not.exist');
+      cy.get('[data-cy=submit]').click();
+
+      cy.step('Admin edit is saved and visible');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.url().should('include', `/library/${slug}`);
+      cy.contains(adminEdit);
+    });
+
     it('[Edit project - Replace images]', () => {
       const randomId = generateAlphaNumeric(8).toLowerCase();
       const initialTitle = `${randomId} Project for image edit`;

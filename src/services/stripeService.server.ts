@@ -145,6 +145,30 @@ export class StripeServiceServer {
     return subscriptions.data[0] || null;
   }
 
+  static async cancelActiveSubscriptions(customerId: string): Promise<number> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return 0;
+    }
+
+    const subscriptions = await stripe.subscriptions.list({ customer: customerId, limit: 100 });
+
+    let cancelled = 0;
+    for (const subscription of subscriptions.data) {
+      try {
+        await stripe.subscriptions.cancel(subscription.id);
+        cancelled += 1;
+      } catch (error) {
+        console.error(
+          `Failed to cancel subscription ${subscription.id} for customer ${customerId}:`,
+          error,
+        );
+      }
+    }
+
+    return cancelled;
+  }
+
   static async createGuestCustomer(email: string, name?: string): Promise<string> {
     const stripe = await getStripe();
     if (!stripe) {

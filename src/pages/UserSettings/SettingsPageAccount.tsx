@@ -21,6 +21,16 @@ export const SettingsPageAccount = observer(() => {
     });
   }, []);
 
+  useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        setIsRedirecting(false);
+      }
+    };
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, []);
+
   const handleManageSubscription = async () => {
     setIsRedirecting(true);
     const url = await stripeService.createPortalSession();
@@ -67,6 +77,7 @@ export const SettingsPageAccount = observer(() => {
             </Flex>
           </Flex>
           <Button
+            data-cy="manage-subscription"
             type="button"
             variant="primary"
             disabled={isRedirecting}

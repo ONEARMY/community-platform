@@ -189,9 +189,7 @@ describe('[Settings]', () => {
     cy.get('[data-cy="userImage"]').should('have.attr', 'src').and('include', userImage);
     cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('include', coverImage);
 
-    cy.step('Updated settings display on contact tab');
-    cy.get('[data-cy="contact-tab"]').click({ force: true });
-    cy.get('[data-cy="contact-tab"]').click({ force: true });
+    cy.step('Updated settings display on contact section');
     cy.contains(`Other users are able to contact you`);
     cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website);
   });
@@ -267,7 +265,7 @@ describe('[Precious Plastic]', () => {
     cy.contains(displayName);
     cy.contains(description);
     cy.contains(tag);
-    cy.get('[data-cy="ImpactTab"]').should('not.exist');
+    cy.get('[data-cy="ImpactPanel"]').should('not.exist');
     cy.get(`[data-cy="MemberBadge-${profileType}"]`);
     cy.get('[data-cy="userImage"]').should('have.attr', 'src').and('include', userImage);
     cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('include', coverImage);
@@ -281,7 +279,6 @@ describe('[Precious Plastic]', () => {
     cy.visit('/settings');
     cy.setSettingImpactData(2022, impactFields);
     cy.visit(`u/${user.username}`);
-    cy.get('[data-cy="ImpactTab"]').click();
 
     // From visibleImpactFields above
     cy.contains('5 Kg of plastic recycled');

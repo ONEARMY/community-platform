@@ -20,7 +20,6 @@ export const UserContactFieldMessage = () => {
         data-testid={name}
         modifiers={{ capitalize: true, trim: true }}
         component={FieldTextarea}
-        sx={{ backgroundColor: 'white' }}
         validate={(value) => required(value) || minValue(MESSAGE_MIN_CHARACTERS)(value)}
         validateFields={[]}
         showCharacterCount

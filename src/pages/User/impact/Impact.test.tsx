@@ -66,7 +66,9 @@ describe('Impact', () => {
       const machineField = screen.queryByText('13 machines built');
       expect(machineField).toBe(null);
 
-      for (const year of IMPACT_YEARS) {
+      // 2025 and 2020 have neither a report link nor data, so they aren't rendered
+      const yearsWithContent = IMPACT_YEARS.filter((year) => year !== 2025 && year !== 2020);
+      for (const year of yearsWithContent) {
         await screen.findByText(year);
       }
 

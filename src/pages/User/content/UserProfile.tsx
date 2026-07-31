@@ -1,15 +1,13 @@
-import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-components';
+import { MemberBadge, MemberHistory } from 'oa-components';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
-import { useContext, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useContext } from 'react';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
-import { Alert, Box, Card, Flex } from 'theme-ui';
+import { Alert, Card, Flex } from 'theme-ui';
 import { Impact } from '../impact/Impact';
-import { heading } from '../impact/labels';
 import { ProfileContact } from './ProfileContact';
 import { ProfileDetails } from './ProfileDetails';
 import { ProfileHeader } from './ProfileHeader';
@@ -23,8 +21,7 @@ interface IProps {
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, impact, type, tags } = user;
-  const location = useLocation();
+  const { impact, type } = user;
   const { isComplete } = useProfileStore();
   const tenantContext = useContext(TenantContext);
 
@@ -33,13 +30,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
     (!tenantContext?.noMessaging && isContactable(user.isContactable)) || !!user.website;
   const hasContributed = docs?.projects.length + docs?.research.length + docs?.questions.length > 0;
   const hasImpacted = !!impact;
-  const hasProfile = about || (tags && Object.keys(tags).length !== 0) || hasContributed;
 
   const showEmptyProfileAlert = isViewingOwnProfile && isComplete === false;
-
-  const defaultValue = location?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact');
-
-  const [selectedTab, setSelectedTab] = useState(defaultValue);
 
   return (
     <Flex
@@ -78,53 +70,16 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
             </Alert>
           )}
 
-          <Box sx={{ width: '100%' }}>
+          <Flex sx={{ width: '100%', flexDirection: 'column', gap: 4 }}>
             <ProfileHeader user={user} />
 
-            <Tabs
-              value={selectedTab}
-              onChange={(_: any, value: string | number | null) => {
-                typeof value === 'string' && setSelectedTab(value);
-              }}
-            >
-              <TabsList>
-                {hasProfile && <Tab value="profile">Profile</Tab>}
-                {hasContributed && (
-                  <Tab data-cy="ContribTab" value="contributions">
-                    Contributions
-                  </Tab>
-                )}
-                {hasImpacted && tenantContext?.showImpact && (
-                  <Tab data-cy="ImpactTab" value="impact">
-                    {heading}
-                  </Tab>
-                )}
-                {hasContactOption && (
-                  <Tab data-cy="contact-tab" value="contact">
-                    Contact
-                  </Tab>
-                )}
-              </TabsList>
-              <TabPanel value="profile">
-                <ProfileDetails docs={docs} profile={user} selectTab={setSelectedTab} />
-              </TabPanel>
-              {hasContributed && (
-                <TabPanel value="contributions">
-                  <UserCreatedDocuments columns={isMember ? 1 : 2} docs={docs} />
-                </TabPanel>
-              )}
-              {hasImpacted && tenantContext?.showImpact && (
-                <TabPanel value="impact">
-                  <Impact impact={impact} user={user} />
-                </TabPanel>
-              )}
-              {hasContactOption && (
-                <TabPanel value="contact">
-                  <ProfileContact user={user} isViewingOwnProfile={isViewingOwnProfile} />
-                </TabPanel>
-              )}
-            </Tabs>
-          </Box>
+            <ProfileDetails docs={docs} profile={user} />
+            {hasContributed && <UserCreatedDocuments columns={isMember ? 1 : 2} docs={docs} />}
+            {hasImpacted && tenantContext?.showImpact && <Impact impact={impact} user={user} />}
+            {hasContactOption && (
+              <ProfileContact user={user} isViewingOwnProfile={isViewingOwnProfile} />
+            )}
+          </Flex>
           <PremiumTierWrapper tierRequired={PremiumTier.ONE}>
             <MemberHistory memberSince={user.createdAt} lastActive={user.lastActive} />
           </PremiumTierWrapper>

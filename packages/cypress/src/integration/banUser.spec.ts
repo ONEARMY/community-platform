@@ -59,8 +59,8 @@ describe('[Ban User]', () => {
       cy.step('Go to own profile');
       cy.visit(`/u/${admin.username}`);
 
-      cy.step('Ban button should be visible but disabled');
-      cy.get('[data-cy=BanUserButton]').should('be.visible').and('be.disabled');
+      cy.step('Ban button should not be shown on own profile');
+      cy.get('[data-cy=BanUserButton]').should('not.exist');
 
       cy.step('Go to research creator profile');
       cy.visit(`/u/${researchCreator.username}`);

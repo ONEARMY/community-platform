@@ -127,12 +127,17 @@ export default defineConfig({
   // open browser with server (note, will open at 127.0.1 not localhost on node <17)
   // https://vitejs.dev/config/server-options.html#server-options
   ssr: {
-    noExternal: ['remix-utils', '@mui/base', '@mui/utils', '@mui/types'],
+    noExternal: ['remix-utils'],
   },
   resolve: {
     alias: {
       'oa-shared': resolve(__dirname, './shared/index.ts'),
       'oa-components': resolve(__dirname, './packages/components/src/index.ts'),
+    },
+  },
+  server: {
+    watch: {
+      ignored: ['**/.vs/**'],
     },
   },
   test: vitestConfig.test,

@@ -23,8 +23,8 @@ export const ProfilePage = observer((props: IProps) => {
   const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
 
   const isViewingOwnProfile = useMemo(
-    () => activeUser?.username === profile?.username,
-    [activeUser?.username],
+    () => activeUser?.id === profile?.id,
+    [activeUser?.id, profile?.id],
   );
   const showMemberProfile = !profile?.type?.isSpace;
   const upgradeBadge = upgradeBadgeForCurrentUser;
@@ -43,7 +43,7 @@ export const ProfilePage = observer((props: IProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <>
-            {isViewingOwnProfile && (
+            {isViewingOwnProfile ? (
               <Flex
                 sx={{
                   alignSelf: ['center', 'flex-end'],
@@ -91,18 +91,19 @@ export const ProfilePage = observer((props: IProps) => {
                   </Button>
                 </InternalLink>
               </Flex>
+            ) : (
+              <Flex
+                sx={{
+                  alignSelf: ['center', 'flex-end'],
+                  marginBottom: isViewingOwnProfile ? 0 : 6,
+                  zIndex: 2,
+                  gap: 2,
+                  flexDirection: 'row',
+                }}
+              >
+                <BanUserButton profile={profile} />
+              </Flex>
             )}
-            <Flex
-              sx={{
-                alignSelf: ['center', 'flex-end'],
-                marginBottom: isViewingOwnProfile ? 0 : 6,
-                zIndex: 2,
-                gap: 2,
-                flexDirection: 'row',
-              }}
-            >
-              <BanUserButton profile={profile} />
-            </Flex>
           </>
         )}
       </ClientOnly>

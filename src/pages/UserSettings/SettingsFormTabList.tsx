@@ -1,19 +1,16 @@
 import styled from '@emotion/styled';
-import { Tab as BaseTab, tabClasses } from '@mui/base/Tab';
-import { TabsList as BaseTabsList } from '@mui/base/TabsList';
-import { prepareForSlot } from '@mui/base/utils';
 import { Icon, InternalLink, Select } from 'oa-components';
 import { useMemo } from 'react';
 import { Flex } from 'theme-ui';
 
 import type { ISettingsTab } from './types';
 
-const Tab = styled(BaseTab)`
-  color: grey;
+const NavButton = styled(InternalLink)<{ $isActive: boolean }>`
+  color: ${(props) => (props.$isActive ? '#1b1b1b' : 'grey')};
   cursor: pointer;
-  background-color: transparent;
+  background-color: ${(props) => (props.$isActive ? '#e2edf7' : 'transparent')};
   padding: 12px 18px;
-  outline: none;
+  outline: ${(props) => (props.$isActive ? '2px solid #1b1b1b' : 'none')};
   border-radius: 12px;
   display: flex;
   gap: 8px;
@@ -21,28 +18,19 @@ const Tab = styled(BaseTab)`
   font-size: 18px;
   font-family: Varela round;
   align-items: center;
+  text-decoration: none;
 
   &:hover {
     background-color: white;
   }
 
-  &:focus {
+  &:focus-visible {
     outline: 2px solid #666;
-  }
-
-  &.${tabClasses.disabled} {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &.${tabClasses.selected} {
-    color: #1b1b1b;
-    outline: 2px solid #1b1b1b;
-    background-color: #e2edf7;
+    outline-offset: 2px;
   }
 `;
 
-const TabsList = styled(BaseTabsList)`
+const NavList = styled.nav`
   width: 100%;
   display: flex;
   gap: 12px;
@@ -84,32 +72,32 @@ export const SettingsFormTabList = (props: IProps) => {
   return (
     <>
       <Flex sx={{ display: ['none', 'flex'] }}>
-        <TabsList>
+        <NavList aria-label="Settings navigation">
           {tabs.map(({ glyph, title, route }) => {
+            const isActive = route === currentTab;
             return (
-              <Tab
+              <NavButton
                 key={title}
                 to={route}
-                value={route}
+                $isActive={isActive}
                 data-cy={`tab-${title}`}
-                slots={{ root: prepareForSlot(InternalLink) }}
+                aria-current={isActive ? 'page' : undefined}
               >
                 <Icon glyph={glyph} size={20} /> {title}
-              </Tab>
+              </NavButton>
             );
           })}
-        </TabsList>
+        </NavList>
       </Flex>
 
       <Flex sx={{ display: ['flex', 'none'] }}>
-        <TabsList>
-          <Select
-            value={currentValue}
-            onChange={(event) => onTabChange(event.value)}
-            variant="tabs"
-            options={selectOptions}
-          />
-        </TabsList>
+        <Select
+          value={currentValue}
+          onChange={(event) => onTabChange(event.value)}
+          variant="tabs"
+          options={selectOptions}
+          aria-label="Settings navigation"
+        />
       </Flex>
     </>
   );

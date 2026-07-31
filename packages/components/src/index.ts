@@ -78,7 +78,6 @@ export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';
 export { SiteFooter } from './SiteFooter/SiteFooter';
-export { Tab, TabPanel, Tabs, TabsList } from './TabbedContent/TabbedContent';
 export { Tag } from './Tag/Tag';
 export { TagList } from './TagList/TagList';
 export { TextNotification } from './TextNotification/TextNotification';

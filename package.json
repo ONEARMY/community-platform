@@ -60,7 +60,6 @@
     "@emotion/react": "11.14.0",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.14.1",
-    "@mui/base": "next",
     "react-email": "6.6.3",
     "@react-router/fs-routes": "7.18.0",
     "@react-spring/web": "10.1.1",

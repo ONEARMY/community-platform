@@ -135,5 +135,10 @@ export default defineConfig({
       'oa-components': resolve(__dirname, './packages/components/src/index.ts'),
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/.vs/**'],
+    },
+  },
   test: vitestConfig.test,
 });

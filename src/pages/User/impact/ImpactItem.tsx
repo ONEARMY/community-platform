@@ -27,9 +27,10 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
   const sortedFields = sortImpactYearDisplayFields(fields);
   const visibleFields = sortedFields?.filter((field) => field.isVisible);
   const isReportYear = IMPACT_REPORT_LINKS[year];
+  const hasData = fields && fields.length > 0;
   const hasImpact = visibleFields && visibleFields.length > 0;
 
-  if (!isReportYear && !hasImpact) {
+  if (!isReportYear && !hasData) {
     return null;
   }
 

@@ -28,6 +28,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
   return (
     <Card
+      data-cy="UserStatistics"
       sx={{
         border: 0,
         padding: 1,

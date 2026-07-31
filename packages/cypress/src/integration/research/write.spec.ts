@@ -86,7 +86,7 @@ describe('[Research]', () => {
       cy.step('Drafted Research should not appear on users profile');
       cy.visit('/u/' + admin.displayName);
       cy.get('[data-testid=research-stat]').should('not.exist');
-      cy.get('[data-cy=ContribTab]').should('not.exist');
+      cy.get('[data-testid="research-contributions"]').should('not.exist');
 
       cy.visit(`/research/${initialExpectedSlug}`);
       cy.get('[data-cy=edit]').click();
@@ -122,7 +122,6 @@ describe('[Research]', () => {
       cy.step('Published Research should appear on users profile');
       cy.visit('/u/' + admin.displayName);
       cy.get('[data-testid=research-stat]').should('exist');
-      cy.get('[data-cy=ContribTab]').click();
       cy.get('[data-testid="research-contributions"]').within(() => {
         cy.contains(expected.title);
         cy.get(`[data-cy="UserDocumentItem: coverImage for ${expected.title}"]`);

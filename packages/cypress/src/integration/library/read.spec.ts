@@ -152,7 +152,6 @@ describe('[Library]', () => {
         cy.step('Project should appear on users profile');
         cy.get('[data-cy=Username]').first().click();
         cy.get('[data-testid=library-stat]').should('exist');
-        cy.get('[data-cy=ContribTab]').click();
         cy.get('[data-testid="library-contributions"]').within(() => {
           cy.contains(item.title);
         });

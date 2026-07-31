@@ -135,7 +135,6 @@ describe('[Question]', () => {
       cy.step('Question should appear on users profile');
       cy.visit('/u/' + user.username);
       cy.get('[data-testid=questions-stat]').should('exist');
-      cy.get('[data-cy=ContribTab]').click();
       cy.get('[data-testid="question-contributions"]').within(() => {
         cy.contains(updatedTitle);
         cy.get(`[data-cy="UserDocumentItem: coverImage for ${updatedTitle}"]`);

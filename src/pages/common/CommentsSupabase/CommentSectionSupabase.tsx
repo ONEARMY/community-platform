@@ -20,15 +20,19 @@ interface IProps {
   sourceId: number;
   sourceType: DiscussionContentType;
   setSubscribersCount?: Dispatch<SetStateAction<number>>;
+  pinnedCommentId?: number;
+  defaultSortBy?: CommentSortOption;
 }
 const commentPageSize = 10;
 
 export const CommentSectionSupabase = observer((props: IProps) => {
-  const { authors, sourceId, sourceType } = props;
+  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
-  const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Oldest);
+  const [sortBy, setSortBy] = useState<CommentSortOption>(
+    defaultSortBy ?? CommentSortOption.Oldest,
+  );
   const { isSubscribed, toggle: toggleFollowReplies } = useSubscription(sourceType, sourceId);
   const { profile } = useProfileStore();
   const location = useLocation();
@@ -36,8 +40,16 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const displayedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
     const sorted = [...comments].sort(sortFn);
+
+    if (pinnedCommentId) {
+      const pinnedIndex = sorted.findIndex((x) => x.id === pinnedCommentId);
+      if (pinnedIndex > 0) {
+        sorted.unshift(...sorted.splice(pinnedIndex, 1));
+      }
+    }
+
     return sorted.slice(0, commentLimit);
-  }, [comments, commentLimit, sortBy]);
+  }, [comments, commentLimit, sortBy, pinnedCommentId]);
 
   const remainingCommentsCount = useMemo(() => {
     return Math.max(0, comments.length - commentLimit);

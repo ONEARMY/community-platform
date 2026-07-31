@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
+import { CommentSortOption } from '../common/CommentsSupabase/CommentSortOptions';
 import { QuestionCommentContext } from './QuestionCommentContext';
 
 interface IProps {
@@ -64,6 +65,8 @@ export const QuestionCommentSection = observer(
             setSubscribersCount={setSubscribersCount}
             sourceId={question.id}
             sourceType="questions"
+            pinnedCommentId={acceptedAnswerId}
+            defaultSortBy={CommentSortOption.MostUseful}
           />
         </Card>
       </QuestionCommentContext.Provider>

@@ -1,6 +1,7 @@
 import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared';
 import { sortImpactYearDisplayFields } from 'src/pages/UserSettings/utils';
 import { Box, Flex, Heading } from 'theme-ui';
+import { IMPACT_REPORT_LINKS } from './constants';
 import { ImpactField } from './ImpactField';
 import { ImpactMissing } from './ImpactMissing';
 
@@ -25,6 +26,12 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
 
   const sortedFields = sortImpactYearDisplayFields(fields);
   const visibleFields = sortedFields?.filter((field) => field.isVisible);
+  const isReportYear = IMPACT_REPORT_LINKS[year];
+  const hasImpact = visibleFields && visibleFields.length > 0;
+
+  if (!isReportYear && !hasImpact) {
+    return null;
+  }
 
   return (
     <Box sx={outterBox} cy-data={`ImpactItem-${year}`}>
@@ -32,12 +39,14 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
         <Heading as="h3" variant="small">
           {year}
         </Heading>
-        {visibleFields && visibleFields.length > 0 ? (
-          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            {visibleFields.map((field, index) => {
-              return <ImpactField field={field} key={index} />;
-            })}
-          </Flex>
+        {hasImpact ? (
+          <>
+            <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+              {visibleFields.map((field, index) => {
+                return <ImpactField field={field} key={index} />;
+              })}
+            </Flex>
+          </>
         ) : (
           <ImpactMissing fields={fields} owner={user} visibleFields={visibleFields} year={year} />
         )}

@@ -10,7 +10,6 @@
         "@emotion/server": "11.11.0",
         "@emotion/styled": "11.14.1",
         "@mdxeditor/editor": "^3.52.0",
-        "@mui/base": "next",
         "@react-router/fs-routes": "7.18.0",
         "@react-spring/web": "10.1.1",
         "@sentry/react": "10.58.0",

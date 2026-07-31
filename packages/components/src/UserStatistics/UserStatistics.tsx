@@ -29,7 +29,6 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   return (
     <Card
       sx={{
-        backgroundColor: 'background',
         border: 0,
         padding: 1,
         ...props.sx,

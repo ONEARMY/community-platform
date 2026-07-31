@@ -106,6 +106,7 @@ const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }];
 const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   {
     ..._TYPES_BASE,
+    background_color: '#f090b3',
     name: 'member',
     display_name: 'Member',
     is_space: false,
@@ -119,6 +120,7 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   },
   {
     ..._TYPES_BASE,
+    background_color: '#97cdeb',
     name: 'workspace',
     display_name: 'Workspace',
     is_space: true,
@@ -132,6 +134,7 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   },
   {
     ..._TYPES_BASE,
+    background_color: '#f29195',
     name: 'machine-builder',
     display_name: 'Machine Builder',
     is_space: true,
@@ -145,6 +148,7 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   },
   {
     ..._TYPES_BASE,
+    background_color: '#8ec685',
     name: 'community-point',
     display_name: 'Community Point',
     is_space: true,
@@ -158,6 +162,7 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   },
   {
     ..._TYPES_BASE,
+    background_color: '#baa0cc',
     name: 'collection-point',
     display_name: 'Collection Point',
     is_space: true,

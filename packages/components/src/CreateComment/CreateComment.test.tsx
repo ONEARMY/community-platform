@@ -11,6 +11,7 @@ import type { ProfileType } from 'oa-shared';
 
 const member: ProfileType = {
   name: 'member',
+  backgroundColor: '#f090b3',
   description: 'A member profile',
   displayName: 'Member',
   id: 2,

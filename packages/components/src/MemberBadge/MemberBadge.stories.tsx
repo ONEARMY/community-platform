@@ -15,6 +15,7 @@ export default {
 } as Meta<typeof MemberBadge>;
 const machineBuilder: ProfileType = {
   name: 'machine-builder',
+  backgroundColor: '#f29195',
   description: 'A machine builder profile',
   displayName: 'Machine Builder',
   id: 1,
@@ -26,6 +27,7 @@ const machineBuilder: ProfileType = {
 };
 const member: ProfileType = {
   name: 'member',
+  backgroundColor: '#f090b3',
   description: 'A member profile',
   displayName: 'Member',
   id: 2,

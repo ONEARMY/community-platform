@@ -15,6 +15,7 @@ export const FactoryUser = (userOverloads: Partial<Profile> = {}): Partial<Profi
   createdAt: faker.date.past(),
   type: {
     id: faker.number.int(),
+    backgroundColor: '#f090b3',
     name: faker.word.noun(),
     displayName: faker.word.noun(),
     description: faker.word.noun(),

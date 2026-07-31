@@ -162,7 +162,7 @@ const UploadNewFiles = observer(
               name="fileUploadTrigger"
               data-cy="file-input-field"
               component={FileInputField}
-              admin={false}
+              admin={isUserAuthorized(UserRole.ADMIN)}
               onFilesChange={handleFilesChange}
             />
           )}

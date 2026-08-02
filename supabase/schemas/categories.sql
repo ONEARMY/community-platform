@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS "public"."categories" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "tenant_id" "text" NOT NULL,
     "name" "text" NOT NULL,
-    "legacy_id" "text",
     "type" "public"."content_types",
     "image_url" "text",
     "description" "text"

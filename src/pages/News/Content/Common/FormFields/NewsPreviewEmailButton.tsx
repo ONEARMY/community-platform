@@ -29,6 +29,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         tags: formValues.tags,
         title: formValues.title || '',
         contentReach: null,
+        poll: formValues.poll || null,
       },
       props.id,
     );

@@ -170,7 +170,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (actionType === 'portal') {
       const portalUrl = await StripeServiceServer.createBillingPortalSession(
         customerId,
-        `${origin}/settings/account`,
+        `${origin}/setup-email-preferences`,
       );
 
       return Response.json({ url: portalUrl }, { headers, status: 200 });

@@ -32,6 +32,7 @@ import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg';
 import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg';
 import bazarSVG from '../../assets/icons/icon-bazar.svg';
 import commentSVG from '../../assets/icons/icon-comment.svg';
+import difficultyLevel from '../../assets/icons/icon-difficulty-level.svg';
 import emailOutlineSVG from '../../assets/icons/icon-email-outline.svg';
 import libraySVG from '../../assets/icons/icon-library.svg';
 import researchSVG from '../../assets/icons/icon-research.svg';
@@ -119,6 +120,7 @@ export const iconMap = {
   copyLink: <ImageIcon src={copyLinkSVG} />,
   declined: <ImageIcon src={declinedSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
+  difficultyLevel: <ImageIcon src={difficultyLevel} />,
   discussion: <ImageIcon src={discussionSVG} />,
   doubleTick: <ImageIcon src={doubleTickSVG} />,
   doubleArrowLeft: (

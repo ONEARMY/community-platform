@@ -18,6 +18,7 @@ import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
+import { PollDisplay } from '../common/Polls/PollDisplay';
 
 interface IProps {
   news: News;
@@ -180,6 +181,8 @@ export const NewsPage = observer(({ news }: IProps) => {
           >
             <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
           </Box>
+
+          {news.poll && <PollDisplay pollData={news.poll} profile={profile} />}
 
           <Divider />
 

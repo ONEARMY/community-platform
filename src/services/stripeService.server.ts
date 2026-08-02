@@ -145,6 +145,30 @@ export class StripeServiceServer {
     return subscriptions.data[0] || null;
   }
 
+  static async cancelActiveSubscriptions(customerId: string): Promise<number> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return 0;
+    }
+
+    const subscriptions = await stripe.subscriptions.list({ customer: customerId, limit: 100 });
+
+    let cancelled = 0;
+    for (const subscription of subscriptions.data) {
+      try {
+        await stripe.subscriptions.cancel(subscription.id);
+        cancelled += 1;
+      } catch (error) {
+        console.error(
+          `Failed to cancel subscription ${subscription.id} for customer ${customerId}:`,
+          error,
+        );
+      }
+    }
+
+    return cancelled;
+  }
+
   static async createGuestCustomer(email: string, name?: string): Promise<string> {
     const stripe = await getStripe();
     if (!stripe) {
@@ -373,13 +397,20 @@ export class StripeServiceServer {
           product: productId,
           active: true,
           limit: 100,
-          expand: ['data.currency_options'],
+          expand: ['data.currency_options', 'data.product'],
         }),
       ),
     );
 
     return allPrices
       .flatMap((result) => result.data)
+      .filter((p) => {
+        const prod = p.product as { active?: boolean; deleted?: boolean } | string;
+        if (typeof prod === 'object' && prod !== null) {
+          return prod.deleted !== true && prod.active !== false;
+        }
+        return true;
+      })
       .filter((p) => p.recurring && p.unit_amount !== null)
       .flatMap((p) => {
         const productId =

@@ -2,6 +2,7 @@ import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
+import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
@@ -18,6 +19,7 @@ import {
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';
+import { PollServiceServer } from '../services/pollService.server';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -102,6 +104,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       contentReach: formData.has('contentReach')
         ? (formData.get('contentReach') as ContentReach)
         : null,
+      poll: formData.has('poll') ? (JSON.parse(formData.get('poll') as string) as PollDTO) : null,
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
@@ -132,6 +135,19 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       throw validationError('You must set a username before creating content', 'username');
     }
 
+    let pollId: number | null = null;
+
+    if (data.poll) {
+      const pollService = new PollServiceServer(client);
+      try {
+        pollId = data.poll.id
+          ? await pollService.updatePoll(data.poll)
+          : await pollService.createPoll(data.poll);
+      } catch (e) {
+        console.error('Error saving or updating the poll: ', data.poll, e);
+      }
+    }
+
     const newsResult = await client
       .from('news')
       .insert({
@@ -148,6 +164,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         title: data.title,
         content_reach: data.contentReach,
         tenant_id: process.env.TENANT_ID,
+        poll: pollId,
       })
       .select('*');
 
@@ -172,6 +189,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       }
     }
 
+    const poll = pollId ? await new PollServiceServer(client).getPoll(pollId) : null;
+
     // Fetch the complete news with badges for response
     const completeNews = await client
       .from('news')
@@ -183,8 +202,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       throw completeNews.error;
     }
 
-    const news = News.fromDB(completeNews.data, []);
-    new SubscribersServiceServer(client).add('news', news.id, profile.id);
+    const news = News.fromDB(completeNews.data, [], null, poll);
+    await new SubscribersServiceServer(client).add('news', news.id, profile.id);
     new BroadcastCoordinationServiceServer(client).news(completeNews.data, profile, request);
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

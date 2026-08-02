@@ -50,6 +50,9 @@ export const fields: ILabels = {
     title: 'Cover image',
     description: 'This image should be landscape with 2:1 aspect ratio. We advise 1240x620px',
   },
+  pollError: {
+    title: 'Poll',
+  },
 };
 
 export const listing = {

@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "tenant_id" "text" NOT NULL,
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", (("title" || ' '::"text") || "description"))) STORED,
     "images" "json"[],
-    "legacy_id" "text",
     "is_draft" boolean DEFAULT false NOT NULL,
     "published_at" timestamp with time zone,
     "accepted_answer_id" bigint REFERENCES "public"."comments"("id") ON DELETE SET NULL,

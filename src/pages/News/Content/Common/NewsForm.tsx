@@ -1,3 +1,4 @@
+import arrayMutators from 'final-form-arrays';
 import { Button, ConfirmModal } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
@@ -6,6 +7,7 @@ import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
+import { PollForm } from 'src/pages/common/FormFields';
 import { BadgeVisibilityField } from 'src/pages/common/FormFields/BadgeVisibilityField';
 import { CategoryField } from 'src/pages/common/FormFields/Category.field';
 import { ContentReachField } from 'src/pages/common/FormFields/ContentReachField';
@@ -61,6 +63,7 @@ export const NewsForm = (props: IProps) => {
         tags: props.formData?.tags || [],
         title: props.formData?.title || '',
         contentReach: props.formData?.contentReach || null,
+        poll: props.formData?.poll || null,
       }) satisfies NewsFormData,
     [],
   );
@@ -75,6 +78,7 @@ export const NewsForm = (props: IProps) => {
       tags: formValues.tags,
       title: formValues.title!,
       contentReach: formValues.contentReach || null,
+      poll: formValues.poll || null,
     });
 
     toast.promise(promise, {
@@ -122,6 +126,18 @@ export const NewsForm = (props: IProps) => {
     if (values.heroImage == null && values.existingHeroImage === null) {
       errors['heroImage'] = 'An image is required (either new or existing).';
     }
+
+    if (values.poll) {
+      const { title, options } = values.poll;
+      if (
+        !title ||
+        title.length < NEWS_MIN_TITLE_LENGTH ||
+        options.length < 2 ||
+        options.some((o) => !o.description)
+      ) {
+        errors['pollError'] = 'A poll must have a title and at least two options.';
+      }
+    }
     return errors;
   }, []);
 
@@ -133,6 +149,9 @@ export const NewsForm = (props: IProps) => {
         onSubmit={(values) => onSubmit(values, false)}
         initialValues={initialValues}
         validate={validateForm}
+        mutators={{
+          ...arrayMutators,
+        }}
         render={({
           dirty,
           errors,
@@ -232,6 +251,10 @@ export const NewsForm = (props: IProps) => {
               />
 
               <NewsBodyField imageUpload={imageUpload} />
+              <PollForm
+                validate={validate}
+                pollData={props.formData ? props.formData.poll : null}
+              />
             </FormWrapper>
           );
         }}

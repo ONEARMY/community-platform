@@ -3,7 +3,7 @@
 import styled from '@emotion/styled';
 import type { Colors } from 'oa-themes';
 import { IconContext } from 'react-icons';
-import { FaCloudUploadAlt, FaFilePdf, FaFilter, FaSignal } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaFilePdf, FaFilter } from 'react-icons/fa';
 import {
   MdAccessTime,
   MdAccountCircle,
@@ -68,7 +68,7 @@ export const glyphs: IGlyphs = {
   'close-modal': iconMap.crossCloseModal,
   declined: iconMap.declined,
   delete: iconMap.delete,
-  difficulty: <FaSignal />,
+  difficulty: iconMap.difficultyLevel,
   discussion: iconMap.discussion,
   doubleTick: iconMap.doubleTick,
   download: <MdFileDownload />,

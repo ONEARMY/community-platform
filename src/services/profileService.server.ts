@@ -276,6 +276,7 @@ export class ProfileServiceServer {
         about: values.about,
         website: values.website,
         cover_images: values.coverImages,
+        photo: values.coverImages?.[0] ?? null,
         profile_type: values.profileTypeId,
         moderation: 'awaiting-moderation',
       })

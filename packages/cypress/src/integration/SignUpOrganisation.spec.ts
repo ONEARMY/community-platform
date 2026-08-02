@@ -104,7 +104,15 @@ describe('[Organisation sign-up]', () => {
       cy.step('The new organisation profile is created awaiting moderation');
       cy.task('getProfileByUsername', user.username).then((profile) => {
         expect(profile, 'created profile row').to.be.an('object');
-        expect((profile as { moderation: string }).moderation).to.eq('awaiting-moderation');
+        const created = profile as {
+          moderation: string;
+          photo: { path: string } | null;
+          cover_images: { path: string }[];
+        };
+        expect(created.moderation).to.eq('awaiting-moderation');
+
+        cy.step('The profile photo is seeded from the first workspace picture');
+        expect(created.photo?.path).to.eq(created.cover_images[0].path);
       });
 
       cy.step('The application form cannot be submitted twice');

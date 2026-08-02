@@ -36,7 +36,7 @@ describe('[Library.Remakes]', () => {
     cy.get('[data-cy=remake-form-modal]').should('be.visible');
     cy.get('[data-cy=remake-submit]').click();
     cy.get('[data-cy=remake-images-error]').contains('Upload at least 1 image');
-    cy.get('[data-cy=remake-submit-error]').should('be.visible');
+    cy.get('[data-cy=errors-container]').should('be.visible');
 
     cy.step('Can publish a remake with an image and description');
     cy.get('[data-cy=remake-image-upload]')

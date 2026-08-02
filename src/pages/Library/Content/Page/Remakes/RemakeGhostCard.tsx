@@ -1,5 +1,5 @@
-import { Button, Icon } from 'oa-components';
-import { Flex, Text } from 'theme-ui';
+import { Icon } from 'oa-components';
+import { Box, Text } from 'theme-ui';
 import { REMAKE_IMAGE_ASPECT_RATIO } from './constants';
 
 interface IProps {
@@ -8,41 +8,33 @@ interface IProps {
 
 export const RemakeGhostCard = ({ onUploadClick }: IProps) => {
   return (
-    <Flex data-cy="remake-ghost-card" sx={{ flexDirection: 'column', gap: 1 }}>
-      <Flex
-        sx={{
-          position: 'relative',
-          aspectRatio: REMAKE_IMAGE_ASPECT_RATIO,
-          border: '2px dashed',
-          borderColor: 'softgrey',
-          borderRadius: 1,
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Icon glyph="add" size={52} color="darkGrey" />
-        <Button
-          type="button"
-          variant="outline"
-          data-cy="remake-ghost-upload"
-          onClick={onUploadClick}
-          sx={{
-            position: 'absolute',
-            bottom: '15%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            whiteSpace: 'nowrap',
-            fontSize: 1,
-            height: '32px',
-          }}
-        >
-          Share your remake
-        </Button>
-      </Flex>
-      <Text sx={{ fontFamily: 'title', fontSize: 2, color: 'darkGrey', textAlign: 'center' }}>
-        Your remake here!
+    <Box
+      as="button"
+      data-cy="remake-ghost-card"
+      onClick={onUploadClick}
+      sx={{
+        aspectRatio: REMAKE_IMAGE_ASPECT_RATIO,
+        alignSelf: 'start',
+        width: '100%',
+        padding: 0,
+        backgroundColor: 'background',
+        border: '2px solid transparent',
+        borderRadius: 1,
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+        '&:hover': {
+          borderColor: 'blue',
+        },
+      }}
+    >
+      <Icon glyph="add" size={52} color="darkGrey" />
+      <Text as="span" sx={{ fontFamily: 'body', fontSize: 2 }}>
+        Share your remake
       </Text>
-    </Flex>
+    </Box>
   );
 };

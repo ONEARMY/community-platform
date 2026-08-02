@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { theme } from 'oa-themes';
+import { useState } from 'react';
 import { MemoryRouter } from 'react-router';
 import { FactoryLibraryItem } from 'src/test/factories/Library';
 import { FactoryRemake } from 'src/test/factories/Remake';
@@ -265,8 +266,26 @@ describe('RemakesSection', () => {
     await waitFor(() => {
       expect(wrapper.getByText('1 remake')).toBeInTheDocument();
       expect(wrapper.container.querySelector('[data-cy=remake-ghost-card]')).toBeInTheDocument();
-      expect(wrapper.getByText('Your remake here!')).toBeInTheDocument();
+      expect(wrapper.getByText('Share your remake')).toBeInTheDocument();
     });
+  });
+
+  it('opens the add form when the ghost card is clicked', async () => {
+    mockUseProfileStore.mockReturnValue({ profile: FactoryUser() });
+    mockGetRemakes.mockResolvedValue([FactoryRemake()]);
+
+    let wrapper;
+    act(() => {
+      wrapper = getWrapper();
+    });
+
+    await waitFor(() => {
+      expect(wrapper.container.querySelector('[data-cy=remake-ghost-card]')).toBeInTheDocument();
+    });
+
+    await userEvent.click(wrapper.container.querySelector('[data-cy=remake-ghost-card]'));
+
+    expect(wrapper.container.querySelector('[data-cy=stub-remake-created]')).toBeInTheDocument();
   });
 
   it('paginates when there are more than 12 remakes', async () => {
@@ -356,6 +375,50 @@ describe('RemakesSection', () => {
     });
 
     expect(onRemakeCountChange).not.toHaveBeenCalled();
+
+    consoleSpy.mockRestore();
+  });
+
+  it('reports the count to a stateful parent without updating it during render', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockUseProfileStore.mockReturnValue({ profile: FactoryUser() });
+    mockGetRemakes.mockResolvedValue([FactoryRemake()]);
+
+    const StatefulParent = () => {
+      const [count, setCount] = useState<number | null>(null);
+
+      return (
+        <ThemeProvider theme={theme}>
+          <MemoryRouter>
+            <SessionContext.Provider value={{ sub: 'auth-id' } as JwtPayload}>
+              <span data-testid="parent-count">{count}</span>
+              <RemakesSection project={project} onRemakeCountChange={setCount} />
+            </SessionContext.Provider>
+          </MemoryRouter>
+        </ThemeProvider>
+      );
+    };
+
+    let wrapper;
+    act(() => {
+      wrapper = render(<StatefulParent />);
+    });
+
+    await waitFor(() => {
+      expect(wrapper.container.querySelector('[data-cy=remake-ghost-card]')).toBeInTheDocument();
+    });
+
+    await userEvent.click(wrapper.container.querySelector('[data-cy=remake-ghost-card]'));
+    await userEvent.click(wrapper.container.querySelector('[data-cy=stub-remake-created]'));
+
+    await waitFor(() => {
+      expect(wrapper.getByTestId('parent-count').textContent).toBe('2');
+    });
+
+    const renderPhaseWarnings = consoleSpy.mock.calls.filter((call) =>
+      String(call[0]).includes('Cannot update a component'),
+    );
+    expect(renderPhaseWarnings).toHaveLength(0);
 
     consoleSpy.mockRestore();
   });

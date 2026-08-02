@@ -47,7 +47,6 @@ export const useRemakes = (
         }
 
         setRemakes(result);
-        onCountChangeRef.current?.(result.length);
       } catch (err) {
         console.error(err);
 
@@ -68,14 +67,18 @@ export const useRemakes = (
     };
   }, [projectId, reloadKey]);
 
+  useEffect(() => {
+    if (isLoading || error) {
+      return;
+    }
+
+    onCountChangeRef.current?.(remakes.length);
+  }, [remakes.length, isLoading, error]);
+
   const refetch = useCallback(() => setReloadKey((current) => current + 1), []);
 
   const addRemake = useCallback((remake: Remake) => {
-    setRemakes((current) => {
-      const next = [remake, ...current];
-      onCountChangeRef.current?.(next.length);
-      return next;
-    });
+    setRemakes((current) => [remake, ...current]);
   }, []);
 
   const replaceRemake = useCallback((remake: Remake) => {
@@ -83,11 +86,7 @@ export const useRemakes = (
   }, []);
 
   const removeRemake = useCallback((remakeId: number) => {
-    setRemakes((current) => {
-      const next = current.filter((x) => x.id !== remakeId);
-      onCountChangeRef.current?.(next.length);
-      return next;
-    });
+    setRemakes((current) => current.filter((x) => x.id !== remakeId));
   }, []);
 
   return { remakes, isLoading, error, refetch, addRemake, replaceRemake, removeRemake };

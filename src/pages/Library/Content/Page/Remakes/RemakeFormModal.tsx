@@ -2,11 +2,12 @@ import { Button, ConfirmModal, Icon, ImageInputV2, Modal, Username } from 'oa-co
 import type { MediaWithPublicUrl, Project, Remake } from 'oa-shared';
 import { DBMedia, REMAKE_MAX_DESCRIPTION_LENGTH, REMAKE_MAX_IMAGES } from 'oa-shared';
 import { useMemo, useState } from 'react';
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { ImageInputFieldWrapper } from 'src/pages/common/FormFields/ImageInputFieldWrapper';
 import { remakeService } from 'src/services/remakeService';
 import { storageService } from 'src/services/storageService';
-import { Flex, Image, Spinner, Text, Textarea } from 'theme-ui';
+import { Box, Flex, Image, Spinner, Text, Textarea } from 'theme-ui';
 import { REMAKE_DELETE_CONFIRM_MESSAGE } from './constants';
 
 interface IProps {
@@ -316,23 +317,9 @@ export const RemakeFormModal = (props: IProps) => {
         </Flex>
 
         {submitError && (
-          <Flex
-            data-cy="remake-submit-error"
-            sx={{
-              flexDirection: 'column',
-              gap: 1,
-              backgroundColor: 'red2',
-              border: '2px solid',
-              borderColor: 'red',
-              borderRadius: 1,
-              padding: 3,
-            }}
-          >
-            <Text sx={{ fontFamily: 'body', fontSize: 2, fontWeight: 'bold' }}>
-              Ouch, something&apos;s wrong
-            </Text>
-            <Text sx={{ fontFamily: 'body', fontSize: 2 }}>{submitError}</Text>
-          </Flex>
+          <Box sx={{ flexShrink: 0 }}>
+            <ErrorsContainer serverErrors={[submitError]} />
+          </Box>
         )}
       </Flex>
 

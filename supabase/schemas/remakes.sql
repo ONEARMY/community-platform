@@ -15,8 +15,7 @@ ALTER TABLE ONLY "public"."remakes"
 ALTER TABLE ONLY "public"."remakes"
     ADD CONSTRAINT "remakes_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
-CREATE INDEX IF NOT EXISTS "remakes_project_id_idx" ON "public"."remakes"("project_id");
-CREATE INDEX IF NOT EXISTS "remakes_created_by_idx" ON "public"."remakes"("created_by");
+CREATE INDEX IF NOT EXISTS "remakes_project_id_created_at_idx" ON "public"."remakes"("project_id", "created_at" DESC);
 
 ALTER TABLE "public"."remakes" ENABLE ROW LEVEL SECURITY;
 

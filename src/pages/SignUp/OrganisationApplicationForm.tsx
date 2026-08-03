@@ -17,6 +17,7 @@ import {
   MAX_ORGANISATION_COVER_IMAGES,
   ORGANISATION_DESCRIPTION_MAX_LENGTH,
   ORGANISATION_SIGNUP_STEPS,
+  organisationActivityClause,
 } from 'src/pages/SignUp/constants';
 import { ProfileTypeRadioField } from 'src/pages/UserSettings/content/fields/ProfileTypeRadio.field';
 import { profileService } from 'src/services/profileService';
@@ -48,6 +49,9 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [coverError, setCoverError] = useState<string | null>(null);
+
+  const activityClause = organisationActivityClause(tenantContext?.organisationActivity);
+  const siteName = tenantContext?.siteName ?? 'the community';
 
   const onSubmit = async (values: OrganisationApplicationFormData) => {
     setSubmitError(null);
@@ -129,9 +133,8 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                   </Flex>
                   <Heading>One last step!</Heading>
                   <Text color="grey" sx={{ fontSize: 3 }}>
-                    This info will help us verify that you work with small-scale recycling.
-                    <br />
-                    It usually takes a day or two to get approved.
+                    This info will help us verify {activityClause}. It usually takes a day or two to
+                    get approved.
                   </Text>
                 </Flex>
                 <Card sx={{ borderRadius: 3 }}>
@@ -241,8 +244,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                         Tell us a bit about your organisation <Text color="red">*</Text>
                       </Text>
                       <Text variant="quiet" sx={{ fontSize: 1 }}>
-                        Describe your organisation and why you want to join Precious Plastic
-                        Universe.
+                        Describe your organisation and why you want to join {siteName}.
                       </Text>
                       <Field
                         data-cy="about"
@@ -276,7 +278,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                         Upload pictures of your workspace <Text color="red">*</Text>
                       </Text>
                       <Text variant="quiet" sx={{ fontSize: 1 }}>
-                        They help us to evaluate that you work with small-scale recycling.
+                        They help us to evaluate {activityClause}.
                       </Text>
                       {coverError && (
                         <Text data-cy="cover-error" sx={{ color: 'error', fontSize: 1 }}>

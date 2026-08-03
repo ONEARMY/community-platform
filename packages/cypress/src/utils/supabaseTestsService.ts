@@ -292,7 +292,8 @@ export class SupabaseTestsService {
           create_research_roles: undefined,
           ga_tracking_id: 'G-TEST123456',
           organisation_signup_description:
-            'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](/academy)? Then apply as an organisation here.\nIt usually takes a day or two to get approved.',
+            'Are you working with small-scale plastic recycling? Do you wish to become part of <a href="/academy">our universe</a>? Then apply as an organisation here. It usually takes a day or two to get approved.',
+          organisation_activity: 'small-scale recycling',
           tenant_id: this.tenantId,
         },
       ],

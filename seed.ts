@@ -620,7 +620,8 @@ const main = async () => {
       supported_modules: 'library,map,research,academy,questions,news',
       hidden_modules: null,
       organisation_signup_description:
-        'Are you working with small-scale plastic recycling? Do you wish to become part of [our universe](/academy)? Then apply as an organisation here.\nIt usually takes a day or two to get approved.',
+        'Are you working with small-scale plastic recycling? Do you wish to become part of <a href="/academy">our universe</a>? Then apply as an organisation here. It usually takes a day or two to get approved.',
+      organisation_activity: 'small-scale recycling',
       donation_settings: {
         defaultDescription:
           'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',

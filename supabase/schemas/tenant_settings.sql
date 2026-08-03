@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "create_research_roles" text[],
     "pwa_icons" "jsonb",
     "organisation_signup_description" "text",
+    "organisation_activity" "text",
     CONSTRAINT "check_pwa_icons_schema" CHECK (
         "pwa_icons" IS NULL
         OR (

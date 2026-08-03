@@ -12,7 +12,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
-import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
+import { ORGANISATION_SIGNUP_STEPS, organisationActivityClause } from 'src/pages/SignUp/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
@@ -46,6 +46,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     {
       siteName: tenantSettings.siteName,
       descriptionHtml: tenantSettings.organisationSignupDescriptionHtml,
+      activityClause: organisationActivityClause(tenantSettings.organisationActivity),
       spaceProfileTypes,
     },
     { headers },
@@ -113,7 +114,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
-  const { descriptionHtml, spaceProfileTypes } = useLoaderData<typeof loader>();
+  const { activityClause, descriptionHtml, spaceProfileTypes } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -263,8 +264,7 @@ export default function Index() {
                         </Text>
                         <Text sx={{ fontSize: 2 }}>
                           A <strong>link to your website</strong> or social media and{' '}
-                          <strong>pictures</strong> to verify that you work with small-scale
-                          recycling.
+                          <strong>pictures</strong> to verify {activityClause}.
                         </Text>
                         <Link
                           to="/academy"

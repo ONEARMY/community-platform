@@ -1,6 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import { marked } from 'marked';
 import { PWAIcons, TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 
@@ -54,12 +53,8 @@ export class TenantSettingsService {
       createResearchRoles: this.validateRoles(data?.create_research_roles),
       gaTrackingId: data?.ga_tracking_id,
       pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
-      organisationSignupDescriptionHtml: data?.organisation_signup_description
-        ? (marked.parseInline(data.organisation_signup_description, {
-            gfm: true,
-            breaks: true,
-          }) as string)
-        : undefined,
+      organisationSignupDescriptionHtml: data?.organisation_signup_description ?? undefined,
+      organisationActivity: data?.organisation_activity ?? undefined,
     });
 
     cache.set('tenant-settings', settings);
@@ -93,7 +88,8 @@ export class TenantSettingsService {
         create_research_roles,
         ga_tracking_id,
         pwa_icons,
-        organisation_signup_description`,
+        organisation_signup_description,
+        organisation_activity`,
       )
       .single();
 

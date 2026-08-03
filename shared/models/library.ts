@@ -196,18 +196,17 @@ export class ProjectStep {
   }
 
   static fromDB(obj: DBProjectStep, images?: Image[]) {
-    const imageIds = obj.images?.map((x) => x.id) || [];
-    const filteredImages = images?.filter((x) => imageIds.includes(x.id)) || [];
-    // Deduplicate by id
-    const uniqueImagesMap = new Map(filteredImages.map((img) => [img.id, img]));
-    const uniqueImages = Array.from(uniqueImagesMap.values());
+    // Sort images according to the order in obj.images
+    const orderedImages =
+      obj.images?.map((dbImage) => images?.find((img) => img.id === dbImage.id)).filter(Boolean) ||
+      [];
 
     return new ProjectStep({
       id: obj.id,
       projectId: obj.project_id,
       title: obj.title,
       description: obj.description,
-      images: uniqueImages,
+      images: orderedImages as Image[],
       videoUrl: obj.video_url,
       order: obj.order,
     });

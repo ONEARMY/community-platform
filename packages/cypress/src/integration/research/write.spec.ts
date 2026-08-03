@@ -381,6 +381,54 @@ describe('[Research]', () => {
       });
     });
 
+    it('[By Admin]', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const title = `${randomId} Research edited by an admin`;
+      const slug = `${randomId}-research-edited-by-an-admin`;
+      const adminEdit = 'Edited by admin';
+
+      cy.step('Another user creates a research article');
+      cy.signIn(researcher.email, researcher.password);
+      cy.visit('/research/create');
+      cy.wait(2000);
+      cy.contains('Start your Research');
+      cy.get('[data-cy=intro-title]').clear().type(title).blur();
+      cy.get('[data-cy=intro-description]').clear().type('Written by someone other than the admin').blur();
+      cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=delete-image]').should('exist');
+      cy.selectCard('Machines', '[data-cy=category-select]');
+      cy.get('[data-cy=submit]').click();
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.url().should('include', `/research/${slug}`);
+
+      cy.step('Research is not authored by the admin');
+      cy.logout();
+      cy.signIn(admin.email, admin.password);
+      cy.visit(`/research/${slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', admin.username);
+
+      cy.step("Admin can see the edit button on another user's research");
+      cy.get('[data-cy=edit]').should('be.visible');
+
+      cy.step('Admin can access the edit page');
+      cy.get('[data-cy=edit]').click();
+      cy.url().should('include', `/research/${slug}/edit`);
+
+      cy.step('Admin can edit the research description');
+      cy.get('[data-cy=intro-description]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-cy=intro-description]').clear().type(adminEdit).blur();
+
+      cy.get('[data-cy=errors-container]').should('not.exist');
+      cy.get('[data-cy=submit]').click();
+
+      cy.step('Admin edit is saved and visible');
+      cy.wait(1000);
+      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.url().should('include', `/research/${slug}`);
+      cy.contains(adminEdit);
+    });
+
     it('[Edit published update - Replace images and files]', () => {
       const randomId = generateAlphaNumeric(8).toLowerCase();
       const researchTitle = `${randomId} Research with update`;
@@ -460,9 +508,5 @@ describe('[Research]', () => {
       cy.contains(updatedDescription);
       cy.get('[data-cy=downloadButton]').should('be.visible');
     });
-
-    // it('[By Admin]', () => {
-    // Should check an admin can edit other's content
-    // })
   });
 });

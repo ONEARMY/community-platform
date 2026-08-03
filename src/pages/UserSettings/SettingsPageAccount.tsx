@@ -111,7 +111,7 @@ export const SettingsPageAccount = observer(() => {
 
       <ChangePasswordForm />
       <ChangeEmailForm />
-      <DeleteAccountForm />
+      <DeleteAccountForm hasSubscription={hasSubscription} />
     </Flex>
   );
 });

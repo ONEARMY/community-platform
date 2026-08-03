@@ -3,6 +3,7 @@ import { type ActionFunctionArgs, data } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { StripeServiceServer } from 'src/services/stripeService.server';
 import { unauthorizedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -50,17 +51,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const hasOtherTenantProfiles = (allProfiles?.length ?? 0) > 1;
 
+    // Cancel this tenant's subscription — the only Stripe account this deployment has keys for.
+    const stripeService = new StripeServiceServer(client);
+    const customerId = await stripeService.getCustomerByAuthId(authId);
+    if (customerId) {
+      await StripeServiceServer.cancelActiveSubscriptions(customerId);
+    }
+
     if (hasOtherTenantProfiles) {
-      // User has profiles on other tenants, only delete current tenant profile
-      // Using regular client (not admin) restricts the operation to current tenant
+      // Other tenant profiles exist, so only remove this tenant's data.
       const { error } = await client.from('profiles').delete().eq('id', profile.id);
 
       if (error) {
         throw error;
       }
+
+      await client.from('stripe_customers').delete().eq('auth_id', authId);
     } else {
-      // User only has profile on this tenant, delete the auth user
-      // This will cascade delete the profile
+      // Last profile: delete the auth user, which cascades the stripe_customers rows.
       const { error } = await adminClient.auth.admin.deleteUser(authId);
 
       if (error) {

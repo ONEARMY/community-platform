@@ -1,5 +1,5 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBMedia, DBProfile, ProfileDTO } from 'oa-shared';
+import type { DBAuthorVotes, DBMedia, DBProfile, Moderation, ProfileDTO } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 
 type CreateOrganisationProfileArgs = {
@@ -263,6 +263,41 @@ export class ProfileServiceServer {
     }
 
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
+  }
+
+  // TODO: needs admin page created
+  async getProfilesAwaitingModeration() {
+    const { data, error } = await this.client
+      .from('profiles')
+      .select('id, username, display_name, moderation, moderation_feedback, created_at')
+      .not('moderation', 'is', null)
+      .neq('moderation', 'accepted')
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return data ?? [];
+  }
+
+  // TODO: needs admin page created
+  async updateModeration(
+    id: number,
+    moderation: Moderation,
+    feedback: string | null,
+  ): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ moderation, moderation_feedback: feedback })
+      .eq('id', id)
+      .select('id');
+
+    if (error) {
+      throw error;
+    }
+
+    return (data?.length ?? 0) > 0;
   }
 
   async createOrganisationProfile(values: CreateOrganisationProfileArgs) {

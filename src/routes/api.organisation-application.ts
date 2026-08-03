@@ -7,6 +7,7 @@ import {
   ORGANISATION_DESCRIPTION_MAX_LENGTH,
 } from 'src/pages/SignUp/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { sendModerationEmail } from 'src/services/moderationEmailService.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
@@ -88,6 +89,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     await applicationsService.deleteByAuthId(authId);
+
+    await sendModerationEmail({
+      authId,
+      client,
+      feedback: null,
+      moderation: 'awaiting-moderation',
+      requestOrigin: new URL(request.url).origin,
+      username: submissionData.username,
+    });
 
     profileService.updateUserActivity(authId);
 

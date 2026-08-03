@@ -150,6 +150,8 @@ export const focusSection = {
 type OrganisationModerationMessage = {
   title: string;
   body: string;
+  bodyWithoutFeedback?: string;
+  feedbackHeading?: string;
   contactPrefix: string;
   afterContact?: string;
   background: 'softblue' | 'softorange';
@@ -167,7 +169,10 @@ export const organisationModeration: Record<
   },
   'improvements-needed': {
     title: 'Your application as an organisation needs changes.',
-    body: 'Check your email for further information from the moderator to see what is missing. Change the information below accordingly, save your profile and send the application again.',
+    body: 'Change the information below accordingly, save your profile and send the application again.',
+    bodyWithoutFeedback:
+      'Check your email for further information from the moderator to see what is missing. Change the information below accordingly, save your profile and send the application again.',
+    feedbackHeading: 'Moderator feedback',
     contactPrefix: 'If you did not receive a message from a moderator, contact us at',
     afterContact: 'Until approved, your profile is not visible to others.',
     background: 'softorange',

@@ -17,6 +17,10 @@ export const OrganisationModerationSection = observer(() => {
   const message = organisationModeration[moderation];
   const contactEmail = tenantContext?.emailFrom;
 
+  const feedback = profile?.moderationFeedback?.trim();
+  const showFeedback = moderation === 'improvements-needed' && !!feedback;
+  const body = showFeedback ? message.body : (message.bodyWithoutFeedback ?? message.body);
+
   return (
     <Flex
       data-cy="organisation-moderation-details"
@@ -33,8 +37,25 @@ export const OrganisationModerationSection = observer(() => {
       }}
     >
       <Text sx={{ fontFamily: 'title', fontSize: 5 }}>{message.title}</Text>
+
+      {showFeedback && (
+        <Flex
+          data-cy="organisation-moderation-feedback"
+          sx={{
+            flexDirection: 'column',
+            gap: 1,
+            padding: 3,
+            borderRadius: 2,
+            backgroundColor: 'white',
+          }}
+        >
+          <Text sx={{ fontFamily: 'title', fontSize: 2 }}>{message.feedbackHeading}</Text>
+          <Text sx={{ fontSize: 3, lineHeight: 1.4, whiteSpace: 'pre-wrap' }}>{feedback}</Text>
+        </Flex>
+      )}
+
       <Text sx={{ fontSize: 3, lineHeight: 1.4 }}>
-        {message.body}
+        {body}
         {contactEmail && (
           <>
             {' '}

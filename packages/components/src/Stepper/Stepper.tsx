@@ -32,6 +32,7 @@ export const Stepper = ({ steps, activeStep }: IProps) => {
                 fontSize: 3,
                 lineHeight: 1,
                 color: isReached ? 'black' : 'grey',
+                fontWeight: isActive ? 'bold' : 'normal',
               }}
             >
               {step}

@@ -44,9 +44,10 @@ describe('[Questions]', () => {
 
     it('Resets pagination when searching', () => {
       cy.visit('/questions?page=2');
+      cy.url().should('include', 'sort=Newest');
 
       cy.step('Search while viewing a later page');
-      cy.get('[data-cy=questions-search-box]').clear().type('deal');
+      cy.get('[data-cy=questions-search-box]').should('be.enabled').clear().type('deal');
 
       cy.step('Verify the search resets pagination');
       cy.url().should('include', 'q=deal');
@@ -54,6 +55,7 @@ describe('[Questions]', () => {
       cy.get('[data-cy=question-list-item]').should('have.length', 1);
 
       cy.visit('/questions?page=2');
+      cy.url().should('include', 'sort=Newest');
 
       cy.step('Filter while viewing a later page');
       cy.get('[data-cy=CategoryHorizonalList]').within(() => {

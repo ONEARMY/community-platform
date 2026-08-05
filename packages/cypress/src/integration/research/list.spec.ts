@@ -52,6 +52,7 @@ describe('[Research - List Articles]', () => {
 
   it('[Pagination - Resets when filtering or searching]', () => {
     cy.visit(`${researchPageUrl}?page=2`);
+    cy.url().should('include', 'sort=LatestUpdated');
 
     cy.step('Select a category while viewing a later page');
     cy.get('[data-cy=CategoryHorizonalList]').within(() => {
@@ -64,9 +65,10 @@ describe('[Research - List Articles]', () => {
     cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', 0);
 
     cy.visit(`${researchPageUrl}?page=2`);
+    cy.url().should('include', 'sort=LatestUpdated');
 
     cy.step('Search while viewing a later page');
-    cy.get('[data-cy=research-search-box]').clear().type('test');
+    cy.get('[data-cy=research-search-box]').should('be.enabled').clear().type('test');
 
     cy.step('Verify the search resets pagination');
     cy.url().should('include', 'q=test');

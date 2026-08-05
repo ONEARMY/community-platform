@@ -55,9 +55,10 @@ describe('[Library]', () => {
 
     it('[Pagination resets after search]', () => {
       cy.visit('/library?page=2');
+      cy.url().should('include', 'sort=MostUsefulLastWeek');
 
       cy.step('Search while viewing a later page');
-      cy.get('[data-cy=library-search-box]').click().type('brick');
+      cy.get('[data-cy=library-search-box]').should('be.enabled').click().type('brick');
 
       cy.step('Verify the search resets pagination');
       cy.url().should('include', 'q=brick');
@@ -65,6 +66,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=card]').should('have.length', 1);
 
       cy.visit('/library?page=2');
+      cy.url().should('include', 'sort=MostUsefulLastWeek');
 
       cy.step('Filter while viewing a later page');
       cy.get('[data-cy=CategoryHorizonalList]').within(() => {

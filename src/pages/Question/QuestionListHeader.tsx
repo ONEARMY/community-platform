@@ -82,6 +82,7 @@ export const QuestionListHeader = (props: IProps) => {
   const updateFilter = useCallback(
     (key: QuestionSearchParams, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
+      params.delete('page');
       if (value) {
         params.set(key, value);
       } else {
@@ -101,6 +102,7 @@ export const QuestionListHeader = (props: IProps) => {
 
   const searchValue = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete('page');
     params.set('q', value);
 
     if (value.length > 0 && sort !== 'MostRelevant') {

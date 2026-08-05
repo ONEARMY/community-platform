@@ -52,6 +52,30 @@ describe('[Library]', () => {
       cy.get('[data-cy=category]').contains('Machines');
       cy.get('[data-cy=category]').contains('Moulds').should('not.exist');
     });
+
+    it('[Pagination resets after search]', () => {
+      cy.visit('/library?page=2');
+
+      cy.step('Search while viewing a later page');
+      cy.get('[data-cy=library-search-box]').click().type('brick');
+
+      cy.step('Verify the search resets pagination');
+      cy.url().should('include', 'q=brick');
+      cy.url().should('not.include', 'page=');
+      cy.get('[data-cy=card]').should('have.length', 1);
+
+      cy.visit('/library?page=2');
+
+      cy.step('Filter while viewing a later page');
+      cy.get('[data-cy=CategoryHorizonalList]').within(() => {
+        cy.contains('Machines').click();
+      });
+
+      cy.step('Verify the category filter resets pagination');
+      cy.url().should('include', 'category=');
+      cy.url().should('not.include', 'page=');
+      cy.get('[data-cy=CategoryHorizonalList-Item-active]').should('be.visible');
+    });
   });
 
   describe('[Read a project]', () => {

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { describe, expect, it } from 'vitest';
 
 import { render } from '../test/utils';
-import { COMMENTS, CommentsTitle, NO_COMMENTS, ONE_COMMENT } from './CommentsTitle';
+import { COMMENTS, CommentsTitle, NO_COMMENTS } from './CommentsTitle';
 
 import type { Comment } from 'oa-shared';
 
@@ -14,17 +14,17 @@ describe('CommentsTitle', () => {
     expect(getByText(NO_COMMENTS)).toBeInTheDocument();
   });
 
-  it('renders correctly when there is one comment', () => {
-    const comment = {} as Comment;
-    const { getByText } = render(<CommentsTitle comments={[comment]} />);
-
-    expect(getByText(ONE_COMMENT)).toBeInTheDocument();
-  });
-
-  it('renders correctly when there are multiple comments', () => {
+  it('renders correctly when there are comments', () => {
     const comment = {} as Comment;
     const { getByText } = render(<CommentsTitle comments={[comment, comment, comment]} />);
 
     expect(getByText(`3 ${COMMENTS}`)).toBeInTheDocument();
+  });
+
+  it('renders with a custom noun', () => {
+    const comment = {} as Comment;
+    const { getByText } = render(<CommentsTitle comments={[comment]} noun="Answers" />);
+
+    expect(getByText('1 Answers')).toBeInTheDocument();
   });
 });

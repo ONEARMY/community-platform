@@ -18,13 +18,14 @@ interface IProps {
   isLoading?: boolean;
   isReply?: boolean;
   placeholder?: string;
+  buttonLabel?: string;
   sx?: ThemeUIStyleObject | undefined;
 }
 
 export const CreateCommentSupabase = observer((props: IProps) => {
   const { onSubmit, isLoading, isReply, sx } = props;
-  const placeholder = props.placeholder || 'Leave your questions or feedback...';
-  const buttonLabel = isReply ? 'Leave a reply' : 'Leave a comment';
+  const placeholder = (!isReply && props.placeholder) || 'Leave your questions or feedback...';
+  const buttonLabel = isReply ? 'Leave a reply' : props.buttonLabel || 'Leave a comment';
 
   const [comment, setComment] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);

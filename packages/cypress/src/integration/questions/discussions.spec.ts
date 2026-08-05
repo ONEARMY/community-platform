@@ -129,7 +129,7 @@ describe('[Questions.Discussions]', () => {
     cy.wait(1000);
     cy.get('[data-cy=CommentItem]').contains(updatedNewComment).should('be.visible');
     cy.addReply(newReply);
-    cy.contains('Comments');
+    cy.contains('Answers');
 
     cy.step('Can edit their reply');
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply);

@@ -15,18 +15,25 @@ import { CommentSort } from './CommentSort';
 import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 
+export interface CommentSectionLabels {
+  title?: string;
+  createButtonLabel?: string;
+  createPlaceholder?: string;
+}
+
 interface IProps {
-  authors: Array<number>;
+  authors: number[];
   sourceId: number;
   sourceType: DiscussionContentType;
   setSubscribersCount?: Dispatch<SetStateAction<number>>;
   pinnedCommentId?: number;
   defaultSortBy?: CommentSortOption;
+  labels?: CommentSectionLabels;
 }
 const commentPageSize = 10;
 
 export const CommentSectionSupabase = observer((props: IProps) => {
-  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy } = props;
+  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
@@ -275,7 +282,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
               flex: '1 1 auto',
             }}
           >
-            <CommentsTitle comments={comments} />
+            <CommentsTitle comments={comments} noun={labels?.title} />
 
             <FollowButton
               isFollowing={isSubscribed}
@@ -316,7 +323,12 @@ export const CommentSectionSupabase = observer((props: IProps) => {
           </Flex>
         )}
 
-        <CreateCommentSupabase onSubmit={postComment} sourceType={sourceType} />
+        <CreateCommentSupabase
+          onSubmit={postComment}
+          sourceType={sourceType}
+          buttonLabel={labels?.createButtonLabel}
+          placeholder={labels?.createPlaceholder}
+        />
       </Flex>
     </AuthorsContext.Provider>
   );

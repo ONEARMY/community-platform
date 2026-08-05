@@ -14,6 +14,8 @@ const ANSWER_LABELS: CommentSectionLabels = {
   title: 'Answers',
   createButtonLabel: 'Add your answer',
   createPlaceholder: 'Leave your answer',
+  logInPrompt: 'Log in to leave your answer',
+  incompleteProfilePrompt: 'Complete your profile to leave your answer',
 };
 
 interface IProps {

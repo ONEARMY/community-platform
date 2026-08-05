@@ -19,6 +19,8 @@ export interface CommentSectionLabels {
   title?: string;
   createButtonLabel?: string;
   createPlaceholder?: string;
+  logInPrompt?: string;
+  incompleteProfilePrompt?: string;
 }
 
 interface IProps {
@@ -328,6 +330,8 @@ export const CommentSectionSupabase = observer((props: IProps) => {
           sourceType={sourceType}
           buttonLabel={labels?.createButtonLabel}
           placeholder={labels?.createPlaceholder}
+          logInPrompt={labels?.logInPrompt}
+          incompleteProfilePrompt={labels?.incompleteProfilePrompt}
         />
       </Flex>
     </AuthorsContext.Provider>

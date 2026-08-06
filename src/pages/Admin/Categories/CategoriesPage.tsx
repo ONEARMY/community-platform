@@ -1,4 +1,4 @@
-import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { ImageOffIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import type { Category, ContentType } from 'oa-shared';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,27 @@ const CATEGORY_TYPE_LABELS: Record<ContentType, string> = {
   research: 'Research',
   news: 'News',
 };
+
+function CategoryThumbnail({ imageUrl, name }: { imageUrl: string | null; name: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!imageUrl || failed) {
+    return (
+      <div className="flex size-10 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
+        <ImageOffIcon className="size-4" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={imageUrl}
+      alt={name}
+      className="size-10 rounded-md border border-border object-cover"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 interface IProps {
   categories: Category[];
@@ -41,6 +62,7 @@ export function CategoriesPage({ categories }: IProps) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-0">Image</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Description</TableHead>
@@ -50,6 +72,9 @@ export function CategoriesPage({ categories }: IProps) {
         <TableBody>
           {categories.map((category) => (
             <TableRow key={category.id}>
+              <TableCell>
+                <CategoryThumbnail imageUrl={category.imageUrl} name={category.name} />
+              </TableCell>
               <TableCell>{category.name}</TableCell>
               <TableCell>{CATEGORY_TYPE_LABELS[category.type]}</TableCell>
               <TableCell className="max-w-xs truncate text-muted-foreground">

@@ -53,6 +53,8 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 Our main technologies are [React Router 7](./docs/react-router-7.md) and [Supabase](./docs/supabase.md)
 We try to document some important [Technical Decisions](./docs/technical-decisions.md).
 
+UI components are being gradually migrated from `packages/components` (theme-ui) to a new [shadcn/Base UI + Tailwind CSS v4 library](./src/components/ui/README.md) — see that README for which library to use for new work.
+
 ## 🏠 Project Structure
 
 - **`src`**
@@ -61,7 +63,8 @@ We try to document some important [Technical Decisions](./docs/technical-decisio
   - **`services`** : client-side services to interact with our api and server-side services to interact with supabase or other external service.
   - **`assets`** : contains assets such as icons/images.
   - **`utils`** : contains utility functions.
-- **`packages/components/`**: - general stateless components that compose the app.
+  - **`components/ui`** : new component library (shadcn / Base UI, Tailwind CSS v4), gradually replacing `packages/components` — see [its README](./src/components/ui/README.md) before adding or migrating components.
+- **`packages/components/`**: - general stateless components that compose the app. Legacy theme-ui based library, being migrated to `src/components/ui` opportunistically.
 - **`packages/themes/`**: - theme definitions for presentation inherited by components
 - **`packages/cypress/`** : contains the test automation of End-to-end tests.
 - **`shared`** : contains mainly type definitions
@@ -144,4 +147,7 @@ We always welcome UX/UI design contributions in various shapes and forms. Whethe
 
 The best way to start would be to look at [open design issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Task%3A%20Design%22) here in our GitHub Repository to see if anything sparks your interest. Another way is to get in touch with us [through Discord](https://discord.gg/p4hWHYeG), the introduce-yourself channel is a good place for that. :) Then we can chat about what would be interesting for you to help out with, as well as what we are currently working on.
 
-In the meantime you can check out our [UI Component library in Storybook](https://storybook.onearmy.earth).
+In the meantime you can check out our UI component libraries in Storybook. There are currently two, side by side during the migration described in [src/components/ui/README.md](./src/components/ui/README.md):
+
+- Legacy `oa-components` (theme-ui): [storybook.onearmy.earth](https://storybook.onearmy.earth), or run `bun run storybook` locally.
+- New shadcn/Base UI library: run `bun run storybook:ui` locally (port 6008).

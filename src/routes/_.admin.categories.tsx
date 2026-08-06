@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data } = await client
     .from('categories')
     .select('id,name,created_at,type,image_url,description')
-    .order('name');
+    .order('type');
 
   const categories = (data || []).map((category) => Category.fromDB(category as DBCategory));
 

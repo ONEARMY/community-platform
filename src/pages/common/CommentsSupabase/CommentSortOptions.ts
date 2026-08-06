@@ -32,9 +32,9 @@ const Options = new Map<CommentSortOption, SortConfig>([
       label: 'Most Useful',
       sortFn: (a, b) => {
         const voteCountDiff = (b.voteCount || 0) - (a.voteCount || 0);
-        // If vote counts are tied, sort by newest first
+        // If vote counts are tied, sort by oldest first
         if (voteCountDiff === 0) {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         }
         return voteCountDiff;
       },

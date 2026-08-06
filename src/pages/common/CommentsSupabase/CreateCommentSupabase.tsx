@@ -18,13 +18,19 @@ interface IProps {
   isLoading?: boolean;
   isReply?: boolean;
   placeholder?: string;
+  buttonLabel?: string;
+  logInPrompt?: string;
+  incompleteProfilePrompt?: string;
   sx?: ThemeUIStyleObject | undefined;
 }
 
 export const CreateCommentSupabase = observer((props: IProps) => {
   const { onSubmit, isLoading, isReply, sx } = props;
-  const placeholder = props.placeholder || 'Leave your questions or feedback...';
-  const buttonLabel = isReply ? 'Leave a reply' : 'Leave a comment';
+  const placeholder = (!isReply && props.placeholder) || 'Leave your questions or feedback...';
+  const buttonLabel = isReply ? 'Leave a reply' : props.buttonLabel || 'Leave a comment';
+  const logInPrompt = (!isReply && props.logInPrompt) || 'Log in to leave a comment';
+  const incompleteProfilePrompt =
+    (!isReply && props.incompleteProfilePrompt) || 'Complete your profile to leave a comment';
 
   const [comment, setComment] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -91,7 +97,9 @@ export const CreateCommentSupabase = observer((props: IProps) => {
             }}
           >
             <UserAction
-              incompleteProfile={<IncompleteProfilePrompt isReply={isReply} />}
+              incompleteProfile={
+                <IncompleteProfilePrompt isReply={isReply} label={incompleteProfilePrompt} />
+              }
               loggedIn={
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Box className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}>
@@ -120,7 +128,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
                   </Text>
                 </Flex>
               }
-              loggedOut={<LoginPrompt isReply={isReply} />}
+              loggedOut={<LoginPrompt isReply={isReply} label={logInPrompt} />}
             />
           </Box>
 
@@ -160,7 +168,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
   );
 });
 
-const LoginPrompt = ({ isReply }: { isReply?: boolean }) => {
+const LoginPrompt = ({ isReply, label }: { isReply?: boolean; label: string }) => {
   return (
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-login-prompt">
@@ -172,14 +180,14 @@ const LoginPrompt = ({ isReply }: { isReply?: boolean }) => {
             color: 'inherit',
           }}
         >
-          {isReply ? 'But first you need to login' : 'Log in to leave a comment'}
+          {isReply ? 'But first you need to login' : label}
         </ReturnPathLink>
       </Text>
     </Box>
   );
 };
 
-const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
+const IncompleteProfilePrompt = ({ isReply, label }: { isReply?: boolean; label: string }) => {
   return (
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-incomplete-profile-prompt">
@@ -191,7 +199,7 @@ const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
             color: 'inherit',
           }}
         >
-          {isReply ? 'complete your profile' : 'Complete your profile to leave a comment'}
+          {isReply ? 'complete your profile' : label}
         </Link>
       </Text>
     </Box>

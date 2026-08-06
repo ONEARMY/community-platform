@@ -23,8 +23,22 @@ describe('CommentsTitle', () => {
 
   it('renders with a custom noun', () => {
     const comment = {} as Comment;
+    const { getByText } = render(<CommentsTitle comments={[comment, comment]} noun="Answers" />);
+
+    expect(getByText('2 Answers')).toBeInTheDocument();
+  });
+
+  it('singularizes the noun when there is exactly one comment', () => {
+    const comment = {} as Comment;
     const { getByText } = render(<CommentsTitle comments={[comment]} noun="Answers" />);
 
-    expect(getByText('1 Answers')).toBeInTheDocument();
+    expect(getByText('1 Answer')).toBeInTheDocument();
+  });
+
+  it('singularizes the default noun when there is exactly one comment', () => {
+    const comment = {} as Comment;
+    const { getByText } = render(<CommentsTitle comments={[comment]} />);
+
+    expect(getByText(`1 ${COMMENTS.slice(0, -1)}`)).toBeInTheDocument();
   });
 });

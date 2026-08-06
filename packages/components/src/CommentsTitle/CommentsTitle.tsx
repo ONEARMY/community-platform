@@ -20,7 +20,9 @@ export const CommentsTitle = ({ comments, noun = COMMENTS }: IProps) => {
       return NO_COMMENTS;
     }
 
-    return `${commentCount} ${noun}`;
+    const label = commentCount === 1 && noun.endsWith('s') ? noun.slice(0, -1) : noun;
+
+    return `${commentCount} ${label}`;
   }, [comments, noun]);
 
   return (

@@ -2,11 +2,12 @@ import { Button, ExternalLink, FieldInput, HeroBanner, TextNotification } from '
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
+import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
@@ -21,8 +22,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect('/', { headers });
   }
   const tenantSettings = await new TenantSettingsService(client).get();
+  const profileTypes = await new ProfileTypesServiceServer(client).get();
 
-  return data(tenantSettings, { headers });
+  const showOrganisationSignup =
+    !!tenantSettings.organisationSignupDescriptionHtml && profileTypes.some((type) => type.isSpace);
+
+  return data({ ...tenantSettings, showOrganisationSignup }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -60,7 +65,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
-    const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
+    const response = await authServiceServer.createUserProfile({
+      user: signupResult.data.user,
+    });
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
@@ -74,6 +81,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
+  const loaderData = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -140,6 +148,19 @@ export default function Index() {
                             Already have an account? Sign-in here
                           </Link>
                         </Text>
+                        {loaderData?.showOrganisationSignup && (
+                          <Text color="grey" sx={{ fontSize: 1 }}>
+                            <Link
+                              to="/sign-up/organisation"
+                              data-cy="sign-up-organisation"
+                              style={{
+                                textDecoration: 'underline',
+                              }}
+                            >
+                              Are you an organisation? Create an organisation account
+                            </Link>
+                          </Text>
+                        )}
                       </Flex>
 
                       {actionResponse?.error && pristine && (

@@ -1,7 +1,8 @@
-import { HeroBanner, Icon } from 'oa-components';
+import { HeroBanner, Icon, Stepper } from 'oa-components';
+import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 
-const SignUpMessagePage = ({ email }) => {
+const SignUpMessagePage = ({ email, isOrganisation = false }) => {
   return (
     <Flex
       sx={{
@@ -50,6 +51,7 @@ const SignUpMessagePage = ({ email }) => {
                 flexDirection: 'column',
               }}
             >
+              {isOrganisation && <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={1} />}
               <Flex
                 sx={{
                   gap: 1,

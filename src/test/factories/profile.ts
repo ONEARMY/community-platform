@@ -38,5 +38,7 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   total_views: 0,
   profile_type: faker.number.int(),
   donations_enabled: false,
+  moderation: null,
+  moderation_feedback: null,
   ...dbProfileOverloads,
 });

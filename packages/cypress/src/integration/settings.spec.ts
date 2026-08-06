@@ -71,7 +71,8 @@ describe('[Settings]', () => {
     cy.get('[data-cy="tab-Profile"]').click();
     cy.get(`[data-cy=MemberBadge-${profileType}]`);
 
-    cy.setSettingFocus(profileType);
+    cy.step('Profile type cannot be changed from settings');
+    cy.get('[data-cy=workspace]').should('not.exist');
 
     cy.step("Can't save without required fields being populated");
     cy.get('[data-cy=save]').click();
@@ -154,29 +155,28 @@ describe('[Settings]', () => {
     const website = 'https://wikipedia.com';
 
     const user = generateNewUserDetails();
-    cy.signUpNewUser(user);
 
-    cy.step('Go to User Settings');
-    cy.visit('/settings');
-    cy.setSettingFocus(profileType);
-
-    cy.step("Can't save without required fields being populated");
-    cy.get('[data-cy=save]').click();
-    cy.contains('This field is required.').should('be.visible');
-
-    cy.step('Populate profile');
-    cy.get('[data-cy=username]').clear().type(user.username);
-    cy.setSettingBasicUserInfo({
+    cy.step('Sign up as an organisation and submit the application');
+    cy.signUpNewOrganisation(user);
+    cy.fillOrganisationApplicationForm({
+      profileType,
+      username: user.username,
       displayName,
       description,
       website,
+      image: coverImage,
     });
-    cy.selectTag(tag, '[data-cy=profile-tag-select]');
+    cy.get('[data-cy=submit]').click();
+    cy.url().should('include', `/u/${user.username}`);
 
-    cy.step('Can add avatar and cover image');
+    cy.step('Profile type cannot be changed from settings');
+    cy.visit('/settings');
+    cy.get('[data-cy=workspace]').should('not.exist');
+    cy.get('[data-cy=member]').should('not.exist');
+
+    cy.step('Can update the profile from settings');
     cy.setSettingImage(userImage, 'userImage');
-    cy.setSettingImage(coverImage, 'coverImages-0');
-
+    cy.selectTag(tag, '[data-cy=profile-tag-select]');
     cy.saveSettingsForm();
 
     cy.step('Updated settings display on profile');
@@ -235,27 +235,25 @@ describe('[Precious Plastic]', () => {
       { name: 'machines', value: 2, visible: false },
     ];
     const user = generateNewUserDetails();
-    cy.signUpNewUser(user);
+
+    cy.step('Sign up as an organisation and submit the application');
+    cy.signUpNewOrganisation(user);
+    cy.fillOrganisationApplicationForm({
+      profileType,
+      username: user.username,
+      displayName,
+      description,
+      image: coverImage,
+    });
+    cy.get('[data-cy=submit]').click();
+    cy.url().should('include', `/u/${user.username}`);
 
     cy.step('Go to User Settings');
     cy.visit('/settings');
-    cy.setSettingFocus(profileType);
-
-    cy.step("Can't save without required fields being populated");
-    cy.get('[data-cy=save]').click();
-    cy.contains('This field is required.').should('be.visible');
-
-    cy.step('Populate profile');
-    cy.get('[data-cy=username]').clear().type(user.username);
-    cy.setSettingBasicUserInfo({
-      displayName,
-      description,
-    });
     cy.selectTag(tag, '[data-cy=profile-tag-select]');
 
-    cy.step('Can add avatar and cover image');
+    cy.step('Can add avatar');
     cy.setSettingImage(userImage, 'userImage');
-    cy.setSettingImage(coverImage, 'coverImages-0');
 
     cy.step('Can add contact link and visitor details');
     cy.setSettingVisitorPolicy(visitorType, visitorDetails);

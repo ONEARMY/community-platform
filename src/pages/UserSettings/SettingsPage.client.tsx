@@ -7,6 +7,7 @@ import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
+import { OrganisationModerationSection } from './content/sections/OrganisationModeration.section';
 import { SettingsFormTab } from './SettingsFormTab';
 import { SettingsFormTabList } from './SettingsFormTabList';
 import { SettingsPageAccount } from './SettingsPageAccount';
@@ -52,6 +53,7 @@ export const SettingsPage = observer(() => {
             )}
           </Flex>
         ),
+        preBody: OrganisationModerationSection,
         body: SettingsPageUserProfile,
         glyph: 'profile' as availableGlyphs,
       },
@@ -102,6 +104,7 @@ export const SettingsPage = observer(() => {
         width: '100%',
         alignSelf: 'center',
         paddingTop: [3, 5, 10],
+        paddingX: [2, 0, 0],
       }}
     >
       <Tabs value={pathname}>

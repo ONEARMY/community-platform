@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { Banner, InternalLink } from 'oa-components';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Flex } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 
 export const AlertOrganisationModeration = observer(() => {
   const { profile } = useProfileStore();
@@ -15,16 +15,18 @@ export const AlertOrganisationModeration = observer(() => {
 
   return (
     <Flex data-cy="organisation-moderation-banner">
-      <Banner sx={{ backgroundColor: 'softblue', color: 'black', gap: 1 }}>
-        Your organisation application is being reviewed. Until approved, your profile is not visible
-        to others.{' '}
-        <InternalLink
-          data-cy="organisation-moderation-see-details"
-          to="/settings/profile"
-          sx={{ color: 'inherit', textDecoration: 'underline' }}
-        >
-          See details.
-        </InternalLink>
+      <Banner sx={{ backgroundColor: 'softblue', color: 'black' }}>
+        <Text sx={{ textAlign: 'center' }}>
+          Your organisation application is being reviewed. Until approved, your profile is not
+          visible to others.{' '}
+          <InternalLink
+            data-cy="organisation-moderation-see-details"
+            to="/settings/profile"
+            sx={{ color: 'inherit', textDecoration: 'underline' }}
+          >
+            See details.
+          </InternalLink>
+        </Text>
       </Banner>
     </Flex>
   );

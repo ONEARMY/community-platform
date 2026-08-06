@@ -104,6 +104,7 @@ export const SettingsPage = observer(() => {
         width: '100%',
         alignSelf: 'center',
         paddingTop: [3, 5, 10],
+        paddingX: [2, 0, 0],
       }}
     >
       <Tabs value={pathname}>

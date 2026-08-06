@@ -160,7 +160,7 @@ export default function Index() {
                     width: '100%',
                     maxWidth: '548px',
                     mx: 'auto',
-                    gap: 3,
+                    gap: 4,
                   }}
                 >
                   <Flex

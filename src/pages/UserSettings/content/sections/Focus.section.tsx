@@ -75,6 +75,7 @@ export const FocusSection = observer(() => {
         data-cy="focus-current"
         sx={{
           alignItems: 'center',
+          flexWrap: 'wrap',
           gap: 4,
           paddingX: 4,
           paddingY: 6,
@@ -83,7 +84,7 @@ export const FocusSection = observer(() => {
         }}
       >
         <MemberBadge size={90} profileType={currentType} />
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, minWidth: '200px' }}>
           <Text sx={{ display: 'block', fontFamily: 'title', fontSize: 1 }}>
             {focusSection.currentLabel}
           </Text>

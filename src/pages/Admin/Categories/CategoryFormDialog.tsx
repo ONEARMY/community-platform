@@ -1,7 +1,9 @@
+import { ImageOffIcon } from 'lucide-react';
 import type { Category, ContentType } from 'oa-shared';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useRevalidator } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';
+import { ImagePickerDialog } from 'src/pages/common/ImagePicker/ImagePickerDialog';
 import { categoryService } from 'src/services/categoryService';
 import { Button } from '@/components/ui/button';
 import {
@@ -40,6 +42,7 @@ const emptyForm = { name: '', type: null as ContentType | null, description: '',
 export function CategoryFormDialog({ open, category, onOpenChange }: IProps) {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const revalidator = useRevalidator();
   const toast = useToast();
 
@@ -94,69 +97,101 @@ export function CategoryFormDialog({ open, category, onOpenChange }: IProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <DialogHeader>
-            <DialogTitle>{isEditing ? 'Edit category' : 'New category'}</DialogTitle>
-          </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <DialogHeader>
+              <DialogTitle>{isEditing ? 'Edit category' : 'New category'}</DialogTitle>
+            </DialogHeader>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="category-name">Name</Label>
-            <Input
-              id="category-name"
-              value={form.name}
-              onChange={(event) => setForm((f) => ({ ...f, name: event.target.value }))}
-              required
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="category-name">Name</Label>
+              <Input
+                id="category-name"
+                value={form.name}
+                onChange={(event) => setForm((f) => ({ ...f, name: event.target.value }))}
+                required
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="category-type">Type</Label>
-            <Select
-              items={CATEGORY_TYPE_OPTIONS}
-              value={form.type}
-              onValueChange={(value) => setForm((f) => ({ ...f, type: value as ContentType }))}
-            >
-              <SelectTrigger id="category-type" className="w-full">
-                <SelectValue placeholder="Select a type" />
-              </SelectTrigger>
-              <SelectContent>
-                {CATEGORY_TYPE_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="category-type">Type</Label>
+              <Select
+                items={CATEGORY_TYPE_OPTIONS}
+                value={form.type}
+                onValueChange={(value) => setForm((f) => ({ ...f, type: value as ContentType }))}
+              >
+                <SelectTrigger id="category-type" className="w-full">
+                  <SelectValue placeholder="Select a type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CATEGORY_TYPE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="category-description">Description</Label>
-            <Textarea
-              id="category-description"
-              value={form.description}
-              onChange={(event) => setForm((f) => ({ ...f, description: event.target.value }))}
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="category-description">Description</Label>
+              <Textarea
+                id="category-description"
+                value={form.description}
+                onChange={(event) => setForm((f) => ({ ...f, description: event.target.value }))}
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="category-image-url">Image URL</Label>
-            <Input
-              id="category-image-url"
-              type="url"
-              value={form.imageUrl}
-              onChange={(event) => setForm((f) => ({ ...f, imageUrl: event.target.value }))}
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label>Image</Label>
+              <div className="flex items-center gap-3">
+                {form.imageUrl ? (
+                  <img src={form.imageUrl} alt="" className="size-16 rounded-md object-contain" />
+                ) : (
+                  <div className="flex size-16 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    <ImageOffIcon className="size-5" />
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPickerOpen(true)}
+                  >
+                    Choose image
+                  </Button>
+                  {form.imageUrl && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setForm((f) => ({ ...f, imageUrl: '' }))}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
 
-          <DialogFooter>
-            <Button type="submit" disabled={submitting}>
-              {isEditing ? 'Save' : 'Create'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+            <DialogFooter>
+              <Button type="submit" disabled={submitting}>
+                {isEditing ? 'Save' : 'Create'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <ImagePickerDialog
+        open={pickerOpen}
+        path="categories"
+        onOpenChange={setPickerOpen}
+        onSelect={(url) => setForm((f) => ({ ...f, imageUrl: url }))}
+      />
+    </>
   );
 }

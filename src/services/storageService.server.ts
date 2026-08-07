@@ -56,6 +56,28 @@ export class StorageServiceServer {
     return result;
   }
 
+  async listImages(path: string): Promise<Image[]> {
+    const bucket = process.env.TENANT_ID as string;
+
+    const { data, error } = await this.client.storage
+      .from(bucket)
+      .list(path, { sortBy: { column: 'name', order: 'asc' } });
+
+    if (!data || error) {
+      return [];
+    }
+
+    return data
+      .filter((item) => item.id) // skip pseudo-folder placeholder entries
+      .map((item) => {
+        const { data: publicUrlData } = this.client.storage
+          .from(bucket)
+          .getPublicUrl(`${path}/${item.name}`);
+
+        return new Image({ id: `${path}/${item.name}`, publicUrl: publicUrlData.publicUrl });
+      });
+  }
+
   async uploadImage(
     files: File[],
     path: string,

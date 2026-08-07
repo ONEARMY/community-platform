@@ -25,7 +25,7 @@ function CategoryThumbnail({ imageUrl, name }: { imageUrl: string | null; name: 
 
   if (!imageUrl || failed) {
     return (
-      <div className="flex size-10 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
+      <div className="flex size-10 items-center justify-center rounded-md bg-muted text-muted-foreground">
         <ImageOffIcon className="size-4" />
       </div>
     );
@@ -35,7 +35,7 @@ function CategoryThumbnail({ imageUrl, name }: { imageUrl: string | null; name: 
     <img
       src={imageUrl}
       alt={name}
-      className="size-10 rounded-md border border-border object-cover"
+      className="size-10 rounded-md object-contain"
       onError={() => setFailed(true)}
     />
   );

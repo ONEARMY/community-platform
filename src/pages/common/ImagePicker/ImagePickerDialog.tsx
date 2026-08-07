@@ -104,7 +104,7 @@ export function ImagePickerDialog({ open, path, onOpenChange, onSelect }: IProps
                   onOpenChange(false);
                 }}
               >
-                <img src={image.publicUrl} alt="" className="size-full object-cover" />
+                <img src={image.publicUrl} alt="" className="size-full object-contain" />
                 <span className="pointer-events-none absolute inset-0 rounded-md ring-2 ring-inset ring-transparent transition-colors group-hover:bg-black/30 group-hover:ring-primary" />
               </button>
             ))}

@@ -1781,6 +1781,7 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "pwa_icons" "jsonb",
     "hidden_modules" "text",
     "site_name_short" "text",
+    "membership_terms" "text",
     CONSTRAINT "check_pwa_icons_schema" CHECK ((("pwa_icons" IS NULL) OR (("jsonb_typeof"("pwa_icons") = 'object'::"text") AND (("pwa_icons" - ARRAY['16'::"text", '32'::"text", '192'::"text", '256'::"text", '512'::"text"]) = '{}'::"jsonb") AND (("pwa_icons" ->> '16'::"text") IS NOT NULL) AND (("pwa_icons" ->> '32'::"text") IS NOT NULL) AND (("pwa_icons" ->> '192'::"text") IS NOT NULL) AND (("pwa_icons" ->> '256'::"text") IS NOT NULL) AND (("pwa_icons" ->> '512'::"text") IS NOT NULL) AND ("jsonb_typeof"(("pwa_icons" -> '16'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '32'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '192'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '256'::"text")) = 'string'::"text") AND ("jsonb_typeof"(("pwa_icons" -> '512'::"text")) = 'string'::"text"))))
 );
 ALTER TABLE "public"."tenant_settings" OWNER TO "postgres";

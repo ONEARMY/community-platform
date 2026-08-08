@@ -6,7 +6,9 @@ const {
   mockList,
   mockCancel,
   mockCreate,
+  mockCustomersList,
   mockCustomersUpdate,
+  mockCustomersCreate,
   mockInvoicePaymentsList,
   mockGetSecret,
 } = vi.hoisted(() => ({
@@ -14,7 +16,9 @@ const {
   mockList: vi.fn(),
   mockCancel: vi.fn(),
   mockCreate: vi.fn(),
+  mockCustomersList: vi.fn(),
   mockCustomersUpdate: vi.fn(),
+  mockCustomersCreate: vi.fn(),
   mockInvoicePaymentsList: vi.fn(),
   mockGetSecret: vi.fn(),
 }));
@@ -24,7 +28,7 @@ vi.mock('stripe', () => ({
   default: class {
     prices = { list: mockPricesList };
     subscriptions = { list: mockList, cancel: mockCancel, create: mockCreate };
-    customers = { update: mockCustomersUpdate };
+    customers = { list: mockCustomersList, update: mockCustomersUpdate, create: mockCustomersCreate };
     invoicePayments = { list: mockInvoicePaymentsList };
   },
 }));
@@ -190,6 +194,70 @@ describe('cancelActiveSubscriptions', () => {
     expect(mockList).not.toHaveBeenCalled();
     expect(mockCancel).not.toHaveBeenCalled();
     expect(cancelled).toBe(0);
+  });
+});
+
+describe('createCustomer', () => {
+  const makeInsertClient = () => {
+    const insert = vi.fn().mockResolvedValue({ error: null });
+    return {
+      client: { from: vi.fn(() => ({ insert })) } as unknown as SupabaseClient,
+      insert,
+    };
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('reuses an existing Stripe customer with the same email and links it', async () => {
+    mockCustomersList.mockResolvedValueOnce({ data: [{ id: 'cus_existing' }] });
+    mockCustomersUpdate.mockResolvedValueOnce({ id: 'cus_existing' });
+    const { client, insert } = makeInsertClient();
+
+    const StripeServiceServer = await loadService();
+    const id = await new StripeServiceServer(client).createCustomer(
+      'auth_1',
+      'a@b.com',
+      'tenant_1',
+    );
+
+    expect(id).toBe('cus_existing');
+    expect(mockCustomersCreate).not.toHaveBeenCalled();
+    expect(mockCustomersUpdate).toHaveBeenCalledWith('cus_existing', {
+      metadata: { supabase_user_id: 'auth_1', tenant_id: 'tenant_1' },
+    });
+    expect(insert).toHaveBeenCalledWith({
+      auth_id: 'auth_1',
+      stripe_customer_id: 'cus_existing',
+      tenant_id: 'tenant_1',
+    });
+  });
+
+  it('creates a new Stripe customer when none matches the email', async () => {
+    mockCustomersList.mockResolvedValueOnce({ data: [] });
+    mockCustomersCreate.mockResolvedValueOnce({ id: 'cus_new' });
+    const { client, insert } = makeInsertClient();
+
+    const StripeServiceServer = await loadService();
+    const id = await new StripeServiceServer(client).createCustomer(
+      'auth_1',
+      'a@b.com',
+      'tenant_1',
+    );
+
+    expect(id).toBe('cus_new');
+    expect(mockCustomersUpdate).not.toHaveBeenCalled();
+    expect(mockCustomersCreate).toHaveBeenCalledWith({
+      email: 'a@b.com',
+      metadata: { supabase_user_id: 'auth_1', tenant_id: 'tenant_1' },
+    });
+    expect(insert).toHaveBeenCalledWith({
+      auth_id: 'auth_1',
+      stripe_customer_id: 'cus_new',
+      tenant_id: 'tenant_1',
+    });
   });
 });
 

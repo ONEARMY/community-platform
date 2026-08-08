@@ -319,21 +319,23 @@ export class StripeServiceServer {
     if (!stripe) {
       throw new Error('Stripe is not configured');
     }
-    const customer = await stripe.customers.create({
-      email,
-      metadata: {
-        supabase_user_id: authUserId,
-        tenant_id: tenantId,
-      },
-    });
+
+    const metadata = { supabase_user_id: authUserId, tenant_id: tenantId };
+
+    // Reuse an existing Stripe customer for this email (e.g. one created during
+    // an earlier guest checkout) instead of minting a duplicate.
+    const existing = await stripe.customers.list({ email, limit: 1 });
+    const customerId = existing.data.length
+      ? (await stripe.customers.update(existing.data[0].id, { metadata })).id
+      : (await stripe.customers.create({ email, metadata })).id;
 
     await this.client.from('stripe_customers').insert({
       auth_id: authUserId,
-      stripe_customer_id: customer.id,
+      stripe_customer_id: customerId,
       tenant_id: tenantId,
     });
 
-    return customer.id;
+    return customerId;
   }
 
   async getOrCreateCustomer(authUserId: string, email: string, tenantId: string): Promise<string> {

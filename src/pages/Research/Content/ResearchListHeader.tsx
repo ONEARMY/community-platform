@@ -64,6 +64,7 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   const handleApplySort = () => {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete(ResearchSearchParams.page);
     if (pendingSort) {
       params.set(ResearchSearchParams.sort, pendingSort);
     } else {
@@ -80,6 +81,7 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   const handleResetSort = () => {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete(ResearchSearchParams.page);
     params.set(ResearchSearchParams.sort, DEFAULT_SORT);
     params.delete(ResearchSearchParams.status);
     setSearchParams(params);
@@ -131,6 +133,7 @@ export const ResearchFilterHeader = (props: IProps) => {
   const updateFilter = useCallback(
     (key: ResearchSearchParams, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
+      params.delete(ResearchSearchParams.page);
       if (value) {
         params.set(key, value);
       } else {
@@ -150,6 +153,7 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   const searchValue = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete(ResearchSearchParams.page);
     params.set(ResearchSearchParams.q, value);
 
     if (value.length > 0 && sort !== 'MostRelevant') {

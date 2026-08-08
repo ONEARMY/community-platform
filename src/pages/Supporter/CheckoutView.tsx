@@ -102,17 +102,15 @@ const CheckoutForm = () => {
           </SupporterCTA>
 
           <Text sx={{ fontSize: '12px', lineHeight: 1.4, color: 'darkGrey', textAlign: 'center' }}>
-            By confirming your payment, you allow us to charge your payment method for this and
-            future payments in accordance with our{' '}
+            Read our Membership terms{' '}
             <Link
-              href="/terms"
+              href="/membership-terms"
               target="_blank"
               rel="noopener noreferrer"
               sx={{ color: 'inherit', textDecoration: 'underline' }}
             >
-              Terms of Service
+              here
             </Link>
-            . You can always cancel your subscription.
           </Text>
         </Flex>
       </Flex>

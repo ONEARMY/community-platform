@@ -20,10 +20,20 @@ import { hasAdminRights } from 'src/utils/helpers';
 import { Card, Flex } from 'theme-ui';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
+import { RemakesSection } from './Remakes/RemakesSection';
 
 interface ProjectPageProps {
   item: Project;
 }
+
+const engagementCardSx = {
+  background: 'softblue',
+  gap: 2,
+  padding: 3,
+  width: ['100%', '100%', '90%', `${(2 / 3) * 100}%`],
+  margin: '0 auto',
+  mt: 5,
+};
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const { profile: activeUser } = useProfileStore();
@@ -33,6 +43,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     toggle: toggleVote,
   } = useUsefulVote('projects', item.id, item.usefulCount);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+  const [remakeCount, setRemakeCount] = useState(item.remakeCount ?? 0);
 
   const isEditable = useMemo(() => {
     return (
@@ -68,6 +79,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         item={item}
         loggedInUser={activeUser}
         commentsCount={item.commentCount}
+        remakeCount={remakeCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={hasVoted}
         onUsefulClick={toggleVote}
@@ -134,21 +146,15 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 </>
               )}
             </ArticleCallToActionSupabase>
-            <Card
-              sx={{
-                background: 'softblue',
-                gap: 2,
-                padding: 3,
-                width: ['100%', '100%', `90%`, `${(2 / 3) * 100}%`],
-                margin: '0 auto',
-                mt: 5,
-              }}
-            >
+            <Card sx={engagementCardSx}>
               <CommentSectionSupabase
                 authors={item.author?.id ? [item.author?.id] : []}
                 sourceId={item.id}
                 sourceType="projects"
               />
+            </Card>
+            <Card sx={engagementCardSx}>
+              <RemakesSection key={item.id} project={item} onRemakeCountChange={setRemakeCount} />
             </Card>
           </UserEngagementWrapper>
         )}

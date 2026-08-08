@@ -19,6 +19,7 @@ export * from './profileBadge';
 export * from './profileTag';
 export * from './profileType';
 export * from './question';
+export * from './remake';
 export * from './research';
 export * from './selectValue';
 export * from './stripe';

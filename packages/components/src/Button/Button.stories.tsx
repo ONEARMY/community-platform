@@ -147,6 +147,18 @@ export const IconOnly: StoryFn<typeof Button> = () => (
   </>
 );
 
+export const IconSized: StoryFn<typeof Button> = () => (
+  <>
+    <Button icon="delete">Default icon size</Button>
+    <Button icon="delete" iconSize={18}>
+      Icon size 18
+    </Button>
+    <Button icon="delete" iconSize={36}>
+      Icon size 36
+    </Button>
+  </>
+);
+
 export const Icons: StoryFn<typeof Button> = () => (
   <>
     {sizeOptions.map((size) =>

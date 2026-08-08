@@ -1,6 +1,6 @@
 import { MediaWithPublicUrl } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Flex, Image as ImageComponent } from 'theme-ui';
+import { Box, Flex, Image as ImageComponent } from 'theme-ui';
 import { Button } from '../Button/Button';
 import { ImageInputDeleteOverlay } from './ImageInputDeleteOverlay';
 import { isImageValid } from './isImageValid';
@@ -10,6 +10,7 @@ interface IProps {
   onError?: (error: string) => void;
   image?: MediaWithPublicUrl;
   maxFileSize?: number;
+  deleteVariant?: 'overlay' | 'cornerIcon';
 }
 
 const ACCEPTED_FORMATS = '.jpeg,.jpg,.png,.gif,.svg,.webp';
@@ -17,7 +18,13 @@ const DEFAULT_MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const ImageInputV2 = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { onFilesChange, onError, image, maxFileSize = DEFAULT_MAX_FILE_SIZE } = props;
+  const {
+    onFilesChange,
+    onError,
+    image,
+    maxFileSize = DEFAULT_MAX_FILE_SIZE,
+    deleteVariant = 'overlay',
+  } = props;
   const [file, setFile] = useState<File | null>(null);
 
   const previewUrl = useMemo(() => {
@@ -120,7 +127,38 @@ export const ImageInputV2 = (props: IProps) => {
           Upload
         </Button>
       ) : (
-        <ImageInputDeleteOverlay onClick={handleImageDelete} />
+        <>
+          {deleteVariant === 'overlay' ? (
+            <ImageInputDeleteOverlay onClick={handleImageDelete} />
+          ) : (
+            <Box sx={{ display: ['none', 'none', 'block'] }}>
+              <ImageInputDeleteOverlay onClick={handleImageDelete} />
+            </Box>
+          )}
+          {deleteVariant === 'cornerIcon' && (
+            <Button
+              type="button"
+              variant="secondary"
+              icon="delete"
+              iconSize={20}
+              showIconOnly
+              data-cy="image-delete-corner"
+              onClick={handleImageDelete}
+              sx={{
+                position: 'absolute',
+                top: 2,
+                right: 2,
+                width: '44px',
+                height: '44px',
+                padding: 0,
+                justifyContent: 'center',
+                display: ['flex', 'flex', 'none'],
+              }}
+            >
+              Delete
+            </Button>
+          )}
+        </>
       )}
     </Flex>
   );

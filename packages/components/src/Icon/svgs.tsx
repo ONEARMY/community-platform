@@ -71,6 +71,7 @@ import newsSVG from '../../assets/icons/news.svg';
 import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
 import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
 import profileSVG from '../../assets/icons/profile.svg';
+import remakeSVG from '../../assets/icons/remake.svg';
 import replySVG from '../../assets/icons/reply.svg';
 import replyOutlineSVG from '../../assets/icons/reply-outline.svg';
 import reportSVG from '../../assets/icons/report.svg';
@@ -176,6 +177,7 @@ export const iconMap = {
     />
   ),
   profile: <ImageIcon src={profileSVG} />,
+  remake: <ImageIcon src={remakeSVG} />,
   reply: <ImageIcon src={replySVG} />,
   replyOutline: <ImageIcon src={replyOutlineSVG} />,
   report: <ImageIcon src={reportSVG} />,

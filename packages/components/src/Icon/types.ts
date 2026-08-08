@@ -59,6 +59,7 @@ export type availableGlyphs =
   | 'notifications'
   | 'pdf'
   | 'profile'
+  | 'remake'
   | 'reply'
   | 'reply-outline'
   | 'report'

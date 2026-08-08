@@ -1,10 +1,25 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { mockPricesList, mockList, mockCancel, mockGetSecret } = vi.hoisted(() => ({
+const {
+  mockPricesList,
+  mockList,
+  mockCancel,
+  mockCreate,
+  mockCustomersList,
+  mockCustomersUpdate,
+  mockCustomersCreate,
+  mockInvoicePaymentsList,
+  mockGetSecret,
+} = vi.hoisted(() => ({
   mockPricesList: vi.fn(),
   mockList: vi.fn(),
   mockCancel: vi.fn(),
+  mockCreate: vi.fn(),
+  mockCustomersList: vi.fn(),
+  mockCustomersUpdate: vi.fn(),
+  mockCustomersCreate: vi.fn(),
+  mockInvoicePaymentsList: vi.fn(),
   mockGetSecret: vi.fn(),
 }));
 
@@ -12,7 +27,9 @@ vi.mock('stripe', () => ({
   __esModule: true,
   default: class {
     prices = { list: mockPricesList };
-    subscriptions = { list: mockList, cancel: mockCancel };
+    subscriptions = { list: mockList, cancel: mockCancel, create: mockCreate };
+    customers = { list: mockCustomersList, update: mockCustomersUpdate, create: mockCustomersCreate };
+    invoicePayments = { list: mockInvoicePaymentsList };
   },
 }));
 
@@ -177,5 +194,162 @@ describe('cancelActiveSubscriptions', () => {
     expect(mockList).not.toHaveBeenCalled();
     expect(mockCancel).not.toHaveBeenCalled();
     expect(cancelled).toBe(0);
+  });
+});
+
+describe('createCustomer', () => {
+  const makeInsertClient = () => {
+    const insert = vi.fn().mockResolvedValue({ error: null });
+    return {
+      client: { from: vi.fn(() => ({ insert })) } as unknown as SupabaseClient,
+      insert,
+    };
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('reuses an existing Stripe customer with the same email and links it', async () => {
+    mockCustomersList.mockResolvedValueOnce({ data: [{ id: 'cus_existing' }] });
+    mockCustomersUpdate.mockResolvedValueOnce({ id: 'cus_existing' });
+    const { client, insert } = makeInsertClient();
+
+    const StripeServiceServer = await loadService();
+    const id = await new StripeServiceServer(client).createCustomer(
+      'auth_1',
+      'a@b.com',
+      'tenant_1',
+    );
+
+    expect(id).toBe('cus_existing');
+    expect(mockCustomersCreate).not.toHaveBeenCalled();
+    expect(mockCustomersUpdate).toHaveBeenCalledWith('cus_existing', {
+      metadata: { supabase_user_id: 'auth_1', tenant_id: 'tenant_1' },
+    });
+    expect(insert).toHaveBeenCalledWith({
+      auth_id: 'auth_1',
+      stripe_customer_id: 'cus_existing',
+      tenant_id: 'tenant_1',
+    });
+  });
+
+  it('creates a new Stripe customer when none matches the email', async () => {
+    mockCustomersList.mockResolvedValueOnce({ data: [] });
+    mockCustomersCreate.mockResolvedValueOnce({ id: 'cus_new' });
+    const { client, insert } = makeInsertClient();
+
+    const StripeServiceServer = await loadService();
+    const id = await new StripeServiceServer(client).createCustomer(
+      'auth_1',
+      'a@b.com',
+      'tenant_1',
+    );
+
+    expect(id).toBe('cus_new');
+    expect(mockCustomersUpdate).not.toHaveBeenCalled();
+    expect(mockCustomersCreate).toHaveBeenCalledWith({
+      email: 'a@b.com',
+      metadata: { supabase_user_id: 'auth_1', tenant_id: 'tenant_1' },
+    });
+    expect(insert).toHaveBeenCalledWith({
+      auth_id: 'auth_1',
+      stripe_customer_id: 'cus_new',
+      tenant_id: 'tenant_1',
+    });
+  });
+});
+
+describe('cancelIncompleteSubscriptions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('only lists incomplete subscriptions and cancels each one', async () => {
+    mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1' }, { id: 'sub_2' }] });
+    mockCancel.mockResolvedValue({});
+
+    const StripeServiceServer = await loadService();
+    const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
+
+    expect(mockList).toHaveBeenCalledWith({
+      customer: 'cus_1',
+      status: 'incomplete',
+      limit: 100,
+    });
+    expect(mockCancel).toHaveBeenCalledTimes(2);
+    expect(cancelled).toBe(2);
+  });
+
+  it('continues past a failing cancel and counts only the successes', async () => {
+    mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1' }, { id: 'sub_2' }] });
+    mockCancel.mockRejectedValueOnce(new Error('stripe boom')).mockResolvedValueOnce({});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const StripeServiceServer = await loadService();
+    const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
+
+    expect(cancelled).toBe(1);
+    expect(errorSpy).toHaveBeenCalled();
+
+    errorSpy.mockRestore();
+  });
+
+  it('returns 0 and does nothing when Stripe is not configured', async () => {
+    mockGetSecret.mockRejectedValue(new Error('no key'));
+
+    const StripeServiceServer = await loadService();
+    const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
+
+    expect(mockList).not.toHaveBeenCalled();
+    expect(mockCancel).not.toHaveBeenCalled();
+    expect(cancelled).toBe(0);
+  });
+});
+
+describe('createSubscriptionWithPaymentIntent', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+    mockCreate.mockResolvedValue({ id: 'sub_1', latest_invoice: { id: 'in_1' } });
+    mockInvoicePaymentsList.mockResolvedValue({
+      data: [{ payment: { payment_intent: { client_secret: 'pi_secret_123' } } }],
+    });
+  });
+
+  it('saves the default payment method so renewals can be charged off-session', async () => {
+    const StripeServiceServer = await loadService();
+    await StripeServiceServer.createSubscriptionWithPaymentIntent('cus_1', 'price_1', 'eur');
+
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        customer: 'cus_1',
+        payment_behavior: 'default_incomplete',
+        payment_settings: { save_default_payment_method: 'on_subscription' },
+      }),
+    );
+  });
+
+  it('returns the payment intent client secret for the first invoice', async () => {
+    const StripeServiceServer = await loadService();
+    const clientSecret = await StripeServiceServer.createSubscriptionWithPaymentIntent(
+      'cus_1',
+      'price_1',
+      'eur',
+    );
+
+    expect(clientSecret).toBe('pi_secret_123');
+  });
+
+  it('throws when no payment intent client secret is available', async () => {
+    mockInvoicePaymentsList.mockResolvedValueOnce({ data: [] });
+
+    const StripeServiceServer = await loadService();
+    await expect(
+      StripeServiceServer.createSubscriptionWithPaymentIntent('cus_1', 'price_1', 'eur'),
+    ).rejects.toThrow('Failed to get payment intent client secret');
   });
 });

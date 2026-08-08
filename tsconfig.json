@@ -37,10 +37,11 @@
       "oa-components/*": ["./packages/components/src/*"],
       "oa-themes": ["./packages/themes/src/index.ts"],
       "oa-themes/*": ["./packages/themes/src/*"],
+      "@/*": ["./src/*"],
       "*": ["./*"]
     }
   },
-  "include": ["src/**/*", "types", "vite-env.d.ts"],
+  "include": ["src/**/*", "types", "vite-env.d.ts", ".storybook/**/*"],
   "exclude": [
     "node_modules",
     "build",

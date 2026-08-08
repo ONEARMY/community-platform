@@ -8,6 +8,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '
 import { createSupabaseServerClient } from './repository/supabase.server';
 import { TenantSettingsService } from './services/tenantSettingsService.server';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
+import './styles/ui-globals.css';
 import { generateTags } from './utils/seo.utils';
 
 interface DocumentProps {

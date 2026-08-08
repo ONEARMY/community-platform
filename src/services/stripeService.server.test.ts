@@ -193,6 +193,54 @@ describe('cancelActiveSubscriptions', () => {
   });
 });
 
+describe('cancelIncompleteSubscriptions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('only lists incomplete subscriptions and cancels each one', async () => {
+    mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1' }, { id: 'sub_2' }] });
+    mockCancel.mockResolvedValue({});
+
+    const StripeServiceServer = await loadService();
+    const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
+
+    expect(mockList).toHaveBeenCalledWith({
+      customer: 'cus_1',
+      status: 'incomplete',
+      limit: 100,
+    });
+    expect(mockCancel).toHaveBeenCalledTimes(2);
+    expect(cancelled).toBe(2);
+  });
+
+  it('continues past a failing cancel and counts only the successes', async () => {
+    mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1' }, { id: 'sub_2' }] });
+    mockCancel.mockRejectedValueOnce(new Error('stripe boom')).mockResolvedValueOnce({});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const StripeServiceServer = await loadService();
+    const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
+
+    expect(cancelled).toBe(1);
+    expect(errorSpy).toHaveBeenCalled();
+
+    errorSpy.mockRestore();
+  });
+
+  it('returns 0 and does nothing when Stripe is not configured', async () => {
+    mockGetSecret.mockRejectedValue(new Error('no key'));
+
+    const StripeServiceServer = await loadService();
+    const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
+
+    expect(mockList).not.toHaveBeenCalled();
+    expect(mockCancel).not.toHaveBeenCalled();
+    expect(cancelled).toBe(0);
+  });
+});
+
 describe('createSubscriptionWithPaymentIntent', () => {
   beforeEach(() => {
     vi.clearAllMocks();

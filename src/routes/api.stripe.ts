@@ -141,6 +141,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         customerId = await StripeServiceServer.createGuestCustomer(email, name);
       }
 
+      // Clear out any earlier abandoned checkout attempts so they don't pile up
+      // as orphaned incomplete subscriptions on the customer.
+      await StripeServiceServer.cancelIncompleteSubscriptions(customerId);
+
       const clientSecret = await StripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
         priceId,

@@ -169,6 +169,34 @@ export class StripeServiceServer {
     return cancelled;
   }
 
+  static async cancelIncompleteSubscriptions(customerId: string): Promise<number> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return 0;
+    }
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: 'incomplete',
+      limit: 100,
+    });
+
+    let cancelled = 0;
+    for (const subscription of subscriptions.data) {
+      try {
+        await stripe.subscriptions.cancel(subscription.id);
+        cancelled += 1;
+      } catch (error) {
+        console.error(
+          `Failed to cancel incomplete subscription ${subscription.id} for customer ${customerId}:`,
+          error,
+        );
+      }
+    }
+
+    return cancelled;
+  }
+
   static async createGuestCustomer(email: string, name?: string): Promise<string> {
     const stripe = await getStripe();
     if (!stripe) {

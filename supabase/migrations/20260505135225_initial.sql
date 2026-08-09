@@ -2666,3 +2666,34 @@ AS $function$
 $function$;
 
 CREATE TRIGGER update_vote_count AFTER INSERT OR DELETE ON "public"."poll_votes" FOR EACH ROW EXECUTE FUNCTION public.update_vote_count();
+
+-- RPC function to list supporters (profiles holding a badge backed by a stripe tier config), including email from auth.users
+CREATE OR REPLACE FUNCTION get_supporters(p_tenant_id text)
+RETURNS TABLE (
+  profile_id bigint,
+  username text,
+  display_name text,
+  email text,
+  tier_name text
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $function$
+BEGIN
+  RETURN QUERY
+  SELECT DISTINCT
+    p.id AS profile_id,
+    p.username,
+    p.display_name,
+    au.email::text,
+    pb.display_name AS tier_name
+  FROM stripe_tier_config stc
+  INNER JOIN profile_badges pb ON pb.id = stc.badge_id
+  INNER JOIN profile_badges_relations pbr ON pbr.profile_badge_id = pb.id
+  INNER JOIN profiles p ON p.id = pbr.profile_id
+  LEFT JOIN auth.users au ON au.id = p.auth_id
+  WHERE stc.tenant_id = p_tenant_id
+    AND pbr.tenant_id = p_tenant_id
+    AND p.tenant_id = p_tenant_id;
+END;
+$function$;

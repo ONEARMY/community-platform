@@ -1,4 +1,4 @@
-import { FolderIcon } from 'lucide-react';
+import { FolderIcon, HeartIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import {
   Sidebar,
@@ -12,7 +12,10 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-const ADMIN_NAV_ITEMS = [{ label: 'Categories', href: '/admin/categories', icon: FolderIcon }];
+const ADMIN_NAV_ITEMS = [
+  { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
+  { label: 'Supporters', href: '/admin/supporters', icon: HeartIcon },
+];
 
 export function AdminSidebar() {
   const location = useLocation();

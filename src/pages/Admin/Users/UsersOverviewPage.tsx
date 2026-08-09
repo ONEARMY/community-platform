@@ -1,5 +1,6 @@
 import type { ProfileTypeCount, SupporterBadgeCount } from 'oa-shared';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Link } from 'react-router';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
@@ -23,7 +24,7 @@ export function UsersOverviewPage({ profileTypeCounts, supporterBadgeCounts }: I
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Profile type</CardTitle>
           </CardHeader>
@@ -40,11 +41,11 @@ export function UsersOverviewPage({ profileTypeCounts, supporterBadgeCounts }: I
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Supporters</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {supporterBadgeCounts.map((badge) => (
                 <StatTile
@@ -55,6 +56,11 @@ export function UsersOverviewPage({ profileTypeCounts, supporterBadgeCounts }: I
               ))}
             </div>
           </CardContent>
+          <CardFooter className="justify-end">
+            <Link to="/admin/supporters" className="text-sm text-muted-foreground hover:!underline">
+              View all
+            </Link>
+          </CardFooter>
         </Card>
       </div>
     </div>

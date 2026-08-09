@@ -45,4 +45,10 @@ function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="card-content" className={cn('px-4', className)} {...props} />;
 }
 
-export { Card, CardContent, CardDescription, CardHeader, CardTitle };
+function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div data-slot="card-footer" className={cn('flex items-center px-4', className)} {...props} />
+  );
+}
+
+export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };

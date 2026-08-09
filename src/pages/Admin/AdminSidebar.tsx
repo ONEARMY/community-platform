@@ -17,7 +17,6 @@ import {
 } from '@/components/ui/sidebar';
 
 const ADMIN_NAV_ITEMS = [
-  { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
   {
     label: 'Users',
     icon: UsersIcon,
@@ -26,6 +25,7 @@ const ADMIN_NAV_ITEMS = [
       { label: 'Supporters', href: '/admin/supporters' },
     ],
   },
+  { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
 ];
 
 export function AdminSidebar() {

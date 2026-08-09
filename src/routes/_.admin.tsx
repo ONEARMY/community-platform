@@ -10,6 +10,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 
 interface AdminRouteHandle {
   breadcrumb?: string;
+  breadcrumbParent?: string;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -35,10 +36,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function AdminLayout() {
   const matches = useMatches();
-  const breadcrumb = matches
-    .map((match) => (match.handle as AdminRouteHandle | undefined)?.breadcrumb)
-    .filter(Boolean)
+  const handle = matches
+    .map((match) => match.handle as AdminRouteHandle | undefined)
+    .filter((routeHandle) => routeHandle?.breadcrumb)
     .at(-1);
+
+  const crumbs = ['Admin', handle?.breadcrumbParent, handle?.breadcrumb].filter(Boolean);
 
   return (
     <Main style={{ flex: 1 }} ignoreMaxWidth>
@@ -48,13 +51,18 @@ export default function AdminLayout() {
           <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger />
             <nav className="flex items-center gap-1 text-sm">
-              <span className={breadcrumb ? 'text-muted-foreground' : 'font-medium'}>Admin</span>
-              {breadcrumb && (
-                <>
-                  <ChevronRightIcon className="size-4 text-muted-foreground" />
-                  <span className="font-medium">{breadcrumb}</span>
-                </>
-              )}
+              {crumbs.map((crumb, index) => (
+                <span key={crumb} className="flex items-center gap-1">
+                  {index > 0 && <ChevronRightIcon className="size-4 text-muted-foreground" />}
+                  <span
+                    className={
+                      index === crumbs.length - 1 ? 'font-medium' : 'text-muted-foreground'
+                    }
+                  >
+                    {crumb}
+                  </span>
+                </span>
+              ))}
             </nav>
           </header>
           <div className="flex-1 overflow-auto p-4">

@@ -4,7 +4,7 @@ import { useLoaderData } from 'react-router';
 import { SupportersPage } from 'src/pages/Admin/Supporters/SupportersPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
-export const handle = { breadcrumb: 'Supporters' };
+export const handle = { breadcrumb: 'Supporters', breadcrumbParent: 'Users' };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = createSupabaseServerClient(request);

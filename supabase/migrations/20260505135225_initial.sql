@@ -2697,3 +2697,54 @@ BEGIN
     AND p.tenant_id = p_tenant_id;
 END;
 $function$;
+
+-- RPC function to count profiles per profile type, for the admin Users overview
+CREATE OR REPLACE FUNCTION get_profile_type_counts(p_tenant_id text)
+RETURNS TABLE (
+  profile_type_id bigint,
+  name text,
+  display_name text,
+  profile_count bigint
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $function$
+BEGIN
+  RETURN QUERY
+  SELECT
+    pt.id AS profile_type_id,
+    pt.name,
+    pt.display_name,
+    COUNT(p.id) AS profile_count
+  FROM profile_types pt
+  LEFT JOIN profiles p ON p.profile_type = pt.id AND p.tenant_id = p_tenant_id
+  WHERE pt.tenant_id = p_tenant_id
+  GROUP BY pt.id, pt.name, pt.display_name, pt."order"
+  ORDER BY pt."order";
+END;
+$function$;
+
+-- RPC function to count supporters per badge, for the admin Users overview
+CREATE OR REPLACE FUNCTION get_supporter_badge_counts(p_tenant_id text)
+RETURNS TABLE (
+  badge_id bigint,
+  badge_name text,
+  supporter_count bigint
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $function$
+BEGIN
+  RETURN QUERY
+  SELECT
+    pb.id AS badge_id,
+    pb.display_name AS badge_name,
+    COUNT(pbr.id) AS supporter_count
+  FROM profile_badges pb
+  INNER JOIN stripe_tier_config stc ON stc.badge_id = pb.id AND stc.tenant_id = p_tenant_id
+  LEFT JOIN profile_badges_relations pbr ON pbr.profile_badge_id = pb.id AND pbr.tenant_id = p_tenant_id
+  WHERE pb.tenant_id = p_tenant_id
+  GROUP BY pb.id, pb.display_name, pb.premium_tier
+  ORDER BY pb.premium_tier;
+END;
+$function$;

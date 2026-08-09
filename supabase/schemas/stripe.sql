@@ -111,3 +111,28 @@ BEGIN
     AND p.tenant_id = p_tenant_id;
 END;
 $$;
+
+-- RPC function to count supporters per badge, for the admin Users overview
+CREATE OR REPLACE FUNCTION get_supporter_badge_counts(p_tenant_id text)
+RETURNS TABLE (
+  badge_id bigint,
+  badge_name text,
+  supporter_count bigint
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    pb.id AS badge_id,
+    pb.display_name AS badge_name,
+    COUNT(pbr.id) AS supporter_count
+  FROM profile_badges pb
+  INNER JOIN stripe_tier_config stc ON stc.badge_id = pb.id AND stc.tenant_id = p_tenant_id
+  LEFT JOIN profile_badges_relations pbr ON pbr.profile_badge_id = pb.id AND pbr.tenant_id = p_tenant_id
+  WHERE pb.tenant_id = p_tenant_id
+  GROUP BY pb.id, pb.display_name, pb.premium_tier
+  ORDER BY pb.premium_tier;
+END;
+$$;

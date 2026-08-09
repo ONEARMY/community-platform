@@ -1,3 +1,4 @@
+export * from './adminMetrics';
 export * from './author';
 export * from './banner';
 export * from './category';

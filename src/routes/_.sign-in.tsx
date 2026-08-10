@@ -18,6 +18,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
+    // Applicants have a session but no profile, so send them to finish the form.
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+        claims.data.claims.sub,
+      );
+
+      if (hasApplication) {
+        return redirect('/organisation-application', { headers });
+      }
+    }
+
     return redirect(getReturnUrl(request), { headers });
   }
 

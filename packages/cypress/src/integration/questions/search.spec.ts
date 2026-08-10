@@ -42,6 +42,32 @@ describe('[Questions]', () => {
       cy.url().should('not.include', 'category=');
     });
 
+    it('Resets pagination when searching', () => {
+      cy.visit('/questions?page=2');
+      cy.url().should('include', 'sort=Newest');
+
+      cy.step('Search while viewing a later page');
+      cy.get('[data-cy=questions-search-box]').should('be.enabled').clear().type('deal');
+
+      cy.step('Verify the search resets pagination');
+      cy.url().should('include', 'q=deal');
+      cy.url().should('not.include', 'page=');
+      cy.get('[data-cy=question-list-item]').should('have.length', 1);
+
+      cy.visit('/questions?page=2');
+      cy.url().should('include', 'sort=Newest');
+
+      cy.step('Filter while viewing a later page');
+      cy.get('[data-cy=CategoryHorizonalList]').within(() => {
+        cy.contains('Machines').click();
+      });
+
+      cy.step('Verify the category filter resets pagination');
+      cy.url().should('include', 'category=');
+      cy.url().should('not.include', 'page=');
+      cy.get('[data-cy=CategoryHorizonalList-Item-active]').should('be.visible');
+    });
+
     it('should show question list items after visit a question', () => {
       cy.get('[data-cy=question-list-item]:eq(0)').click();
       cy.get('[data-cy=question-title]').should('be.visible');

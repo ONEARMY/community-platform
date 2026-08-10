@@ -222,6 +222,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://theantiquesouls.com/"><img src="https://avatars.githubusercontent.com/u/49906335?v=4?s=60" width="60px;" alt="Leo Ebeling"/><br /><sub><b>Leo Ebeling</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=SirLeoIV" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Guflly"><img src="https://avatars.githubusercontent.com/u/145608489?v=4?s=60" width="60px;" alt="Guflly"/><br /><sub><b>Guflly</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Guflly" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

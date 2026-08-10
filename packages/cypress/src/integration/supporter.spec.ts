@@ -54,5 +54,6 @@ describe('[Supporter]', () => {
 
     cy.step('New supporters are sent to their email preferences');
     cy.url().should('include', '/setup-email-preferences');
+    cy.get('[data-cy=email-preferences-submit]').should('be.visible');
   });
 });

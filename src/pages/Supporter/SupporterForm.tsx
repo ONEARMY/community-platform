@@ -172,6 +172,7 @@ export const SupporterForm = () => {
                   <Box
                     key={price.id}
                     as="button"
+                    data-cy="price-option"
                     onClick={() => setSelectedPriceId(price.id)}
                     sx={{
                       display: 'flex',
@@ -214,6 +215,7 @@ export const SupporterForm = () => {
                 <Text sx={{ fontSize: '14px', color: 'error' }}>{fieldErrors.name}</Text>
               )}
               <Input
+                data-cy="supporter-name"
                 placeholder="Your name"
                 value={name}
                 onChange={(e) => {
@@ -234,6 +236,7 @@ export const SupporterForm = () => {
               <Text sx={{ fontSize: '14px', color: 'error' }}>{fieldErrors.email}</Text>
             )}
             <Input
+              data-cy="supporter-email"
               type="email"
               placeholder="Email"
               value={email}
@@ -262,7 +265,12 @@ export const SupporterForm = () => {
             alignSelf: 'stretch',
           }}
         >
-          <SupporterCTA onClick={handleSupport} disabled={disabled} color={tierColor}>
+          <SupporterCTA
+            dataCy="supporter-submit"
+            onClick={handleSupport}
+            disabled={disabled}
+            color={tierColor}
+          >
             {isLoading ? (
               'Processing...'
             ) : (

@@ -7,16 +7,18 @@ export const SupporterCTA = ({
   children,
   color,
   type = 'button',
+  dataCy,
 }: {
   onClick?: () => void;
   disabled?: boolean;
   children: ReactNode;
   color: string;
   type?: 'button' | 'submit';
+  dataCy?: string;
 }) => (
   <Box
     as="button"
-    {...({ type, disabled } as any)}
+    {...({ type, disabled, 'data-cy': dataCy } as any)}
     onClick={onClick}
     sx={{
       width: '100%',

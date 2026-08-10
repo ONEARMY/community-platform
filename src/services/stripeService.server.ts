@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { isTestEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
@@ -416,7 +417,7 @@ export class StripeServiceServer {
   async getPrices(): Promise<SupporterPrice[]> {
     const stripe = await getStripe();
     if (!stripe) {
-      return process.env.NODE_ENV === 'development' ? STUB_PRICES : [];
+      return process.env.NODE_ENV === 'development' || isTestEnvironment() ? STUB_PRICES : [];
     }
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];

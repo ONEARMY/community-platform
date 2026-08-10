@@ -58,6 +58,11 @@ export const isProductionEnvironment = (): boolean => {
   return site === 'production';
 };
 
+export const isTestEnvironment = (): boolean => {
+  const site = getSiteVariant();
+  return site === 'test-ci';
+};
+
 export const SITE = siteVariant;
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c('VITE_SENTRY_DSN'),

@@ -55,6 +55,7 @@ export const ThankYouAccountForm = () => {
   return (
     <ThankYouLayout>
       <Card
+        data-cy="supporter-account-form"
         sx={{
           bg: 'white',
           border: '2px solid',
@@ -98,6 +99,7 @@ export const ThankYouAccountForm = () => {
                   Password
                 </Text>
                 <Input
+                  data-cy="supporter-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -125,6 +127,7 @@ export const ThankYouAccountForm = () => {
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}
 
               <Button
+                data-cy="supporter-set-password"
                 type="submit"
                 variant="primary"
                 disabled={isSubmitting || password.length < 6}
@@ -146,7 +149,7 @@ export const ThankYouAccountForm = () => {
       <form
         ref={signInFormRef}
         method="post"
-        action={`/sign-in?returnUrl=${encodeURIComponent('/settings/account')}`}
+        action={`/sign-in?returnUrl=${encodeURIComponent('/setup-email-preferences')}`}
         style={{ display: 'none' }}
       >
         <input type="hidden" name="email" value={email} />

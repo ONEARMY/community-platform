@@ -9,6 +9,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
+import { RemakeServiceServer } from 'src/services/remakeService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
@@ -46,7 +47,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     project.author = await factory.createAuthor(dbProject.author);
   }
 
-  const tenantSettings = await new TenantSettingsService(client).get();
+  const [tenantSettings, remakeCount] = await Promise.all([
+    new TenantSettingsService(client).get(),
+    new RemakeServiceServer(client).getCountByProjectId(dbProject.id),
+  ]);
+
+  project.remakeCount = remakeCount;
 
   return data({ project, tenantSettings }, { headers });
 }
@@ -71,5 +77,5 @@ export default function Index() {
     return <NotFoundPage />;
   }
 
-  return <ProjectPage item={data.project} />;
+  return <ProjectPage key={data.project.id} item={data.project} />;
 }

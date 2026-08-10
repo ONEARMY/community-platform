@@ -106,6 +106,7 @@ export const glyphs: IGlyphs = {
   notifications: <MdNotifications />,
   pdf: <FaFilePdf />,
   profile: iconMap.profile,
+  remake: iconMap.remake,
   reply: iconMap.reply,
   'reply-outline': iconMap.replyOutline,
   report: iconMap.report,

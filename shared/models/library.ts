@@ -104,6 +104,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   usefulVotesLastWeek?: number;
   subscriberCount: number;
   commentCount: number;
+  remakeCount?: number;
   fileDownloadCount: number;
   moderation: Moderation;
   moderationFeedback?: string;

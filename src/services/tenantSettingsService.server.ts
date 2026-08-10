@@ -52,6 +52,7 @@ export class TenantSettingsService {
       hasMembershipTiers,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
       gaTrackingId: data?.ga_tracking_id,
+      membershipTerms: data?.membership_terms,
       pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
       organisationSignupDescriptionHtml: data?.organisation_signup_description ?? undefined,
       organisationActivity: data?.organisation_activity ?? undefined,
@@ -88,6 +89,7 @@ export class TenantSettingsService {
         create_research_roles,
         ga_tracking_id,
         pwa_icons,
+        membership_terms,
         organisation_signup_description,
         organisation_activity`,
       )

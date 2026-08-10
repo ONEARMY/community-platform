@@ -5,6 +5,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { MapView } from 'src/pages/Maps/Content/MapView/MapView.client';
 import { MapContext } from 'src/pages/Maps/MapContext';
 import { MapPinServiceContext, mapPinService } from 'src/pages/Maps/map.service';
+import { filterPins } from 'src/pages/Maps/utils/pinUtils';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { MapPinsServiceServer } from 'src/services/mapPinsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -18,16 +19,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   const typeParam = url.searchParams.get('type') as string;
+  const tagsParam = url.searchParams.get('tags');
   const zoomParam = url.searchParams.get('zoom');
   const latParam = url.searchParams.get('lat');
   const lngParam = url.searchParams.get('lng');
   const clustersParam = url.searchParams.get('clusters');
 
+  const tags = tagsParam
+    ?.split(',')
+    .map((tag) => parseInt(tag, 10))
+    .filter((tag) => !isNaN(tag));
+
   try {
-    const [tenantSettings, pins] = await Promise.all([
+    const [tenantSettings, allPins] = await Promise.all([
       new TenantSettingsService(client).get(),
-      new MapPinsServiceServer(client).getByProfileType(typeParam),
+      new MapPinsServiceServer(client).get(),
     ]);
+
+    const pins = filterPins(allPins, {
+      types: typeParam ? [typeParam] : undefined,
+      tags,
+    });
 
     return data(
       {

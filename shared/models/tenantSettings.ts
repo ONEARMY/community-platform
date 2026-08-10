@@ -24,6 +24,7 @@ export class TenantSettings {
   createResearchRoles: UserRole[];
   gaTrackingId: string;
   pwaIcons?: PWAIcons;
+  membershipTerms?: string;
   organisationSignupDescriptionHtml?: string;
   organisationActivity?: string;
 

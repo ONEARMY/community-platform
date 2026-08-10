@@ -26,3 +26,15 @@ export const Sized: StoryFn<typeof Modal> = () => (
     Sized Modal
   </Modal>
 );
+
+export const CustomBounds: StoryFn<typeof Modal> = () => (
+  <Modal
+    isOpen={true}
+    onDismiss={dismissed}
+    width={500}
+    maxWidth="100vw"
+    maxHeight={['50vh', '95vh']}
+  >
+    Modal with custom max bounds
+  </Modal>
+);

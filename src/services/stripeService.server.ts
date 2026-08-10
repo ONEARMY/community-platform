@@ -169,6 +169,34 @@ export class StripeServiceServer {
     return cancelled;
   }
 
+  static async cancelIncompleteSubscriptions(customerId: string): Promise<number> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return 0;
+    }
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: 'incomplete',
+      limit: 100,
+    });
+
+    let cancelled = 0;
+    for (const subscription of subscriptions.data) {
+      try {
+        await stripe.subscriptions.cancel(subscription.id);
+        cancelled += 1;
+      } catch (error) {
+        console.error(
+          `Failed to cancel incomplete subscription ${subscription.id} for customer ${customerId}:`,
+          error,
+        );
+      }
+    }
+
+    return cancelled;
+  }
+
   static async createGuestCustomer(email: string, name?: string): Promise<string> {
     const stripe = await getStripe();
     if (!stripe) {
@@ -207,6 +235,9 @@ export class StripeServiceServer {
       items: [{ price: priceId }],
       currency,
       payment_behavior: 'default_incomplete',
+      payment_settings: {
+        save_default_payment_method: 'on_subscription',
+      },
       expand: ['latest_invoice'],
     });
 
@@ -288,21 +319,23 @@ export class StripeServiceServer {
     if (!stripe) {
       throw new Error('Stripe is not configured');
     }
-    const customer = await stripe.customers.create({
-      email,
-      metadata: {
-        supabase_user_id: authUserId,
-        tenant_id: tenantId,
-      },
-    });
+
+    const metadata = { supabase_user_id: authUserId, tenant_id: tenantId };
+
+    // Reuse an existing Stripe customer for this email (e.g. one created during
+    // an earlier guest checkout) instead of minting a duplicate.
+    const existing = await stripe.customers.list({ email, limit: 1 });
+    const customerId = existing.data.length
+      ? (await stripe.customers.update(existing.data[0].id, { metadata })).id
+      : (await stripe.customers.create({ email, metadata })).id;
 
     await this.client.from('stripe_customers').insert({
       auth_id: authUserId,
-      stripe_customer_id: customer.id,
+      stripe_customer_id: customerId,
       tenant_id: tenantId,
     });
 
-    return customer.id;
+    return customerId;
   }
 
   async getOrCreateCustomer(authUserId: string, email: string, tenantId: string): Promise<string> {

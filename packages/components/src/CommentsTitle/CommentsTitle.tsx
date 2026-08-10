@@ -3,14 +3,14 @@ import { useMemo } from 'react';
 import { Heading } from 'theme-ui';
 
 export const NO_COMMENTS = 'Start the discussion';
-export const ONE_COMMENT = '1 Comment';
 export const COMMENTS = 'Comments';
 
 export interface IProps {
   comments: Comment[];
+  noun?: string;
 }
 
-export const CommentsTitle = ({ comments }: IProps) => {
+export const CommentsTitle = ({ comments, noun = COMMENTS }: IProps) => {
   const title = useMemo(() => {
     const commentCount =
       comments.filter((x) => !x.deleted).length +
@@ -19,12 +19,11 @@ export const CommentsTitle = ({ comments }: IProps) => {
     if (commentCount === 0) {
       return NO_COMMENTS;
     }
-    if (commentCount === 1) {
-      return ONE_COMMENT;
-    }
 
-    return `${commentCount} ${COMMENTS}`;
-  }, [comments]);
+    const label = commentCount === 1 && noun.endsWith('s') ? noun.slice(0, -1) : noun;
+
+    return `${commentCount} ${label}`;
+  }, [comments, noun]);
 
   return (
     <Heading as="h3" variant="h3" data-cy="DiscussionTitle" sx={{ whiteSpace: 'nowrap' }}>

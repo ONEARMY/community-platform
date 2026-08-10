@@ -295,3 +295,42 @@ describe('[Precious Plastic]', () => {
     cy.get('[data-cy=tag-openToVisitors]').should('not.exist');
   });
 });
+
+describe('[Account subscription]', () => {
+  const subscriptionStatus = {
+    hasSubscription: true,
+    subscription: { status: 'active', cancelAtPeriodEnd: false, cancelAt: null },
+  };
+
+  beforeEach(() => {
+    cy.intercept('GET', '/api/stripe', { statusCode: 200, body: subscriptionStatus }).as(
+      'subscriptionStatus',
+    );
+  });
+
+  it('resets the Manage subscription button when the page is restored from bfcache', () => {
+    cy.step('Sign in and open account settings');
+    cy.signIn(settings_member_new.email, settings_member_new.password);
+
+    cy.intercept('POST', '/api/stripe', (req) => {
+      req.reply({ delay: 5000, body: { url: null } });
+    }).as('portalSession');
+
+    cy.visit('/settings/account');
+    cy.wait('@subscriptionStatus');
+
+    cy.step('Clicking Manage subscription shows the redirecting state');
+    cy.get('[data-cy=manage-subscription]').should('contain', 'Manage subscription').click();
+    cy.get('[data-cy=manage-subscription]')
+      .should('contain', 'Redirecting...')
+      .and('be.disabled');
+
+    cy.step('Returning via the back/forward cache resets the button');
+    cy.window().then((win) => {
+      win.dispatchEvent(new win.PageTransitionEvent('pageshow', { persisted: true }));
+    });
+    cy.get('[data-cy=manage-subscription]')
+      .should('contain', 'Manage subscription')
+      .and('not.be.disabled');
+  });
+});

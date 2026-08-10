@@ -1,3 +1,5 @@
+/** @jsxImportSource theme-ui */
+
 import { useEffect, useRef } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box } from 'theme-ui';
@@ -8,11 +10,22 @@ export interface Props {
   children: React.ReactNode;
   width?: number;
   height?: number;
+  maxWidth?: string;
+  maxHeight?: string | string[];
   sx?: ThemeUIStyleObject;
 }
 
 export const Modal = (props: Props) => {
-  const { children, width = 300, height, isOpen, sx, onDismiss } = props;
+  const {
+    children,
+    width = 300,
+    height,
+    isOpen,
+    maxWidth = '90vw',
+    maxHeight = '95vh',
+    sx,
+    onDismiss,
+  } = props;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const mouseDownOutsideRef = useRef(false);
 
@@ -76,12 +89,12 @@ export const Modal = (props: Props) => {
       onMouseDown={handleMouseDown}
       onClick={handleBackdropClick}
       onClose={handleClose}
-      style={{
+      sx={{
         padding: 0,
         border: 'none',
         borderRadius: '10px',
-        maxWidth: '90vw',
-        maxHeight: '95vh',
+        maxWidth,
+        maxHeight,
       }}
     >
       <Box

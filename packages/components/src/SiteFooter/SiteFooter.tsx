@@ -57,6 +57,7 @@ const OneArmyIcon = styled(Icon)`
 export const SiteFooter = ({ siteName }: SiteFooterProps) => {
   return (
     <FooterContainer
+      as="footer"
       bg="#27272c"
       sx={{ alignItems: 'center' }}
       style={{

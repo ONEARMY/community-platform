@@ -1,14 +1,12 @@
 import { HTTPException } from 'hono/http-exception';
-import Keyv from 'keyv';
 import type { ContentType, DBCategory } from 'oa-shared';
 import { Category } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { categoriesCache as cache } from 'src/services/categoryService.server';
 import { validationError } from 'src/utils/httpException';
-
-const cache = new Keyv<Category[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 const filterByType = (categories: Category[], type: ContentType) => {
   return categories.filter((category) => category.type === type);

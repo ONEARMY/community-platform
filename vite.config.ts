@@ -1,4 +1,5 @@
 import { reactRouter } from '@react-router/dev/vite';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -60,6 +61,7 @@ export default defineConfig({
   },
   plugins: [
     !process.env.VITEST ? reactRouter() : react(),
+    tailwindcss(),
     // TODO - confirm if required (given manual resolutions below)
     ViteTsConfigPathsPlugin({
       root: './',

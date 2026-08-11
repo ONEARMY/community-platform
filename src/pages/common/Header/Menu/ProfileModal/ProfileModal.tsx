@@ -4,6 +4,7 @@ import { countries } from 'countries-list';
 import { countryToAlpha2 } from 'country-to-iso';
 import { observer } from 'mobx-react';
 import { FlagIcon, Icon, MemberBadge, ReturnPathLink } from 'oa-components';
+import { UserRole } from 'oa-shared';
 import { theme } from 'oa-themes';
 import { type ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router';
@@ -151,6 +152,11 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
         <AuthWrapper>
           <RowLink to="/settings/profile" data-cy="menu-Settings">
             <RowContent icon="nav-settings">Settings</RowContent>
+          </RowLink>
+        </AuthWrapper>
+        <AuthWrapper roleRequired={UserRole.ADMIN}>
+          <RowLink to="/admin" data-cy="menu-Admin">
+            <RowContent icon="nav-settings">Admin</RowContent>
           </RowLink>
         </AuthWrapper>
         {showSupporter && (

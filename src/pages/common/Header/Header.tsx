@@ -58,6 +58,7 @@ const Header = observer(() => {
       }}
     >
       <Flex
+        as="header"
         data-cy="header"
         sx={{
           backgroundColor: 'white',

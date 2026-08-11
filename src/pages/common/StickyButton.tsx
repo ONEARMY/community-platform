@@ -14,7 +14,7 @@ export const StickyButton = () => {
 
   const href = `/feedback/#page=${page}`;
 
-  if (location.pathname.startsWith('/support')) {
+  if (location.pathname.startsWith('/support') || location.pathname.startsWith('/admin')) {
     return null;
   }
 

@@ -56,6 +56,28 @@ export class StorageServiceServer {
     return result;
   }
 
+  async listImages(path: string): Promise<Image[]> {
+    const bucket = process.env.TENANT_ID as string;
+
+    const { data, error } = await this.client.storage
+      .from(bucket)
+      .list(path, { sortBy: { column: 'name', order: 'asc' } });
+
+    if (!data || error) {
+      return [];
+    }
+
+    return data
+      .filter((item) => item.id) // skip pseudo-folder placeholder entries
+      .map((item) => {
+        const { data: publicUrlData } = this.client.storage
+          .from(bucket)
+          .getPublicUrl(`${path}/${item.name}`);
+
+        return new Image({ id: `${path}/${item.name}`, publicUrl: publicUrlData.publicUrl });
+      });
+  }
+
   async uploadImage(
     files: File[],
     path: string,
@@ -77,14 +99,17 @@ export class StorageServiceServer {
         // Check if image needs processing
         // Always process JPEG/PNG for WebP conversion
         // Process other formats if: dimensions too large OR file size > 1MB
+        // SVG is vector, not a sharp output format - always pass it through untouched
+        const isSvg = metadata.format === 'svg';
         const isJpegOrPng =
           metadata.format === 'jpeg' || metadata.format === 'jpg' || metadata.format === 'png';
         const needsProcessing =
-          isJpegOrPng ||
-          (metadata.width &&
-            metadata.height &&
-            (metadata.width > 2048 || metadata.height > 2048)) ||
-          buffer.length > 1024 * 1024; // 1MB in bytes
+          !isSvg &&
+          (isJpegOrPng ||
+            (metadata.width &&
+              metadata.height &&
+              (metadata.width > 2048 || metadata.height > 2048)) ||
+            buffer.length > 1024 * 1024); // 1MB in bytes
 
         let finalBuffer: Buffer;
         let finalContentType = file.type;

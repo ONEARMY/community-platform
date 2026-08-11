@@ -62,6 +62,10 @@ Convention for this library:
 - 19 of the legacy glyphs are generic (`react-icons`, e.g. `menu`, `lock`, `check`, `filter`) rather than custom brand art. These are a small, drawable set — the plan is to eventually commission custom versions of these too and drop the `react-icons` dependency entirely, rather than pull in a generic icon library (e.g. lucide-react) for them. Not a blocker for anything else in this library.
 - Separately, 23 confirmed-unused legacy icon assets (~281KB, mostly old map-pin iconography) were deleted from `packages/components/assets/icons/` as basic repo hygiene. A further pass to optimize the oversized remaining assets (several are 10-30KB Figma exports that should be sub-2KB) was considered and intentionally deferred — out of scope for this change.
 
+## Rendering raw/CMS HTML
+
+For content that comes pre-rendered as HTML (e.g. `dangerouslySetInnerHTML`) rather than authored as JSX, wrap it in `prose max-w-none dark:prose-invert` (via [`@tailwindcss/typography`](https://github.com/tailwindlabs/tailwindcss-typography)) instead of hand-styling each tag. Tailwind's Preflight strips default browser spacing/font-sizing from `h1`–`h6`, `p`, `ul`, etc., so unstyled HTML needs this to look reasonable. `max-w-none` drops the plugin's default `65ch` cap. See `src/routes/_.membership-terms.tsx` for an example.
+
 ## Storybook
 
 This library has its **own** Storybook instance, independent of `oa-components`'s (`packages/components/.storybook`, port 6006):

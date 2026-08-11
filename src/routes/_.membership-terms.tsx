@@ -23,7 +23,10 @@ export default function Index() {
 
   return (
     <Main style={{ flex: 1 }}>
-      <div dangerouslySetInnerHTML={{ __html: data.membershipTerms }} />
+      <div
+        className="prose max-w-none pt-8 dark:prose-invert"
+        dangerouslySetInnerHTML={{ __html: data.membershipTerms }}
+      />
     </Main>
   );
 }

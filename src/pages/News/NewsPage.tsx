@@ -143,28 +143,57 @@ export const NewsPage = observer(({ news }: IProps) => {
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
               },
+              p: {
+                marginBottom: 3,
+              },
               h1: {
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h2: {
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h3: {
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h4: {
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h5: {
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h6: {
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
+              },
+              'ul, ol': {
+                marginBottom: 3,
+                paddingLeft: 8,
+              },
+              ul: {
+                listStyle: 'disc',
+              },
+              ol: {
+                listStyle: 'decimal',
+              },
+              li: {
+                marginBottom: 1,
               },
               blockQuote: {
                 paddingX: 4,
                 paddingY: 2,
                 margin: 0,
+                marginBottom: 4,
                 backgroundColor: '#f4f8fd',
                 borderLeft: '3px solid #c8d8ec',
               },

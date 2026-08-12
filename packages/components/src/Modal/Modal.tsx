@@ -91,6 +91,7 @@ export const Modal = (props: Props) => {
       onClose={handleClose}
       sx={{
         padding: 0,
+        margin: 'auto',
         border: 'none',
         borderRadius: '10px',
         maxWidth,

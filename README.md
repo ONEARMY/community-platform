@@ -223,6 +223,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://theantiquesouls.com/"><img src="https://avatars.githubusercontent.com/u/49906335?v=4?s=60" width="60px;" alt="Leo Ebeling"/><br /><sub><b>Leo Ebeling</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=SirLeoIV" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Guflly"><img src="https://avatars.githubusercontent.com/u/145608489?v=4?s=60" width="60px;" alt="Guflly"/><br /><sub><b>Guflly</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Guflly" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://mxx1111.github.io/"><img src="https://avatars.githubusercontent.com/u/30290248?v=4?s=60" width="60px;" alt="雄雄的小课堂"/><br /><sub><b>雄雄的小课堂</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mxx1111" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

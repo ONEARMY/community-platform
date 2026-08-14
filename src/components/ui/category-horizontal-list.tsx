@@ -22,7 +22,7 @@ export function CategoryHorizontalList({
     .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
 
   return (
-    <div className="flex overflow-x-auto">
+    <div data-cy="CategoryHorizonalList" className="flex overflow-x-auto">
       {orderedCategories.map((category) => {
         const isSelected = category.id === activeCategory?.id;
 

@@ -1,12 +1,5 @@
 import debounce from 'debounce';
-import {
-  ButtonIcon,
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-  Tooltip,
-} from 'oa-components';
+import { ButtonIcon, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
@@ -17,6 +10,7 @@ import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
 import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { CategoryHorizontalList } from '@/components/ui/category-horizontal-list';
 import DraftButton from '../common/Drafts/DraftButton';
 import { ListHeader } from '../common/Layout/ListHeader';
 import { headings, listing } from './labels';
@@ -192,7 +186,7 @@ export const QuestionListHeader = (props: IProps) => {
   );
 
   const categoryComponent = (
-    <CategoryHorizonalList
+    <CategoryHorizontalList
       allCategories={categories}
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>

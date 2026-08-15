@@ -32,8 +32,8 @@ export function CategoryHorizontalList({
             type="button"
             variant="ghost"
             aria-pressed={isSelected}
-            data-cy={`CategoryHorizontalList-Item${isSelected ? '-active' : ''}`}
-            data-testid="CategoryHorizontalList-Item"
+            data-cy={`CategoryHorizonalList-Item${isSelected ? '-active' : ''}`}
+            data-testid="CategoryHorizonalList-Item"
             title={category.name}
             onClick={() => setActiveCategory(isSelected ? null : category)}
             className={cn(

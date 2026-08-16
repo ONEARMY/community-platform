@@ -5,6 +5,7 @@ import { PollDTO, PollOptionDTO } from 'oa-shared/models/poll';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useLocation, useNavigate } from 'react-router';
+import { logger } from 'src/logger';
 import { useToast } from '../../../common/Toast';
 import { pollService } from './poll.service';
 
@@ -46,7 +47,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
       }
     } catch (error) {
       toast.error('Oops! Your vote didn’t go through');
-      console.error({ error });
+      logger.error({ error });
     }
   };
 

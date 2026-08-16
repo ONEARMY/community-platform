@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 
@@ -36,13 +37,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           }
         }
       } catch (error) {
-        console.error('Error fetching profile donation settings:', error);
+        logger.error('Error fetching profile donation settings:', error);
       }
     }
 
     return Response.json(donationSettings, { headers, status: 200 });
   } catch (error) {
-    console.error('Error fetching donation settings:', error);
+    logger.error('Error fetching donation settings:', error);
     return Response.json({}, { headers, status: 500 });
   }
 }

@@ -3,6 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMedia } from 'oa-shared';
 import { Image, MediaFile } from 'oa-shared';
 import sharp from 'sharp';
+import { logger } from 'src/logger';
 
 export class StorageServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -325,7 +326,7 @@ export class StorageServiceServer {
         .copy(sourcePath, fullDestinationPath);
 
       if (copyError) {
-        console.error('Error copying file:', copyError);
+        logger.error('Error copying file:', copyError);
         return null;
       }
 
@@ -338,7 +339,7 @@ export class StorageServiceServer {
         fullPath: fullDestinationPath,
       };
     } catch (error) {
-      console.error('Error moving image:', error);
+      logger.error('Error moving image:', error);
       return null;
     }
   }

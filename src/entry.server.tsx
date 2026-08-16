@@ -5,6 +5,7 @@ import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
 import type { EntryContext } from 'react-router';
 import { ServerRouter } from 'react-router';
+import { logger } from 'src/logger';
 import { isProductionEnvironment, SENTRY_CONFIG } from './config/config';
 import { createEmotionCache } from './styles/createEmotionCache';
 
@@ -40,7 +41,7 @@ async function handleBotRequest(
       {
         signal: controller.signal,
         onError(error: unknown) {
-          console.error(error);
+          logger.error({ error });
           responseStatusCode = 500;
         },
       },
@@ -81,7 +82,7 @@ async function handleBrowserRequest(
       {
         signal: controller.signal,
         onError(error: unknown) {
-          console.error(error);
+          logger.error({ error });
           Sentry.captureException(error);
           if (responseStatusCode === 200) {
             responseStatusCode = 500;

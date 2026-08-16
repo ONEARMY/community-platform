@@ -3,6 +3,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -90,7 +91,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error updating research', status: 500 }, { status: 500 });
   }
 };
@@ -128,7 +129,7 @@ async function deleteResearch(request, id: number) {
       return Response.json({}, { status: 200, headers });
     }
   } catch (error) {
-    console.error('Delete research error:', error);
+    logger.error('Delete research error:', error);
   }
 
   return Response.json({}, { status: 500, headers });

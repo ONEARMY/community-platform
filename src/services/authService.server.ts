@@ -1,4 +1,5 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
+import { logger } from 'src/logger';
 
 type CreateProfileArgs = {
   user: User;
@@ -17,7 +18,7 @@ export class AuthServiceServer {
       .eq('name', 'member');
 
     if (error) {
-      console.error(error);
+      logger.error(error);
       throw 'Default member type not found';
     }
 

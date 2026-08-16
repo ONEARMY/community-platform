@@ -4,6 +4,7 @@ import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } fr
 import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -54,7 +55,7 @@ export const loader = async ({ request }) => {
   });
 
   if (rpcResult.error) {
-    console.error(rpcResult.error);
+    logger.error(rpcResult.error);
     return Response.json({ error: 'Failed to load news' }, { status: 500 });
   }
   const rows = rpcResult.data as (DBNews & { total_count: number })[];
@@ -121,7 +122,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .limit(1);
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.error(profileRequest.error);
+      logger.error({ error: profileRequest.error });
       throw validationError('User not found');
     }
 
@@ -144,7 +145,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
           ? await pollService.updatePoll(data.poll)
           : await pollService.createPoll(data.poll);
       } catch (e) {
-        console.error('Error saving or updating the poll: ', data.poll, e);
+        logger.error('Error saving or updating the poll: ', data.poll, e);
       }
     }
 
@@ -185,7 +186,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
 
       if (badgeResult.error) {
-        console.error('Error inserting badge relations:', badgeResult.error);
+        logger.error('Error inserting badge relations:', badgeResult.error);
       }
     }
 
@@ -213,7 +214,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error creating news', status: 500 }, { status: 500 });
   }
 };

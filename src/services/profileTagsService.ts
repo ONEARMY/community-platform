@@ -1,4 +1,5 @@
 import type { ProfileTag } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getAllTags = async () => {
   try {
@@ -8,7 +9,7 @@ const getAllTags = async () => {
 
     return profileTags;
   } catch (error) {
-    console.error({ error });
+    logger.error({ error });
     return [];
   }
 };

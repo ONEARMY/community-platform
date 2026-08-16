@@ -1,6 +1,7 @@
 import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -74,7 +75,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     );
 
     if (banError) {
-      console.error('Error banning auth user:', banError);
+      logger.error('Error banning auth user:', banError);
       throw new Error('Failed to ban user');
     }
 
@@ -113,7 +114,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error('Ban user error:', error);
+    logger.error('Ban user error:', error);
     return Response.json({ error: 'Failed to ban user' }, { headers, status: 500 });
   }
 };

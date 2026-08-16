@@ -7,6 +7,7 @@ import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { PollForm } from 'src/pages/common/FormFields';
 import { BadgeVisibilityField } from 'src/pages/common/FormFields/BadgeVisibilityField';
 import { CategoryField } from 'src/pages/common/FormFields/Category.field';
@@ -48,7 +49,7 @@ export const NewsForm = (props: IProps) => {
       await newsService.deleteNews(id);
       window.location.assign('/news');
     } catch (e) {
-      console.error(e.message || 'Error deleting news');
+      logger.error(e.message || 'Error deleting news');
     }
   };
 
@@ -94,7 +95,7 @@ export const NewsForm = (props: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       duration: 10000,

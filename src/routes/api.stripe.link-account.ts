@@ -1,4 +1,5 @@
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
@@ -56,7 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {
-    console.error('Error linking supporter account:', error);
+    logger.error('Error linking supporter account:', error);
     return Response.json(
       { error: error?.message || 'An unexpected error occurred.' },
       { status: 500 },

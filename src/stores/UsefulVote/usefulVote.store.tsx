@@ -2,6 +2,7 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import type { UsefulContentType } from 'oa-shared';
 import { createContext, useContext, useEffect } from 'react';
 import { trackEvent } from 'src/common/Analytics';
+import { logger } from 'src/logger';
 import { usefulService } from 'src/services/usefulService';
 import { useProfileStore } from '../Profile/profile.store';
 
@@ -98,7 +99,7 @@ export class UsefulVoteStore {
         }
       });
     } catch (error) {
-      console.error('Failed to check vote status:', error);
+      logger.error('Failed to check vote status:', error);
       runInAction(() => {
         const currentState = this.votes.get(key);
         if (currentState) {
@@ -116,7 +117,7 @@ export class UsefulVoteStore {
     const currentState = this.votes.get(key);
 
     if (!currentState) {
-      console.error('Vote state not initialized');
+      logger.error('Vote state not initialized');
       return false;
     }
 
@@ -154,7 +155,7 @@ export class UsefulVoteStore {
 
       return true;
     } catch (error) {
-      console.error('Failed to toggle vote:', error);
+      logger.error('Failed to toggle vote:', error);
 
       // Rollback optimistic update
       runInAction(() => {

@@ -1,6 +1,7 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import type { DBAuthorVotes, DBProfile, ProfileDTO, ProfileType } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { logger } from 'src/logger';
 import { ProfileTypesServiceServer } from './profileTypesService.server';
 
 export class ProfileServiceServer {
@@ -173,7 +174,7 @@ export class ProfileServiceServer {
     });
 
     if (error || !data) {
-      console.error(error);
+      logger.error({ error });
       return null;
     }
 
@@ -291,7 +292,7 @@ export class ProfileServiceServer {
         .in('profile_tag_id', tagsToRemove);
 
       if (error) {
-        console.error(error);
+        logger.error(error);
       }
     }
 
@@ -306,7 +307,7 @@ export class ProfileServiceServer {
       const { error } = await this.client.from('profile_tags_relations').insert(newRelations);
 
       if (error) {
-        console.error(error);
+        logger.error(error);
       }
     }
   }
@@ -337,7 +338,7 @@ export class ProfileServiceServer {
     });
 
     if (error) {
-      console.error('Error creating profile for user:', error);
+      logger.error('Error creating profile for user:', error);
     }
   }
 

@@ -1,6 +1,7 @@
 import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { forbiddenError, validationError } from 'src/utils/httpException';
@@ -56,7 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500 });
   }
 };

@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
@@ -22,7 +23,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     .limit(1);
 
   if (!profileResult.data || profileResult.error) {
-    console.error(profileResult.error + ' auth_id:' + claims.data.claims.sub);
+    logger.error(profileResult.error + ' auth_id:' + claims.data.claims.sub);
     return Response.json({}, { headers, status: 400, statusText: 'user not found' });
   }
 
@@ -45,7 +46,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   }
 
   if (result.error) {
-    console.error(result.error);
+    logger.error(result.error);
     return Response.json({}, { headers, status: 500, statusText: 'error' });
   }
 

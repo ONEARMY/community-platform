@@ -2,6 +2,7 @@ import Keyv from 'keyv';
 import type { DBMapSettings, DefaultMapFilters, FilterResponse, MapFilters } from 'oa-shared';
 import { ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 const cache = new Keyv<FilterResponse>({ ttl: 3600000 }); // expires 60 minutes after being set
@@ -27,7 +28,7 @@ export const loader = async ({ request }) => {
       .filter((x) => !!x.error)
       .flatMap((x) => x.error);
     if (errors.length) {
-      console.error({ message: 'Error fetching map pin filters', errors });
+      logger.error({ message: 'Error fetching map pin filters', errors });
     }
 
     const settings = mapSettings?.data?.at(0) as DBMapSettings | undefined;
@@ -48,7 +49,7 @@ export const loader = async ({ request }) => {
     cache.set('map-filters', response);
     return Response.json(response, { headers });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { status: 500, headers });
   }
 };

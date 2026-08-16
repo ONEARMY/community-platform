@@ -3,6 +3,7 @@ import type { Project, Remake } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import remakesEmptyStateImage from 'src/assets/images/remakes-empty-state.png';
+import { logger } from 'src/logger';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { remakeService } from 'src/services/remakeService';
 import { buildStatisticsLabel } from 'src/utils/helpers';
@@ -117,7 +118,7 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
       setDeleteError(null);
       handleDeleted(deleteTarget.id);
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       setDeleteError(DELETE_ERROR_MESSAGE);
     } finally {
       setIsDeleting(false);

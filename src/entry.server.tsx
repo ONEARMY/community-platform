@@ -5,12 +5,14 @@ import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
 import type { EntryContext } from 'react-router';
 import { ServerRouter } from 'react-router';
-import { SENTRY_CONFIG } from './config/config';
+import { isProductionEnvironment, SENTRY_CONFIG } from './config/config';
 import { createEmotionCache } from './styles/createEmotionCache';
 
 const ABORT_DELAY = 5_000;
 
-Sentry.init({ ...SENTRY_CONFIG });
+if (isProductionEnvironment()) {
+  Sentry.init({ ...SENTRY_CONFIG });
+}
 
 export default function handleRequest(
   request: Request,

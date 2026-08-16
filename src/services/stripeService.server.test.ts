@@ -1,5 +1,4 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { logger } from 'src/logger';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
@@ -12,6 +11,7 @@ const {
   mockCustomersCreate,
   mockInvoicePaymentsList,
   mockGetSecret,
+  mockLoggerError,
 } = vi.hoisted(() => ({
   mockPricesList: vi.fn(),
   mockList: vi.fn(),
@@ -22,6 +22,7 @@ const {
   mockCustomersCreate: vi.fn(),
   mockInvoicePaymentsList: vi.fn(),
   mockGetSecret: vi.fn(),
+  mockLoggerError: vi.fn(),
 }));
 
 vi.mock('stripe', () => ({
@@ -40,6 +41,13 @@ vi.mock('src/services/secretsService.server', () => ({
 
 vi.mock('src/repository/supabaseAdmin.server', () => ({
   createSupabaseAdminServerClient: vi.fn(),
+}));
+
+// stripeService.server.ts is re-imported fresh per test via vi.resetModules()
+// in loadService() below, so a vi.spyOn() on an already-imported `logger`
+// instance would watch a stale module - this mock survives resetModules().
+vi.mock('src/logger', () => ({
+  logger: { error: mockLoggerError },
 }));
 
 import { StripeServiceServer } from './stripeService.server';
@@ -163,16 +171,13 @@ describe('cancelActiveSubscriptions', () => {
     mockCancel
       .mockRejectedValueOnce(new Error('stripe boom'))
       .mockResolvedValueOnce({});
-    const errorSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
     const StripeServiceServer = await loadService();
     const cancelled = await StripeServiceServer.cancelActiveSubscriptions('cus_1');
 
     expect(mockCancel).toHaveBeenCalledTimes(2);
     expect(cancelled).toBe(1);
-    expect(errorSpy).toHaveBeenCalled();
-
-    errorSpy.mockRestore();
+    expect(mockLoggerError).toHaveBeenCalled();
   });
 
   it('returns 0 without listing when the customer has no subscriptions', async () => {
@@ -287,15 +292,12 @@ describe('cancelIncompleteSubscriptions', () => {
   it('continues past a failing cancel and counts only the successes', async () => {
     mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1' }, { id: 'sub_2' }] });
     mockCancel.mockRejectedValueOnce(new Error('stripe boom')).mockResolvedValueOnce({});
-    const errorSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
     const StripeServiceServer = await loadService();
     const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');
 
     expect(cancelled).toBe(1);
-    expect(errorSpy).toHaveBeenCalled();
-
-    errorSpy.mockRestore();
+    expect(mockLoggerError).toHaveBeenCalled();
   });
 
   it('returns 0 and does nothing when Stripe is not configured', async () => {

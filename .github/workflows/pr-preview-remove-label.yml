@@ -5,6 +5,9 @@ on:
     # Trigger when labels are changed or more commits added to a PR that contains labels
     types: [closed]
 
+permissions:
+  issues: write
+
 jobs:
   preview_app:
     if: contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅')
@@ -15,12 +18,6 @@ jobs:
       group: pr-${{ github.event.number }}
 
     steps:
-      - name: Get code
-        uses: actions/checkout@v4
-        with:
-          # pull the repo from the pull request source, not the default local repo
-          ref: ${{ github.event.pull_request.head.sha }}
-
       - name: Remove preview label
         uses: actions/github-script@v7
         with:

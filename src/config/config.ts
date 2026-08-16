@@ -60,7 +60,7 @@ export const isProductionEnvironment = (): boolean => {
 
 export const SITE = siteVariant;
 export const SENTRY_CONFIG: ISentryConfig = {
-  dsn: _c('VITE_SENTRY_DSN', 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729'),
+  dsn: _c('VITE_SENTRY_DSN'),
   environment: siteVariant,
   // Caps captured error/message event volume (not performance traces) so the
   // logger -> Sentry bridge in src/logger/index.ts can't spike quota/noise.

@@ -4,6 +4,7 @@ import type { DBMedia, DBQuestion, QuestionDTO } from 'oa-shared';
 import { Question, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { QuestionServiceServer } from 'src/services/questionService.server';
@@ -97,7 +98,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error updating question' }, { headers, status: 500 });
   }
 };
@@ -150,7 +151,7 @@ async function deleteQuestion(request: Request, id: number) {
       return error.getResponse();
     }
 
-    console.error('Delete question error:', error);
+    logger.error('Delete question error:', error);
     return Response.json({}, { status: 500, headers });
   }
 }

@@ -1,4 +1,5 @@
 import type { SubscribableContentTypes } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const add = async (contentType: SubscribableContentTypes, id: number) => {
   return await fetch(`/api/subscribers/${contentType}/${id}`, {
@@ -21,7 +22,7 @@ const isSubscribed = async (contentType: SubscribableContentTypes, id: number) =
 
     return !!subscribed;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return false;
   }
 };

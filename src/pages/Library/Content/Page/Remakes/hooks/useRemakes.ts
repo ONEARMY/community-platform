@@ -1,5 +1,6 @@
 import type { Remake } from 'oa-shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { logger } from 'src/logger';
 import { remakeService } from 'src/services/remakeService';
 
 interface UseRemakesReturn {
@@ -48,7 +49,7 @@ export const useRemakes = (
 
         setRemakes(result);
       } catch (err) {
-        console.error(err);
+        logger.error(err);
 
         if (!ignore) {
           setError(FETCH_ERROR_MESSAGE);

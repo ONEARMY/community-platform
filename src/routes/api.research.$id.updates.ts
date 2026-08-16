@@ -2,6 +2,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBProfile, DBResearchItem, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -97,7 +98,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
 };

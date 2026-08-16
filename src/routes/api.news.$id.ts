@@ -4,6 +4,7 @@ import type { ContentReach, DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs, Params } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
@@ -120,7 +121,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
 
       if (badgeResult.error) {
-        console.error('Error inserting badge relations:', badgeResult.error);
+        logger.error('Error inserting badge relations:', badgeResult.error);
       }
     }
 
@@ -150,7 +151,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error updating news', status: 500 }, { status: 500 });
   }
 };
@@ -202,7 +203,7 @@ async function deleteNews(request: Request, id: number) {
       return error.getResponse();
     }
 
-    console.error('Delete news error:', error);
+    logger.error('Delete news error:', error);
     return Response.json({}, { status: 500, headers });
   }
 }

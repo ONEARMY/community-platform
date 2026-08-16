@@ -1,4 +1,5 @@
 import { PollDTO } from 'oa-shared/models/poll';
+import { logger } from 'src/logger';
 
 const voteOnPoll = async (poll: PollDTO, selectedIds: number[]) => {
   const response = await fetch(`/api/polls/${poll.id}`, {
@@ -22,7 +23,7 @@ const getPoll = async (poll: PollDTO) => {
     const data: PollDTO | null = await response.json();
     return data;
   } catch (error) {
-    console.error({ error });
+    logger.error({ error });
   }
   return null;
 };

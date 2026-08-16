@@ -9,6 +9,7 @@ import {
   UserRole,
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 import { ProfileServiceServer } from './profileService.server';
 import { StorageServiceServer } from './storageService.server';
@@ -122,7 +123,7 @@ export class ResearchServiceServer {
     });
 
     if (error) {
-      console.error('Error fetching user research:', error);
+      logger.error('Error fetching user research:', error);
       return [];
     }
 

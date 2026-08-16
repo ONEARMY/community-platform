@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast/useToast';
+import { logger } from 'src/logger';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { FilesFields } from '../../../common/FormFields/FilesFields';
 import { buttons, headings, updateForm } from '../../labels';
@@ -58,7 +59,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       duration: 10000,

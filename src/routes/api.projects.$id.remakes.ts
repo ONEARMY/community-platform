@@ -1,6 +1,7 @@
 import { HTTPException } from 'hono/http-exception';
 import type { RemakeDTO } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { RemakeServiceServer } from 'src/services/remakeService.server';
@@ -41,7 +42,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error fetching remakes' });
   }
 };
@@ -105,7 +106,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating remake' });
   }
 };

@@ -12,6 +12,7 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import '../styles/leaflet.css';
 import type { LatLngBounds, Map as LeafletMap } from 'leaflet';
+import { logger } from 'src/logger';
 import { Box } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -53,7 +54,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       { headers },
     );
   } catch (error) {
-    console.error('Error loading map embed data:', error);
+    logger.error('Error loading map embed data:', error);
     throw error;
   }
 }

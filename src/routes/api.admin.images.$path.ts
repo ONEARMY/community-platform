@@ -2,6 +2,7 @@ import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { isAllowedImagePickerPath } from 'src/config/imagePickerPaths';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import {
@@ -56,7 +57,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       return error.getResponse();
     }
 
-    console.error('Error listing images:', error);
+    logger.error('Error listing images:', error);
     return Response.json({ error: 'Error listing images' }, { status: 500, headers });
   }
 }
@@ -104,7 +105,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       return error.getResponse();
     }
 
-    console.error('Error uploading image:', error);
+    logger.error('Error uploading image:', error);
     return Response.json({ error: 'Error uploading image' }, { status: 500, headers });
   }
 }

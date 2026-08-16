@@ -1,5 +1,6 @@
 import type { ResearchStatus } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
@@ -53,7 +54,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json(null, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
 };

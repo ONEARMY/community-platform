@@ -42,16 +42,22 @@ export const logger = new Logger({
 // this covers try/catch'd service errors that never reach a boundary.
 logger.use((ctx) => {
   if (ctx.logLevelId >= levelNumberToNameMap['error']) {
-    const errorArg = ctx.args.find(
-      (a) =>
-        a instanceof Error ||
-        (typeof a === 'object' && a !== null && (a as any).error instanceof Error),
-    );
-    const err = errorArg instanceof Error ? errorArg : (errorArg as any)?.error;
+    const carrier = ctx.args.find(
+      (a) => a instanceof Error || (typeof a === 'object' && a !== null && 'error' in a),
+    ) as any;
+    const errorLike = carrier instanceof Error ? carrier : carrier?.error;
     const message = ctx.args.find((a) => typeof a === 'string');
 
-    if (err) {
-      Sentry.captureException(err, { extra: { message } });
+    if (errorLike instanceof Error) {
+      Sentry.captureException(errorLike, { extra: { message } });
+    } else if (errorLike && typeof errorLike === 'object') {
+      // Non-Error error-like object (e.g. Supabase's PostgrestError) - no
+      // stack trace to attach, but its message/code/details are still worth
+      // surfacing rather than a bare fallback message.
+      Sentry.captureMessage(message ?? errorLike.message ?? 'Unknown logger.error call', {
+        level: 'error',
+        extra: { error: errorLike },
+      });
     } else {
       Sentry.captureMessage(message ?? 'Unknown logger.error call', 'error');
     }

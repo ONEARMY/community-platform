@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from 'src/logger';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
@@ -162,7 +163,7 @@ describe('cancelActiveSubscriptions', () => {
     mockCancel
       .mockRejectedValueOnce(new Error('stripe boom'))
       .mockResolvedValueOnce({});
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
     const StripeServiceServer = await loadService();
     const cancelled = await StripeServiceServer.cancelActiveSubscriptions('cus_1');
@@ -286,7 +287,7 @@ describe('cancelIncompleteSubscriptions', () => {
   it('continues past a failing cancel and counts only the successes', async () => {
     mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1' }, { id: 'sub_2' }] });
     mockCancel.mockRejectedValueOnce(new Error('stripe boom')).mockResolvedValueOnce({});
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
     const StripeServiceServer = await loadService();
     const cancelled = await StripeServiceServer.cancelIncompleteSubscriptions('cus_1');

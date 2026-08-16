@@ -1,11 +1,12 @@
 import { NotificationsPreferencesFormData } from 'oa-shared';
+import { logger } from 'src/logger';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+const mockConsoleError = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 const mockEmailReachField = { value: '1', label: 'All emails' };
 
 describe('notificationsPreferencesService', () => {

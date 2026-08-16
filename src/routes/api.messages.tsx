@@ -1,5 +1,6 @@
 import { HTTPException } from 'hono/http-exception';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -125,7 +126,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
 
     return Response.json({ error }, { headers, status: 500, statusText: 'Error sending message' });
   }

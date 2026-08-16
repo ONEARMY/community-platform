@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { DBMedia, DBNotification, News, Notification, NotificationDisplay } from 'oa-shared';
+import { logger } from 'src/logger';
 import { NewsServiceServer } from './newsService.server';
 import { TagsServiceServer } from './tagsService.server';
 
@@ -54,7 +55,7 @@ export class NotificationMapperServiceServer {
       const notificationDisplay = NotificationDisplay.fromNotification(notification);
       return notificationDisplay;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw error;
     }
   }

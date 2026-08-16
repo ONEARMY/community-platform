@@ -2,6 +2,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { ContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { CategoryServiceServer } from 'src/services/categoryService.server';
 import {
@@ -62,7 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error('Error creating category:', error);
+    logger.error('Error creating category:', error);
     return Response.json({ error: 'Error creating category' }, { status: 500, headers });
   }
 };

@@ -1,6 +1,7 @@
 import type { DBProfile, ProfileListItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -38,7 +39,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .eq('tenant_id', process.env.TENANT_ID!);
 
   if (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 

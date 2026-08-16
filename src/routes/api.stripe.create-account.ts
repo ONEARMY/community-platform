@@ -1,5 +1,6 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { AuthServiceServer } from 'src/services/authService.server';
@@ -48,7 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       if (createError.message?.includes('already been registered')) {
         return Response.json({ error: FRIENDLY_MESSAGES['generic-error'] }, { status: 409 });
       }
-      console.error('Error creating user:', createError);
+      logger.error('Error creating user:', createError);
       return Response.json({ error: 'Failed to create account.' }, { status: 500 });
     }
 
@@ -72,7 +73,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {
-    console.error('Error creating supporter account:', error);
+    logger.error('Error creating supporter account:', error);
     return Response.json(
       { error: error?.message || 'An unexpected error occurred.' },
       { status: 500 },

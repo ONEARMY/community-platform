@@ -4,6 +4,7 @@ import { Category } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { categoriesCache as cache } from 'src/services/categoryService.server';
 import { validationError } from 'src/utils/httpException';
@@ -53,7 +54,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       return error.getResponse();
     }
 
-    console.error('Error loading categories:', error);
+    logger.error('Error loading categories:', error);
     return data({ error: 'Error loading categories', status: 500 }, { status: 500 });
   }
 }

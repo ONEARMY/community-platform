@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
+import { logger } from 'src/logger';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { Box, Divider, Flex, Paragraph } from 'theme-ui';
 
@@ -29,7 +30,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
           setPin(pin);
         }
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     };
     getPin();

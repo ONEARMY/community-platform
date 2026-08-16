@@ -4,6 +4,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBProfile, DBQuestion, Moderation, QuestionDTO } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -39,7 +40,7 @@ export const loader = async ({ request }) => {
   });
 
   if (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { status: 500, headers });
   }
 
@@ -123,7 +124,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .limit(1);
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.error(profileRequest.error);
+      logger.error({ error: profileRequest.error });
       throw validationError('User not found');
     }
 
@@ -169,7 +170,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
 
     return Response.json({ error: 'Error creating question' }, { headers, status: 500 });
   }

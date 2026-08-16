@@ -1,5 +1,6 @@
 import { HTTPException } from 'hono/http-exception';
 import { type ActionFunctionArgs, data } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { unauthorizedError, validationError } from 'src/utils/httpException';
 
@@ -37,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return data({ error: 'Error changing password', status: 500 }, { status: 500 });
   }
 

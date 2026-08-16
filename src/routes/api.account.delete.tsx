@@ -1,5 +1,6 @@
 import { HTTPException } from 'hono/http-exception';
 import { type ActionFunctionArgs, data } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -85,7 +86,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return data(
       { error: 'Failed to delete account' },
       { headers, status: 500, statusText: 'Failed to delete account' },

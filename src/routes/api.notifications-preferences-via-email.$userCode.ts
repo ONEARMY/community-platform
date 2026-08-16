@@ -5,6 +5,7 @@ import {
   NotificationsPreferencesDefaults,
 } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { methodNotAllowedError, unauthorizedError, validationError } from 'src/utils/httpException';
 import { tokens } from 'src/utils/tokens.server';
@@ -52,7 +53,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     return Response.json({ preferences, isContactable, roles }, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({ error }, { headers, status: 500 });
   }
 };
@@ -119,7 +120,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({ error }, { headers, status: 500 });
   }
 };

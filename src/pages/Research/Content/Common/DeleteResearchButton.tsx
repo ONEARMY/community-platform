@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { trackEvent } from 'src/common/Analytics';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { hasAdminRights } from 'src/utils/helpers';
 import { researchService } from '../../research.service';
@@ -42,7 +43,7 @@ const DeleteResearchButton = observer(({ research }: DeleteResearchButtonProps) 
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         setIsDeleting(false);
         return `Error: ${error.message}`;
       },

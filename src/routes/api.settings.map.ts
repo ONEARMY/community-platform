@@ -3,6 +3,7 @@ import type { DBMapPin, DBProfile, UpsertPin } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { MapPinsServiceServer } from 'src/services/mapPinsService.server';
 import { MapServiceServer } from 'src/services/mapService.server';
@@ -55,7 +56,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const result = await mapService.upsert(data, profile);
 
     if (result?.error) {
-      console.error(result.error);
+      logger.error(result.error);
       throw new Error(result.error.message || 'Error saving map pin');
     }
 
@@ -70,7 +71,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error saving map pin' });
   }
 };
@@ -99,7 +100,7 @@ async function deletePin(request: Request, profile: DBProfile) {
   try {
     await new MapPinsServiceServer(client).delete(profile.id);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500 });
   }
 

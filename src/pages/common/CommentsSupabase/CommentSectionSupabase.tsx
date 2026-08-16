@@ -5,6 +5,7 @@ import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
+import { logger } from 'src/logger';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -99,7 +100,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
 
         setComments(comments || []);
       } catch (err) {
-        console.error(err);
+        logger.error(err);
       }
     };
 
@@ -127,7 +128,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -150,7 +151,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -171,7 +172,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   };
 
@@ -193,7 +194,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   };
 
@@ -220,7 +221,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -246,7 +247,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };

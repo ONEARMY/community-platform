@@ -2,6 +2,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { ContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { CategoryServiceServer } from 'src/services/categoryService.server';
 import {
@@ -74,7 +75,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error('Error updating/deleting category:', error);
+    logger.error('Error updating/deleting category:', error);
     return Response.json({ error: 'Error updating/deleting category' }, { status: 500, headers });
   }
 };

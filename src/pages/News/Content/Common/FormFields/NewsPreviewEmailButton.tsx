@@ -2,6 +2,7 @@ import { Button } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
 import { useState } from 'react';
 import { useToast } from 'src/common/Toast/useToast';
+import { logger } from 'src/logger';
 import { emailPreviewService } from 'src/services/emailPreviewService';
 
 interface IProps {
@@ -42,7 +43,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       finally: () => {

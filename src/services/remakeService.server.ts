@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBProfile, DBRemake, RemakeDTO } from 'oa-shared';
 import { REMAKE_MAX_DESCRIPTION_LENGTH, REMAKE_MAX_IMAGES, Remake, UserRole } from 'oa-shared';
+import { logger } from 'src/logger';
 import { forbiddenError, notFoundError, validationError } from 'src/utils/httpException';
 import { ImageServiceServer } from './imageService.server';
 
@@ -43,7 +44,7 @@ export class RemakeServiceServer {
       .eq('project_id', projectId);
 
     if (error) {
-      console.error(error);
+      logger.error(error);
       return 0;
     }
 

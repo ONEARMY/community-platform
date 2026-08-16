@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router';
 import { toast as sonnerToast } from 'sonner';
 import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
+import { logger } from 'src/logger';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
 import type { SupporterPrice, TierConfigMap } from 'src/services/stripeService.server';
@@ -200,7 +201,7 @@ export const SupporterPage = ({
           setAccountCreated(true);
         }
       } catch (err) {
-        console.error('Auto-create account failed:', err);
+        logger.error('Auto-create account failed:', err);
       }
     };
 
@@ -285,7 +286,7 @@ export const SupporterPage = ({
           setAccountCreated(true);
         }
       } catch (err) {
-        console.error('Auto-create account failed:', err);
+        logger.error('Auto-create account failed:', err);
       }
     }
 

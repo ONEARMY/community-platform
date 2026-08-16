@@ -1,4 +1,5 @@
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { StripeServiceServer } from 'src/services/stripeService.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
@@ -47,13 +48,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     if (updateError) {
-      console.error('Error updating password:', updateError);
+      logger.error('Error updating password:', updateError);
       return Response.json({ error: 'Failed to update password.' }, { status: 500 });
     }
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error: any) {
-    console.error('Error setting password:', error);
+    logger.error('Error setting password:', error);
     return Response.json(
       { error: error?.message || 'An unexpected error occurred.' },
       { status: 500 },

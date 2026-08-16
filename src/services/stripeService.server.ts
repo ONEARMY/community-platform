@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
@@ -159,7 +160,7 @@ export class StripeServiceServer {
         await stripe.subscriptions.cancel(subscription.id);
         cancelled += 1;
       } catch (error) {
-        console.error(
+        logger.error(
           `Failed to cancel subscription ${subscription.id} for customer ${customerId}:`,
           error,
         );
@@ -187,7 +188,7 @@ export class StripeServiceServer {
         await stripe.subscriptions.cancel(subscription.id);
         cancelled += 1;
       } catch (error) {
-        console.error(
+        logger.error(
           `Failed to cancel incomplete subscription ${subscription.id} for customer ${customerId}:`,
           error,
         );

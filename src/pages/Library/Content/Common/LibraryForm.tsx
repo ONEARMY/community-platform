@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
@@ -74,7 +75,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
           };
         },
         error: (error) => {
-          console.error(error);
+          logger.error(error);
           return `Error: ${error.message}`;
         },
         duration: 10000,

@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import clusterIcon from 'src/assets/icons/map-cluster.svg';
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg';
 
+import { logger } from 'src/logger';
 import './sprites.css';
 
 /**
@@ -30,7 +31,7 @@ export const createClusterIcon = () => {
           resolved,
         );
       })
-      .catch((fetchError) => console.error(fetchError));
+      .catch((fetchError) => logger.error(fetchError));
   }, []);
 
   return (cluster: MarkerCluster) => {

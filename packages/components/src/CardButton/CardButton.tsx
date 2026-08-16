@@ -7,11 +7,26 @@ export interface IProps extends BoxProps {
   isSelected?: boolean;
 }
 
+// When an onClick is passed the card is genuinely interactive, so it has to be
+// rendered as a real <button>. A <div> is not focusable, gets skipped by tab
+// navigation and is not announced as a control to assistive technology.
+const buttonReset: ThemeUIStyleObject = {
+  appearance: 'none',
+  color: 'inherit',
+  font: 'inherit',
+  textAlign: 'inherit',
+  // Card already provides the border via its variant.
+  border: 0,
+};
+
 export const CardButton = (props: IProps) => {
-  const { children, extrastyles, isSelected } = props;
+  const { children, extrastyles, isSelected, ...cardProps } = props;
+  const isInteractive = !!props.onClick;
 
   return (
     <Card
+      {...(isInteractive ? { as: 'button', type: 'button', 'aria-pressed': !!isSelected } : {})}
+      {...cardProps}
       sx={{
         alignItems: 'center',
         alignContent: 'center',
@@ -44,9 +59,9 @@ export const CardButton = (props: IProps) => {
               transform: 'translateY(-2px)',
             }
           : {}),
+        ...(isInteractive ? buttonReset : {}),
         ...extrastyles,
       }}
-      {...props}
     >
       {children}
     </Card>

@@ -61,7 +61,10 @@ export const CategoryHorizonalList = (props: IProps) => {
             {category.imageUrl && (
               <img
                 src={category.imageUrl}
-                alt={category.name}
+                // The name is already rendered as visible text below, so the
+                // image is decorative and repeating it would double up in
+                // screen readers.
+                alt=""
                 style={{
                   width: '40px',
                   height: '40px',

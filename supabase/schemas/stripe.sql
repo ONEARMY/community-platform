@@ -82,7 +82,7 @@ REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "anon";
 REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "authenticated";
 
 -- RPC function to list supporters (profiles holding a badge backed by a stripe tier config), including email from auth.users
-CREATE OR REPLACE FUNCTION get_supporters(p_tenant_id text)
+CREATE OR REPLACE FUNCTION "public"."get_supporters"(p_tenant_id text)
 RETURNS TABLE (
   profile_id bigint,
   username text,
@@ -92,6 +92,7 @@ RETURNS TABLE (
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
 AS $$
 BEGIN
   RETURN QUERY
@@ -113,7 +114,7 @@ END;
 $$;
 
 -- RPC function to count supporters per badge, for the admin Users overview
-CREATE OR REPLACE FUNCTION get_supporter_badge_counts(p_tenant_id text)
+CREATE OR REPLACE FUNCTION "public"."get_supporter_badge_counts"(p_tenant_id text)
 RETURNS TABLE (
   badge_id bigint,
   badge_name text,
@@ -121,6 +122,7 @@ RETURNS TABLE (
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
 AS $$
 BEGIN
   RETURN QUERY

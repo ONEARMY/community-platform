@@ -280,7 +280,7 @@ END;
 $$;
 
 -- RPC function to count profiles per profile type, for the admin Users overview
-CREATE OR REPLACE FUNCTION get_profile_type_counts(p_tenant_id text)
+CREATE OR REPLACE FUNCTION "public"."get_profile_type_counts"(p_tenant_id text)
 RETURNS TABLE (
   profile_type_id bigint,
   name text,
@@ -289,6 +289,7 @@ RETURNS TABLE (
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
 AS $$
 BEGIN
   RETURN QUERY

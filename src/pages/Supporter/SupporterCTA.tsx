@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Box } from 'theme-ui';
+import type { CSSProperties, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 export const SupporterCTA = ({
   onClick,
@@ -16,33 +16,20 @@ export const SupporterCTA = ({
   type?: 'button' | 'submit';
   dataCy?: string;
 }) => (
-  <Box
-    as="button"
-    {...({ type, disabled, 'data-cy': dataCy } as any)}
+  <button
+    type={type}
+    disabled={disabled}
+    data-cy={dataCy}
     onClick={onClick}
-    sx={{
-      width: '100%',
-      height: ['64px', '64px'],
-      borderRadius: '5px',
-      border: 'none',
-      bg: color,
-      color: 'black',
-      fontSize: ['17px', '22px'],
-      fontWeight: 500,
-      fontFamily: 'inherit',
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.6 : 1,
-      transition: 'background-color 0.15s, color 0.15s',
-      '&:hover:not(:disabled)': {
-        bg: 'black',
-        color: 'white',
-      },
-      '&:focus-visible': {
-        outline: '2px solid black',
-        outlineOffset: '2px',
-      },
-    }}
+    style={{ '--supporter-cta-color': color } as CSSProperties}
+    className={cn(
+      'inline-flex h-13 w-full items-center justify-center gap-[10px] rounded-[5px] border-none bg-[var(--supporter-cta-color)] font-medium text-[17px] text-black transition-colors duration-150 sm:text-[22px]',
+      disabled
+        ? 'cursor-not-allowed opacity-60'
+        : 'cursor-pointer hover:bg-[#1b1b1b] hover:text-white',
+      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black',
+    )}
   >
     {children}
-  </Box>
+  </button>
 );

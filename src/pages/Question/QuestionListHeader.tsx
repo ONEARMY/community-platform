@@ -1,12 +1,5 @@
 import debounce from 'debounce';
-import {
-  ButtonIcon,
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-  Tooltip,
-} from 'oa-components';
+import { ButtonIcon, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
@@ -17,6 +10,7 @@ import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
 import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { SelectableHorizontalList } from '@/components/ui/selectable-horizontal-list';
 import DraftButton from '../common/Drafts/DraftButton';
 import { ListHeader } from '../common/Layout/ListHeader';
 import { headings, listing } from './labels';
@@ -192,13 +186,21 @@ export const QuestionListHeader = (props: IProps) => {
   );
 
   const categoryComponent = (
-    <CategoryHorizonalList
-      allCategories={categories}
-      activeCategory={category}
-      setActiveCategory={(updatedCategory) =>
+    <SelectableHorizontalList
+      items={categories
+        .slice()
+        .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+        .map((category) => ({
+          id: category.id,
+          label: category.name,
+          imageUrl: category.imageUrl,
+        }))}
+      selectedId={category?.id}
+      dataCy="CategoryHorizonalList"
+      onSelect={(categoryId) =>
         updateFilter(
           QuestionSearchParams.category,
-          updatedCategory ? (updatedCategory as Category).id.toString() : '',
+          categoryId !== null ? categoryId.toString() : '',
         )
       }
     />
@@ -223,6 +225,7 @@ export const QuestionListHeader = (props: IProps) => {
           />
         </FieldContainer>
       </Flex>
+
       <Flex sx={{ width: ['100%', '100%', '300px'] }}>
         <SearchField
           dataCy="questions-search-box"
@@ -256,6 +259,7 @@ export const QuestionListHeader = (props: IProps) => {
             },
           }}
         />
+
         {activeFilterCount > 0 && (
           <Box
             sx={{
@@ -278,6 +282,7 @@ export const QuestionListHeader = (props: IProps) => {
           </Box>
         )}
       </Flex>
+
       <ButtonIcon
         onClick={handleToggleSearchOpen}
         icon="search"
@@ -332,6 +337,7 @@ export const QuestionListHeader = (props: IProps) => {
         mobileFilteringComponents={isSearchOpen ? mobileSearchBar : mobileFilteringComponents}
         searchString={q || undefined}
       />
+
       <MobileSortModal
         isOpen={isSortModalOpen}
         onDismiss={handleCloseSortModal}

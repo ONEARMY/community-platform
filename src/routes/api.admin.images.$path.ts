@@ -1,35 +1,19 @@
 import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
 import { isAllowedImagePickerPath } from 'src/config/imagePickerPaths';
 import { logger } from 'src/logger';
+import { requireRoleApi } from 'src/middleware/requireRole.server';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import {
-  forbiddenError,
-  methodNotAllowedError,
-  unauthorizedError,
-  validationError,
-} from 'src/utils/httpException';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { validateImage } from 'src/utils/storage';
 
-async function requireAdmin(client: ReturnType<typeof createSupabaseServerClient>['client']) {
-  const claims = await client.auth.getClaims();
-
-  if (!claims.data?.claims) {
-    throw unauthorizedError();
-  }
-
-  const { data: profiles } = await client
-    .from('profiles')
-    .select('id,roles')
-    .eq('auth_id', claims.data.claims.sub)
-    .limit(1);
-
-  if (!profiles?.at(0)?.roles?.includes(UserRole.ADMIN)) {
-    throw forbiddenError();
-  }
-}
+export const middleware: MiddlewareFunction<Response>[] = [
+  sessionMiddleware,
+  requireRoleApi(UserRole.ADMIN),
+];
 
 function assertAllowedPath(path: string | undefined): asserts path is string {
   if (!path || !isAllowedImagePickerPath(path)) {
@@ -46,7 +30,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    await requireAdmin(client);
     assertAllowedPath(params.path);
 
     const images = await new StorageServiceServer(client).listImages(params.path);
@@ -70,7 +53,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
       throw methodNotAllowedError();
     }
 
-    await requireAdmin(client);
     assertAllowedPath(params.path);
 
     const formData = await request.formData();

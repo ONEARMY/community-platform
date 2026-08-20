@@ -1,11 +1,12 @@
 import { ChevronRightIcon } from 'lucide-react';
 import { UserRole } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
-import { Outlet, redirect, useMatches } from 'react-router';
+import type { MiddlewareFunction } from 'react-router';
+import { Outlet, useMatches } from 'react-router';
+import { requireRole } from 'src/middleware/requireRole.server';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { AdminSidebar } from 'src/pages/Admin/AdminSidebar';
 import Main from 'src/pages/common/Layout/Main';
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { redirectServiceServer } from 'src/services/redirectService.server';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 interface AdminRouteHandle {
@@ -13,26 +14,10 @@ interface AdminRouteHandle {
   breadcrumbParent?: string;
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const { client, headers } = createSupabaseServerClient(request);
-  const claims = await client.auth.getClaims();
-
-  if (!claims.data?.claims) {
-    return redirectServiceServer.redirectSignIn('/admin', headers);
-  }
-
-  const { data } = await client
-    .from('profiles')
-    .select('id,roles')
-    .eq('auth_id', claims.data.claims.sub)
-    .limit(1);
-
-  if (!data?.at(0)?.roles?.includes(UserRole.ADMIN)) {
-    return redirect('/forbidden?page=admin', { headers });
-  }
-
-  return null;
-}
+export const middleware: MiddlewareFunction<Response>[] = [
+  sessionMiddleware,
+  requireRole(UserRole.ADMIN, ForbiddenPage.ADMIN),
+];
 
 export default function AdminLayout() {
   const matches = useMatches();

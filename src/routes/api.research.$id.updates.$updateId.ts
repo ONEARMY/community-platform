@@ -1,15 +1,19 @@
 import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBResearchUpdate, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
+import { Session, sessionContext } from 'src/context';
 import { logger } from 'src/logger';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const middleware: MiddlewareFunction<Response>[] = [sessionMiddleware];
+
+export const action = async ({ request, params, context }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
@@ -17,7 +21,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const updateId = Number(params.updateId);
 
     if (request.method === 'DELETE') {
-      return await deleteResearchUpdate(request, researchId, updateId);
+      return await deleteResearchUpdate(request, researchId, updateId, context.get(sessionContext));
     }
 
     const formData = await request.formData();
@@ -47,7 +51,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, researchId, updateId)) {
+    if (
+      (await new ResearchServiceServer(client).isAllowedToEditUpdate(
+        profile,
+        researchId,
+        updateId,
+      )) !== true
+    ) {
       throw forbiddenError();
     }
 
@@ -102,19 +112,25 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 };
 
-async function deleteResearchUpdate(request: Request, id: number, updateId: number) {
+async function deleteResearchUpdate(
+  request: Request,
+  id: number,
+  updateId: number,
+  session: Session,
+) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const claims = await client.auth.getClaims();
-
-  if (!claims.data?.claims) {
+  if (!session) {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const profileService = new ProfileServiceServer(client);
-  const profile = await profileService.getByAuthId(claims.data.claims.sub);
+  const profile = session.profileId
+    ? { id: session.profileId, username: session.username, roles: session.roles }
+    : null;
 
-  if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, id, updateId)) {
+  if (
+    (await new ResearchServiceServer(client).isAllowedToEditUpdate(profile, id, updateId)) !== true
+  ) {
     return Response.json({}, { status: 403, headers });
   }
 

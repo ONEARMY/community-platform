@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { DBNews, NewsFormData, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
@@ -29,7 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!(await isAllowedToEdit(result.data.created_by, claims.data.claims.sub, client))) {
-    return redirect('/forbidden?page=news-edit', { headers });
+    return redirect(`/forbidden?page=${ForbiddenPage.NEWS_EDIT}`, { headers });
   }
 
   const dbNews = result.data as unknown as DBNews;

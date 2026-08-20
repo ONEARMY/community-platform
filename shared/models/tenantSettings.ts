@@ -25,6 +25,8 @@ export class TenantSettings {
   gaTrackingId: string;
   pwaIcons?: PWAIcons;
   membershipTerms?: string;
+  organisationSignupDescriptionHtml?: string;
+  organisationActivity?: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

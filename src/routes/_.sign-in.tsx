@@ -6,6 +6,7 @@ import { PasswordField } from 'src/common/Form/PasswordField';
 import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
@@ -18,6 +19,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
+    // Applicants have a session but no profile, so send them to finish the form.
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+        claims.data.claims.sub,
+      );
+
+      if (hasApplication) {
+        return redirect('/organisation-application', { headers });
+      }
+    }
+
     return redirect(getReturnUrl(request), { headers });
   }
 
@@ -71,6 +85,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const profileService = new ProfileServiceServer(client);
+
+  // Organisation applicants have no profile until their application is submitted.
+  // Checked before ensureProfile so a member profile is not auto-created for them.
+  const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+    signInResult.data.user.id,
+  );
+
+  if (hasApplication) {
+    return redirect('/organisation-application', { headers });
+  }
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)

@@ -49,6 +49,7 @@ export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithToolti
 export { ImageGallery } from './ImageGallery/ImageGallery';
 export { ImageInputDeleteOverlay } from './ImageInput/ImageInputDeleteOverlay';
 export { ImageInputV2 } from './ImageInput/ImageInputV2';
+export { MultipleImageInput } from './ImageInput/MultipleImageInput';
 export { InformationTooltip } from './InformationTooltip/InformationTooltip';
 export { InternalLink } from './InternalLink/InternalLink';
 export { LinkifyText } from './LinkifyText/LinkifyText';
@@ -78,6 +79,7 @@ export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';
 export { SiteFooter } from './SiteFooter/SiteFooter';
+export { Stepper } from './Stepper/Stepper';
 export { Tab, TabPanel, Tabs, TabsList } from './TabbedContent/TabbedContent';
 export { Tag } from './Tag/Tag';
 export { TagList } from './TagList/TagList';

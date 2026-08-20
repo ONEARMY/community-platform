@@ -1,5 +1,5 @@
 import type { Profile, UserCreatedDocs } from 'oa-shared';
-import { AuthorVotes } from 'oa-shared';
+import { AuthorVotes, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
@@ -37,6 +37,28 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     if (!profileDb) {
       return data({ profile: null, tenantSettings }, { headers });
+    }
+
+    // Hide profiles that are still awaiting moderation from everyone except their
+    // owner and staff (admins/moderators, who may preview before approving)
+    const isPendingModeration = !!profileDb.moderation && profileDb.moderation !== 'accepted';
+
+    if (isPendingModeration) {
+      const claims = await client.auth.getClaims();
+      const viewerAuthId = claims.data?.claims?.sub;
+      const isOwner = !!viewerAuthId && profileDb.auth_id === viewerAuthId;
+
+      let isStaff = false;
+      if (viewerAuthId && !isOwner) {
+        const viewerProfile = await profileService.getByAuthId(viewerAuthId);
+        isStaff =
+          !!viewerProfile?.roles?.includes(UserRole.ADMIN) ||
+          !!viewerProfile?.roles?.includes(UserRole.MODERATOR);
+      }
+
+      if (!isOwner && !isStaff) {
+        return data({ profile: null, tenantSettings }, { headers });
+      }
     }
 
     const authorVotesDb = await profileService.getAuthorUsefulVotes(profileDb.id);

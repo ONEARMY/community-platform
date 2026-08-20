@@ -55,6 +55,8 @@ export class TenantSettingsService {
       gaTrackingId: data?.ga_tracking_id,
       membershipTerms: data?.membership_terms,
       pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
+      organisationSignupDescriptionHtml: data?.organisation_signup_description ?? undefined,
+      organisationActivity: data?.organisation_activity ?? undefined,
     });
 
     cache.set('tenant-settings', settings);
@@ -88,7 +90,9 @@ export class TenantSettingsService {
         create_research_roles,
         ga_tracking_id,
         pwa_icons,
-        membership_terms`,
+        membership_terms,
+        organisation_signup_description,
+        organisation_activity`,
       )
       .single();
 

@@ -80,3 +80,61 @@ $$;
 
 REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "anon";
 REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "authenticated";
+
+-- RPC function to list supporters (profiles holding a badge backed by a stripe tier config), including email from auth.users
+CREATE OR REPLACE FUNCTION "public"."get_supporters"(p_tenant_id text)
+RETURNS TABLE (
+  profile_id bigint,
+  username text,
+  display_name text,
+  email text,
+  tier_name text
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT DISTINCT
+    p.id AS profile_id,
+    p.username,
+    p.display_name,
+    au.email::text,
+    pb.display_name AS tier_name
+  FROM stripe_tier_config stc
+  INNER JOIN profile_badges pb ON pb.id = stc.badge_id
+  INNER JOIN profile_badges_relations pbr ON pbr.profile_badge_id = pb.id
+  INNER JOIN profiles p ON p.id = pbr.profile_id
+  LEFT JOIN auth.users au ON au.id = p.auth_id
+  WHERE stc.tenant_id = p_tenant_id
+    AND pbr.tenant_id = p_tenant_id
+    AND p.tenant_id = p_tenant_id;
+END;
+$$;
+
+-- RPC function to count supporters per badge, for the admin Users overview
+CREATE OR REPLACE FUNCTION "public"."get_supporter_badge_counts"(p_tenant_id text)
+RETURNS TABLE (
+  badge_id bigint,
+  badge_name text,
+  supporter_count bigint
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    pb.id AS badge_id,
+    pb.display_name AS badge_name,
+    COUNT(pbr.id) AS supporter_count
+  FROM profile_badges pb
+  INNER JOIN stripe_tier_config stc ON stc.badge_id = pb.id AND stc.tenant_id = p_tenant_id
+  LEFT JOIN profile_badges_relations pbr ON pbr.profile_badge_id = pb.id AND pbr.tenant_id = p_tenant_id
+  WHERE pb.tenant_id = p_tenant_id
+  GROUP BY pb.id, pb.display_name, pb.premium_tier
+  ORDER BY pb.premium_tier;
+END;
+$$;

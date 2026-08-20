@@ -1,6 +1,9 @@
 import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
+import { logger } from 'src/logger';
+import { requireAnyRoleApi } from 'src/middleware/requireRole.server';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -10,6 +13,11 @@ import {
   notFoundError,
   unauthorizedError,
 } from 'src/utils/httpException';
+
+export const middleware: MiddlewareFunction<Response>[] = [
+  sessionMiddleware,
+  requireAnyRoleApi([UserRole.ADMIN, UserRole.MODERATOR]),
+];
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
@@ -36,14 +44,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     if (!currentUserProfile) {
       throw unauthorizedError();
-    }
-
-    const hasPermission =
-      currentUserProfile.roles?.includes(UserRole.ADMIN) ||
-      currentUserProfile.roles?.includes(UserRole.MODERATOR);
-
-    if (!hasPermission) {
-      throw forbiddenError('Only admins and moderators can ban users');
     }
 
     const targetProfile = await profileService.getById(profileId);
@@ -74,7 +74,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     );
 
     if (banError) {
-      console.error('Error banning auth user:', banError);
+      logger.error('Error banning auth user:', banError);
       throw new Error('Failed to ban user');
     }
 
@@ -113,7 +113,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error('Ban user error:', error);
+    logger.error('Ban user error:', error);
     return Response.json({ error: 'Failed to ban user' }, { headers, status: 500 });
   }
 };

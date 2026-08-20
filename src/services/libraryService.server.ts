@@ -8,6 +8,7 @@ import {
   UserRole,
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 import { StorageServiceServer } from './storageService.server';
 
@@ -75,7 +76,7 @@ export class LibraryServiceServer {
     });
 
     if (error) {
-      console.error('Error fetching user projects:', error);
+      logger.error('Error fetching user projects:', error);
       return [];
     }
 

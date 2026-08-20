@@ -12,7 +12,7 @@ const Main = (props: IProps) => {
   const { ignoreMaxWidth, ...rest } = props;
 
   return (
-    <Flex {...rest} sx={{ flexDirection: 'column' }}>
+    <Flex as="main" {...rest} sx={{ flexDirection: 'column' }}>
       <Flex
         className="main-container"
         sx={{

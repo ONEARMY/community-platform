@@ -1,4 +1,5 @@
 import type { NotificationDisplay } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getNotifications = async () => {
   try {
@@ -9,7 +10,7 @@ const getNotifications = async () => {
 
     return result.notifications;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
   return [];
 };

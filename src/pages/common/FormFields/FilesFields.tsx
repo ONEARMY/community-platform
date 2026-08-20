@@ -7,6 +7,7 @@ import { Field, useForm, useFormState } from 'react-final-form';
 import { ClientOnly } from 'remix-utils/client-only';
 import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay';
 import { FileInputField } from 'src/common/Form/FileInput.field';
+import { logger } from 'src/logger';
 import { MAX_LINK_LENGTH } from 'src/pages/constants';
 import { storageService } from 'src/services/storageService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -140,7 +141,7 @@ const UploadNewFiles = observer(
         const currentFiles = state.values.files || [];
         form.change('files', [...currentFiles, ...uploadedFiles]);
       } catch (error) {
-        console.error('Error uploading files:', error);
+        logger.error('Error uploading files:', error);
         setUploadError('Failed to upload one or more files. Please try again.');
       } finally {
         setIsUploading(false);

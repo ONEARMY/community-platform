@@ -3,7 +3,10 @@ import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
-import type { LoaderFunctionArgs } from 'react-router';
+import type { LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
+import { logger } from 'src/logger';
+import { requireAnyRoleApi } from 'src/middleware/requireRole.server';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -11,15 +14,19 @@ import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
-import {
-  conflictError,
-  forbiddenError,
-  methodNotAllowedError,
-  validationError,
-} from 'src/utils/httpException';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';
 import { PollServiceServer } from '../services/pollService.server';
+
+// GET (feed) stays public; only POST (create) is role-gated.
+export const middleware: MiddlewareFunction<Response>[] = [
+  sessionMiddleware,
+  (args, next) =>
+    args.request.method === 'POST'
+      ? requireAnyRoleApi([UserRole.ADMIN, UserRole.EDITOR])(args, next)
+      : next(),
+];
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -54,7 +61,7 @@ export const loader = async ({ request }) => {
   });
 
   if (rpcResult.error) {
-    console.error(rpcResult.error);
+    logger.error(rpcResult.error);
     return Response.json({ error: 'Failed to load news' }, { status: 500 });
   }
   const rows = rpcResult.data as (DBNews & { total_count: number })[];
@@ -108,28 +115,21 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
-    if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
-    }
     const slug = convertToSlug(data.title);
     await validateRequest(request, data, slug, claims.error, client);
 
     const profileRequest = await client
       .from('profiles')
       .select('id,username,roles')
-      .eq('auth_id', claims.data.claims.sub)
+      .eq('auth_id', claims.data!.claims!.sub)
       .limit(1);
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.error(profileRequest.error);
+      logger.error({ error: profileRequest.error });
       throw validationError('User not found');
     }
 
     const profile = profileRequest.data[0] as DBProfile;
-
-    if (!profile.roles?.includes(UserRole.ADMIN) && !profile.roles?.includes(UserRole.EDITOR)) {
-      throw forbiddenError();
-    }
 
     if (!profile.username) {
       throw validationError('You must set a username before creating content', 'username');
@@ -144,7 +144,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
           ? await pollService.updatePoll(data.poll)
           : await pollService.createPoll(data.poll);
       } catch (e) {
-        console.error('Error saving or updating the poll: ', data.poll, e);
+        logger.error('Error saving or updating the poll: ', data.poll, e);
       }
     }
 
@@ -185,7 +185,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
 
       if (badgeResult.error) {
-        console.error('Error inserting badge relations:', badgeResult.error);
+        logger.error('Error inserting badge relations:', badgeResult.error);
       }
     }
 
@@ -205,7 +205,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const news = News.fromDB(completeNews.data, [], null, poll);
     await new SubscribersServiceServer(client).add('news', news.id, profile.id);
     new BroadcastCoordinationServiceServer(client).news(completeNews.data, profile, request);
-    await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    await new ProfileServiceServer(client).updateUserActivity(claims.data!.claims!.sub);
 
     return Response.json({ news }, { headers, status: 201 });
   } catch (error) {
@@ -213,7 +213,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error creating news', status: 500 }, { status: 500 });
   }
 };

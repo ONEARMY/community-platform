@@ -281,3 +281,30 @@ BEGIN
   AND p.tenant_id = p_tenant_id;
 END;
 $$;
+
+-- RPC function to count profiles per profile type, for the admin Users overview
+CREATE OR REPLACE FUNCTION "public"."get_profile_type_counts"(p_tenant_id text)
+RETURNS TABLE (
+  profile_type_id bigint,
+  name text,
+  display_name text,
+  profile_count bigint
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    pt.id AS profile_type_id,
+    pt.name,
+    pt.display_name,
+    COUNT(p.id) AS profile_count
+  FROM profile_types pt
+  LEFT JOIN profiles p ON p.profile_type = pt.id AND p.tenant_id = p_tenant_id
+  WHERE pt.tenant_id = p_tenant_id
+  GROUP BY pt.id, pt.name, pt.display_name, pt."order"
+  ORDER BY pt."order";
+END;
+$$;

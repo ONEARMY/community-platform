@@ -2,16 +2,18 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   Author,
   DBAuthor,
-  DBProfile,
   DBResearchItem,
   DBResearchUpdate,
   ResearchItem,
   UserRole,
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 import { ProfileServiceServer } from './profileService.server';
 import { StorageServiceServer } from './storageService.server';
+
+type EditorProfile = { id: number; username: string | null; roles: string[] | null };
 
 export class ResearchServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -122,7 +124,7 @@ export class ResearchServiceServer {
     });
 
     if (error) {
-      console.error('Error fetching user research:', error);
+      logger.error('Error fetching user research:', error);
       return [];
     }
 
@@ -151,7 +153,7 @@ export class ResearchServiceServer {
       : [];
   }
 
-  async isAllowedToEditResearch(research: DBResearchItem, profile: DBProfile) {
+  async isAllowedToEditResearch(research: DBResearchItem, profile: EditorProfile) {
     if (profile.id === research.author?.id) {
       return true;
     }
@@ -167,7 +169,7 @@ export class ResearchServiceServer {
     return profile.roles?.includes(UserRole.ADMIN);
   }
 
-  async isAllowedToEditResearchById(id: number, profile: DBProfile) {
+  async isAllowedToEditResearchById(id: number, profile: EditorProfile) {
     const researchResult = await this.client
       .from('research')
       .select('id,created_by,collaborators,author:profiles(id,username)')
@@ -189,7 +191,7 @@ export class ResearchServiceServer {
     return result.data as DBResearchUpdate;
   }
 
-  async isAllowedToEditUpdate(profile: DBProfile | null, researchId: number, updateId: number) {
+  async isAllowedToEditUpdate(profile: EditorProfile | null, researchId: number, updateId: number) {
     const research = await this.getById(researchId);
     const researchUpdate = await this.getUpdateById(updateId);
 
@@ -199,7 +201,7 @@ export class ResearchServiceServer {
 
     return (
       profile &&
-      (profile.id === research.author?.id ||
+      (profile.id === research.created_by ||
         (profile.username && research.collaborators?.includes(profile.username)) ||
         profile?.roles?.includes(UserRole.ADMIN))
     );

@@ -1,4 +1,5 @@
 import type { ProfileListItem, UsefulContentType } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const add = async (contentType: UsefulContentType, id: number) => {
   return await fetch(`/api/useful/${contentType}/${id}`, {
@@ -21,7 +22,7 @@ const hasVoted = async (contentType: UsefulContentType, id: number) => {
 
     return !!voted;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return false;
   }
 };
@@ -37,7 +38,7 @@ const usefulVoters = async (
 
     return users;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return [];
   }
 };

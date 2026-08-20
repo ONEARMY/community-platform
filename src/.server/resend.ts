@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import { Resend } from 'resend';
 
+import { logger } from 'src/logger';
+
 type SendEmailArgs = {
   to: string;
   from: string;
@@ -57,12 +59,10 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
       });
 
       if (batchResult.error) {
-        console.error('Error sending batch emails:', batchResult.error);
+        logger.error('Error sending batch emails:', batchResult.error);
       }
     } catch (error) {
-      console.error('Error sending batch emails:', error);
+      logger.error('Error sending batch emails:', error);
     }
   }
-
-  return;
 }

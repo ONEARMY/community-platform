@@ -98,6 +98,50 @@ export const FieldMarkdown = (props: IProps) => {
             borderRadius: 2,
             maxWidth: '100%',
           },
+          p: {
+            marginBottom: 3,
+          },
+          h1: {
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h2: {
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h3: {
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h4: {
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h5: {
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h6: {
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          'ul, ol': {
+            marginBottom: 3,
+            paddingLeft: 8,
+          },
+          ul: {
+            listStyle: 'disc',
+          },
+          ol: {
+            listStyle: 'decimal',
+          },
+          li: {
+            marginBottom: 1,
+          },
+          blockQuote: {
+            marginBottom: 3,
+            paddingLeft: 4,
+          },
         }}
       >
         <MDXEditor

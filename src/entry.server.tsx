@@ -5,12 +5,15 @@ import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
 import type { EntryContext } from 'react-router';
 import { ServerRouter } from 'react-router';
-import { SENTRY_CONFIG } from './config/config';
+import { logger } from 'src/logger';
+import { isProductionEnvironment, SENTRY_CONFIG } from './config/config';
 import { createEmotionCache } from './styles/createEmotionCache';
 
 const ABORT_DELAY = 5_000;
 
-Sentry.init({ ...SENTRY_CONFIG });
+if (isProductionEnvironment()) {
+  Sentry.init({ ...SENTRY_CONFIG });
+}
 
 export default function handleRequest(
   request: Request,
@@ -38,7 +41,7 @@ async function handleBotRequest(
       {
         signal: controller.signal,
         onError(error: unknown) {
-          console.error(error);
+          logger.error({ error });
           responseStatusCode = 500;
         },
       },
@@ -79,7 +82,7 @@ async function handleBrowserRequest(
       {
         signal: controller.signal,
         onError(error: unknown) {
-          console.error(error);
+          logger.error({ error });
           Sentry.captureException(error);
           if (responseStatusCode === 200) {
             responseStatusCode = 500;

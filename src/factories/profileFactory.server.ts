@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AuthorVotes, DBProfile } from 'oa-shared';
 import { Profile, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from 'src/services/imageService.server';
 
 export class ProfileFactory {
@@ -29,7 +30,7 @@ export class ProfileFactory {
         }
       }
     } catch (_) {
-      console.error('error parsing impact');
+      logger.error('error parsing impact');
     }
 
     try {
@@ -44,7 +45,7 @@ export class ProfileFactory {
         }
       }
     } catch (_) {
-      console.error('error parsing visitor policy');
+      logger.error('error parsing visitor policy');
     }
 
     return new Profile({

@@ -16,6 +16,7 @@ import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import PageHeader from 'src/common/PageHeader';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
+import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
@@ -51,7 +52,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
         body: JSON.stringify({ acceptedAnswerId: commentId }),
       });
     } catch (error) {
-      console.error('Failed to update accepted answer:', error);
+      logger.error('Failed to update accepted answer:', error);
     }
   };
 

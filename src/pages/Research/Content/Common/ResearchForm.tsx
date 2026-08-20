@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { TagsField } from 'src/pages/common/FormFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
@@ -65,7 +66,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       finally: () => {
@@ -97,7 +98,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       duration: 10000,

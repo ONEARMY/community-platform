@@ -2,6 +2,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBProfile, ProfileDTO, UserVisitorPreference } from 'oa-shared';
 import { type ActionFunctionArgs, data } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { validationError } from 'src/utils/httpException';
@@ -62,7 +63,7 @@ export const loader = async ({ request }) => {
 
     return data(profile, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({ error }, { headers, status: 500 });
   }
 };
@@ -134,7 +135,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500 });
   }
 };

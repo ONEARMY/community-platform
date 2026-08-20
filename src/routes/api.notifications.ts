@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NotificationMapperServiceServer } from 'src/services/notificationMapperService.server';
 
@@ -57,7 +58,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     return Response.json({ notifications }, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({ error }, { headers, status: 500 });
   }
 };

@@ -24,6 +24,20 @@ How?
 - Each table has a tenant_id column
 - On each request, to supabase (via its sdk) we pass a header 'x-tenant-id' with the process.env.TENANT_ID variable, which is set for each app, via Fly.io secret.
 
+## Role Checks
+
+Roles live per-tenant in `profiles.roles`, not the Supabase JWT (a Custom Access Token Hook can't know which tenant to read - see Multi-tenant above). Checking a role therefore meant a DB query per protected route.
+
+Decision: `requireRole()` middleware, backed by a signed roles cookie, instead of a DB query per route.
+
+How?
+
+- `sessionMiddleware` trusts a valid cookie (signed with `TOKEN_SECRET`, bound to authId/tenantId) or falls back to `profiles` and re-signs it (10 min TTL).
+- `requireRole(role, page)`/`requireAnyRole(roles, page)` read the resolved roles from context and redirect - no DB access. Page routes only.
+- `requireRoleApi(role)`/`requireAnyRoleApi(roles)` do the same for `api.*` routes, throwing a JSON error `Response` instead of redirecting, since a redirect breaks `fetch()` callers.
+- Both run as route `middleware`, which completes fully before any loader runs, so roles are guaranteed resolved in time. Mounted only on routes that need it, not globally. A route that gates only some HTTP methods (e.g. a public GET + a role-gated POST) wraps the gate in a small conditional middleware instead of gating the whole route.
+- This is server-side gating only. Client-side conditional UI (e.g. showing/hiding admin buttons) still reads `profile.roles` from the profile store - it doesn't go through `sessionContext`/the roles cookie.
+
 ## Comment Counts
 
 Currently we can sort questions/research/library by the number of comments.

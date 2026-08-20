@@ -3,6 +3,7 @@ import { AuthorVotes, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { logger } from 'src/logger';
 import { ProfilePage } from 'src/pages/User/content/ProfilePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
@@ -80,7 +81,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       { headers },
     );
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return redirect('/', { headers });
   }
 }

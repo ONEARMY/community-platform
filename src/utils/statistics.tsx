@@ -1,6 +1,7 @@
 import type { IStatistic } from 'oa-components';
 import { ProfileList } from 'oa-components';
 import type { ContentType, ProfileListItem } from 'oa-shared';
+import { logger } from 'src/logger';
 import { usefulService } from 'src/services/usefulService';
 import { buildStatisticsLabel } from './helpers';
 
@@ -23,7 +24,7 @@ export function createUsefulStatistic(
         try {
           return await usefulService.usefulVoters(contentType, contentId);
         } catch (error) {
-          console.error('Failed to load useful voters:', error);
+          logger.error('Failed to load useful voters:', error);
           return [];
         }
       },

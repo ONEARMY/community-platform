@@ -1,3 +1,5 @@
+import { logger } from 'src/logger';
+
 export type SubscriptionStatus = {
   hasSubscription: boolean;
   subscription: {
@@ -54,7 +56,7 @@ const getSubscriptionStatus = async (): Promise<SubscriptionStatus | null> => {
     const response = await fetch('/api/stripe');
     return (await response.json()) as SubscriptionStatus;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 
   return null;
@@ -84,7 +86,7 @@ const createElementsSubscription = async (
       accountExists: data.accountExists ?? false,
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };
   }
 };
@@ -104,7 +106,7 @@ const createPortalSession = async (): Promise<string | null> => {
     const data = await response.json();
     return data.url;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 
   return null;
@@ -128,7 +130,7 @@ const createSupporterAccount = async (
 
     return { ok: true };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };
   }
 };
@@ -151,7 +153,7 @@ const linkExistingAccount = async (
 
     return { ok: true };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };
   }
 };
@@ -172,7 +174,7 @@ const setPassword = async (params: SetPasswordParams): Promise<SetPasswordRespon
 
     return { ok: true };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };
   }
 };

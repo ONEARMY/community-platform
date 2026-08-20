@@ -3,6 +3,7 @@ import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
+import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
@@ -73,7 +74,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
-    console.error(signInResult.error);
+    logger.error(signInResult.error);
     return data(
       {
         error: 'Invalid email or password.',
@@ -99,7 +100,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
     await profileService.ensureProfile(signInResult.data.user);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 
   const profile = await profileService.getByAuthId(signInResult.data.user.id);

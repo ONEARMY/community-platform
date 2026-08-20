@@ -6,6 +6,7 @@ import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { CategoryField, TagsField, TitleField } from 'src/pages/common/FormFields';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common';
@@ -41,7 +42,7 @@ export const QuestionForm = (props: IProps) => {
       await questionService.deleteQuestion(id);
       window.location.assign('/questions');
     } catch (e) {
-      console.error(e.message || 'Error deleting question');
+      logger.error(e.message || 'Error deleting question');
     }
   };
 
@@ -85,7 +86,7 @@ export const QuestionForm = (props: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       duration: 10000,

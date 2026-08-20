@@ -2,12 +2,13 @@ import type { UserRole } from 'oa-shared';
 import type { MiddlewareFunction } from 'react-router';
 import { redirect } from 'react-router';
 import { sessionContext } from 'src/context';
+import type { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { forbiddenError, unauthorizedError } from 'src/utils/httpException';
 
 export const requireRole = (
   role: UserRole,
-  forbiddenPage: string,
+  forbiddenPage: ForbiddenPage,
 ): MiddlewareFunction<Response> => {
   return ({ request, context }) => {
     const session = context.get(sessionContext);
@@ -24,7 +25,7 @@ export const requireRole = (
 
 export const requireAnyRole = (
   roles: UserRole[],
-  forbiddenPage: string,
+  forbiddenPage: ForbiddenPage,
 ): MiddlewareFunction<Response> => {
   return ({ request, context }) => {
     const session = context.get(sessionContext);

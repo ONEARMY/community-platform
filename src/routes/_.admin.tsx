@@ -6,6 +6,7 @@ import { requireRole } from 'src/middleware/requireRole.server';
 import { sessionMiddleware } from 'src/middleware/session.server';
 import { AdminSidebar } from 'src/pages/Admin/AdminSidebar';
 import Main from 'src/pages/common/Layout/Main';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 interface AdminRouteHandle {
@@ -15,7 +16,7 @@ interface AdminRouteHandle {
 
 export const middleware: MiddlewareFunction<Response>[] = [
   sessionMiddleware,
-  requireRole(UserRole.ADMIN, 'admin'),
+  requireRole(UserRole.ADMIN, ForbiddenPage.ADMIN),
 ];
 
 export default function AdminLayout() {

@@ -1,6 +1,7 @@
 import { DBProject } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { LibraryForm } from 'src/pages/Library/Content/Common/LibraryForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
@@ -24,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .data as unknown as DBProject;
 
   if (!profile || !(await libraryService.isAllowedToEditProject(projectDb, profile))) {
-    return redirect('/forbidden?page=library-edit', { headers });
+    return redirect(`/forbidden?page=${ForbiddenPage.LIBRARY_EDIT}`, { headers });
   }
 
   const allImages = projectDb.steps?.flatMap((x) => x.images).filter((x) => !!x) || [];

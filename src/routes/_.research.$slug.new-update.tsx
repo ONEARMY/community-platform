@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { sessionContext } from 'src/context';
 import { sessionMiddleware } from 'src/middleware/session.server';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
@@ -38,7 +39,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     }));
 
   if (!canEdit) {
-    return redirect('/forbidden?page=research-edit-create', { headers });
+    return redirect(`/forbidden?page=${ForbiddenPage.RESEARCH_EDIT_CREATE}`, { headers });
   }
 
   return data({ research }, { headers });

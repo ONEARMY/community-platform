@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { DBQuestion, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { QuestionServiceServer } from 'src/services/questionService.server';
@@ -30,7 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion;
 
   if (!(await isUserAllowedToEdit(dbQuestion, claims.data.claims.sub, client))) {
-    return redirect('/forbidden?page=question-edit', { headers });
+    return redirect(`/forbidden?page=${ForbiddenPage.QUESTION_EDIT}`, { headers });
   }
 
   const publicImages = dbQuestion?.images

@@ -10,3 +10,8 @@ Parts of the component might be rendered client side, for that we can use React.
 Additionally, routes could also export [Links](https://reactrouter.com/api/components/Links#links) and [Meta](https://reactrouter.com/api/components/Meta#meta) functions that will be added to the html head.
 
 For the API, we can use [action/loader](https://reactrouter.com/start/framework/actions#server-actions) routes.
+
+## Middleware
+Routes can export a `middleware` array that runs before loaders/actions (parent to child) and can read/write a shared `context`. https://reactrouter.com/how-to/middleware
+
+We use it for auth: `sessionMiddleware` (`src/middleware/session.server.ts`) resolves the current user into `context`, and `requireRole`/`requireAnyRole` (page routes) or `requireRoleApi`/`requireAnyRoleApi` (api routes) gate access based on it (`src/middleware/requireRole.server.ts`).

@@ -2,6 +2,7 @@ import { Button, ExternalLink } from 'oa-components';
 import type { LoaderFunctionArgs } from 'react-router';
 import { useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
+import { getForbiddenMessage } from 'src/pages/Forbidden/labels';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
@@ -21,7 +22,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Index() {
   const { page, settings, url } = useLoaderData<typeof loader>() || {};
 
-  const actionLabel = page ? 'I want to use it' : 'Report the problem';
+  const { heading, body, actionLabel } = getForbiddenMessage(page);
 
   return (
     <Main style={{ flex: 1 }}>
@@ -58,30 +59,12 @@ export default function Index() {
                     textAlign: 'center',
                   }}
                 >
-                  <Heading>Oh no you can't post, yet</Heading>
+                  <Heading>{heading}</Heading>
                 </Flex>
                 <Text sx={{ textAlign: 'center', color: 'grey' }}>
-                  {page ? (
-                    <>
-                      <p>
-                        <strong>
-                          This is a new feature and we are currently rolling it out to a small group
-                          of people.
-                        </strong>
-                      </p>
-                      <p>
-                        Let us know if you have a project to share and want to be an early tester.
-                        We'd love to set you up.
-                      </p>
-                    </>
-                  ) : (
-                    <p>
-                      <strong>
-                        You don't have the right permissions to go here right now. If this is wrong,
-                        please let us know.
-                      </strong>
-                    </p>
-                  )}
+                  <p>
+                    <strong>{body}</strong>
+                  </p>
                   <ExternalLink
                     href={`mailto:${settings.emailFrom}&subject:Cannot access ${page || url}`}
                   >

@@ -1,11 +1,11 @@
-import { Button, ExternalLink } from 'oa-components';
 import type { LoaderFunctionArgs } from 'react-router';
 import { useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { getForbiddenMessage } from 'src/pages/Forbidden/labels';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
-import { Card, Flex, Heading, Text } from 'theme-ui';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = createSupabaseServerClient(request);
@@ -26,56 +26,24 @@ export default function Index() {
 
   return (
     <Main style={{ flex: 1 }}>
-      <Flex
-        sx={{
-          background: 'inherit',
-          paddingX: 2,
-          width: '100%',
-          maxWidth: '620px',
-          marginX: 'auto',
-          marginTop: [5, 10],
-        }}
-      >
-        <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-          <Flex
-            sx={{
-              flexDirection: 'column',
-            }}
-          >
-            <Card sx={{ borderRadius: 3 }}>
-              <Flex
-                sx={{
-                  padding: 4,
-                  paddingTop: 6,
-                  gap: 2,
-                  flexDirection: 'column',
-                }}
-              >
-                <Flex
-                  sx={{
-                    gap: 1,
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                  }}
-                >
-                  <Heading>{heading}</Heading>
-                </Flex>
-                <Text sx={{ textAlign: 'center', color: 'grey' }}>
-                  <p>
-                    <strong>{body}</strong>
-                  </p>
-                  <ExternalLink
-                    href={`mailto:${settings.emailFrom}&subject:Cannot access ${page || url}`}
-                  >
-                    <Button>{actionLabel}</Button>
-                  </ExternalLink>
-                </Text>
-              </Flex>
-            </Card>
-          </Flex>
-        </Flex>
-      </Flex>
+      <div className="mx-auto mt-10 w-full max-w-[620px] px-2 md:mt-20">
+        <Card variant="outline">
+          <CardHeader className="items-center text-center">
+            <h1 className="text-2xl font-semibold">{heading}</h1>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
+            <p className="font-medium">{body}</p>
+            <Button
+              render={
+                <a href={`mailto:${settings.emailFrom}&subject:Cannot access ${page || url}`} />
+              }
+              nativeButton={false}
+            >
+              {actionLabel}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </Main>
   );
 }

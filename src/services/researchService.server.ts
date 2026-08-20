@@ -201,7 +201,7 @@ export class ResearchServiceServer {
 
     return (
       profile &&
-      (profile.id === research.author?.id ||
+      (profile.id === research.created_by ||
         (profile.username && research.collaborators?.includes(profile.username)) ||
         profile?.roles?.includes(UserRole.ADMIN))
     );

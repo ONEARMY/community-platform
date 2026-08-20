@@ -2,8 +2,10 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
+import { Session, sessionContext } from 'src/context';
 import { logger } from 'src/logger';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -17,11 +19,14 @@ import {
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const middleware: MiddlewareFunction<Response>[] = [sessionMiddleware];
+
+export const action = async ({ request, params, context }: ActionFunctionArgs) => {
   const id = Number(params.id);
+  const session = context.get(sessionContext);
 
   if (request.method === 'DELETE') {
-    return await deleteResearch(request, id);
+    return await deleteResearch(request, id, session);
   }
 
   const { client, headers } = createSupabaseServerClient(request);
@@ -43,15 +48,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     } satisfies ResearchDTO;
 
     const slug = convertToSlug(data.title);
-    const claims = await client.auth.getClaims();
 
-    if (!claims.data?.claims) {
+    if (!session) {
       return Response.json({}, { headers, status: 401 });
     }
 
     const oldResearch = await new ResearchServiceServer(client).getById(id);
 
-    await validateRequest(request, claims.data.claims.sub, data, oldResearch, slug, client);
+    await validateRequest(request, session, data, oldResearch, slug, client);
 
     const previousSlugs = ContentServiceServer.updatePreviousSlugs(oldResearch, slug);
 
@@ -83,7 +87,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const research = ResearchItem.fromDB(researchResult.data, []);
 
     await new SubscribersServiceServer(client).updateResearchSubscribers(oldResearch, research);
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(session.authId);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
@@ -96,26 +100,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 };
 
-async function deleteResearch(request, id: number) {
+async function deleteResearch(request: Request, id: number, session: Session) {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const claims = await client.auth.getClaims();
-
-    if (!claims.data?.claims) {
+    if (!session?.profileId) {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
-
-    if (!profile) {
-      return Response.json({}, { headers, status: 401 });
-    }
-
-    const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
-      id,
-      profile,
-    );
+    const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(id, {
+      id: session.profileId,
+      username: session.username,
+      roles: session.roles,
+    });
 
     if (canEdit) {
       await client
@@ -137,7 +134,7 @@ async function deleteResearch(request, id: number) {
 
 async function validateRequest(
   request: Request,
-  userAuthId: string,
+  session: NonNullable<Session>,
   data: ResearchDTO,
   research: DBResearchItem,
   slug: string,
@@ -166,23 +163,21 @@ async function validateRequest(
     throw conflictError('This research already exists');
   }
 
-  const profile = await new ProfileServiceServer(client).getByAuthId(userAuthId);
-
-  if (!profile) {
+  if (!session.profileId) {
     throw validationError('User not found');
   }
 
-  if (!profile.username) {
+  if (!session.username) {
     throw validationError('You must set a username before editing content', 'username');
   }
 
-  if (profile.roles?.includes(UserRole.ADMIN)) {
+  if (session.roles.includes(UserRole.ADMIN)) {
     return;
   }
 
   if (
-    research.created_by !== profile.id &&
-    !(profile.username && research.collaborators?.includes(profile.username))
+    research.created_by !== session.profileId &&
+    !(session.username && research.collaborators?.includes(session.username))
   ) {
     throw forbiddenError();
   }

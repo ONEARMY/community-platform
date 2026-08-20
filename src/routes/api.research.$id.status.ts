@@ -1,19 +1,22 @@
 import type { ResearchStatus } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
+import { sessionContext } from 'src/context';
 import { logger } from 'src/logger';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const middleware: MiddlewareFunction<Response>[] = [sessionMiddleware];
+
+export const action = async ({ request, params, context }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
     const id = Number(params.id);
+    const session = context.get(sessionContext);
 
-    const claims = await client.auth.getClaims();
-
-    if (!claims.data?.claims) {
+    if (!session) {
       return Response.json({}, { headers, status: 401 });
     }
 
@@ -29,16 +32,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
-
-    if (!profile) {
+    if (!session.profileId) {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
-      id,
-      profile,
-    );
+    const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(id, {
+      id: session.profileId,
+      username: session.username,
+      roles: session.roles,
+    });
 
     if (!canEdit) {
       return Response.json(null, { headers, status: 403 });
@@ -50,7 +52,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw result.error;
     }
 
-    new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
+    new ProfileServiceServer(client).updateUserActivity(session.authId);
 
     return Response.json(null, { headers, status: 200 });
   } catch (error) {

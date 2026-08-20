@@ -8,6 +8,8 @@ const key = process.env.TOKEN_SECRET as string;
 type RolesPayload = {
   authId: string;
   tenantId: string;
+  profileId: number | null;
+  username: string | null;
   roles: string[];
 };
 
@@ -25,7 +27,11 @@ const sign = (payload: RolesPayload) => {
 
 // authId/tenantId are the current, trusted values (from the just-verified Supabase claims),
 // so a cookie minted for a different user or tenant is rejected rather than trusted.
-const verify = (request: Request, authId: string, tenantId: string): string[] | null => {
+const verify = (
+  request: Request,
+  authId: string,
+  tenantId: string,
+): Pick<RolesPayload, 'profileId' | 'username' | 'roles'> | null => {
   const token = parseCookieHeader(request.headers.get('Cookie') ?? '').find(
     (cookie) => cookie.name === COOKIE_NAME,
   )?.value;
@@ -41,7 +47,7 @@ const verify = (request: Request, authId: string, tenantId: string): string[] | 
       return null;
     }
 
-    return payload.roles;
+    return { profileId: payload.profileId, username: payload.username, roles: payload.roles };
   } catch {
     return null;
   }

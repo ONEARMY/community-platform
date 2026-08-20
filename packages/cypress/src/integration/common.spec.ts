@@ -39,9 +39,15 @@ describe('[Common]', () => {
     cy.contains("You don't have the right permissions");
     cy.contains('Report the problem');
 
-    cy.visit('/forbidden?page=news-create');
+    cy.step('research-create still shows the early-access message');
+    cy.visit('/forbidden?page=research-create');
     cy.contains('This is a new feature');
     cy.contains('I want to use it');
+
+    cy.step('news-create shows a plain permission message, not early-access');
+    cy.visit('/forbidden?page=news-create');
+    cy.contains("You don't have permission to create news posts");
+    cy.contains('Report the problem');
   });
 
   describe('[User feedback button]', () => {

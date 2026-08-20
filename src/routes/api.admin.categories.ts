@@ -1,18 +1,20 @@
 import { HTTPException } from 'hono/http-exception';
 import type { ContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
 import { logger } from 'src/logger';
+import { requireRoleApi } from 'src/middleware/requireRole.server';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { CategoryServiceServer } from 'src/services/categoryService.server';
-import {
-  forbiddenError,
-  methodNotAllowedError,
-  unauthorizedError,
-  validationError,
-} from 'src/utils/httpException';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 const CATEGORY_TYPES: ContentType[] = ['questions', 'projects', 'research', 'news'];
+
+export const middleware: MiddlewareFunction<Response>[] = [
+  sessionMiddleware,
+  requireRoleApi(UserRole.ADMIN),
+];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -20,22 +22,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     if (request.method !== 'POST') {
       throw methodNotAllowedError();
-    }
-
-    const claims = await client.auth.getClaims();
-
-    if (!claims.data?.claims) {
-      throw unauthorizedError();
-    }
-
-    const { data: profiles } = await client
-      .from('profiles')
-      .select('id,roles')
-      .eq('auth_id', claims.data.claims.sub)
-      .limit(1);
-
-    if (!profiles?.at(0)?.roles?.includes(UserRole.ADMIN)) {
-      throw forbiddenError();
     }
 
     const body = await request.json();

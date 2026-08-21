@@ -15,6 +15,7 @@ const viewport = 'desktop';
 
 const member: ProfileType = {
   name: 'member',
+  backgroundColor: '#f090b3',
   description: 'A member profile',
   displayName: 'Member',
   id: 2,
@@ -27,6 +28,7 @@ const member: ProfileType = {
 
 const space: ProfileType = {
   name: 'space',
+  backgroundColor: '#f090b3',
   description: 'A space profile',
   displayName: 'Space',
   id: 3,

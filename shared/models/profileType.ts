@@ -1,5 +1,6 @@
 export class DBProfileType {
   id: number;
+  background_color: string;
   description: string;
   display_name: string;
   image_url: string;
@@ -16,6 +17,7 @@ export class DBProfileType {
 
 export class ProfileType {
   id: number;
+  backgroundColor: string;
   description: string;
   displayName: string;
   imageUrl: string;
@@ -32,6 +34,7 @@ export class ProfileType {
   static fromDB(value: DBProfileType) {
     return new ProfileType({
       id: value.id,
+      backgroundColor: value.background_color,
       description: value.description,
       displayName: value.display_name,
       imageUrl: value.image_url,

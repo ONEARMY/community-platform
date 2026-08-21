@@ -136,13 +136,18 @@ export const MapView = ({
         {mapState.mapPins && mapState.mapPins.length > 0 && (
           <>
             {disableClusters || !mapState.selectPinWithClusterCheck ? (
-              <Markers pins={mapState.mapPins} onPinClick={mapState.selectPin} />
+              <Markers
+                pins={mapState.mapPins}
+                onPinClick={mapState.selectPin}
+                selectedPin={mapState.selectedPin}
+              />
             ) : (
               <Clusters
                 pins={mapState.mapPins}
                 onPinClick={mapState.selectPinWithClusterCheck}
                 onClusterClick={handleClusterClick}
                 clusterGroupRef={clusterGroupRef}
+                selectedPin={mapState.selectedPin}
               />
             )}
           </>

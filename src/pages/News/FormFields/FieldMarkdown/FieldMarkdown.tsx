@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import type { FieldRenderProps } from 'react-final-form';
 import { TIPTAP_EXTENSIONS } from 'src/utils/tiptapExtensions';
 import { Box, Flex, Text } from 'theme-ui';
+import { handleImagePaste } from './handleImagePaste';
 import { ImageBubbleMenu } from './ImageBubbleMenu';
 import { LinkBubbleMenu } from './LinkBubbleMenu';
 import { Toolbar } from './Toolbar';
@@ -28,6 +29,9 @@ export const FieldMarkdown = (props: IProps) => {
     extensions: [...TIPTAP_EXTENSIONS, Placeholder.configure({ placeholder })],
     content: input.value || null,
     editable: !disabled,
+    editorProps: {
+      handlePaste: (view, event) => handleImagePaste(view, event, imageUploadHandler),
+    },
     onUpdate: ({ editor }) => {
       input.onChange(editor.getJSON());
     },

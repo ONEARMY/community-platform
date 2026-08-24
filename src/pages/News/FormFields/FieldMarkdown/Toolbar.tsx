@@ -30,6 +30,7 @@ import {
 } from 'src/components/ui/tooltip';
 import { Flex } from 'theme-ui';
 import { AddImage } from './AddImage';
+import { AddYoutube } from './AddYoutube';
 
 interface IProps {
   editor: Editor;
@@ -217,6 +218,7 @@ export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
         </ToolbarButton>
 
         <AddImage editor={editor} imageUploadHandler={imageUploadHandler} />
+        <AddYoutube editor={editor} />
 
         <ToolbarButton
           label="Align left"

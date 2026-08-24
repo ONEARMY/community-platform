@@ -47,23 +47,21 @@ const renderMarks = (node: JSONContent, key: number | string): React.ReactNode =
       case 'underline':
         content = <u key={`${key}-u`}>{content}</u>;
         break;
-      case 'link': {
-        // Existing content predates the target attribute, so default to `_blank` (the
-        // editor's own previous fixed behavior) when it isn't set.
-        const target = mark.attrs?.target === '_self' ? '_self' : '_blank';
+      case 'link':
+        // Unlike the web view, email links always open in a new tab regardless of the
+        // mark's saved `target` — "same tab" isn't a meaningful concept inside an email client.
         content = (
           <Link
             key={`${key}-a`}
             href={mark.attrs?.href}
-            target={target}
-            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
             style={linkStyle}
           >
             {content}
           </Link>
         );
         break;
-      }
     }
   }
 
@@ -83,6 +81,51 @@ const renderInline = (nodes: JSONContent[] = []): React.ReactNode =>
 
 const isImageWidth = (width: unknown): width is string =>
   typeof width === 'string' && /^\d{1,3}%$/.test(width);
+
+// `content` is untrusted (it's stored JSON, not necessarily produced by the editor's own
+// AddYoutube flow), so validate the shape of a YouTube video ID before splicing it into a URL.
+const isYoutubeVideoId = (videoId: unknown): videoId is string =>
+  typeof videoId === 'string' && /^[a-zA-Z0-9_-]{6,15}$/.test(videoId);
+
+const youtubeThumbnailStyle: React.CSSProperties = {
+  width: '100%',
+  borderRadius: '10px',
+  display: 'block',
+};
+const youtubeCaptionStyle: React.CSSProperties = {
+  fontSize: '0.875rem',
+  color: '#6b7280',
+  textAlign: 'center',
+  marginTop: 4,
+};
+
+// Email clients don't render iframes (Gmail strips them entirely), so embed a clickable
+// thumbnail linking out to YouTube instead — the standard email-safe fallback for video.
+const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode => {
+  const videoId = node.attrs?.videoId;
+  if (!isYoutubeVideoId(videoId)) {
+    return null;
+  }
+
+  return (
+    <Row key={key}>
+      <Column>
+        <Link
+          href={`https://www.youtube.com/watch?v=${videoId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Img
+            src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+            alt="YouTube video thumbnail"
+            style={youtubeThumbnailStyle}
+          />
+        </Link>
+        <Text style={youtubeCaptionStyle}>▶ Watch the video</Text>
+      </Column>
+    </Row>
+  );
+};
 
 const renderImage = (node: JSONContent, key: number | string): React.ReactNode => {
   const width = isImageWidth(node.attrs?.width) ? node.attrs.width : imageStyle.width;
@@ -148,6 +191,8 @@ const renderBlock = (node: JSONContent, key: number | string): React.ReactNode =
       );
     case 'image':
       return renderImage(node, key);
+    case 'youtube':
+      return renderYoutube(node, key);
     case 'horizontalRule':
       return <hr key={key} />;
     default:

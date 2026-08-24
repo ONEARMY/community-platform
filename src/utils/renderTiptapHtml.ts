@@ -38,6 +38,11 @@ const imageAlignStyle = (textAlign: string | undefined): string => {
 const imageWidthStyle = (width: unknown): string =>
   typeof width === 'string' && /^\d{1,3}%$/.test(width) ? `width:${width};` : '';
 
+// `content` is untrusted (it's stored JSON, not necessarily produced by the editor's own
+// AddYoutube flow), so validate the shape of a YouTube video ID before splicing it into a URL.
+const isYoutubeVideoId = (videoId: unknown): videoId is string =>
+  typeof videoId === 'string' && /^[a-zA-Z0-9_-]{6,15}$/.test(videoId);
+
 const MARK_TAGS: Record<string, string> = {
   bold: 'strong',
   italic: 'em',
@@ -122,6 +127,15 @@ const renderBlock = (node: JSONContent): string => {
 
       const figureStyle = `margin:0;${imageAlignStyle(textAlign)}${imageWidthStyle(node.attrs?.width)}`;
       return `<figure style="${figureStyle}"><img src="${src}" alt="${alt}" style="display:block;width:100%;"><figcaption style="text-align:center;font-size:0.875rem;color:#6b7280;margin-top:4px;">${escapeHtml(caption)}</figcaption></figure>`;
+    }
+    case 'youtube': {
+      const videoId = node.attrs?.videoId;
+      if (!isYoutubeVideoId(videoId)) {
+        return '';
+      }
+      // Matches YOUTUBE_EMBED_WRAPPER_STYLE/YOUTUBE_IFRAME_STYLE in tiptapExtensions.ts
+      // (the editor's own NodeView and HTML export) — keep all three in sync.
+      return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;"><iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen title="YouTube video player"></iframe></div>`;
     }
     default:
       return '';

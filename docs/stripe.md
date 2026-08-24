@@ -58,7 +58,21 @@ The app handles these webhook events:
 - `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
+- `invoice.payment_succeeded`
 - `invoice.payment_failed`
+
+`stripe listen` forwards every event, so no endpoint configuration is needed locally. Hosted
+environments use a webhook endpoint per tenant, and each must have all five events enabled.
+
+### 5. Membership notifications (optional)
+
+Successful payments, cancellations, tier changes and failed renewals post to an admin Discord
+channel. Set `DISCORD_MEMBERSHIP_WEBHOOK_URL` in `.env.local` to a Discord webhook URL to see
+them; leave it unset and nothing is posted.
+
+Messages are prefixed with the tenant's `site_name_short` from `tenant_settings`, and name the
+tier via `stripe_badge_products`. Without the product mappings from step 2 the notifications
+still fire, but omit the tier name.
 
 ## Database Tables
 

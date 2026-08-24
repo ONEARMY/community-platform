@@ -1,10 +1,42 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
+import type { Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { membershipNotifications, supporterName } from 'src/services/membership.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { getTenantDisplayName } from 'src/services/tenantSettingsService.server';
 import { forbiddenError, validationError } from 'src/utils/httpException';
+
+async function notifySupporterAccountReady(
+  client: SupabaseClient,
+  profile: Profile,
+  request: Request,
+) {
+  const tenantId = process.env.TENANT_ID;
+  const tierBadge = profile.badges?.find((badge) => badge.premiumTier !== undefined);
+
+  if (!tenantId || !tierBadge || !profile.username) {
+    return;
+  }
+
+  try {
+    const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+    const membership = membershipNotifications(
+      (await getTenantDisplayName(client, tenantId)) ?? tenantId,
+    );
+
+    membership.supporterAccountReady(
+      supporterName(null, { id: profile.id, displayName: profile.displayName }),
+      tierBadge.displayName,
+      `${siteUrl}/u/${profile.username}`,
+    );
+  } catch (error) {
+    logger.error('Supporter account notification failed:', error);
+  }
+}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -50,6 +82,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profile = await profileService.updateUsername(profileData.id, username);
+
+    await notifySupporterAccountReady(client, profile, request);
 
     return Response.json(profile, { headers, status: 200 });
   } catch (error) {

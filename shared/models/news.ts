@@ -1,3 +1,4 @@
+import type { JSONContent } from '@tiptap/core';
 import { marked } from 'marked';
 import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
 import type { DBAuthor } from './author';
@@ -35,19 +36,13 @@ export class DBNews implements IDBContentDoc {
   readonly tags: number[];
   readonly useful_count?: number;
   readonly body: string;
+  readonly content: JSONContent | null;
+  readonly content_search_text: string | null;
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
   readonly poll: number | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null, poll: PollDTO | null) {
-    let htmlBody = marked(news.body, {
-      breaks: true,
-      gfm: true,
-    }) as string;
-
-    htmlBody = processYouTubeLinks(htmlBody);
-    htmlBody = processStandaloneYouTubeUrls(htmlBody);
-
     const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
 
     const setting = contentReachSettings.find((option) => option.value === news.content_reach);
@@ -56,7 +51,10 @@ export class DBNews implements IDBContentDoc {
       : null;
 
     return {
-      body: news.body,
+      // The new Tiptap-based editor edits `content` (JSON). Rows not yet backfilled
+      // (content === null) have no JSON representation to load, so the editor starts
+      // empty on edit for those rows until a real cutover decides how to handle them.
+      body: news.content,
       category: news.category
         ? { value: news.category.id.toString(), label: news.category.name }
         : null,
@@ -81,6 +79,7 @@ export class News implements IContentDoc {
   author: Author | null;
   body: string;
   bodyHtml: string;
+  content: JSONContent | null;
   category: Category | null;
   commentCount: number;
   createdAt: Date;
@@ -106,11 +105,19 @@ export class News implements IContentDoc {
     Object.assign(this, news);
   }
 
-  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null, poll?: PollDTO | null) {
-    let htmlBody = marked(news.body, {
-      breaks: true,
-      gfm: true,
-    }) as string;
+  static fromDB(
+    news: DBNews,
+    tags: Tag[],
+    heroImage?: Image | null,
+    poll?: PollDTO | null,
+    // Tiptap-specific rendering (generateHTML/TIPTAP_EXTENSIONS) lives in the app layer
+    // (src/utils/renderNewsBodyHtml.ts), not in oa-shared, so callers pass it in. Falls
+    // back to the legacy Markdown-only path if omitted.
+    renderBodyHtml?: (news: DBNews) => string,
+  ) {
+    let htmlBody = renderBodyHtml
+      ? renderBodyHtml(news)
+      : (marked(news.body, { breaks: true, gfm: true }) as string);
 
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
@@ -123,6 +130,7 @@ export class News implements IContentDoc {
       author: news.author ? Author.fromDB(news.author) : null,
       body: news.body,
       bodyHtml: htmlBody,
+      content: news.content || null,
       category: news.category ? Category.fromDB(news.category) : null,
       commentCount: news.comment_count || 0,
       createdAt: new Date(news.created_at),
@@ -148,7 +156,7 @@ export class News implements IContentDoc {
 }
 
 export type NewsFormData = {
-  body: string | null;
+  body: JSONContent | null;
   category: SelectValue | null;
   heroImage: MediaWithPublicUrl | null;
   isDraft: boolean | null;
@@ -161,7 +169,7 @@ export type NewsFormData = {
 
 export type NewsDTO = {
   title: string;
-  body: string | null;
+  body: JSONContent | null;
   category: number | null;
   heroImage: DBMedia | null;
   isDraft: boolean | null;

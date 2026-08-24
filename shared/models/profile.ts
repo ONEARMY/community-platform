@@ -1,3 +1,4 @@
+import type { JSONContent } from '@tiptap/core';
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
@@ -200,6 +201,7 @@ export class NotificationDisplay {
   date: Date;
   email: {
     body: string | undefined;
+    content: JSONContent | null;
     buttonLabel: string;
     displayDate: string | undefined;
     preview: string;
@@ -229,6 +231,17 @@ export class NotificationDisplay {
       }
       default: {
         return this.setBody(notification) || '';
+      }
+    }
+  }
+
+  static setEmailContent(notification: Notification): JSONContent | null {
+    switch (notification.contentType) {
+      case 'news': {
+        return (notification.content as News).content;
+      }
+      default: {
+        return null;
       }
     }
   }
@@ -380,6 +393,7 @@ export class NotificationDisplay {
       date: this.setDate(notification),
       email: {
         body: this.setEmailBody(notification),
+        content: this.setEmailContent(notification),
         buttonLabel: this.setEmailButtonLabel(notification),
         displayDate: this.setEmailDate(notification),
         preview: this.setEmailPreview(notification),

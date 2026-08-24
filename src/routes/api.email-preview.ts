@@ -30,7 +30,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     content: new News({
       id: formData.has('id') ? Number(formData.get('id')) : undefined,
       title: formData.has('title') ? (formData.get('title') as string) : '[No title]',
-      body: formData.has('body') ? (formData.get('body') as string) : '[No body]',
+      body: '',
+      content: formData.has('body') ? JSON.parse(formData.get('body') as string) : null,
       createdAt: new Date(),
       heroImage,
       tags,

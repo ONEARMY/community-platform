@@ -1,9 +1,9 @@
-import { FieldMarkdown } from 'oa-components';
 import { MediaWithPublicUrl } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { fields } from 'src/pages/News/labels';
 import { required } from 'src/utils/validators';
+import { FieldMarkdown } from './FieldMarkdown/FieldMarkdown';
 
 interface IProps {
   imageUpload: (image: File) => Promise<MediaWithPublicUrl | null>;

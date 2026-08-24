@@ -53,9 +53,9 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
 
-    cy.addToMarkdownField(initialNewsBodyOne);
-    cy.addToMarkdownField(initialNewsBodyTwo);
-    cy.addToMarkdownField(initialNewsBodyThree);
+    cy.addToRichTextField(initialNewsBodyOne);
+    cy.addToRichTextField(initialNewsBodyTwo);
+    cy.addToRichTextField(initialNewsBodyThree);
 
     cy.selectCard(category, '[data-cy=category-select]');
     cy.selectTag(tag1, '[data-cy="tag-select"]');
@@ -105,12 +105,12 @@ describe('[News.Write]', () => {
     cy.url().should('include', `${initialExpectedSlug}/edit`);
 
     cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
-    cy.get('.mdxeditor-root-contenteditable').type('{selectAll}{del}');
+    cy.get('[data-cy="field-body"] .ProseMirror').type('{selectAll}{del}');
 
-    cy.addToMarkdownField(updatedNewsBody);
-    cy.addToMarkdownField(initialNewsBodyOne);
-    cy.addToMarkdownField(initialNewsBodyTwo);
-    cy.addToMarkdownField(initialNewsBodyThree);
+    cy.addToRichTextField(updatedNewsBody);
+    cy.addToRichTextField(initialNewsBodyOne);
+    cy.addToRichTextField(initialNewsBodyTwo);
+    cy.addToRichTextField(initialNewsBodyThree);
 
     cy.step('Replace hero image');
     cy.get('[data-cy=existingHeroImage]').should('exist');
@@ -167,7 +167,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField(content);
+    cy.addToRichTextField(content);
     cy.selectTag('PRO', '[data-cy=profileBadges-select]');
     cy.selectByValue('important', '[data-cy=contentReach-select]');
 
@@ -241,7 +241,7 @@ describe('[News.Write]', () => {
 
     cy.step('Admin can edit the news body');
     cy.get('[data-cy=field-title]', { timeout: 20000 }).should('be.visible');
-    cy.addToMarkdownField(adminEdit);
+    cy.addToRichTextField(adminEdit);
 
     cy.step('Add the hero image required to publish');
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
@@ -273,7 +273,7 @@ describe('[Delete a news item]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField('This news will be deleted.');
+    cy.addToRichTextField('This news will be deleted.');
     cy.get('[data-cy=submit]').click();
     cy.wait(2000);
     cy.get('[data-cy=toast]').contains('News published');

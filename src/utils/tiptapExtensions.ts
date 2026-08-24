@@ -3,7 +3,9 @@ import TiptapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { ImageNodeView } from 'src/pages/News/FormFields/FieldMarkdown/ImageNodeView';
 
 /**
  * CSS `text-align` has no visual effect on an `<img>` element (it only affects inline
@@ -25,8 +27,20 @@ export const Image = TiptapImage.extend({
       width: {
         default: null,
       },
+      caption: {
+        default: null,
+      },
     };
   },
+  // Renders the live editor view as an actual <figure>/<figcaption> with a plain
+  // <input> for the caption, instead of a nested ProseMirror-editable text node —
+  // the caption is a single line of plain text, so a real form control is far
+  // simpler than giving the image node real (schema-managed) editable content.
+  addNodeView() {
+    return ReactNodeViewRenderer(ImageNodeView);
+  },
+  // Only used for HTML export (copy/paste) now that the live view is a NodeView —
+  // keep it in sync with ImageNodeView.tsx and renderTiptapHtml.ts's image case.
   renderHTML({ node, HTMLAttributes }) {
     // Drop `style` here: TextAlign's global attribute already ran and set it to
     // `text-align: ...`, which does nothing on an <img>. Read the real value off the
@@ -35,6 +49,7 @@ export const Image = TiptapImage.extend({
     const { style: _discardTextAlignStyle, ...rest } = HTMLAttributes;
     const textAlign = node.attrs.textAlign;
     const width = node.attrs.width as string | null;
+    const caption = node.attrs.caption as string | null;
     const alignStyle =
       textAlign === 'center'
         ? 'display:block;margin:0 auto;'
@@ -42,8 +57,18 @@ export const Image = TiptapImage.extend({
           ? 'display:block;margin:0 0 0 auto;'
           : '';
     const style = `${alignStyle}${width ? `width:${width};` : ''}`;
+    const img = ['img', mergeAttributes(rest, style ? { style } : {})] as const;
 
-    return ['img', mergeAttributes(rest, style ? { style } : {})];
+    if (!caption) {
+      return img;
+    }
+
+    return [
+      'figure',
+      { style: `margin:0;${style}` },
+      ['img', mergeAttributes(rest, { style: 'display:block;width:100%;' })],
+      ['figcaption', {}, caption],
+    ];
   },
 });
 

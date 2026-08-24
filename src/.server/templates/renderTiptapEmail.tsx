@@ -9,11 +9,17 @@ const headingStyles: Record<number, React.CSSProperties> = {
   3: { ...baseHeaderStyle, fontSize: '1.75rem' },
   4: { ...baseHeaderStyle, fontSize: '1.5rem' },
 };
+// Matches the blockquote styling used in the editor (FieldMarkdown.tsx) and the
+// web article view (NewsPage.tsx), rather than react-email's own <Markdown> defaults.
 const blockQuoteStyle: React.CSSProperties = {
-  background: '#f9f9f9',
-  borderLeft: '10px solid #ccc',
-  margin: '1.5em 10px',
-  padding: '1em 10px',
+  paddingLeft: 20,
+  paddingRight: 20,
+  paddingTop: 10,
+  paddingBottom: 10,
+  margin: 0,
+  marginBottom: 15,
+  backgroundColor: '#f4f8fd',
+  borderLeft: '3px solid #c8d8ec',
 };
 const linkStyle: React.CSSProperties = {
   color: '#007bff',
@@ -21,6 +27,11 @@ const linkStyle: React.CSSProperties = {
   backgroundColor: 'transparent',
 };
 const imageStyle: React.CSSProperties = { width: '100%', borderRadius: '10px' };
+const imageCaptionStyle: React.CSSProperties = {
+  fontSize: '0.875rem',
+  color: '#6b7280',
+  marginTop: 4,
+};
 
 const renderMarks = (node: JSONContent, key: number | string): React.ReactNode => {
   let content: React.ReactNode = node.text;
@@ -65,6 +76,8 @@ const isImageWidth = (width: unknown): width is string =>
 
 const renderImage = (node: JSONContent, key: number | string): React.ReactNode => {
   const width = isImageWidth(node.attrs?.width) ? node.attrs.width : imageStyle.width;
+  const caption = node.attrs?.caption as string | undefined;
+  const textAlign = (node.attrs?.textAlign as 'left' | 'center' | 'right' | undefined) ?? 'left';
   const img = (
     <Img
       key={key}
@@ -73,17 +86,22 @@ const renderImage = (node: JSONContent, key: number | string): React.ReactNode =
       style={{ ...imageStyle, width }}
     />
   );
-  const textAlign = node.attrs?.textAlign;
 
-  if (textAlign === 'center' || textAlign === 'right') {
-    return (
-      <Row key={key}>
-        <Column align={textAlign}>{img}</Column>
-      </Row>
-    );
+  // A caption needs a place to sit below the image regardless of alignment, so
+  // always use the table-based Row/Column wrapper once one is present (Outlook
+  // doesn't reliably honor margin/display-based layout for this).
+  if (!caption && textAlign === 'left') {
+    return img;
   }
 
-  return img;
+  return (
+    <Row key={key}>
+      <Column align={textAlign}>
+        {img}
+        {caption && <Text style={{ ...imageCaptionStyle, textAlign }}>{caption}</Text>}
+      </Column>
+    </Row>
+  );
 };
 
 const renderBlock = (node: JSONContent, key: number | string): React.ReactNode => {

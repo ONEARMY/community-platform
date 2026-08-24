@@ -24,6 +24,7 @@ export const FieldMarkdown = (props: IProps) => {
   const { imageUploadHandler, input, meta, placeholder, disabled, ...rest } = props;
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [...TIPTAP_EXTENSIONS, Placeholder.configure({ placeholder })],
     content: input.value || null,
     editable: !disabled,
@@ -73,12 +74,37 @@ export const FieldMarkdown = (props: IProps) => {
           p: {
             marginBottom: 3,
           },
-          h1: { fontSize: 7, fontWeight: 'bold', marginTop: 4, marginBottom: 2 },
-          h2: { fontSize: 6, fontWeight: 'bold', marginTop: 4, marginBottom: 2 },
-          h3: { fontSize: 5, fontWeight: 'bold', marginTop: 4, marginBottom: 2 },
-          h4: { fontSize: 4, fontWeight: 'bold', marginTop: 4, marginBottom: 2 },
-          h5: { fontSize: 3, fontWeight: 'bold', marginTop: 4, marginBottom: 2 },
-          h6: { fontSize: 2, fontWeight: 'bold', marginTop: 4, marginBottom: 2 },
+          'blockquote p': {
+            marginBottom: 0,
+          },
+          h2: {
+            fontSize: '1.875rem',
+            fontWeight: 600,
+            letterSpacing: '-0.025em',
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h3: {
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            letterSpacing: '-0.025em',
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h4: {
+            fontSize: '1.25rem',
+            fontWeight: 600,
+            letterSpacing: '-0.025em',
+            marginTop: 4,
+            marginBottom: 2,
+          },
+          h5: {
+            fontSize: '1.125rem',
+            fontWeight: 600,
+            letterSpacing: '-0.025em',
+            marginTop: 4,
+            marginBottom: 2,
+          },
           'ul, ol': {
             marginBottom: 3,
             paddingLeft: 8,

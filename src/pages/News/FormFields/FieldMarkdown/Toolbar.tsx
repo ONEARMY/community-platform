@@ -68,8 +68,15 @@ const setBlockType = (editor: Editor, value: string | null) => {
   const chain = editor.chain().focus();
 
   if (value === 'blockquote') {
-    chain.setBlockquote().run();
-  } else if (value.startsWith('heading-')) {
+    chain.toggleBlockquote().run();
+    return;
+  }
+
+  if (editor.isActive('blockquote')) {
+    chain.unsetBlockquote();
+  }
+
+  if (value.startsWith('heading-')) {
     const level = Number(value.split('-')[1]) as (typeof HEADING_LEVELS)[number];
     chain.setHeading({ level }).run();
   } else {

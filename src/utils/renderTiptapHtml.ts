@@ -107,8 +107,17 @@ const renderBlock = (node: JSONContent): string => {
     case 'horizontalRule':
       return '<hr>';
     case 'image': {
-      const style = `${imageAlignStyle(textAlign)}${imageWidthStyle(node.attrs?.width)}`;
-      return `<img src="${escapeAttr(node.attrs?.src ?? '')}" alt="${escapeAttr(node.attrs?.alt ?? '')}"${style ? ` style="${style}"` : ''}>`;
+      const src = escapeAttr(node.attrs?.src ?? '');
+      const alt = escapeAttr(node.attrs?.alt ?? '');
+      const caption = node.attrs?.caption as string | undefined;
+
+      if (!caption) {
+        const style = `${imageAlignStyle(textAlign)}${imageWidthStyle(node.attrs?.width)}`;
+        return `<img src="${src}" alt="${alt}"${style ? ` style="${style}"` : ''}>`;
+      }
+
+      const figureStyle = `margin:0;${imageAlignStyle(textAlign)}${imageWidthStyle(node.attrs?.width)}`;
+      return `<figure style="${figureStyle}"><img src="${src}" alt="${alt}" style="display:block;width:100%;"><figcaption style="text-align:center;font-size:0.875rem;color:#6b7280;margin-top:4px;">${escapeHtml(caption)}</figcaption></figure>`;
     }
     default:
       return '';

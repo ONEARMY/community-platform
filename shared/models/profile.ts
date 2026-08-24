@@ -200,6 +200,11 @@ export class NotificationDisplay {
   body?: string;
   date: Date;
   email: {
+    /**
+     * @deprecated For news notifications this is the legacy Markdown source, rendered via
+     * `<Markdown>` only when `content` is null (an un-backfilled news row). For every other
+     * notification type it's the actual (non-legacy) body text — only the news case is deprecated.
+     */
     body: string | undefined;
     content: JSONContent | null;
     buttonLabel: string;

@@ -2,11 +2,7 @@
  * One-off backfill: converts existing `news.body` Markdown into Tiptap JSON and writes
  * it to the new `content`/`content_search_text` columns. Never touches `body` itself.
  *
- * This is NOT run automatically — it writes to real rows in whatever database
- * SUPABASE_API_URL/SUPABASE_SERVICE_ROLE_KEY point at (including production, since local dev
- * in this repo shares the prod database). Test against a handful of known article IDs
- * first (see TEST_ARTICLE_IDS below), verify the rendered/searched output, then run
- * against the rest.
+ * This is NOT run automatically
  *
  * Usage:
  *   npx tsx scripts/backfill-news-content.ts            # only TEST_ARTICLE_IDS

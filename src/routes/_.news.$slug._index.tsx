@@ -111,7 +111,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
   const title = `${news.title} - News - ${loaderData?.tenantSettings?.siteName}`;
   const imageUrl = news.heroImage?.publicUrl;
 
-  return generateTags(title, news.body, imageUrl, { type: 'article' });
+  return generateTags(title, news.summary || '', imageUrl, { type: 'article' });
 });
 
 export default function Index() {

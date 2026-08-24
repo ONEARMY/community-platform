@@ -63,7 +63,6 @@
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.14.1",
     "@fontsource-variable/geist": "^5.3.0",
-    "@mdxeditor/editor": "^3.52.0",
     "@mui/base": "next",
     "@tiptap/core": "^2.11.5",
     "@tiptap/extension-bubble-menu": "^2.11.5",

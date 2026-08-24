@@ -1,5 +1,4 @@
 import type { JSONContent } from '@tiptap/core';
-import { marked } from 'marked';
 import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
 import type { DBAuthor } from './author';
 import { Author } from './author';
@@ -35,6 +34,13 @@ export class DBNews implements IDBContentDoc {
   readonly summary: string | null;
   readonly tags: number[];
   readonly useful_count?: number;
+  /**
+   * @deprecated Legacy Markdown source from the pre-Tiptap editor. Every row is expected
+   * to be backfilled to `content` before this ships, so nothing reads this for rendering
+   * anymore — it's written on insert purely because the DB column is NOT NULL (new rows
+   * get a plain-text stub extracted from `content`, not real prose). Use `content`/
+   * `bodyHtml` for anything else.
+   */
   readonly body: string;
   readonly content: JSONContent | null;
   readonly content_search_text: string | null;
@@ -77,6 +83,7 @@ export type EditNews = Omit<News, 'heroImage'> & {
 export class News implements IContentDoc {
   id: number;
   author: Author | null;
+  /** @deprecated Legacy Markdown source — see `DBNews.body`. Use `content`/`bodyHtml` instead. */
   body: string;
   bodyHtml: string;
   content: JSONContent | null;
@@ -108,16 +115,13 @@ export class News implements IContentDoc {
   static fromDB(
     news: DBNews,
     tags: Tag[],
-    heroImage?: Image | null,
-    poll?: PollDTO | null,
-    // Tiptap-specific rendering (generateHTML/TIPTAP_EXTENSIONS) lives in the app layer
-    // (src/utils/renderNewsBodyHtml.ts), not in oa-shared, so callers pass it in. Falls
-    // back to the legacy Markdown-only path if omitted.
-    renderBodyHtml?: (news: DBNews) => string,
+    heroImage: Image | null,
+    poll: PollDTO | null,
+    // Tiptap-specific rendering (renderTiptapHtml/TIPTAP_EXTENSIONS) lives in the app
+    // layer (src/utils/renderNewsBodyHtml.ts), not in oa-shared, so callers pass it in.
+    renderBodyHtml: (news: DBNews) => string,
   ) {
-    let htmlBody = renderBodyHtml
-      ? renderBodyHtml(news)
-      : (marked(news.body, { breaks: true, gfm: true }) as string);
+    let htmlBody = renderBodyHtml(news);
 
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);

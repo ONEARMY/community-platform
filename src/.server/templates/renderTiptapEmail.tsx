@@ -47,13 +47,23 @@ const renderMarks = (node: JSONContent, key: number | string): React.ReactNode =
       case 'underline':
         content = <u key={`${key}-u`}>{content}</u>;
         break;
-      case 'link':
+      case 'link': {
+        // Existing content predates the target attribute, so default to `_blank` (the
+        // editor's own previous fixed behavior) when it isn't set.
+        const target = mark.attrs?.target === '_self' ? '_self' : '_blank';
         content = (
-          <Link key={`${key}-a`} href={mark.attrs?.href} style={linkStyle}>
+          <Link
+            key={`${key}-a`}
+            href={mark.attrs?.href}
+            target={target}
+            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+            style={linkStyle}
+          >
             {content}
           </Link>
         );
         break;
+      }
     }
   }
 
@@ -98,7 +108,7 @@ const renderImage = (node: JSONContent, key: number | string): React.ReactNode =
     <Row key={key}>
       <Column align={textAlign}>
         {img}
-        {caption && <Text style={{ ...imageCaptionStyle, textAlign }}>{caption}</Text>}
+        {caption && <Text style={{ ...imageCaptionStyle, textAlign: 'center' }}>{caption}</Text>}
       </Column>
     </Row>
   );

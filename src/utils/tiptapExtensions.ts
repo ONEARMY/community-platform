@@ -80,6 +80,8 @@ export const TIPTAP_EXTENSIONS = [
   TextAlign.configure({
     types: ['heading', 'paragraph', 'image'],
   }),
-  Link,
+  Link.configure({
+    openOnClick: false,
+  }),
   Image,
 ];

@@ -54,21 +54,14 @@ export const loader = async ({ request }) => {
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
   }
 
-  // `?searchMode=content` is a local-only toggle for exercising search over the new
-  // `content`/`content_fts` columns without touching what production calls by default.
-  const searchMode = params.get('searchMode');
-
-  const rpcResult = await client.rpc(
-    searchMode === 'content' ? 'get_news_feed_by_content' : 'get_news_feed',
-    {
-      p_user_profile_id: userProfileId,
-      p_is_admin: isAdmin,
-      p_search: q || null,
-      p_sort: sort || 'Newest',
-      p_skip: skip,
-      p_limit: ITEMS_PER_PAGE,
-    },
-  );
+  const rpcResult = await client.rpc('get_news_feed_by_content', {
+    p_user_profile_id: userProfileId,
+    p_is_admin: isAdmin,
+    p_search: q || null,
+    p_sort: sort || 'Newest',
+    p_skip: skip,
+    p_limit: ITEMS_PER_PAGE,
+  });
 
   if (rpcResult.error) {
     logger.error(rpcResult.error);

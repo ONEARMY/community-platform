@@ -50,7 +50,11 @@ const renderMarksOpen = (marks: JSONContent['marks'] = []): string =>
   marks
     .map((mark) => {
       if (mark.type === 'link') {
-        return `<a href="${escapeAttr(mark.attrs?.href ?? '')}" target="_blank" rel="noopener noreferrer">`;
+        // Existing content predates the target attribute, so default to `_blank` (the
+        // editor's own previous fixed behavior) when it isn't set.
+        const target = mark.attrs?.target === '_self' ? '_self' : '_blank';
+        const rel = target === '_blank' ? ' rel="noopener noreferrer"' : '';
+        return `<a href="${escapeAttr(mark.attrs?.href ?? '')}" target="${target}"${rel}>`;
       }
       const tag = MARK_TAGS[mark.type];
       return tag ? `<${tag}>` : '';

@@ -1,8 +1,8 @@
-import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components';
+import { HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData } from 'react-router';
-import { PasswordField } from 'src/common/Form/PasswordField';
+import { TextInputField } from 'src/common/Form/TextInput.field';
 import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -11,7 +11,9 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { Card, Flex, Heading, Label, Text } from 'theme-ui';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -104,91 +106,71 @@ export default function Index() {
         render={({ submitting, invalid }) => {
           return (
             <form data-cy="login-form" method="post">
-              <Flex
-                sx={{
-                  bg: 'inherit',
-                  px: 2,
-                  width: '100%',
-                  maxWidth: '620px',
-                  mx: 'auto',
-                  mt: [5, 10],
-                  mb: 3,
-                }}
-              >
-                <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type="celebration" />
-                  <Card sx={{ borderRadius: 3 }}>
-                    <Flex
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        padding: 4,
-                        gap: 4,
-                        width: '100%',
-                      }}
+              <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+                <HeroBanner type="celebration" />
+                <Card variant="outline">
+                  <CardHeader>
+                    <h1 className="text-2xl font-semibold">Log in</h1>
+                    <p className="text-sm text-muted-foreground">
+                      <Link to="/sign-up" data-cy="no-account" className="hover:underline">
+                        Don't have an account? Sign-up here
+                      </Link>
+                    </p>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4">
+                    {actionResponse?.error && (
+                      <div
+                        className="w-full rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                        data-cy="TextNotification: failure"
+                      >
+                        {actionResponse.error}
+                      </div>
+                    )}
+
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="email">Email</Label>
+                      <Field
+                        id="email"
+                        name="email"
+                        type="email"
+                        data-cy="email"
+                        component={TextInputField}
+                        validate={required}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="password">Password</Label>
+                      <Field
+                        id="password"
+                        name="password"
+                        type="password"
+                        data-cy="password"
+                        component={TextInputField}
+                        validate={required}
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      <Link
+                        to="/reset-password"
+                        data-cy="lost-password"
+                        className="hover:underline"
+                      >
+                        Forgotten password?
+                      </Link>
+                    </p>
+
+                    <Button
+                      data-cy="submit"
+                      size="lg"
+                      className="w-full justify-center"
+                      disabled={submitting || invalid}
+                      type="submit"
                     >
-                      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>Log in</Heading>
-                        <Text sx={{ fontSize: 1 }} color="grey">
-                          <Link to="/sign-up" data-cy="no-account">
-                            Don't have an account? Sign-up here
-                          </Link>
-                        </Text>
-                      </Flex>
-
-                      {actionResponse?.error && (
-                        <TextNotification isVisible={true} variant="failure">
-                          <Text>{actionResponse?.error}</Text>
-                        </TextNotification>
-                      )}
-
-                      <Flex sx={{ flexDirection: 'column' }}>
-                        <Label htmlFor="title">Email</Label>
-                        <Field
-                          name="email"
-                          type="email"
-                          data-cy="email"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex sx={{ flexDirection: 'column' }}>
-                        <Label htmlFor="title">Password</Label>
-                        <PasswordField
-                          name="password"
-                          data-cy="password"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex sx={{ justifyContent: 'space-between' }}>
-                        <Text sx={{ fontSize: 1 }} color="grey">
-                          <Link to="/reset-password" data-cy="lost-password">
-                            Forgotten password?
-                          </Link>
-                        </Text>
-                      </Flex>
-
-                      <Flex>
-                        <Button
-                          large
-                          data-cy="submit"
-                          sx={{
-                            borderRadius: 3,
-                            width: '100%',
-                            justifyContent: 'center',
-                          }}
-                          variant="primary"
-                          disabled={submitting || invalid}
-                          type="submit"
-                        >
-                          Log in
-                        </Button>
-                      </Flex>
-                    </Flex>
-                  </Card>
-                </Flex>
-              </Flex>
+                      Log in
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </form>
           );
         }}

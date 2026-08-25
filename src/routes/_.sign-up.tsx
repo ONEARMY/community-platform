@@ -123,7 +123,7 @@ export default function Index() {
                   <CardContent className="flex flex-col gap-4">
                     {actionResponse?.error && pristine && (
                       <div
-                        className="w-full rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                        className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
                         data-cy="TextNotification: failure"
                       >
                         {actionResponse.error}

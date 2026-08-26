@@ -47,6 +47,11 @@ export const AddImage = ({ editor, imageUploadHandler }: IProps) => {
     setError(errorMsg);
   };
 
+  const close = () => {
+    setIsOpen(false);
+    setError(null);
+  };
+
   return (
     <>
       <Tooltip>
@@ -66,7 +71,7 @@ export const AddImage = ({ editor, imageUploadHandler }: IProps) => {
         <TooltipContent>Insert image</TooltipContent>
       </Tooltip>
 
-      <Modal isOpen={isOpen} width={600} onDismiss={() => {}}>
+      <Modal isOpen={isOpen} width={600} onDismiss={close}>
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           {error && <Box sx={{ color: 'error', fontSize: 1 }}>{error}</Box>}
           <Box sx={{ height: '300px' }}>
@@ -76,7 +81,7 @@ export const AddImage = ({ editor, imageUploadHandler }: IProps) => {
             {isLoading ? (
               <Loader />
             ) : (
-              <Button variant="secondary" type="button" onClick={() => setIsOpen(false)}>
+              <Button variant="secondary" type="button" onClick={close}>
                 Cancel
               </Button>
             )}

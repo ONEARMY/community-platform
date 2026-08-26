@@ -11,6 +11,7 @@ import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
+import { getSummaryFromTiptapJson } from 'src/utils/getSummaryFromTiptapJson';
 import {
   conflictError,
   forbiddenError,
@@ -100,14 +101,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const newsResult = await client
       .from('news')
       .update({
-        // `body`/`summary` are left untouched here on purpose: they're the legacy
-        // Markdown source (and the fields production's fts/search RPC read), and this
-        // edit came through the new Tiptap-JSON editor, not the Markdown one. Only
-        // `content`/`content_search_text` get updated; body/summary go stale for this
-        // row until a real cutover decides what to do with them.
+        body: bodyPlainText,
         category: data.category,
         content: data.body,
         content_search_text: bodyPlainText,
+        summary: getSummaryFromTiptapJson(data.body),
         is_draft: currentNews.published_at ? false : data.isDraft,
         modified_at: new Date(),
         slug: slug,

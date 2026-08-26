@@ -8,6 +8,20 @@ const insertImage = (view: EditorView, src: string) => {
   view.dispatch(view.state.tr.replaceSelectionWith(schema.nodes.image.create({ src })));
 };
 
+const toSafeFetchUrl = (rawSrc: string): string | null => {
+  try {
+    const parsed = new URL(rawSrc);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return null;
+    }
+
+    const normalized = parsed.toString();
+    return isFetchableUrl(normalized) ? normalized : null;
+  } catch {
+    return null;
+  }
+};
+
 const uploadAndInsert = async (
   view: EditorView,
   file: File,
@@ -119,19 +133,20 @@ export const handleImagePaste = (
   if (/^https?:\/\//.test(src)) {
     event.preventDefault();
 
-    if (!isFetchableUrl(src)) {
-      // A private/internal/loopback address — don't fetch it, and don't insert it as a
-      // plain hotlink either (a published article would then make every viewer's
-      // browser hit it too).
+    const safeSrc = toSafeFetchUrl(src);
+    if (!safeSrc) {
+      // A private/internal/loopback address (or invalid URL) — don't fetch it, and
+      // don't insert it as a plain hotlink either (a published article would then
+      // make every viewer's browser hit it too).
       return true;
     }
 
-    void fetch(src)
+    void fetch(safeSrc)
       .then((response) => response.blob())
       .then((blob) =>
         uploadAndInsert(
           view,
-          new File([blob], filenameFromUrl(src), { type: blob.type }),
+          new File([blob], filenameFromUrl(safeSrc), { type: blob.type }),
           imageUploadHandler,
         ),
       )

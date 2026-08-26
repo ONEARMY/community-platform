@@ -5,7 +5,12 @@ import type { DBMedia, DBProfile, DBQuestion, Moderation, QuestionDTO } from 'oa
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
-import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
+import {
+  ITEMS_PER_PAGE,
+  QUESTION_MAX_LINKS,
+  QUESTION_MAX_PER_DAY,
+  QUESTION_MAX_PER_MONTH,
+} from 'src/pages/Question/constants';
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
@@ -13,7 +18,12 @@ import { discordServiceServer } from 'src/services/discordService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
-import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  conflictError,
+  methodNotAllowedError,
+  tooManyRequestsError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const loader = async ({ request }) => {
@@ -93,6 +103,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
   try {
     const formData = await request.formData();
+
+    if (formData.get('website')) {
+      throw validationError('Invalid request');
+    }
+
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
@@ -132,6 +147,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (!profile.username) {
       throw validationError('You must set a username before creating content', 'username');
+    }
+
+    if (!data.isDraft) {
+      await checkRateLimit(client, profile.id);
     }
 
     const questionResult = await client
@@ -190,6 +209,45 @@ function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) 
   );
 }
 
+async function checkRateLimit(
+  client: ReturnType<typeof createSupabaseServerClient>['client'],
+  profileId: number,
+) {
+  const dayAgo = new Date(Date.now() - 1000 * 60 * 60 * 24);
+  const monthAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
+
+  const [dayCount, monthCount] = await Promise.all([
+    client
+      .from('questions')
+      .select('id', { count: 'exact' })
+      .eq('created_by', profileId)
+      .gt('created_at', dayAgo.toISOString()),
+    client
+      .from('questions')
+      .select('id', { count: 'exact' })
+      .eq('created_by', profileId)
+      .gt('created_at', monthAgo.toISOString()),
+  ]);
+
+  if (dayCount.count! >= QUESTION_MAX_PER_DAY) {
+    throw tooManyRequestsError(
+      "You've posted a lot of questions today! To protect the platform from spam we haven't posted this one.",
+    );
+  }
+
+  if (monthCount.count! >= QUESTION_MAX_PER_MONTH) {
+    throw tooManyRequestsError(
+      "You've reached the monthly limit for new questions. To protect the platform from spam we haven't posted this one.",
+    );
+  }
+}
+
+function isLikelySpam(data: QuestionDTO): boolean {
+  const text = `${data.title} ${data.description}`;
+  const linkCount = (text.match(/https?:\/\//g) || []).length;
+  return linkCount > QUESTION_MAX_LINKS;
+}
+
 async function validateRequest(request: Request, data: QuestionDTO) {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
@@ -201,5 +259,9 @@ async function validateRequest(request: Request, data: QuestionDTO) {
 
   if (!data.description) {
     throw validationError('Description is required', 'description');
+  }
+
+  if (isLikelySpam(data)) {
+    throw validationError('This question looks like spam. Please rephrase and try again.');
   }
 }

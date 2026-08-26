@@ -157,7 +157,7 @@ Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=confirm-password]').clear().type(password);
-  cy.get('[data-cy=consent]').check();
+  cy.get('[data-cy=consent]').click({ force: true });
 });
 
 Cypress.Commands.add('signIn', (email: string, password: string) => {

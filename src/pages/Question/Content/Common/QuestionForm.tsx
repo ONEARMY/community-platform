@@ -2,7 +2,7 @@ import { FormApi } from 'node_modules/final-form/dist';
 import { Button, ConfirmModal } from 'oa-components';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
-import { Form } from 'react-final-form';
+import { Field, Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { useToast } from 'src/common/Toast';
@@ -55,6 +55,7 @@ export const QuestionForm = (props: IProps) => {
         images: props.formData?.images || [],
         tags: props.formData?.tags || null,
         isDraft: props.formData?.isDraft || null,
+        website: '',
       }) satisfies QuestionFormData,
     [],
   );
@@ -71,6 +72,7 @@ export const QuestionForm = (props: IProps) => {
       category: values.category || null,
       images: values.images || null,
       isDraft: isDraft,
+      website: values.website,
     });
 
     toast.promise(promise, {
@@ -173,6 +175,25 @@ export const QuestionForm = (props: IProps) => {
               />
               <CategoryField type="questions" required />
               <TagsField title={LABELS.fields.tags.title} />
+              <Field name="website">
+                {({ input }) => (
+                  <input
+                    {...input}
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      width: 1,
+                      height: 1,
+                      opacity: 0,
+                      pointerEvents: 'none',
+                      left: -9999,
+                    }}
+                  />
+                )}
+              </Field>
             </FormWrapper>
           );
         }}

@@ -74,7 +74,7 @@ export const Image = TiptapImage.extend({
 });
 
 // Matches the wrapper markup `processYouTubeLinks`/`processStandaloneYouTubeUrls`
-// (shared/utils/markdown.ts) already produce for plain-text/pasted-link YouTube URLs in
+// (shared/utils/youtube.ts) already produce for plain-text/pasted-link YouTube URLs in
 // legacy Markdown content, so both paths render identically on the web article view.
 export const YOUTUBE_EMBED_WRAPPER_STYLE =
   'position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;';

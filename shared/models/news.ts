@@ -1,5 +1,5 @@
 import type { JSONContent } from '@tiptap/core';
-import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
+import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/youtube';
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';

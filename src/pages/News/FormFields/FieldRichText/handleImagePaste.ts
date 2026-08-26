@@ -27,6 +27,45 @@ const filenameFromUrl = (url: string): string => {
   }
 };
 
+// Literal loopback/private/link-local hosts (the last of which includes cloud metadata
+// endpoints like 169.254.169.254). Blocking these keeps a malicious paste from making a
+// privileged author's own browser fetch — or worse, publish a hotlink to — an internal
+// address only reachable from their machine/network. This can't catch DNS rebinding
+// (a hostname that only resolves to a private IP at request time), which client-side JS
+// has no way to pre-check — but it stops the common literal-address case for free.
+const isPrivateHost = (hostname: string): boolean => {
+  const host = hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (host === 'localhost' || host === '0.0.0.0' || host === '::1') {
+    return true;
+  }
+  const ipv4 = host.match(/^(\d{1,3})\.(\d{1,3})\.\d{1,3}\.\d{1,3}$/);
+  if (!ipv4) {
+    return false;
+  }
+  const first = Number(ipv4[1]);
+  const second = Number(ipv4[2]);
+  return (
+    first === 127 ||
+    first === 10 ||
+    first === 0 ||
+    (first === 172 && second >= 16 && second <= 31) ||
+    (first === 192 && second === 168) ||
+    (first === 169 && second === 254)
+  );
+};
+
+const isFetchableUrl = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    return (
+      (parsed.protocol === 'http:' || parsed.protocol === 'https:') &&
+      !isPrivateHost(parsed.hostname)
+    );
+  } catch {
+    return false;
+  }
+};
+
 export const handleImagePaste = (
   view: EditorView,
   event: ClipboardEvent,
@@ -75,6 +114,14 @@ export const handleImagePaste = (
 
   if (/^https?:\/\//.test(src)) {
     event.preventDefault();
+
+    if (!isFetchableUrl(src)) {
+      // A private/internal/loopback address — don't fetch it, and don't insert it as a
+      // plain hotlink either (a published article would then make every viewer's
+      // browser hit it too).
+      return true;
+    }
+
     void fetch(src)
       .then((response) => response.blob())
       .then((blob) =>

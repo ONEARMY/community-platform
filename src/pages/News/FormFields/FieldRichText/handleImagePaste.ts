@@ -118,15 +118,32 @@ export const handleImagePaste = (
   if (dataImageMatch) {
     event.preventDefault();
     const dataImageSrc = dataImageMatch[0];
-    void fetch(dataImageSrc)
-      .then((response) => response.blob())
-      .then((blob) =>
-        uploadAndInsert(view, new File([blob], 'image', { type: blob.type }), imageUploadHandler),
-      )
-      .catch(() => {
+    try {
+      const parsed = dataImageSrc.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,([a-zA-Z0-9+/=\s]+)$/);
+      if (!parsed) {
+        return true;
+      }
+
+      const mimeType = parsed[1];
+      const base64Data = parsed[2].replace(/\s+/g, '');
+      const binary = atob(base64Data);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+
+      const blob = new Blob([bytes], { type: mimeType });
+      void uploadAndInsert(
+        view,
+        new File([blob], 'image', { type: blob.type }),
+        imageUploadHandler,
+      ).catch(() => {
         // Upload failed — unlike the external-URL case, there's no sane fallback (we
         // don't want to insert the raw base64 back into the document), so just drop it.
       });
+    } catch {
+      // Invalid/undecodable base64 payload — drop it.
+    }
     return true;
   }
 

@@ -278,7 +278,7 @@ export class NotificationDisplay {
         return `New research update on ${notification.title}`;
       }
       case 'newNews': {
-        return `News: ${notification.title}`;
+        return `News: ${(notification.content as News)?.summary}`;
       }
       case 'newComment': {
         if (notification.triggeredBy && notification.triggeredBy.username) {

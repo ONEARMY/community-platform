@@ -98,9 +98,13 @@ export const handleImagePaste = (
     return false;
   }
 
-  if (src.startsWith('data:image/')) {
+  const dataImageMatch = src.match(
+    /^data:image\/[a-zA-Z0-9.+-]+;base64,[a-zA-Z0-9+/=\s]+$/,
+  );
+  if (dataImageMatch) {
     event.preventDefault();
-    void fetch(src)
+    const dataImageSrc = dataImageMatch[0];
+    void fetch(dataImageSrc)
       .then((response) => response.blob())
       .then((blob) =>
         uploadAndInsert(view, new File([blob], 'image', { type: blob.type }), imageUploadHandler),

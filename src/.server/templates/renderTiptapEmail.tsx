@@ -126,7 +126,7 @@ const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode
           rel="noopener noreferrer"
         >
           <Img
-            src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+            src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
             alt="YouTube video thumbnail"
             style={youtubeThumbnailStyle}
           />

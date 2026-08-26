@@ -5,8 +5,8 @@ import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { ImageNodeView } from 'src/pages/News/FormFields/FieldMarkdown/ImageNodeView';
-import { YoutubeNodeView } from 'src/pages/News/FormFields/FieldMarkdown/YoutubeNodeView';
+import { ImageNodeView } from 'src/pages/News/FormFields/FieldRichText/ImageNodeView';
+import { YoutubeNodeView } from 'src/pages/News/FormFields/FieldRichText/YoutubeNodeView';
 
 /**
  * CSS `text-align` has no visual effect on an `<img>` element (it only affects inline

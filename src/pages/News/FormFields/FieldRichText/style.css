@@ -11,6 +11,6 @@
   pointer-events: none;
 }
 
-.field-markdown-error .ProseMirror {
+.field-rich-text-error .ProseMirror {
   border-color: red;
 }

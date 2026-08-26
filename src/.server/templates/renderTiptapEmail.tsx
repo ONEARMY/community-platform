@@ -9,8 +9,7 @@ const headingStyles: Record<number, React.CSSProperties> = {
   3: { ...baseHeaderStyle, fontSize: '1.75rem' },
   4: { ...baseHeaderStyle, fontSize: '1.5rem' },
 };
-// Matches the blockquote styling used in the editor (FieldMarkdown.tsx) and the
-// web article view (NewsPage.tsx), rather than react-email's own <Markdown> defaults.
+
 const blockQuoteStyle: React.CSSProperties = {
   paddingLeft: 20,
   paddingRight: 20,

@@ -21,7 +21,7 @@ export interface IProps extends FieldProps {
   'data-cy'?: string;
 }
 
-export const FieldMarkdown = (props: IProps) => {
+export const FieldRichText = (props: IProps) => {
   const { imageUploadHandler, input, meta, placeholder, disabled, ...rest } = props;
 
   const editor = useEditor({
@@ -59,7 +59,7 @@ export const FieldMarkdown = (props: IProps) => {
     <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       {showError && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
       <Box
-        className={showError ? 'field-markdown-error' : ''}
+        className={showError ? 'field-rich-text-error' : ''}
         sx={{
           alignSelf: 'stretch',
           fontFamily: 'body',

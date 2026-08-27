@@ -57,13 +57,15 @@ export const Layout = (props: LayoutArgs) => {
             width: '600px',
           }}
         >
-          <Img
-            alt={settings.siteName}
-            height="85px"
-            width="85px"
-            src={settings.siteImage}
-            style={{ margin: '30px auto' }}
-          />
+          <Link href={settings.siteUrl}>
+            <Img
+              alt={settings.siteName}
+              height="85px"
+              width="85px"
+              src={settings.siteImage}
+              style={{ margin: '30px auto' }}
+            />
+          </Link>
           <Section
             style={{
               background: '#fff',

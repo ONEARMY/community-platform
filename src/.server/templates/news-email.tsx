@@ -60,7 +60,9 @@ export const NewsEmail = (props: IProps) => {
         )}
       </Header>
 
-      <Container style={{ padding: '0 20px 20px 20px', margin: 0, maxWidth: '100%' }}>
+      <Container
+        style={{ padding: '0 20px 20px 20px', lineHeight: 1.5, margin: 0, maxWidth: '100%' }}
+      >
         {isPreview && (
           <BoxText>
             <Text>PREVIEW: if you haven't saved the news as a draft yet, links will not work.</Text>

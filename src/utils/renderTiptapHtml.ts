@@ -19,19 +19,11 @@ const escapeAttr = (text: string): string => escapeHtml(text).replace(/"/g, '&qu
 
 /**
  * CSS `text-align` has no visual effect on an `<img>` element itself (it only affects
- * inline content inside a block container) — center/right-align via margin/display
+ * inline content inside a block container) — images are always centered via margin/display
  * instead. Keep in sync with the `Image` extension override in `tiptapExtensions.ts`,
  * which applies the same mapping for the editor's own live (browser) rendering.
  */
-const imageAlignStyle = (textAlign: string | undefined): string => {
-  if (textAlign === 'center') {
-    return 'display:block;margin:0 auto;';
-  }
-  if (textAlign === 'right') {
-    return 'display:block;margin:0 0 0 auto;';
-  }
-  return '';
-};
+const IMAGE_ALIGN_STYLE = 'display:block;margin:0 auto;';
 
 // Width is only ever set by the editor's own resize presets (see IMAGE_WIDTH_PRESETS in
 // tiptapExtensions.ts), but validate the shape anyway before splicing it into a style string.
@@ -121,12 +113,12 @@ const renderBlock = (node: JSONContent): string => {
       const caption = node.attrs?.caption as string | undefined;
 
       if (!caption) {
-        const style = `${imageAlignStyle(textAlign)}${imageWidthStyle(node.attrs?.width)}`;
+        const style = `${IMAGE_ALIGN_STYLE}${imageWidthStyle(node.attrs?.width)}`;
         return `<img src="${src}" alt="${alt}"${style ? ` style="${style}"` : ''}>`;
       }
 
-      const figureStyle = `margin:0;${imageAlignStyle(textAlign)}${imageWidthStyle(node.attrs?.width)}`;
-      return `<figure style="${figureStyle}"><img src="${src}" alt="${alt}" style="display:block;width:100%;"><figcaption style="text-align:center;font-size:0.875rem;color:#6b7280;margin-top:4px;">${escapeHtml(caption)}</figcaption></figure>`;
+      const figureStyle = `margin:0;${IMAGE_ALIGN_STYLE}${imageWidthStyle(node.attrs?.width)}`;
+      return `<figure style="${figureStyle}"><img src="${src}" alt="${alt}" style="display:block;width:100%;"><figcaption style="text-align:center;font-size:0.875rem;color:#6b7280;line-height:1.5;margin-top:5px;">${escapeHtml(caption)}</figcaption></figure>`;
     }
     case 'youtube': {
       const videoId = node.attrs?.videoId;

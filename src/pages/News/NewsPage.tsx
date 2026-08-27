@@ -138,13 +138,13 @@ export const NewsPage = observer(({ news }: IProps) => {
             sx={{
               alignSelf: 'stretch',
               fontFamily: 'body',
-              lineHeight: 2,
+              lineHeight: 1.5,
               a: {
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
               },
               p: {
-                marginBottom: 3,
+                marginBottom: 2,
               },
               'blockQuote p': {
                 marginBottom: 0,
@@ -182,7 +182,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                 marginBottom: 2,
               },
               'ul, ol': {
-                marginBottom: 3,
+                marginBottom: 2,
                 paddingLeft: 8,
               },
               ul: {
@@ -192,7 +192,10 @@ export const NewsPage = observer(({ news }: IProps) => {
                 listStyle: 'decimal',
               },
               li: {
-                marginBottom: 1,
+                marginBottom: 0,
+                '> p': {
+                  marginBottom: 0,
+                },
               },
               blockQuote: {
                 paddingX: 4,

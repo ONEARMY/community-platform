@@ -12,9 +12,9 @@ const headingStyles: Record<number, React.CSSProperties> = {
   4: { ...baseHeaderStyle, fontSize: '1.25rem', marginTop: 20, marginBottom: 10 },
 };
 
-const paragraphStyle: React.CSSProperties = { marginTop: 0, marginBottom: 15 };
-const listStyle: React.CSSProperties = { marginBottom: 15, paddingLeft: 40 };
-const listItemStyle: React.CSSProperties = { marginBottom: 5 };
+const paragraphStyle: React.CSSProperties = { marginTop: 0, marginBottom: 10 };
+const listStyle: React.CSSProperties = { marginBottom: 10, paddingLeft: 40 };
+const listItemStyle: React.CSSProperties = { marginBottom: 0 };
 
 const blockQuoteStyle: React.CSSProperties = {
   paddingLeft: 20,
@@ -37,6 +37,7 @@ const imageStyle: React.CSSProperties = { width: '100%', borderRadius: '10px' };
 const imageCaptionStyle: React.CSSProperties = {
   fontSize: '0.875rem',
   color: '#6b7280',
+  lineHeight: 1.5,
   marginTop: 5,
 };
 // Only the captioned case has a bottom margin on the web (the `figure` wrapper) — a bare
@@ -140,7 +141,6 @@ const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode
 const renderImage = (node: JSONContent, key: number | string): React.ReactNode => {
   const width = isImageWidth(node.attrs?.width) ? node.attrs.width : imageStyle.width;
   const caption = node.attrs?.caption as string | undefined;
-  const textAlign = (node.attrs?.textAlign as 'left' | 'center' | 'right' | undefined) ?? 'left';
   const img = (
     <Img
       key={key}
@@ -150,16 +150,16 @@ const renderImage = (node: JSONContent, key: number | string): React.ReactNode =
     />
   );
 
-  // A caption needs a place to sit below the image regardless of alignment, so
-  // always use the table-based Row/Column wrapper once one is present (Outlook
-  // doesn't reliably honor margin/display-based layout for this).
-  if (!caption && textAlign === 'left') {
+  // Images are always centered. A full-width image renders the same whether centered or
+  // not, so only pay for the table-based Row/Column wrapper (Outlook doesn't reliably
+  // honor margin/display-based centering) when it's narrower or has a caption to place.
+  if (!caption && width === imageStyle.width) {
     return img;
   }
 
   return (
     <Row key={key} style={caption ? { marginBottom: imageFigureMarginBottom } : undefined}>
-      <Column align={textAlign}>
+      <Column align="center">
         {img}
         {caption && <Text style={{ ...imageCaptionStyle, textAlign: 'center' }}>{caption}</Text>}
       </Column>

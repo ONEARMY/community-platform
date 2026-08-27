@@ -1,9 +1,6 @@
 import type { Editor } from '@tiptap/react';
 import { useEditorState } from '@tiptap/react';
 import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
   Bold,
   Italic,
   Link as LinkIcon,
@@ -37,13 +34,12 @@ interface IProps {
   imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
 }
 
-const HEADING_LEVELS = [2, 3, 4] as const;
+const HEADING_LEVELS = [2, 3] as const;
 
 const BLOCK_TYPES = [
   { value: 'paragraph', label: 'Paragraph' },
   { value: 'heading-2', label: 'Heading 2' },
   { value: 'heading-3', label: 'Heading 3' },
-  { value: 'heading-4', label: 'Heading 4' },
   { value: 'blockquote', label: 'Quote' },
 ] as const;
 
@@ -220,7 +216,7 @@ export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
         <AddImage editor={editor} imageUploadHandler={imageUploadHandler} />
         <AddYoutube editor={editor} />
 
-        <ToolbarButton
+        {/* <ToolbarButton
           label="Align left"
           active={editor.isActive({ textAlign: 'left' })}
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
@@ -240,7 +236,7 @@ export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
         >
           <AlignRight size={16} />
-        </ToolbarButton>
+        </ToolbarButton> */}
       </Flex>
     </TooltipProvider>
   );

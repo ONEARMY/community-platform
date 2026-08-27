@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { NotificationEmailServiceServer } from 'src/services/notificationEmailService.server';
 import { TagsServiceServer } from 'src/services/tagsService.server';
+import { getSummaryFromTiptapJson } from 'src/utils/getSummaryFromTiptapJson';
 import { methodNotAllowedError, unauthorizedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
@@ -32,6 +33,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       title: formData.has('title') ? (formData.get('title') as string) : '[No title]',
       body: '',
       content: formData.has('body') ? JSON.parse(formData.get('body') as string) : null,
+      summary: formData.has('body')
+        ? getSummaryFromTiptapJson(JSON.parse(formData.get('body') as string))
+        : null,
       createdAt: new Date(),
       heroImage,
       tags,

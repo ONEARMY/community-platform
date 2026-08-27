@@ -76,7 +76,7 @@ export const FieldRichText = (props: IProps) => {
             maxWidth: '100%',
           },
           p: {
-            marginBottom: 3,
+            marginBottom: 2,
           },
           'blockquote p': {
             marginBottom: 0,
@@ -110,12 +110,12 @@ export const FieldRichText = (props: IProps) => {
             marginBottom: 2,
           },
           'ul, ol': {
-            marginBottom: 3,
+            marginBottom: 2,
             paddingLeft: 8,
           },
           ul: { listStyle: 'disc' },
           ol: { listStyle: 'decimal' },
-          li: { marginBottom: 1 },
+          li: { marginBottom: 0 },
           blockquote: {
             paddingX: 4,
             paddingY: 2,

@@ -1,6 +1,5 @@
 import type { Editor } from '@tiptap/react';
 import { BubbleMenu, useEditorState } from '@tiptap/react';
-import { AlignCenter, AlignLeft, AlignRight } from 'lucide-react';
 import { Button } from 'oa-components';
 import {
   Tooltip,
@@ -26,17 +25,10 @@ const bubbleSx = {
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
 };
 
-const ALIGN_OPTIONS = [
-  { value: 'left', label: 'Align left', icon: AlignLeft },
-  { value: 'center', label: 'Align center', icon: AlignCenter },
-  { value: 'right', label: 'Align right', icon: AlignRight },
-] as const;
-
 export const ImageBubbleMenu = ({ editor }: IProps) => {
-  const { textAlign, width } = useEditorState({
+  const { width } = useEditorState({
     editor,
     selector: ({ editor }) => ({
-      textAlign: editor.getAttributes('image').textAlign as string | undefined,
       width: (editor.getAttributes('image').width as string | undefined) ?? '100%',
     }),
   });
@@ -50,27 +42,6 @@ export const ImageBubbleMenu = ({ editor }: IProps) => {
     >
       <TooltipProvider>
         <Flex sx={bubbleSx}>
-          {ALIGN_OPTIONS.map(({ value, label, icon: Icon }) => (
-            <Tooltip key={value}>
-              <TooltipTrigger
-                render={
-                  <Button
-                    small
-                    variant={textAlign === value ? 'primary' : 'subtle'}
-                    type="button"
-                    aria-label={label}
-                    onClick={() => editor.chain().focus().setTextAlign(value).run()}
-                  />
-                }
-              >
-                <Icon size={14} />
-              </TooltipTrigger>
-              <TooltipContent>{label}</TooltipContent>
-            </Tooltip>
-          ))}
-
-          <Flex sx={{ width: '2px', alignSelf: 'stretch', backgroundColor: '#f0f0f3', mx: 1 }} />
-
           {IMAGE_WIDTH_PRESETS.map((preset) => (
             <Tooltip key={preset}>
               <TooltipTrigger

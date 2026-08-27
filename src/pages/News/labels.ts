@@ -26,7 +26,7 @@ export const fields: ILabels = {
     title: 'Email reach',
   },
   body: {
-    placeholder: 'Write and structure the body of your article. Markdown is also supported.',
+    placeholder: 'Write your article...',
     title: 'Body',
   },
   profileBadge: {

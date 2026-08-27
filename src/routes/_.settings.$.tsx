@@ -34,16 +34,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return data(tenantSettings, { headers });
 }
 
+const SETTINGS_PAGE_TITLES: Record<string, string> = {
+  profile: 'Profile',
+  map: 'Map',
+  impact: 'Impact',
+  notifications: 'Notifications',
+  account: 'Account',
+};
+
 export const meta = mergeMeta<typeof loader>(({ loaderData, location }) => {
   const siteName = loaderData?.siteName ?? 'Community Platform';
-  const path = location.pathname;
-  let page = 'Settings';
-  if (path.includes('/settings/profile')) page = 'Profile';
-  else if (path.includes('/settings/map')) page = 'Map';
-  else if (path.includes('/settings/impact')) page = 'Impact';
-  else if (path.includes('/settings/notifications')) page = 'Notifications';
-  else if (path.includes('/settings/account')) page = 'Account';
-  else if (path === '/settings' || path === '/settings/') page = 'Profile';
+  const subPath = location.pathname.replace(/^\/settings\/?/, '').split('/')[0];
+  const page = SETTINGS_PAGE_TITLES[subPath] ?? 'Profile';
 
   const title = `${page} - Settings - ${siteName}`;
   return generateTags(title);

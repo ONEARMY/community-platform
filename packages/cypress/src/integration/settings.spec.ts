@@ -336,3 +336,25 @@ describe('[Account subscription]', () => {
       .and('not.be.disabled');
   });
 });
+
+describe('[Settings titles]', () => {
+  it('should have correct page titles', () => {
+    cy.signIn(settings_member_new.email, settings_member_new.password);
+
+    const siteName = 'Test Site';
+    const checks = [
+      { path: '/settings/profile', title: `Profile - Settings - ${siteName}` },
+      { path: '/settings/map', title: `Map - Settings - ${siteName}` },
+      { path: '/settings/impact', title: `Impact - Settings - ${siteName}` },
+      { path: '/settings/notifications', title: `Notifications - Settings - ${siteName}` },
+      { path: '/settings/account', title: `Account - Settings - ${siteName}` },
+    ];
+
+    checks.forEach(({ path, title }) => {
+      cy.visit(path);
+      cy.title().should('eq', title);
+      cy.get('meta[property="og:title"]').should('have.attr', 'content', title);
+      cy.get('meta[name="twitter:title"]').should('have.attr', 'content', title);
+    });
+  });
+});

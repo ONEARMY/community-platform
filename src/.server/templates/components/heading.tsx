@@ -13,7 +13,7 @@ export const Heading = ({ as, children, customStyle }: IProps) => (
       color: '#2e2e2e',
       lineHeight: 1.2,
       fontWeight: 'normal',
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: "'Inter', Arial, sans-serif",
       marginBottom: '12px',
       padding: '0',
       ...customStyle,

@@ -2,7 +2,7 @@ import { HeroBanner } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -24,8 +25,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect('/', { headers });
   }
   const tenantSettings = await new TenantSettingsService(client).get();
+  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '';
 
-  return data(tenantSettings, { headers });
+  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -45,12 +47,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signupResult = await client.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo,
+      captchaToken,
     },
   });
 
@@ -75,6 +79,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
+  const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -86,6 +91,7 @@ export default function Index() {
       .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
       .required(FRIENDLY_MESSAGES['sign-up/email-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
+    'cf-turnstile-token': string().required(FRIENDLY_MESSAGES['sign-up/captcha-required']),
   });
 
   return (
@@ -200,6 +206,15 @@ export default function Index() {
                             </a>
                           </span>
                         </Label>
+                      )}
+                    </Field>
+
+                    <Field name="cf-turnstile-token">
+                      {({ input }) => (
+                        <>
+                          <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                          <input {...input} type="hidden" />
+                        </>
                       )}
                     </Field>
 

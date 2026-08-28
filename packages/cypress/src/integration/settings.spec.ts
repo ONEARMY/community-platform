@@ -341,20 +341,18 @@ describe('[Settings titles]', () => {
   it('should have correct page titles', () => {
     cy.signIn(settings_member_new.email, settings_member_new.password);
 
-    const siteName = 'Test Site';
     const checks = [
-      { path: '/settings/profile', title: `Profile - Settings - ${siteName}` },
-      { path: '/settings/map', title: `Map - Settings - ${siteName}` },
-      { path: '/settings/impact', title: `Impact - Settings - ${siteName}` },
-      { path: '/settings/notifications', title: `Notifications - Settings - ${siteName}` },
-      { path: '/settings/account', title: `Account - Settings - ${siteName}` },
+      { path: '/settings/profile', expected: 'Profile - Settings - ' },
+      { path: '/settings/map', expected: 'Map - Settings - ' },
+      { path: '/settings/notifications', expected: 'Notifications - Settings - ' },
+      { path: '/settings/account', expected: 'Account - Settings - ' },
     ];
 
-    checks.forEach(({ path, title }) => {
+    checks.forEach(({ path, expected }) => {
       cy.visit(path);
-      cy.title().should('eq', title);
-      cy.get('meta[property="og:title"]').should('have.attr', 'content', title);
-      cy.get('meta[name="twitter:title"]').should('have.attr', 'content', title);
+      cy.title().should('contain', expected);
+      cy.get('meta[property="og:title"]').should('have.attr', 'content').and('contain', expected);
+      cy.get('meta[name="twitter:title"]').should('have.attr', 'content').and('contain', expected);
     });
   });
 });

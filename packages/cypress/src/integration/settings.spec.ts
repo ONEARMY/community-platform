@@ -336,3 +336,23 @@ describe('[Account subscription]', () => {
       .and('not.be.disabled');
   });
 });
+
+describe('[Settings titles]', () => {
+  it('should have correct page titles', () => {
+    cy.signIn(settings_member_new.email, settings_member_new.password);
+
+    const checks = [
+      { path: '/settings/profile', expected: 'Profile - Settings - ' },
+      { path: '/settings/map', expected: 'Map - Settings - ' },
+      { path: '/settings/notifications', expected: 'Notifications - Settings - ' },
+      { path: '/settings/account', expected: 'Account - Settings - ' },
+    ];
+
+    checks.forEach(({ path, expected }) => {
+      cy.visit(path);
+      cy.title().should('contain', expected);
+      cy.get('meta[property="og:title"]').should('have.attr', 'content').and('contain', expected);
+      cy.get('meta[name="twitter:title"]').should('have.attr', 'content').and('contain', expected);
+    });
+  });
+});

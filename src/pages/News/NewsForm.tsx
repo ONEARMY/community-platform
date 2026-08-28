@@ -187,27 +187,34 @@ export const NewsForm = (props: IProps) => {
           );
           const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
 
-          const sidebar = isEdit ? (
-            <Button
-              data-cy="delete"
-              onClick={(evt) => {
-                setShowDeleteModal(true);
-                evt.preventDefault();
-              }}
-              variant="destructive"
-              type="submit"
-              disabled={submitting}
-              sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
-            >
-              {LABELS.buttons.deletion.text}
-            </Button>
-          ) : (
-            <NewsPreviewEmailButton
-              submitting={submitting}
-              formValues={values}
-              isSubmittingDraft={isSubmittingDraft}
-              id={props.id || undefined}
-            />
+          const isPublished = props.formData?.isDraft === false;
+
+          const sidebar = (
+            <>
+              {isEdit && (
+                <Button
+                  data-cy="delete"
+                  onClick={(evt) => {
+                    setShowDeleteModal(true);
+                    evt.preventDefault();
+                  }}
+                  variant="destructive"
+                  type="submit"
+                  disabled={submitting}
+                  sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+                >
+                  {LABELS.buttons.deletion.text}
+                </Button>
+              )}
+              {!isPublished && (
+                <NewsPreviewEmailButton
+                  submitting={submitting}
+                  formValues={values}
+                  isSubmittingDraft={isSubmittingDraft}
+                  id={props.id || undefined}
+                />
+              )}
+            </>
           );
 
           return (

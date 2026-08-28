@@ -1,8 +1,6 @@
 import type { NodeViewProps } from '@tiptap/react';
 import { NodeViewWrapper } from '@tiptap/react';
 
-// Matches YOUTUBE_EMBED_WRAPPER_STYLE/YOUTUBE_IFRAME_STYLE in tiptapExtensions.ts (used for
-// HTML export) and renderTiptapHtml.ts's youtube case (used for the web article view).
 export const YoutubeNodeView = ({ node, selected }: NodeViewProps) => {
   const { videoId } = node.attrs;
 

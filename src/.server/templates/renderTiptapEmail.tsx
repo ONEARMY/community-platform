@@ -108,7 +108,11 @@ const youtubeCaptionStyle: React.CSSProperties = {
   textAlign: 'center',
   marginTop: '10px',
   color: '#0a0a0a',
-  textDecoration: 'underline',
+};
+
+const youtubeCaptionUnderlineStyle: React.CSSProperties = {
+  borderBottom: '1.5px solid currentColor',
+  paddingBottom: '5px',
 };
 
 // Email clients don't render iframes (Gmail strips them entirely), so embed a clickable
@@ -132,7 +136,9 @@ const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode
             alt="YouTube video thumbnail"
             style={youtubeThumbnailStyle}
           />
-          <Text style={youtubeCaptionStyle}>🎥 Click to watch the video 👆</Text>
+          <Text style={youtubeCaptionStyle}>
+            <span style={youtubeCaptionUnderlineStyle}>🎥 Click to watch the video 👆</span>
+          </Text>
         </Link>
       </Column>
     </Row>

@@ -14,6 +14,7 @@ import { SettingsPageImpact } from './SettingsPageImpact';
 import { SettingsPageMapPin } from './SettingsPageMapPin';
 import { SettingsPageNotifications } from './SettingsPageNotifications';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
+import { SETTINGS_TABS } from './settingsTabs';
 import type { ISettingsTab } from './types';
 
 import '../../styles/leaflet.css';
@@ -31,8 +32,7 @@ export const SettingsPage = observer(() => {
   const tabs: ISettingsTab[] = useMemo(
     () => [
       {
-        title: 'Profile',
-        route: '/settings/profile',
+        ...SETTINGS_TABS.find((t) => t.route === '/settings/profile')!,
         header: isComplete === false && (
           <Flex sx={{ gap: 2, flexDirection: 'column' }} data-cy="CompleteProfileHeader">
             <Text as="h3">✏️ Complete your profile</Text>
@@ -58,8 +58,7 @@ export const SettingsPage = observer(() => {
       ...(showMapTab
         ? [
             {
-              title: 'Map',
-              route: '/settings/map',
+              ...SETTINGS_TABS.find((t) => t.route === '/settings/map')!,
               body: SettingsPageMapPin,
               glyph: 'map' as availableGlyphs,
             },
@@ -68,22 +67,19 @@ export const SettingsPage = observer(() => {
       ...(showImpactTab
         ? [
             {
-              title: 'Impact',
-              route: '/settings/impact',
+              ...SETTINGS_TABS.find((t) => t.route === '/settings/impact')!,
               body: SettingsPageImpact,
               glyph: 'impact' as availableGlyphs,
             },
           ]
         : []),
       {
-        title: 'Notifications',
-        route: '/settings/notifications',
+        ...SETTINGS_TABS.find((t) => t.route === '/settings/notifications')!,
         body: SettingsPageNotifications,
         glyph: 'megaphone' as availableGlyphs,
       },
       {
-        title: 'Account',
-        route: '/settings/account',
+        ...SETTINGS_TABS.find((t) => t.route === '/settings/account')!,
         body: SettingsPageAccount,
         glyph: 'account' as availableGlyphs,
       },

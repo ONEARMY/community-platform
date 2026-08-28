@@ -52,6 +52,15 @@ export const Turnstile = ({ siteKey, onVerify, onExpire }: TurnstileProps) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const widgetIdRef = React.useRef<string | null>(null);
 
+  // Callers (e.g. a react-final-form field) commonly pass a new onVerify/onExpire
+  // function identity on every render. Reading them via ref keeps the widget's
+  // lifecycle tied only to siteKey, so a parent re-render doesn't tear down and
+  // recreate the widget mid-verification.
+  const onVerifyRef = React.useRef(onVerify);
+  onVerifyRef.current = onVerify;
+  const onExpireRef = React.useRef(onExpire);
+  onExpireRef.current = onExpire;
+
   React.useEffect(() => {
     let cancelled = false;
 
@@ -62,8 +71,8 @@ export const Turnstile = ({ siteKey, onVerify, onExpire }: TurnstileProps) => {
 
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
-        callback: onVerify,
-        'expired-callback': onExpire,
+        callback: (token) => onVerifyRef.current(token),
+        'expired-callback': () => onExpireRef.current?.(),
       });
     });
 
@@ -73,7 +82,7 @@ export const Turnstile = ({ siteKey, onVerify, onExpire }: TurnstileProps) => {
         window.turnstile.remove(widgetIdRef.current);
       }
     };
-  }, [siteKey, onVerify, onExpire]);
+  }, [siteKey]);
 
   return <div ref={containerRef} />;
 };

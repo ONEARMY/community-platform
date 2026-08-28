@@ -107,6 +107,7 @@ const youtubeCaptionStyle: React.CSSProperties = {
   fontSize: '0.875rem',
   textAlign: 'center',
   marginTop: '10px',
+  color: '#0a0a0a',
   textDecoration: 'underline',
 };
 
@@ -131,7 +132,7 @@ const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode
             alt="YouTube video thumbnail"
             style={youtubeThumbnailStyle}
           />
-          <Text style={youtubeCaptionStyle}>Watch the video</Text>
+          <Text style={youtubeCaptionStyle}>🎥 Click to watch the video 👆</Text>
         </Link>
       </Column>
     </Row>

@@ -45,7 +45,7 @@ export const Layout = (props: LayoutArgs) => {
       <Body
         style={{
           backgroundColor: '#f4f6f7',
-          fontFamily: '"Varela Round", Arial, sans-serif',
+          fontFamily: "'Inter', Arial, sans-serif",
           fontSize: '14px',
           color: '#000000',
           maxWidth: '100%',

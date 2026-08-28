@@ -9,6 +9,7 @@ import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
+import { Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -30,9 +31,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
   const emailRedirectUrl = `${protocol}//${url.host}/update-password`;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   await client.auth.resetPasswordForEmail(formData.get('email') as string, {
     redirectTo: emailRedirectUrl,
+    captchaToken,
   });
 
   // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
@@ -132,6 +135,18 @@ export default function Index() {
                               validate={required}
                             />
                           </Flex>
+
+                          <Field name="cf-turnstile-token" validate={required}>
+                            {({ input }) => (
+                              <>
+                                <Turnstile
+                                  siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? ''}
+                                  onVerify={input.onChange}
+                                />
+                                <input {...input} type="hidden" />
+                              </>
+                            )}
+                          </Field>
 
                           <Flex>
                             <Button

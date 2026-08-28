@@ -2,7 +2,7 @@ import { HeroBanner } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
+import { data, Link, redirect, useActionData } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -25,9 +25,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect('/', { headers });
   }
   const tenantSettings = await new TenantSettingsService(client).get();
-  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '';
 
-  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
+  return data(tenantSettings, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -79,7 +78,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -212,7 +210,10 @@ export default function Index() {
                     <Field name="cf-turnstile-token">
                       {({ input }) => (
                         <>
-                          <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                          <Turnstile
+                            siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? ''}
+                            onVerify={input.onChange}
+                          />
                           <input {...input} type="hidden" />
                         </>
                       )}

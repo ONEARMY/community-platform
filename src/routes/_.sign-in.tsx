@@ -14,6 +14,7 @@ import { required } from 'src/utils/validators';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -34,10 +35,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signInResult = await client.auth.signInWithPassword({
     email,
     password,
+    options: { captchaToken },
   });
 
   if (signInResult.error) {
@@ -158,6 +161,18 @@ export default function Index() {
                         Forgotten password?
                       </Link>
                     </p>
+
+                    <Field name="cf-turnstile-token" validate={required}>
+                      {({ input }) => (
+                        <>
+                          <Turnstile
+                            siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? ''}
+                            onVerify={input.onChange}
+                          />
+                          <input {...input} type="hidden" />
+                        </>
+                      )}
+                    </Field>
 
                     <Button
                       data-cy="submit"

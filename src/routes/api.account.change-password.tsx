@@ -3,9 +3,11 @@ import { type ActionFunctionArgs, data } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { unauthorizedError, validationError } from 'src/utils/httpException';
+import { createSupabaseAdminServerClient } from '@/repository/supabaseAdmin.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
+  const adminClient = createSupabaseAdminServerClient();
 
   try {
     const formData = await request.formData();
@@ -19,12 +21,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw unauthorizedError();
     }
 
-    const signInResult = await client.auth.signInWithPassword({
+    const signInResult = await adminClient.auth.signInWithPassword({
       email: claims.data?.claims?.email as string,
       password: oldPassword,
     });
 
     if (signInResult.error) {
+      console.error(signInResult.error);
       throw validationError('Invalid password');
     }
 

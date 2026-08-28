@@ -9,6 +9,7 @@ import { unauthorizedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
+  const adminClient = createSupabaseAdminServerClient();
 
   try {
     const formData = await request.formData();
@@ -26,12 +27,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     // Verify password
-    const signInResult = await client.auth.signInWithPassword({
+    const signInResult = await adminClient.auth.signInWithPassword({
       email: claims.data?.claims?.email as string,
       password,
     });
 
     if (signInResult.error) {
+      console.error(signInResult.error);
       throw validationError('Invalid password', 'password');
     }
 
@@ -41,8 +43,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (!profile) {
       throw validationError('Profile not found', 'profile');
     }
-
-    const adminClient = createSupabaseAdminServerClient();
 
     // Check if user has profiles on other tenants
     const { data: allProfiles } = await adminClient

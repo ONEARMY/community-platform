@@ -235,7 +235,7 @@ export const NewsForm = (props: IProps) => {
                 removeImage={removeImage}
                 contentId={props.id || null}
               />
-              <CategoryField type="news" />
+              <CategoryField type="news" title={LABELS.fields.category.title} />
               <TagsField title={LABELS.fields.tags.title} />
 
               <BadgeVisibilityField

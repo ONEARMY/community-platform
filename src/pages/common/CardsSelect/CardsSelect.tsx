@@ -92,7 +92,6 @@ export const CardsSelect = ({
               sx={{
                 alignItems: 'start',
                 flexDirection: 'column',
-                paddingTop: 1,
                 minWidth: 0,
               }}
             >

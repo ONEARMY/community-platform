@@ -82,9 +82,9 @@ describe('Research Article', () => {
 
     // Assert
     await waitFor(() => {
-      expect(wrapper.getAllByText('With contributions from')).toHaveLength(1);
-      expect(wrapper.getAllByText('example-username')).toHaveLength(2);
-      expect(wrapper.getAllByText('another-example-username')).toHaveLength(2);
+      expect(wrapper.getAllByText('2 contributors')).toHaveLength(1);
+      expect(wrapper.getAllByText('example-username')).toHaveLength(1);
+      expect(wrapper.getAllByText('another-example-username')).toHaveLength(1);
     });
   });
 
@@ -121,10 +121,10 @@ describe('Research Article', () => {
       // Assert
       await waitFor(
         () => {
-          expect(wrapper.getAllByText('With contributions from')).toHaveLength(1);
-          expect(wrapper.getAllByText('example-username')).toHaveLength(4);
-          expect(wrapper.getAllByText('another-example-username')).toHaveLength(3);
-          expect(wrapper.getAllByText('third-example-username')).toHaveLength(2);
+          expect(wrapper.getAllByText('3 contributors')).toHaveLength(1);
+          expect(wrapper.getAllByText('example-username')).toHaveLength(3);
+          expect(wrapper.getAllByText('another-example-username')).toHaveLength(2);
+          expect(wrapper.getAllByText('third-example-username')).toHaveLength(1);
           expect(wrapper.queryByText('fourth-example-username')).toBeNull();
           expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1);
         },

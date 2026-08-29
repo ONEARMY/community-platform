@@ -3,7 +3,7 @@ import { DBNews, NewsFormData, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ForbiddenPage } from 'src/pages/Forbidden/labels';
-import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
+import { NewsForm } from 'src/pages/News/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';

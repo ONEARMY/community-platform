@@ -1,9 +1,9 @@
-import { FieldMarkdown } from 'oa-components';
 import { MediaWithPublicUrl } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { fields } from 'src/pages/News/labels';
 import { required } from 'src/utils/validators';
+import { FieldRichText } from './FieldRichText/FieldRichText';
 
 interface IProps {
   imageUpload: (image: File) => Promise<MediaWithPublicUrl | null>;
@@ -16,7 +16,7 @@ export const NewsBodyField = ({ imageUpload }: IProps) => {
     <FormFieldWrapper htmlFor={name} text={fields.body.title} required>
       <Field
         data-cy={`field-${name}`}
-        component={FieldMarkdown}
+        component={FieldRichText}
         id={name}
         imageUploadHandler={imageUpload}
         name={name}

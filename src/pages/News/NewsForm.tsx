@@ -15,13 +15,14 @@ import { ContentReachField } from 'src/pages/common/FormFields/ContentReachField
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
 import { TitleField } from 'src/pages/common/FormFields/Title.field';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
-import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPostingGuidelines';
 import * as LABELS from 'src/pages/News/labels';
+import { NewsPostingGuidelines } from 'src/pages/News/NewsPostingGuidelines';
 import { newsService } from 'src/services/newsService';
 import { storageService } from 'src/services/storageService';
+import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
-import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
+import { NEWS_MIN_TITLE_LENGTH } from './constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
 
@@ -56,7 +57,7 @@ export const NewsForm = (props: IProps) => {
   const initialValues = useMemo<NewsFormData>(
     () =>
       ({
-        body: props.formData?.body || '',
+        body: props.formData?.body || null,
         category: props.formData?.category || null,
         heroImage: props.formData?.heroImage || null,
         isDraft: props.formData?.isDraft || null,
@@ -121,7 +122,7 @@ export const NewsForm = (props: IProps) => {
 
   const validateForm = useCallback((values) => {
     const errors = {};
-    if (!values.body?.length) {
+    if (!extractPlainTextFromTiptapJson(values.body).trim()) {
       errors['body'] = 'Body field required. Gotta have something to say...';
     }
     if (values.heroImage == null && values.existingHeroImage === null) {
@@ -186,27 +187,34 @@ export const NewsForm = (props: IProps) => {
           );
           const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
 
-          const sidebar = isEdit ? (
-            <Button
-              data-cy="delete"
-              onClick={(evt) => {
-                setShowDeleteModal(true);
-                evt.preventDefault();
-              }}
-              variant="destructive"
-              type="submit"
-              disabled={submitting}
-              sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
-            >
-              {LABELS.buttons.deletion.text}
-            </Button>
-          ) : (
-            <NewsPreviewEmailButton
-              submitting={submitting}
-              formValues={values}
-              isSubmittingDraft={isSubmittingDraft}
-              id={props.id || undefined}
-            />
+          const isPublished = props.formData?.isDraft === false;
+
+          const sidebar = (
+            <>
+              {isEdit && (
+                <Button
+                  data-cy="delete"
+                  onClick={(evt) => {
+                    setShowDeleteModal(true);
+                    evt.preventDefault();
+                  }}
+                  variant="destructive"
+                  type="submit"
+                  disabled={submitting}
+                  sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+                >
+                  {LABELS.buttons.deletion.text}
+                </Button>
+              )}
+              {!isPublished && (
+                <NewsPreviewEmailButton
+                  submitting={submitting}
+                  formValues={values}
+                  isSubmittingDraft={isSubmittingDraft}
+                  id={props.id || undefined}
+                />
+              )}
+            </>
           );
 
           return (

@@ -65,6 +65,7 @@ export const Select = (props: Props) => {
       ...provided,
       border: '2px solid ' + theme.colors.softblue,
       boxShadow: 'none',
+      zIndex: 2,
       backgroundColor: theme.colors.background,
       ':hover': {
         border: '2px solid ' + theme.colors.softblue,

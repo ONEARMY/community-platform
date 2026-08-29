@@ -33,6 +33,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Great work',
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'dave0 has left a new comment',
           subject: 'New comment on New thing coming',
           displayDate ,
@@ -61,6 +62,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Amazing',
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'JEFF123 has left a new comment',
           subject: 'New comment on Best Guide',
           displayDate ,
@@ -89,6 +91,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'Ben has left a new comment',
           subject: 'New comment on Where to start?',
           displayDate,
@@ -117,6 +120,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'Mario has left a new comment',
           subject: 'New comment on New Buildings: Digging',
           displayDate ,
@@ -146,6 +150,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Great work',
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'dave0 has left a new reply',
           subject: 'You have a new comment reply!',
           displayDate,
@@ -173,6 +178,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Amazing',
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'JEFF123 has left a new reply',
           subject: 'You have a new comment reply!',
           displayDate,
@@ -200,6 +206,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'Ben has left a new reply',
           subject: 'You have a new comment reply!',
           displayDate,
@@ -227,6 +234,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
+          content: null,
           preview: 'Mario has left a new reply',
           subject: 'You have a new comment reply!',
           displayDate,
@@ -261,6 +269,7 @@ describe('NotificationDisplay', () => {
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Foundations:\n\nWe put some tiles down.',
           buttonLabel: 'Join the discussion',
+          content: null,
           preview: 'New research update on Second Building',
           subject: 'New update on Second Building',
           displayDate,

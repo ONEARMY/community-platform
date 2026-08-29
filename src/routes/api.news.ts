@@ -1,7 +1,7 @@
 import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
-import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
+import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
 import { logger } from 'src/logger';
@@ -14,7 +14,10 @@ import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
+import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
+import { getSummaryFromTiptapJson } from 'src/utils/getSummaryFromTiptapJson';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import { renderNewsBodyHtml } from 'src/utils/renderNewsBodyHtml';
 import { convertToSlug } from 'src/utils/slug';
 import { ContentServiceServer } from '../services/contentService.server';
 import { PollServiceServer } from '../services/pollService.server';
@@ -51,7 +54,7 @@ export const loader = async ({ request }) => {
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
   }
 
-  const rpcResult = await client.rpc('get_news_feed', {
+  const rpcResult = await client.rpc('get_news_feed_by_content', {
     p_user_profile_id: userProfileId,
     p_is_admin: isAdmin,
     p_search: q || null,
@@ -66,7 +69,7 @@ export const loader = async ({ request }) => {
   }
   const rows = rpcResult.data as (DBNews & { total_count: number })[];
   const total = rows[0]?.total_count ?? 0;
-  const items = rows.map((row) => News.fromDB(row, []));
+  const items = rows.map((row) => News.fromDB(row, [], null, null, renderNewsBodyHtml));
 
   // Populate useful votes + hero images
   if (items.length > 0) {
@@ -97,7 +100,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData();
     const data = {
-      body: formData.get('body') as string,
+      body: formData.has('body') ? JSON.parse(formData.get('body') as string) : null,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('isDraft') === 'true',
       profileBadges: formData.has('profileBadges')
@@ -114,9 +117,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       poll: formData.has('poll') ? (JSON.parse(formData.get('poll') as string) as PollDTO) : null,
     } satisfies NewsDTO;
 
+    const bodyPlainText = extractPlainTextFromTiptapJson(data.body);
+
     const claims = await client.auth.getClaims();
     const slug = convertToSlug(data.title);
-    await validateRequest(request, data, slug, claims.error, client);
+    await validateRequest(request, data, bodyPlainText, slug, claims.error, client);
 
     const profileRequest = await client
       .from('profiles')
@@ -151,14 +156,16 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const newsResult = await client
       .from('news')
       .insert({
-        body: data.body,
+        body: bodyPlainText,
         category: data.category,
+        content: data.body,
+        content_search_text: bodyPlainText,
         created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
         published_at: data.isDraft ? null : new Date(),
         slug,
-        summary: getSummaryFromMarkdown(data.body),
+        summary: getSummaryFromTiptapJson(data.body),
         tags: data.tags,
         hero_image: data.heroImage,
         title: data.title,
@@ -202,7 +209,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       throw completeNews.error;
     }
 
-    const news = News.fromDB(completeNews.data, [], null, poll);
+    const news = News.fromDB(completeNews.data, [], null, poll, renderNewsBodyHtml);
     await new SubscribersServiceServer(client).add('news', news.id, profile.id);
     new BroadcastCoordinationServiceServer(client).news(completeNews.data, profile, request);
     await new ProfileServiceServer(client).updateUserActivity(claims.data!.claims!.sub);
@@ -221,6 +228,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 async function validateRequest(
   request: Request,
   data: any,
+  bodyPlainText: string,
   slug: string,
   authError: AuthError | null,
   client: SupabaseClient,
@@ -242,7 +250,7 @@ async function validateRequest(
     throw validationError('Title is required', 'title');
   }
 
-  if (!data.body && notDraft) {
+  if (!bodyPlainText.trim() && notDraft) {
     throw validationError('Body is required', 'body');
   }
 

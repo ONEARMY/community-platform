@@ -19,6 +19,9 @@ export const supporterName = (
   customer?.name?.trim() ||
   (profile ? `profile #${profile.id}` : 'Someone');
 
+export const supporterProfileUrl = (siteUrl: string, profileId: number | null) =>
+  profileId ? `${siteUrl}/u/${profileId}` : null;
+
 export const membershipNotifications = (tenantLabel: string) => {
   const post = (message: string) => {
     const webhookUrl = process.env.DISCORD_MEMBERSHIP_WEBHOOK_URL;
@@ -31,10 +34,11 @@ export const membershipNotifications = (tenantLabel: string) => {
   };
 
   return {
-    newSupporter(name: string, tierName: string | null, amount: string) {
+    newSupporter(name: string, tierName: string | null, amount: string, profileUrl: string | null) {
       const description = tierName ? `a new ${tierName} Supporter` : 'a new Supporter';
+      const link = profileUrl ? `\n<${profileUrl}>` : '';
 
-      post(`${name} is now ${description} (${amount})`);
+      post(`${name} is now ${description} (${amount})${link}`);
     },
 
     recurringPayment(
@@ -61,12 +65,6 @@ export const membershipNotifications = (tenantLabel: string) => {
       post(
         `${name} had a failed payment for their ${description} (${amount})\n<${stripeCustomerUrl}>`,
       );
-    },
-
-    supporterAccountReady(name: string, tierName: string | null, profileUrl: string) {
-      const description = tierName ? `their ${tierName} account` : 'their account';
-
-      post(`${name} set up ${description}: <${profileUrl}>`);
     },
 
     tierChanged(name: string, fromTierName: string, toTierName: string) {

@@ -1,5 +1,9 @@
 import { discordServiceServer } from 'src/services/discordService.server';
-import { membershipNotifications, supporterName } from 'src/services/membership.server';
+import {
+  membershipNotifications,
+  supporterName,
+  supporterProfileUrl,
+} from 'src/services/membership.server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('src/services/discordService.server');
@@ -24,7 +28,7 @@ describe('membershipNotifications', () => {
     it('does not post at all', () => {
       vi.stubEnv('DISCORD_MEMBERSHIP_WEBHOOK_URL', '');
 
-      membership.newSupporter('Michael', 'Legend', '€10');
+      membership.newSupporter('Michael', 'Legend', '€10', null);
 
       expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
     });
@@ -33,7 +37,7 @@ describe('membershipNotifications', () => {
       vi.stubEnv('DISCORD_MEMBERSHIP_WEBHOOK_URL', '');
       vi.stubEnv('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/activity');
 
-      membership.newSupporter('Michael', 'Legend', '€10');
+      membership.newSupporter('Michael', 'Legend', '€10', null);
 
       expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
     });
@@ -57,16 +61,28 @@ describe('membershipNotifications', () => {
   });
 
   describe('newSupporter', () => {
-    it('names the tier and the amount', () => {
-      membership.newSupporter('Michael', 'Legend', '€10');
+    const profileUrl = 'https://community.preciousplastic.com/u/11';
 
-      expect(lastMessage()).toBe('[Precious Plastic] Michael is now a new Legend Supporter (€10)');
+    it('names the tier and the amount, and links to the profile', () => {
+      membership.newSupporter('Michael', 'Legend', '€10', profileUrl);
+
+      expect(lastMessage()).toBe(
+        `[Precious Plastic] Michael is now a new Legend Supporter (€10)\n<${profileUrl}>`,
+      );
     });
 
     it('omits the tier when it cannot be resolved', () => {
-      membership.newSupporter('Michael', null, '€10');
+      membership.newSupporter('Michael', null, '€10', profileUrl);
 
-      expect(lastMessage()).toBe('[Precious Plastic] Michael is now a new Supporter (€10)');
+      expect(lastMessage()).toBe(
+        `[Precious Plastic] Michael is now a new Supporter (€10)\n<${profileUrl}>`,
+      );
+    });
+
+    it('omits the link when the payment is not tied to a profile', () => {
+      membership.newSupporter('Michael', 'Legend', '€10', null);
+
+      expect(lastMessage()).toBe('[Precious Plastic] Michael is now a new Legend Supporter (€10)');
     });
   });
 
@@ -112,32 +128,6 @@ describe('membershipNotifications', () => {
     });
   });
 
-  describe('supporterAccountReady', () => {
-    it('links to the new profile', () => {
-      membership.supporterAccountReady(
-        'Michael',
-        'Legend',
-        'https://community.preciousplastic.com/u/michael',
-      );
-
-      expect(lastMessage()).toBe(
-        '[Precious Plastic] Michael set up their Legend account: <https://community.preciousplastic.com/u/michael>',
-      );
-    });
-
-    it('omits the tier when it cannot be resolved', () => {
-      membership.supporterAccountReady(
-        'Michael',
-        null,
-        'https://community.preciousplastic.com/u/michael',
-      );
-
-      expect(lastMessage()).toBe(
-        '[Precious Plastic] Michael set up their account: <https://community.preciousplastic.com/u/michael>',
-      );
-    });
-  });
-
   describe('subscriptionResumed', () => {
     it('reports an un-cancelled subscription', () => {
       membership.subscriptionResumed('Michael');
@@ -158,6 +148,18 @@ describe('membershipNotifications', () => {
     });
   });
 
+
+  describe('supporterProfileUrl', () => {
+    const siteUrl = 'https://community.preciousplastic.com';
+
+    it('links by profile id so it works before a username is set', () => {
+      expect(supporterProfileUrl(siteUrl, 11)).toBe('https://community.preciousplastic.com/u/11');
+    });
+
+    it('has no link when the supporter has no profile', () => {
+      expect(supporterProfileUrl(siteUrl, null)).toBe(null);
+    });
+  });
 
   describe('supporterName', () => {
     const customer = { name: 'Michael', email: 'michael@example.com' };

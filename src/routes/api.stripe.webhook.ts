@@ -2,7 +2,11 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ActionFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
-import { membershipNotifications, supporterName } from 'src/services/membership.server';
+import {
+  membershipNotifications,
+  supporterName,
+  supporterProfileUrl,
+} from 'src/services/membership.server';
 import { getSecret } from 'src/services/secretsService.server';
 import {
   cancellationJustScheduled,
@@ -117,7 +121,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         break;
     }
 
-    await notifyMembershipEvent(event, client, stripeService, tenantId);
+    const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+
+    await notifyMembershipEvent(event, client, stripeService, tenantId, siteUrl);
 
     return new Response('OK', { status: 200 });
   } catch (error) {
@@ -140,6 +146,7 @@ async function notifyMembershipEvent(
   client: SupabaseClient,
   stripeService: StripeServiceServer,
   tenantId: string | undefined,
+  siteUrl: string,
 ) {
   if (!tenantId || !NOTIFIED_EVENTS.includes(event.type)) {
     return;
@@ -148,7 +155,7 @@ async function notifyMembershipEvent(
   const tierNameOf = (productId: string | undefined) =>
     productId ? stripeService.getTierNameForProduct(productId, tenantId) : null;
 
-  const nameFor = async (customerId: string) => {
+  const supporterFor = async (customerId: string) => {
     const customer = await StripeServiceServer.getStripeCustomer(customerId);
     const profile = await stripeService.getProfileIdentityByStripeCustomerId(
       customerId,
@@ -156,8 +163,10 @@ async function notifyMembershipEvent(
       customer?.email ?? null,
     );
 
-    return supporterName(customer, profile);
+    return { name: supporterName(customer, profile), profileId: profile?.id ?? null };
   };
+
+  const nameFor = async (customerId: string) => (await supporterFor(customerId)).name;
 
   try {
     const membership = membershipNotifications(
@@ -219,8 +228,8 @@ async function notifyMembershipEvent(
         const line = invoice.lines.data[0];
         const priceId = priceIdOf(line);
 
-        const [name, tierName, interval] = await Promise.all([
-          nameFor(invoice.customer as string),
+        const [supporter, tierName, interval] = await Promise.all([
+          supporterFor(invoice.customer as string),
           tierNameOf(line?.pricing?.price_details?.product),
           priceId ? StripeServiceServer.getPriceInterval(priceId) : null,
         ]);
@@ -228,9 +237,14 @@ async function notifyMembershipEvent(
         const amount = formatCurrency(invoice.amount_paid, invoice.currency, MESSAGE_LOCALE);
 
         if (billingReason === 'subscription_create') {
-          membership.newSupporter(name, tierName, amount);
+          membership.newSupporter(
+            supporter.name,
+            tierName,
+            amount,
+            supporterProfileUrl(siteUrl, supporter.profileId),
+          );
         } else {
-          membership.recurringPayment(name, tierName, interval, amount);
+          membership.recurringPayment(supporter.name, tierName, interval, amount);
         }
         break;
       }

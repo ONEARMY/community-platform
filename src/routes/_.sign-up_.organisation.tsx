@@ -1,9 +1,9 @@
-import { Button, ExternalLink, FieldInput, MemberBadge, Stepper } from 'oa-components';
+import { MemberBadge, Stepper } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
-import { PasswordField } from 'src/common/Form/PasswordField';
+import { TextInputField } from 'src/common/Form/TextInput.field';
 import Main from 'src/pages/common/Layout/Main';
 import { ORGANISATION_SIGNUP_STEPS, organisationActivityClause } from 'src/pages/SignUp/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -12,8 +12,12 @@ import { ProfileTypesServiceServer } from 'src/services/profileTypesService.serv
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { Alert, Card, Flex, Heading, Label, Text } from 'theme-ui';
 import { bool, object, string } from 'yup';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -104,8 +108,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 };
 
-const rowWidth = ['100%', '100%', `100%`];
-
 export default function Index() {
   const { activityClause, descriptionHtml, spaceProfileTypes } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
@@ -139,32 +141,10 @@ export default function Index() {
           const disabled = invalid || submitting;
           return (
             <form method="post">
-              <Flex
-                bg="inherit"
-                px={2}
-                sx={{ width: '100%', maxWidth: '620px' }}
-                mx="auto"
-                mt={[5, 10]}
-                mb={3}
-              >
-                <Flex
-                  sx={{
-                    flexDirection: 'column',
-                    width: '100%',
-                    maxWidth: '548px',
-                    mx: 'auto',
-                    gap: 4,
-                  }}
-                >
-                  <Flex
-                    sx={{
-                      flexDirection: 'column',
-                      gap: 2,
-                      textAlign: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Flex data-cy="organisation-signup-badges" sx={{ justifyContent: 'center' }}>
+              <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+                <div className="mx-auto flex w-full max-w-[548px] flex-col gap-6">
+                  <div className="flex max-w-[508px] flex-col items-center gap-2 self-center text-center">
+                    <div data-cy="organisation-signup-badges" className="flex justify-center">
                       {spaceProfileTypes.map((profileType, index) => (
                         <MemberBadge
                           key={profileType.name}
@@ -173,31 +153,23 @@ export default function Index() {
                           sx={{ marginLeft: index === 0 ? 0 : '-12px' }}
                         />
                       ))}
-                    </Flex>
-                    <Heading>Create an organisation account</Heading>
-                    <Text
-                      color="grey"
+                    </div>
+                    <h1 className="text-2xl font-semibold">Create an organisation account</h1>
+                    <div
                       data-cy="organisation-signup-description"
-                      sx={{ fontSize: 3, maxWidth: '508px' }}
+                      className="prose max-w-none text-muted-foreground dark:prose-invert"
                       dangerouslySetInnerHTML={{
                         __html: descriptionHtml ?? '',
                       }}
                     />
-                  </Flex>
-                  <Card sx={{ borderRadius: 3 }}>
-                    <Flex
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        padding: 4,
-                        gap: 4,
-                        width: '100%',
-                      }}
-                    >
+                  </div>
+
+                  <Card variant="outline">
+                    <CardHeader className="gap-4">
                       <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={0} />
-
-                      <Heading>Create an account</Heading>
-
+                      <h2 className="text-2xl font-semibold">Create an account</h2>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
                       {actionResponse?.error && pristine && (
                         <div
                           className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
@@ -207,135 +179,109 @@ export default function Index() {
                         </div>
                       )}
 
-                      <Flex
-                        sx={{
-                          flexDirection: 'column',
-                          width: rowWidth,
-                        }}
-                      >
+                      <div className="flex flex-col gap-1.5">
                         <Label htmlFor="email">Organisation's email</Label>
-                        <Text color="grey" sx={{ fontSize: 1 }}>
+                        <p className="text-sm text-muted-foreground">
                           Email that the organisation uses.
-                        </Text>
+                        </p>
                         <Field
+                          id="email"
                           data-cy="email"
                           name="email"
                           type="email"
-                          component={FieldInput}
+                          component={TextInputField}
                           placeholder="Email"
                           validate={required}
                         />
-                      </Flex>
-                      <Flex
-                        sx={{
-                          flexDirection: 'column',
-                          width: rowWidth,
-                        }}
-                      >
+                      </div>
+                      <div className="flex flex-col gap-1.5">
                         <Label htmlFor="password">Password</Label>
-                        <Text color="grey" sx={{ fontSize: 1 }}>
+                        <p className="text-sm text-muted-foreground">
                           We recommend a strong password.
-                        </Text>
-                        <PasswordField
+                        </p>
+                        <Field
+                          id="password"
                           data-cy="password"
                           name="password"
+                          type="password"
+                          component={TextInputField}
                           placeholder="Password"
-                          component={FieldInput}
                           validate={required}
                         />
-                      </Flex>
+                      </div>
 
-                      <Alert
-                        variant="info"
-                        sx={{
-                          flexDirection: 'column',
-                          alignItems: 'flex-start',
-                          gap: 3,
-                          textAlign: 'left',
-                          fontWeight: 'normal',
-                        }}
-                      >
-                        <Text sx={{ fontSize: 2 }}>
+                      <Alert className="gap-3 bg-accent/10">
+                        <AlertTitle>
                           Heads up. After this you need to fill in some information.
-                        </Text>
-                        <Text sx={{ fontSize: 2 }}>
+                        </AlertTitle>
+                        <AlertDescription>
                           A <strong>link to your website</strong> or social media and{' '}
                           <strong>pictures</strong> to verify {activityClause}.
-                        </Text>
-                        <Link
-                          to="/academy"
-                          data-cy="organisation-signup-learn-more"
-                          style={{
-                            display: 'inline-block',
-                            border: '2px solid #1b1b1b',
-                            borderRadius: '5px',
-                            padding: '5px 15px',
-                            fontSize: '14px',
-                            color: '#1b1b1b',
-                            textDecoration: 'none',
-                          }}
+                        </AlertDescription>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-fit"
+                          render={<Link to="/academy" data-cy="organisation-signup-learn-more" />}
                         >
                           Learn more
-                        </Link>
+                        </Button>
                       </Alert>
 
-                      <Flex>
-                        <Label
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                          }}
-                        >
-                          <Field
-                            data-cy="consent"
-                            name="consent"
-                            type="checkbox"
-                            component="input"
-                            validate={required}
-                          />
-                          <Text
-                            sx={{
-                              fontSize: 2,
-                            }}
-                          >
-                            I agree to the{' '}
-                            <ExternalLink href="/terms">Terms of Service</ExternalLink>
-                            <span> and </span>
-                            <ExternalLink href="/privacy">Privacy Policy</ExternalLink>
-                          </Text>
-                        </Label>
-                      </Flex>
+                      <Field name="consent" type="checkbox" validate={required}>
+                        {({ input }) => (
+                          <Label htmlFor="consent" className="items-start gap-2 font-normal">
+                            <Checkbox
+                              id="consent"
+                              data-cy="consent"
+                              checked={input.checked}
+                              onCheckedChange={input.onChange}
+                              onBlur={input.onBlur}
+                            />
+                            <span className="text-sm">
+                              I agree to the{' '}
+                              <a
+                                href="/terms"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-bold underline-offset-4 hover:underline"
+                              >
+                                Terms of Service
+                              </a>{' '}
+                              and{' '}
+                              <a
+                                href="/privacy"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-bold underline-offset-4 hover:underline"
+                              >
+                                Privacy Policy
+                              </a>
+                            </span>
+                          </Label>
+                        )}
+                      </Field>
 
-                      <Flex>
-                        <Button
-                          large
-                          sx={{
-                            borderRadius: 1,
-                            width: '100%',
-                            justifyContent: 'center',
-                          }}
-                          data-cy="submit"
-                          variant="primary"
-                          disabled={disabled}
-                          type="submit"
-                        >
-                          Continue with the application form
-                        </Button>
-                      </Flex>
-                    </Flex>
+                      <Button
+                        data-cy="submit"
+                        size="lg"
+                        className="w-full justify-center"
+                        disabled={disabled}
+                        type="submit"
+                      >
+                        Continue with the application form
+                      </Button>
+                    </CardContent>
                   </Card>
-                  <Text color="grey" sx={{ fontSize: 1, textAlign: 'center' }}>
+
+                  <p className="text-center text-sm text-muted-foreground">
                     Not an organisation?{' '}
-                    <Link
-                      to="/sign-up"
-                      data-cy="sign-up-member"
-                      style={{ textDecoration: 'underline' }}
-                    >
+                    <Link to="/sign-up" data-cy="sign-up-member" className="underline">
                       Sign-up as a member
                     </Link>
-                  </Text>
-                </Flex>
-              </Flex>
+                  </p>
+                </div>
+              </div>
             </form>
           );
         }}

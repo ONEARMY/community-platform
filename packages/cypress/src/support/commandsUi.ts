@@ -283,7 +283,7 @@ Cypress.Commands.add('signUpNewOrganisation', (user: IUserSignUpDetails) => {
   cy.wait(2000);
   cy.get('[data-cy=email]').clear().type(user.email);
   cy.get('[data-cy=password]').clear().type(user.password);
-  cy.get('[data-cy=consent]').check();
+  cy.get('[data-cy=consent]').click({ force: true });
   cy.get('[data-cy=submit]').click();
   cy.url().should('include', 'sign-up-message');
 });

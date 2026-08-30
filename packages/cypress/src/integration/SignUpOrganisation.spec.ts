@@ -11,14 +11,14 @@ describe('[Organisation sign-up]', () => {
       cy.get('[data-cy=email]').click();
       cy.get('[data-cy=email]').clear();
       cy.get('[data-cy=email]').type('a');
-      cy.get('[data-cy=consent]').uncheck().check();
+      cy.get('[data-cy=consent]').click({ force: true });
       cy.contains(FRIENDLY_MESSAGES['auth/invalid-email']).should('be.visible');
 
       cy.step('Password is too short');
       cy.get('[data-cy=password]').click();
       cy.get('[data-cy=password]').clear();
       cy.get('[data-cy=password]').type('a');
-      cy.get('[data-cy=consent]').uncheck().check();
+      cy.get('[data-cy=consent]').click({ force: true });
       cy.contains(FRIENDLY_MESSAGES['sign-up/password-short']).should('be.visible');
     });
 

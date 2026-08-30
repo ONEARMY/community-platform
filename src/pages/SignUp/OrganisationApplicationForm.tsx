@@ -1,16 +1,10 @@
-import {
-  Button,
-  ExternalLink,
-  FieldInput,
-  FieldTextarea,
-  MemberBadge,
-  MultipleImageInput,
-  Stepper,
-} from 'oa-components';
+import { MemberBadge, MultipleImageInput, Stepper } from 'oa-components';
 import type { OrganisationApplicationFormData, ProfileType } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
+import { TextareaField } from 'src/common/Form/Textarea.field';
+import { TextInputField } from 'src/common/Form/TextInput.field';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import {
   MAX_ORGANISATION_COVER_IMAGES,
@@ -28,7 +22,9 @@ import {
   required,
   validateUrl,
 } from 'src/utils/validators';
-import { Box, Card, Flex, Grid, Heading, Text } from 'theme-ui';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 interface IProps {
   profileTypes: ProfileType[];
@@ -103,24 +99,10 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
 
         return (
           <form data-cy="organisation-application-form" onSubmit={handleSubmit}>
-            <Flex
-              bg="inherit"
-              px={2}
-              sx={{ width: '100%', maxWidth: '620px' }}
-              mx="auto"
-              mt={[5, 10]}
-              mb={3}
-            >
-              <Flex sx={{ flexDirection: 'column', width: '100%', gap: 3 }}>
-                <Flex
-                  sx={{
-                    flexDirection: 'column',
-                    gap: 2,
-                    textAlign: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Flex data-cy="organisation-application-badges" sx={{ justifyContent: 'center' }}>
+            <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+              <div className="flex w-full flex-col gap-4">
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <div data-cy="organisation-application-badges" className="flex justify-center">
                     {profileTypes.map((profileType, index) => (
                       <MemberBadge
                         key={profileType.name}
@@ -129,32 +111,25 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                         sx={{ marginLeft: index === 0 ? 0 : '-12px' }}
                       />
                     ))}
-                  </Flex>
-                  <Heading>One last step!</Heading>
-                  <Text color="grey" sx={{ fontSize: 3 }}>
+                  </div>
+                  <h1 className="text-2xl font-semibold">One last step!</h1>
+                  <p className="text-muted-foreground">
                     This info will help us verify {activityClause}. It usually takes a day or two to
                     get approved.
-                  </Text>
-                </Flex>
-                <Card sx={{ borderRadius: 3 }}>
-                  <Flex
-                    sx={{
-                      flexWrap: 'wrap',
-                      flexDirection: 'column',
-                      padding: 4,
-                      gap: 4,
-                      width: '100%',
-                    }}
-                  >
+                  </p>
+                </div>
+
+                <Card variant="outline">
+                  <CardHeader className="gap-4">
                     <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={2} />
-
-                    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                      <Heading>Application form</Heading>
-                      <Text color="grey" sx={{ fontSize: 1 }}>
+                    <div className="flex flex-col gap-1">
+                      <h2 className="text-2xl font-semibold">Application form</h2>
+                      <p className="text-sm text-muted-foreground">
                         This info will be then shown in your public profile.
-                      </Text>
-                    </Flex>
-
+                      </p>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-6">
                     {submitError && (
                       <div
                         className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
@@ -164,20 +139,22 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                       </div>
                     )}
 
-                    <Flex data-cy="FocusSection" sx={{ flexDirection: 'column', gap: 2 }}>
-                      <Text>
-                        Your focus <Text color="red">*</Text>
-                      </Text>
-                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    <div data-cy="FocusSection" className="flex flex-col gap-2">
+                      <Label>
+                        Your focus <span className="text-destructive">*</span>
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
                         Not sure?{' '}
-                        <ExternalLink
+                        <a
                           href={tenantContext?.profileGuidelines}
-                          sx={{ textDecoration: 'underline' }}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-4"
                         >
                           Check out our guidelines.
-                        </ExternalLink>
-                      </Text>
-                      <Grid columns={[2, 4]} gap={2}>
+                        </a>
+                      </p>
+                      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
                         {profileTypes.map((profileType) => (
                           <ProfileTypeRadioField
                             key={profileType.name}
@@ -190,106 +167,107 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                             required
                           />
                         ))}
-                      </Grid>
+                      </div>
                       {selectedType?.description && (
-                        <Box
+                        <div
                           data-cy="type-description"
-                          sx={{
-                            backgroundColor: 'softblue',
-                            borderRadius: 2,
-                            padding: 3,
-                            fontSize: 1,
-                          }}
+                          className="rounded-lg bg-accent/10 p-3 text-sm"
                         >
-                          <Text sx={{ fontWeight: 'bold', display: 'block' }}>Definition:</Text>
-                          <Text>{selectedType.description}</Text>
-                        </Box>
+                          <span className="block font-bold">Definition:</span>
+                          <span>{selectedType.description}</span>
+                        </div>
                       )}
-                    </Flex>
+                    </div>
 
-                    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                      <Text>
-                        Username <Text color="red">*</Text>
-                      </Text>
-                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="username">
+                        Username <span className="text-destructive">*</span>
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
                         Your unique identifier. Used in your profile URL.
-                      </Text>
+                      </p>
                       <Field
+                        id="username"
                         data-cy="username"
                         name="username"
-                        component={FieldInput}
+                        component={TextInputField}
                         placeholder="your username"
                         validate={composeValidators(required, noSpecialCharacters)}
                         validateFields={[]}
                       />
-                    </Flex>
+                    </div>
 
-                    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                      <Text>
-                        Display Name <Text color="red">*</Text>
-                      </Text>
-                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="displayName">
+                        Display Name <span className="text-destructive">*</span>
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
                         Shown on your profile page. You can use spaces and everything!
-                      </Text>
+                      </p>
                       <Field
+                        id="displayName"
                         data-cy="displayName"
                         name="displayName"
-                        component={FieldInput}
+                        component={TextInputField}
                         placeholder="Pick a name to display on your profile"
                         validate={required}
                         validateFields={[]}
                       />
-                    </Flex>
+                    </div>
 
-                    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                      <Text>
-                        Tell us a bit about your organisation <Text color="red">*</Text>
-                      </Text>
-                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="about">
+                        Tell us a bit about your organisation{' '}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
                         Describe your organisation and why you want to join {siteName}.
-                      </Text>
+                      </p>
                       <Field
+                        id="about"
                         data-cy="about"
                         name="about"
-                        component={FieldTextarea}
+                        component={TextareaField}
                         showCharacterCount
                         maxLength={ORGANISATION_DESCRIPTION_MAX_LENGTH}
                         placeholder="Write description..."
                         validate={required}
                         validateFields={[]}
                       />
-                    </Flex>
+                    </div>
 
-                    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                      <Text>Website or social media</Text>
-                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="website">Website or social media</Label>
+                      <p className="text-sm text-muted-foreground">
                         In case you have some online presence, link it here.
-                      </Text>
+                      </p>
                       <Field
+                        id="website"
                         data-cy="website"
                         name="website"
-                        component={FieldInput}
+                        component={TextInputField}
                         placeholder="https://"
                         validate={validateUrl}
                         validateFields={[]}
                       />
-                    </Flex>
+                    </div>
 
-                    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                      <Text>
-                        Upload pictures of your workspace <Text color="red">*</Text>
-                      </Text>
-                      <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    <div className="flex flex-col gap-1.5">
+                      <Label>
+                        Upload pictures of your workspace{' '}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
                         They help us to evaluate {activityClause}.
-                      </Text>
+                      </p>
                       {coverError && (
-                        <Text data-cy="cover-error" sx={{ color: 'error', fontSize: 1 }}>
+                        <p data-cy="cover-error" className="text-sm text-destructive">
                           {coverError}
-                        </Text>
+                        </p>
                       )}
                       <Field name="coverImages" validate={requiredImages} validateFields={[]}>
                         {() => (
-                          <Box data-cy="coverImages">
+                          <div data-cy="coverImages">
                             <MultipleImageInput
                               images={coverImages}
                               maxImages={MAX_ORGANISATION_COVER_IMAGES}
@@ -299,31 +277,24 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                               onDelete={handleImageDelete}
                               onError={setCoverError}
                             />
-                          </Box>
+                          </div>
                         )}
                       </Field>
-                    </Flex>
+                    </div>
 
-                    <Flex>
-                      <Button
-                        large
-                        sx={{
-                          borderRadius: 3,
-                          width: '100%',
-                          justifyContent: 'center',
-                        }}
-                        data-cy="submit"
-                        variant="primary"
-                        disabled={invalid || submitting || isUploading}
-                        type="submit"
-                      >
-                        Send application and create account
-                      </Button>
-                    </Flex>
-                  </Flex>
+                    <Button
+                      data-cy="submit"
+                      size="lg"
+                      className="w-full justify-center"
+                      disabled={invalid || submitting || isUploading}
+                      type="submit"
+                    >
+                      Send application and create account
+                    </Button>
+                  </CardContent>
                 </Card>
-              </Flex>
-            </Flex>
+              </div>
+            </div>
           </form>
         );
       }}

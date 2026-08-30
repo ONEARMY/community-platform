@@ -35,7 +35,7 @@ declare global {
     interface Chainable {
       addComment(newComment: string): Chainable<void>;
       addReply(reply: string): Chainable<void>;
-      addToMarkdownField(text: string): Chainable<void>;
+      addToRichTextField(text: string): Chainable<void>;
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>;
       deleteDiscussionItem(element: string, item: string): Chainable<void>;
       editDiscussionItem(element: string, oldComment: string, updatedNewComment: string): Chainable<void>;
@@ -88,13 +88,9 @@ declare global {
  * used in chained results
  */
 
-Cypress.Commands.add('addToMarkdownField', (text: string) => {
-  cy.get('[aria-label="editable markdown"]').click().type('{moveToEnd}').type('{enter}').type('{enter}');
+Cypress.Commands.add('addToRichTextField', (text: string) => {
 
-  for (let i = 0; i < text.length; i++) {
-    // This is a very slow way to do this, but avoidable currently.
-    cy.get('[aria-label="editable markdown"]').click().type('{moveToEnd}').type(text[i], { delay: 0 });
-  }
+  cy.get('[data-cy="field-body"] .ProseMirror').click().type('{moveToEnd}{enter}').type(text);
 });
 
 Cypress.Commands.add('saveSettingsForm', () => {
@@ -167,7 +163,7 @@ Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=confirm-password]').clear().type(password);
-  cy.get('[data-cy=consent]').check();
+  cy.get('[data-cy=consent]').click({ force: true });
 });
 
 Cypress.Commands.add('signIn', (email: string, password: string) => {

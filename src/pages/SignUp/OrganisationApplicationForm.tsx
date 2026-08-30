@@ -6,7 +6,6 @@ import {
   MemberBadge,
   MultipleImageInput,
   Stepper,
-  TextNotification,
 } from 'oa-components';
 import type { OrganisationApplicationFormData, ProfileType } from 'oa-shared';
 import { useContext, useState } from 'react';
@@ -157,9 +156,12 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </Flex>
 
                     {submitError && (
-                      <TextNotification variant="failure" isVisible>
+                      <div
+                        className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                        data-cy="TextNotification: failure"
+                      >
                         {submitError}
-                      </TextNotification>
+                      </div>
                     )}
 
                     <Flex data-cy="FocusSection" sx={{ flexDirection: 'column', gap: 2 }}>

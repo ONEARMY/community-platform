@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from './_.settings.$';
@@ -12,6 +13,7 @@ vi.mock('src/services/profileService.server');
 vi.mock('src/services/redirectService.server', () => ({
   redirectServiceServer: { redirectSignIn: vi.fn().mockReturnValue(new Response(null)) },
 }));
+vi.mock('src/services/tenantSettingsService.server');
 
 const setup = (opts: {
   authed?: boolean;
@@ -39,6 +41,10 @@ const setup = (opts: {
       return { existsByAuthId: vi.fn().mockResolvedValue(opts.hasApplication ?? false) };
     },
   );
+
+  (TenantSettingsService as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
+    return { get: vi.fn().mockResolvedValue({ siteName: 'Test Site' }) };
+  });
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: minimal loader args stub

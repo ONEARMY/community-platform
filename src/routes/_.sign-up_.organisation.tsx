@@ -1,11 +1,4 @@
-import {
-  Button,
-  ExternalLink,
-  FieldInput,
-  MemberBadge,
-  Stepper,
-  TextNotification,
-} from 'oa-components';
+import { Button, ExternalLink, FieldInput, MemberBadge, Stepper } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
@@ -206,9 +199,12 @@ export default function Index() {
                       <Heading>Create an account</Heading>
 
                       {actionResponse?.error && pristine && (
-                        <TextNotification variant="failure" isVisible>
-                          {actionResponse?.error}
-                        </TextNotification>
+                        <div
+                          className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                          data-cy="TextNotification: failure"
+                        >
+                          {actionResponse.error}
+                        </div>
                       )}
 
                       <Flex

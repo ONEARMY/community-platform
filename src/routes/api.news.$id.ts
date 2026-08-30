@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { ContentReach, DBMedia, DBNews, NewsDTO } from 'oa-shared';
-import { getSummaryFromMarkdown, News, UserRole } from 'oa-shared';
+import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { logger } from 'src/logger';
@@ -10,6 +10,8 @@ import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
+import { getSummaryFromTiptapJson } from 'src/utils/getSummaryFromTiptapJson';
 import {
   conflictError,
   forbiddenError,
@@ -18,6 +20,7 @@ import {
   unauthorizedError,
   validationError,
 } from 'src/utils/httpException';
+import { renderNewsBodyHtml } from 'src/utils/renderNewsBodyHtml';
 import { convertToSlug } from 'src/utils/slug';
 import { PollServiceServer } from '../services/pollService.server';
 
@@ -33,7 +36,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData();
     const data = {
-      body: formData.get('body') as string,
+      body: formData.has('body') ? JSON.parse(formData.get('body') as string) : null,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('isDraft') === 'true',
       profileBadges: formData.has('profileBadges')
@@ -50,6 +53,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       poll: formData.has('poll') ? (JSON.parse(formData.get('poll') as string) as PollDTO) : null,
     } satisfies NewsDTO;
 
+    const bodyPlainText = extractPlainTextFromTiptapJson(data.body);
+
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
@@ -58,7 +63,16 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentNews = await new NewsServiceServer(client).getById(id);
     const slug = convertToSlug(data.title);
-    await validateRequest(params, request, claims.data.claims.sub, data, currentNews, slug, client);
+    await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      bodyPlainText,
+      currentNews,
+      slug,
+      client,
+    );
     const previousSlugs = ContentServiceServer.updatePreviousSlugs(currentNews, slug);
 
     const isFirstPublish = currentNews.is_draft && !data.isDraft && !currentNews.published_at;
@@ -87,13 +101,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const newsResult = await client
       .from('news')
       .update({
-        body: data.body,
+        body: bodyPlainText,
         category: data.category,
+        content: data.body,
+        content_search_text: bodyPlainText,
+        summary: getSummaryFromTiptapJson(data.body),
         is_draft: currentNews.published_at ? false : data.isDraft,
         modified_at: new Date(),
         slug: slug,
         previous_slugs: previousSlugs,
-        summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
         hero_image: data.heroImage,
@@ -136,7 +152,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw completeNews.error;
     }
 
-    const news = News.fromDB(completeNews.data, [], null, poll);
+    const news = News.fromDB(completeNews.data, [], null, poll, renderNewsBodyHtml);
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
@@ -213,6 +229,7 @@ async function validateRequest(
   request: Request,
   userAuthId: string,
   data: NewsDTO,
+  bodyPlainText: string,
   currentNews: DBNews,
   slug: string,
   client: SupabaseClient,
@@ -231,7 +248,7 @@ async function validateRequest(
     throw validationError('Title is required', 'title');
   }
 
-  if (!data.body && notDraft) {
+  if (!bodyPlainText.trim() && notDraft) {
     throw validationError('Body is required to publish', 'body');
   }
 

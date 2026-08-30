@@ -8,6 +8,38 @@ const CACHE_TTL_MS = 1000 * 60 * 60;
 const MEMBERSHIP_TIERS_ERROR_TTL_MS = 1000 * 30;
 const cache = new Keyv<TenantSettings>({ ttl: CACHE_TTL_MS });
 const membershipTiersCache = new Keyv<boolean>({ ttl: CACHE_TTL_MS });
+const displayNameCache = new Keyv<string>({ ttl: CACHE_TTL_MS });
+
+// Filters on tenant_id rather than relying on the tenant_isolation RLS policy, because
+// callers include the Stripe webhook, which uses the service_role client and bypasses RLS.
+export async function getTenantDisplayName(
+  client: SupabaseClient,
+  tenantId: string,
+): Promise<string | null> {
+  const cached = await displayNameCache.get(tenantId);
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const { data } = await client
+      .from('tenant_settings')
+      .select('site_name, site_name_short')
+      .eq('tenant_id', tenantId)
+      .single();
+
+    const displayName = data?.site_name_short || data?.site_name || null;
+
+    if (displayName) {
+      displayNameCache.set(tenantId, displayName);
+    }
+
+    return displayName;
+  } catch (error) {
+    logger.error('Error reading tenant display name:', error);
+    return null;
+  }
+}
 
 export class TenantSettingsService {
   constructor(

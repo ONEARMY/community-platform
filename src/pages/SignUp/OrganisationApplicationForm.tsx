@@ -1,4 +1,4 @@
-import { MemberBadge, MultipleImageInput, Stepper } from 'oa-components';
+import { MemberBadge, MultipleImageInput } from 'oa-components';
 import type { OrganisationApplicationFormData, ProfileType } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
@@ -25,6 +25,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Stepper } from '@/components/ui/stepper';
 
 interface IProps {
   profileTypes: ProfileType[];

@@ -1,6 +1,7 @@
-import { HeroBanner, Icon, Stepper } from 'oa-components';
+import { HeroBanner, Icon } from 'oa-components';
 import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
 import { Card, CardContent } from '@/components/ui/card';
+import { Stepper } from '@/components/ui/stepper';
 
 const SignUpMessagePage = ({ email, isOrganisation = false }) => {
   return (

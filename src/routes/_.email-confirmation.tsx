@@ -1,4 +1,4 @@
-import { Button, HeroBanner, Stepper } from 'oa-components';
+import { Button, HeroBanner } from 'oa-components';
 import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useActionData, useLoaderData } from 'react-router';
@@ -8,6 +8,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
+import { Stepper } from '@/components/ui/stepper';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

@@ -1,19 +1,28 @@
 import { Username } from 'oa-components';
 import type { Author } from 'oa-shared';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const MAX_VISIBLE_AVATARS = 3;
 
-const ContributorAvatar = ({ contributor }: { contributor: Author }) => {
-  const className = 'size-6 shrink-0 rounded-full ring-2 ring-background';
+// The surrounding page is theme-ui, whose body font is Inter, while this
+// component library defaults to Geist. Match the page rather than the library.
+const FONT_FAMILY = 'font-[Inter,Arial,sans-serif]';
+
+interface AvatarProps {
+  contributor: Author;
+  className: string;
+}
+
+const ContributorAvatar = ({ contributor, className }: AvatarProps) => {
+  const shared = `${className} shrink-0 rounded-full ring-2 ring-background`;
   const name = contributor.displayName || contributor.username || '';
 
   if (!contributor.photo) {
     return (
       <span
         aria-hidden="true"
-        className={`${className} flex items-center justify-center bg-muted text-xs text-muted-foreground`}
+        className={`${shared} flex items-center justify-center bg-muted text-xs text-muted-foreground`}
       >
         {name.charAt(0).toUpperCase()}
       </span>
@@ -23,7 +32,7 @@ const ContributorAvatar = ({ contributor }: { contributor: Author }) => {
   return (
     <img
       alt={name}
-      className={`${className} object-cover`}
+      className={`${shared} object-cover`}
       loading="lazy"
       src={contributor.photo.publicUrl}
     />
@@ -38,6 +47,7 @@ interface IProps {
 
 export const ResearchContributors = ({ contributors }: IProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   if (contributors.length === 0) {
     return null;
@@ -46,19 +56,22 @@ export const ResearchContributors = ({ contributors }: IProps) => {
   const label = `${contributors.length} contributors`;
 
   return (
-    <div className="flex items-center gap-1 text-sm" data-cy="research-contributors">
+    <div
+      className={`${FONT_FAMILY} flex items-center gap-[5px] text-sm`}
+      data-cy="research-contributors"
+    >
       <span className="text-muted-foreground">with</span>
 
       {contributors.length === 1 ? (
-        <span className="flex items-center gap-1">
-          <ContributorAvatar contributor={contributors[0]} />
+        <span className="flex items-center gap-[5px]">
+          <ContributorAvatar className="size-[25px]" contributor={contributors[0]} />
           <Username user={contributors[0]} />
         </span>
       ) : (
         <>
           <button
             aria-label={`Show all ${label}`}
-            className="flex cursor-pointer items-center gap-2 rounded-full px-1 py-0.5 hover:bg-muted"
+            className="flex cursor-pointer items-center gap-[5px] rounded-full border border-transparent px-1 py-0.5 hover:border-border hover:bg-muted"
             data-cy="research-contributors-trigger"
             onClick={() => setIsModalOpen(true)}
             type="button"
@@ -66,23 +79,30 @@ export const ResearchContributors = ({ contributors }: IProps) => {
             <span className="flex -space-x-2">
               {contributors.slice(0, MAX_VISIBLE_AVATARS).map((contributor, index) => (
                 <ContributorAvatar
+                  className="size-[25px]"
                   contributor={contributor}
                   key={contributorKey(contributor, index)}
                 />
               ))}
             </span>
-            <span className="underline">{label}</span>
+            <span>{label}</span>
           </button>
 
           <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{label}</DialogTitle>
+            <DialogContent
+              className={`${FONT_FAMILY} gap-0 rounded-lg border border-black p-0 ring-0`}
+              // Without this the first contributor's link takes focus on open
+              // and the row reads as selected.
+              initialFocus={modalRef}
+              ref={modalRef}
+            >
+              <DialogHeader className="border-b border-black px-4 py-3">
+                <DialogTitle className="text-base">{label}</DialogTitle>
               </DialogHeader>
-              <ul className="flex max-h-96 flex-col gap-3 overflow-y-auto">
+              <ul className="flex max-h-96 flex-col gap-4 overflow-y-auto px-4 py-3">
                 {contributors.map((contributor, index) => (
                   <li className="flex items-center gap-2" key={contributorKey(contributor, index)}>
-                    <ContributorAvatar contributor={contributor} />
+                    <ContributorAvatar className="size-8" contributor={contributor} />
                     <Username user={contributor} />
                   </li>
                 ))}

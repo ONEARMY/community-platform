@@ -57,6 +57,20 @@ describe('ResearchContributors', () => {
     expect(trigger.querySelectorAll('[aria-hidden="true"]')).toHaveLength(3);
   });
 
+  it('does not put focus on a contributor when the modal opens', async () => {
+    renderContributors(makeContributors(14));
+
+    await act(async () => {
+      screen.getByRole('button').click();
+    });
+
+    const dialog = await screen.findByRole('dialog');
+    const links = within(dialog).queryAllByRole('link');
+    for (const link of links) {
+      expect(link).not.toHaveFocus();
+    }
+  });
+
   it('lists every contributor once the modal opens', async () => {
     renderContributors(makeContributors(14));
 

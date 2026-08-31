@@ -101,7 +101,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
         return (
           <form data-cy="organisation-application-form" onSubmit={handleSubmit}>
             <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
-              <div className="flex w-full flex-col gap-4">
+              <div className="mx-auto flex w-full max-w-[548px] flex-col gap-4">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <div data-cy="organisation-application-badges" className="flex justify-center">
                     {profileTypes.map((profileType, index) => (
@@ -115,8 +115,12 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                   </div>
                   <h1 className="text-2xl font-semibold">One last step!</h1>
                   <p className="text-muted-foreground">
-                    This info will help us verify {activityClause}. It usually takes a day or two to
-                    get approved.
+                    <span className="inline-block">
+                      This info will help us verify {activityClause}.
+                    </span>{' '}
+                    <span className="inline-block">
+                      It usually takes a day or two to get approved.
+                    </span>
                   </p>
                 </div>
 
@@ -141,7 +145,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     )}
 
                     <div data-cy="FocusSection" className="flex flex-col gap-2">
-                      <Label>
+                      <Label className="text-base">
                         Your focus <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -150,7 +154,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                           href={tenantContext?.profileGuidelines}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="underline underline-offset-4"
+                          className="underline underline-offset-3 hover:no-underline"
                         >
                           Check out our guidelines.
                         </a>
@@ -172,7 +176,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                       {selectedType?.description && (
                         <div
                           data-cy="type-description"
-                          className="rounded-lg bg-accent/10 p-3 text-sm"
+                          className="rounded-[5px] bg-[#e2edf7] p-[15px] text-sm"
                         >
                           <span className="block font-bold">Definition:</span>
                           <span>{selectedType.description}</span>
@@ -181,7 +185,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="username">
+                      <Label htmlFor="username" className="text-base">
                         Username <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -199,7 +203,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="displayName">
+                      <Label htmlFor="displayName" className="text-base">
                         Display Name <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -217,7 +221,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="about">
+                      <Label htmlFor="about" className="text-base">
                         Tell us a bit about your organisation{' '}
                         <span className="text-destructive">*</span>
                       </Label>
@@ -238,7 +242,9 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="website">Website or social media</Label>
+                      <Label htmlFor="website" className="text-base">
+                        Website or social media
+                      </Label>
                       <p className="text-sm text-muted-foreground">
                         In case you have some online presence, link it here.
                       </p>
@@ -254,7 +260,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label>
+                      <Label className="text-base">
                         Upload pictures of your workspace{' '}
                         <span className="text-destructive">*</span>
                       </Label>

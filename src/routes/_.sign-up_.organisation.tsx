@@ -211,19 +211,27 @@ export default function Index() {
                         />
                       </div>
 
-                      <Alert className="gap-3 bg-accent/10">
+                      <Alert className="gap-3 border-transparent bg-[#e2edf7]">
                         <AlertTitle>
                           Heads up. After this you need to fill in some information.
                         </AlertTitle>
-                        <AlertDescription>
-                          A <strong>link to your website</strong> or social media and{' '}
-                          <strong>pictures</strong> to verify {activityClause}.
+                        <AlertDescription className="text-foreground">
+                          A <strong className="font-bold">link to your website</strong> or social
+                          media and <strong className="font-bold">pictures</strong> to verify{' '}
+                          {activityClause}.
                         </AlertDescription>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-fit"
-                          render={<Link to="/academy" data-cy="organisation-signup-learn-more" />}
+                          className="w-fit border-[#1b1b1b]"
+                          render={
+                            <Link
+                              to="/academy"
+                              data-cy="organisation-signup-learn-more"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            />
+                          }
                         >
                           Learn more
                         </Button>
@@ -245,7 +253,7 @@ export default function Index() {
                                 href="/terms"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-bold underline-offset-4 hover:underline"
+                                className="font-bold underline underline-offset-3 hover:no-underline"
                               >
                                 Terms of Service
                               </a>{' '}
@@ -254,7 +262,7 @@ export default function Index() {
                                 href="/privacy"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-bold underline-offset-4 hover:underline"
+                                className="font-bold underline underline-offset-3 hover:no-underline"
                               >
                                 Privacy Policy
                               </a>
@@ -277,7 +285,11 @@ export default function Index() {
 
                   <p className="text-center text-sm text-muted-foreground">
                     Not an organisation?{' '}
-                    <Link to="/sign-up" data-cy="sign-up-member" className="underline">
+                    <Link
+                      to="/sign-up"
+                      data-cy="sign-up-member"
+                      className="underline underline-offset-3 hover:no-underline"
+                    >
                       Sign-up as a member
                     </Link>
                   </p>

@@ -121,18 +121,23 @@ export default function Index() {
                   <CardHeader>
                     <h1 className="text-2xl font-semibold">Create an account</h1>
                     <p className="text-sm text-muted-foreground">
-                      <Link to="/sign-in" className="hover:underline">
-                        Already have an account? Sign-in here
+                      Already have an account?{' '}
+                      <Link
+                        to="/sign-in"
+                        className="underline underline-offset-3 hover:no-underline"
+                      >
+                        Sign-in here
                       </Link>
                     </p>
                     {loaderData?.showOrganisationSignup && (
                       <p className="text-sm text-muted-foreground">
+                        Are you an organisation?{' '}
                         <Link
                           to="/sign-up/organisation"
                           data-cy="sign-up-organisation"
-                          className="hover:underline"
+                          className="underline underline-offset-3 hover:no-underline"
                         >
-                          Are you an organisation? Create an organisation account
+                          Create an organisation account
                         </Link>
                       </p>
                     )}
@@ -202,7 +207,7 @@ export default function Index() {
                               href="/terms"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-bold underline-offset-4 hover:underline"
+                              className="font-bold underline underline-offset-3 hover:no-underline"
                             >
                               Terms of Service
                             </a>{' '}
@@ -211,7 +216,7 @@ export default function Index() {
                               href="/privacy"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-bold underline-offset-4 hover:underline"
+                              className="font-bold underline underline-offset-3 hover:no-underline"
                             >
                               Privacy Policy
                             </a>

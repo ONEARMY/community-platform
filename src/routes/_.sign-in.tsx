@@ -136,8 +136,13 @@ export default function Index() {
                   <CardHeader>
                     <h1 className="text-2xl font-semibold">Log in</h1>
                     <p className="text-sm text-muted-foreground">
-                      <Link to="/sign-up" data-cy="no-account" className="hover:underline">
-                        Don't have an account? Sign-up here
+                      Don't have an account?{' '}
+                      <Link
+                        to="/sign-up"
+                        data-cy="no-account"
+                        className="underline underline-offset-3 hover:no-underline"
+                      >
+                        Sign-up here
                       </Link>
                     </p>
                   </CardHeader>
@@ -177,7 +182,7 @@ export default function Index() {
                       <Link
                         to="/reset-password"
                         data-cy="lost-password"
-                        className="hover:underline"
+                        className="underline underline-offset-3 hover:no-underline"
                       >
                         Forgotten password?
                       </Link>

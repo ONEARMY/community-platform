@@ -1,4 +1,4 @@
-import { ChevronRightIcon, FolderIcon, TagsIcon, UsersIcon } from 'lucide-react';
+import { ChevronRightIcon, FolderIcon, MegaphoneIcon, TagsIcon, UsersIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -26,6 +26,7 @@ const ADMIN_NAV_ITEMS = [
   },
   { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
   { label: 'Tags', href: '/admin/tags', icon: TagsIcon },
+  { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
 ];
 
 export function AdminSidebar() {

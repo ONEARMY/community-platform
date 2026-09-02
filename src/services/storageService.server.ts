@@ -208,12 +208,10 @@ export class StorageServiceServer {
 
         const storageFileName = options.preserveFileName
           ? finalFileName
-          : `${finalFileName.replace(/(\.[^.]+)$/, '')}-${(
-              crypto.getRandomValues(new Uint32Array(1))[0] %
-              36 ** 6
-            )
-              .toString(36)
-              .padStart(6, '0')}${finalFileName.match(/\.[^.]+$/)?.[0] || ''}`;
+          : `${finalFileName.replace(/(\.[^.]+)$/, '')}-${crypto
+              .randomUUID()
+              .replaceAll('-', '')
+              .slice(0, 8)}${finalFileName.match(/\.[^.]+$/)?.[0] || ''}`;
 
         const result = await this.client.storage
           .from(process.env.TENANT_ID as string)

@@ -63,6 +63,7 @@ export class Question implements IContentDoc {
   category: Category | null;
   commentCount: number;
   createdAt: Date;
+  createdBy: Number;
   deleted: boolean;
   isDraft: boolean;
   modifiedAt: Date | null;
@@ -92,6 +93,7 @@ export class Question implements IContentDoc {
       category: obj.category ? Category.fromDB(obj.category) : null,
       createdAt: new Date(obj.created_at),
       commentCount: obj.comment_count || 0,
+      createdBy: obj.created_by || 0,
       deleted: obj.deleted || false,
       description: obj.description,
       images: images || [],

@@ -41,7 +41,7 @@ export function QuestionsPage({ questions }: IProps) {
               <TableCell className="max-w-xs truncate text-muted-foreground">
                 {question.description}
               </TableCell>
-              <TableCell>{}</TableCell>
+              <TableCell>{question.createdBy.toString()}</TableCell>
               <TableCell>{question.category !== null ? question.category : ''}</TableCell>
               <TableCell>{question.tags.join()}</TableCell>
               <TableCell>{}</TableCell>

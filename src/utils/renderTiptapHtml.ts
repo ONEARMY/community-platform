@@ -23,7 +23,7 @@ const escapeAttr = (text: string): string => escapeHtml(text).replace(/"/g, '&qu
  * instead. Keep in sync with the `Image` extension override in `tiptapExtensions.ts`,
  * which applies the same mapping for the editor's own live (browser) rendering.
  */
-const IMAGE_ALIGN_STYLE = 'display:block;margin:0 auto;';
+const IMAGE_ALIGN_STYLE = 'display:block;margin:10px auto;';
 
 // Width is only ever set by the editor's own resize presets (see IMAGE_WIDTH_PRESETS in
 // tiptapExtensions.ts), but validate the shape anyway before splicing it into a style string.

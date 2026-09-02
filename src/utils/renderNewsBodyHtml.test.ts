@@ -34,6 +34,6 @@ describe('renderNewsBodyHtml', () => {
     });
 
     expect(html).toContain('display:block');
-    expect(html).toContain('margin:0 auto');
+    expect(html).toContain('margin:10px auto');
   });
 });

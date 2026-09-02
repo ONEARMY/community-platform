@@ -10,7 +10,7 @@ import { YoutubeNodeView } from 'src/pages/News/FormFields/FieldRichText/Youtube
 
 /**
  * CSS `text-align` has no visual effect on an `<img>` element (it only affects inline
- * content inside a block container), so images are always centered via `margin: 0 auto`
+ * content inside a block container), so images are always centered via `margin: 10px auto`
  * instead. This is for browser-rendered surfaces (the editor's own view, and the web page
  * via generateHTML) only. Email uses a separate renderer (see renderTiptapEmail) that needs
  * a table-based `align` attribute instead, since Outlook doesn't reliably honor `margin: auto`.
@@ -43,7 +43,7 @@ export const Image = TiptapImage.extend({
     const { style: _discardStyle, ...rest } = HTMLAttributes;
     const width = node.attrs.width as string | null;
     const caption = node.attrs.caption as string | null;
-    const style = `display:block;margin:0 auto;${width ? `width:${width};` : ''}`;
+    const style = `display:block;margin:10px auto;${width ? `width:${width};` : ''}`;
     const img = ['img', mergeAttributes(rest, { style })] as const;
 
     if (!caption) {

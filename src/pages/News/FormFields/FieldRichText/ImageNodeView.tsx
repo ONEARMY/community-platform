@@ -23,7 +23,7 @@ export const ImageNodeView = ({ node, updateAttributes, selected }: NodeViewProp
     <NodeViewWrapper
       as="figure"
       style={{
-        margin: '0 auto 1rem',
+        margin: '10px auto',
         width: width || '100%',
       }}
     >

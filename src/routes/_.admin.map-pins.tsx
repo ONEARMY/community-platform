@@ -30,7 +30,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       profile:profiles(
         id,
         username,
-        display_name
+        display_name,
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url
+        )
       )
     `,
       { count: 'exact' },
@@ -59,6 +66,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
           id: pin.profile.id,
           username: pin.profile.username,
           displayName: pin.profile.display_name,
+          profileType: pin.profile.type
+            ? {
+                id: pin.profile.type.id,
+                name: pin.profile.type.name,
+                displayName: pin.profile.type.display_name,
+                imageUrl: pin.profile.type.image_url || pin.profile.type.small_image_url,
+              }
+            : null,
         }
       : null,
   }));

@@ -19,6 +19,12 @@ describe('MapPinsPage', () => {
         id: 101,
         username: 'precious-workspace',
         displayName: 'Precious Workspace NL',
+        profileType: {
+          id: 2,
+          name: 'workspace',
+          displayName: 'Workspace',
+          imageUrl: 'https://example.com/workspace.svg',
+        },
       },
     },
     {
@@ -34,6 +40,12 @@ describe('MapPinsPage', () => {
         id: 102,
         username: 'jean-dupont',
         displayName: 'Jean Dupont',
+        profileType: {
+          id: 1,
+          name: 'member',
+          displayName: 'Member',
+          imageUrl: 'https://example.com/member.svg',
+        },
       },
     },
   ];
@@ -47,7 +59,10 @@ describe('MapPinsPage', () => {
 
     expect(screen.getByText('Map Pins')).toBeInTheDocument();
     expect(screen.getByText('Total: 2')).toBeInTheDocument();
+    expect(screen.getByText('Profile Type')).toBeInTheDocument();
     expect(screen.getByText('Precious Plastic Workshop')).toBeInTheDocument();
+    expect(screen.getByText('Workspace')).toBeInTheDocument();
+    expect(screen.getByText('Member')).toBeInTheDocument();
     expect(screen.getByText('Netherlands')).toBeInTheDocument();
     expect(screen.getByText('North Holland')).toBeInTheDocument();
     expect(screen.getByText('1012 JS')).toBeInTheDocument();

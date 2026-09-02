@@ -23,6 +23,12 @@ export interface AdminMapPinItem {
     id: number;
     username: string | null;
     displayName: string;
+    profileType?: {
+      id: number;
+      name: string;
+      displayName: string;
+      imageUrl?: string | null;
+    } | null;
   } | null;
 }
 
@@ -70,6 +76,7 @@ export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPa
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Profile</TableHead>
+            <TableHead>Profile Type</TableHead>
             <TableHead>Country</TableHead>
             <TableHead>Administrative Area</TableHead>
             <TableHead>Post Code</TableHead>
@@ -79,7 +86,7 @@ export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPa
         <TableBody>
           {mapPins.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+              <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
                 No map pins found.
               </TableCell>
             </TableRow>
@@ -100,6 +107,22 @@ export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPa
                       <span>{profileDisplayName}</span>
                       <ExternalLinkIcon className="size-3 text-muted-foreground" />
                     </Link>
+                  </TableCell>
+                  <TableCell>
+                    {pin.profile?.profileType ? (
+                      <div className="flex items-center gap-2">
+                        {pin.profile.profileType.imageUrl && (
+                          <img
+                            src={pin.profile.profileType.imageUrl}
+                            alt={pin.profile.profileType.displayName}
+                            className="size-5 rounded-full object-contain"
+                          />
+                        )}
+                        <span>{pin.profile.profileType.displayName}</span>
+                      </div>
+                    ) : (
+                      '-'
+                    )}
                   </TableCell>
                   <TableCell>{pin.country || '-'}</TableCell>
                   <TableCell>{pin.administrative || '-'}</TableCell>

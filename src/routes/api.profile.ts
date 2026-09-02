@@ -1,11 +1,10 @@
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, ProfileDTO, UserVisitorPreference } from 'oa-shared';
+import type { DBMedia, DBProfile, ProfileDTO, UserVisitorPreference } from 'oa-shared';
 import { type ActionFunctionArgs, data } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { validationError } from 'src/utils/httpException';
 
 export const loader = async ({ request }) => {
@@ -80,7 +79,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       displayName: String(formData.get('displayName')),
       about: String(formData.get('about')),
       country: country ? String(country) : null,
-      type: String(formData.get('type')),
       isContactable: formData.get('isContactable') === 'true',
       showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
       visitorPreferenceDetails: formData.get(
@@ -106,15 +104,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profileData = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
-    const profileTypes = await new ProfileTypesServiceServer(client).get();
-
-    const memberTypes = profileTypes.filter((x) => x.isSpace === false).map((x) => x.name) || null;
 
     const { valid, status, statusText } = await validateRequest(
       request,
       submissionData,
       profileData,
-      memberTypes,
     );
 
     if (!valid) {
@@ -126,7 +120,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profileService = new ProfileServiceServer(client);
-    const profile = await profileService.updateProfile(profileData?.id, submissionData);
+    const resendApplication =
+      !!profileData.type?.is_space && profileData.moderation === 'improvements-needed';
+    const profile = await profileService.updateProfile(
+      profileData?.id,
+      submissionData,
+      resendApplication,
+    );
     profileService.updateUserActivity(claims.data.claims.sub);
 
     return data(profile, { headers, status: 200 });
@@ -140,12 +140,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-async function validateRequest(
-  request: Request,
-  data: ProfileDTO,
-  profile: { id: number } | null,
-  memberTypes: string[] | null,
-) {
+async function validateRequest(request: Request, data: ProfileDTO, profile: DBProfile | null) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' };
   }
@@ -158,12 +153,10 @@ async function validateRequest(
     throw validationError('displayName is required', 'displayName');
   }
 
-  if (!data.type) {
-    throw validationError('type is required', 'type');
-  }
-
-  if (!memberTypes || !memberTypes?.includes(data.type)) {
-    if (!data.photo && !data.photo) {
+  // Organisation-only requirements, keyed off the stored profile type — the
+  // type is fixed at signup/application and cannot be changed from settings
+  if (profile.type?.is_space) {
+    if (!data.photo) {
       throw validationError('photo is required', 'photo');
     }
 

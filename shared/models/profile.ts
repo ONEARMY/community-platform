@@ -40,6 +40,8 @@ export class DBProfile {
   auth_id: string;
   profile_type: number;
   donations_enabled: boolean;
+  moderation: Moderation | null;
+  moderation_feedback: string | null;
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj);
@@ -68,6 +70,8 @@ export class Profile {
   coverImages: MediaWithPublicUrl[] | null;
   authorUsefulVotes?: AuthorVotes[];
   donationsEnabled: boolean;
+  moderation: Moderation | null;
+  moderationFeedback: string | null;
 
   constructor(obj: Profile) {
     Object.assign(this, obj);
@@ -109,6 +113,8 @@ export class Profile {
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       donationsEnabled: dbProfile.donations_enabled,
+      moderation: dbProfile.moderation ?? null,
+      moderationFeedback: dbProfile.moderation_feedback ?? null,
       badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
     });
@@ -425,7 +431,6 @@ export type ProfileFormData = {
   country: string;
   website: string;
   isContactable: boolean;
-  type: string;
   photo?: MediaWithPublicUrl;
   coverImages?: MediaWithPublicUrl[];
   showVisitorPolicy: boolean;
@@ -433,11 +438,19 @@ export type ProfileFormData = {
   visitorPreferenceDetails?: UserVisitorPreference['details'];
 };
 
+export type OrganisationApplicationFormData = {
+  type: string;
+  username: string;
+  displayName: string;
+  about: string;
+  website: string;
+  coverImages: MediaWithPublicUrl[];
+};
+
 export type ProfileDTO = {
   displayName: string;
   about: string;
   isContactable: boolean;
-  type: string;
   country: string | null;
   website: string | null;
   photo: DBMedia | null;

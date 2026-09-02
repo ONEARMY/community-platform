@@ -4,6 +4,7 @@ import {
   type IUserImpact,
   type MapPin,
   type MapPinFormData,
+  type OrganisationApplicationFormData,
   type Profile,
   type ProfileDTO,
   type ProfileFormData,
@@ -33,7 +34,6 @@ const update = async (value: ProfileFormData) => {
     displayName: value.displayName,
     about: value.about,
     country: value.country,
-    type: value.type.toString(),
     isContactable: value.isContactable,
     website: value.website,
     showVisitorPolicy: value.showVisitorPolicy,
@@ -67,6 +67,37 @@ const update = async (value: ProfileFormData) => {
   return result;
 };
 
+const applyAsOrganisation = async (value: OrganisationApplicationFormData) => {
+  const url = new URL('/api/organisation-application', window.location.origin);
+  const data = createFormData({
+    type: value.type,
+    username: value.username,
+    displayName: value.displayName,
+    about: value.about,
+    website: value.website,
+    coverImages:
+      value.coverImages && value.coverImages.length > 0
+        ? value.coverImages.map(DBMedia.fromPublicMedia)
+        : null,
+  });
+
+  const response = await fetch(url, {
+    body: data,
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Failed to submit application' }));
+    const errorMessage =
+      errorData.error || errorData.message || response.statusText || 'Failed to submit application';
+    throw new Error(errorMessage);
+  }
+
+  return (await response.json()) as Profile;
+};
+
 const updateUsername = async (username: string): Promise<Profile> => {
   const url = new URL('/api/profile/username', window.location.origin);
 
@@ -86,6 +117,30 @@ const updateUsername = async (username: string): Promise<Profile> => {
 
   if (!result) {
     throw new Error('Failed to update username');
+  }
+
+  return result;
+};
+
+const updateProfileType = async (profileTypeId: number): Promise<Profile> => {
+  const url = new URL('/api/profile/type', window.location.origin);
+
+  const response = await fetch(url, {
+    body: JSON.stringify({ type: profileTypeId }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to update focus' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update focus';
+    throw new Error(errorMessage);
+  }
+
+  const result = (await response.json()) as Profile | null;
+
+  if (!result) {
+    throw new Error('Failed to update focus');
   }
 
   return result;
@@ -172,7 +227,9 @@ const ban = async (profileId: number) => {
 export const profileService = {
   get,
   update,
+  applyAsOrganisation,
   updateUsername,
+  updateProfileType,
   upsertPin,
   deletePin,
   updateImpact,

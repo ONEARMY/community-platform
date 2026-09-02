@@ -112,14 +112,14 @@ export const handleImagePaste = (
     return false;
   }
 
-  const dataImageMatch = src.match(
-    /^data:image\/[a-zA-Z0-9.+-]+;base64,[a-zA-Z0-9+/=\s]+$/,
-  );
+  const dataImageMatch = src.match(/^data:image\/[a-zA-Z0-9.+-]+;base64,[a-zA-Z0-9+/=\s]+$/);
   if (dataImageMatch) {
     event.preventDefault();
     const dataImageSrc = dataImageMatch[0];
     try {
-      const parsed = dataImageSrc.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,([a-zA-Z0-9+/=\s]+)$/);
+      const parsed = dataImageSrc.match(
+        /^data:(image\/[a-zA-Z0-9.+-]+);base64,([a-zA-Z0-9+/=\s]+)$/,
+      );
       if (!parsed) {
         return true;
       }

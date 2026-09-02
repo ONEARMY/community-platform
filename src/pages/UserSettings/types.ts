@@ -4,6 +4,7 @@ import type { SettingsRoute } from './settingsTabs';
 
 export interface ISettingsTab {
   header?: React.ReactNode;
+  preBody?: ComponentType;
   body: ComponentType;
   glyph: availableGlyphs;
   title: string;

@@ -82,6 +82,7 @@ export class StorageServiceServer {
   async uploadImage(
     files: File[],
     path: string,
+    options: { preserveFileName?: boolean; upsert?: boolean } = {},
   ): Promise<{
     media: DBMedia[];
     errors: string[];
@@ -205,10 +206,16 @@ export class StorageServiceServer {
           finalBuffer = buffer;
         }
 
+        const storageFileName = options.preserveFileName
+          ? finalFileName
+          : `${crypto.randomUUID()}${
+              finalFileName.includes('.') ? finalFileName.slice(finalFileName.lastIndexOf('.')) : ''
+            }`;
+
         const result = await this.client.storage
           .from(process.env.TENANT_ID as string)
-          .upload(`${path}/${finalFileName}`, finalBuffer, {
-            upsert: true,
+          .upload(`${path}/${storageFileName}`, finalBuffer, {
+            upsert: options.upsert ?? false,
             contentType: finalContentType,
           });
 

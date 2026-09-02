@@ -33,7 +33,11 @@ const linkStyle: React.CSSProperties = {
   textDecoration: 'underline',
   backgroundColor: 'transparent',
 };
-const imageStyle: React.CSSProperties = { width: '100%', borderRadius: '10px' };
+const imageStyle: React.CSSProperties = {
+  width: '100%',
+  borderRadius: '10px',
+  margin: '10px auto',
+};
 const imageCaptionStyle: React.CSSProperties = {
   fontSize: '0.875rem',
   color: '#6b7280',

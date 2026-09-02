@@ -22,9 +22,16 @@ export function QuestionsPage({ questions }: IProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-0">Image</TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead className="w-0">Title</TableHead>
             <TableHead>Description</TableHead>
+            <TableHead>Created By</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Tags</TableHead>
+            <TableHead>Moderation</TableHead>
+            <TableHead>Is Draft</TableHead>
+            <TableHead>Published At</TableHead>
+            <TableHead>Comment Count</TableHead>
+            <TableHead>Deleted</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -34,6 +41,16 @@ export function QuestionsPage({ questions }: IProps) {
               <TableCell className="max-w-xs truncate text-muted-foreground">
                 {question.description}
               </TableCell>
+              <TableCell>{}</TableCell>
+              <TableCell>{question.category !== null ? question.category : ''}</TableCell>
+              <TableCell>{question.tags.join()}</TableCell>
+              <TableCell>{}</TableCell>
+              <TableCell>{question.isDraft}</TableCell>
+              <TableCell>
+                {question.publishedAt !== null ? question.publishedAt.toLocaleDateString() : ''}
+              </TableCell>
+              <TableCell>{question.commentCount}</TableCell>
+              <TableCell>{question.deleted}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -11,6 +11,7 @@ export class DBQuestion implements IDBContentDoc {
   readonly id: number;
   is_draft: boolean;
   readonly created_at: Date;
+  readonly moderation: string;
   readonly modified_at: Date | null;
   readonly published_at: Date | null;
   readonly author?: DBAuthor;
@@ -66,6 +67,7 @@ export class Question implements IContentDoc {
   createdBy: Number;
   deleted: boolean;
   isDraft: boolean;
+  moderation: string;
   modifiedAt: Date | null;
   previousSlugs: string[];
   publishedAt: Date | null;
@@ -98,6 +100,7 @@ export class Question implements IContentDoc {
       description: obj.description,
       images: images || [],
       isDraft: obj.is_draft || false,
+      moderation: obj.moderation,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       previousSlugs: obj.previous_slugs,
       publishedAt: obj.published_at ? new Date(obj.published_at) : null,

@@ -1,4 +1,5 @@
 import type { Question } from 'oa-shared';
+import { Link } from 'react-router';
 import {
   Table,
   TableBody,
@@ -34,7 +35,9 @@ export function QuestionsPage({ questions }: IProps) {
         <TableBody>
           {questions.map((question) => (
             <TableRow key={question.id}>
-              <TableCell>{question.title}</TableCell>
+              <Link to={'/questions/' + question.slug} key={question.id}>
+                <TableCell>{question.title}</TableCell>
+              </Link>
               <TableCell>{question.createdBy.toString()}</TableCell>
               <TableCell>{question.category !== null ? question.category.name : ''}</TableCell>
               <TableCell>{question.moderation}</TableCell>

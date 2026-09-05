@@ -13,9 +13,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data } = await client
     .from('questions')
     .select(
-      'title,slug,created_by,category,tags,moderation,is_draft,published_at,comment_count,deleted,id,created_at,modified_at,previous_slugs,images,description',
+      'title,slug,created_by,category,tags,moderation,is_draft,published_at,comment_count,deleted,total_views,id,images',
     )
-    .order('published_at', { ascending: false });
+    .order('published_at', { ascending: true });
 
   const questions = (data || []).map((question) =>
     Question.fromDB(question as DBQuestion, question.tags, question.images),

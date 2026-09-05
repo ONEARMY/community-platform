@@ -1,7 +1,9 @@
 import { Username } from 'oa-components';
 import type { Author } from 'oa-shared';
 import { useRef, useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 const MAX_VISIBLE_AVATARS = 3;
 
@@ -14,28 +16,18 @@ interface AvatarProps {
   className: string;
 }
 
+// Decorative: the name is always rendered next to it, and the trigger carries
+// its own aria-label, so the avatar adds nothing for a screen reader.
 const ContributorAvatar = ({ contributor, className }: AvatarProps) => {
-  const shared = `${className} shrink-0 rounded-full ring-2 ring-background`;
   const name = contributor.displayName || contributor.username || '';
 
-  if (!contributor.photo) {
-    return (
-      <span
-        aria-hidden="true"
-        className={`${shared} flex items-center justify-center bg-muted text-xs text-muted-foreground`}
-      >
-        {name.charAt(0).toUpperCase()}
-      </span>
-    );
-  }
-
   return (
-    <img
-      alt={name}
-      className={`${shared} object-cover`}
-      loading="lazy"
-      src={contributor.photo.publicUrl}
-    />
+    <Avatar aria-hidden="true" className={cn(className, 'ring-2 ring-background')}>
+      {contributor.photo ? (
+        <AvatarImage alt="" loading="lazy" src={contributor.photo.publicUrl} />
+      ) : null}
+      <AvatarFallback>{name.charAt(0).toUpperCase()}</AvatarFallback>
+    </Avatar>
   );
 };
 

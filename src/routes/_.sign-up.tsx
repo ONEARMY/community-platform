@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -45,12 +46,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signupResult = await client.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo,
+      captchaToken,
     },
   });
 
@@ -86,6 +89,7 @@ export default function Index() {
       .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
       .required(FRIENDLY_MESSAGES['sign-up/email-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
+    'cf-turnstile-token': string().required(FRIENDLY_MESSAGES['sign-up/captcha-required']),
   });
 
   return (
@@ -200,6 +204,18 @@ export default function Index() {
                             </a>
                           </span>
                         </Label>
+                      )}
+                    </Field>
+
+                    <Field name="cf-turnstile-token">
+                      {({ input }) => (
+                        <>
+                          <Turnstile
+                            siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? ''}
+                            onVerify={input.onChange}
+                          />
+                          <input {...input} type="hidden" />
+                        </>
                       )}
                     </Field>
 

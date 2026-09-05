@@ -209,7 +209,8 @@ jobs:
               --debug --verbose \
               --build-secret NODE_ENV="production" \
               --build-secret VITE_BRANCH="$VITE_BRANCH" \
-              --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN"
+              --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN" \
+              --build-secret VITE_TURNSTILE_SITE_KEY="$VITE_TURNSTILE_SITE_KEY"
       - run:
           name: Set Server Secrets
           command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID TOKEN_SECRET="$TOKEN_SECRET"

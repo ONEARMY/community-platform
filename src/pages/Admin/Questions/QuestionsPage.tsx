@@ -27,9 +27,10 @@ export function QuestionsPage({ questions }: IProps) {
             <TableHead>Created By</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Moderation</TableHead>
-            <TableHead>Is Draft</TableHead>
-            <TableHead>Published At</TableHead>
-            <TableHead>Comment Count</TableHead>
+            <TableHead>Draft</TableHead>
+            <TableHead>Published</TableHead>
+            <TableHead>Comments</TableHead>
+            <TableHead>Views</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -41,11 +42,12 @@ export function QuestionsPage({ questions }: IProps) {
               <TableCell>{question.createdBy.toString()}</TableCell>
               <TableCell>{question.category !== null ? question.category.name : ''}</TableCell>
               <TableCell>{question.moderation}</TableCell>
-              <TableCell>{question.isDraft}</TableCell>
+              <TableCell>{question.isDraft ? 'Yes' : 'No'}</TableCell>
               <TableCell>
                 {question.publishedAt !== null ? question.publishedAt.toLocaleDateString() : ''}
               </TableCell>
               <TableCell>{question.commentCount}</TableCell>
+              <TableCell>{question.totalViews}</TableCell>
             </TableRow>
           ))}
         </TableBody>

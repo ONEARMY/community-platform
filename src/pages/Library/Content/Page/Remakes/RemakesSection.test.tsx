@@ -89,9 +89,9 @@ describe('RemakesSection', () => {
     });
 
     await waitFor(() => {
-      expect(wrapper.getByText('Remakes')).toBeInTheDocument();
+      expect(wrapper.getByText('Remakes (⭐️New!)')).toBeInTheDocument();
       expect(wrapper.getByText('Make this and share with us!')).toBeInTheDocument();
-      expect(wrapper.getByText('Try this tutorial and share with the community.')).toBeInTheDocument();
+      expect(wrapper.getByText("We'd love to see your version and learn from it.")).toBeInTheDocument();
       expect(wrapper.getByText('Upload your remake')).toBeInTheDocument();
       expect(wrapper.container.querySelector('[data-cy=remakes-fetch-error]')).not.toBeInTheDocument();
     });

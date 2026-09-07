@@ -14,3 +14,12 @@ export default meta;
 type Story = StoryObj<typeof Turnstile>;
 
 export const Default: Story = {};
+
+export const Failed: Story = {
+  args: {
+    // Cloudflare's published "always blocks" test sitekey - exercises the
+    // error-callback path and the retry UI it renders.
+    // https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+    siteKey: '2x00000000000000000000AB',
+  },
+};

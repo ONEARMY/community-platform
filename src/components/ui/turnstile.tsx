@@ -13,6 +13,7 @@ declare global {
         },
       ) => string;
       remove: (widgetId: string) => void;
+      reset: (widgetId: string) => void;
     };
   }
 }
@@ -56,6 +57,7 @@ interface TurnstileProps {
 export const Turnstile = ({ siteKey, onVerify, onExpire }: TurnstileProps) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const widgetIdRef = React.useRef<string | null>(null);
+  const [hasError, setHasError] = React.useState(false);
 
   // Callers (e.g. a react-final-form field) commonly pass a new onVerify/onExpire
   // function identity on every render. Reading them via ref keeps the widget's
@@ -76,8 +78,22 @@ export const Turnstile = ({ siteKey, onVerify, onExpire }: TurnstileProps) => {
 
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
-        callback: (token) => onVerifyRef.current(token),
-        'expired-callback': () => onExpireRef.current?.(),
+        callback: (token) => {
+          setHasError(false);
+          onVerifyRef.current(token);
+        },
+        'error-callback': () => {
+          // The widget failed to load/verify (network issue, ad blocker, Cloudflare
+          // outage). Clear any stale token so the field goes back to invalid instead
+          // of silently keeping a submit button enabled with a token that will never
+          // pass server-side verification.
+          setHasError(true);
+          onVerifyRef.current('');
+        },
+        'expired-callback': () => {
+          onVerifyRef.current('');
+          onExpireRef.current?.();
+        },
       });
     });
 
@@ -89,5 +105,24 @@ export const Turnstile = ({ siteKey, onVerify, onExpire }: TurnstileProps) => {
     };
   }, [siteKey]);
 
-  return <div ref={containerRef} />;
+  const handleRetry = () => {
+    if (widgetIdRef.current && window.turnstile) {
+      setHasError(false);
+      window.turnstile.reset(widgetIdRef.current);
+    }
+  };
+
+  return (
+    <div>
+      <div ref={containerRef} />
+      {hasError && (
+        <p className="flex items-center gap-2 text-sm text-destructive">
+          Verification failed to load.
+          <button type="button" onClick={handleRetry} className="underline">
+            Try again
+          </button>
+        </p>
+      )}
+    </div>
+  );
 };

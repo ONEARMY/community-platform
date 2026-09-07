@@ -28,7 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     if (signInResult.error) {
-      console.error(signInResult.error);
+      logger.error(signInResult.error);
       throw validationError('Invalid password');
     }
 

@@ -1,15 +1,16 @@
 import { Button, FieldInput, HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useNavigate } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
-import { Turnstile } from '@/components/ui/turnstile';
+import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -20,8 +21,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const tenantSettings = await new TenantSettingsService(client).get();
+  const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
-  return data(tenantSettings, { headers });
+  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -49,6 +51,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
+  const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
   const navigate = useNavigate();
 
@@ -139,10 +142,7 @@ export default function Index() {
                           <Field name="cf-turnstile-token" validate={required}>
                             {({ input }) => (
                               <>
-                                <Turnstile
-                                  siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? ''}
-                                  onVerify={input.onChange}
-                                />
+                                <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
                                 <input {...input} type="hidden" />
                               </>
                             )}

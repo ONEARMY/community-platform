@@ -20,6 +20,11 @@ declare global {
 const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
 const SCRIPT_ID = 'cf-turnstile-script';
 
+// Cloudflare's published "always passes" test sitekey - used as the default
+// wherever a real sitekey isn't configured (local dev, CI, forks of this project).
+// https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+export const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA';
+
 const loadTurnstileScript = () =>
   new Promise<void>((resolve) => {
     if (window.turnstile) {

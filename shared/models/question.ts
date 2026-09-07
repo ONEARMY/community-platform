@@ -30,7 +30,7 @@ export class DBQuestion implements IDBContentDoc {
   readonly accepted_answer_id?: number | null;
   readonly accepted_answer_date?: string | null;
 
-  readonly profiles: { id: number; display_name: string };
+  readonly profiles: { display_name: string };
 
   readonly description: string;
   readonly images: DBMedia[] | null;

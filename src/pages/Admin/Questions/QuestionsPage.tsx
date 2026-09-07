@@ -35,7 +35,10 @@ export function QuestionsPage({ questions }: IProps) {
         </TableHeader>
         <TableBody>
           {questions.map((question) => (
-            <TableRow key={question.id}>
+            <TableRow
+              key={question.id}
+              className={question.deleted === true ? 'text-muted-foreground bg-gray-100' : ''}
+            >
               <Link to={'/questions/' + question.slug} key={question.id}>
                 <TableCell>{question.title}</TableCell>
               </Link>

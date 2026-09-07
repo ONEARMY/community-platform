@@ -26,7 +26,7 @@ describe('[Polls.Write]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(newsTitle).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField(newsBody);
+    cy.addToRichTextField(newsBody);
 
     cy.step('Add new poll to news');
     cy.get('[data-cy=add-news]').click();
@@ -113,7 +113,7 @@ describe('[Polls.Write]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(newsTitle).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField(newsBody);
+    cy.addToRichTextField(newsBody);
 
     cy.step('Add poll to news');
     cy.get('[data-cy=add-news]').click();

@@ -138,46 +138,51 @@ export const NewsPage = observer(({ news }: IProps) => {
             sx={{
               alignSelf: 'stretch',
               fontFamily: 'body',
-              lineHeight: 2,
+              lineHeight: 1.5,
               a: {
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
               },
               p: {
-                marginBottom: 3,
-              },
-              h1: {
-                lineHeight: 1.2,
-                marginTop: 4,
                 marginBottom: 2,
               },
+              'blockQuote p': {
+                marginBottom: 0,
+              },
               h2: {
+                fontSize: '1.875rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
                 marginTop: 4,
                 marginBottom: 2,
               },
               h3: {
+                fontSize: '1.5rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
                 marginTop: 4,
                 marginBottom: 2,
               },
               h4: {
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
                 marginTop: 4,
                 marginBottom: 2,
               },
               h5: {
-                lineHeight: 1.2,
-                marginTop: 4,
-                marginBottom: 2,
-              },
-              h6: {
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
                 marginTop: 4,
                 marginBottom: 2,
               },
               'ul, ol': {
-                marginBottom: 3,
+                marginBottom: 2,
                 paddingLeft: 8,
               },
               ul: {
@@ -187,7 +192,10 @@ export const NewsPage = observer(({ news }: IProps) => {
                 listStyle: 'decimal',
               },
               li: {
-                marginBottom: 1,
+                marginBottom: 0,
+                '> p': {
+                  marginBottom: 0,
+                },
               },
               blockQuote: {
                 paddingX: 4,
@@ -202,6 +210,16 @@ export const NewsPage = observer(({ news }: IProps) => {
                 maxWidth: '100%',
                 display: 'block',
                 margin: '0 auto',
+              },
+              figure: {
+                margin: 0,
+                marginBottom: 4,
+              },
+              figcaption: {
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                textAlign: 'center',
+                marginTop: 1,
               },
               iframe: {
                 maxHeight: ['300px', '370px', '420px'],

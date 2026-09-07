@@ -1,18 +1,17 @@
-import { insertImage$, usePublisher } from '@mdxeditor/editor';
-import { MediaWithPublicUrl } from 'oa-shared';
+import type { Editor } from '@tiptap/react';
+import { ImageIcon } from 'lucide-react';
+import { Button, ImageInputV2, Loader, Modal } from 'oa-components';
+import type { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from 'src/components/ui/tooltip';
 import { Box, Flex } from 'theme-ui';
-import { Button } from '../Button/Button';
-import { ImageInputV2 } from '../ImageInput/ImageInputV2';
-import { Loader } from '../Loader/Loader';
-import { Modal } from '../Modal/Modal';
 
 interface IProps {
+  editor: Editor;
   imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
 }
 
-export const AddImage = ({ imageUploadHandler }: IProps) => {
-  const insertImage = usePublisher(insertImage$);
+export const AddImage = ({ editor, imageUploadHandler }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,9 +28,7 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
       const mediaFile = await imageUploadHandler(file);
 
       if (mediaFile) {
-        insertImage({
-          src: mediaFile.publicUrl,
-        });
+        editor.chain().focus().setImage({ src: mediaFile.publicUrl }).run();
       } else {
         setError('Failed to upload image. Please try again.');
       }
@@ -50,20 +47,31 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
     setError(errorMsg);
   };
 
+  const close = () => {
+    setIsOpen(false);
+    setError(null);
+  };
+
   return (
     <>
-      <Button
-        small
-        variant="subtle"
-        icon="image"
-        type="button"
-        showIconOnly
-        onClick={() => setIsOpen(true)}
-      >
-        Upload
-      </Button>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              small
+              variant="subtle"
+              type="button"
+              aria-label="Insert image"
+              onClick={() => setIsOpen(true)}
+            />
+          }
+        >
+          <ImageIcon size={16} />
+        </TooltipTrigger>
+        <TooltipContent>Insert image</TooltipContent>
+      </Tooltip>
 
-      <Modal isOpen={isOpen} width={600} onDismiss={() => {}}>
+      <Modal isOpen={isOpen} width={600} onDismiss={close}>
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           {error && <Box sx={{ color: 'error', fontSize: 1 }}>{error}</Box>}
           <Box sx={{ height: '300px' }}>
@@ -73,7 +81,7 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
             {isLoading ? (
               <Loader />
             ) : (
-              <Button variant="secondary" type="button" onClick={() => setIsOpen(false)}>
+              <Button variant="secondary" type="button" onClick={close}>
                 Cancel
               </Button>
             )}

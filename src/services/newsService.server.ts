@@ -27,6 +27,8 @@ export class NewsServiceServer {
        published_at,
        comment_count,
        body,
+       content,
+       content_search_text,
        is_draft,
        moderation,
        slug,

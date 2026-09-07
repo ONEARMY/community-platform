@@ -1,3 +1,8 @@
+// A real YouTube video ID is always exactly 11 of these characters. Validating this
+// (rather than trusting the capture groups below, which only exclude `&`/`?`/`#`/newline)
+// guarantees callers can safely splice the result into an HTML attribute.
+const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
+
 export const extractYouTubeId = (url: string): string | null => {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
@@ -7,7 +12,7 @@ export const extractYouTubeId = (url: string): string | null => {
 
   for (const pattern of patterns) {
     const match = url.match(pattern);
-    if (match) {
+    if (match && YOUTUBE_ID_PATTERN.test(match[1])) {
       return match[1];
     }
   }
@@ -27,9 +32,9 @@ export const processYouTubeLinks = (html: string): string => {
       return `
         <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 16px 0;">
           <iframe 
-            src="https://www.youtube.com/embed/${videoId}" 
+            src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0 auto;"
-            frameborder="0" 
+            frameborder="0"
             allowfullscreen
             title="YouTube video player">
           </iframe>
@@ -84,9 +89,9 @@ export const processStandaloneYouTubeUrls = (html: string): string => {
       const replacement = `
         <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 16px 0;">
           <iframe 
-            src="https://www.youtube.com/embed/${videoId}" 
+            src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0 auto;"
-            frameborder="0" 
+            frameborder="0"
             allowfullscreen
             title="YouTube video player">
           </iframe>

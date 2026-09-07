@@ -45,7 +45,7 @@ export const Layout = (props: LayoutArgs) => {
       <Body
         style={{
           backgroundColor: '#f4f6f7',
-          fontFamily: '"Varela Round", Arial, sans-serif',
+          fontFamily: "'Inter', Arial, sans-serif",
           fontSize: '14px',
           color: '#000000',
           maxWidth: '100%',
@@ -57,13 +57,15 @@ export const Layout = (props: LayoutArgs) => {
             width: '600px',
           }}
         >
-          <Img
-            alt={settings.siteName}
-            height="85px"
-            width="85px"
-            src={settings.siteImage}
-            style={{ margin: '30px auto' }}
-          />
+          <Link href={settings.siteUrl}>
+            <Img
+              alt={settings.siteName}
+              height="85px"
+              width="85px"
+              src={settings.siteImage}
+              style={{ margin: '30px auto' }}
+            />
+          </Link>
           <Section
             style={{
               background: '#fff',

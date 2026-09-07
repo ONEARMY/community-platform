@@ -12,6 +12,7 @@ import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { renderNewsBodyHtml } from 'src/utils/renderNewsBodyHtml';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { ContentServiceServer } from '../services/contentService.server';
 import { PollServiceServer } from '../services/pollService.server';
@@ -93,7 +94,7 @@ async function loadNews(client: SupabaseClient, dbNews: DBNews) {
     }
   }
 
-  const news = News.fromDB(dbNews, tags, heroImage, poll);
+  const news = News.fromDB(dbNews, tags, heroImage, poll, renderNewsBodyHtml);
   news.usefulCount = usefulVotes.count || 0;
   news.subscriberCount = subscribers.count || 0;
 
@@ -110,7 +111,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
   const title = `${news.title} - News - ${loaderData?.tenantSettings?.siteName}`;
   const imageUrl = news.heroImage?.publicUrl;
 
-  return generateTags(title, news.body, imageUrl, { type: 'article' });
+  return generateTags(title, news.summary || '', imageUrl, { type: 'article' });
 });
 
 export default function Index() {

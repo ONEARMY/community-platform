@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { extractYouTubeId, processStandaloneYouTubeUrls, processYouTubeLinks } from './markdown';
+import { extractYouTubeId, processStandaloneYouTubeUrls, processYouTubeLinks } from './youtube';
 
-describe('DisplayMarkdown utils', () => {
+describe('YouTube embed utils', () => {
   describe('extractYouTubeId', () => {
     it('should extract video ID from youtube.com/watch URL', () => {
       const url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';

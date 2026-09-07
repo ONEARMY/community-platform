@@ -1,12 +1,13 @@
 import { CSSProperties } from '@theme-ui/core';
 import type { NotificationDisplay, TenantSettings } from 'oa-shared';
-import { Column, Container, Html, Img, Markdown, Row, Text } from 'react-email';
+import { Column, Container, Img, Row, Text } from 'react-email';
 import { BoxText } from './components/box-text';
 import { Button } from './components/button';
 import { ButtonCallToAction } from './components/button-call-to-action';
 import { Header } from './components/header';
 import { Heading } from './components/heading';
 import { Layout, urlAppend } from './Layout';
+import { renderTiptapEmail } from './renderTiptapEmail';
 
 interface IProps {
   notification: NotificationDisplay;
@@ -59,7 +60,9 @@ export const NewsEmail = (props: IProps) => {
         )}
       </Header>
 
-      <Container style={{ padding: '0 20px 20px 20px', margin: 0, maxWidth: '100%' }}>
+      <Container
+        style={{ padding: '0 20px 20px 20px', lineHeight: 1.5, margin: 0, maxWidth: '100%' }}
+      >
         {isPreview && (
           <BoxText>
             <Text>PREVIEW: if you haven't saved the news as a draft yet, links will not work.</Text>
@@ -89,44 +92,7 @@ export const NewsEmail = (props: IProps) => {
             </table>
           </Column>
         </Row>
-        <Html>
-          <Markdown
-            markdownCustomStyles={{
-              image: { width: '100%', borderRadius: '10px' },
-              p: { lineHeight: '2' },
-              li: { lineHeight: '2' },
-              h1: {
-                lineHeight: '1.2',
-              },
-              h2: {
-                lineHeight: '1.2',
-              },
-              h3: {
-                lineHeight: '1.2',
-              },
-              h4: {
-                lineHeight: '1.2',
-              },
-              h5: {
-                lineHeight: '1.2',
-              },
-              h6: {
-                lineHeight: '1.2',
-              },
-              blockQuote: {
-                paddingLeft: '20px',
-                paddingRight: '20px',
-                paddingTop: '10px',
-                paddingBottom: '10px',
-                backgroundColor: '#f4f8fd',
-                borderLeft: '3px solid #c8d8ec',
-                margin: 0,
-              },
-            }}
-          >
-            {notification.email.body!}
-          </Markdown>
-        </Html>
+        {renderTiptapEmail(notification.email.content!)}
         {notification.tags && notification.tags.length > 0 && (
           <Text style={{ color: '#83ceeb' }}>
             {notification.tags.map((tag) => `#${tag.name}`).join(' ')}

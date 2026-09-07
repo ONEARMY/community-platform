@@ -22,7 +22,7 @@ export const NewsPreviewEmailButton = (props: IProps) => {
 
     const promise = emailPreviewService.send(
       {
-        body: formValues.body || '',
+        body: formValues.body || null,
         category: formValues.category || null,
         heroImage: formValues.heroImage || null,
         isDraft: false,

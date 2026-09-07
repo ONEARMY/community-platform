@@ -247,23 +247,17 @@ describe('[Profile]', () => {
       cy.intercept('GET', '/api/upgrade-badges').as('getUpgradeBadges');
 
       const newUser = generateNewUserDetails();
-      cy.signUpNewUser(newUser);
 
-      cy.step('Set user as workspace to be eligible for PRO badge');
-      cy.visit('/settings');
-      cy.get('[data-cy=tab-Profile]').click();
-      cy.get('[data-cy=workspace]').click();
-      cy.get('[data-cy=username]').clear().type(newUser.username);
-      cy.setSettingImage('avatar', 'userImage');
-      cy.setSettingImage('profile-cover-1', 'coverImages-0');
-      cy.setSettingBasicUserInfo({
+      cy.step('Sign up as a workspace, the only profile type eligible for the PRO badge');
+      cy.signUpNewOrganisation(newUser);
+      cy.fillOrganisationApplicationForm({
+        profileType: 'workspace',
+        username: newUser.username,
         displayName: newUser.username,
         description: 'A workspace profile',
       });
-      cy.saveSettingsForm();
-
-      cy.step('Navigate to own profile');
-      cy.visit(`/u/${newUser.username}`);
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', `/u/${newUser.username}`);
 
       cy.wait(2000);
 

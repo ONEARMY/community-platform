@@ -6,6 +6,7 @@ import { TextInputField } from 'src/common/Form/TextInput.field';
 import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
@@ -20,6 +21,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
+    // Applicants have a session but no profile, so send them to finish the form.
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+        claims.data.claims.sub,
+      );
+
+      if (hasApplication) {
+        return redirect('/organisation-application', { headers });
+      }
+    }
+
     return redirect(getReturnUrl(request), { headers });
   }
 
@@ -74,6 +88,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const profileService = new ProfileServiceServer(client);
 
+  // Organisation applicants have no profile until their application is submitted.
+  // Checked before ensureProfile so a member profile is not auto-created for them.
+  const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+    signInResult.data.user.id,
+  );
+
+  if (hasApplication) {
+    return redirect('/organisation-application', { headers });
+  }
+
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
     await profileService.ensureProfile(signInResult.data.user);
@@ -112,8 +136,13 @@ export default function Index() {
                   <CardHeader>
                     <h1 className="text-2xl font-semibold">Log in</h1>
                     <p className="text-sm text-muted-foreground">
-                      <Link to="/sign-up" data-cy="no-account" className="hover:underline">
-                        Don't have an account? Sign-up here
+                      Don't have an account?{' '}
+                      <Link
+                        to="/sign-up"
+                        data-cy="no-account"
+                        className="underline underline-offset-3 hover:no-underline"
+                      >
+                        Sign-up here
                       </Link>
                     </p>
                   </CardHeader>
@@ -153,7 +182,7 @@ export default function Index() {
                       <Link
                         to="/reset-password"
                         data-cy="lost-password"
-                        className="hover:underline"
+                        className="underline underline-offset-3 hover:no-underline"
                       >
                         Forgotten password?
                       </Link>

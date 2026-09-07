@@ -79,7 +79,9 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "visitor_policy" "json",
     "website" "text",
     "profile_type" bigint,
-    "donations_enabled" boolean DEFAULT false NOT NULL
+    "donations_enabled" boolean DEFAULT false NOT NULL,
+    "moderation" "text",
+    "moderation_feedback" "text"
 );
 
 ALTER TABLE ONLY "public"."profiles"
@@ -103,6 +105,7 @@ CREATE INDEX "profile_tags_relations_profile_tenant_idx" ON "public"."profile_ta
 CREATE INDEX "profiles_firebase_auth_id_idx" ON "public"."profiles" USING "btree" ("firebase_auth_id");
 CREATE INDEX "profiles_tenant_created_at_idx" ON "public"."profiles" USING "btree" ("tenant_id", "created_at" DESC);
 CREATE UNIQUE INDEX "profiles_username_tenant_id_key" ON "public"."profiles" ("username", "tenant_id") WHERE ("username" IS NOT NULL);
+CREATE INDEX "profiles_moderation_idx" ON "public"."profiles" USING "btree" ("tenant_id", "moderation") WHERE ("moderation" IS NOT NULL AND "moderation" <> 'accepted');
 
 ALTER TABLE ONLY "public"."profile_badges_relations"
     ADD CONSTRAINT "profile_badges_relations_profile_badge_id_fkey" FOREIGN KEY ("profile_badge_id") REFERENCES "public"."profile_badges"("id") ON UPDATE CASCADE ON DELETE CASCADE;

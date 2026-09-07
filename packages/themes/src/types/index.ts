@@ -12,6 +12,7 @@ export interface PlatformTheme {
     red: string;
     red2: string;
     softblue: string;
+    softorange: string;
     highlight: string;
     highlightHover: string;
     bluetag: string;

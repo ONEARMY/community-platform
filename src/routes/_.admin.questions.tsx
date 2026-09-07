@@ -29,12 +29,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       modified_at,
       description,
       previous_slugs,
-      profiles(id,display_name)`,
+      profiles(display_name)`,
     )
     .order('published_at', { ascending: true });
 
   const questions = (data || []).map((question) =>
-    Question.fromDB(question as DBQuestion, question.tags, question.images),
+    Question.fromDB(question as unknown as DBQuestion, question.tags, question.images),
   );
 
   return { questions };

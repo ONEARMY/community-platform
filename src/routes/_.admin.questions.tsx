@@ -13,7 +13,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data } = await client
     .from('questions')
     .select(
-      'title,slug,created_by,category,tags,moderation,is_draft,published_at,comment_count,deleted,total_views,id,images',
+      `title,
+      slug,
+      created_by,
+      category,tags,
+      moderation,
+      is_draft,
+      published_at,
+      comment_count,
+      deleted,
+      total_views,
+      id,
+      images,
+      created_at,
+      modified_at,
+      description,
+      previous_slugs,
+      profiles(id,display_name)`,
     )
     .order('published_at', { ascending: true });
 

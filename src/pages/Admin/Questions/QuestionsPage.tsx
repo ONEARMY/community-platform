@@ -39,7 +39,7 @@ export function QuestionsPage({ questions }: IProps) {
               <Link to={'/questions/' + question.slug} key={question.id}>
                 <TableCell>{question.title}</TableCell>
               </Link>
-              <TableCell>{question.createdBy.toString()}</TableCell>
+              <TableCell>{question.displayName}</TableCell>
               <TableCell>{question.category !== null ? question.category.name : ''}</TableCell>
               <TableCell>{question.moderation}</TableCell>
               <TableCell>{question.isDraft ? 'Yes' : 'No'}</TableCell>

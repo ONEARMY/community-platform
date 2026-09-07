@@ -30,6 +30,8 @@ export class DBQuestion implements IDBContentDoc {
   readonly accepted_answer_id?: number | null;
   readonly accepted_answer_date?: string | null;
 
+  readonly profiles: { id: number; display_name: string };
+
   readonly description: string;
   readonly images: DBMedia[] | null;
 
@@ -81,6 +83,8 @@ export class Question implements IContentDoc {
   acceptedAnswerId?: number | null;
   acceptedAnswerDate?: Date | null;
 
+  displayName: string;
+
   description: string;
   images: Image[] | null;
 
@@ -113,6 +117,7 @@ export class Question implements IContentDoc {
       usefulCount: obj.useful_count || 0,
       acceptedAnswerId: obj.accepted_answer_id,
       acceptedAnswerDate: obj.accepted_answer_date ? new Date(obj.accepted_answer_date) : null,
+      displayName: obj.profiles?.display_name,
     });
   }
 }

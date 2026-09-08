@@ -11,7 +11,6 @@ export class DBQuestion implements IDBContentDoc {
   readonly id: number;
   is_draft: boolean;
   readonly created_at: Date;
-  readonly moderation: string;
   readonly modified_at: Date | null;
   readonly published_at: Date | null;
   readonly author?: DBAuthor;
@@ -29,8 +28,6 @@ export class DBQuestion implements IDBContentDoc {
   readonly useful_count?: number;
   readonly accepted_answer_id?: number | null;
   readonly accepted_answer_date?: string | null;
-
-  readonly profiles: { display_name: string };
 
   readonly description: string;
   readonly images: DBMedia[] | null;
@@ -60,16 +57,24 @@ export class DBQuestion implements IDBContentDoc {
   }
 }
 
+export class DBAdminQuestion extends DBQuestion {
+  readonly moderation: string;
+  readonly profiles: { display_name: string };
+
+  constructor(question: DBAdminQuestion) {
+    super(question);
+    Object.assign(this, question);
+  }
+}
+
 export class Question implements IContentDoc {
   id: number;
   author: Author | null;
   category: Category | null;
   commentCount: number;
   createdAt: Date;
-  createdBy: Number;
   deleted: boolean;
   isDraft: boolean;
-  moderation: string;
   modifiedAt: Date | null;
   previousSlugs: string[];
   publishedAt: Date | null;
@@ -83,8 +88,6 @@ export class Question implements IContentDoc {
   acceptedAnswerId?: number | null;
   acceptedAnswerDate?: Date | null;
 
-  displayName: string;
-
   description: string;
   images: Image[] | null;
 
@@ -94,6 +97,44 @@ export class Question implements IContentDoc {
 
   static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
     return new Question({
+      id: obj.id,
+      author: obj.author ? Author.fromDB(obj.author) : null,
+      category: obj.category ? Category.fromDB(obj.category) : null,
+      createdAt: new Date(obj.created_at),
+      commentCount: obj.comment_count || 0,
+      deleted: obj.deleted || false,
+      description: obj.description,
+      images: images || [],
+      isDraft: obj.is_draft || false,
+      modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      previousSlugs: obj.previous_slugs,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
+      slug: obj.slug,
+      subscriberCount: obj.subscriber_count || 0,
+      tagIds: obj.tags,
+      tags: tags,
+      title: obj.title,
+      totalViews: obj.total_views || 0,
+      usefulCount: obj.useful_count || 0,
+      acceptedAnswerId: obj.accepted_answer_id,
+      acceptedAnswerDate: obj.accepted_answer_date ? new Date(obj.accepted_answer_date) : null,
+    });
+  }
+}
+
+export class AdminQuestion extends Question {
+  createdBy: Number | null;
+  moderation: string | null;
+
+  AuthorDisplayName: string | null;
+
+  constructor(question: AdminQuestion) {
+    super(question);
+    Object.assign(this, question);
+  }
+
+  static fromDB(obj: DBAdminQuestion, tags: Tag[], images?: Image[]) {
+    return new AdminQuestion({
       id: obj.id,
       author: obj.author ? Author.fromDB(obj.author) : null,
       category: obj.category ? Category.fromDB(obj.category) : null,
@@ -117,7 +158,7 @@ export class Question implements IContentDoc {
       usefulCount: obj.useful_count || 0,
       acceptedAnswerId: obj.accepted_answer_id,
       acceptedAnswerDate: obj.accepted_answer_date ? new Date(obj.accepted_answer_date) : null,
-      displayName: obj.profiles?.display_name,
+      AuthorDisplayName: obj.profiles?.display_name,
     });
   }
 }

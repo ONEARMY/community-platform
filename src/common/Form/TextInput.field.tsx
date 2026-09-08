@@ -8,7 +8,7 @@ import type { FieldProps } from './types';
 export const TextInputField = ({ input, meta, className, ...rest }: FieldProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const isPassword = input.type === 'password';
-  const showError = meta.error && meta.touched;
+  const showError = Boolean(meta.error && meta.touched);
 
   return (
     <div className="flex flex-col gap-1">

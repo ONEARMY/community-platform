@@ -1,12 +1,13 @@
 import { HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
 import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -14,6 +15,7 @@ import { required } from 'src/utils/validators';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -24,8 +26,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const tenantSettings = await new TenantSettingsService(client).get();
+  const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
-  return data(tenantSettings, { headers });
+  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -34,10 +37,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signInResult = await client.auth.signInWithPassword({
     email,
     password,
+    options: { captchaToken },
   });
 
   if (signInResult.error) {
@@ -96,6 +101,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
+  const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   return (
@@ -158,6 +164,15 @@ export default function Index() {
                         Forgotten password?
                       </Link>
                     </p>
+
+                    <Field name="cf-turnstile-token" validate={required}>
+                      {({ input }) => (
+                        <>
+                          <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                          <input {...input} type="hidden" />
+                        </>
+                      )}
+                    </Field>
 
                     <Button
                       data-cy="submit"

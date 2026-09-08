@@ -5,7 +5,6 @@ import type { FieldRenderProps } from 'react-final-form';
 import { TIPTAP_EXTENSIONS } from 'src/utils/tiptapExtensions';
 import { Box, Flex, Text } from 'theme-ui';
 import { handleImagePaste } from './handleImagePaste';
-import { ImageBubbleMenu } from './ImageBubbleMenu';
 import { LinkBubbleMenu } from './LinkBubbleMenu';
 import { Toolbar } from './Toolbar';
 
@@ -129,7 +128,6 @@ export const FieldRichText = (props: IProps) => {
       >
         {editor && <Toolbar editor={editor} imageUploadHandler={imageUploadHandler} />}
         <Box sx={{ padding: 3 }}>
-          {editor && <ImageBubbleMenu editor={editor} />}
           {editor && <LinkBubbleMenu editor={editor} />}
           <EditorContent editor={editor} />
         </Box>

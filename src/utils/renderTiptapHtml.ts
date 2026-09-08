@@ -23,12 +23,7 @@ const escapeAttr = (text: string): string => escapeHtml(text).replace(/"/g, '&qu
  * instead. Keep in sync with the `Image` extension override in `tiptapExtensions.ts`,
  * which applies the same mapping for the editor's own live (browser) rendering.
  */
-const IMAGE_ALIGN_STYLE = 'display:block;margin:10px auto;';
-
-// Width is only ever set by the editor's own resize presets (see IMAGE_WIDTH_PRESETS in
-// tiptapExtensions.ts), but validate the shape anyway before splicing it into a style string.
-const imageWidthStyle = (width: unknown): string =>
-  typeof width === 'string' && /^\d{1,3}%$/.test(width) ? `width:${width};` : '';
+const IMAGE_ALIGN_STYLE = 'display:block;width:100%;margin:10px auto;';
 
 // `content` is untrusted (it's stored JSON, not necessarily produced by the editor's own
 // AddYoutube flow), so validate the shape of a YouTube video ID before splicing it into a URL.
@@ -113,11 +108,10 @@ const renderBlock = (node: JSONContent): string => {
       const caption = node.attrs?.caption as string | undefined;
 
       if (!caption) {
-        const style = `${IMAGE_ALIGN_STYLE}${imageWidthStyle(node.attrs?.width)}`;
-        return `<img src="${src}" alt="${alt}"${style ? ` style="${style}"` : ''}>`;
+        return `<img src="${src}" alt="${alt}" style="${IMAGE_ALIGN_STYLE}">`;
       }
 
-      const figureStyle = `margin:0;${IMAGE_ALIGN_STYLE}${imageWidthStyle(node.attrs?.width)}`;
+      const figureStyle = `margin:0;${IMAGE_ALIGN_STYLE}`;
       return `<figure style="${figureStyle}"><img src="${src}" alt="${alt}" style="display:block;width:100%;"><figcaption style="text-align:center;font-size:0.875rem;color:#6b7280;line-height:1.5;margin-top:5px;">${escapeHtml(caption)}</figcaption></figure>`;
     }
     case 'youtube': {

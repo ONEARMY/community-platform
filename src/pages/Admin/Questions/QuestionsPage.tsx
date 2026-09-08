@@ -1,4 +1,4 @@
-import type { Question } from 'oa-shared';
+import type { AdminQuestion } from 'oa-shared';
 import { Link } from 'react-router';
 import {
   Table,
@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 
 interface IProps {
-  questions: Question[];
+  questions: AdminQuestion[];
 }
 
 export function QuestionsPage({ questions }: IProps) {
@@ -42,7 +42,7 @@ export function QuestionsPage({ questions }: IProps) {
               <Link to={'/questions/' + question.slug} key={question.id}>
                 <TableCell>{question.title}</TableCell>
               </Link>
-              <TableCell>{question.displayName}</TableCell>
+              <TableCell>{question.AuthorDisplayName}</TableCell>
               <TableCell>{question.category !== null ? question.category.name : ''}</TableCell>
               <TableCell>{question.moderation}</TableCell>
               <TableCell>{question.isDraft ? 'Yes' : 'No'}</TableCell>

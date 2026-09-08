@@ -1,5 +1,5 @@
 import type { DBAdminQuestion } from 'oa-shared';
-import { AdminQuestion, Question } from 'oa-shared';
+import { AdminQuestion } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { useLoaderData } from 'react-router';
 import { QuestionsPage } from 'src/pages/Admin/Questions/QuestionsPage';

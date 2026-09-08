@@ -1,5 +1,5 @@
-import type { DBQuestion } from 'oa-shared';
-import { Question } from 'oa-shared';
+import type { DBAdminQuestion } from 'oa-shared';
+import { AdminQuestion, Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { useLoaderData } from 'react-router';
 import { QuestionsPage } from 'src/pages/Admin/Questions/QuestionsPage';
@@ -34,7 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .order('published_at', { ascending: true });
 
   const questions = (data || []).map((question) =>
-    Question.fromDB(question as unknown as DBQuestion, question.tags, question.images),
+    AdminQuestion.fromDB(question as unknown as DBAdminQuestion, question.tags, question.images),
   );
 
   return { questions };

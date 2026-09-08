@@ -33,7 +33,9 @@ type CreateSupporterAccountParams = {
   stripeCustomerId: string;
 };
 
-type CreateSupporterAccountResponse = { ok: true } | { ok: false; error: string };
+type CreateSupporterAccountResponse =
+  | { ok: true; signInTicket: string }
+  | { ok: false; error: string };
 
 type LinkExistingAccountParams = {
   email: string;
@@ -41,7 +43,9 @@ type LinkExistingAccountParams = {
   stripeCustomerId: string;
 };
 
-type LinkExistingAccountResponse = { ok: true } | { ok: false; error: string };
+type LinkExistingAccountResponse =
+  | { ok: true; signInTicket: string }
+  | { ok: false; error: string };
 
 type SetPasswordParams = {
   email: string;
@@ -49,7 +53,7 @@ type SetPasswordParams = {
   password: string;
 };
 
-type SetPasswordResponse = { ok: true } | { ok: false; error: string };
+type SetPasswordResponse = { ok: true; signInTicket: string } | { ok: false; error: string };
 
 const getSubscriptionStatus = async (): Promise<SubscriptionStatus | null> => {
   try {
@@ -128,7 +132,7 @@ const createSupporterAccount = async (
       return { ok: false, error: data.error || 'Something went wrong.' };
     }
 
-    return { ok: true };
+    return { ok: true, signInTicket: data.signInTicket };
   } catch (error) {
     logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };
@@ -151,7 +155,7 @@ const linkExistingAccount = async (
       return { ok: false, error: data.error || 'Something went wrong.' };
     }
 
-    return { ok: true };
+    return { ok: true, signInTicket: data.signInTicket };
   } catch (error) {
     logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };
@@ -172,7 +176,7 @@ const setPassword = async (params: SetPasswordParams): Promise<SetPasswordRespon
       return { ok: false, error: data.error || 'Something went wrong.' };
     }
 
-    return { ok: true };
+    return { ok: true, signInTicket: data.signInTicket };
   } catch (error) {
     logger.error(error);
     return { ok: false, error: 'Network error. Please try again.' };

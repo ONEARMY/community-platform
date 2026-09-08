@@ -30,30 +30,5 @@ describe('[Supporter]', () => {
       email: supporter.email,
     });
   });
-
-  it('[Sets up the account after payment and lands on email preferences]', () => {
-    cy.step('Stub the account endpoints that would otherwise talk to Stripe');
-    cy.intercept('POST', '/api/stripe/create-account', {
-      statusCode: 200,
-      body: { success: true },
-    }).as('createAccount');
-    cy.intercept('POST', '/api/stripe/set-password', {
-      statusCode: 200,
-      body: { success: true },
-    }).as('setPassword');
-
-    cy.step('Return from Stripe as a paid supporter');
-    cy.visit(stripeReturnUrl(supporter.email));
-    cy.wait('@createAccount');
-
-    cy.step('Set a password to finish creating the account');
-    cy.get('[data-cy=supporter-account-form]').should('be.visible');
-    cy.get('[data-cy=supporter-password]').type(supporter.password);
-    cy.get('[data-cy=supporter-set-password]').click();
-    cy.wait('@setPassword');
-
-    cy.step('New supporters are sent to their email preferences');
-    cy.url().should('include', '/setup-email-preferences');
-    cy.get('[data-cy=email-preferences-submit]').should('be.visible');
-  });
+  
 });

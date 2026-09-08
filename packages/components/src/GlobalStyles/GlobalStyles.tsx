@@ -11,14 +11,6 @@ export const GlobalStyles = css`
     min-height: 100vh;
   }
 
-  a {
-    text-decoration: none;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
   .beta-tester-feature {
     border: 4px dashed ${commonStyles.colors.betaGreen};
   }
@@ -33,22 +25,6 @@ export const GlobalStyles = css`
     background-color: ${commonStyles.colors.white};
   }
 
-  /***** Fix for Algolia search Icon *******/
-  .ap-icon-pin {
-    display: none;
-  }
-
-  /* Screen-reader text only - Taken from bootstrap 4 */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.4);
   }

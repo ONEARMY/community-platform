@@ -3,7 +3,7 @@ import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.se
 
 const cache = new Keyv<string>({ ttl: 3600000 }); // ttl: 60 minutes
 
-export const getSecret = async (name: string): Promise<string> => {
+export const getSecret = async (name: string, fallback?: string): Promise<string> => {
   const tenantId = process.env.TENANT_ID;
   if (!tenantId) {
     throw new Error('TENANT_ID environment variable is not set');
@@ -28,6 +28,10 @@ export const getSecret = async (name: string): Promise<string> => {
   if (envValue) {
     cache.set(prefixedName, envValue);
     return envValue;
+  }
+
+  if (fallback !== undefined) {
+    return fallback;
   }
 
   throw new Error(`Secret "${prefixedName}" not found in vault or environment`);

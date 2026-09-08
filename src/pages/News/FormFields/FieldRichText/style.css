@@ -1,0 +1,16 @@
+.ProseMirror {
+  min-height: 150px;
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.field-rich-text-error .ProseMirror {
+  border-color: red;
+}

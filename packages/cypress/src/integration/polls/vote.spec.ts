@@ -21,7 +21,7 @@ describe('[Polls.Vote]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(newsTitle).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField(newsBody);
+    cy.addToRichTextField(newsBody);
 
     cy.get('[data-cy=add-news]').click();
     cy.get('[data-cy=field-poll-title]').clear().type(pollTitle).blur({ force: true });

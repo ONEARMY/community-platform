@@ -13,14 +13,14 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy=email]').click();
       cy.get('[data-cy=email]').clear();
       cy.get('[data-cy=email]').type('a');
-      cy.get('[data-cy=consent]').uncheck().check();
+      cy.get('[data-cy=consent]').click({ force: true });
       cy.contains(FRIENDLY_MESSAGES['auth/invalid-email']).should('be.visible');
 
       cy.step('Password is too short');
       cy.get('[data-cy=password]').click();
       cy.get('[data-cy=password]').clear();
       cy.get('[data-cy=password]').type('a');
-      cy.get('[data-cy=consent]').uncheck().check();
+      cy.get('[data-cy=consent]').click({ force: true });
       cy.contains(FRIENDLY_MESSAGES['sign-up/password-short']).should('be.visible');
 
       cy.step('Password confirmation does not match');
@@ -30,7 +30,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy=confirm-password]').click();
       cy.get('[data-cy=confirm-password]').clear();
       cy.get('[data-cy=confirm-password]').type('b');
-      cy.get('[data-cy=consent]').uncheck().check();
+      cy.get('[data-cy=consent]').click({ force: true });
       cy.contains(FRIENDLY_MESSAGES['sign-up/password-mismatch']).should('be.visible');
     });
   });

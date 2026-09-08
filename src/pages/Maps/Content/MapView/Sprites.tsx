@@ -1,11 +1,9 @@
 import { divIcon, point } from 'leaflet';
 import { MarkerCluster } from 'leaflet.markercluster';
 import type { MapPin } from 'oa-shared';
-import { useEffect, useRef } from 'react';
 import clusterIcon from 'src/assets/icons/map-cluster.svg';
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg';
 
-import { logger } from 'src/logger';
 import './sprites.css';
 
 /**
@@ -14,34 +12,13 @@ import './sprites.css';
  * such as total pins. Currently none used, but retaining
  */
 export const createClusterIcon = () => {
-  const iconAsStringRef = useRef<string>('');
-
-  useEffect(() => {
-    // Resolve CSS variable to actual hex for SVG attribute replacement
-    // (SVG attributes like fill="#..." don't support CSS variables)
-    const resolved = getComputedStyle(document.documentElement)
-      .getPropertyValue('--color-primary')
-      .trim();
-
-    fetch(clusterIcon)
-      .then((response) => response.text())
-      .then((data) => {
-        iconAsStringRef.current = data.replaceAll(
-          /#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/g,
-          resolved,
-        );
-      })
-      .catch((fetchError) => logger.error(fetchError));
-  }, []);
-
   return (cluster: MarkerCluster) => {
     const className = ['icon'];
-    let icon: any;
+    let icon: any = '';
     let outlineSize: number = 0;
     const clusterChildCount: number = cluster.getChildCount();
     if (clusterChildCount > 1) {
       className.push('icon-cluster-many');
-      icon = iconAsStringRef.current;
       // Calcute Outline CSS
       if (clusterChildCount > 49) {
         outlineSize = 24;

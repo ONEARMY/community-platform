@@ -1,14 +1,16 @@
 import { Button, FieldInput, HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useNavigate } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
+import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -19,8 +21,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const tenantSettings = await new TenantSettingsService(client).get();
+  const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
-  return data(tenantSettings, { headers });
+  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -30,9 +33,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
   const emailRedirectUrl = `${protocol}//${url.host}/update-password`;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   await client.auth.resetPasswordForEmail(formData.get('email') as string, {
     redirectTo: emailRedirectUrl,
+    captchaToken,
   });
 
   // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
@@ -46,6 +51,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
+  const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
   const navigate = useNavigate();
 
@@ -132,6 +138,15 @@ export default function Index() {
                               validate={required}
                             />
                           </Flex>
+
+                          <Field name="cf-turnstile-token" validate={required}>
+                            {({ input }) => (
+                              <>
+                                <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                                <input {...input} type="hidden" />
+                              </>
+                            )}
+                          </Field>
 
                           <Flex>
                             <Button

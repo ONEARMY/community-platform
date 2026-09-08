@@ -119,6 +119,7 @@ export type QuestionFormData = {
   isDraft: boolean | null;
   tags: number[] | null;
   title: string;
+  website?: string;
 };
 
 export type QuestionDTO = {

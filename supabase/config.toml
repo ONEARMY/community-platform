@@ -117,6 +117,14 @@ enable_anonymous_sign_ins = false
 enable_manual_linking = false
 #signing_keys_path = "./signing_key.json"
 
+[auth.captcha]
+enabled = true
+provider = "turnstile"
+# Cloudflare's published "always passes" test secret - safe to commit, matches the
+# test sitekey used by the app's default .env / Cypress config.
+# https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+secret = "1x0000000000000000000000000000000AA"
+
 [auth.email]
 # Allow/disallow new user signups via email to your project.
 enable_signup = true

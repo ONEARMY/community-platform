@@ -6,6 +6,7 @@ import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
+import { renderNewsBodyHtml } from 'src/utils/renderNewsBodyHtml';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -45,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ? new StorageServiceServer(client).getPublicUrls([x.hero_image], IMAGE_SIZES.GALLERY)
       : [];
 
-    return News.fromDB(x, [], images[0]);
+    return News.fromDB(x, [], images[0], null, renderNewsBodyHtml);
   });
 
   return Response.json({ items }, { headers });

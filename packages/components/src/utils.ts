@@ -66,6 +66,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   usefulCount: faker.number.int(20),
   body: faker.word.words(50),
   bodyHtml: faker.word.words(50),
+  content: null,
   heroImage: null,
   isDraft: false,
   profileBadges: null,
@@ -82,6 +83,7 @@ export const fakeDisplayNotification = (
   contentType: 'comments',
   email: {
     body: undefined,
+    content: null,
     buttonLabel: 'See the full discussion',
     displayDate: faker.date.past().toDateString(),
     preview: 'Jeff has left a new comment',

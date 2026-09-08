@@ -25,7 +25,7 @@ jobs:
             await github.rest.issues.removeLabel({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: github.event.number,
+              issue_number: context.payload.number,
               name: 'Review allow-preview ✅',
             });
         env:

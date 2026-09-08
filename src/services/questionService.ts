@@ -3,13 +3,14 @@ import { DBMedia, DBQuestion, Question } from 'oa-shared';
 import { createFormData } from './formDataHelper';
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
-  const body = createFormData<QuestionDTO>({
+  const body = createFormData<QuestionDTO & { website?: string }>({
     title: question.title,
     description: question.description,
     category: Number(question.category?.value) || null,
     images: question.images?.length ? question.images.map(DBMedia.fromPublicMedia) : null,
     isDraft: question.isDraft,
     tags: question.tags,
+    website: question.website,
   });
 
   const response =

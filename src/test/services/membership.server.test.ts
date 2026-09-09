@@ -10,7 +10,7 @@ vi.mock('src/services/discordService.server');
 
 const MEMBERSHIP_WEBHOOK = 'https://discord.com/api/webhooks/membership';
 
-const membership = membershipNotifications('Precious Plastic');
+const membership = membershipNotifications();
 
 const lastMessage = () => vi.mocked(discordServiceServer.postWebhookRequest).mock.calls[0][0];
 
@@ -43,20 +43,21 @@ describe('membershipNotifications', () => {
     });
   });
 
-  describe('tenant labelling', () => {
-    it('prefixes the message with the tenant label', () => {
+  describe('subscriptionCancelled', () => {
+    it('posts the message to the membership webhook', () => {
       membership.subscriptionCancelled('Michael');
 
       expect(discordServiceServer.postWebhookRequest).toHaveBeenCalledWith(
-        '[Precious Plastic] Michael canceled their support',
+        'Michael canceled their support',
         MEMBERSHIP_WEBHOOK,
       );
     });
 
-    it('uses whatever label it is given', () => {
-      membershipNotifications('some-new-tenant').subscriptionCancelled('Michael');
+    // Each tenant posts through its own Discord webhook, whose bot name names the tenant
+    it('does not label the tenant', () => {
+      membership.subscriptionCancelled('Michael');
 
-      expect(lastMessage()).toBe('[some-new-tenant] Michael canceled their support');
+      expect(lastMessage()).not.toContain('[');
     });
   });
 
@@ -66,23 +67,19 @@ describe('membershipNotifications', () => {
     it('names the tier and the amount, and links to the profile', () => {
       membership.newSupporter('Michael', 'Legend', '€10', profileUrl);
 
-      expect(lastMessage()).toBe(
-        `[Precious Plastic] Michael is now a new Legend Supporter (€10)\n<${profileUrl}>`,
-      );
+      expect(lastMessage()).toBe(`Michael is now a new Legend Supporter (€10)\n<${profileUrl}>`);
     });
 
     it('omits the tier when it cannot be resolved', () => {
       membership.newSupporter('Michael', null, '€10', profileUrl);
 
-      expect(lastMessage()).toBe(
-        `[Precious Plastic] Michael is now a new Supporter (€10)\n<${profileUrl}>`,
-      );
+      expect(lastMessage()).toBe(`Michael is now a new Supporter (€10)\n<${profileUrl}>`);
     });
 
-    it('omits the link when the payment is not tied to a profile', () => {
+    it('omits the link when given nothing to link to', () => {
       membership.newSupporter('Michael', 'Legend', '€10', null);
 
-      expect(lastMessage()).toBe('[Precious Plastic] Michael is now a new Legend Supporter (€10)');
+      expect(lastMessage()).toBe('Michael is now a new Legend Supporter (€10)');
     });
   });
 
@@ -90,23 +87,19 @@ describe('membershipNotifications', () => {
     it('describes a monthly plan', () => {
       membership.recurringPayment('Michael', 'Legend', 'month', '€10');
 
-      expect(lastMessage()).toBe(
-        '[Precious Plastic] Michael paid their monthly Legend membership (€10)',
-      );
+      expect(lastMessage()).toBe('Michael paid their monthly Legend membership (€10)');
     });
 
     it('describes a yearly plan', () => {
       membership.recurringPayment('Michael', 'Legend', 'year', '€100');
 
-      expect(lastMessage()).toBe(
-        '[Precious Plastic] Michael paid their yearly Legend membership (€100)',
-      );
+      expect(lastMessage()).toBe('Michael paid their yearly Legend membership (€100)');
     });
 
     it('drops the unknown parts rather than guessing', () => {
       membership.recurringPayment('Michael', null, null, '€10');
 
-      expect(lastMessage()).toBe('[Precious Plastic] Michael paid their membership (€10)');
+      expect(lastMessage()).toBe('Michael paid their membership (€10)');
     });
   });
 
@@ -117,7 +110,7 @@ describe('membershipNotifications', () => {
       membership.paymentFailed('Michael', 'Legend', '€10', stripeUrl);
 
       expect(lastMessage()).toBe(
-        `[Precious Plastic] Michael had a failed payment for their Legend membership (€10)\n<${stripeUrl}>`,
+        `Michael had a failed payment for their Legend membership (€10)\n<${stripeUrl}>`,
       );
     });
 
@@ -132,9 +125,7 @@ describe('membershipNotifications', () => {
     it('reports an un-cancelled subscription', () => {
       membership.subscriptionResumed('Michael');
 
-      expect(lastMessage()).toBe(
-        '[Precious Plastic] Michael changed their mind and resumed their support',
-      );
+      expect(lastMessage()).toBe('Michael changed their mind and resumed their support');
     });
   });
 
@@ -142,9 +133,7 @@ describe('membershipNotifications', () => {
     it('names both tiers', () => {
       membership.tierChanged('Michael', 'Legend', 'Hero');
 
-      expect(lastMessage()).toBe(
-        '[Precious Plastic] Michael changed their membership from Legend to Hero',
-      );
+      expect(lastMessage()).toBe('Michael changed their membership from Legend to Hero');
     });
   });
 

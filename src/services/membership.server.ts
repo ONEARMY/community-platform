@@ -22,7 +22,7 @@ export const supporterName = (
 export const supporterProfileUrl = (siteUrl: string, profileId: number | null) =>
   profileId ? `${siteUrl}/u/${profileId}` : null;
 
-export const membershipNotifications = (tenantLabel: string) => {
+export const membershipNotifications = () => {
   const post = (message: string) => {
     const webhookUrl = process.env.DISCORD_MEMBERSHIP_WEBHOOK_URL;
 
@@ -30,13 +30,13 @@ export const membershipNotifications = (tenantLabel: string) => {
       return;
     }
 
-    discordServiceServer.postWebhookRequest(`[${tenantLabel}] ${message}`, webhookUrl);
+    discordServiceServer.postWebhookRequest(message, webhookUrl);
   };
 
   return {
-    newSupporter(name: string, tierName: string | null, amount: string, profileUrl: string | null) {
+    newSupporter(name: string, tierName: string | null, amount: string, url: string | null) {
       const description = tierName ? `a new ${tierName} Supporter` : 'a new Supporter';
-      const link = profileUrl ? `\n<${profileUrl}>` : '';
+      const link = url ? `\n<${url}>` : '';
 
       post(`${name} is now ${description} (${amount})${link}`);
     },

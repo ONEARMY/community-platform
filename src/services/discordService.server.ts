@@ -1,8 +1,8 @@
 import { logger } from 'src/logger';
 
-const postWebhookRequest = async (message: string) => {
+const postWebhookRequest = async (message: string, webhookUrl?: string) => {
   try {
-    const discordWebhookUrl = process.env.DISCORD_WEBHOOK_URL as string;
+    const discordWebhookUrl = webhookUrl ?? (process.env.DISCORD_WEBHOOK_URL as string);
 
     if (!discordWebhookUrl) {
       return;
@@ -15,6 +15,7 @@ const postWebhookRequest = async (message: string) => {
       },
       body: JSON.stringify({
         content: message,
+        allowed_mentions: { parse: [] },
       }),
     });
   } catch (error) {

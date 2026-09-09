@@ -19,7 +19,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
 
   const [showBanModal, setShowBanModal] = useState(false);
 
-  const isViewingOwnProfile = activeUser?.username === profile?.username;
+  const isViewingOwnProfile = !!activeUser && activeUser.id === profile.id;
   const hasPermission = isUserAuthorized([UserRole.ADMIN, UserRole.MODERATOR]);
 
   // Prevent banning users with ADMIN, EDITOR, or MODERATOR roles
@@ -45,7 +45,7 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
   const tooltipId = 'ban-user-button-tooltip';
 
   const handleBanUser = async () => {
-    if (!profile?.id || !profile?.username) {
+    if (!profile?.id) {
       return;
     }
 

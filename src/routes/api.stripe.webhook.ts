@@ -1,6 +1,7 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
+import { notifyMembershipEvent } from 'src/services/membershipNotifier.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
@@ -103,6 +104,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       default:
         break;
     }
+
+    const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+
+    await notifyMembershipEvent(event, stripeService, tenantId, siteUrl);
 
     return new Response('OK', { status: 200 });
   } catch (error) {

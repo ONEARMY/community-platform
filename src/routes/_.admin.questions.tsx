@@ -24,17 +24,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       deleted,
       total_views,
       id,
-      images,
-      created_at,
-      modified_at,
-      description,
-      previous_slugs,
       profiles(display_name)`,
     )
     .order('published_at', { ascending: true });
 
   const questions = (data || []).map((question) =>
-    AdminQuestion.fromDB(question as unknown as DBAdminQuestion, question.tags, question.images),
+    AdminQuestion.fromDB(question as unknown as DBAdminQuestion),
   );
 
   return { questions };

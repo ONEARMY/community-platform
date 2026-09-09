@@ -57,12 +57,20 @@ export class DBQuestion implements IDBContentDoc {
   }
 }
 
-export class DBAdminQuestion extends DBQuestion {
+export class DBAdminQuestion {
+  readonly id: number;
+  is_draft: boolean;
+  readonly published_at: Date | null;
+  readonly comment_count?: number;
+  readonly category: DBCategory | null;
+  readonly deleted: boolean | null;
+  readonly title: string;
+  readonly total_views?: number;
+  readonly slug: string;
   readonly moderation: string;
   readonly profiles: { display_name: string };
 
   constructor(question: DBAdminQuestion) {
-    super(question);
     Object.assign(this, question);
   }
 }
@@ -122,42 +130,36 @@ export class Question implements IContentDoc {
   }
 }
 
-export class AdminQuestion extends Question {
-  createdBy: Number | null;
+export class AdminQuestion {
+  id: number;
+  category: Category | null;
+  commentCount: number;
+  deleted: boolean;
+  isDraft: boolean;
+  publishedAt: Date | null;
+  slug: string;
+  title: string;
+  totalViews: number;
   moderation: string | null;
 
   authorDisplayName: string | null;
 
   constructor(question: AdminQuestion) {
-    super(question);
     Object.assign(this, question);
   }
 
-  static fromDB(obj: DBAdminQuestion, tags: Tag[], images?: Image[]) {
+  static fromDB(obj: DBAdminQuestion) {
     return new AdminQuestion({
       id: obj.id,
-      author: obj.author ? Author.fromDB(obj.author) : null,
       category: obj.category ? Category.fromDB(obj.category) : null,
-      createdAt: new Date(obj.created_at),
       commentCount: obj.comment_count || 0,
-      createdBy: obj.created_by || null,
       deleted: obj.deleted || false,
-      description: obj.description,
-      images: images || [],
       isDraft: obj.is_draft || false,
       moderation: obj.moderation,
-      modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
-      previousSlugs: obj.previous_slugs,
       publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       slug: obj.slug,
-      subscriberCount: obj.subscriber_count || 0,
-      tagIds: obj.tags,
-      tags: tags,
       title: obj.title,
       totalViews: obj.total_views || 0,
-      usefulCount: obj.useful_count || 0,
-      acceptedAnswerId: obj.accepted_answer_id,
-      acceptedAnswerDate: obj.accepted_answer_date ? new Date(obj.accepted_answer_date) : null,
       authorDisplayName: obj.profiles?.display_name,
     });
   }

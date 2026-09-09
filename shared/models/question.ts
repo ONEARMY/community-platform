@@ -57,24 +57,6 @@ export class DBQuestion implements IDBContentDoc {
   }
 }
 
-export class DBAdminQuestion {
-  readonly id: number;
-  is_draft: boolean;
-  readonly published_at: Date | null;
-  readonly comment_count?: number;
-  readonly category: DBCategory | null;
-  readonly deleted: boolean | null;
-  readonly title: string;
-  readonly total_views?: number;
-  readonly slug: string;
-  readonly moderation: string;
-  readonly profiles: { display_name: string };
-
-  constructor(question: DBAdminQuestion) {
-    Object.assign(this, question);
-  }
-}
-
 export class Question implements IContentDoc {
   id: number;
   author: Author | null;
@@ -130,6 +112,43 @@ export class Question implements IContentDoc {
   }
 }
 
+export type QuestionFormData = {
+  category: SelectValue | null;
+  description: string;
+  images: MediaWithPublicUrl[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
+  title: string;
+  website?: string;
+};
+
+export type QuestionDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  images: DBMedia[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
+};
+
+export class DBAdminQuestion {
+  readonly id: number;
+  is_draft: boolean;
+  readonly published_at: Date | null;
+  readonly comment_count?: number;
+  readonly category: DBCategory | null;
+  readonly deleted: boolean | null;
+  readonly title: string;
+  readonly total_views?: number;
+  readonly slug: string;
+  readonly moderation: string;
+  readonly profiles: { display_name: string };
+
+  constructor(question: DBAdminQuestion) {
+    Object.assign(this, question);
+  }
+}
+
 export class AdminQuestion {
   id: number;
   category: Category | null;
@@ -164,22 +183,3 @@ export class AdminQuestion {
     });
   }
 }
-
-export type QuestionFormData = {
-  category: SelectValue | null;
-  description: string;
-  images: MediaWithPublicUrl[] | null;
-  isDraft: boolean | null;
-  tags: number[] | null;
-  title: string;
-  website?: string;
-};
-
-export type QuestionDTO = {
-  title: string;
-  description: string;
-  category: number | null;
-  images: DBMedia[] | null;
-  isDraft: boolean | null;
-  tags: number[] | null;
-};

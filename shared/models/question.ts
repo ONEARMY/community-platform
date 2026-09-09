@@ -126,7 +126,7 @@ export class AdminQuestion extends Question {
   createdBy: Number | null;
   moderation: string | null;
 
-  AuthorDisplayName: string | null;
+  authorDisplayName: string | null;
 
   constructor(question: AdminQuestion) {
     super(question);
@@ -140,7 +140,7 @@ export class AdminQuestion extends Question {
       category: obj.category ? Category.fromDB(obj.category) : null,
       createdAt: new Date(obj.created_at),
       commentCount: obj.comment_count || 0,
-      createdBy: obj.created_by || 0,
+      createdBy: obj.created_by || null,
       deleted: obj.deleted || false,
       description: obj.description,
       images: images || [],
@@ -158,7 +158,7 @@ export class AdminQuestion extends Question {
       usefulCount: obj.useful_count || 0,
       acceptedAnswerId: obj.accepted_answer_id,
       acceptedAnswerDate: obj.accepted_answer_date ? new Date(obj.accepted_answer_date) : null,
-      AuthorDisplayName: obj.profiles?.display_name,
+      authorDisplayName: obj.profiles?.display_name,
     });
   }
 }

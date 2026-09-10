@@ -7,17 +7,13 @@ import { cn } from '@/lib/utils';
 
 const MAX_VISIBLE_AVATARS = 3;
 
-// The surrounding page is theme-ui, whose body font is Inter, while this
-// component library defaults to Geist. Match the page rather than the library.
-const FONT_FAMILY = 'font-[Inter,Arial,sans-serif]';
-
 interface AvatarProps {
   contributor: Author;
   className: string;
 }
 
-// Decorative: the name is always rendered next to it, and the trigger carries
-// its own aria-label, so the avatar adds nothing for a screen reader.
+// Hidden from screen readers rather than labelled: everywhere this renders, the
+// text beside it already names the contributor, so a label would only repeat it.
 const ContributorAvatar = ({ contributor, className }: AvatarProps) => {
   const name = contributor.displayName || contributor.username || '';
 
@@ -48,10 +44,7 @@ export const ResearchContributors = ({ contributors }: IProps) => {
   const label = `${contributors.length} contributors`;
 
   return (
-    <div
-      className={`${FONT_FAMILY} flex items-center gap-[5px] text-sm`}
-      data-cy="research-contributors"
-    >
+    <div className="font-body flex items-center gap-[5px] text-sm" data-cy="research-contributors">
       <span className="text-muted-foreground">with</span>
 
       {contributors.length === 1 ? (
@@ -82,14 +75,14 @@ export const ResearchContributors = ({ contributors }: IProps) => {
 
           <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
             <DialogContent
-              className={`${FONT_FAMILY} gap-0 rounded-lg border border-black p-0 ring-0`}
+              className="font-body gap-0 rounded-lg border border-black p-0 ring-0"
               // Without this the first contributor's link takes focus on open
               // and the row reads as selected.
               initialFocus={modalRef}
               ref={modalRef}
             >
               <DialogHeader className="border-b border-black px-4 py-3">
-                <DialogTitle className="text-base">{label}</DialogTitle>
+                <DialogTitle className="font-body text-base">{label}</DialogTitle>
               </DialogHeader>
               <ul className="flex max-h-96 flex-col gap-4 overflow-y-auto px-4 py-3">
                 {contributors.map((contributor, index) => (

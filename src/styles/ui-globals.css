@@ -10,6 +10,11 @@
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Geist Variable', sans-serif;
+  /* The legacy theme-ui pages render their body text in Inter (oa-themes
+     commonStyles.fontFamily.body) while the page body itself is Varela Round.
+     A component from this library dropped into one of those pages opts in with
+     font-body so its text matches the oa-components around it. */
+  --font-body: 'Inter', Arial, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

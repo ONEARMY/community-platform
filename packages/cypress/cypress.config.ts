@@ -93,8 +93,12 @@ export default defineConfig({
               'profile_types',
               'upgrade_badge',
               'tenant_settings',
-              'notification_preferences',
               'news_badges_relations',
+              'poll_votes',
+              'poll_options',
+              'polls',
+              'useful_votes',
+              'map_pins',
             ],
             tenantId,
           );

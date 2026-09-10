@@ -16,7 +16,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       `title,
       slug,
       created_by,
-      category,tags,
+      category,
       moderation,
       is_draft,
       published_at,

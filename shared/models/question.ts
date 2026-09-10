@@ -160,7 +160,6 @@ export class AdminQuestion {
   title: string;
   totalViews: number;
   moderation: string | null;
-
   authorDisplayName: string | null;
 
   constructor(question: AdminQuestion) {

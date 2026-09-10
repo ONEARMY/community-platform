@@ -44,7 +44,7 @@ export const ResearchContributors = ({ contributors }: IProps) => {
   const label = `${contributors.length} contributors`;
 
   return (
-    <div className="font-body flex items-center gap-[5px] text-sm" data-cy="research-contributors">
+    <div className="flex items-center gap-[5px] text-sm" data-cy="research-contributors">
       <span className="text-muted-foreground">with</span>
 
       {contributors.length === 1 ? (
@@ -56,7 +56,10 @@ export const ResearchContributors = ({ contributors }: IProps) => {
         <>
           <button
             aria-label={`Show all ${label}`}
-            className="flex cursor-pointer items-center gap-[5px] rounded-full border border-transparent px-1 py-0.5 hover:border-border hover:bg-muted"
+            // Hover colours are oa-themes softblue behind highlightHover, the same
+            // pair the platform's own quiet buttons use. Written out because this
+            // library has no token for either yet.
+            className="flex cursor-pointer items-center gap-[5px] rounded-[4px] border border-transparent px-1 py-0.5 hover:border-[#97cdeb] hover:bg-[#e2edf7]"
             data-cy="research-contributors-trigger"
             onClick={() => setIsModalOpen(true)}
             type="button"
@@ -75,14 +78,14 @@ export const ResearchContributors = ({ contributors }: IProps) => {
 
           <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
             <DialogContent
-              className="font-body gap-0 rounded-lg border border-black p-0 ring-0"
+              className="gap-0 rounded-lg border-2 border-black p-0 ring-0"
               // Without this the first contributor's link takes focus on open
               // and the row reads as selected.
               initialFocus={modalRef}
               ref={modalRef}
             >
               <DialogHeader className="border-b border-black px-4 py-3">
-                <DialogTitle className="font-body text-base">{label}</DialogTitle>
+                <DialogTitle className="text-base">{label}</DialogTitle>
               </DialogHeader>
               <ul className="flex max-h-96 flex-col gap-4 overflow-y-auto px-4 py-3">
                 {contributors.map((contributor, index) => (

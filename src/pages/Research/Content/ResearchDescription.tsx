@@ -1,17 +1,11 @@
 import { max } from 'date-fns';
-import {
-  AuthorDisplay,
-  Category,
-  DisplayDate,
-  LinkifyText,
-  TagList,
-  Username,
-} from 'oa-components';
+import { AuthorDisplay, Category, DisplayDate, LinkifyText, TagList } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 import { useMemo } from 'react';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { researchStatusColour } from '../researchHelpers';
+import { ResearchContributors } from './ResearchContributors';
 import ResearchFooter from './ResearchFooter';
 
 interface IProps {
@@ -31,8 +25,6 @@ const ResearchDescription = (props: IProps) => {
 
     return dates.length > 0 ? max(dates) : new Date();
   }, [research]);
-
-  const hasContributors = research.collaborators && research.collaborators.length;
 
   return (
     <Card variant="responsive">
@@ -74,16 +66,7 @@ const ResearchDescription = (props: IProps) => {
           >
             <AuthorDisplay author={research.author} />
 
-            {hasContributors ? (
-              <Flex sx={{ alignItems: 'center', gap: 1 }}>
-                <Text variant="auxiliary" sx={{ color: 'lightgrey' }}>
-                  With contributions from
-                </Text>
-                {research.collaborators.map((contributor, key) => (
-                  <Username key={key} user={contributor} />
-                ))}
-              </Flex>
-            ) : null}
+            <ResearchContributors contributors={research.collaborators ?? []} />
 
             {research.isDraft && <DraftTag />}
 

@@ -102,8 +102,14 @@ export class ResearchServiceServer {
 
     const profileService = new ProfileServiceServer(this.client);
     const users = await profileService.getUsersByUsername(collaboratorIds);
+    const imageService = new ImageServiceServer(this.client);
 
-    return users?.map((user) => Author.fromDB(user as unknown as DBAuthor)) || [];
+    return (
+      users?.map((user) => {
+        const dbAuthor = user as unknown as DBAuthor;
+        return Author.fromDB(dbAuthor, imageService.getPublicUrl(dbAuthor.photo));
+      }) || []
+    );
   }
 
   async getUpdate(researchId: number, updateId: number) {

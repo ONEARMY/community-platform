@@ -1,7 +1,7 @@
 import arrayMutators from 'final-form-arrays';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { Button, Loader } from 'oa-components';
+import { Button } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
 import { useContext, useMemo } from 'react';
 import { Form } from 'react-final-form';
@@ -11,6 +11,7 @@ import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
 import { Flex } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { TenantContext } from '../common/TenantContext';
 import { ProfileTypeSection } from './content/sections/ProfileType.section';
 import { PublicContactSection } from './content/sections/PublicContact.section';
@@ -105,7 +106,7 @@ export const SettingsPageUserProfile = observer(() => {
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-            {submitting && <Loader sx={{ alignSelf: 'center' }} />}
+            {submitting && <Spinner className="self-center" />}
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <ProfileTypeSection profileTypes={profileTypes || []} />

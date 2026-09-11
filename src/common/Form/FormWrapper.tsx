@@ -1,7 +1,8 @@
-import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
+import { Button, ElWithBeforeIcon } from 'oa-components';
 import { useFormState } from 'react-final-form';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ErrorsContainer } from './ErrorsContainer';
 import type { IErrorsListSet } from './types';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
@@ -133,7 +134,10 @@ export const FormWrapper = (props: IProps) => {
         )}
 
         {submitting && !hideSubmittingMessage && (
-          <Loader label="Submitting, please do not close the page..." />
+          <div className="flex flex-col items-center gap-2">
+            <Spinner />
+            <span>Submitting, please do not close the page...</span>
+          </div>
         )}
         {sidebar && sidebar}
         {hasClientSideErrors && <ErrorsContainer clientErrors={errorsClientSide} />}

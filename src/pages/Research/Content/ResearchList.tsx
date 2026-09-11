@@ -1,10 +1,11 @@
-import { Loader, Pagination } from 'oa-components';
+import { Pagination } from 'oa-components';
 import type { ResearchItem, ResearchStatus } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { Box, Flex } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ITEMS_PER_PAGE } from '../constants';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { researchService } from '../research.service';
@@ -133,7 +134,7 @@ const ResearchList = () => {
         </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
     </Flex>
   );
 };

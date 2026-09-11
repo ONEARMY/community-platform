@@ -1,10 +1,10 @@
 import type { NotificationDisplay } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
-import { Box, Flex, Heading } from 'theme-ui';
+import { Box, Flex, Heading, Spinner } from 'theme-ui';
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { InternalLink } from '../InternalLink/InternalLink';
-import { Loader } from '../Loader/Loader';
 import { NotificationItemSupabase } from '../NotificationItemSupabase/NotificationItemSupabase';
 
 export interface IProps {
@@ -108,7 +108,12 @@ export const NotificationListSupabase = (props: IProps) => {
           </Button>
         </InternalLink>
       </Flex>
-      {isUpdatingNotifications && <Loader />}
+      {isUpdatingNotifications && (
+        <Spinner
+          aria-label="Loading..."
+          sx={{ color: commonStyles.colors.darkGrey, margin: 'auto' }}
+        />
+      )}
       {!isUpdatingNotifications &&
         notificationList.map((notification, index) => {
           return (

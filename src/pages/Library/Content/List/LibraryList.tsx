@@ -1,4 +1,4 @@
-import { Loader, Pagination } from 'oa-components';
+import { Pagination } from 'oa-components';
 import type { Project } from 'oa-shared';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -6,6 +6,7 @@ import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { Flex, Grid } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ITEMS_PER_PAGE } from '../../constants';
 import { LibrarySearchParams, libraryService } from '../../library.service';
 import { LibraryListHeader } from './LibraryListHeader';
@@ -111,7 +112,7 @@ export const LibraryList = () => {
         </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
 
       <h3 className="mx-auto mt-5 max-w-[500px] text-center text-xl font-semibold">
         Contribute to the {tenantContext?.siteName || 'Community Platform'} library

@@ -60,7 +60,6 @@ export { MemberBadge } from './MemberBadge/MemberBadge';
 export { MemberHistory } from './MemberHistory/MemberHistory';
 export { Modal } from './Modal/Modal';
 export { ModerationRecord, ModerationStatus } from './ModerationStatus/ModerationStatus';
-export { MoreContainer } from './MoreContainer/MoreContainer';
 export { NotificationListSupabase } from './NotificationListSupabase/NotificationListSupabase';
 export { NotificationsModal } from './NotificationsModal/NotificationsModal';
 export { OsmGeocoding } from './OsmGeocoding/OsmGeocoding';

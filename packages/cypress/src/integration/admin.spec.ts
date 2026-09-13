@@ -30,4 +30,13 @@ describe('[Admin]', () => {
     cy.url().should('include', '/admin/users');
     cy.contains('Overview');
   });
+
+  it('[Admin can access the admin questions overview]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.url().should('include', '/admin/questions')
+    cy.get('h1').contains('Questions')
+  })
 });

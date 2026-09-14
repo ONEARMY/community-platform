@@ -142,7 +142,7 @@ export class DBAdminQuestion {
   readonly total_views?: number;
   readonly slug: string;
   readonly moderation: string;
-  readonly profiles: { display_name: string };
+  readonly profiles: { display_name: string; username: string };
 
   constructor(question: DBAdminQuestion) {
     Object.assign(this, question);
@@ -161,6 +161,7 @@ export class AdminQuestion {
   totalViews: number;
   moderation: string | null;
   authorDisplayName: string | null;
+  authorUserName: string | null;
 
   constructor(question: AdminQuestion) {
     Object.assign(this, question);
@@ -179,6 +180,7 @@ export class AdminQuestion {
       title: obj.title,
       totalViews: obj.total_views || 0,
       authorDisplayName: obj.profiles?.display_name,
+      authorUserName: obj.profiles?.username,
     });
   }
 }

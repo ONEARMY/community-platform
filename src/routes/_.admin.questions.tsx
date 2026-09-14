@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       id,
       profiles(display_name)`,
     )
-    .order('published_at', { ascending: true });
+    .order('published_at', { ascending: false });
 
   const questions = (data || []).map((question) =>
     AdminQuestion.fromDB(question as unknown as DBAdminQuestion),

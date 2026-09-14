@@ -44,7 +44,7 @@ export function QuestionsPage({ questions }: IProps) {
               </Link>
               <TableCell>{question.authorDisplayName}</TableCell>
               <TableCell>{question.category !== null ? question.category.name : ''}</TableCell>
-              <TableCell>{question.moderation}</TableCell>
+              {/* <TableCell>{question.moderation}</TableCell> */}
               <TableCell>{question.isDraft ? 'Yes' : 'No'}</TableCell>
               <TableCell>
                 {question.publishedAt !== null ? question.publishedAt.toLocaleDateString() : ''}

@@ -12,6 +12,7 @@
       "!**/cypress",
       "!**/.react-router",
       "!**/*.md",
+      "!**/*.svg",
       "!**/*.spec.*",
       "!**/*.stories.*",
       "!**/*.test.*",

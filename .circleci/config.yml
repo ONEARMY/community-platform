@@ -88,9 +88,7 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: bun run lint
-      - run:
-          command: bun run --filter oa-components lint
+          command: bun run lint:ci
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:

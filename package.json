@@ -24,6 +24,7 @@
     "build": "bun run build:shared && bun run build:themes && bun run build:components && bun run build:vite && tsc",
     "lint": "biome lint --write --unsafe",
     "format": "biome check --write",
+    "lint:ci": "biome ci",
     "serve": "bunx serve -s build",
     "test": "bun run --filter oa-cypress start",
     "test:components": "bun run build:shared && bun run build:themes && bun run build:components && bun run --filter oa-components test",

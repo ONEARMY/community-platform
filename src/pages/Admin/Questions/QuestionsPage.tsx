@@ -26,7 +26,7 @@ export function QuestionsPage({ questions }: IProps) {
             <TableHead className="w-0">Title</TableHead>
             <TableHead>Created By</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead>Moderation</TableHead>
+            {/* {<TableHead>Moderation</TableHead> */}
             <TableHead>Draft</TableHead>
             <TableHead>Published</TableHead>
             <TableHead>Comments</TableHead>

@@ -24,7 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       deleted,
       total_views,
       id,
-      profiles(display_name)`,
+      profiles(display_name,username)`,
     )
     .order('published_at', { ascending: false });
 

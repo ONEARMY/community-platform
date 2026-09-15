@@ -29,7 +29,7 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 ### Prerequisites
 
-- [Bun 1.3.10](https://bun.sh/docs/installation)
+- [Bun 1.4.2](https://bun.sh/docs/installation)
 
 ### One time setup
 

@@ -1,5 +1,7 @@
+import { PencilIcon, TrashIcon } from 'lucide-react';
 import type { AdminQuestion } from 'oa-shared';
 import { Link } from 'react-router';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -31,6 +33,7 @@ export function QuestionsPage({ questions }: IProps) {
             <TableHead>Published</TableHead>
             <TableHead>Comments</TableHead>
             <TableHead>Views</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -53,6 +56,26 @@ export function QuestionsPage({ questions }: IProps) {
               </TableCell>
               <TableCell>{question.commentCount}</TableCell>
               <TableCell>{question.totalViews}</TableCell>
+              <TableCell>
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={`Edit ${question.title}`}
+                    onClick={() => {}}
+                  >
+                    <PencilIcon />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={`Delete ${question.title}`}
+                    onClick={() => {}}
+                  >
+                    <TrashIcon />
+                  </Button>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

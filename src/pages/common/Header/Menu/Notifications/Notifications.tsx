@@ -50,7 +50,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
       <SheetContent
         side="top"
         showCloseButton={false}
-        className="z-[var(--z-above-header)] mx-auto max-h-dvh max-w-[800px] overflow-y-auto p-5"
+        className="z-[var(--z-above-header)] mx-auto max-h-dvh max-w-[800px] overflow-y-auto px-3 py-5 md:px-5"
         overlayClassName="z-[var(--z-above-header)]"
       >
         <SheetTitle className="sr-only">Notifications</SheetTitle>

@@ -1,7 +1,7 @@
-import { formatDistanceToNow } from 'date-fns';
 import type { NotificationDisplay } from 'oa-shared';
 import { Link } from 'react-router';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DisplayDate } from '@/components/ui/display-date';
 import CommentIcon from '@/components/ui/icons/comment.svg?react';
 import ThunderboltIcon from '@/components/ui/icons/thunderbolt.svg?react';
 import UpdateIcon from '@/components/ui/icons/update.svg?react';
@@ -67,13 +67,11 @@ export const NotificationItem = ({ markRead, modalDismiss, notification }: IProp
             </div>
           )}
         </div>
-        <time
+        <DisplayDate
+          createdAt={notification.date}
+          showLabel={false}
           className="shrink-0 self-start text-xs text-muted-foreground"
-          dateTime={new Date(notification.date).toISOString()}
-          title={new Date(notification.date).toLocaleString()}
-        >
-          {formatDistanceToNow(new Date(notification.date), { addSuffix: true })}
-        </time>
+        />
       </div>
     </Link>
   );

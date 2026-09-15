@@ -39,9 +39,9 @@ export function QuestionsPage({ questions }: IProps) {
               key={question.id}
               className={question.deleted === true ? 'text-muted-foreground bg-gray-100' : ''}
             >
-              <Link to={'/questions/' + question.slug}>
-                <TableCell>{question.title}</TableCell>
-              </Link>
+              <TableCell>
+                <Link to={'/questions/' + question.slug}>{question.title}</Link>
+              </TableCell>
               <TableCell>
                 <Link to={'/u/' + question.authorUserName}>{question.authorDisplayName}</Link>
               </TableCell>

@@ -11,7 +11,7 @@ Follow these exactly. PRs that ignore them are closed without review.
 
 ## Setup
 
-Requires [Bun 1.3.10](https://bun.sh/docs/installation) and a [local Supabase instance](./docs/supabase.md).
+Requires [Bun 1.4.2](https://bun.sh/docs/installation) and a [local Supabase instance](./docs/supabase.md).
 
 ```
 bun install

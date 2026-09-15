@@ -70,7 +70,6 @@ export const glyphs: IGlyphs = {
   delete: iconMap.delete,
   difficulty: iconMap.difficultyLevel,
   discussion: iconMap.discussion,
-  doubleTick: iconMap.doubleTick,
   download: <MdFileDownload />,
   'download-cloud': <DownloadIcon />,
   'double-arrow-left': iconMap.doubleArrowLeft,
@@ -148,8 +147,6 @@ export const glyphs: IGlyphs = {
   'nav-settings': iconMap.navSettings,
   'nav-supporter': iconMap.navSupporter,
   'nav-updates': iconMap.navUpdates,
-  'nav-notifications': iconMap.navNotifications,
-  'nav-notifications-active': iconMap.navNotificationsActive,
 };
 
 export type IconProps = IProps & VerticalAlignProps & SpaceProps;

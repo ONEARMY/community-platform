@@ -57,8 +57,8 @@ Convention for this library:
 
   No central glyph-map/switch component — each icon is its own tree-shakeable import, which is what makes this approach tree-shakeable (the legacy `Icon` component's shared glyph object meant every consumer bundled references to essentially all ~90 icons regardless of which one they used).
 
-- Source SVGs should use `fill="currentColor"` (or `stroke="currentColor"`) and no inline `width`/`height`/pixel `style` — size and color are controlled by the consumer via `className`, exactly like Base UI/shadcn's own icon usage.
-- Only 6 icons have been ported so far (`close`, the 4 `chevron-*` directions, `search`) as a proof of the pattern — porting the rest of the ~90 custom icons is a follow-up, done opportunistically as components that need them get migrated.
+- Source SVGs should use `fill="currentColor"` (or `stroke="currentColor"`) and no inline `width`/`height`/pixel `style` — size and color are controlled by the consumer via `className`, exactly like Base UI/shadcn's own icon usage. Multicolor brand art is the exception: it keeps its literal fills.
+- Icons are ported opportunistically, as the components that need them get migrated. Most of the legacy custom icons still live only in `oa-components`.
 - 19 of the legacy glyphs are generic (`react-icons`, e.g. `menu`, `lock`, `check`, `filter`) rather than custom brand art. These are a small, drawable set — the plan is to eventually commission custom versions of these too and drop the `react-icons` dependency entirely, rather than pull in a generic icon library (e.g. lucide-react) for them. Not a blocker for anything else in this library.
 - Separately, 23 confirmed-unused legacy icon assets (~281KB, mostly old map-pin iconography) were deleted from `packages/components/assets/icons/` as basic repo hygiene. A further pass to optimize the oversized remaining assets (several are 10-30KB Figma exports that should be sub-2KB) was considered and intentionally deferred — out of scope for this change.
 
@@ -78,7 +78,7 @@ Runs on port 6008, config at `.storybook` (repo root). It intentionally does not
 
 ## What's intentionally out of scope here
 
-- Migrating any of the 100+ existing `oa-components` components or their call sites.
-- Porting the remaining ~85 custom icons.
+- Migrating the rest of the 100+ existing `oa-components` components or their call sites (the notification panel under `src/pages/common/Header/Menu/Notifications/` is the first one migrated).
+- Porting the remaining custom icons.
 - Dropping `react-icons` (blocked on custom art for the 19 generic glyphs).
 - Deleting `oa-components`/`oa-themes` — only after the migration is complete.

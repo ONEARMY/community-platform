@@ -2,7 +2,7 @@ import { HeroBanner } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -82,6 +82,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Index() {
   const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== 'idle';
 
   const validationSchema = object({
     email: string().email(FRIENDLY_MESSAGES['auth/invalid-email']).required('Required'),
@@ -112,8 +114,8 @@ export default function Index() {
             );
           }
         }}
-        render={({ submitting, invalid, pristine }) => {
-          const disabled = invalid || submitting;
+        render={({ invalid, pristine }) => {
+          const disabled = invalid || isSubmitting;
           return (
             <form method="post">
               <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">

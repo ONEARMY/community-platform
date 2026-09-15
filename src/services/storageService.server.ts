@@ -103,8 +103,7 @@ export class StorageServiceServer {
         // Process other formats if: dimensions too large OR file size > 1MB
         // SVG is vector, not a sharp output format - always pass it through untouched
         const isSvg = metadata.format === 'svg';
-        const isJpegOrPng =
-          metadata.format === 'jpeg' || metadata.format === 'jpg' || metadata.format === 'png';
+        const isJpegOrPng = metadata.format === 'jpeg' || metadata.format === 'png';
         const needsProcessing =
           !isSvg &&
           (isJpegOrPng ||
@@ -134,7 +133,6 @@ export class StorageServiceServer {
 
           switch (metadata.format) {
             case 'jpeg':
-            case 'jpg':
               // Convert JPEG to WebP for better compression (25-35% smaller)
               processedImage = processedImage.webp({
                 quality: 82, // Slightly higher quality for JPEG conversions
@@ -179,12 +177,13 @@ export class StorageServiceServer {
               });
               finalContentType = 'image/tiff';
               break;
-            case 'avif':
+            case 'heif':
               processedImage = processedImage.avif({
                 quality: 80,
                 effort: 6,
               });
               finalContentType = 'image/avif';
+              finalFileName = file.name.replace(/\.(avif|heic|heif)$/i, '.avif');
               break;
             default:
               // Keep original format for other types (preserves transparency, animations, etc.)

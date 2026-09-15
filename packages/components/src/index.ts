@@ -59,8 +59,6 @@ export { MemberBadge } from './MemberBadge/MemberBadge';
 export { MemberHistory } from './MemberHistory/MemberHistory';
 export { Modal } from './Modal/Modal';
 export { ModerationRecord, ModerationStatus } from './ModerationStatus/ModerationStatus';
-export { NotificationListSupabase } from './NotificationListSupabase/NotificationListSupabase';
-export { NotificationsModal } from './NotificationsModal/NotificationsModal';
 export { OsmGeocoding } from './OsmGeocoding/OsmGeocoding';
 export { Pagination } from './Pagination/Pagination';
 export { PaginationIcons } from './PaginationIcons/PaginationIcons';
@@ -74,7 +72,6 @@ export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorO
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';
-export { SiteFooter } from './SiteFooter/SiteFooter';
 export { Tab, TabPanel, Tabs, TabsList } from './TabbedContent/TabbedContent';
 export { Tag } from './Tag/Tag';
 export { TagList } from './TagList/TagList';

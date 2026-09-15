@@ -1,7 +1,7 @@
 import { HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
 import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
@@ -103,13 +103,15 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 export default function Index() {
   const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== 'idle';
 
   return (
     <Main style={{ flex: 1 }}>
       <Form
         initialValues={{ email: actionResponse?.email }}
         onSubmit={() => {}}
-        render={({ submitting, invalid }) => {
+        render={({ invalid }) => {
           return (
             <form data-cy="login-form" method="post">
               <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
@@ -178,7 +180,7 @@ export default function Index() {
                       data-cy="submit"
                       size="lg"
                       className="w-full justify-center"
-                      disabled={submitting || invalid}
+                      disabled={isSubmitting || invalid}
                       type="submit"
                     >
                       Log in

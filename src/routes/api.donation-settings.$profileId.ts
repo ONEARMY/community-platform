@@ -17,7 +17,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       imageUrl: data?.donation_settings?.defaultImageUrl,
     };
 
-    if (params.profileId) {
+    if (params.profileId && params.profileId !== 'default') {
       try {
         const profileResult = await client
           .from('profiles')

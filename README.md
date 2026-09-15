@@ -227,6 +227,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DanielLuuu"><img src="https://avatars.githubusercontent.com/u/166998822?v=4?s=60" width="60px;" alt="DanielLuuu"/><br /><sub><b>DanielLuuu</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=DanielLuuu" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://brit-os.pages.dev/"><img src="https://avatars.githubusercontent.com/u/254318047?v=4?s=60" width="60px;" alt="Musfiqur Rahman Saimon"/><br /><sub><b>Musfiqur Rahman Saimon</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=britsync07-prog" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://t.me/asterustudio"><img src="https://avatars.githubusercontent.com/u/150630975?v=4?s=60" width="60px;" alt="Daniar Jabagin"/><br /><sub><b>Daniar Jabagin</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=daniarjabagin" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/samuel-sarmah"><img src="https://avatars.githubusercontent.com/u/151577316?v=4?s=60" width="60px;" alt="samuel-sarmah"/><br /><sub><b>samuel-sarmah</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=samuel-sarmah" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

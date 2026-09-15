@@ -23,7 +23,7 @@ export function QuestionsPage({ questions }: IProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-0">Title</TableHead>
+            <TableHead>Title</TableHead>
             <TableHead>Created By</TableHead>
             <TableHead>Category</TableHead>
             {/* {<TableHead>Moderation</TableHead> */}
@@ -39,10 +39,12 @@ export function QuestionsPage({ questions }: IProps) {
               key={question.id}
               className={question.deleted === true ? 'text-muted-foreground bg-gray-100' : ''}
             >
-              <Link to={'/questions/' + question.slug} key={question.id}>
+              <Link to={'/questions/' + question.slug}>
                 <TableCell>{question.title}</TableCell>
               </Link>
-              <TableCell>{question.authorDisplayName}</TableCell>
+              <TableCell>
+                <Link to={'/u/' + question.authorUserName}>{question.authorDisplayName}</Link>
+              </TableCell>
               <TableCell>{question.category !== null ? question.category.name : ''}</TableCell>
               {/* <TableCell>{question.moderation}</TableCell> */}
               <TableCell>{question.isDraft ? 'Yes' : 'No'}</TableCell>

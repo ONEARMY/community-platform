@@ -58,14 +58,16 @@ export function QuestionsPage({ questions }: IProps) {
               <TableCell>{question.totalViews}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Edit ${question.title}`}
-                    onClick={() => {}}
-                  >
-                    <PencilIcon />
-                  </Button>
+                  <Link to={'/questions/' + question.slug + '/edit'}>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`Edit ${question.title}`}
+                      onClick={() => {}}
+                    >
+                      <PencilIcon />
+                    </Button>
+                  </Link>
                   <Button
                     variant="ghost"
                     size="icon-sm"

@@ -1,0 +1,39 @@
+/* Brand @font-face rules, mirroring oa-themes' GlobalFonts (packages/themes/src/fonts).
+   Declared here too so the shadcn layer and its standalone Storybook get them without
+   Emotion. Duplicate @font-face for the same family/weight is a no-op in the app. */
+
+@font-face {
+  font-family: 'Varela Round';
+  font-display: auto;
+  src: url('../../packages/themes/assets/fonts/VarelaRound-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-display: auto;
+  src:
+    url('../../packages/themes/assets/fonts/Inter-Regular.woff2') format('woff2'),
+    url('../../packages/themes/assets/fonts/Inter-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-display: auto;
+  src: url('../../packages/themes/assets/fonts/Inter-SemiBold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Klima';
+  font-display: auto;
+  src:
+    url('../../packages/themes/assets/fonts/Klima-Regular.woff2') format('woff2'),
+    url('../../packages/themes/assets/fonts/Klima-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

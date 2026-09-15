@@ -17,7 +17,6 @@ import deleteSVG from '../../assets/icons/delete.svg';
 import discussionSVG from '../../assets/icons/discussion.svg';
 import doubleArrowLeft from '../../assets/icons/double-arrow-left.svg';
 import doubleArrowRight from '../../assets/icons/double-arrow-right.svg';
-import doubleTickSVG from '../../assets/icons/double-tick.svg';
 import editSVG from '../../assets/icons/edit.svg';
 import emailSVG from '../../assets/icons/email.svg';
 import emailOffSVG from '../../assets/icons/email-off.svg';
@@ -58,8 +57,6 @@ import navAcademySVG from '../../assets/icons/nav-academy.svg';
 import navLibrarySVG from '../../assets/icons/nav-library.svg';
 import navLogoutSVG from '../../assets/icons/nav-logout.svg';
 import navMapSVG from '../../assets/icons/nav-map.svg';
-import navNotificationsSVG from '../../assets/icons/nav-notifications.svg';
-import navNotificationsActiveSVG from '../../assets/icons/nav-notifications-active.svg';
 import navProfileSVG from '../../assets/icons/nav-profile.svg';
 import navProjectsSVG from '../../assets/icons/nav-projects.svg';
 import navQuestionsSVG from '../../assets/icons/nav-questions.svg';
@@ -123,7 +120,6 @@ export const iconMap = {
   delete: <ImageIcon src={deleteSVG} />,
   difficultyLevel: <ImageIcon src={difficultyLevel} />,
   discussion: <ImageIcon src={discussionSVG} />,
-  doubleTick: <ImageIcon src={doubleTickSVG} />,
   doubleArrowLeft: (
     <ImageIcon
       src={doubleArrowLeft}
@@ -217,6 +213,4 @@ export const iconMap = {
   navSettings: <ImageIcon src={navSettingsSVG} />,
   navSupporter: <ImageIcon src={navSupporterSVG} />,
   navUpdates: <ImageIcon src={navUpdatesSVG} />,
-  navNotifications: <ImageIcon src={navNotificationsSVG} />,
-  navNotificationsActive: <ImageIcon src={navNotificationsActiveSVG} />,
 };

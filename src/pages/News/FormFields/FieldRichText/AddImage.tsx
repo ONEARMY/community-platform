@@ -80,7 +80,9 @@ export const AddImage = ({ editor, imageUploadHandler }: IProps) => {
           </Box>
           <Flex>
             {isLoading ? (
-              <Spinner />
+              <Flex sx={{ justifyContent: 'center', width: '100%' }}>
+                <Spinner className="size-12" />
+              </Flex>
             ) : (
               <Button variant="secondary" type="button" onClick={close}>
                 Cancel

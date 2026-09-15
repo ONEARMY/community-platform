@@ -106,7 +106,7 @@ export const SettingsPageUserProfile = observer(() => {
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-            {submitting && <Spinner className="self-center" />}
+            {submitting && <Spinner className="size-12 self-center" />}
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <ProfileTypeSection profileTypes={profileTypes || []} />

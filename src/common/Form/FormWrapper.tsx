@@ -135,8 +135,8 @@ export const FormWrapper = (props: IProps) => {
 
         {submitting && !hideSubmittingMessage && (
           <div className="flex flex-col items-center gap-2">
-            <Spinner />
-            <span>Submitting, please do not close the page...</span>
+            <Spinner className="size-12" />
+            <span className="text-center text-base">Submitting, please do not close the page...</span>
           </div>
         )}
         {sidebar && sidebar}

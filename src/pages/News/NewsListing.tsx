@@ -120,7 +120,11 @@ export const NewsListing = () => {
           </Flex>
         )}
       </Flex>
-      {(isFetching || isFetchingDrafts) && <Spinner />}
+      {(isFetching || isFetchingDrafts) && (
+        <Flex sx={{ justifyContent: 'center' }}>
+          <Spinner className="size-12" />
+        </Flex>
+      )}
     </Flex>
   );
 };

@@ -9,29 +9,20 @@ export default meta;
 
 type Story = StoryObj<typeof Avatar>;
 
-export const WithImage: Story = {
+export const Default: Story = {
   render: () => (
     <Avatar>
-      <AvatarImage alt="Ada Lovelace" src="https://i.pravatar.cc/64?img=5" />
-      <AvatarFallback>A</AvatarFallback>
+      <AvatarImage src="https://i.pravatar.cc/80?img=12" alt="Ada Lovelace" />
+      <AvatarFallback>AL</AvatarFallback>
     </Avatar>
   ),
 };
 
-export const FallbackOnly: Story = {
+export const Fallback: Story = {
   render: () => (
     <Avatar>
-      <AvatarFallback>A</AvatarFallback>
-    </Avatar>
-  ),
-};
-
-// A broken src must still leave something in the layout rather than a gap.
-export const BrokenImage: Story = {
-  render: () => (
-    <Avatar>
-      <AvatarImage alt="Ada Lovelace" src="https://example.invalid/missing.png" />
-      <AvatarFallback>A</AvatarFallback>
+      <AvatarImage src="/does-not-exist.png" alt="Ada Lovelace" />
+      <AvatarFallback>AL</AvatarFallback>
     </Avatar>
   ),
 };
@@ -39,28 +30,21 @@ export const BrokenImage: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <Avatar className="size-[25px]">
-        <AvatarFallback>S</AvatarFallback>
-      </Avatar>
-      <Avatar>
-        <AvatarFallback>M</AvatarFallback>
-      </Avatar>
-      <Avatar className="size-12">
-        <AvatarFallback>L</AvatarFallback>
-      </Avatar>
+      {['size-6', 'size-8', 'size-12', 'size-16'].map((size) => (
+        <Avatar key={size} className={size}>
+          <AvatarImage src="https://i.pravatar.cc/80?img=12" alt="Ada Lovelace" />
+          <AvatarFallback>AL</AvatarFallback>
+        </Avatar>
+      ))}
     </div>
   ),
 };
 
-// How the research contributor row stacks them.
-export const Stacked: Story = {
+export const Square: Story = {
   render: () => (
-    <div style={{ display: 'flex' }} className="-space-x-2">
-      {['A', 'B', 'C'].map((initial) => (
-        <Avatar className="size-[25px] ring-2 ring-background" key={initial}>
-          <AvatarFallback>{initial}</AvatarFallback>
-        </Avatar>
-      ))}
-    </div>
+    <Avatar className="size-16 rounded-lg">
+      <AvatarImage src="https://picsum.photos/seed/news/80" alt="News hero" />
+      <AvatarFallback className="rounded-lg">NW</AvatarFallback>
+    </Avatar>
   ),
 };

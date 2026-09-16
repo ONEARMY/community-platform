@@ -94,9 +94,6 @@ const renderInline = (nodes: JSONContent[] = []): React.ReactNode =>
     return null;
   });
 
-const isImageWidth = (width: unknown): width is string =>
-  typeof width === 'string' && /^\d{1,3}%$/.test(width);
-
 // `content` is untrusted (it's stored JSON, not necessarily produced by the editor's own
 // AddYoutube flow), so validate the shape of a YouTube video ID before splicing it into a URL.
 const isYoutubeVideoId = (videoId: unknown): videoId is string =>
@@ -150,29 +147,23 @@ const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode
 };
 
 const renderImage = (node: JSONContent, key: number | string): React.ReactNode => {
-  const width = isImageWidth(node.attrs?.width) ? node.attrs.width : imageStyle.width;
   const caption = node.attrs?.caption as string | undefined;
   const img = (
-    <Img
-      key={key}
-      src={node.attrs?.src}
-      alt={node.attrs?.alt ?? ''}
-      style={{ ...imageStyle, width }}
-    />
+    <Img key={key} src={node.attrs?.src} alt={node.attrs?.alt ?? ''} style={imageStyle} />
   );
 
-  // Images are always centered. A full-width image renders the same whether centered or
-  // not, so only pay for the table-based Row/Column wrapper (Outlook doesn't reliably
-  // honor margin/display-based centering) when it's narrower or has a caption to place.
-  if (!caption && width === imageStyle.width) {
+  // Images are always full-width, so a bare image needs no wrapper — only pay for the
+  // table-based Row/Column wrapper (Outlook doesn't reliably honor margin/display-based
+  // centering) when there's a caption to place underneath it.
+  if (!caption) {
     return img;
   }
 
   return (
-    <Row key={key} style={caption ? { marginBottom: imageFigureMarginBottom } : undefined}>
+    <Row key={key} style={{ marginBottom: imageFigureMarginBottom }}>
       <Column align="center">
         {img}
-        {caption && <Text style={{ ...imageCaptionStyle, textAlign: 'center' }}>{caption}</Text>}
+        <Text style={{ ...imageCaptionStyle, textAlign: 'center' }}>{caption}</Text>
       </Column>
     </Row>
   );

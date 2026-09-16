@@ -13,7 +13,7 @@ import { notificationSupabaseService } from 'src/services/notificationsSupabaseS
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Text } from 'theme-ui';
 import { NotificationsContext } from '../NotificationsContext';
-import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
+import { NotificationsSupabase } from './Menu/Notifications/Notifications';
 import { HEADER_HEIGHT_DESKTOP, HEADER_HEIGHT_MOBILE } from './navLayout';
 
 const HIDDEN_PATHS = ['/support'];

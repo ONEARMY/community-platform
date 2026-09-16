@@ -38,7 +38,7 @@ aliases:
   - &install_bun
     run:
       name: Install Bun
-      command: curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.10" && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
+      command: curl -fsSL https://bun.sh/install | bash -s "bun-v1.4.2" && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
   - &restore_bun_cache
     restore_cache:
       name: Restore bun cache
@@ -88,9 +88,7 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: bun run lint
-      - run:
-          command: bun run --filter oa-components lint
+          command: bun run lint:ci
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
@@ -212,7 +210,7 @@ jobs:
               --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN"
       - run:
           name: Set Server Secrets
-          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID TOKEN_SECRET="$TOKEN_SECRET"
+          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL DISCORD_MEMBERSHIP_WEBHOOK_URL=$DISCORD_MEMBERSHIP_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID TOKEN_SECRET="$TOKEN_SECRET"
   # deploy-supabase:
   #   docker:
   #     - image: cimg/node:20.7.0

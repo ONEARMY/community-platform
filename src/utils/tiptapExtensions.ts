@@ -15,16 +15,12 @@ import { YoutubeNodeView } from 'src/pages/News/FormFields/FieldRichText/Youtube
  * via generateHTML) only. Email uses a separate renderer (see renderTiptapEmail) that needs
  * a table-based `align` attribute instead, since Outlook doesn't reliably honor `margin: auto`.
  */
-export const IMAGE_WIDTH_PRESETS = ['25%', '50%', '75%', '100%'] as const;
 export const CAPTION_MAX_LENGTH = 180;
 
 export const Image = TiptapImage.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      width: {
-        default: null,
-      },
       caption: {
         default: null,
       },
@@ -41,9 +37,8 @@ export const Image = TiptapImage.extend({
   // keep it in sync with ImageNodeView.tsx and renderTiptapHtml.ts's image case.
   renderHTML({ node, HTMLAttributes }) {
     const { style: _discardStyle, ...rest } = HTMLAttributes;
-    const width = node.attrs.width as string | null;
     const caption = node.attrs.caption as string | null;
-    const style = `display:block;margin:10px auto;${width ? `width:${width};` : ''}`;
+    const style = 'display:block;width:100%;margin:10px auto;';
     const img = ['img', mergeAttributes(rest, { style })] as const;
 
     if (!caption) {

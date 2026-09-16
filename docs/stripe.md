@@ -58,7 +58,16 @@ The app handles these webhook events:
 - `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
+- `invoice.payment_succeeded`
 - `invoice.payment_failed`
+
+Hosted environments use a webhook endpoint per tenant, and each must have all five enabled.
+
+### 5. Membership notifications (optional)
+
+Successful payments, cancellations, tier changes and failed renewals post to an admin Discord
+channel. Set `DISCORD_MEMBERSHIP_WEBHOOK_URL` in `.env.local` to a Discord webhook URL to see
+them; leave it unset and nothing is posted.
 
 ## Database Tables
 

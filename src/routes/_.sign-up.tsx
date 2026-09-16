@@ -4,6 +4,7 @@ import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
+import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
@@ -68,6 +69,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
+    // Supabase returns a fake user with no identities for an already-registered
+    // email, to avoid leaking which emails exist. Don't try to create a profile for it.
+    if (signupResult.data.user.identities?.length === 0) {
+      logger.warn('Sign-up attempted for already-registered email');
+      return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+    }
+
     const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
 
     // This will error if there is already a profile with this auth_id + tenant_id

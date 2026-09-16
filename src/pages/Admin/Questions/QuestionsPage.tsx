@@ -1,5 +1,6 @@
 import { PencilIcon, TrashIcon } from 'lucide-react';
 import type { AdminQuestion } from 'oa-shared';
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,12 +11,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DeleteQuestionDialog } from './DeleteQuestionDialog';
 
 interface IProps {
   questions: AdminQuestion[];
 }
 
 export function QuestionsPage({ questions }: IProps) {
+  const [deletingQuestion, setDeletingQuestion] = useState<AdminQuestion | null>(null);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -72,7 +76,7 @@ export function QuestionsPage({ questions }: IProps) {
                     variant="ghost"
                     size="icon-sm"
                     aria-label={`Delete ${question.title}`}
-                    onClick={() => {}}
+                    onClick={() => setDeletingQuestion(question)}
                   >
                     <TrashIcon />
                   </Button>
@@ -82,6 +86,14 @@ export function QuestionsPage({ questions }: IProps) {
           ))}
         </TableBody>
       </Table>
+      <DeleteQuestionDialog
+        question={deletingQuestion}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeletingQuestion(null);
+          }
+        }}
+      />
     </div>
   );
 }

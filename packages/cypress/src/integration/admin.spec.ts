@@ -50,4 +50,12 @@ describe('[Admin]', () => {
 
   })
 
+  it('[Admin can click on the question author to go to the autors profile page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.get('a[href*="/u/"').first().click()
+    cy.url().should('include', '/u/')
+  })
 });

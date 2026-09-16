@@ -12,8 +12,6 @@ interface AvatarProps {
   className: string;
 }
 
-// Hidden from screen readers rather than labelled: everywhere this renders, the
-// text beside it already names the contributor, so a label would only repeat it.
 const ContributorAvatar = ({ contributor, className }: AvatarProps) => {
   const name = contributor.displayName || contributor.username || '';
 
@@ -56,9 +54,6 @@ export const ResearchContributors = ({ contributors }: IProps) => {
         <>
           <button
             aria-label={`Show all ${label}`}
-            // Hover colours are oa-themes softblue behind highlightHover, the same
-            // pair the platform's own quiet buttons use. Written out because this
-            // library has no token for either yet.
             className="flex cursor-pointer items-center gap-[5px] rounded-[4px] border border-transparent px-1 py-0.5 hover:border-[#97cdeb] hover:bg-[#e2edf7]"
             data-cy="research-contributors-trigger"
             onClick={() => setIsModalOpen(true)}
@@ -79,8 +74,6 @@ export const ResearchContributors = ({ contributors }: IProps) => {
           <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
             <DialogContent
               className="gap-0 rounded-lg border-2 border-black p-0 ring-0"
-              // Without this the first contributor's link takes focus on open
-              // and the row reads as selected.
               initialFocus={modalRef}
               ref={modalRef}
             >

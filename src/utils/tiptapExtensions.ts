@@ -106,6 +106,9 @@ export const Youtube = Node.create({
 export const TIPTAP_EXTENSIONS = [
   StarterKit.configure({
     heading: { levels: [2, 3, 4] },
+    // Registered separately below with our own config.
+    underline: false,
+    link: false,
   }),
   Underline,
   TextAlign.configure({

@@ -9,6 +9,7 @@ const text = {
   color: '#686868',
   fontSize: '18px',
   lineHeight: '30px',
+  whiteSpace: 'pre-line' as const,
 };
 
 interface IProps {

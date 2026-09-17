@@ -112,11 +112,7 @@ export const LibraryList = () => {
         </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && (
-        <Flex sx={{ justifyContent: 'center' }}>
-          <Spinner className="size-12" />
-        </Flex>
-      )}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
 
       <h3 className="mx-auto mt-5 max-w-[500px] text-center text-xl font-semibold">
         Contribute to the {tenantContext?.siteName || 'Community Platform'} library

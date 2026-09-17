@@ -34,10 +34,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       <Flex
         sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
       >
-        <div className="flex flex-col items-center gap-2 self-center">
-          <Spinner className="size-12" />
-          <span className="text-center text-base">{mapState.loadingMessage}</span>
-        </div>
+        <Spinner className="self-center" label={mapState.loadingMessage} />
       </Flex>
     );
   }

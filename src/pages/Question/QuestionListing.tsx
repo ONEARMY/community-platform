@@ -125,11 +125,7 @@ export const QuestionListing = () => {
         </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && (
-        <Flex sx={{ justifyContent: 'center' }}>
-          <Spinner className="size-12" />
-        </Flex>
-      )}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
     </Flex>
   );
 };

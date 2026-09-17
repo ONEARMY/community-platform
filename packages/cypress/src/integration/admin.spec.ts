@@ -58,4 +58,15 @@ describe('[Admin]', () => {
     cy.get('a[href*="/u/"').first().click()
     cy.url().should('include', '/u/')
   })
+
+  it('[Admin can click on the edit button to go to the question edit page]', () => {
+
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.get('a[href*="/edit"').first().click()
+    cy.url().should('include', '/edit')
+    cy.contains('Edit your question to the community');
+  })
 });

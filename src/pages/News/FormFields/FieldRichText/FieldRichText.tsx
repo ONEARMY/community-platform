@@ -48,7 +48,7 @@ export const FieldRichText = (props: IProps) => {
     const current = JSON.stringify(editor.getJSON());
     const next = JSON.stringify(input.value || null);
     if (current !== next) {
-      editor.commands.setContent(input.value || null, false);
+      editor.commands.setContent(input.value || null, { emitUpdate: false });
     }
   }, [editor, input.value]);
 

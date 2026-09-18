@@ -1,4 +1,4 @@
-import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
+import { Button, Loader } from 'oa-components';
 import { useFormState } from 'react-final-form';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
@@ -68,11 +68,9 @@ export const FormWrapper = (props: IProps) => {
           onSubmit={handleSubmit}
         >
           <Card sx={{ backgroundColor: 'softblue' }}>
-            <Flex sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}>
+            <Flex className="items-center gap-[15px]" sx={{ paddingX: 3, paddingY: 2 }}>
               <Heading as="h1">{heading}</Heading>
-              <Box ml="15px">
-                <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
-              </Box>
+              <img className="size-[20px] shrink-0 object-contain" src={IconHeaderHowto} alt="" />
             </Flex>
           </Card>
           {guidelines && <Box sx={{ display: ['block', 'block', 'none'] }}>{guidelines}</Box>}

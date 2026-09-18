@@ -30,6 +30,19 @@ describe('UserStatistics', () => {
     expect(container).toBeTruthy();
   });
 
+  it('renders statistic icons with the inline layout', () => {
+    const { getByTestId } = render(<UserStatistics {...defaultProps} />);
+
+    for (const testId of ['useful-stat', 'library-stat', 'research-stat', 'questions-stat']) {
+      const statistic = getByTestId(testId);
+      const icon = statistic.querySelector('img');
+
+      expect(statistic).toHaveClass('flex', 'items-center', 'gap-2');
+      expect(icon).toHaveAttribute('alt', '');
+      expect(icon).toHaveClass('size-[22px]', 'shrink-0', 'object-contain');
+    }
+  });
+
   it('renders location link when country and userName are provided', () => {
     const { getByTestId } = render(<UserStatistics {...defaultProps} />);
     const locationLink = getByTestId('location-link');

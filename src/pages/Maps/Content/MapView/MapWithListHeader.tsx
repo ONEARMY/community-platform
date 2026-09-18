@@ -1,7 +1,8 @@
 import { LatLngBounds } from 'leaflet';
-import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components';
+import { Button, MapCardList, Modal, OsmGeocoding } from 'oa-components';
 import { useContext, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { MapContext } from '../../MapContext';
 import { MapFilterList } from '../../MapFilterList';
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client';
@@ -33,7 +34,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       <Flex
         sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
       >
-        <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
+        <Spinner className="self-center" label={mapState.loadingMessage} />
       </Flex>
     );
   }

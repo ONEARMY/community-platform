@@ -77,7 +77,7 @@ export const ResearchContributors = ({ contributors }: IProps) => {
               initialFocus={modalRef}
               ref={modalRef}
             >
-              <DialogHeader className="border-b border-black px-4 py-3">
+              <DialogHeader className="border-b-2 border-black px-4 py-3">
                 <DialogTitle className="text-base">{label}</DialogTitle>
               </DialogHeader>
               <ul className="flex max-h-96 flex-col gap-4 overflow-y-auto px-4 py-3">

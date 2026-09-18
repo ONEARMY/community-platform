@@ -69,4 +69,17 @@ describe('[Admin]', () => {
     cy.url().should('include', '/edit')
     cy.contains('Edit your question to the community');
   })
+
+  it('[When admin clicks on the delete button the confirmation dialog will show]', () => {
+
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin/questions')
+    cy.wait(500)
+    cy.get('button[aria-label*="Delete"]').first().click()
+    cy.contains('Delete Question')
+    cy.get('button').contains("Cancel").click()
+    cy.get('body').should("not.contain.text", "Delete Question")
+
+  })
 });

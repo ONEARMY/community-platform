@@ -47,7 +47,7 @@ export function DeleteQuestionDialog({ question, onOpenChange }: IProps) {
     <Dialog open={!!question} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete category</DialogTitle>
+          <DialogTitle>Delete Question</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete "{question?.title}"? This cannot be undone.
           </DialogDescription>

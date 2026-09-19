@@ -45,6 +45,7 @@
   --color-softblue: var(--softblue);
   --color-highlight-hover: var(--highlight-hover);
   --spacing: 0.3125rem;
+  --radius-s: var(--spacing);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

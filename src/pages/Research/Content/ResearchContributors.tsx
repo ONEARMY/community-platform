@@ -54,7 +54,7 @@ export const ResearchContributors = ({ contributors }: IProps) => {
         <>
           <button
             aria-label={`Show all ${label}`}
-            className="flex cursor-pointer radius-1 p-1 items-center gap-1 rounded-1 border border-transparent hover:border-highlight-hover hover:bg-softblue"
+            className="flex cursor-pointer rounded-s p-1 items-center gap-1 border border-transparent hover:border-highlight-hover hover:bg-softblue"
             data-cy="research-contributors-trigger"
             onClick={() => setIsModalOpen(true)}
             type="button"

@@ -42,32 +42,32 @@ export const ResearchContributors = ({ contributors }: IProps) => {
   const label = `${contributors.length} contributors`;
 
   return (
-    <div className="flex items-center gap-[5px] text-sm" data-cy="research-contributors">
+    <div className="flex items-center gap-1 text-sm" data-cy="research-contributors">
       <span className="text-muted-foreground">with</span>
 
       {contributors.length === 1 ? (
-        <span className="flex items-center gap-[5px]">
-          <ContributorAvatar className="size-[25px]" contributor={contributors[0]} />
+        <span className="flex items-center gap-2">
+          <ContributorAvatar className="size-5" contributor={contributors[0]} />
           <Username user={contributors[0]} />
         </span>
       ) : (
         <>
           <button
             aria-label={`Show all ${label}`}
-            className="flex cursor-pointer items-center gap-[5px] rounded-[4px] border border-transparent px-1 py-0.5 hover:border-[#97cdeb] hover:bg-[#e2edf7]"
+            className="flex cursor-pointer radius-1 p-1 items-center gap-1 rounded-1 border border-transparent hover:border-highlight-hover hover:bg-softblue"
             data-cy="research-contributors-trigger"
             onClick={() => setIsModalOpen(true)}
             type="button"
           >
-            <span className="flex -space-x-2">
+            <div className="flex -space-x-2">
               {contributors.slice(0, MAX_VISIBLE_AVATARS).map((contributor, index) => (
                 <ContributorAvatar
-                  className="size-[25px]"
+                  className="size-5"
                   contributor={contributor}
                   key={contributorKey(contributor, index)}
                 />
               ))}
-            </span>
+            </div>
             <span>{label}</span>
           </button>
 

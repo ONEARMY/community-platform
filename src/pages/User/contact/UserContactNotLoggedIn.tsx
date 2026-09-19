@@ -1,5 +1,5 @@
 import { Button, ReturnPathLink } from 'oa-components';
-import { Alert, Flex, Text } from 'theme-ui';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface Props {
   displayName: string;
@@ -8,12 +8,10 @@ interface Props {
 export const UserContactNotLoggedIn = ({ displayName }: Props) => {
   return (
     <Alert variant="info" data-cy="UserContactNotLoggedIn">
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Text sx={{ textAlign: 'left' }}>
-          {`${displayName} would love to hear from you...but you're not logged in!`}
-        </Text>
-        <Text sx={{ textAlign: 'left' }}>If you were you'd able to send them a message...</Text>
-        <Flex sx={{ alignItems: 'center', flexDirection: 'row', gap: 2 }}>
+      <AlertDescription className="text-left">
+        <p>{`${displayName} would love to hear from you...but you're not logged in!`}</p>
+        <p>If you were you'd able to send them a message...</p>
+        <div className="flex items-center gap-2">
           <ReturnPathLink
             to="/sign-in"
             style={{
@@ -28,8 +26,8 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
               Sign-up now
             </Button>
           </ReturnPathLink>
-        </Flex>
-      </Flex>
+        </div>
+      </AlertDescription>
     </Alert>
   );
 };

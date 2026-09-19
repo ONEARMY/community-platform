@@ -33,11 +33,11 @@ export function DeleteQuestionDialog({ question, onOpenChange }: IProps) {
     const promise = questionService.deleteQuestion(question.id).finally(() => setSubmitting(false));
 
     toast.promise(promise, {
-      loading: 'Deleting category...',
+      loading: 'Deleting question...',
       success: () => {
         onOpenChange(false);
         revalidator.revalidate();
-        return 'Category deleted';
+        return 'Question deleted';
       },
       error: (error) => error.message || 'Something went wrong',
     });

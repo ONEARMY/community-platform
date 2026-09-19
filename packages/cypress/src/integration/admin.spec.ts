@@ -60,7 +60,6 @@ describe('[Admin]', () => {
   })
 
   it('[Admin can click on the edit button to go to the question edit page]', () => {
-
     cy.signIn(admin.email, admin.password)
 
     cy.visit('/admin')
@@ -71,7 +70,6 @@ describe('[Admin]', () => {
   })
 
   it('[When admin clicks on the delete button the confirmation dialog will show]', () => {
-
     cy.signIn(admin.email, admin.password)
 
     cy.visit('/admin/questions')
@@ -82,4 +80,20 @@ describe('[Admin]', () => {
     cy.get('body').should("not.contain.text", "Delete Question")
 
   })
+
+
+  it('[Admin can delete questions from the question page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin/questions')
+    cy.wait(500)
+    cy.get('button[aria-label*="Delete"]').first().click()
+    cy.contains('Delete Question')
+    cy.get('button').contains("Delete").click()
+    cy.get('body').should("not.contain.text", "Delete Question")
+    cy.get('tr').should("have.class", "bg-gray-100")
+
+  })
+  // TODO: Add test for deleting question
+  // TODO: seperate admin question test to their own 'describe' and have the signin be beforeall
 });

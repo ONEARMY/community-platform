@@ -62,9 +62,10 @@ export function QuestionsPage({ questions }: IProps) {
               <TableCell>{question.totalViews}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
-                  <Link to={'/questions/' + question.slug + '/edit'}>
+                  <Link to={question.deleted ? '' : '/questions/' + question.slug + '/edit'}>
                     <Button
                       variant="ghost"
+                      disabled={question.deleted ? true : false}
                       size="icon-sm"
                       aria-label={`Edit ${question.title}`}
                       onClick={() => {}}

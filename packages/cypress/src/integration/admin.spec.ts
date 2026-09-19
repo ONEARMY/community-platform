@@ -94,6 +94,4 @@ describe('[Admin]', () => {
     cy.get('tr').should("have.class", "bg-gray-100")
 
   })
-  // TODO: Add test for deleting question
-  // TODO: seperate admin question test to their own 'describe' and have the signin be beforeall
 });

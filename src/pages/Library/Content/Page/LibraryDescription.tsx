@@ -18,7 +18,8 @@ import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
-import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
+import { Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface IProps {
   commentsCount: number;
@@ -73,13 +74,11 @@ export const LibraryDescription = ({
           )}
 
           {showFeedback && (
-            <Alert variant="info">
-              <Box sx={{ textAlign: 'left' }} data-cy="moderationFeedback">
-                <Heading as="p" variant="small">
-                  Moderator Feedback
-                </Heading>
-                <Text sx={{ fontSize: 2 }}>{item.moderationFeedback}</Text>
-              </Box>
+            <Alert variant="info" className="text-left" data-cy="moderationFeedback">
+              <AlertTitle className="font-heading text-lg font-normal tracking-normal">
+                Moderator Feedback
+              </AlertTitle>
+              <AlertDescription className="text-sm">{item.moderationFeedback}</AlertDescription>
             </Alert>
           )}
 

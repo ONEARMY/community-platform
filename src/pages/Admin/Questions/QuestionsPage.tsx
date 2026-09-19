@@ -74,6 +74,7 @@ export function QuestionsPage({ questions }: IProps) {
                   </Link>
                   <Button
                     variant="ghost"
+                    disabled={question.deleted ? true : false}
                     size="icon-sm"
                     aria-label={`Delete ${question.title}`}
                     onClick={() => setDeletingQuestion(question)}

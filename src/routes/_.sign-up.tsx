@@ -2,12 +2,14 @@ import { HeroBanner } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useLoaderData } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
+import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
@@ -16,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -26,11 +29,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
   const tenantSettings = await new TenantSettingsService(client).get();
   const profileTypes = await new ProfileTypesServiceServer(client).get();
+  const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
   const showOrganisationSignup =
     !!tenantSettings.organisationSignupDescriptionHtml && profileTypes.some((type) => type.isSpace);
 
-  return data({ ...tenantSettings, showOrganisationSignup }, { headers });
+  return data({ ...tenantSettings, showOrganisationSignup, turnstileSiteKey }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -50,12 +54,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signupResult = await client.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo,
+      captchaToken,
     },
   });
 
@@ -68,6 +74,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
+    // Supabase returns a fake user with no identities for an already-registered
+    // email, to avoid leaking which emails exist. Don't try to create a profile for it.
+    if (signupResult.data.user.identities?.length === 0) {
+      logger.warn('Sign-up attempted for already-registered email');
+      return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+    }
+
     const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
 
     // This will error if there is already a profile with this auth_id + tenant_id
@@ -80,8 +93,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const loaderData = useLoaderData<typeof loader>();
+  const { showOrganisationSignup, turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== 'idle';
 
   const validationSchema = object({
     email: string().email(FRIENDLY_MESSAGES['auth/invalid-email']).required('Required'),
@@ -92,6 +107,7 @@ export default function Index() {
       .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
       .required(FRIENDLY_MESSAGES['sign-up/email-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
+    'cf-turnstile-token': string().required(FRIENDLY_MESSAGES['sign-up/captcha-required']),
   });
 
   return (
@@ -111,8 +127,8 @@ export default function Index() {
             );
           }
         }}
-        render={({ submitting, invalid, pristine }) => {
-          const disabled = invalid || submitting;
+        render={({ invalid, pristine }) => {
+          const disabled = invalid || isSubmitting;
           return (
             <form method="post">
               <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
@@ -129,7 +145,7 @@ export default function Index() {
                         Sign-in here
                       </Link>
                     </p>
-                    {loaderData?.showOrganisationSignup && (
+                    {showOrganisationSignup && (
                       <p className="text-sm text-muted-foreground">
                         Are you an organisation?{' '}
                         <Link
@@ -222,6 +238,15 @@ export default function Index() {
                             </a>
                           </span>
                         </Label>
+                      )}
+                    </Field>
+
+                    <Field name="cf-turnstile-token">
+                      {({ input }) => (
+                        <>
+                          <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                          <input {...input} type="hidden" />
+                        </>
                       )}
                     </Field>
 

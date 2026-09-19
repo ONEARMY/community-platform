@@ -9,6 +9,9 @@ vi.mock('src/repository/supabase.server');
 vi.mock('src/services/organisationApplicationsService.server');
 vi.mock('src/services/profileService.server');
 vi.mock('src/services/tenantSettingsService.server');
+vi.mock('src/services/secretsService.server', () => ({
+  getSecret: vi.fn().mockResolvedValue('test-turnstile-site-key'),
+}));
 
 const setup = (opts: { hasApplication?: boolean }) => {
   const signInWithPassword = vi

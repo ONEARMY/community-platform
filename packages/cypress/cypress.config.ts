@@ -108,8 +108,12 @@ export default defineConfig({
               'upgrade_badge',
               'tenant_settings',
               'organisation_applications',
-              'notification_preferences',
               'news_badges_relations',
+              'poll_votes',
+              'poll_options',
+              'polls',
+              'useful_votes',
+              'map_pins',
             ],
             tenantId,
           );

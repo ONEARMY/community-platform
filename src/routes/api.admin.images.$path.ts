@@ -73,7 +73,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     const storage = new StorageServiceServer(client);
-    const uploadResult = await storage.uploadImage([safeFile], params.path);
+    const uploadResult = await storage.uploadImage([safeFile], params.path, {
+      preserveFileName: true,
+      upsert: true,
+    });
 
     if (uploadResult.errors.length > 0) {
       throw validationError(uploadResult.errors.join(', '));

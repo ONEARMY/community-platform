@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { AuthorVotes, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
@@ -14,33 +15,41 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Text } from 'theme-ui';
 
+async function getUserCreatedDocs(
+  client: SupabaseClient,
+  username: string | null,
+): Promise<UserCreatedDocs> {
+  if (!username) {
+    return { projects: [], research: [], questions: [] };
+  }
+
+  const [projects, research, questions] = await Promise.all([
+    new LibraryServiceServer(client).getUserProjects(username),
+    new ResearchServiceServer(client).getUserResearch(username),
+    new QuestionServiceServer(client).getQuestionsByUser(username),
+  ]);
+
+  return { projects, research, questions };
+}
+
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
   try {
     const tenantSettings = await new TenantSettingsService(client).get();
     const profileService = new ProfileServiceServer(client);
 
-    const username = params.id as string;
+    const idOrUsername = params.id as string;
 
-    const [profileDb, projects, research, questions] = await Promise.all([
-      profileService.getByUsername(username),
-      new LibraryServiceServer(client).getUserProjects(username),
-      new ResearchServiceServer(client).getUserResearch(username),
-      new QuestionServiceServer(client).getQuestionsByUser(username),
-    ]);
-
-    const userCreatedDocs = {
-      projects,
-      research,
-      questions,
-    } as UserCreatedDocs;
+    const profileDb =
+      (await profileService.getByUsername(idOrUsername)) ??
+      (/^\d+$/.test(idOrUsername) ? await profileService.getById(Number(idOrUsername)) : null);
 
     if (!profileDb) {
       return data({ profile: null, tenantSettings }, { headers });
     }
 
-    // Hide profiles that are still awaiting moderation from everyone except their
-    // owner and staff (admins/moderators, who may preview before approving)
+    // Hide profiles awaiting moderation from everyone except their owner and staff.
+    // Runs before the id -> username redirect so an unapproved username isn't revealed.
     const isPendingModeration = !!profileDb.moderation && profileDb.moderation !== 'accepted';
 
     if (isPendingModeration) {
@@ -61,7 +70,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       }
     }
 
-    const authorVotesDb = await profileService.getAuthorUsefulVotes(profileDb.id);
+    // Supporters get linked by profile id before they pick a username
+    if (profileDb.username && profileDb.username !== idOrUsername) {
+      return redirect(`/u/${profileDb.username}`, { headers });
+    }
+
+    const [userCreatedDocs, authorVotesDb] = await Promise.all([
+      getUserCreatedDocs(client, profileDb.username),
+      profileService.getAuthorUsefulVotes(profileDb.id),
+    ]);
+
     const authorVotes = authorVotesDb ? authorVotesDb.map((x) => AuthorVotes.fromDB(x)) : undefined;
 
     if (profileDb?.id) {

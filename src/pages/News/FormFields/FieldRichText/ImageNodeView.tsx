@@ -5,7 +5,7 @@ import { Textarea } from 'src/components/ui/textarea';
 import { CAPTION_MAX_LENGTH } from 'src/utils/tiptapExtensions';
 
 export const ImageNodeView = ({ node, updateAttributes, selected }: NodeViewProps) => {
-  const { src, alt, width, caption } = node.attrs;
+  const { src, alt, caption } = node.attrs;
   const [captionDraft, setCaptionDraft] = useState<string>(caption ?? '');
 
   // Stay in sync if the caption changes from elsewhere (e.g. undo/redo).
@@ -23,8 +23,8 @@ export const ImageNodeView = ({ node, updateAttributes, selected }: NodeViewProp
     <NodeViewWrapper
       as="figure"
       style={{
-        margin: '0 auto 1rem',
-        width: width || '100%',
+        margin: '10px auto',
+        width: '100%',
       }}
     >
       <img

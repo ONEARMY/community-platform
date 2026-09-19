@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react';
-import { BubbleMenu, useEditorState } from '@tiptap/react';
+import { useEditorState } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 import { ExternalLink, Eye, Link2Off } from 'lucide-react';
 import { Button } from 'oa-components';
 import { useEffect, useRef, useState } from 'react';
@@ -79,10 +80,10 @@ export const LinkBubbleMenu = ({ editor }: IProps) => {
       editor={editor}
       pluginKey="linkBubbleMenu"
       shouldShow={({ editor }) => editor.isActive('link')}
-      tippyOptions={{
+      style={{ zIndex: 3 }}
+      options={{
         placement: 'bottom',
-        offset: [0, 8],
-        zIndex: 3,
+        offset: 8,
         onShow: () => {
           requestAnimationFrame(() => inputRef.current?.focus());
         },

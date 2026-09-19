@@ -10,21 +10,17 @@ import { YoutubeNodeView } from 'src/pages/News/FormFields/FieldRichText/Youtube
 
 /**
  * CSS `text-align` has no visual effect on an `<img>` element (it only affects inline
- * content inside a block container), so images are always centered via `margin: 0 auto`
+ * content inside a block container), so images are always centered via `margin: 10px auto`
  * instead. This is for browser-rendered surfaces (the editor's own view, and the web page
  * via generateHTML) only. Email uses a separate renderer (see renderTiptapEmail) that needs
  * a table-based `align` attribute instead, since Outlook doesn't reliably honor `margin: auto`.
  */
-export const IMAGE_WIDTH_PRESETS = ['25%', '50%', '75%', '100%'] as const;
 export const CAPTION_MAX_LENGTH = 180;
 
 export const Image = TiptapImage.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      width: {
-        default: null,
-      },
       caption: {
         default: null,
       },
@@ -41,9 +37,8 @@ export const Image = TiptapImage.extend({
   // keep it in sync with ImageNodeView.tsx and renderTiptapHtml.ts's image case.
   renderHTML({ node, HTMLAttributes }) {
     const { style: _discardStyle, ...rest } = HTMLAttributes;
-    const width = node.attrs.width as string | null;
     const caption = node.attrs.caption as string | null;
-    const style = `display:block;margin:0 auto;${width ? `width:${width};` : ''}`;
+    const style = 'display:block;width:100%;margin:10px auto;';
     const img = ['img', mergeAttributes(rest, { style })] as const;
 
     if (!caption) {
@@ -111,6 +106,9 @@ export const Youtube = Node.create({
 export const TIPTAP_EXTENSIONS = [
   StarterKit.configure({
     heading: { levels: [2, 3, 4] },
+    // Registered separately below with our own config.
+    underline: false,
+    link: false,
   }),
   Underline,
   TextAlign.configure({

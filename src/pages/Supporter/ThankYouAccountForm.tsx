@@ -14,6 +14,7 @@ export const ThankYouAccountForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const signInFormRef = useRef<HTMLFormElement>(null);
+  const ticketInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -49,6 +50,9 @@ export const ThankYouAccountForm = () => {
       return;
     }
 
+    if (ticketInputRef.current) {
+      ticketInputRef.current.value = result.signInTicket;
+    }
     signInFormRef.current?.submit();
   };
 
@@ -149,11 +153,10 @@ export const ThankYouAccountForm = () => {
       <form
         ref={signInFormRef}
         method="post"
-        action={`/sign-in?returnUrl=${encodeURIComponent('/setup-email-preferences')}`}
+        action={`/api/stripe/sign-in?returnUrl=${encodeURIComponent('/setup-email-preferences')}`}
         style={{ display: 'none' }}
       >
-        <input type="hidden" name="email" value={email} />
-        <input type="hidden" name="password" value={password} />
+        <input ref={ticketInputRef} type="hidden" name="ticket" />
       </form>
     </ThankYouLayout>
   );

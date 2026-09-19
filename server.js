@@ -85,6 +85,7 @@ const sharedCspOptions = {
     'sentry.io',
     '*.sentry.io',
     'api.stripe.com',
+    'challenges.cloudflare.com',
     ...wsUrls,
   ],
   defaultSrc: [
@@ -107,6 +108,7 @@ const sharedCspOptions = {
     'www.youtube.com',
     'donorbox.org',
     'js.stripe.com',
+    'challenges.cloudflare.com',
     "'unsafe-eval'",
     "'unsafe-inline'",
   ],
@@ -118,6 +120,7 @@ const sharedCspOptions = {
     '*.donorbox.org',
     'donorbox.org',
     'js.stripe.com',
+    'challenges.cloudflare.com',
     '*.run.app',
     '*.netlify.app',
     'projectkamp.com',

@@ -23,8 +23,8 @@ export const ProfilePage = observer((props: IProps) => {
   const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
 
   const isViewingOwnProfile = useMemo(
-    () => activeUser?.username === profile?.username,
-    [activeUser?.username],
+    () => !!activeUser && activeUser.id === profile.id,
+    [activeUser?.id, profile.id],
   );
   const showMemberProfile = !profile?.type?.isSpace;
   const upgradeBadge = upgradeBadgeForCurrentUser;

@@ -159,7 +159,7 @@ Cypress.Commands.add('setSettingPublicContact', () => {
 Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.log('Fill in sign-up form');
   cy.visit('/sign-up');
-  cy.wait(2000);
+  cy.get('input[name="cf-turnstile-token"]').should('not.have.value', '');
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=confirm-password]').clear().type(password);
@@ -169,11 +169,12 @@ Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
 Cypress.Commands.add('signIn', (email: string, password: string) => {
   cy.log('Fill in sign in form');
   cy.visit('/sign-in');
-  cy.wait(2000);
+  cy.get('input[name="cf-turnstile-token"]').should('not.have.value', '');
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
-  cy.get('[data-cy=submit]').click();
-  cy.get('[data-cy=loader]').should('not.exist');
+  cy.get('[data-cy=submit]').should('be.enabled').click();
+  cy.location('pathname').should('not.include', '/sign-in');
+  cy.get('[data-cy=user-menu]').should('exist');
 });
 
 Cypress.Commands.add('logout', () => {

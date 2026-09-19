@@ -116,7 +116,7 @@ export class StripeServiceServer {
 
   static async getStripeCustomer(
     customerId: string,
-  ): Promise<{ id: string; email: string | null } | null> {
+  ): Promise<{ id: string; email: string | null; name: string | null } | null> {
     const stripe = await getStripe();
     if (!stripe) {
       return null;
@@ -126,7 +126,26 @@ export class StripeServiceServer {
       if (customer.deleted) {
         return null;
       }
-      return { id: customer.id, email: customer.email };
+      return { id: customer.id, email: customer.email, name: customer.name ?? null };
+    } catch {
+      return null;
+    }
+  }
+
+  static async getPriceInterval(priceId: string): Promise<Stripe.Price.Recurring.Interval | null> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return null;
+    }
+
+    try {
+      const price = await stripe.prices.retrieve(priceId);
+
+      if (!price.recurring || price.recurring.interval_count !== 1) {
+        return null;
+      }
+
+      return price.recurring.interval;
     } catch {
       return null;
     }
@@ -500,6 +519,49 @@ export class StripeServiceServer {
     return data?.badge_id ?? null;
   }
 
+  // Filters on tenant_id rather than relying on the tenant_isolation RLS policy, because
+  // callers include the Stripe webhook, which uses the service_role client and bypasses RLS.
+  async getTierNameForProduct(productId: string, tenantId: string): Promise<string | null> {
+    const { data } = await this.client
+      .from('stripe_badge_products')
+      .select('profile_badges:badge_id(display_name)')
+      .eq('stripe_product_id', productId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    const badge = data?.profile_badges as unknown as { display_name: string } | null;
+
+    return badge?.display_name ?? null;
+  }
+
+  // Takes the email so callers holding the Stripe customer do not fetch it a second time.
+  async getProfileIdentityByStripeCustomerId(
+    customerId: string,
+    tenantId: string,
+    customerEmail: string | null,
+  ): Promise<{ id: number; displayName: string | null } | null> {
+    const authId =
+      (await this.getAuthIdByStripeCustomerId(customerId, tenantId)) ??
+      (customerEmail ? await this.getAuthIdByEmail(customerEmail) : null);
+
+    if (!authId) {
+      return null;
+    }
+
+    const { data } = await this.client
+      .from('profiles')
+      .select('id, display_name')
+      .eq('auth_id', authId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    if (!data) {
+      return null;
+    }
+
+    return { id: data.id, displayName: data.display_name };
+  }
+
   async getProfileIdByAuthId(authId: string, tenantId: string): Promise<number | null> {
     const { data } = await this.client
       .from('profiles')
@@ -517,7 +579,11 @@ export class StripeServiceServer {
       return null;
     }
 
-    const { data } = await this.client.rpc('get_user_id_by_email', { email: customer.email });
+    return this.getAuthIdByEmail(customer.email);
+  }
+
+  async getAuthIdByEmail(email: string): Promise<string | null> {
+    const { data } = await this.client.rpc('get_user_id_by_email', { email });
     if (!Array.isArray(data) || data.length === 0) {
       return null;
     }

@@ -1,6 +1,6 @@
-import { SiteFooter } from 'oa-components';
 import { useContext, useMemo } from 'react';
 import { useLocation } from 'react-router';
+import { SiteFooter } from '@/components/ui/site-footer';
 
 import { TenantContext } from '../TenantContext';
 

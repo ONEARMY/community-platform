@@ -4,6 +4,8 @@ Thanks for being here already! You'll find all the information you need to start
 
 If you think something is missing, consider sending us a PR.
 
+> **Using an AI coding agent?** Point it at [AGENTS.md](./AGENTS.md) before it writes any code, and read [AI-assisted contributions](#-ai-assisted-contributions) below. We review agent-written PRs by the same standard as any other — you are responsible for what you submit.
+
 ## 🍽 Summary
 
 - [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-code-of-conduct)
@@ -12,6 +14,8 @@ If you think something is missing, consider sending us a PR.
 - [Branching](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-branching)
 - [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-style-guide)
 - [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-testing)
+- [Submitting a pull request](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-submitting-a-pull-request)
+- [AI-assisted contributions](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-ai-assisted-contributions)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-joining-the-team)
 - [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-contributing-with-uxui-design)
 
@@ -25,7 +29,7 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 ### Prerequisites
 
-- [Bun 1.3.10](https://bun.sh/docs/installation)
+- [Bun 1.4.2](https://bun.sh/docs/installation)
 
 ### One time setup
 
@@ -126,9 +130,54 @@ A few practices we ensure:
 - We use `helmet` for CSP and other security checks
 - Reduce and keep packages up-to-date to reduce potential vulnerabilities
 
-## First time contributing?
+## 🚀 Submitting a pull request
 
-Early on, and especially when contributing for the first time, please only submit and work on a single issue at a time. It's likely there's lots of little changes we'd like you to make while you get up to speed with how we work and what the code already does.
+### Start from an issue
+
+Find an open issue and **ask to be assigned** before you start. We close unsolicited PRs that don't correspond to an assigned issue.
+
+Work on **one** issue at a time, especially for your first contributions. There are usually lots of small changes we'll ask for while you get up to speed with how we work.
+
+### Keep the PR small and focused
+
+One issue per PR. Don't mix in refactors, reformatting, renames or dependency bumps that the issue didn't call for.
+
+### Screenshots are required for UI changes
+
+If your PR touches anything under `src/pages`, `src/components`, `packages/components`, `packages/themes`, or any `.css` file, run the app and look at your change before you submit it. Then attach to the PR description:
+
+- a **before** and **after** screenshot
+- the same view at **mobile width** (375px)
+
+A UI change with no screenshot gets closed.
+
+### Write a short description
+
+Use the PR template and keep it **under 400 words**. Say what changed. Don't restate the diff, don't narrate how you arrived at the solution, and don't replace the template with your own format. Link the issue with `Closes #123`.
+
+### What we close without review
+
+- No assigned issue (for first-time contributors)
+- UI change with no screenshot
+- PR template deleted or ignored
+- A description that is mostly generated filler
+- Unrelated refactors, reformatting or dependency bumps bundled in
+- Code the author clearly hasn't run
+
+## 🤖 AI-assisted contributions
+
+Using an AI agent is fine. Submitting its output unread is not.
+
+If you used one, you're expected to have:
+
+1. **Run the app** and tested the change yourself.
+2. **Read the whole diff** and be able to explain any line of it in review.
+3. **Checked it against this guide** — especially [style](#-style-guide), [testing](#-testing), and the screenshot requirement above.
+4. **Said so in the PR.** We don't mind; it helps us review.
+
+Agents should read [AGENTS.md](./AGENTS.md), which carries the same rules in a form they follow well.
+
+The most common failures we see in agent-written PRs, in order: no screenshot on a UI change, a description many times longer than the diff deserves, the PR template discarded, code comments added (we almost never need them).
 
 ## 🤝 Joining the team
 

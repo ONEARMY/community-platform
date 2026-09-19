@@ -36,30 +36,26 @@ export const logger = new Logger({
   },
 });
 
-// Bridge caught-and-logged errors into Sentry. These are only console-logged
-// today and invisible in Sentry (Sentry.captureException is only called from
-// the top-level error boundaries in entry.server.tsx / entry.client.tsx) -
-// this covers try/catch'd service errors that never reach a boundary.
 logger.use((ctx) => {
   if (ctx.logLevelId >= levelNumberToNameMap['error']) {
-    const carrier = ctx.args.find(
-      (a) => a instanceof Error || (typeof a === 'object' && a !== null && 'error' in a),
-    ) as any;
-    const errorLike = carrier instanceof Error ? carrier : carrier?.error;
-    const message = ctx.args.find((a) => typeof a === 'string');
+    const message = ctx.args.find((a) => typeof a === 'string') as string | undefined;
+    const objects = ctx.args.filter((a) => typeof a === 'object' && a !== null) as Record<
+      string,
+      any
+    >[];
 
-    if (errorLike instanceof Error) {
-      Sentry.captureException(errorLike, { extra: { message } });
-    } else if (errorLike && typeof errorLike === 'object') {
-      // Non-Error error-like object (e.g. Supabase's PostgrestError) - no
-      // stack trace to attach, but its message/code/details are still worth
-      // surfacing rather than a bare fallback message.
-      Sentry.captureMessage(message ?? errorLike.message ?? 'Unknown logger.error call', {
-        level: 'error',
-        extra: { error: errorLike },
-      });
+    const error = [...objects, ...objects.map((o) => o.error)].find((a) => a instanceof Error);
+
+    if (error) {
+      Sentry.captureException(error, { extra: { message } });
     } else {
-      Sentry.captureMessage(message ?? 'Unknown logger.error call', 'error');
+      const errorLike = objects.find(
+        (o) => typeof o.message === 'string' || typeof o.error === 'object',
+      );
+      Sentry.captureMessage(message ?? errorLike?.message ?? 'Unknown logger.error call', {
+        level: 'error',
+        extra: errorLike ? { error: errorLike } : undefined,
+      });
     }
   }
   return ctx;

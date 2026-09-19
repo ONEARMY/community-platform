@@ -79,7 +79,8 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "visitor_policy" "json",
     "website" "text",
     "profile_type" bigint,
-    "donations_enabled" boolean DEFAULT false NOT NULL
+    "donations_enabled" boolean DEFAULT false NOT NULL,
+    "signup_source" "text" DEFAULT 'sign_up'::"text" NOT NULL
 );
 
 ALTER TABLE ONLY "public"."profiles"

@@ -188,7 +188,7 @@ describe('[Organisation sign-up]', () => {
       cy.logout();
 
       cy.step('Signing in redirects to the application form');
-      cy.signIn(user.email, user.password);
+      cy.fillSignInForm(user.email, user.password);
       cy.url().should('include', '/organisation-application');
 
       cy.step('Settings also redirects to the application form');

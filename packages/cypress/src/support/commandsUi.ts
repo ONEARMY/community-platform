@@ -40,6 +40,7 @@ declare global {
       deleteDiscussionItem(element: string, item: string): Chainable<void>;
       editDiscussionItem(element: string, oldComment: string, updatedNewComment: string): Chainable<void>;
       signIn(email: string, password: string): Chainable<void>;
+      fillSignInForm(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
       fillSignupForm(email: string, password: string): Chainable<void>;
       fillIntroTitle(intro: string): Chainable<void>;
@@ -166,13 +167,17 @@ Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.get('[data-cy=consent]').click({ force: true });
 });
 
-Cypress.Commands.add('signIn', (email: string, password: string) => {
+Cypress.Commands.add('fillSignInForm', (email: string, password: string) => {
   cy.log('Fill in sign in form');
   cy.visit('/sign-in');
   cy.get('input[name="cf-turnstile-token"]').should('not.have.value', '');
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=submit]').should('be.enabled').click();
+});
+
+Cypress.Commands.add('signIn', (email: string, password: string) => {
+  cy.fillSignInForm(email, password);
   cy.location('pathname').should('not.include', '/sign-in');
   cy.get('[data-cy=user-menu]').should('exist');
 });

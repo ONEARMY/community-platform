@@ -46,7 +46,7 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
         <TableBody>
           {profileTypes.map((profileType) => (
             <TableRow key={profileType.id}>
-              <TableCell>{profileType.name}</TableCell>
+              <TableCell>{profileType.displayName}</TableCell>
               <TableCell className="max-w-xs truncate text-muted-foreground">
                 {profileType.description}
               </TableCell>

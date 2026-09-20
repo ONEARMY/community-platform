@@ -16,10 +16,10 @@ describe('Alert', () => {
 
   it('applies the legacy palette per variant', () => {
     const variants = {
-      success: 'bg-[#00c3a9]',
-      destructive: 'bg-[#f58d8e]',
-      info: 'bg-[#e2edf7]',
-      warning: 'bg-[#fee77b]',
+      success: 'bg-alert-success',
+      destructive: 'bg-alert-destructive',
+      info: 'bg-alert-info',
+      warning: 'bg-alert-warning',
     } as const;
 
     for (const [variant, className] of Object.entries(variants)) {

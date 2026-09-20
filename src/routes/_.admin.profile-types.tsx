@@ -12,7 +12,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { data } = await client
     .from('profile_types')
-    .select('name,display_name,order,image_url,small_image_url,description,map_pin_name,is_space');
+    .select('name,display_name,order,image_url,small_image_url,description,map_pin_name,is_space')
+    .order('order');
 
   const profileTypes = (data || []).map((profile_type) =>
     ProfileType.fromDB(profile_type as DBProfileType),

@@ -62,7 +62,10 @@ export function QuestionsPage({ questions }: IProps) {
               <TableCell>{question.totalViews}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
-                  <Link to={question.deleted ? '' : '/questions/' + question.slug + '/edit'}>
+                  <Link
+                    className={question.deleted ? 'cursor-default' : ''}
+                    to={question.deleted ? '' : '/questions/' + question.slug + '/edit'}
+                  >
                     <Button
                       variant="ghost"
                       disabled={question.deleted ? true : false}

@@ -127,7 +127,7 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
 
   const countLabel =
     remakes.length === 0
-      ? 'Remakes'
+      ? 'Remakes (⭐️New!)'
       : `${remakes.length} ${buildStatisticsLabel({
           stat: remakes.length,
           statUnit: 'remake',
@@ -144,7 +144,13 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
         <Text data-cy="remakes-count" sx={{ fontFamily: 'title', fontSize: 4 }}>
           {countLabel}
         </Text>
-        <Button type="button" variant="primary" data-cy="upload-remake" onClick={openAddForm}>
+        <Button
+          type="button"
+          variant="primary"
+          data-cy="upload-remake"
+          onClick={openAddForm}
+          sx={{ flexShrink: 0 }}
+        >
           Upload your remake
         </Button>
       </Flex>
@@ -177,7 +183,7 @@ export const RemakesSection = ({ project, onRemakeCountChange }: IProps) => {
           <Flex sx={{ flexDirection: 'column', alignItems: 'center', gap: 1 }}>
             <Text sx={{ fontFamily: 'title', fontSize: 4 }}>Make this and share with us!</Text>
             <Text sx={{ fontFamily: 'title', fontSize: 2, color: 'darkGrey' }}>
-              Try this tutorial and share with the community.
+              We'd love to see your version and learn from it.
             </Text>
           </Flex>
         </Flex>

@@ -8,32 +8,20 @@ import { logger } from 'src/logger';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
 import type { SupporterPrice, TierConfigMap } from 'src/services/stripeService.server';
+import { currencySymbol, formatCurrency } from 'src/utils/currency';
 import { CheckoutView } from './CheckoutView';
 import { type Interval, SupporterProvider } from './SupporterContext';
 import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
+
 import { TIER_CONFIG } from './tierConfig';
 
-export const formatPrice = (cents: number, currency: string) => {
-  const fractionDigits = cents % 100 === 0 ? 0 : 2;
-  return new Intl.NumberFormat(navigator.language, {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(cents / 100);
-};
+export const formatPrice = (minorUnits: number, currency: string) =>
+  formatCurrency(minorUnits, currency, navigator.language);
 
-export const getCurrencySymbol = (currency: string) =>
-  new Intl.NumberFormat(navigator.language, {
-    style: 'currency',
-    currency,
-    currencyDisplay: 'narrowSymbol',
-  })
-    .formatToParts(0)
-    .find((p) => p.type === 'currency')?.value || currency.toUpperCase();
+export const getCurrencySymbol = (currency: string) => currencySymbol(currency, navigator.language);
 
 type PageState = 'form' | 'checkout' | 'thank-you';
 

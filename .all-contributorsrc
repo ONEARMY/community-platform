@@ -1205,6 +1205,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "daniarjabagin",
+      "name": "Daniar Jabagin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/150630975?v=4",
+      "profile": "https://t.me/asterustudio",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "samuel-sarmah",
+      "name": "samuel-sarmah",
+      "avatar_url": "https://avatars.githubusercontent.com/u/151577316?v=4",
+      "profile": "https://github.com/samuel-sarmah",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

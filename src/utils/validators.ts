@@ -98,16 +98,16 @@ const ensureExternalUrl = (url: string) =>
   typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url;
 
 export {
-  validateUrl,
-  validateUrlAcceptEmpty,
-  validateEmail,
-  draftValidationWrapper,
-  required,
   addProtocolMutator,
+  composeValidators,
+  draftValidationWrapper,
+  endsWithQuestionMark,
   ensureExternalUrl,
   maxValue,
   minValue,
-  composeValidators,
   noSpecialCharacters,
-  endsWithQuestionMark,
+  required,
+  validateEmail,
+  validateUrl,
+  validateUrlAcceptEmpty,
 };

@@ -17,6 +17,17 @@ const getProfileTypes = async () => {
   }
 };
 
+const deleteProfileType = async (id: number) => {
+  const response = await fetch(`/api/profile-types/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting profile type' }));
+    throw new Error(errorData.error || 'Error deleting profile type');
+  }
+};
 export const profileTypesService = {
+  deleteProfileType,
   getProfileTypes,
 };

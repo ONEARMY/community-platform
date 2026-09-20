@@ -1,12 +1,17 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import { ProfileType } from 'oa-shared';
+import { DBProfileType, ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 
 const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export class ProfileTypesServiceServer {
   constructor(private client: SupabaseClient) {}
+
+  async getById(id: number): Promise<DBProfileType> {
+    const result = await this.client.from('questions').select().eq('id', id).single();
+    return result.data as DBProfileType;
+  }
 
   async get(cached = true) {
     if (cached) {

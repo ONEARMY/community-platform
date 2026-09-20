@@ -5,6 +5,7 @@ import {
   MegaphoneIcon,
   MessageCircleQuestionMarkIcon,
   TagsIcon,
+  UserPen,
   UsersIcon,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
@@ -37,6 +38,7 @@ const ADMIN_NAV_ITEMS = [
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map Pins', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
+  { label: 'Profile Types', href: '/admin/profile-types', icon: UserPen },
 ];
 
 export function AdminSidebar() {

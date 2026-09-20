@@ -38,6 +38,7 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
+            <TableHead>Is Space</TableHead>
             <TableHead className="w-0">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -48,6 +49,7 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
               <TableCell className="max-w-xs truncate text-muted-foreground">
                 {profileType.description}
               </TableCell>
+              <TableCell>{profileType.isSpace ? 'Yes' : 'No'}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
                   <Button

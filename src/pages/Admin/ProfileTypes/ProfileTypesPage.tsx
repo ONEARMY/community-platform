@@ -1,4 +1,4 @@
-import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { ImageOffIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import type { ProfileType } from 'oa-shared';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,26 @@ interface IProps {
   profileTypes: ProfileType[];
 }
 
+function ProfileTypeImage({ imageUrl, name }: { imageUrl: string | null; name: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!imageUrl || failed) {
+    return (
+      <div className="flex size-10 items-center justify-center rounded-md bg-muted text-muted-foreground">
+        <ImageOffIcon className="size-4" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={imageUrl}
+      alt={name}
+      className="size-10 rounded-md object-contain"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 export function ProfileTypesPage({ profileTypes }: IProps) {
   const [editingProfileType, setEditingProfileType] = useState<ProfileType | null | undefined>(
     undefined,
@@ -36,9 +56,10 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Image</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Is Space</TableHead>
+            <TableHead>Space</TableHead>
             <TableHead>Map Pin Name</TableHead>
             <TableHead className="w-0">Actions</TableHead>
           </TableRow>
@@ -46,6 +67,9 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
         <TableBody>
           {profileTypes.map((profileType) => (
             <TableRow key={profileType.id}>
+              <TableCell>
+                <ProfileTypeImage imageUrl={profileType.smallImageUrl} name={profileType.name} />
+              </TableCell>
               <TableCell>{profileType.displayName}</TableCell>
               <TableCell className="max-w-xs truncate text-muted-foreground">
                 {profileType.description}

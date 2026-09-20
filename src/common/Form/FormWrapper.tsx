@@ -69,8 +69,8 @@ export const FormWrapper = (props: IProps) => {
         >
           <Card sx={{ backgroundColor: 'softblue' }}>
             <div className="flex items-center gap-3 px-3 py-2">
-              <h1 className="font-heading text-[30px] font-normal leading-[1.25]">{heading}</h1>
-              <img className="size-[20px] shrink-0 object-contain" src={IconHeaderHowto} alt="" />
+              <h1 className="font-heading text-3xl font-normal leading-tight">{heading}</h1>
+              <img className="size-4 shrink-0 object-contain" src={IconHeaderHowto} alt="" />
             </div>
           </Card>
           {guidelines && <Box sx={{ display: ['block', 'block', 'none'] }}>{guidelines}</Box>}

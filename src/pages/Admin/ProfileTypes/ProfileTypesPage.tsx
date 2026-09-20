@@ -39,6 +39,7 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Is Space</TableHead>
+            <TableHead>Map Pin Name</TableHead>
             <TableHead className="w-0">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -50,6 +51,7 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
                 {profileType.description}
               </TableCell>
               <TableCell>{profileType.isSpace ? 'Yes' : 'No'}</TableCell>
+              <TableCell>{profileType.mapPinName}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
                   <Button

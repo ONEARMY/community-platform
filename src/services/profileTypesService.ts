@@ -38,6 +38,21 @@ const createProfileType = async (form: ProfileTypeFormData) => {
   return (await response.json()) as ProfileType;
 };
 
+const updateProfileType = async (id: number, form: ProfileTypeFormData) => {
+  const response = await fetch(`/api/profile-type${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Error updating profile type' }));
+    throw new Error(errorData.error || 'Error updating profile type');
+  }
+
+  return (await response.json()) as ProfileType;
+};
+
 const deleteProfileType = async (id: number) => {
   const response = await fetch(`/api/profile-types/${id}`, {
     method: 'DELETE',
@@ -52,4 +67,5 @@ export const profileTypesService = {
   createProfileType,
   deleteProfileType,
   getProfileTypes,
+  updateProfileType,
 };

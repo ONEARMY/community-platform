@@ -20,6 +20,8 @@ const getProfileTypes = async () => {
 export interface ProfileTypeFormData {
   name: string;
   description: string | null;
+  mapPinName: string;
+  isSpace: boolean;
   imageUrl: string | null;
 }
 

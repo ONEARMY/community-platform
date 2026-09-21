@@ -17,6 +17,27 @@ const getProfileTypes = async () => {
   }
 };
 
+export interface ProfileTypeFormData {
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+}
+
+const createProfileType = async (form: ProfileTypeFormData) => {
+  const response = await fetch('/api/profile-type', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Error creating profile type' }));
+    throw new Error(errorData.error || 'Error creating profile type');
+  }
+
+  return (await response.json()) as ProfileType;
+};
+
 const deleteProfileType = async (id: number) => {
   const response = await fetch(`/api/profile-types/${id}`, {
     method: 'DELETE',
@@ -28,6 +49,7 @@ const deleteProfileType = async (id: number) => {
   }
 };
 export const profileTypesService = {
+  createProfileType,
   deleteProfileType,
   getProfileTypes,
 };

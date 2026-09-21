@@ -23,27 +23,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const body = await request.json();
     const name = (body.name as string)?.trim();
-    const displayName = (body.displayName as string)?.trim();
-    const isSpace = body.isSpace as boolean;
 
     if (!name) {
       throw validationError('Name is required', 'name');
     }
 
-    if (!displayName) {
-      throw validationError('Display Name is required', 'displayName');
-    }
-
-    if (!isSpace) {
-      throw validationError('Is a Space is required', 'isSpace');
-    }
-
     const profileType = await new ProfileTypesServiceServer(client).create({
       name,
-      displayName,
+      displayName: body.name as string,
       description: (body.description as string) || null,
       mapPinName: (body.mapPinName as string) || null,
-      isSpace,
+      isSpace: body.isSpace as boolean,
       imageUrl: (body.imageUrl as string) || null,
     });
 

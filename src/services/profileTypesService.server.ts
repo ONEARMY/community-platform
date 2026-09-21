@@ -7,9 +7,11 @@ const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export interface ProfileTypeInput {
   name: string;
+  order: number;
   displayName: string;
   description: string | null;
   imageUrl: string | null;
+  smallImageUrl: string | null;
   mapPinName: string | null;
   isSpace: boolean;
 }
@@ -61,6 +63,7 @@ export class ProfileTypesServiceServer {
       .from('profile_types')
       .insert({
         name: data.name.toLocaleLowerCase(),
+        order: data.order,
         display_name: data.name,
         description: data.description,
         image_url: data.imageUrl,

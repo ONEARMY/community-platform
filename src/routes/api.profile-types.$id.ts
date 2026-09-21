@@ -42,11 +42,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const profileType = await profileTypesServiceServer.update(id, {
       name,
+      order: (body.order as number) || 0,
       displayName: body.name as string,
       description: (body.description as string) || null,
       mapPinName: (body.mapPinName as string) || null,
       isSpace: body.isSpace as boolean,
       imageUrl: (body.imageUrl as string) || null,
+      smallImageUrl: (body.smallImageUrl as string) || null,
     });
 
     return Response.json(profileType, { headers, status: 200 });

@@ -58,14 +58,14 @@ export class ProfileTypesServiceServer {
 
   async create(data: ProfileTypeInput) {
     const result = await this.client
-      .from('profile-types')
+      .from('profile_types')
       .insert({
         name: data.name.toLocaleLowerCase(),
-        displayName: data.name,
+        display_name: data.name,
         description: data.description,
         image_url: data.imageUrl,
-        mapPinName: data.mapPinName,
-        isSpace: data.isSpace,
+        map_pin_name: data.mapPinName,
+        is_space: data.isSpace,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -82,14 +82,14 @@ export class ProfileTypesServiceServer {
 
   async update(id: number, data: ProfileTypeInput) {
     const result = await this.client
-      .from('categories')
+      .from('profile_types')
       .update({
         name: data.name.toLocaleLowerCase(),
-        displayName: data.name,
+        display_name: data.name,
         description: data.description,
         image_url: data.imageUrl,
-        mapPinName: data.mapPinName,
-        isSpace: data.isSpace,
+        map_pin_name: data.mapPinName,
+        is_space: data.isSpace,
         tenant_id: process.env.TENANT_ID,
       })
       .eq('id', id)

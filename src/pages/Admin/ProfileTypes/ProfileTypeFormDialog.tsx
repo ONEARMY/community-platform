@@ -35,12 +35,21 @@ const IS_SPACE_TYPE_OPTIONS: { value: boolean; label: string }[] = [
   { value: true, label: 'No' },
 ];
 
-const emptyForm = { name: '', description: '', mapPinName: '', isSpace: false, imageUrl: '' };
+const emptyForm = {
+  name: '',
+  order: 0,
+  description: '',
+  mapPinName: '',
+  isSpace: false,
+  imageUrl: '',
+  smallImageUrl: '',
+};
 
 export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProps) {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [smallPickerOpen, setSmallPickerOpen] = useState(false);
   const revalidator = useRevalidator();
   const toast = useToast();
 
@@ -50,10 +59,12 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
         profileType
           ? {
               name: profileType.name ?? '',
+              order: profileType.order ?? 0,
               description: profileType.description ?? '',
               mapPinName: profileType.mapPinName ?? '',
               isSpace: profileType.isSpace ?? false,
               imageUrl: profileType.imageUrl ?? '',
+              smallImageUrl: profileType.smallImageUrl ?? '',
             }
           : emptyForm,
       );
@@ -71,10 +82,12 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
 
     const data = {
       name: form.name.trim(),
+      order: form.order,
       description: form.description.trim() || null,
       mapPinName: form.mapPinName.trim() || null,
       isSpace: form.isSpace || false,
       imageUrl: form.imageUrl.trim() || null,
+      smallImageUrl: form.smallImageUrl.trim() || null,
     };
 
     setSubmitting(true);
@@ -111,6 +124,18 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
                 id="profile-type-name"
                 value={form.name}
                 onChange={(event) => setForm((f) => ({ ...f, name: event.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="profile-type-name">Order</Label>
+              <Input
+                id="profile-type-name"
+                value={form.order}
+                onChange={(event) =>
+                  setForm((f) => ({ ...f, order: parseInt(event.target.value) }))
+                }
                 required
               />
             </div>
@@ -187,6 +212,43 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
               </div>
             </div>
 
+            <div className="flex flex-col gap-2">
+              <Label>Small Image</Label>
+              <div className="flex items-center gap-3">
+                {form.smallImageUrl ? (
+                  <img
+                    src={form.smallImageUrl}
+                    alt=""
+                    className="size-16 rounded-md object-contain"
+                  />
+                ) : (
+                  <div className="flex size-16 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    <ImageOffIcon className="size-5" />
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSmallPickerOpen(true)}
+                  >
+                    Choose image
+                  </Button>
+                  {form.smallImageUrl && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setForm((f) => ({ ...f, smallImageUrl: '' }))}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <DialogFooter>
               <Button type="submit" disabled={submitting}>
                 {isEditing ? 'Save' : 'Create'}
@@ -201,6 +263,12 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
         path="categories"
         onOpenChange={setPickerOpen}
         onSelect={(url) => setForm((f) => ({ ...f, imageUrl: url }))}
+      />
+      <ImagePickerDialog
+        open={smallPickerOpen}
+        path="categories"
+        onOpenChange={setSmallPickerOpen}
+        onSelect={(url) => setForm((f) => ({ ...f, smallImageUrl: url }))}
       />
     </>
   );

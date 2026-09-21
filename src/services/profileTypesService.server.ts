@@ -89,6 +89,7 @@ export class ProfileTypesServiceServer {
       .from('profile_types')
       .update({
         name: data.name.toLocaleLowerCase(),
+        order: data.order,
         display_name: data.name,
         description: data.description,
         image_url: data.imageUrl,

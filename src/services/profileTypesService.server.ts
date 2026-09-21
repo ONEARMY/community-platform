@@ -7,6 +7,7 @@ const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export interface ProfileTypeInput {
   name: string;
+  displayName: string;
   description: string | null;
   imageUrl: string | null;
   mapPinName: string | null;

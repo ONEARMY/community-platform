@@ -131,6 +131,7 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
             <div className="flex flex-col gap-2">
               <Label htmlFor="profile-type-name">Order</Label>
               <Input
+                type="number"
                 id="profile-type-name"
                 value={form.order}
                 onChange={(event) =>

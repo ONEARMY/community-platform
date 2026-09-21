@@ -19,10 +19,12 @@ const getProfileTypes = async () => {
 
 export interface ProfileTypeFormData {
   name: string;
+  order: number | null;
   description: string | null;
   mapPinName: string;
   isSpace: boolean;
   imageUrl: string | null;
+  smallImageUrl: string | null;
 }
 
 const createProfileType = async (form: ProfileTypeFormData) => {

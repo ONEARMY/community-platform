@@ -103,4 +103,14 @@ export class ProfileTypesServiceServer {
 
     return ProfileType.fromDB(result.data as DBProfileType);
   }
+
+  async delete(id: number) {
+    const result = await this.client.from('profile-types').delete().eq('id', id);
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    await cache.delete('profile-types');
+  }
 }

@@ -5,7 +5,6 @@ import {
   ContentStatistics,
   DisplayDate,
   ImageGallery,
-  LinkifyText,
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
@@ -24,6 +23,7 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { LinkifyText } from '@/components/ui/linkify-text';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { QuestionCommentSection } from './QuestionCommentSection';
 

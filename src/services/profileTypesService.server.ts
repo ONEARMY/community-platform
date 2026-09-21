@@ -78,4 +78,29 @@ export class ProfileTypesServiceServer {
 
     return ProfileType.fromDB(result.data as DBProfileType);
   }
+
+  async update(id: number, data: ProfileTypeInput) {
+    const result = await this.client
+      .from('categories')
+      .update({
+        name: data.name.toLocaleLowerCase(),
+        displayName: data.name,
+        description: data.description,
+        image_url: data.imageUrl,
+        mapPinName: data.mapPinName,
+        isSpace: data.isSpace,
+        tenant_id: process.env.TENANT_ID,
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (result.error || !result.data) {
+      throw result.error;
+    }
+
+    await cache.delete('profile-types');
+
+    return ProfileType.fromDB(result.data as DBProfileType);
+  }
 }

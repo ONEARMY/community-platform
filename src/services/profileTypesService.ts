@@ -21,7 +21,7 @@ export interface ProfileTypeFormData {
   name: string;
   order: number | null;
   description: string | null;
-  mapPinName: string;
+  mapPinName: string | null;
   isSpace: boolean;
   imageUrl: string | null;
   smallImageUrl: string | null;

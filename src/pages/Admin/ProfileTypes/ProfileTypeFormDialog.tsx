@@ -31,8 +31,8 @@ interface IProps {
 }
 
 const IS_SPACE_TYPE_OPTIONS: { value: boolean; label: string }[] = [
-  { value: false, label: 'Yes' },
-  { value: true, label: 'No' },
+  { value: true, label: 'Yes' },
+  { value: false, label: 'No' },
 ];
 
 const emptyForm = {

@@ -5,6 +5,14 @@ import { isProductionEnvironment } from 'src/config/config';
 
 const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
+export interface ProfileTypeInput {
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+  mapPinName: string | null;
+  isSpace: boolean;
+}
+
 export class ProfileTypesServiceServer {
   constructor(private client: SupabaseClient) {}
 
@@ -45,5 +53,29 @@ export class ProfileTypesServiceServer {
     await cache.set('profile-types', profileTypes);
 
     return profileTypes;
+  }
+
+  async create(data: ProfileTypeInput) {
+    const result = await this.client
+      .from('profile-types')
+      .insert({
+        name: data.name.toLocaleLowerCase(),
+        displayName: data.name,
+        description: data.description,
+        image_url: data.imageUrl,
+        mapPinName: data.mapPinName,
+        isSpace: data.isSpace,
+        tenant_id: process.env.TENANT_ID,
+      })
+      .select()
+      .single();
+
+    if (result.error || !result.data) {
+      throw result.error;
+    }
+
+    await cache.delete('profile-types');
+
+    return ProfileType.fromDB(result.data as DBProfileType);
   }
 }

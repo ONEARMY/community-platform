@@ -14,6 +14,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { profileTypesService } from '@/services/profileTypesService';
 
@@ -22,6 +29,11 @@ interface IProps {
   profileType: ProfileType | null;
   onOpenChange: (open: boolean) => void;
 }
+
+const IS_SPACE_TYPE_OPTIONS: { value: boolean; label: string }[] = [
+  { value: false, label: 'Yes' },
+  { value: true, label: 'No' },
+];
 
 const emptyForm = { name: '', description: '', mapPinName: '', isSpace: false, imageUrl: '' };
 
@@ -120,6 +132,26 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
                 onChange={(event) => setForm((f) => ({ ...f, mapPinName: event.target.value }))}
                 required
               />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="is-space">Is A Space</Label>
+              <Select
+                items={IS_SPACE_TYPE_OPTIONS}
+                value={form.isSpace}
+                onValueChange={(value) => setForm((f) => ({ ...f, isSpace: value as boolean }))}
+              >
+                <SelectTrigger id="is-space" className="w-full">
+                  <SelectValue placeholder="No" />
+                </SelectTrigger>
+                <SelectContent>
+                  {IS_SPACE_TYPE_OPTIONS.map((option) => (
+                    <SelectItem key={option.label} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="flex flex-col gap-2">

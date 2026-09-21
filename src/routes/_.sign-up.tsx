@@ -93,7 +93,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { showOrganisationSignup, turnstileSiteKey } = useLoaderData<typeof loader>();
+  const { /* showOrganisationSignup, */ turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== 'idle';
@@ -145,6 +145,7 @@ export default function Index() {
                         Sign-in here
                       </Link>
                     </p>
+                    {/* Organisation sign-up is live but intentionally unlinked for now.
                     {showOrganisationSignup && (
                       <p className="text-sm text-muted-foreground">
                         Are you an organisation?{' '}
@@ -156,7 +157,7 @@ export default function Index() {
                           Create an organisation account
                         </Link>
                       </p>
-                    )}
+                    )} */}
                   </CardHeader>
                   <CardContent className="flex flex-col gap-4">
                     {actionResponse?.error && pristine && (

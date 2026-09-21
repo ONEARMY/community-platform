@@ -3,7 +3,7 @@ import { logger } from 'src/logger';
 
 const getProfileTypes = async () => {
   try {
-    const response = await fetch('/api/profile_types', {
+    const response = await fetch('/api/profile-types', {
       cache: 'force-cache',
       headers: {
         'Cache-Control': 'max-age=1800', // 30 minutes
@@ -26,7 +26,7 @@ export interface ProfileTypeFormData {
 }
 
 const createProfileType = async (form: ProfileTypeFormData) => {
-  const response = await fetch('/api/profile_types', {
+  const response = await fetch('/api/profile-types', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(form),
@@ -41,7 +41,7 @@ const createProfileType = async (form: ProfileTypeFormData) => {
 };
 
 const updateProfileType = async (id: number, form: ProfileTypeFormData) => {
-  const response = await fetch(`/api/profile_types/${id}`, {
+  const response = await fetch(`/api/profile-types/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(form),
@@ -56,7 +56,7 @@ const updateProfileType = async (id: number, form: ProfileTypeFormData) => {
 };
 
 const deleteProfileType = async (id: number) => {
-  const response = await fetch(`/api/profile_types/${id}`, {
+  const response = await fetch(`/api/profile-types/${id}`, {
     method: 'DELETE',
   });
 

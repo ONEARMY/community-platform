@@ -106,7 +106,7 @@ export class ProfileTypesServiceServer {
   }
 
   async delete(id: number) {
-    const result = await this.client.from('profile-types').delete().eq('id', id);
+    const result = await this.client.from('profile_types').delete().eq('id', id);
 
     if (result.error) {
       throw result.error;

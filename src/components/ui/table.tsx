@@ -39,16 +39,28 @@ function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
   );
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
+const tableRowVariants = cva(
+  'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
+  {
+    variants: {
+      variant: {
+        default: '',
+        muted: 'bg-muted text-muted-foreground',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  },
+);
+
+function TableRow({
+  className,
+  variant = 'default',
+  ...props
+}: React.ComponentProps<'tr'> & VariantProps<typeof tableRowVariants>) {
   return (
-    <tr
-      data-slot="table-row"
-      className={cn(
-        'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
-        className,
-      )}
-      {...props}
-    />
+    <tr data-slot="table-row" className={cn(tableRowVariants({ variant, className }))} {...props} />
   );
 }
 
@@ -108,4 +120,15 @@ function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) 
   );
 }
 
-export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+  tableCellVariants,
+  tableRowVariants,
+};

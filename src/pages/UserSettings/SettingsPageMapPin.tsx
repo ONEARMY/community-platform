@@ -134,19 +134,21 @@ export const SettingsPageMapPin = observer(() => {
 
                 {mapPin && mapPin.moderation !== 'accepted' && (
                   <Alert variant="warning">
-                    <AlertDescription className="flex items-center gap-1 text-xs">
-                      <span>
-                        Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
-                      </span>
-                      {mapPin.moderationFeedback && (
-                        <>
-                          -
-                          <span>
-                            Moderator feedback:{' '}
-                            <span className="font-bold">{mapPin.moderationFeedback}</span>
-                          </span>
-                        </>
-                      )}
+                    <AlertDescription size="xs">
+                      <div className="flex items-center gap-1">
+                        <span>
+                          Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
+                        </span>
+                        {mapPin.moderationFeedback && (
+                          <>
+                            -
+                            <span>
+                              Moderator feedback:{' '}
+                              <span className="font-bold">{mapPin.moderationFeedback}</span>
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </AlertDescription>
                   </Alert>
                 )}

@@ -22,7 +22,8 @@ export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
   return (
     <Alert variant="info">
       <AlertDescription
-        className="text-left text-sm [&_ol]:mt-1 [&_ol]:mb-0"
+        size="sm"
+        className="text-left [&_ol]:mt-1 [&_ol]:mb-0"
         dangerouslySetInnerHTML={{ __html: guidance[label][type] }}
       />
     </Alert>

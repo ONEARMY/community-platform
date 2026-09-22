@@ -28,13 +28,6 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-info-foreground: var(--info-foreground);
-  --color-info: var(--info);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-warning: var(--warning);
-  --color-success-foreground: var(--success-foreground);
-  --color-success: var(--success);
-  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -99,16 +92,6 @@
   --accent: var(--color-accent);
   --accent-foreground: oklch(0.145 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  /* Status colours, from the legacy `alerts` palette (packages/themes
-     commonStyles.colors). The legacy theme has no dark variants for these, so
-     dark mode inherits them from here. */
-  --destructive-foreground: oklch(0.972 0.003 228.784);
-  --success: oklch(0.731 0.134 178.56);
-  --success-foreground: oklch(0.972 0.003 228.784);
-  --warning: oklch(0.925 0.131 97.563);
-  --warning-foreground: oklch(0.222 0 89.876);
-  --info: oklch(0.941 0.018 245.391);
-  --info-foreground: oklch(0.222 0 89.876);
   --border: oklch(0.922 0 0);
   --input: oklch(0.75 0 0);
   --ring: oklch(0.708 0 0);
@@ -175,6 +158,12 @@
   --success: oklch(0.765 0.177 163.223);
   --warning: oklch(0.828 0.189 84.429);
   --info: oklch(0.707 0.165 254.624);
+}
+
+@utility grid-cols-alert {
+  /* Alert's two-column layout when it has an icon: the icon column sized to the
+     icon, the content column taking the rest. */
+  grid-template-columns: auto 1fr;
 }
 
 @utility z-above-header {

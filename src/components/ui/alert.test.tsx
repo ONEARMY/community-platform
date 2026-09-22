@@ -14,12 +14,12 @@ describe('Alert', () => {
     expect(getByRole('alert')).toHaveTextContent('An information message');
   });
 
-  it('applies the legacy palette per variant', () => {
+  it('applies the status tint per variant', () => {
     const variants = {
-      success: 'bg-success',
-      destructive: 'bg-destructive',
-      info: 'bg-info',
-      warning: 'bg-warning',
+      success: 'bg-success/10',
+      destructive: 'bg-destructive/10',
+      info: 'bg-info/10',
+      warning: 'bg-warning/10',
     } as const;
 
     for (const [variant, className] of Object.entries(variants)) {
@@ -47,6 +47,18 @@ describe('Alert', () => {
       'data-slot',
       'alert-description',
     );
+  });
+
+  it('sizes the title and description via their size variants', () => {
+    const { getByText } = render(
+      <Alert variant="info">
+        <AlertTitle size="lg">Moderator Feedback</AlertTitle>
+        <AlertDescription size="sm">Please add a cover image</AlertDescription>
+      </Alert>,
+    );
+
+    expect(getByText('Moderator Feedback')).toHaveClass('text-lg');
+    expect(getByText('Please add a cover image')).toHaveClass('text-sm');
   });
 
   it('forwards className and other props', () => {

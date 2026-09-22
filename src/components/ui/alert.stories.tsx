@@ -61,6 +61,17 @@ export const WithTitle: Story = {
   ),
 };
 
+export const WithHeadingTitle: Story = {
+  render: () => (
+    <Alert variant="info" className="text-left">
+      <AlertTitle size="lg">Moderator Feedback</AlertTitle>
+      <AlertDescription size="sm">
+        Please add a cover image that shows the topic of the guide.
+      </AlertDescription>
+    </Alert>
+  ),
+};
+
 export const WithIcon: Story = {
   render: () => (
     <Alert variant="warning" className="text-left">

@@ -75,10 +75,8 @@ export const LibraryDescription = ({
 
           {showFeedback && (
             <Alert variant="info" className="text-left" data-cy="moderationFeedback">
-              <AlertTitle className="font-heading text-lg font-normal tracking-normal">
-                Moderator Feedback
-              </AlertTitle>
-              <AlertDescription className="text-sm">{item.moderationFeedback}</AlertDescription>
+              <AlertTitle size="lg">Moderator Feedback</AlertTitle>
+              <AlertDescription size="sm">{item.moderationFeedback}</AlertDescription>
             </Alert>
           )}
 

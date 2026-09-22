@@ -3,7 +3,6 @@ import type { Author } from 'oa-shared';
 import { useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
 
 const MAX_VISIBLE_AVATARS = 3;
 
@@ -16,7 +15,7 @@ const ContributorAvatar = ({ contributor, className }: AvatarProps) => {
   const name = contributor.displayName || contributor.username || '';
 
   return (
-    <Avatar aria-hidden="true" className={cn(className, 'ring-2 ring-background')}>
+    <Avatar aria-hidden="true" ring className={className}>
       {contributor.photo ? (
         <AvatarImage alt="" loading="lazy" src={contributor.photo.publicUrl} />
       ) : null}
@@ -72,13 +71,9 @@ export const ResearchContributors = ({ contributors }: IProps) => {
           </button>
 
           <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
-            <DialogContent
-              className="gap-0 rounded-lg border-2 border-black p-0 ring-0"
-              initialFocus={modalRef}
-              ref={modalRef}
-            >
-              <DialogHeader className="border-b-2 border-black px-4 py-3">
-                <DialogTitle className="text-base">{label}</DialogTitle>
+            <DialogContent variant="strong" initialFocus={modalRef} ref={modalRef}>
+              <DialogHeader variant="strong">
+                <DialogTitle>{label}</DialogTitle>
               </DialogHeader>
               <ul className="flex max-h-96 flex-col gap-4 overflow-y-auto px-4 py-3">
                 {contributors.map((contributor, index) => (

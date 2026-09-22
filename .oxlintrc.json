@@ -1,0 +1,56 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "jsPlugins": ["@shadcn/lint"],
+  "plugins": [],
+  "categories": {
+    "correctness": "off",
+    "suspicious": "off",
+    "pedantic": "off",
+    "perf": "off",
+    "style": "off",
+    "restriction": "off",
+    "nursery": "off"
+  },
+  "rules": {
+    "shadcn/no-restyle": [
+      "error",
+      {
+        "allow": ["layout"]
+      }
+    ],
+    "shadcn/no-raw-colors": "error",
+    "shadcn/no-arbitrary-values": "error",
+    "shadcn/no-unknown-classes": [
+      "error",
+      {
+        "allow": [
+          "beta-tester-feature",
+          "field-rich-text-error",
+          "file-container",
+          "floating-label",
+          "grow-wrap",
+          "has-value",
+          "main-container",
+          "markercluster-map",
+          "menu-desktop",
+          "notification-quote",
+          "selected",
+          "user-beta-icon",
+          "value-set",
+          "viewComments"
+        ]
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "build",
+    "dist",
+    "storybook-static",
+    ".react-router",
+    "shared/lib",
+    "packages/components",
+    "packages/themes",
+    "packages/cypress",
+    "supabase"
+  ]
+}

@@ -44,11 +44,9 @@ export const NotificationItem = ({ markRead, modalDismiss, notification }: IProp
       )}
     >
       {notification.sidebar.image ? (
-        <Avatar className={cn('size-14 shrink-0', isNews && 'rounded-md')}>
+        <Avatar shape={isNews ? 'rounded' : 'circle'} className="size-14 shrink-0">
           <AvatarImage src={notification.sidebar.image} alt="" />
-          <AvatarFallback className={cn(isNews && 'rounded-md')}>
-            {notification.triggeredBy.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
+          <AvatarFallback>{notification.triggeredBy.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
       ) : (
         SidebarIcon && <SidebarIcon className="size-7 shrink-0" aria-hidden />
@@ -61,7 +59,7 @@ export const NotificationItem = ({ markRead, modalDismiss, notification }: IProp
           </p>
           {notification.body && (
             <div className={cn('flex', isDiscussion && 'notification-quote')}>
-              <p className="m-0 max-w-full truncate rounded-[25px] border-2 border-[#1b1b1b] bg-[#e2edf7] p-2">
+              <p className="m-0 max-w-full truncate rounded-3xl border-2 border-outline bg-softblue p-2">
                 {notification.body}
               </p>
             </div>
@@ -70,7 +68,8 @@ export const NotificationItem = ({ markRead, modalDismiss, notification }: IProp
         <DisplayDate
           createdAt={notification.date}
           showLabel={false}
-          className="shrink-0 self-start text-xs text-muted-foreground"
+          variant="muted"
+          className="shrink-0 self-start"
         />
       </div>
     </Link>

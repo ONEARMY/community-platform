@@ -78,7 +78,7 @@ export const NewsEmail = (props: IProps) => {
                     <Img
                       alt=""
                       height="15px"
-                      src={`${settings.siteUrl}/assets/icon-comment-N7-BVPWS.svg`}
+                      src={`${settings.siteUrl}/assets/img/icon-comment.svg`}
                       width="15px"
                     />
                   </Button>

@@ -26,12 +26,12 @@ export default function Index() {
 
   return (
     <Main style={{ flex: 1 }}>
-      <div className="mx-auto mt-10 w-full max-w-[620px] px-2 md:mt-20">
+      <div className="mx-auto mt-10 w-full max-w-124 px-2 md:mt-20">
         <Card variant="outline">
           <CardHeader className="items-center text-center">
             <h1 className="text-2xl font-semibold">{heading}</h1>
           </CardHeader>
-          <CardContent className="flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
+          <CardContent variant="muted" gap="sm" className="flex flex-col items-center text-center">
             <p className="font-medium">{body}</p>
             <Button
               render={

@@ -14,7 +14,7 @@ export const UserBadge = ({ badge }: IProps) => {
     <>
       <Image
         src={badge.imageUrl}
-        sx={{ height: 16, width: 16, flexShrink: 0 }}
+        sx={{ height: 16, width: 'auto', objectFit: 'contain', flexShrink: 0 }}
         data-testid={`Username: ${badge.name} badge`}
         data-tooltip-id={uuid}
         data-tooltip-content={badge.displayName}

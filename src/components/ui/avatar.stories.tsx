@@ -42,9 +42,9 @@ export const Sizes: Story = {
 
 export const Square: Story = {
   render: () => (
-    <Avatar className="size-16 rounded-lg">
+    <Avatar shape="rounded" className="size-16">
       <AvatarImage src="https://picsum.photos/seed/news/80" alt="News hero" />
-      <AvatarFallback className="rounded-lg">NW</AvatarFallback>
+      <AvatarFallback>NW</AvatarFallback>
     </Avatar>
   ),
 };

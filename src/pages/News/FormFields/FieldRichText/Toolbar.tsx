@@ -110,11 +110,30 @@ const ToolbarButton = ({ label, active, disabled, onClick, children }: ToolbarBu
 );
 
 export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
-  const { selectionEmpty, linkActive } = useEditorState({
+  const {
+    selectionEmpty,
+    linkActive,
+    canUndo,
+    canRedo,
+    activeBlockType,
+    boldActive,
+    italicActive,
+    underlineActive,
+    bulletListActive,
+    orderedListActive,
+  } = useEditorState({
     editor,
     selector: ({ editor }) => ({
       selectionEmpty: editor.state.selection.empty,
       linkActive: editor.isActive('link'),
+      canUndo: editor.can().undo(),
+      canRedo: editor.can().redo(),
+      activeBlockType: getActiveBlockType(editor),
+      boldActive: editor.isActive('bold'),
+      italicActive: editor.isActive('italic'),
+      underlineActive: editor.isActive('underline'),
+      bulletListActive: editor.isActive('bulletList'),
+      orderedListActive: editor.isActive('orderedList'),
     }),
   });
 
@@ -138,23 +157,20 @@ export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
       >
         <ToolbarButton
           label="Undo"
-          disabled={!editor.can().undo()}
+          disabled={!canUndo}
           onClick={() => editor.chain().focus().undo().run()}
         >
           <Undo2 size={16} />
         </ToolbarButton>
         <ToolbarButton
           label="Redo"
-          disabled={!editor.can().redo()}
+          disabled={!canRedo}
           onClick={() => editor.chain().focus().redo().run()}
         >
           <Redo2 size={16} />
         </ToolbarButton>
 
-        <Select
-          value={getActiveBlockType(editor)}
-          onValueChange={(value) => setBlockType(editor, value)}
-        >
+        <Select value={activeBlockType} onValueChange={(value) => setBlockType(editor, value)}>
           <SelectTrigger size="sm" className="h-8 w-36" aria-label="Block type">
             <SelectValue />
           </SelectTrigger>
@@ -169,21 +185,21 @@ export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
 
         <ToolbarButton
           label="Bold"
-          active={editor.isActive('bold')}
+          active={boldActive}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >
           <Bold size={16} />
         </ToolbarButton>
         <ToolbarButton
           label="Italic"
-          active={editor.isActive('italic')}
+          active={italicActive}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
           <Italic size={16} />
         </ToolbarButton>
         <ToolbarButton
           label="Underline"
-          active={editor.isActive('underline')}
+          active={underlineActive}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
         >
           <Underline size={16} />
@@ -191,14 +207,14 @@ export const Toolbar = ({ editor, imageUploadHandler }: IProps) => {
 
         <ToolbarButton
           label="Bullet list"
-          active={editor.isActive('bulletList')}
+          active={bulletListActive}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
           <List size={16} />
         </ToolbarButton>
         <ToolbarButton
           label="Numbered list"
-          active={editor.isActive('orderedList')}
+          active={orderedListActive}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
           <ListOrdered size={16} />

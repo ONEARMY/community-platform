@@ -4,6 +4,7 @@ import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { TextInputField } from 'src/common/Form/TextInput.field';
+import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
@@ -68,6 +69,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
+    // Supabase returns a fake user with no identities for an already-registered
+    // email, to avoid leaking which emails exist. Don't try to create a profile for it.
+    if (signupResult.data.user.identities?.length === 0) {
+      logger.warn('Sign-up attempted for already-registered email');
+      return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+    }
+
     const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
 
     // This will error if there is already a profile with this auth_id + tenant_id
@@ -118,7 +126,7 @@ export default function Index() {
           const disabled = invalid || isSubmitting;
           return (
             <form method="post">
-              <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+              <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
                 <HeroBanner type="celebration" />
                 <Card variant="outline">
                   <CardHeader>
@@ -129,7 +137,7 @@ export default function Index() {
                       </Link>
                     </p>
                   </CardHeader>
-                  <CardContent className="flex flex-col gap-4">
+                  <CardContent gap="md" className="flex flex-col">
                     {actionResponse?.error && pristine && (
                       <div
                         className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
@@ -180,7 +188,7 @@ export default function Index() {
                     </div>
                     <Field name="consent" type="checkbox" validate={required}>
                       {({ input }) => (
-                        <Label htmlFor="consent" className="items-start gap-2 font-normal">
+                        <Label htmlFor="consent" weight="normal" className="items-start">
                           <Checkbox
                             id="consent"
                             data-cy="consent"

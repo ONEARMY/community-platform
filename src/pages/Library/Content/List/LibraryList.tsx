@@ -114,7 +114,7 @@ export const LibraryList = () => {
 
       {(isFetching || isFetchingDrafts) && <Spinner />}
 
-      <h3 className="mx-auto mt-5 max-w-[500px] text-center text-xl font-semibold">
+      <h3 className="mx-auto mt-5 max-w-100 text-center text-xl font-semibold">
         Contribute to the {tenantContext?.siteName || 'Community Platform'} library
         <br />
         Share your project!

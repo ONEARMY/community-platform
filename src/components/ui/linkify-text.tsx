@@ -14,7 +14,7 @@ function LinkifyText({ children }: LinkifyTextProps) {
   const renderLink = ({ attributes = {}, content }: LinkRendererProps) => (
     <a
       {...attributes}
-      className={cn('text-[#61646b] underline', attributes.className)}
+      className={cn('text-muted-foreground underline', attributes.className)}
       target="_blank"
       rel="noopener noreferrer"
     >

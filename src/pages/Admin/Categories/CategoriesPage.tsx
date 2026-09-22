@@ -77,7 +77,7 @@ export function CategoriesPage({ categories }: IProps) {
               </TableCell>
               <TableCell>{category.name}</TableCell>
               <TableCell>{CATEGORY_TYPE_LABELS[category.type]}</TableCell>
-              <TableCell className="max-w-xs truncate text-muted-foreground">
+              <TableCell variant="muted" truncate className="max-w-xs">
                 {category.description}
               </TableCell>
               <TableCell>

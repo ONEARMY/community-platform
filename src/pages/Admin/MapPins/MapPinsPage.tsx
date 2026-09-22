@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon, ExternalLinkIcon } from 'lucide-react';
 import { Link } from 'react-router';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -40,24 +41,16 @@ export interface MapPinsPageProps {
 }
 
 function ModerationBadge({ status }: { status: string }) {
-  const isAccepted = status === 'accepted';
-  const isAwaiting = status === 'awaiting-moderation';
-  const isNeedsImprovement = status === 'improvements-needed';
-  const badgeClasses = isAccepted
-    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-    : isAwaiting
-      ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-      : isNeedsImprovement
-        ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
-        : 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300';
+  const variant =
+    status === 'accepted'
+      ? 'success'
+      : status === 'awaiting-moderation'
+        ? 'warning'
+        : status === 'improvements-needed'
+          ? 'info'
+          : 'destructive';
 
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${badgeClasses}`}
-    >
-      {status}
-    </span>
-  );
+  return <Badge variant={variant}>{status}</Badge>;
 }
 
 export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPageProps) {
@@ -86,7 +79,7 @@ export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPa
         <TableBody>
           {mapPins.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+              <TableCell colSpan={7} variant="muted" className="h-24 text-center">
                 No map pins found.
               </TableCell>
             </TableRow>
@@ -98,11 +91,11 @@ export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPa
 
               return (
                 <TableRow key={pin.id}>
-                  <TableCell className="font-medium">{pin.name || '-'}</TableCell>
+                  <TableCell variant="strong">{pin.name || '-'}</TableCell>
                   <TableCell>
                     <Link
                       to={`/u/${profileIdentifier}`}
-                      className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
+                      className="inline-flex items-center gap-1 text-outline hover:underline font-medium"
                     >
                       <span>{profileDisplayName}</span>
                       <ExternalLinkIcon className="size-3 text-muted-foreground" />

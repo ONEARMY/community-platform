@@ -89,6 +89,8 @@ jobs:
       - setup_repo
       - run:
           command: bun run lint:ci
+      - run:
+          command: bun run lint:design
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:

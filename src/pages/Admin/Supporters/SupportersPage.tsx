@@ -33,7 +33,7 @@ export function SupportersPage({ supporters }: IProps) {
             <TableRow key={supporter.profile_id}>
               <TableCell>{supporter.username}</TableCell>
               <TableCell>{supporter.display_name}</TableCell>
-              <TableCell className="text-muted-foreground">{supporter.email}</TableCell>
+              <TableCell variant="muted">{supporter.email}</TableCell>
               <TableCell>{supporter.tier_name}</TableCell>
             </TableRow>
           ))}

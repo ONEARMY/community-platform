@@ -41,15 +41,27 @@
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
+  --color-secondary-hover: color-mix(in oklch, var(--secondary), var(--foreground) 5%);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --color-softblue: var(--softblue);
+  --color-highlight-hover: var(--highlight-hover);
+  --color-outline: var(--outline);
+  --color-footer: var(--footer);
+  --color-caption: var(--caption);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-supporter-cta: var(--supporter-cta-color, #bfdeba);
   --spacing: 0.3125rem;
+  --radius-s: var(--spacing);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -57,6 +69,15 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-control-xs: min(var(--radius-md), 10px);
+  --radius-control-sm: min(var(--radius-md), 12px);
+  --radius-card: 15px;
+  --radius-checkbox: 4px;
+  --text-control-sm: 0.8rem;
+  --spacing-hairline: 2px;
+  --container-dialog: calc(100% - 2rem);
+  --shadow-sidebar-ring: 0 0 0 1px var(--sidebar-border);
+  --shadow-sidebar-ring-hover: 0 0 0 1px var(--sidebar-accent);
 }
 
 :root {
@@ -69,6 +90,7 @@
   /* Tenant-driven brand colors: --color-primary/--color-accent are set per-request
        by the SSR <style> tag in src/root.tsx, sourced from tenant_settings in the DB. */
   --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
   --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -106,6 +128,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --softblue: #e2edf7;
+  --highlight-hover: #97cdeb;
+  --outline: #1b1b1b;
+  --footer: #27272c;
+  --caption: #6b7280;
+  --success: oklch(0.596 0.145 163.225);
+  --warning: oklch(0.666 0.179 58.318);
+  --info: oklch(0.546 0.245 262.881);
 }
 
 .dark {
@@ -117,6 +147,7 @@
   --popover-foreground: oklch(0.985 0 0);
   /* No separate dark-mode brand colors exist in tenant_settings; reuse the same vars. */
   --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
   --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -141,6 +172,13 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --success: oklch(0.765 0.177 163.223);
+  --warning: oklch(0.828 0.189 84.429);
+  --info: oklch(0.707 0.165 254.624);
+}
+
+@utility z-above-header {
+  z-index: var(--z-above-header);
 }
 
 @layer base {

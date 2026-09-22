@@ -3,7 +3,6 @@ import type { Author } from 'oa-shared';
 import { useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
 
 const MAX_VISIBLE_AVATARS = 3;
 
@@ -16,7 +15,7 @@ const ContributorAvatar = ({ contributor, className }: AvatarProps) => {
   const name = contributor.displayName || contributor.username || '';
 
   return (
-    <Avatar aria-hidden="true" className={cn(className, 'ring-2 ring-background')}>
+    <Avatar aria-hidden="true" ring className={className}>
       {contributor.photo ? (
         <AvatarImage alt="" loading="lazy" src={contributor.photo.publicUrl} />
       ) : null}
@@ -42,43 +41,39 @@ export const ResearchContributors = ({ contributors }: IProps) => {
   const label = `${contributors.length} contributors`;
 
   return (
-    <div className="flex items-center gap-[5px] text-sm" data-cy="research-contributors">
+    <div className="flex items-center gap-1 text-sm" data-cy="research-contributors">
       <span className="text-muted-foreground">with</span>
 
       {contributors.length === 1 ? (
-        <span className="flex items-center gap-[5px]">
-          <ContributorAvatar className="size-[25px]" contributor={contributors[0]} />
+        <span className="flex items-center gap-2">
+          <ContributorAvatar className="size-5" contributor={contributors[0]} />
           <Username user={contributors[0]} />
         </span>
       ) : (
         <>
           <button
             aria-label={`Show all ${label}`}
-            className="flex cursor-pointer items-center gap-[5px] rounded-[4px] border border-transparent px-1 py-0.5 hover:border-[#97cdeb] hover:bg-[#e2edf7]"
+            className="flex cursor-pointer rounded-s p-1 items-center gap-1 border border-transparent hover:border-highlight-hover hover:bg-softblue"
             data-cy="research-contributors-trigger"
             onClick={() => setIsModalOpen(true)}
             type="button"
           >
-            <span className="flex -space-x-2">
+            <div className="flex -space-x-2">
               {contributors.slice(0, MAX_VISIBLE_AVATARS).map((contributor, index) => (
                 <ContributorAvatar
-                  className="size-[25px]"
+                  className="size-5"
                   contributor={contributor}
                   key={contributorKey(contributor, index)}
                 />
               ))}
-            </span>
+            </div>
             <span>{label}</span>
           </button>
 
           <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
-            <DialogContent
-              className="gap-0 rounded-lg border-2 border-black p-0 ring-0"
-              initialFocus={modalRef}
-              ref={modalRef}
-            >
-              <DialogHeader className="border-b-2 border-black px-4 py-3">
-                <DialogTitle className="text-base">{label}</DialogTitle>
+            <DialogContent variant="strong" initialFocus={modalRef} ref={modalRef}>
+              <DialogHeader variant="strong">
+                <DialogTitle>{label}</DialogTitle>
               </DialogHeader>
               <ul className="flex max-h-96 flex-col gap-4 overflow-y-auto px-4 py-3">
                 {contributors.map((contributor, index) => (

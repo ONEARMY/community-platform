@@ -130,3 +130,57 @@ export type QuestionDTO = {
   isDraft: boolean | null;
   tags: number[] | null;
 };
+
+export class DBAdminQuestion {
+  readonly id: number;
+  is_draft: boolean;
+  readonly published_at: Date | null;
+  readonly comment_count?: number;
+  readonly category: DBCategory | null;
+  readonly deleted: boolean | null;
+  readonly title: string;
+  readonly total_views?: number;
+  readonly slug: string;
+  readonly moderation: string;
+  readonly profiles: { display_name: string; username: string };
+
+  constructor(question: DBAdminQuestion) {
+    Object.assign(this, question);
+  }
+}
+
+export class AdminQuestion {
+  id: number;
+  category: Category | null;
+  commentCount: number;
+  deleted: boolean;
+  isDraft: boolean;
+  publishedAt: Date | null;
+  slug: string;
+  title: string;
+  totalViews: number;
+  moderation: string | null;
+  authorDisplayName: string | null;
+  authorUserName: string | null;
+
+  constructor(question: AdminQuestion) {
+    Object.assign(this, question);
+  }
+
+  static fromDB(obj: DBAdminQuestion) {
+    return new AdminQuestion({
+      id: obj.id,
+      category: obj.category ? Category.fromDB(obj.category) : null,
+      commentCount: obj.comment_count || 0,
+      deleted: obj.deleted || false,
+      isDraft: obj.is_draft || false,
+      moderation: obj.moderation,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
+      slug: obj.slug,
+      title: obj.title,
+      totalViews: obj.total_views || 0,
+      authorDisplayName: obj.profiles?.display_name,
+      authorUserName: obj.profiles?.username,
+    });
+  }
+}

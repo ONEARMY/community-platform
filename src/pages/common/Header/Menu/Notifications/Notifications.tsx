@@ -35,11 +35,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger
-        data-cy={`NotificationsSupabase-${device}`}
-        aria-label="Notifications"
-        className="cursor-pointer rounded-full border-none bg-transparent p-1 text-foreground hover:bg-muted"
-      >
+      <SheetTrigger data-cy={`NotificationsSupabase-${device}`} aria-label="Notifications">
         <BellIcon
           data-cy={
             hasNewNotifications ? 'notifications-new-messages' : 'notifications-no-new-messages'
@@ -50,8 +46,8 @@ export const NotificationsSupabase = ({ device }: IProps) => {
       <SheetContent
         side="top"
         showCloseButton={false}
-        className="z-[var(--z-above-header)] mx-auto max-h-dvh max-w-[800px] overflow-y-auto px-3 py-5 md:px-5"
-        overlayClassName="z-[var(--z-above-header)]"
+        padding="default"
+        className="mx-auto max-h-dvh max-w-160 overflow-y-auto"
       >
         <SheetTitle className="sr-only">Notifications</SheetTitle>
         <NotificationList

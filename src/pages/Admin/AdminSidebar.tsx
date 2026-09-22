@@ -3,6 +3,7 @@ import {
   FolderIcon,
   MapPinIcon,
   MegaphoneIcon,
+  MessageCircleQuestionMarkIcon,
   TagsIcon,
   UsersIcon,
 } from 'lucide-react';
@@ -33,6 +34,7 @@ const ADMIN_NAV_ITEMS = [
   },
   { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
   { label: 'Tags', href: '/admin/tags', icon: TagsIcon },
+  { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map Pins', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
 ];

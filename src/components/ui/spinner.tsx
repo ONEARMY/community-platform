@@ -15,7 +15,7 @@ function Spinner({ className, label }: SpinnerProps) {
         data-slot="spinner"
         role="status"
         aria-label="Loading..."
-        className="size-[48px] animate-spin text-muted-foreground"
+        className="size-12 animate-spin text-muted-foreground"
       />
       {label && <span className="w-full text-center text-base">{label}</span>}
     </div>

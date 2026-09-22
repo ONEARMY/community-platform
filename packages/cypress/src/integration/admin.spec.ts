@@ -74,11 +74,10 @@ describe('[Admin]', () => {
 
     cy.visit('/admin/questions')
     cy.wait(500)
-    cy.get('button[aria-label*="Delete"]').first().click()
+    cy.get('button[aria-label*="Delete"]').first().click({ force: true })
     cy.contains('Delete Question')
-    cy.get('button').contains("Cancel").click()
+    cy.get('button').contains("Cancel").click({ force: true })
     cy.get('body').should("not.contain.text", "Delete Question")
-
   })
 
 

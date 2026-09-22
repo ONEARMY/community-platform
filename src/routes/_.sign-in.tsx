@@ -125,7 +125,7 @@ export default function Index() {
                       </Link>
                     </p>
                   </CardHeader>
-                  <CardContent className="flex flex-col gap-4">
+                  <CardContent gap="md" className="flex flex-col">
                     {actionResponse?.error && (
                       <div
                         className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"

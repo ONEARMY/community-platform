@@ -21,7 +21,7 @@ type Story = StoryObj<typeof Sheet>;
 function SheetDemo(side: 'top' | 'right' | 'bottom' | 'left') {
   return (
     <Sheet>
-      <SheetTrigger render={<Button variant="outline" />}>Open from {side}</SheetTrigger>
+      <SheetTrigger>Open from {side}</SheetTrigger>
       <SheetContent side={side}>
         <SheetHeader>
           <SheetTitle>Edit category</SheetTitle>

@@ -10,7 +10,7 @@ function SiteFooter({ className, siteName, ...props }: SiteFooterProps) {
     <footer
       data-slot="site-footer"
       className={cn(
-        'relative mt-9 flex flex-col items-center bg-[#27272c] px-5 py-9 text-center text-white',
+        'relative mt-9 flex flex-col items-center bg-footer px-5 py-9 text-center text-white',
         // right padding keeps the text clear of the fixed StickyButton
         'min-[52rem]:items-start min-[52rem]:py-7 min-[52rem]:pr-62 min-[52rem]:pl-13 min-[52rem]:text-left',
         'min-[70rem]:flex-row min-[70rem]:items-center min-[70rem]:py-9 min-[70rem]:pl-5',

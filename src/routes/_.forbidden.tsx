@@ -31,7 +31,7 @@ export default function Index() {
           <CardHeader className="items-center text-center">
             <h1 className="text-2xl font-semibold">{heading}</h1>
           </CardHeader>
-          <CardContent className="flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
+          <CardContent variant="muted" gap="sm" className="flex flex-col items-center text-center">
             <p className="font-medium">{body}</p>
             <Button
               render={

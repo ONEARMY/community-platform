@@ -1,3 +1,4 @@
+// oxlint-disable shadcn/no-arbitrary-values
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '@/lib/utils';
@@ -31,7 +32,7 @@ function TooltipContent({
         alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
-        className="isolate z-[var(--z-above-header)]"
+        className="isolate z-above-header"
       >
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"

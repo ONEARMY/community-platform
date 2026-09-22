@@ -126,7 +126,7 @@ export default function Index() {
           const disabled = invalid || isSubmitting;
           return (
             <form method="post">
-              <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+              <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
                 <HeroBanner type="celebration" />
                 <Card variant="outline">
                   <CardHeader>

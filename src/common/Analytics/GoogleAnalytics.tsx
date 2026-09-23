@@ -6,15 +6,19 @@ import { TenantContext } from 'src/pages/common/TenantContext';
 export const GoogleAnalytics = () => {
   const location = useLocation();
   const env = useContext(TenantContext);
+  const trackingIds = (env?.gaTrackingId ?? '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean);
 
   useEffect(() => {
-    if (env?.gaTrackingId) {
-      ReactGA.initialize([{ trackingId: env.gaTrackingId }]);
+    if (trackingIds.length) {
+      ReactGA.initialize(trackingIds.map((trackingId) => ({ trackingId })));
     }
   }, []);
 
   useEffect(() => {
-    if (env?.gaTrackingId) {
+    if (trackingIds.length) {
       sendPageView(location);
     }
   }, [location]);

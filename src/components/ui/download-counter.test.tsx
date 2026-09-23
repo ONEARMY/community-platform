@@ -34,8 +34,8 @@ describe('DownloadCounter', () => {
     expect(getByText('0 downloads')).toBeInTheDocument();
   });
 
-  it('falls back to 0 when total is null', () => {
-    const { getByText } = render(<DownloadCounter total={null} />);
+  it('falls back to 0 when total is not set', () => {
+    const { getByText } = render(<DownloadCounter/>);
 
     expect(getByText('0 downloads')).toBeInTheDocument();
   });

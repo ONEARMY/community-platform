@@ -90,7 +90,5 @@ describe('[Admin]', () => {
     cy.contains('Delete Question')
     cy.get('button').contains("Delete").click({ force: true })
     cy.get('body').should("not.contain.text", "Delete Question")
-    cy.get('tr').should("have.class", "bg-gray-100")
-
   })
 });

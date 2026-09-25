@@ -29,7 +29,6 @@ export { DownloadButton } from './DownloadButton/DownloadButton';
 export { DownloadCounter } from './DownloadCounter/DownloadCounter';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
-export { ElWithBeforeIcon } from './ElWithBeforeIcon/ElWithBeforeIcon';
 export { ExternalLink } from './ExternalLink/ExternalLink';
 export { FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { FieldInput } from './FieldInput/FieldInput';

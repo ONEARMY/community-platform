@@ -23,6 +23,15 @@ export const Default: Story = {
   ),
 };
 
+export const Flat: Story = {
+  render: () => (
+    <Card variant="flat" style={{ width: 320 }}>
+      <h2 className="m-0 font-heading text-card-heading">Research overview</h2>
+      <span className="text-sm text-muted-foreground">Matches the legacy oa-components card.</span>
+    </Card>
+  ),
+};
+
 const profileTypeCounts = [
   { name: 'Member', count: 812 },
   { name: 'Space', count: 46 },

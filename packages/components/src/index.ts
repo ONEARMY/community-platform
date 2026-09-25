@@ -69,7 +69,6 @@ export { ProfileLink } from './ProfileLink/ProfileLink';
 export { ProfileList } from './ProfileList/ProfileList';
 export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList';
 export { AuthorsContext } from './providers/AuthorsContext';
-export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorOverview';
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';

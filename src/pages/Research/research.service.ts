@@ -177,6 +177,25 @@ const deleteUpdate = async (id: number, updateId: number | null) => {
   }
 };
 
+const reorderUpdates = async (id: number, updateIds: number[]) => {
+  const data = new FormData();
+  updateIds.forEach((updateId) => data.append('updateIds', updateId.toString()));
+
+  const response = await fetch(`/api/research/${id}/updates/order`, {
+    method: 'PUT',
+    body: data,
+  });
+
+  if (response.status !== 200) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error reordering research updates' }));
+    const errorMessage =
+      errorData.error || errorData.message || 'Error reordering research updates';
+    throw new Error(errorMessage, { cause: response.status });
+  }
+};
+
 export const researchService = {
   search,
   getDrafts,
@@ -186,4 +205,5 @@ export const researchService = {
   updateResearchStatus,
   deleteResearch,
   deleteUpdate,
+  reorderUpdates,
 };

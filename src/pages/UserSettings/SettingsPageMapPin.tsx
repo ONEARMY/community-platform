@@ -10,7 +10,8 @@ import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSet
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { getLocationData } from 'src/utils/getLocationData';
-import { Alert, Card, Flex, Heading, Text } from 'theme-ui';
+import { Card, Flex, Heading, Text } from 'theme-ui';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
 import { mapPinService } from '../Maps/map.service';
 
@@ -132,19 +133,23 @@ export const SettingsPageMapPin = observer(() => {
                 )}
 
                 {mapPin && mapPin.moderation !== 'accepted' && (
-                  <Alert variant="warning" sx={{ gap: 1 }}>
-                    <Text sx={{ fontSize: 1 }}>
-                      Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
-                    </Text>
-                    {mapPin.moderationFeedback && (
-                      <>
-                        -
-                        <Text sx={{ fontSize: 1 }}>
-                          Moderator feedback:{' '}
-                          <Text sx={{ fontWeight: 'bold' }}>{mapPin.moderationFeedback}</Text>
-                        </Text>
-                      </>
-                    )}
+                  <Alert variant="warning">
+                    <AlertDescription size="xs">
+                      <div className="flex items-center gap-1">
+                        <span>
+                          Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
+                        </span>
+                        {mapPin.moderationFeedback && (
+                          <>
+                            -
+                            <span>
+                              Moderator feedback:{' '}
+                              <span className="font-bold">{mapPin.moderationFeedback}</span>
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </AlertDescription>
                   </Alert>
                 )}
 

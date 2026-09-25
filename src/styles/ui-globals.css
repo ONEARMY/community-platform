@@ -160,6 +160,12 @@
   --info: oklch(0.707 0.165 254.624);
 }
 
+@utility grid-cols-alert {
+  /* Alert's two-column layout when it has an icon: the icon column sized to the
+     icon, the content column taking the rest. */
+  grid-template-columns: auto 1fr;
+}
+
 @utility z-above-header {
   z-index: var(--z-above-header);
 }

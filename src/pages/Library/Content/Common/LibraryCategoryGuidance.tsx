@@ -1,5 +1,5 @@
 import type { Category } from 'oa-shared';
-import { Alert, Text } from 'theme-ui';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { guidance } from '../../labels';
 
 interface IProps {
@@ -21,16 +21,10 @@ export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
 
   return (
     <Alert variant="info">
-      <Text
+      <AlertDescription
+        size="sm"
+        className="text-left [&_ol]:mt-1 [&_ol]:mb-0"
         dangerouslySetInnerHTML={{ __html: guidance[label][type] }}
-        sx={{
-          fontSize: 2,
-          textAlign: 'left',
-          ol: {
-            marginTop: 1,
-            marginBottom: 0,
-          },
-        }}
       />
     </Alert>
   );

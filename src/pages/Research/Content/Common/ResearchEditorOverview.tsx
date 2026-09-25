@@ -1,3 +1,4 @@
+import { CheckIcon } from 'lucide-react';
 import type { ResearchItem } from 'oa-shared';
 import { useState } from 'react';
 import { Link } from 'react-router';
@@ -6,7 +7,6 @@ import { logger } from 'src/logger';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import CheckIcon from '@/components/ui/icons/check.svg?react';
 import ChevronDownIcon from '@/components/ui/icons/chevron-down.svg?react';
 import ChevronUpIcon from '@/components/ui/icons/chevron-up.svg?react';
 import CloseIcon from '@/components/ui/icons/close.svg?react';

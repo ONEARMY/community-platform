@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import Account from './account.svg?react';
-import Check from './check.svg?react';
 import ChevronDown from './chevron-down.svg?react';
 import ChevronLeft from './chevron-left.svg?react';
 import ChevronRight from './chevron-right.svg?react';
@@ -15,7 +14,6 @@ import Update from './update.svg?react';
 
 const icons = {
   Account,
-  Check,
   Close,
   ChevronDown,
   ChevronUp,

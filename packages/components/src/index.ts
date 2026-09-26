@@ -83,5 +83,4 @@ export { UserBadge } from './Username/UserBadge';
 export { Username } from './Username/Username';
 export { UserStatistics } from './UserStatistics/UserStatistics';
 export { VerticalList } from './VerticalList/VerticalList.client';
-export { VideoPlayer } from './VideoPlayer/VideoPlayer';
 export { VisitorModal, visitorDisplayData } from './VisitorModal/VisitorModal';

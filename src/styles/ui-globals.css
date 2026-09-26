@@ -65,8 +65,10 @@
   --radius-control-xs: min(var(--radius-md), 10px);
   --radius-control-sm: min(var(--radius-md), 12px);
   --radius-card: 15px;
+  --radius-card-flat: 5px;
   --radius-checkbox: 4px;
   --text-control-sm: 0.8rem;
+  --text-card-heading: 1.375rem;
   --spacing-hairline: 2px;
   --container-dialog: calc(100% - 2rem);
   --shadow-sidebar-ring: 0 0 0 1px var(--sidebar-border);

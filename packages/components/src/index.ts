@@ -28,7 +28,6 @@ export { DonationRequestModal } from './DonationRequestModal/DonationRequestModa
 export { DownloadButton } from './DownloadButton/DownloadButton';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
-export { ElWithBeforeIcon } from './ElWithBeforeIcon/ElWithBeforeIcon';
 export { ExternalLink } from './ExternalLink/ExternalLink';
 export { FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { FieldInput } from './FieldInput/FieldInput';
@@ -68,7 +67,6 @@ export { ProfileLink } from './ProfileLink/ProfileLink';
 export { ProfileList } from './ProfileList/ProfileList';
 export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList';
 export { AuthorsContext } from './providers/AuthorsContext';
-export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorOverview';
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';

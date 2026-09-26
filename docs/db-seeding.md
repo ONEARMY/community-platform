@@ -9,7 +9,7 @@ Snaplet is a tool used to seed mostly PostgresSQL databases. Read through their 
 To initialize snaplet:
 
 ```sh
-npx @snaplet/seed init
+bunx @snaplet/seed init
 ```
 
 To sync snaplet (essentially generate snaplet models and docs from `seed.config.ts`):
@@ -23,8 +23,8 @@ bun run db:reset
 Or if you need to run the commands separately:
 
 ```sh
-npx supabase db reset
-npx @snaplet/seed sync
-npx tsx seed.ts > seed.sql
+bunx supabase db reset
+bunx @snaplet/seed sync
+bunx tsx seed.ts > seed.sql
 bun run format
 ```

@@ -12,7 +12,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
 import { Flex } from 'theme-ui';
 import { TenantContext } from '../common/TenantContext';
-import { ProfileTypeSection } from './content/sections/ProfileType.section';
+import { FocusSection } from './content/sections/Focus.section';
 import { PublicContactSection } from './content/sections/PublicContact.section';
 import { UserImagesSection } from './content/sections/UserImages.section';
 import { UserInfosSection } from './content/sections/UserInfos.section';
@@ -23,11 +23,14 @@ export const SettingsPageUserProfile = observer(() => {
   const toast = useToast();
   const tenantContext = useContext(TenantContext);
   const profileStore = useProfileStore();
-  const { profile, profileTypes } = profileStore;
+  const { profile } = profileStore;
 
   if (!profile) {
     return null;
   }
+
+  const isMember = !profile.type?.isSpace;
+  const needsResend = profile.moderation === 'improvements-needed';
 
   const saveProfile = async (values: ProfileFormData) => {
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || [];
@@ -65,7 +68,6 @@ export const SettingsPageUserProfile = observer(() => {
     () =>
       ({
         username: profile.username || '',
-        type: profile.type?.name || 'member',
         displayName: profile.displayName || '',
         about: profile.about || '',
         isContactable: isContactable(profile.isContactable),
@@ -100,15 +102,13 @@ export const SettingsPageUserProfile = observer(() => {
         errors,
         form,
       }) => {
-        const isMember = !profileTypes?.find((x) => x.name === values.type)?.isSpace;
-
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
             {submitting && <Loader sx={{ alignSelf: 'center' }} />}
+            <FocusSection />
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                <ProfileTypeSection profileTypes={profileTypes || []} />
                 <UserInfosSection formValues={values} />
                 <UserImagesSection isMemberProfile={isMember} values={values} form={form} />
 
@@ -142,7 +142,7 @@ export const SettingsPageUserProfile = observer(() => {
               disabled={submitting}
               sx={{ alignSelf: 'flex-start' }}
             >
-              {buttons.save}
+              {needsResend ? buttons.saveAndResend : buttons.save}
             </Button>
           </Flex>
         );

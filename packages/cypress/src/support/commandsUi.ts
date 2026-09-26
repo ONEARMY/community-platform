@@ -21,6 +21,15 @@ interface IMapPin {
   locationName: string;
 }
 
+interface IOrganisationApplication {
+  profileType: string;
+  username: string;
+  displayName: string;
+  description: string;
+  website?: string;
+  image?: string;
+}
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -31,6 +40,7 @@ declare global {
       deleteDiscussionItem(element: string, item: string): Chainable<void>;
       editDiscussionItem(element: string, oldComment: string, updatedNewComment: string): Chainable<void>;
       signIn(email: string, password: string): Chainable<void>;
+      fillSignInForm(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
       fillSignupForm(email: string, password: string): Chainable<void>;
       fillIntroTitle(intro: string): Chainable<void>;
@@ -54,12 +64,13 @@ declare global {
       setSettingVisitorPolicy(policyText: string, details?: string): Chainable<void>;
       clearSettingVisitorPolicy(): Chainable<void>;
       setSettingBasicUserInfo(info: IInfo): Chainable<void>;
-      setSettingFocus(focus: string): Chainable<void>;
       setSettingImage(image: string, selector: string): Chainable<void>;
       setSettingImpactData(year: number, fields: { name: string, value: number, visible?: boolean }[]): Chainable<void>;
       setSettingPublicContact(): Chainable<void>;
 
       signUpNewUser(user?: IUserSignUpDetails): Chainable<void>;
+      signUpNewOrganisation(user: IUserSignUpDetails): Chainable<void>;
+      fillOrganisationApplicationForm(application: IOrganisationApplication): Chainable<void>;
       signUpCompletedUser(user?: IUserSignUpDetails): Chainable<void>;
       completeUserProfile(username: string): Chainable<void>;
       setProfileUsername(username: string): Chainable<void>;
@@ -113,10 +124,6 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   website && cy.get('[data-cy=website').clear().type(website);
 });
 
-Cypress.Commands.add('setSettingFocus', (focus: string) => {
-  cy.get(`[data-cy=${focus}]`).first().click();
-});
-
 Cypress.Commands.add('setSettingImage', (image: string, selector: string) => {
   cy.get(`[data-cy=${selector}]`).find(':file').selectFile(`src/fixtures/images/${image}.jpg`, { force: true });
   cy.wait(2000);
@@ -160,13 +167,17 @@ Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.get('[data-cy=consent]').click({ force: true });
 });
 
-Cypress.Commands.add('signIn', (email: string, password: string) => {
+Cypress.Commands.add('fillSignInForm', (email: string, password: string) => {
   cy.log('Fill in sign in form');
   cy.visit('/sign-in');
   cy.get('input[name="cf-turnstile-token"]').should('not.have.value', '');
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=submit]').should('be.enabled').click();
+});
+
+Cypress.Commands.add('signIn', (email: string, password: string) => {
+  cy.fillSignInForm(email, password);
   cy.location('pathname').should('not.include', '/sign-in');
   cy.get('[data-cy=user-menu]').should('exist');
 });
@@ -270,6 +281,30 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(email, password);
   cy.get('[data-cy=submit]').click();
   cy.url().should('include', 'sign-up-message');
+});
+
+Cypress.Commands.add('signUpNewOrganisation', (user: IUserSignUpDetails) => {
+  cy.log('Sign up a new organisation account');
+  cy.visit('/sign-up/organisation');
+  cy.wait(2000);
+  cy.get('[data-cy=email]').clear().type(user.email);
+  cy.get('[data-cy=password]').clear().type(user.password);
+  cy.get('[data-cy=consent]').click({ force: true });
+  cy.get('[data-cy=submit]').click();
+  cy.url().should('include', 'sign-up-message');
+});
+
+Cypress.Commands.add('fillOrganisationApplicationForm', (application: IOrganisationApplication) => {
+  cy.log('Fill in the organisation application form');
+  cy.visit('/organisation-application');
+  cy.get(`[data-cy=${application.profileType}]`).first().click();
+  cy.get('[data-cy=username]').clear().type(application.username);
+  cy.get('[data-cy=displayName]').clear().type(application.displayName);
+  cy.get('[data-cy=about]').clear().type(application.description);
+  if (application.website) {
+    cy.get('[data-cy=website]').clear().type(application.website);
+  }
+  cy.setSettingImage(application.image || 'profile-cover-1', 'coverImages');
 });
 
 Cypress.Commands.add('completeUserProfile', (username) => {

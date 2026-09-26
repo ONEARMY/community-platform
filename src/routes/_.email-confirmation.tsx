@@ -3,24 +3,41 @@ import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useActionData, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
+import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
+import { Stepper } from '@/components/ui/stepper';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const error = url.searchParams.get('error_description');
   const token = url.searchParams.get('token');
+  const isOrganisation = url.searchParams.get('flow') === 'organisation';
 
   const { client, headers } = createSupabaseServerClient(request);
 
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+        claims.data.claims.sub,
+      );
+
+      if (hasApplication) {
+        return redirect('/organisation-application', { headers });
+      }
+    }
+
     return redirect('/settings/profile', { headers });
   }
 
   if (token || error) {
-    return data({ token, error }, { headers });
+    return data({ token, error, isOrganisation }, { headers });
   }
 
   return redirect('/', { headers });
@@ -44,6 +61,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!tokenVerification.data.user) {
     return data({ error: 'Your link has expired or is invalid' }, { status: 400, headers });
+  }
+
+  const profile = await new ProfileServiceServer(client).getByAuthId(
+    tokenVerification.data.user.id,
+  );
+
+  if (!profile) {
+    const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+      tokenVerification.data.user.id,
+    );
+
+    if (hasApplication) {
+      return redirect('/organisation-application', { headers });
+    }
   }
 
   return redirect('/setup-email-preferences', { headers });
@@ -83,6 +114,9 @@ export default function Index() {
                         width: '100%',
                       }}
                     >
+                      {loaderData.isOrganisation && (
+                        <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={1} />
+                      )}
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
                         <Heading>Email confirmation</Heading>
                       </Flex>
@@ -112,7 +146,9 @@ export default function Index() {
                               disabled={submitting}
                               type="submit"
                             >
-                              Confirm Email
+                              {loaderData.isOrganisation
+                                ? 'Continue with the application form'
+                                : 'Confirm Email'}
                             </Button>
                           </Flex>
                         </>

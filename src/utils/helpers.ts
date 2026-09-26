@@ -1,4 +1,5 @@
 import type { DBProfile, IModeration, Profile } from 'oa-shared';
+import { UserRole } from 'oa-shared';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
@@ -62,6 +63,16 @@ export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
 
   return roles.includes('admin');
+};
+
+// TODO: needs admin page created
+export const canModerate = (user?: DBProfile | Partial<Profile> | null) => {
+  if (!user) {
+    return false;
+  }
+  const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
+
+  return hasAdminRights(user) || roles.includes(UserRole.MODERATOR);
 };
 
 export const needsModeration = (doc: IModeration, user?: Profile) => {

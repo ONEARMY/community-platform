@@ -1,83 +1,37 @@
 import { HeroBanner, Icon } from 'oa-components';
-import { Box, Card, Flex, Heading, Text } from 'theme-ui';
+import { ORGANISATION_SIGNUP_STEPS } from 'src/pages/SignUp/constants';
+import { Card, CardContent } from '@/components/ui/card';
+import { Stepper } from '@/components/ui/stepper';
 
-const SignUpMessagePage = ({ email }) => {
+const SignUpMessagePage = ({ email, isOrganisation = false }) => {
   return (
-    <Flex
-      sx={{
-        bg: 'inherit',
-        px: 2,
-        width: '100%',
-        maxWidth: '620px',
-        mx: 'auto',
-        mt: [5, 10],
-        mb: 3,
-      }}
-    >
-      <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-        <HeroBanner type="email" />
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            transform: 'translateY(-50px)',
-          }}
-        >
-          <Box
+    <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+      <HeroBanner type="email" />
+      <div className="flex -translate-y-[50px] flex-col">
+        <div className="z-[3] self-center rounded-[25px] border-2 border-black">
+          <Icon
+            glyph="star-active"
+            size={60}
             sx={{
-              alignSelf: 'center',
-              border: '2px solid #000',
+              backgroundColor: '#ffedd6',
+              border: '5px solid #fff',
               borderRadius: 25,
-              zIndex: 3,
+              padding: 2,
             }}
-          >
-            <Icon
-              glyph="star-active"
-              size={60}
-              sx={{
-                backgroundColor: '#ffedd6',
-                border: '5px solid #fff',
-                borderRadius: 25,
-                padding: 2,
-              }}
-            />
-          </Box>
-          <Card sx={{ borderRadius: 3, transform: 'translateY(-25px)' }}>
-            <Flex
-              sx={{
-                padding: 4,
-                paddingTop: 6,
-                gap: 2,
-                flexDirection: 'column',
-              }}
-            >
-              <Flex
-                sx={{
-                  gap: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                }}
-              >
-                <Heading>Yay! Welcome to One Army!</Heading>
-              </Flex>
-              <Text sx={{ textAlign: 'center', color: 'grey' }}>
-                <p>
-                  Before you dive in, please confirm you email through the link we've sent to{' '}
-                  <Text
-                    sx={{
-                      background: 'linear-gradient(0deg, #ffe2e1 60%, #fff 40%)',
-                      paddingX: 1,
-                    }}
-                  >
-                    {email}
-                  </Text>
-                </p>
-              </Text>
-            </Flex>
-          </Card>
-        </Flex>
-      </Flex>
-    </Flex>
+          />
+        </div>
+        <Card variant="outline" className="-translate-y-[25px]">
+          <CardContent className="flex flex-col gap-2 pt-6">
+            {isOrganisation && <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={1} />}
+            <h1 className="text-center text-2xl font-semibold">Yay! Welcome to One Army!</h1>
+            <p className="text-center text-muted-foreground">
+              Before you dive in, please confirm you email through the link we've sent to{' '}
+              <span className="bg-[linear-gradient(0deg,#ffe2e1_60%,#fff_40%)] px-1">{email}</span>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

@@ -9,16 +9,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Get the raw search string and manually parse the email parameter, otherwise characters like '+' are ignored.
   const emailMatch = url.search.match(/[?&]email=([^&]*)/);
   const email = emailMatch ? decodeURIComponent(emailMatch[1]) : null;
+  const isOrganisation = url.searchParams.get('flow') === 'organisation';
 
-  return email;
+  return { email, isOrganisation };
 }
 
 export default function Index() {
-  const email = useLoaderData<typeof loader>();
+  const { email, isOrganisation } = useLoaderData<typeof loader>();
 
   return (
     <Main style={{ flex: 1 }}>
-      <SignUpMessagePage email={email} />
+      <SignUpMessagePage email={email} isOrganisation={isOrganisation} />
     </Main>
   );
 }

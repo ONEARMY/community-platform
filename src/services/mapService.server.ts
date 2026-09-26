@@ -4,6 +4,18 @@ import type { Moderation, Profile, UpsertPin } from 'oa-shared';
 export class MapServiceServer {
   constructor(private client: SupabaseClient) {}
 
+  private pinModeration(profile: Profile, existingModeration?: Moderation): Moderation {
+    if (profile.type?.isSpace) {
+      return profile.moderation ?? 'awaiting-moderation';
+    }
+
+    if (existingModeration !== undefined) {
+      return existingModeration === 'accepted' ? 'accepted' : 'awaiting-moderation';
+    }
+
+    return profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation';
+  }
+
   async upsert(pin: UpsertPin, profile: Profile) {
     const existingPin = await this.client
       .from('map_pins')
@@ -12,8 +24,7 @@ export class MapServiceServer {
     const existingPinId = existingPin.data?.at(0)?.id;
 
     if (existingPinId) {
-      const moderation: Moderation =
-        existingPin.data![0].moderation === 'accepted' ? 'accepted' : 'awaiting-moderation';
+      const moderation = this.pinModeration(profile, existingPin.data![0].moderation);
 
       return await this.client
         .from('map_pins')
@@ -76,8 +87,7 @@ export class MapServiceServer {
         )
         .single();
     } else {
-      const moderation: Moderation =
-        profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation';
+      const moderation = this.pinModeration(profile);
 
       return await this.client
         .from('map_pins')

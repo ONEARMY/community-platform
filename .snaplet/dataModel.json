@@ -6258,6 +6258,99 @@
         }
       ]
     },
+    "organisation_applications": {
+      "id": "public.organisation_applications",
+      "schemaName": "public",
+      "tableName": "organisation_applications",
+      "fields": [
+        {
+          "id": "public.organisation_applications.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"organisation_applications_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.organisation_applications.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.organisation_applications.auth_id",
+          "name": "auth_id",
+          "columnName": "auth_id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.organisation_applications.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "users",
+          "type": "users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "organisation_applicationsTousers",
+          "relationFromFields": ["auth_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "organisation_applications_auth_id_tenant_id_key",
+          "fields": ["auth_id", "tenant_id"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "organisation_applications_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "poll_options": {
       "id": "public.poll_options",
       "schemaName": "public",
@@ -7631,6 +7724,34 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profiles.moderation",
+          "name": "moderation",
+          "columnName": "moderation",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profiles.moderation_feedback",
+          "name": "moderation_feedback",
+          "columnName": "moderation_feedback",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -12464,6 +12585,34 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.organisation_signup_description",
+          "name": "organisation_signup_description",
+          "columnName": "organisation_signup_description",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.organisation_activity",
+          "name": "organisation_activity",
+          "columnName": "organisation_activity",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [
@@ -13669,6 +13818,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "webauthn_credentialsTousers",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "organisation_applications",
+          "type": "organisation_applications",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "organisation_applicationsTousers",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,

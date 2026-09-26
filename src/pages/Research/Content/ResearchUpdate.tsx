@@ -3,7 +3,6 @@ import {
   Button,
   DisplayDate,
   ImageGallery,
-  LinkifyText,
   Tooltip,
   VideoPlayer,
 } from 'oa-components';
@@ -15,6 +14,7 @@ import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
+import { LinkifyText } from '@/components/ui/linkify-text';
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
 
 interface IProps {

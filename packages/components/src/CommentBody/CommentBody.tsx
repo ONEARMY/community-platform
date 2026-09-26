@@ -1,12 +1,29 @@
+import styled from '@emotion/styled';
+import Linkify from 'linkify-react';
 import { useEffect, useRef, useState } from 'react';
 import { Text } from 'theme-ui';
 
-import { LinkifyText } from '../LinkifyText/LinkifyText';
+import { ExternalLink } from '../ExternalLink/ExternalLink';
 
 interface IProps {
   body: string;
 }
 const SHORT_COMMENT = 129;
+
+const CommentLink = styled(ExternalLink)`
+  color: ${({ theme }) => (theme as any).colors.grey} !important;
+  text-decoration: underline;
+`;
+
+const renderExternalLink = ({ attributes = {} as any, content = '' }) => {
+  const { href, ...props } = attributes;
+
+  return (
+    <CommentLink href={href} {...props}>
+      {content}
+    </CommentLink>
+  );
+};
 
 export const CommentBody = ({ body }: IProps) => {
   const textRef = useRef<HTMLDivElement>(null);
@@ -37,7 +54,7 @@ export const CommentBody = ({ body }: IProps) => {
           fontSize: [3],
         }}
       >
-        <LinkifyText>{body.trim()}</LinkifyText>
+        <Linkify options={{ render: { url: renderExternalLink } }}>{body.trim()}</Linkify>
       </Text>
       {textHeight > SHORT_COMMENT && (
         <Text

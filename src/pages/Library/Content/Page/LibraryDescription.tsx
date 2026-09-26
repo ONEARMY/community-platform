@@ -3,7 +3,6 @@ import {
   Category,
   ContentStatistics,
   DisplayDate,
-  LinkifyText,
   ModerationStatus,
   TagList,
   UsefulStatsButton,
@@ -19,6 +18,7 @@ import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
+import { LinkifyText } from '@/components/ui/linkify-text';
 
 interface IProps {
   commentsCount: number;

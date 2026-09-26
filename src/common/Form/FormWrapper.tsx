@@ -1,7 +1,8 @@
-import { Button, Loader } from 'oa-components';
+import { Button } from 'oa-components';
 import { useFormState } from 'react-final-form';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ErrorsContainer } from './ErrorsContainer';
 import type { IErrorsListSet } from './types';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
@@ -131,7 +132,7 @@ export const FormWrapper = (props: IProps) => {
         )}
 
         {submitting && !hideSubmittingMessage && (
-          <Loader label="Submitting, please do not close the page..." />
+          <Spinner label="Submitting, please do not close the page..." />
         )}
         {sidebar && sidebar}
         {hasClientSideErrors && <ErrorsContainer clientErrors={errorsClientSide} />}

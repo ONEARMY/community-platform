@@ -1,8 +1,9 @@
-import { ConfirmModal, FieldSwitch, InformationTooltip, InternalLink, Loader } from 'oa-components';
+import { ConfirmModal, FieldSwitch, InformationTooltip, InternalLink } from 'oa-components';
 import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Button, Flex } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { TenantContext } from '../common/TenantContext';
 import { ContentReachRadioOptions } from './content/fields/ContentReachPreferenceField';
 import { ContentReachSwitch } from './content/fields/ContentReachSwitch';
@@ -46,7 +47,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         if (isLoading) {
           return (
             <Flex sx={{ minHeight: '700px', alignItems: 'center', justifyContent: 'center' }}>
-              <Loader />
+              <Spinner />
             </Flex>
           );
         }

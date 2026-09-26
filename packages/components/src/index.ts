@@ -26,7 +26,6 @@ export { DisplayDate } from './DisplayDate/DisplayDate';
 // export { DisplayMarkdownStylingWrapper } from './DisplayMarkdown/DisplayMarkdownStylingWrapper'
 export { DonationRequestModal } from './DonationRequestModal/DonationRequestModal';
 export { DownloadButton } from './DownloadButton/DownloadButton';
-export { DownloadCounter } from './DownloadCounter/DownloadCounter';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
 export { ExternalLink } from './ExternalLink/ExternalLink';

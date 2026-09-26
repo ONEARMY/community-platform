@@ -26,7 +26,7 @@ export interface VideoPlayerProps
 
 export function VideoPlayer({
   videoUrl,
-  light = true,
+  light,
   controls = true,
   aspectRatio,
   className,

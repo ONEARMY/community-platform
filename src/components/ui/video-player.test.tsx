@@ -1,7 +1,11 @@
 import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { VideoPlayer } from './video-player';
+
+vi.mock('react-player', () => ({
+  default: ({ src }: { src: string }) => <div data-testid="MockReactPlayer">{src}</div>,
+}));
 
 describe('VideoPlayer', () => {
   it('renders the VideoPlayer container with data-testid', () => {

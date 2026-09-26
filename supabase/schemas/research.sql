@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS "public"."research_updates" (
     "file_link" "text",
     "file_download_count" integer,
     "created_by" bigint,
-    "published_at" timestamp with time zone
+    "published_at" timestamp with time zone,
+    "order" integer
 );
 
 CREATE INDEX "research_created_by_idx" ON "public"."research" USING "btree" ("created_by");
@@ -293,5 +294,20 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION "public"."set_research_update_order"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
+    AS $$
+BEGIN
+  IF NEW."order" IS NULL THEN
+    SELECT COALESCE(MAX(ru."order") + 1, 0) INTO NEW."order"
+    FROM research_updates ru
+    WHERE ru.research_id = NEW.research_id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
 CREATE OR REPLACE TRIGGER "research_text_trigger" AFTER INSERT OR UPDATE OF "title", "description" ON "public"."research" FOR EACH ROW EXECUTE FUNCTION "public"."update_research_tsvector"();
 CREATE OR REPLACE TRIGGER "research_update_trigger" AFTER INSERT OR DELETE OR UPDATE OF "title", "description" ON "public"."research_updates" FOR EACH ROW EXECUTE FUNCTION "public"."update_research_tsvector"();
+CREATE OR REPLACE TRIGGER "research_update_order_trigger" BEFORE INSERT ON "public"."research_updates" FOR EACH ROW EXECUTE FUNCTION "public"."set_research_update_order"();

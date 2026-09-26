@@ -1,6 +1,6 @@
 import arrayMutators from 'final-form-arrays';
 import { FormApi } from 'node_modules/final-form/dist';
-import { Button, ResearchEditorOverview } from 'oa-components';
+import { Button } from 'oa-components';
 import {
   type ResearchFormData,
   type ResearchItem,
@@ -23,6 +23,7 @@ import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsFi
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
 import { ResearchTitleField } from './FormFields/ResearchTitleField';
 import ResearchFieldCategory from './ResearchCategorySelect';
+import { ResearchEditorOverview } from './ResearchEditorOverview';
 
 interface IProps {
   id: number | null;
@@ -160,19 +161,8 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
 
             {research && <DeleteResearchButton research={research} />}
 
-            {research?.updates && (
-              <ResearchEditorOverview
-                updates={research?.updates
-                  .filter((u) => !u.deleted)
-                  .map((u) => ({
-                    isActive: false,
-                    isDraft: u.isDraft,
-                    title: u.title,
-                    id: u.id,
-                  }))}
-                researchSlug={research?.slug}
-                showCreateUpdateButton={true}
-              />
+            {research && (
+              <ResearchEditorOverview research={research} sortable showCreateUpdateButton />
             )}
           </>
         );

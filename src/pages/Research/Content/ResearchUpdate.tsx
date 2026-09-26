@@ -5,7 +5,6 @@ import {
   ImageGallery,
   LinkifyText,
   Tooltip,
-  VideoPlayer,
 } from 'oa-components';
 import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 import { useMemo } from 'react';
@@ -15,6 +14,7 @@ import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
+import { VideoPlayer } from '@/components/ui/video-player';
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
 
 interface IProps {

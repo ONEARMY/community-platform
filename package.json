@@ -119,6 +119,7 @@
     "react-highlight-words": "0.21.0",
     "react-leaflet": "5.0.0",
     "react-leaflet-markercluster": "5.0.0-rc.0",
+    "react-player": "^3.4.0",
     "react-router": "7.18.2",
     "react-spring": "10.0.3",
     "react-tooltip": "5.30.0",

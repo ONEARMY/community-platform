@@ -39,7 +39,7 @@ export function VideoPlayer({
       className={cn(videoPlayerVariants({ aspectRatio, className }))}
       {...props}
     >
-      <ReactPlayer url={videoUrl} width="100%" height="100%" controls={controls} light={light} />
+      <ReactPlayer src={videoUrl} width="100%" height="100%" controls={controls} light={light} />
     </div>
   );
 }

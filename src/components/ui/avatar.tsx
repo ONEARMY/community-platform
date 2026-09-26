@@ -1,14 +1,34 @@
 import { Avatar as AvatarPrimitive } from '@base-ui/react/avatar';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-function Avatar({ className, ...props }: AvatarPrimitive.Root.Props) {
+const avatarVariants = cva('relative flex size-8 shrink-0 overflow-hidden select-none', {
+  variants: {
+    shape: {
+      circle: 'rounded-full',
+      rounded: 'rounded-md',
+    },
+    ring: {
+      true: 'ring-2 ring-background',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    shape: 'circle',
+    ring: false,
+  },
+});
+
+function Avatar({
+  className,
+  shape = 'circle',
+  ring = false,
+  ...props
+}: AvatarPrimitive.Root.Props & VariantProps<typeof avatarVariants>) {
   return (
     <AvatarPrimitive.Root
       data-slot="avatar"
-      className={cn(
-        'relative flex size-8 shrink-0 overflow-hidden rounded-full select-none',
-        className,
-      )}
+      className={cn(avatarVariants({ shape, ring, className }))}
       {...props}
     />
   );
@@ -37,4 +57,4 @@ function AvatarFallback({ className, ...props }: AvatarPrimitive.Fallback.Props)
   );
 }
 
-export { Avatar, AvatarFallback, AvatarImage };
+export { Avatar, AvatarFallback, AvatarImage, avatarVariants };

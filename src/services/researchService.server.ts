@@ -64,6 +64,7 @@ export class ResearchServiceServer {
         is_draft,
         comment_count,
         deleted,
+        order,
         update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
             id,
@@ -121,6 +122,41 @@ export class ResearchServiceServer {
       .eq('id', updateId)
       .eq('research_id', researchId)
       .single();
+  }
+
+  async reorderUpdates(researchId: number, updateIds: number[]) {
+    const { data, error } = await this.client
+      .from('research_updates')
+      .select('id')
+      .eq('research_id', researchId)
+      .or('deleted.eq.false,deleted.is.null');
+
+    if (error) {
+      throw error;
+    }
+
+    const existingIds = new Set(data.map((x) => x.id));
+    const isSameSet =
+      existingIds.size === updateIds.length &&
+      new Set(updateIds).size === updateIds.length &&
+      updateIds.every((id) => existingIds.has(id));
+
+    if (!isSameSet) {
+      return false;
+    }
+
+    const results = await Promise.all(
+      updateIds.map((id, order) =>
+        this.client.from('research_updates').update({ order }).eq('id', id),
+      ),
+    );
+    const failed = results.find((x) => x.error);
+
+    if (failed) {
+      throw failed.error;
+    }
+
+    return true;
   }
 
   async getUserResearch(username: string): Promise<Partial<ResearchItem>[]> {

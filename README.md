@@ -229,6 +229,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://t.me/asterustudio"><img src="https://avatars.githubusercontent.com/u/150630975?v=4?s=60" width="60px;" alt="Daniar Jabagin"/><br /><sub><b>Daniar Jabagin</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=daniarjabagin" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/samuel-sarmah"><img src="https://avatars.githubusercontent.com/u/151577316?v=4?s=60" width="60px;" alt="samuel-sarmah"/><br /><sub><b>samuel-sarmah</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=samuel-sarmah" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://portfolio.shubhamashish.xyz"><img src="https://avatars.githubusercontent.com/u/78084828?v=4?s=60" width="60px;" alt="Shubham Ashish"/><br /><sub><b>Shubham Ashish</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=shubhamashish33" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

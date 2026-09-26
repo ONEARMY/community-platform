@@ -30,4 +30,65 @@ describe('[Admin]', () => {
     cy.url().should('include', '/admin/users');
     cy.contains('Overview');
   });
+
+  it('[Admin can access the admin questions overview]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.url().should('include', '/admin/questions')
+    cy.get('h1').contains('Questions')
+  })
+
+  it('[Admin can click on the question title to go to the question page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.get('a[href*="/questions/"').first().click()
+    cy.url().should('include', '/questions/')
+
+  })
+
+  it('[Admin can click on the question author to go to the autors profile page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.get('a[href*="/u/"').first().click()
+    cy.url().should('include', '/u/')
+  })
+
+  it('[Admin can click on the edit button to go to the question edit page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/questions"]').click()
+    cy.get('a[href*="/edit"').first().click()
+    cy.url().should('include', '/edit')
+    cy.contains('Edit your question to the community');
+  })
+
+  it('[When admin clicks on the delete button the confirmation dialog will show]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin/questions')
+    cy.wait(500)
+    cy.get('button[aria-label*="Delete"]').first().click({ force: true })
+    cy.contains('Delete Question')
+    cy.get('button').contains("Cancel").click({ force: true })
+    cy.get('body').should("not.contain.text", "Delete Question")
+  })
+
+
+  it('[Admin can delete questions from the question page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin/questions')
+    cy.wait(500)
+    cy.get('button[aria-label*="Delete"]').first().click({ force: true })
+    cy.contains('Delete Question')
+    cy.get('button').contains("Delete").click({ force: true })
+    cy.get('body').should("not.contain.text", "Delete Question")
+  })
 });

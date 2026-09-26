@@ -3,12 +3,13 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const cardVariants = cva(
-  'flex flex-col gap-4 rounded-[15px] bg-card py-4 text-card-foreground shadow-sm',
+  'flex flex-col gap-4 rounded-card bg-card py-4 text-card-foreground shadow-sm',
   {
     variants: {
       variant: {
         default: 'border',
-        outline: 'border-2 border-[#1b1b1b]',
+        outline: 'border-2 border-outline',
+        flat: 'gap-2.5 rounded-card-flat border-2 border-outline p-2.5 shadow-none sm:p-4 md:p-5',
       },
     },
     defaultVariants: {
@@ -51,8 +52,37 @@ function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-content" className={cn('px-4', className)} {...props} />;
+const cardContentVariants = cva('px-4', {
+  variants: {
+    variant: {
+      default: '',
+      muted: 'text-sm text-muted-foreground',
+    },
+    gap: {
+      none: '',
+      sm: 'gap-2',
+      md: 'gap-4',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    gap: 'none',
+  },
+});
+
+function CardContent({
+  className,
+  variant = 'default',
+  gap = 'none',
+  ...props
+}: React.ComponentProps<'div'> & VariantProps<typeof cardContentVariants>) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn(cardContentVariants({ variant, gap, className }))}
+      {...props}
+    />
+  );
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
@@ -61,4 +91,13 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, cardVariants };
+export {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  cardContentVariants,
+  cardVariants,
+};

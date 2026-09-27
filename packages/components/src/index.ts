@@ -26,7 +26,6 @@ export { DisplayDate } from './DisplayDate/DisplayDate';
 // export { DisplayMarkdownStylingWrapper } from './DisplayMarkdown/DisplayMarkdownStylingWrapper'
 export { DonationRequestModal } from './DonationRequestModal/DonationRequestModal';
 export { DownloadButton } from './DownloadButton/DownloadButton';
-export { DownloadCounter } from './DownloadCounter/DownloadCounter';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
 export { ExternalLink } from './ExternalLink/ExternalLink';
@@ -67,7 +66,6 @@ export { ProfileLink } from './ProfileLink/ProfileLink';
 export { ProfileList } from './ProfileList/ProfileList';
 export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList';
 export { AuthorsContext } from './providers/AuthorsContext';
-export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorOverview';
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';

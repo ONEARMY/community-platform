@@ -1,11 +1,4 @@
-import {
-  AuthorDisplay,
-  Button,
-  DisplayDate,
-  ImageGallery,
-  Tooltip,
-  VideoPlayer,
-} from 'oa-components';
+import { AuthorDisplay, Button, DisplayDate, ImageGallery, Tooltip } from 'oa-components';
 import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 import { useMemo } from 'react';
 import { Link } from 'react-router';
@@ -15,6 +8,7 @@ import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/Collaps
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { VideoPlayer } from '@/components/ui/video-player';
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
 
 interface IProps {

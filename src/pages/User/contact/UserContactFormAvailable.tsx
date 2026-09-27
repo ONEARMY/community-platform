@@ -1,4 +1,4 @@
-import { Alert, Flex, Text } from 'theme-ui';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface IProps {
   isUserProfileContactable: boolean;
@@ -7,18 +7,14 @@ interface IProps {
 export const UserContactFormAvailable = ({ isUserProfileContactable }: IProps) => {
   return (
     <Alert variant="info">
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+      <AlertDescription className="text-left">
         {isUserProfileContactable ? (
-          <Text sx={{ textAlign: 'left' }} data-cy="UserContactForm-Available">
-            Other users are able to contact you
-          </Text>
+          <p data-cy="UserContactForm-Available">Other users are able to contact you</p>
         ) : (
-          <Text sx={{ textAlign: 'left' }} data-cy="UserContactForm-NotAvailable">
-            Other users are not able to contact you
-          </Text>
+          <p data-cy="UserContactForm-NotAvailable">Other users are not able to contact you</p>
         )}
-        <Text sx={{ textAlign: 'left' }}>You can change that by editing your profile</Text>
-      </Flex>
+        <p>You can change that by editing your profile</p>
+      </AlertDescription>
     </Alert>
   );
 };

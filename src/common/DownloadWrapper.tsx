@@ -1,8 +1,9 @@
-import { DownloadButton, DownloadCounter, DownloadStaticFile, ExternalLink } from 'oa-components';
+import { DownloadButton, DownloadStaticFile, ExternalLink } from 'oa-components';
 import type { MediaFile } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button, Flex } from 'theme-ui';
+import { DownloadCounter } from '@/components/ui/download-counter';
 import { trackEvent } from './Analytics';
 import { DonationRequestModalContainer } from './DonationRequestModalContainer';
 import { UserAction } from './UserAction';

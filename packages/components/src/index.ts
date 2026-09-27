@@ -26,7 +26,6 @@ export { DisplayDate } from './DisplayDate/DisplayDate';
 // export { DisplayMarkdownStylingWrapper } from './DisplayMarkdown/DisplayMarkdownStylingWrapper'
 export { DonationRequestModal } from './DonationRequestModal/DonationRequestModal';
 export { DownloadButton } from './DownloadButton/DownloadButton';
-export { DownloadCounter } from './DownloadCounter/DownloadCounter';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
 export { ExternalLink } from './ExternalLink/ExternalLink';
@@ -49,8 +48,6 @@ export { ImageInputDeleteOverlay } from './ImageInput/ImageInputDeleteOverlay';
 export { ImageInputV2 } from './ImageInput/ImageInputV2';
 export { InformationTooltip } from './InformationTooltip/InformationTooltip';
 export { InternalLink } from './InternalLink/InternalLink';
-export { LinkifyText } from './LinkifyText/LinkifyText';
-export { Loader } from './Loader/Loader';
 export { type IProps as MapProps, Map } from './Map/Map.client';
 export { MapCardList } from './MapCardList/MapCardList';
 export { MapFilterListItem } from './MapFilterListItem/MapFilterListItem';

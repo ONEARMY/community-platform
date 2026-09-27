@@ -38,5 +38,7 @@ export const Default: Story = {
     libraryCount: 10,
     usefulCount: 20,
     researchCount: 2,
+    questionCount: 5,
+    showViews: true,
   },
 };

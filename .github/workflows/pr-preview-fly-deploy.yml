@@ -12,6 +12,9 @@ env:
   SUPABASE_PROJECT_ID: ${{ secrets.PREVIEW_PROJECT_ID }}
   FLY_APP_NAME: community-platform-pr-${{ github.event.number }}
 
+permissions:
+  contents: read
+
 jobs:
   preview_app:
     if: contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅')
@@ -31,6 +34,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          allow-unsafe-pr-checkout: true
 
       - name: Install Fly CLI
         run: |

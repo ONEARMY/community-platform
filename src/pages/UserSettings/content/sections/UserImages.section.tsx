@@ -5,6 +5,7 @@ import type { ProfileFormData } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
+import { logger } from 'src/logger';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { storageService } from 'src/services/storageService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -39,7 +40,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
       const uploadedImage = await storageService.imageUpload(profile!.id, 'profiles', file);
       form.change('photo', uploadedImage);
     } catch (error) {
-      console.error('Error uploading photo:', error);
+      logger.error('Error uploading photo:', error);
     } finally {
       setIsUploadingPhoto(false);
     }
@@ -64,7 +65,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
       const updatedImages = updatedSlots.filter((img) => img);
       form.change('coverImages', updatedImages);
     } catch (error) {
-      console.error('Error uploading cover image:', error);
+      logger.error('Error uploading cover image:', error);
     } finally {
       setUploadingCoverIndex(null);
     }

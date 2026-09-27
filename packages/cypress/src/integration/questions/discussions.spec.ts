@@ -69,8 +69,8 @@ describe('[Questions.Discussions]', () => {
     cy.step('Sort dropdown is visible');
     cy.get('[data-cy=comment-sort-select]').should('be.visible');
 
-    cy.step('Default sort is oldest - comment1 should be first');
-    cy.get('[data-cy=comment-sort-select]').contains('Oldest');
+    cy.step('Default sort is most useful - comment1 should be first');
+    cy.get('[data-cy=comment-sort-select]').contains('Most Useful');
     cy.get('[data-cy=comment-text]').first().should('contain', comment1);
 
     cy.step('Sort by newest - comment3 should be first');
@@ -79,12 +79,12 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=comment-sort-select]').contains('Newest');
     cy.get('[data-cy=comment-text]').first().should('contain', comment5);
 
-    cy.step('Sort by most useful - comment3 should be first (newer of the two useful)');
+    cy.step('Sort by most useful - comment1 should be first (older of the two useful)');
     cy.get('[data-cy=comment-sort-select]').click();
     cy.contains('Most Useful').click();
     cy.get('[data-cy=comment-sort-select]').contains('Most Useful');
-    cy.get('[data-cy=comment-text]').first().should('contain', comment3);
-    cy.get('[data-cy=comment-text]').eq(1).should('contain', comment1);
+    cy.get('[data-cy=comment-text]').first().should('contain', comment1);
+    cy.get('[data-cy=comment-text]').eq(1).should('contain', comment3);
 
     cy.step('Sort back to oldest - comment1 should be first');
     cy.get('[data-cy=comment-sort-select]').click();
@@ -129,7 +129,7 @@ describe('[Questions.Discussions]', () => {
     cy.wait(1000);
     cy.get('[data-cy=CommentItem]').contains(updatedNewComment).should('be.visible');
     cy.addReply(newReply);
-    cy.contains('Comments');
+    cy.contains('Answers');
 
     cy.step('Can edit their reply');
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply);

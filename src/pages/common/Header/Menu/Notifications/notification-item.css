@@ -1,0 +1,30 @@
+/* Outlined quote glyphs straddling the comment bubble - too fiddly for utility classes. */
+.notification-quote::before,
+.notification-quote::after {
+  font-size: 4em;
+  color: white;
+  text-shadow:
+    2px 0 #000,
+    -2px 0 #000,
+    0 2px #000,
+    0 -2px #000,
+    1px 1px #000,
+    -1px -1px #000,
+    1px -1px #000,
+    -1px 1px #000;
+}
+
+.notification-quote::before {
+  content: "\201C";
+  position: absolute;
+  transform: translateX(-8px) rotate(-10deg) translateY(-12px);
+}
+
+.notification-quote::after {
+  content: "\201D";
+  position: relative;
+  bottom: 0;
+  height: 0;
+  width: 10px;
+  transform: translateX(-8px) rotate(10deg) translateY(14px);
+}

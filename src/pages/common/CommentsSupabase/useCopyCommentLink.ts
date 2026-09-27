@@ -1,6 +1,7 @@
 import type { Comment, Reply } from 'oa-shared';
 import { useCallback } from 'react';
 import { useLocation } from 'react-router';
+import { logger } from 'src/logger';
 
 export const useCopyCommentLink = (comment: Comment | Reply) => {
   const location = useLocation();
@@ -21,7 +22,7 @@ export const useCopyCommentLink = (comment: Comment | Reply) => {
 
       await navigator.clipboard.writeText(url);
     } catch (error) {
-      console.error('Failed to copy comment link:', error);
+      logger.error('Failed to copy comment link:', error);
     }
   }, [comment.id, comment.sourceId, comment.sourceType, location.pathname, location.search]);
 };

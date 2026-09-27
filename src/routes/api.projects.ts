@@ -14,6 +14,7 @@ import type {
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -58,7 +59,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const count = countResult.data || 0;
 
   if (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { status: 500, headers });
   }
 
@@ -165,7 +166,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error creating project', status: 500 }, { status: 500 });
   }
 };

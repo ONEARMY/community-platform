@@ -54,9 +54,14 @@ export const DisplayDate = (props: IProps) => {
     >
       {/* Mobile version - show short format */}
       <span className="date-mobile">
-        {showLabel && `${primaryLabel} `}
-        {primaryShort}
-        {wasEdited ? `. Edited ${modifiedShort}` : ''}
+        {wasEdited ? (
+          `Edited ${modifiedShort}`
+        ) : (
+          <>
+            {showLabel && `${primaryLabel} `}
+            {primaryShort}
+          </>
+        )}
       </span>
 
       {/* Desktop version - show full format */}

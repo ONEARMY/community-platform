@@ -1,0 +1,281 @@
+import arrayMutators from 'final-form-arrays';
+import { Button, ConfirmModal } from 'oa-components';
+import type { NewsFormData } from 'oa-shared';
+import { useCallback, useMemo, useState } from 'react';
+import { Form } from 'react-final-form';
+import { FormWrapper } from 'src/common/Form/FormWrapper';
+import type { MainFormAction } from 'src/common/Form/types';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
+import { PollForm } from 'src/pages/common/FormFields';
+import { BadgeVisibilityField } from 'src/pages/common/FormFields/BadgeVisibilityField';
+import { CategoryField } from 'src/pages/common/FormFields/Category.field';
+import { ContentReachField } from 'src/pages/common/FormFields/ContentReachField';
+import { TagsField } from 'src/pages/common/FormFields/Tags.field';
+import { TitleField } from 'src/pages/common/FormFields/Title.field';
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
+import * as LABELS from 'src/pages/News/labels';
+import { NewsPostingGuidelines } from 'src/pages/News/NewsPostingGuidelines';
+import { newsService } from 'src/services/newsService';
+import { storageService } from 'src/services/storageService';
+import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
+import { fireConfetti } from 'src/utils/fireConfetti';
+import { composeValidators, minValue, required } from 'src/utils/validators';
+import { NEWS_MIN_TITLE_LENGTH } from './constants';
+import { NewsBodyField, NewsImageField } from './FormFields';
+import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
+
+interface IProps {
+  'data-testid'?: string;
+  id: number | null;
+  formData: NewsFormData | null;
+  formAction: MainFormAction;
+}
+
+export const NewsForm = (props: IProps) => {
+  const toast = useToast();
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const id = props?.id || null;
+  const isEdit = props.formAction === 'edit';
+
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setShowDeleteModal(false);
+    try {
+      await newsService.deleteNews(id);
+      window.location.assign('/news');
+    } catch (e) {
+      logger.error(e.message || 'Error deleting news');
+    }
+  };
+
+  const initialValues = useMemo<NewsFormData>(
+    () =>
+      ({
+        body: props.formData?.body || null,
+        category: props.formData?.category || null,
+        heroImage: props.formData?.heroImage || null,
+        isDraft: props.formData?.isDraft || null,
+        profileBadges: props.formData?.profileBadges || null,
+        tags: props.formData?.tags || [],
+        title: props.formData?.title || '',
+        contentReach: props.formData?.contentReach || null,
+        poll: props.formData?.poll || null,
+      }) satisfies NewsFormData,
+    [],
+  );
+
+  const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
+    const promise = newsService.upsert(props.id, {
+      body: formValues.body!,
+      category: formValues.category || null,
+      heroImage: formValues.heroImage || null,
+      isDraft,
+      profileBadges: formValues.profileBadges || null,
+      tags: formValues.tags,
+      title: formValues.title!,
+      contentReach: formValues.contentReach || null,
+      poll: formValues.poll || null,
+    });
+
+    toast.promise(promise, {
+      loading: isDraft ? 'Saving draft news...' : 'Publishing news...',
+      success: (data) => {
+        !isDraft && fireConfetti();
+        return {
+          message: isDraft ? 'Draft news saved' : 'News published',
+          actionLink: {
+            href: '/news/' + data.slug,
+            label: isDraft ? 'View draft news' : 'View news',
+          },
+        };
+      },
+      error: (error) => {
+        logger.error(error);
+        return `Error: ${error.message}`;
+      },
+      duration: 10000,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+  };
+
+  const imageUpload = useCallback(
+    async (imageFile: File) => {
+      if (!imageFile) {
+        return null;
+      }
+      try {
+        const response = await storageService.imageUpload(props.id, 'news', imageFile);
+        return response || null;
+      } catch (_) {
+        return null;
+      }
+    },
+    [props.id],
+  );
+
+  const validateForm = useCallback((values) => {
+    const errors = {};
+    if (!extractPlainTextFromTiptapJson(values.body).trim()) {
+      errors['body'] = 'Body field required. Gotta have something to say...';
+    }
+    if (values.heroImage == null && values.existingHeroImage === null) {
+      errors['heroImage'] = 'An image is required (either new or existing).';
+    }
+
+    if (values.poll) {
+      const { title, options } = values.poll;
+      if (
+        !title ||
+        title.length < NEWS_MIN_TITLE_LENGTH ||
+        options.length < 2 ||
+        options.some((o) => !o.description)
+      ) {
+        errors['pollError'] = 'A poll must have a title and at least two options.';
+      }
+    }
+    return errors;
+  }, []);
+
+  return (
+    <>
+      <Form
+        key={props.id || 'new'}
+        data-testid={props['data-testid']}
+        onSubmit={(values) => onSubmit(values, false)}
+        initialValues={initialValues}
+        validate={validateForm}
+        mutators={{
+          ...arrayMutators,
+        }}
+        render={({
+          dirty,
+          errors,
+          form,
+          hasValidationErrors,
+          submitFailed,
+          submitting,
+          submitSucceeded,
+          handleSubmit,
+          values,
+        }) => {
+          const removeImage = () => {
+            form.change('heroImage', null);
+          };
+
+          const errorsClientSide = [errorSet(errors, LABELS.fields)];
+
+          const handleSubmitDraft = async (e: React.MouseEvent) => {
+            e.preventDefault();
+            setIsSubmittingDraft(true);
+            try {
+              await onSubmit(values, true);
+              form.reset(values);
+            } finally {
+              setIsSubmittingDraft(false);
+            }
+          };
+
+          const unsavedChangesDialog = (
+            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+          );
+          const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
+
+          const isPublished = props.formData?.isDraft === false;
+
+          const sidebar = (
+            <>
+              {isEdit && (
+                <Button
+                  data-cy="delete"
+                  onClick={(evt) => {
+                    setShowDeleteModal(true);
+                    evt.preventDefault();
+                  }}
+                  variant="destructive"
+                  type="submit"
+                  disabled={submitting}
+                  sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+                >
+                  {LABELS.buttons.deletion.text}
+                </Button>
+              )}
+              {!isPublished && (
+                <NewsPreviewEmailButton
+                  submitting={submitting}
+                  formValues={values}
+                  isSubmittingDraft={isSubmittingDraft}
+                  id={props.id || undefined}
+                />
+              )}
+            </>
+          );
+
+          return (
+            <FormWrapper
+              buttonLabel={LABELS.buttons.publish}
+              errorsClientSide={errorsClientSide}
+              guidelines={<NewsPostingGuidelines />}
+              handleSubmit={handleSubmit}
+              handleSubmitDraft={props.formData?.isDraft === false ? undefined : handleSubmitDraft}
+              hasValidationErrors={hasValidationErrors}
+              heading={LABELS.headings[props.formAction]}
+              sidebar={sidebar}
+              hideSubmittingMessage={true}
+              submitFailed={submitFailed}
+              submitting={submitting}
+              unsavedChangesDialog={unsavedChangesDialog}
+            >
+              <TitleField
+                placeholder={LABELS.fields.title.placeholder}
+                validate={validate}
+                title={LABELS.fields.title.title}
+              />
+              <NewsImageField
+                image={values.heroImage}
+                removeImage={removeImage}
+                contentId={props.id || null}
+              />
+              <CategoryField type="news" title={LABELS.fields.category.title} />
+              <TagsField title={LABELS.fields.tags.title} />
+
+              <BadgeVisibilityField
+                description={LABELS.fields.profileBadge.description as string}
+                placeholder={LABELS.fields.profileBadge.placeholder as string}
+                title={LABELS.fields.profileBadge.title}
+                showPublicBadge={true}
+              />
+              <ContentReachField
+                placeholder={LABELS.fields.contentReach.placeholder as string}
+                title={LABELS.fields.contentReach.title}
+                shouldDisableContentReach={
+                  !!(props.id && props.formData?.contentReach && props.formData?.isDraft === false)
+                }
+              />
+
+              <NewsBodyField imageUpload={imageUpload} />
+              <PollForm
+                validate={validate}
+                pollData={props.formData ? props.formData.poll : null}
+              />
+            </FormWrapper>
+          );
+        }}
+      />
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message={LABELS.buttons.deletion.message}
+        confirmButtonText={LABELS.buttons.deletion.confirm}
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={handleDelete}
+        confirmVariant="destructive"
+      />
+    </>
+  );
+};

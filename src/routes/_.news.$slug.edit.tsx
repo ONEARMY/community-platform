@@ -2,11 +2,13 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { DBNews, NewsFormData, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
-import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
+import { NewsForm } from 'src/pages/News/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
+import { PollServiceServer } from '../services/pollService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -28,7 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!(await isAllowedToEdit(result.data.created_by, claims.data.claims.sub, client))) {
-    return redirect('/forbidden?page=news-edit', { headers });
+    return redirect(`/forbidden?page=${ForbiddenPage.NEWS_EDIT}`, { headers });
   }
 
   const dbNews = result.data as unknown as DBNews;
@@ -37,7 +39,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ? new StorageServiceServer(client).getPublicUrl(dbNews.hero_image)
     : null;
 
-  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage);
+  const pollService = new PollServiceServer(client);
+  const poll = dbNews.poll ? await pollService.getPoll(dbNews.poll) : null;
+
+  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage, poll);
 
   return data({ formData, id: result.data.id }, { headers });
 }

@@ -3,8 +3,20 @@ import type { Question } from 'oa-shared';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card } from 'theme-ui';
-import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
+import {
+  type CommentSectionLabels,
+  CommentSectionSupabase,
+} from '../common/CommentsSupabase/CommentSectionSupabase';
+import { CommentSortOption } from '../common/CommentsSupabase/CommentSortOptions';
 import { QuestionCommentContext } from './QuestionCommentContext';
+
+const ANSWER_LABELS: CommentSectionLabels = {
+  title: 'Answers',
+  createButtonLabel: 'Add your answer',
+  createPlaceholder: 'Leave your answer',
+  logInPrompt: 'Log in to leave your answer',
+  incompleteProfilePrompt: 'Complete your profile to leave your answer',
+};
 
 interface IProps {
   question: Question;
@@ -64,6 +76,9 @@ export const QuestionCommentSection = observer(
             setSubscribersCount={setSubscribersCount}
             sourceId={question.id}
             sourceType="questions"
+            pinnedCommentId={acceptedAnswerId}
+            defaultSortBy={CommentSortOption.MostUseful}
+            labels={ANSWER_LABELS}
           />
         </Card>
       </QuestionCommentContext.Provider>

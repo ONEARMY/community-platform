@@ -1,5 +1,7 @@
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
+import { notifyMembershipEvent } from 'src/services/membershipNotifier.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
@@ -26,7 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const webhookSecret = await getSecret('STRIPE_WEBHOOK_SECRET');
     event = await StripeServiceServer.constructWebhookEvent(body, signature, webhookSecret);
   } catch (error) {
-    console.error('Webhook signature verification failed:', error);
+    logger.error('Webhook signature verification failed:', error);
     return new Response('Invalid signature', { status: 400 });
   }
 
@@ -103,9 +105,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         break;
     }
 
+    const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+
+    await notifyMembershipEvent(event, stripeService, tenantId, siteUrl);
+
     return new Response('OK', { status: 200 });
   } catch (error) {
-    console.error('Webhook handler error:', error);
+    logger.error('Webhook handler error:', error);
     return new Response('Webhook handler failed', { status: 500 });
   }
 };

@@ -2,16 +2,18 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   Author,
   DBAuthor,
-  DBProfile,
   DBResearchItem,
   DBResearchUpdate,
   ResearchItem,
   UserRole,
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 import { ProfileServiceServer } from './profileService.server';
 import { StorageServiceServer } from './storageService.server';
+
+type EditorProfile = { id: number; username: string | null; roles: string[] | null };
 
 export class ResearchServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -62,6 +64,7 @@ export class ResearchServiceServer {
         is_draft,
         comment_count,
         deleted,
+        order,
         update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
             id,
@@ -100,8 +103,14 @@ export class ResearchServiceServer {
 
     const profileService = new ProfileServiceServer(this.client);
     const users = await profileService.getUsersByUsername(collaboratorIds);
+    const imageService = new ImageServiceServer(this.client);
 
-    return users?.map((user) => Author.fromDB(user as unknown as DBAuthor)) || [];
+    return (
+      users?.map((user) => {
+        const dbAuthor = user as unknown as DBAuthor;
+        return Author.fromDB(dbAuthor, imageService.getPublicUrl(dbAuthor.photo));
+      }) || []
+    );
   }
 
   async getUpdate(researchId: number, updateId: number) {
@@ -115,6 +124,41 @@ export class ResearchServiceServer {
       .single();
   }
 
+  async reorderUpdates(researchId: number, updateIds: number[]) {
+    const { data, error } = await this.client
+      .from('research_updates')
+      .select('id')
+      .eq('research_id', researchId)
+      .or('deleted.eq.false,deleted.is.null');
+
+    if (error) {
+      throw error;
+    }
+
+    const existingIds = new Set(data.map((x) => x.id));
+    const isSameSet =
+      existingIds.size === updateIds.length &&
+      new Set(updateIds).size === updateIds.length &&
+      updateIds.every((id) => existingIds.has(id));
+
+    if (!isSameSet) {
+      return false;
+    }
+
+    const results = await Promise.all(
+      updateIds.map((id, order) =>
+        this.client.from('research_updates').update({ order }).eq('id', id),
+      ),
+    );
+    const failed = results.find((x) => x.error);
+
+    if (failed) {
+      throw failed.error;
+    }
+
+    return true;
+  }
+
   async getUserResearch(username: string): Promise<Partial<ResearchItem>[]> {
     const imageService = new ImageServiceServer(this.client);
     const { data, error } = await this.client.rpc('get_user_research', {
@@ -122,7 +166,7 @@ export class ResearchServiceServer {
     });
 
     if (error) {
-      console.error('Error fetching user research:', error);
+      logger.error('Error fetching user research:', error);
       return [];
     }
 
@@ -151,7 +195,7 @@ export class ResearchServiceServer {
       : [];
   }
 
-  async isAllowedToEditResearch(research: DBResearchItem, profile: DBProfile) {
+  async isAllowedToEditResearch(research: DBResearchItem, profile: EditorProfile) {
     if (profile.id === research.author?.id) {
       return true;
     }
@@ -167,7 +211,7 @@ export class ResearchServiceServer {
     return profile.roles?.includes(UserRole.ADMIN);
   }
 
-  async isAllowedToEditResearchById(id: number, profile: DBProfile) {
+  async isAllowedToEditResearchById(id: number, profile: EditorProfile) {
     const researchResult = await this.client
       .from('research')
       .select('id,created_by,collaborators,author:profiles(id,username)')
@@ -189,7 +233,7 @@ export class ResearchServiceServer {
     return result.data as DBResearchUpdate;
   }
 
-  async isAllowedToEditUpdate(profile: DBProfile | null, researchId: number, updateId: number) {
+  async isAllowedToEditUpdate(profile: EditorProfile | null, researchId: number, updateId: number) {
     const research = await this.getById(researchId);
     const researchUpdate = await this.getUpdateById(updateId);
 
@@ -199,7 +243,7 @@ export class ResearchServiceServer {
 
     return (
       profile &&
-      (profile.id === research.author?.id ||
+      (profile.id === research.created_by ||
         (profile.username && research.collaborators?.includes(profile.username)) ||
         profile?.roles?.includes(UserRole.ADMIN))
     );

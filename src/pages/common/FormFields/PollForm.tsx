@@ -1,0 +1,154 @@
+import { Card, Checkbox, Flex, Heading, Label, Text } from '@theme-ui/components';
+import { FieldValidator } from 'final-form';
+import { Button, FieldInput } from 'oa-components';
+import { PollDTO } from 'oa-shared/models/poll';
+import { Field, useForm } from 'react-final-form';
+import { FieldArray } from 'react-final-form-arrays';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { NEWS_MAX_TITLE_LENGTH, NEWS_MIN_TITLE_LENGTH } from 'src/pages/News/constants';
+
+interface IProps {
+  validate: FieldValidator<string>;
+  pollData: PollDTO | null;
+}
+
+export const PollForm = ({ validate }: IProps) => {
+  const form = useForm();
+  const poll: PollDTO = form.getState().values?.poll;
+
+  const validatePollOptions = (options?: { description: string }[]) => {
+    if (!options || options.length < 2) {
+      return 'A poll must have at least 2 options.';
+    }
+    if (options.some((o) => !o.description)) {
+      return 'Every options has to have a description.';
+    }
+  };
+
+  return (
+    <>
+      {!poll ? (
+        <Button
+          data-cy={`add-news`}
+          type="button"
+          sx={{ width: 'fit-content ', marginTop: 3 }}
+          variant="outline"
+          icon="difficulty"
+          onClick={() =>
+            form.change('poll', {
+              title: '',
+              options: [{ description: '' }, { description: '' }, { description: '' }],
+              singleChoice: true,
+            })
+          }
+        >
+          Add poll
+        </Button>
+      ) : (
+        <Card sx={{ borderColor: 'offWhite' }}>
+          <Flex p={3} sx={{ flexDirection: 'column', gap: 3 }}>
+            <Flex p={0}>
+              <Heading as="h3" variant="small" sx={{ flex: 1 }} mb={3}>
+                Add poll
+              </Heading>
+              <Button
+                data-cy={`delete-poll`}
+                type="button"
+                variant="subtle"
+                icon="close"
+                showIconOnly={true}
+                onClick={() => form.change('poll', null)}
+              />
+            </Flex>
+            <FormFieldWrapper htmlFor="poll.title" text="Poll title" required>
+              <Field
+                data-cy={`field-poll-title`}
+                name="poll.title"
+                id="poll.title"
+                validate={validate}
+                component={FieldInput}
+                placeholder="Add a title for your poll"
+                minLength={NEWS_MIN_TITLE_LENGTH}
+                maxLength={NEWS_MAX_TITLE_LENGTH}
+                // showCharacterCount
+                onBlur
+              />
+            </FormFieldWrapper>
+
+            <FormFieldWrapper htmlFor="poll.options" text="Poll options">
+              <FieldArray name="poll.options" validate={validatePollOptions}>
+                {({ fields, meta }) => (
+                  <>
+                    {fields.map((name, index) => (
+                      <div
+                        key={name}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginTop: 3,
+                        }}
+                      >
+                        <Field
+                          data-cy={`field-poll-option-${index}`}
+                          name={`${name}.description`}
+                          component={FieldInput}
+                          placeholder={`Option ${index + 1}`}
+                        />
+                        <Button
+                          data-cy={`remove-poll-option-${index}`}
+                          type="button"
+                          variant="subtle"
+                          icon="close-modal"
+                          showIconOnly={true}
+                          onClick={() => fields.remove(index)}
+                        />
+                      </div>
+                    ))}
+                    {meta.submitFailed && meta.error && (
+                      <Text
+                        sx={{
+                          color: 'error',
+                          fontSize: 1,
+                          mt: 1,
+                        }}
+                      >
+                        {meta.error}
+                      </Text>
+                    )}
+                    <Button
+                      variant="outline"
+                      type="button"
+                      data-cy={`poll-add-option`}
+                      sx={{ width: 'fit-content ', marginTop: 3 }}
+                      icon="add"
+                      onClick={() => fields.push({ description: '' })}
+                    >
+                      Add option
+                    </Button>
+                  </>
+                )}
+              </FieldArray>
+              <Label sx={{ mt: 3, gap: 1 }}>
+                <Field name="poll.singleChoice">
+                  {({ input }) => (
+                    <Flex sx={{ alignItems: 'center' }}>
+                      <Checkbox
+                        sx={{
+                          'input:checked ~ &': { color: 'highlight' },
+                          'input:focus ~ &': { backgroundColor: 'white', color: 'highlight' },
+                        }}
+                        checked={!input.value}
+                        onChange={() => input.onChange(!input.value)}
+                      />
+                      <Text> Allow users to vote on more than one option </Text>
+                    </Flex>
+                  )}
+                </Field>
+              </Label>
+            </FormFieldWrapper>
+          </Flex>
+        </Card>
+      )}
+    </>
+  );
+};

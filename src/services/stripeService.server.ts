@@ -1,4 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { isTestEnvironment } from 'src/config/config';
+import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
@@ -13,6 +15,78 @@ export type SupporterPrice = {
 };
 
 export type TierConfigMap = Record<number, { color: string; name: string; description: string }>;
+
+const STUB_PRICES: SupporterPrice[] = [
+  {
+    id: 'stub_starter_month',
+    unitAmount: 100,
+    currency: 'eur',
+    interval: 'month',
+    tier: 1,
+    tierName: 'Starter',
+  },
+  {
+    id: 'stub_starter_year',
+    unitAmount: 100,
+    currency: 'eur',
+    interval: 'year',
+    tier: 1,
+    tierName: 'Starter',
+  },
+  {
+    id: 'stub_hero_month',
+    unitAmount: 200,
+    currency: 'eur',
+    interval: 'month',
+    tier: 2,
+    tierName: 'Hero',
+  },
+  {
+    id: 'stub_hero_year',
+    unitAmount: 200,
+    currency: 'eur',
+    interval: 'year',
+    tier: 2,
+    tierName: 'Hero',
+  },
+  {
+    id: 'stub_legend_month',
+    unitAmount: 300,
+    currency: 'eur',
+    interval: 'month',
+    tier: 3,
+    tierName: 'Legend',
+  },
+  {
+    id: 'stub_legend_year',
+    unitAmount: 300,
+    currency: 'eur',
+    interval: 'year',
+    tier: 3,
+    tierName: 'Legend',
+  },
+];
+
+const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null } = {
+  tiers: {
+    1: {
+      color: '#BFDEBA',
+      name: 'Starter',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+    2: {
+      color: '#77BDE3',
+      name: 'Hero',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+    3: {
+      color: '#FEE77B',
+      name: 'Legend',
+      description: 'You help us develop new features, get videos in 4K without ads!',
+    },
+  },
+  thankYouImageUrl: null,
+};
 
 let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
@@ -42,7 +116,7 @@ export class StripeServiceServer {
 
   static async getStripeCustomer(
     customerId: string,
-  ): Promise<{ id: string; email: string | null } | null> {
+  ): Promise<{ id: string; email: string | null; name: string | null } | null> {
     const stripe = await getStripe();
     if (!stripe) {
       return null;
@@ -52,7 +126,26 @@ export class StripeServiceServer {
       if (customer.deleted) {
         return null;
       }
-      return { id: customer.id, email: customer.email };
+      return { id: customer.id, email: customer.email, name: customer.name ?? null };
+    } catch {
+      return null;
+    }
+  }
+
+  static async getPriceInterval(priceId: string): Promise<Stripe.Price.Recurring.Interval | null> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return null;
+    }
+
+    try {
+      const price = await stripe.prices.retrieve(priceId);
+
+      if (!price.recurring || price.recurring.interval_count !== 1) {
+        return null;
+      }
+
+      return price.recurring.interval;
     } catch {
       return null;
     }
@@ -71,6 +164,58 @@ export class StripeServiceServer {
     });
 
     return subscriptions.data[0] || null;
+  }
+
+  static async cancelActiveSubscriptions(customerId: string): Promise<number> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return 0;
+    }
+
+    const subscriptions = await stripe.subscriptions.list({ customer: customerId, limit: 100 });
+
+    let cancelled = 0;
+    for (const subscription of subscriptions.data) {
+      try {
+        await stripe.subscriptions.cancel(subscription.id);
+        cancelled += 1;
+      } catch (error) {
+        logger.error(
+          `Failed to cancel subscription ${subscription.id} for customer ${customerId}:`,
+          error,
+        );
+      }
+    }
+
+    return cancelled;
+  }
+
+  static async cancelIncompleteSubscriptions(customerId: string): Promise<number> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return 0;
+    }
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: 'incomplete',
+      limit: 100,
+    });
+
+    let cancelled = 0;
+    for (const subscription of subscriptions.data) {
+      try {
+        await stripe.subscriptions.cancel(subscription.id);
+        cancelled += 1;
+      } catch (error) {
+        logger.error(
+          `Failed to cancel incomplete subscription ${subscription.id} for customer ${customerId}:`,
+          error,
+        );
+      }
+    }
+
+    return cancelled;
   }
 
   static async createGuestCustomer(email: string, name?: string): Promise<string> {
@@ -111,6 +256,9 @@ export class StripeServiceServer {
       items: [{ price: priceId }],
       currency,
       payment_behavior: 'default_incomplete',
+      payment_settings: {
+        save_default_payment_method: 'on_subscription',
+      },
       expand: ['latest_invoice'],
     });
 
@@ -155,7 +303,7 @@ export class StripeServiceServer {
     if (!stripe) {
       throw new Error('Stripe is not configured');
     }
-    return stripe.webhooks.constructEvent(body, signature, secret);
+    return stripe.webhooks.constructEventAsync(body, signature, secret);
   }
 
   // ── Instance methods (request-scoped DB reads/writes via passed client) ──
@@ -192,21 +340,23 @@ export class StripeServiceServer {
     if (!stripe) {
       throw new Error('Stripe is not configured');
     }
-    const customer = await stripe.customers.create({
-      email,
-      metadata: {
-        supabase_user_id: authUserId,
-        tenant_id: tenantId,
-      },
-    });
+
+    const metadata = { supabase_user_id: authUserId, tenant_id: tenantId };
+
+    // Reuse an existing Stripe customer for this email (e.g. one created during
+    // an earlier guest checkout) instead of minting a duplicate.
+    const existing = await stripe.customers.list({ email, limit: 1 });
+    const customerId = existing.data.length
+      ? (await stripe.customers.update(existing.data[0].id, { metadata })).id
+      : (await stripe.customers.create({ email, metadata })).id;
 
     await this.client.from('stripe_customers').insert({
       auth_id: authUserId,
-      stripe_customer_id: customer.id,
+      stripe_customer_id: customerId,
       tenant_id: tenantId,
     });
 
-    return customer.id;
+    return customerId;
   }
 
   async getOrCreateCustomer(authUserId: string, email: string, tenantId: string): Promise<string> {
@@ -243,17 +393,27 @@ export class StripeServiceServer {
     return map;
   }
 
-  async getTierConfig(): Promise<TierConfigMap> {
+  async getTierConfig(): Promise<{ tiers: TierConfigMap; thankYouImageUrl: string | null }> {
     const { data } = await this.client
       .from('stripe_tier_config')
-      .select('description, color, profile_badges:badge_id(premium_tier, display_name)');
+      .select(
+        'description, color, thank_you_image_url, profile_badges:badge_id(premium_tier, display_name)',
+      );
 
-    const map: TierConfigMap = {};
-    if (!data) {
-      return map;
+    let thankYouImageUrl: string | null = null;
+
+    if (!data || data.length === 0) {
+      const stripe = await getStripe();
+      if (!stripe && process.env.NODE_ENV === 'development') {
+        return STUB_TIER_CONFIG;
+      }
+      return { tiers: {}, thankYouImageUrl };
     }
 
-    for (const row of data) {
+    const map: TierConfigMap = {};
+    for (const row of data as Array<
+      (typeof data)[number] & { thank_you_image_url: string | null }
+    >) {
       const badge = row.profile_badges as unknown as {
         premium_tier: number | null;
         display_name: string;
@@ -265,15 +425,18 @@ export class StripeServiceServer {
           description: row.description,
         };
       }
+      if (!thankYouImageUrl && row.thank_you_image_url) {
+        thankYouImageUrl = row.thank_you_image_url;
+      }
     }
 
-    return map;
+    return { tiers: map, thankYouImageUrl };
   }
 
   async getPrices(): Promise<SupporterPrice[]> {
     const stripe = await getStripe();
     if (!stripe) {
-      return [];
+      return process.env.NODE_ENV === 'development' || isTestEnvironment() ? STUB_PRICES : [];
     }
     const tierMap = await this.getProductTierMap();
     const productIds = [...tierMap.keys()];
@@ -288,13 +451,20 @@ export class StripeServiceServer {
           product: productId,
           active: true,
           limit: 100,
-          expand: ['data.currency_options'],
+          expand: ['data.currency_options', 'data.product'],
         }),
       ),
     );
 
     return allPrices
       .flatMap((result) => result.data)
+      .filter((p) => {
+        const prod = p.product as { active?: boolean; deleted?: boolean } | string;
+        if (typeof prod === 'object' && prod !== null) {
+          return prod.deleted !== true && prod.active !== false;
+        }
+        return true;
+      })
       .filter((p) => p.recurring && p.unit_amount !== null)
       .flatMap((p) => {
         const productId =
@@ -349,6 +519,49 @@ export class StripeServiceServer {
     return data?.badge_id ?? null;
   }
 
+  // Filters on tenant_id rather than relying on the tenant_isolation RLS policy, because
+  // callers include the Stripe webhook, which uses the service_role client and bypasses RLS.
+  async getTierNameForProduct(productId: string, tenantId: string): Promise<string | null> {
+    const { data } = await this.client
+      .from('stripe_badge_products')
+      .select('profile_badges:badge_id(display_name)')
+      .eq('stripe_product_id', productId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    const badge = data?.profile_badges as unknown as { display_name: string } | null;
+
+    return badge?.display_name ?? null;
+  }
+
+  // Takes the email so callers holding the Stripe customer do not fetch it a second time.
+  async getProfileIdentityByStripeCustomerId(
+    customerId: string,
+    tenantId: string,
+    customerEmail: string | null,
+  ): Promise<{ id: number; displayName: string | null } | null> {
+    const authId =
+      (await this.getAuthIdByStripeCustomerId(customerId, tenantId)) ??
+      (customerEmail ? await this.getAuthIdByEmail(customerEmail) : null);
+
+    if (!authId) {
+      return null;
+    }
+
+    const { data } = await this.client
+      .from('profiles')
+      .select('id, display_name')
+      .eq('auth_id', authId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    if (!data) {
+      return null;
+    }
+
+    return { id: data.id, displayName: data.display_name };
+  }
+
   async getProfileIdByAuthId(authId: string, tenantId: string): Promise<number | null> {
     const { data } = await this.client
       .from('profiles')
@@ -366,7 +579,11 @@ export class StripeServiceServer {
       return null;
     }
 
-    const { data } = await this.client.rpc('get_user_id_by_email', { email: customer.email });
+    return this.getAuthIdByEmail(customer.email);
+  }
+
+  async getAuthIdByEmail(email: string): Promise<string | null> {
+    const { data } = await this.client.rpc('get_user_id_by_email', { email });
     if (!Array.isArray(data) || data.length === 0) {
       return null;
     }

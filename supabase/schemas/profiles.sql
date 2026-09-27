@@ -238,7 +238,7 @@ END;
 $$;
 
 -- RPC function to get staff profiles (admin, editor, moderator), including email from auth.users
-CREATE OR REPLACE FUNCTION get_staff_profiles()
+CREATE OR REPLACE FUNCTION get_staff_profiles(p_tenant_id text)
 RETURNS TABLE (
   profile_id bigint,
   profile_created_at timestamp with time zone,
@@ -252,7 +252,7 @@ RETURNS TABLE (
   is_unsubscribed boolean,
   content_reach content_reach,
   badge_ids bigint[]
-) 
+)
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
@@ -274,6 +274,34 @@ BEGIN
   FROM profiles p
   LEFT JOIN auth.users au ON p.auth_id = au.id
   LEFT JOIN notifications_preferences np ON p.id = np.user_id
-  WHERE p.roles && ARRAY['admin', 'editor', 'moderator']::text[];
+  WHERE p.roles && ARRAY['admin', 'editor', 'moderator']::text[]
+  AND p.tenant_id = p_tenant_id;
+END;
+$$;
+
+-- RPC function to count profiles per profile type, for the admin Users overview
+CREATE OR REPLACE FUNCTION "public"."get_profile_type_counts"(p_tenant_id text)
+RETURNS TABLE (
+  profile_type_id bigint,
+  name text,
+  display_name text,
+  profile_count bigint
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET "search_path" TO 'public', 'pg_temp'
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    pt.id AS profile_type_id,
+    pt.name,
+    pt.display_name,
+    COUNT(p.id) AS profile_count
+  FROM profile_types pt
+  LEFT JOIN profiles p ON p.profile_type = pt.id AND p.tenant_id = p_tenant_id
+  WHERE pt.tenant_id = p_tenant_id
+  GROUP BY pt.id, pt.name, pt.display_name, pt."order"
+  ORDER BY pt."order";
 END;
 $$;

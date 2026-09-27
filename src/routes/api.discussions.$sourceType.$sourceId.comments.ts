@@ -3,6 +3,7 @@ import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
 import { DBComment, DiscussionContentTypes } from 'oa-shared';
 import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { NotificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
@@ -45,7 +46,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
     return data({ comments }, { headers });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return data({}, { status: 500, headers });
   }
 }

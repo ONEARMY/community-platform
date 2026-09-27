@@ -1,10 +1,11 @@
 import { FormApi } from 'node_modules/final-form/dist';
-import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
-import type { ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
+import { Button, ConfirmModal } from 'oa-components';
+import type { ResearchItem, ResearchUpdateFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast/useToast';
+import { logger } from 'src/logger';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { FilesFields } from '../../../common/FormFields/FilesFields';
 import { buttons, headings, updateForm } from '../../labels';
@@ -13,6 +14,7 @@ import { DescriptionField } from '../CreateResearch/Form/DescriptionField';
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField';
 import { TitleField } from '../CreateResearch/Form/TitleField';
 import VideoUrlField from '../CreateResearch/Form/VideoUrlField';
+import { ResearchEditorOverview } from './ResearchEditorOverview';
 
 interface IProps {
   id: number | null;
@@ -58,7 +60,7 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       duration: 10000,
@@ -122,10 +124,10 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
 
               {research && (
                 <ResearchEditorOverview
-                  updates={getResearchUpdates(research.updates || [], !isEdit, values.title)}
-                  researchSlug={research?.slug}
+                  research={research}
+                  newUpdateTitle={isEdit ? undefined : values.title}
                   showCreateUpdateButton={isEdit}
-                  showBackToResearchButton={true}
+                  showBackToResearchButton
                 />
               )}
             </>
@@ -164,26 +166,3 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
     </>
   );
 };
-
-const getResearchUpdates = (
-  updates: ResearchUpdate[],
-  isCreating: boolean,
-  researchTitle: string,
-): any[] =>
-  [
-    ...updates
-      .filter((u) => !u.deleted)
-      .map((u) => ({
-        title: u.title,
-        isDraft: u.isDraft,
-        slug: u.id,
-        id: u.id,
-      })),
-    isCreating
-      ? {
-          title: researchTitle,
-          isDraft: true,
-          slug: null,
-        }
-      : null,
-  ].filter(Boolean);

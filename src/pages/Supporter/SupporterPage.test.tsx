@@ -290,7 +290,7 @@ describe('SupporterPage', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Check what we prepared for you'),
+          screen.getByText('Continue'),
         ).toBeInTheDocument();
       });
 

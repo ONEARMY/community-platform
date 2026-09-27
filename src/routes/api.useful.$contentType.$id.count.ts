@@ -1,5 +1,6 @@
 import type { UsefulContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -32,7 +33,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .eq('content_id', commentId);
 
   if (error) {
-    console.error('Supabase error:', error);
+    logger.error('Supabase error:', error);
     return Response.json({ error: 'Error fetching votes' }, { status: 500, headers });
   }
 

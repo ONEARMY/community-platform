@@ -4,13 +4,14 @@ import { countries } from 'countries-list';
 import { countryToAlpha2 } from 'country-to-iso';
 import { observer } from 'mobx-react';
 import { FlagIcon, Icon, MemberBadge, ReturnPathLink } from 'oa-components';
+import { UserRole } from 'oa-shared';
 import { theme } from 'oa-themes';
 import { type ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router';
+import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Avatar, Box, Flex, Text } from 'theme-ui';
-
 import { TenantContext } from '../../../TenantContext';
 
 const rowStyles = ({ theme }: { theme: Theme }) => `
@@ -153,8 +154,17 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
             <RowContent icon="nav-settings">Settings</RowContent>
           </RowLink>
         </AuthWrapper>
+        <AuthWrapper roleRequired={UserRole.ADMIN}>
+          <RowLink to="/admin" data-cy="menu-Admin">
+            <RowContent icon="nav-settings">Admin</RowContent>
+          </RowLink>
+        </AuthWrapper>
         {showSupporter && (
-          <RowLink to="/support" data-cy="menu-Supporter">
+          <RowLink
+            to="/support"
+            data-cy="menu-Supporter"
+            onClick={() => trackEvent({ action: 'clickSupport', category: 'profiles' })}
+          >
             <RowContent icon="nav-supporter">Become a supporter</RowContent>
           </RowLink>
         )}

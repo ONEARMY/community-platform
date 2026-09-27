@@ -1,4 +1,5 @@
 import { NotificationsPreferencesViaEmailFormData } from 'oa-shared';
+import { logger } from 'src/logger';
 import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -33,7 +34,7 @@ describe('notificationsPreferencesViaEmailService', () => {
     it('should return null when API returns HTTP error', async () => {
       global.fetch = vi.fn().mockResolvedValue(createFetchResponse({}, false, 404));
 
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
       const result = await notificationsPreferencesViaEmailService.getPreferences('user123');
 
@@ -46,7 +47,7 @@ describe('notificationsPreferencesViaEmailService', () => {
     it('should return null when network error occurs', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
       const result = await notificationsPreferencesViaEmailService.getPreferences('user123');
 
@@ -62,7 +63,7 @@ describe('notificationsPreferencesViaEmailService', () => {
         json: vi.fn().mockRejectedValue(new Error('Invalid JSON')),
       });
 
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 
       const result = await notificationsPreferencesViaEmailService.getPreferences('user123');
 

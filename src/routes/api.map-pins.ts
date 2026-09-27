@@ -1,3 +1,4 @@
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { MapPinsServiceServer } from 'src/services/mapPinsService.server';
 
@@ -9,7 +10,7 @@ export const loader = async ({ request }) => {
     const mapPins = await new MapPinsServiceServer(client).get();
     return Response.json({ mapPins }, { headers });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     return Response.json({}, { headers, status: 500, statusText: 'Error fetching map-pins' });
   }

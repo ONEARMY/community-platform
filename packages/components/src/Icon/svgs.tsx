@@ -17,7 +17,6 @@ import deleteSVG from '../../assets/icons/delete.svg';
 import discussionSVG from '../../assets/icons/discussion.svg';
 import doubleArrowLeft from '../../assets/icons/double-arrow-left.svg';
 import doubleArrowRight from '../../assets/icons/double-arrow-right.svg';
-import doubleTickSVG from '../../assets/icons/double-tick.svg';
 import editSVG from '../../assets/icons/edit.svg';
 import emailSVG from '../../assets/icons/email.svg';
 import emailOffSVG from '../../assets/icons/email-off.svg';
@@ -32,6 +31,7 @@ import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg';
 import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg';
 import bazarSVG from '../../assets/icons/icon-bazar.svg';
 import commentSVG from '../../assets/icons/icon-comment.svg';
+import difficultyLevel from '../../assets/icons/icon-difficulty-level.svg';
 import emailOutlineSVG from '../../assets/icons/icon-email-outline.svg';
 import libraySVG from '../../assets/icons/icon-library.svg';
 import researchSVG from '../../assets/icons/icon-research.svg';
@@ -57,8 +57,6 @@ import navAcademySVG from '../../assets/icons/nav-academy.svg';
 import navLibrarySVG from '../../assets/icons/nav-library.svg';
 import navLogoutSVG from '../../assets/icons/nav-logout.svg';
 import navMapSVG from '../../assets/icons/nav-map.svg';
-import navNotificationsSVG from '../../assets/icons/nav-notifications.svg';
-import navNotificationsActiveSVG from '../../assets/icons/nav-notifications-active.svg';
 import navProfileSVG from '../../assets/icons/nav-profile.svg';
 import navProjectsSVG from '../../assets/icons/nav-projects.svg';
 import navQuestionsSVG from '../../assets/icons/nav-questions.svg';
@@ -70,6 +68,7 @@ import newsSVG from '../../assets/icons/news.svg';
 import paginationSingleLeftSVG from '../../assets/icons/pagination-arrow-left.svg';
 import paginationSingleRightSVG from '../../assets/icons/pagination-arrow-right.svg';
 import profileSVG from '../../assets/icons/profile.svg';
+import remakeSVG from '../../assets/icons/remake.svg';
 import replySVG from '../../assets/icons/reply.svg';
 import replyOutlineSVG from '../../assets/icons/reply-outline.svg';
 import reportSVG from '../../assets/icons/report.svg';
@@ -119,8 +118,8 @@ export const iconMap = {
   copyLink: <ImageIcon src={copyLinkSVG} />,
   declined: <ImageIcon src={declinedSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
+  difficultyLevel: <ImageIcon src={difficultyLevel} />,
   discussion: <ImageIcon src={discussionSVG} />,
-  doubleTick: <ImageIcon src={doubleTickSVG} />,
   doubleArrowLeft: (
     <ImageIcon
       src={doubleArrowLeft}
@@ -174,6 +173,7 @@ export const iconMap = {
     />
   ),
   profile: <ImageIcon src={profileSVG} />,
+  remake: <ImageIcon src={remakeSVG} />,
   reply: <ImageIcon src={replySVG} />,
   replyOutline: <ImageIcon src={replyOutlineSVG} />,
   report: <ImageIcon src={reportSVG} />,
@@ -213,6 +213,4 @@ export const iconMap = {
   navSettings: <ImageIcon src={navSettingsSVG} />,
   navSupporter: <ImageIcon src={navSupporterSVG} />,
   navUpdates: <ImageIcon src={navUpdatesSVG} />,
-  navNotifications: <ImageIcon src={navNotificationsSVG} />,
-  navNotificationsActive: <ImageIcon src={navNotificationsActiveSVG} />,
 };

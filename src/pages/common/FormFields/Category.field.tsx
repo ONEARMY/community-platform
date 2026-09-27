@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Field } from 'react-final-form';
 import type { CardSelectOption } from 'src/pages/common/CardsSelect/CardsSelect';
 import { CardsSelect } from 'src/pages/common/CardsSelect/CardsSelect';
-import { fields } from 'src/pages/Question/labels';
 import { categoryService } from 'src/services/categoryService';
 import { required as requiredValidator } from 'src/utils/validators';
 import { Box, Text } from 'theme-ui';
@@ -11,10 +10,11 @@ import { FormFieldWrapper } from './FormFieldWrapper';
 
 interface IProps {
   type: ContentType;
+  title: string;
   required?: boolean;
 }
 
-export const CategoryField = ({ type, required = false }: IProps) => {
+export const CategoryField = ({ type, title, required = false }: IProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const name = 'category';
 
@@ -41,7 +41,7 @@ export const CategoryField = ({ type, required = false }: IProps) => {
   }, []);
 
   return (
-    <FormFieldWrapper htmlFor={name} text={fields.category.title} required={required}>
+    <FormFieldWrapper htmlFor={name} text={title} required={required}>
       <Field
         name={name}
         id={name}

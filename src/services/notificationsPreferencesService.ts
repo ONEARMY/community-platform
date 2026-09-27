@@ -1,4 +1,5 @@
 import type { NotificationsPreferences, NotificationsPreferencesFormData } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getPreferences = async (): Promise<NotificationsPreferences | null> => {
   try {
@@ -7,7 +8,7 @@ const getPreferences = async (): Promise<NotificationsPreferences | null> => {
 
     return preferences;
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return null;
   }
 };

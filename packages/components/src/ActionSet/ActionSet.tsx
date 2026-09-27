@@ -5,10 +5,11 @@ import { Button } from '../Button/Button';
 
 interface IProps {
   children: ReactNode[];
-  itemType: 'ReplyItem' | 'CommentItem';
+  itemType: 'ReplyItem' | 'CommentItem' | 'RemakeItem';
+  menuMinWidth?: string;
 }
 
-export const ActionSet = ({ children, itemType }: IProps) => {
+export const ActionSet = ({ children, itemType, menuMinWidth = '200px' }: IProps) => {
   const [show, setShow] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +63,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
             right: 0,
             zIndex: 10,
             gap: 1,
-            minWidth: '200px',
+            minWidth: menuMinWidth,
           }}
         >
           <Flex

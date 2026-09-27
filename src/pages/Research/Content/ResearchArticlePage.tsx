@@ -43,12 +43,6 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     );
   }, [activeUser, research.author]);
 
-  const sortedUpdates = useMemo(() => {
-    return research?.updates
-      ?.slice()
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-  }, [research?.updates]);
-
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <PageHeader
@@ -99,7 +93,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
           gap: [4, 6],
         }}
       >
-        {sortedUpdates?.map((update, index) => (
+        {research.updates?.map((update, index) => (
           <ResearchUpdate
             research={research}
             update={update}

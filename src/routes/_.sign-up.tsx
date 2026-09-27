@@ -1,17 +1,23 @@
-import { Button, ExternalLink, FieldInput, HeroBanner, TextNotification } from 'oa-components';
+import { HeroBanner } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData } from 'react-router';
-import { PasswordField } from 'src/common/Form/PasswordField';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { TextInputField } from 'src/common/Form/TextInput.field';
+import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 import { bool, object, ref, string } from 'yup';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -21,8 +27,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect('/', { headers });
   }
   const tenantSettings = await new TenantSettingsService(client).get();
+  const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
-  return data(tenantSettings, { headers });
+  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -42,12 +49,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signupResult = await client.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo,
+      captchaToken,
     },
   });
 
@@ -60,6 +69,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (signupResult.data.user) {
+    // Supabase returns a fake user with no identities for an already-registered
+    // email, to avoid leaking which emails exist. Don't try to create a profile for it.
+    if (signupResult.data.user.identities?.length === 0) {
+      logger.warn('Sign-up attempted for already-registered email');
+      return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+    }
+
     const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
 
     // This will error if there is already a profile with this auth_id + tenant_id
@@ -71,10 +87,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect(`/sign-up-message?email=${email}`, { headers });
 };
 
-const rowWidth = ['100%', '100%', `100%`];
-
 export default function Index() {
+  const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== 'idle';
 
   const validationSchema = object({
     email: string().email(FRIENDLY_MESSAGES['auth/invalid-email']).required('Required'),
@@ -85,6 +102,7 @@ export default function Index() {
       .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
       .required(FRIENDLY_MESSAGES['sign-up/email-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
+    'cf-turnstile-token': string().required(FRIENDLY_MESSAGES['sign-up/captcha-required']),
   });
 
   return (
@@ -104,146 +122,125 @@ export default function Index() {
             );
           }
         }}
-        render={({ submitting, invalid, pristine }) => {
-          const disabled = invalid || submitting;
+        render={({ invalid, pristine }) => {
+          const disabled = invalid || isSubmitting;
           return (
             <form method="post">
-              <Flex
-                bg="inherit"
-                px={2}
-                sx={{ width: '100%', maxWidth: '620px' }}
-                mx="auto"
-                mt={[5, 10]}
-                mb={3}
-              >
-                <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type="celebration" />
-                  <Card sx={{ borderRadius: 3 }}>
-                    <Flex
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        padding: 4,
-                        gap: 4,
-                        width: '100%',
-                      }}
-                    >
-                      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                        <Heading>Create an account</Heading>
-                        <Text color="grey" sx={{ fontSize: 1 }}>
-                          <Link
-                            to="/sign-in"
-                            style={{
-                              textDecoration: 'underline',
-                            }}
-                          >
-                            Already have an account? Sign-in here
-                          </Link>
-                        </Text>
-                      </Flex>
+              <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
+                <HeroBanner type="celebration" />
+                <Card variant="outline">
+                  <CardHeader>
+                    <h1 className="text-2xl font-semibold">Create an account</h1>
+                    <p className="text-sm text-muted-foreground">
+                      <Link to="/sign-in" className="hover:underline">
+                        Already have an account? Sign-in here
+                      </Link>
+                    </p>
+                  </CardHeader>
+                  <CardContent gap="md" className="flex flex-col">
+                    {actionResponse?.error && pristine && (
+                      <div
+                        className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                        data-cy="TextNotification: failure"
+                      >
+                        {actionResponse.error}
+                      </div>
+                    )}
 
-                      {actionResponse?.error && pristine && (
-                        <TextNotification variant="failure" isVisible>
-                          {actionResponse?.error}
-                        </TextNotification>
-                      )}
-
-                      <Flex
-                        sx={{
-                          flexDirection: 'column',
-                          width: rowWidth,
-                        }}
-                      >
-                        <Label htmlFor="email">Email</Label>
-                        <Text color="grey" sx={{ fontSize: 1 }}>
-                          It can be personal or work email.
-                        </Text>
-                        <Field
-                          data-cy="email"
-                          name="email"
-                          type="email"
-                          component={FieldInput}
-                          placeholder="yourname@domain.com"
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex
-                        sx={{
-                          flexDirection: 'column',
-                          width: rowWidth,
-                        }}
-                      >
-                        <Label htmlFor="password">Password</Label>
-                        <PasswordField
-                          data-cy="password"
-                          name="password"
-                          placeholder="Password"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex
-                        sx={{
-                          flexDirection: 'column',
-                          width: rowWidth,
-                        }}
-                      >
-                        <Label htmlFor="confirm-password">Confirm Password</Label>
-                        <PasswordField
-                          data-cy="confirm-password"
-                          name="confirm-password"
-                          placeholder="Confirm your Password"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex>
-                        <Label
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                          }}
-                        >
-                          <Field
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="email">Email</Label>
+                      <p className="text-sm text-muted-foreground">
+                        It can be personal or work email.
+                      </p>
+                      <Field
+                        id="email"
+                        data-cy="email"
+                        name="email"
+                        type="email"
+                        component={TextInputField}
+                        placeholder="yourname@domain.com"
+                        validate={required}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="password">Password</Label>
+                      <Field
+                        id="password"
+                        data-cy="password"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        component={TextInputField}
+                        validate={required}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="confirm-password">Confirm Password</Label>
+                      <Field
+                        id="confirm-password"
+                        data-cy="confirm-password"
+                        name="confirm-password"
+                        type="password"
+                        placeholder="Confirm your Password"
+                        component={TextInputField}
+                        validate={required}
+                      />
+                    </div>
+                    <Field name="consent" type="checkbox" validate={required}>
+                      {({ input }) => (
+                        <Label htmlFor="consent" weight="normal" className="items-start">
+                          <Checkbox
+                            id="consent"
                             data-cy="consent"
-                            name="consent"
-                            type="checkbox"
-                            component="input"
-                            validate={required}
+                            checked={input.checked}
+                            onCheckedChange={input.onChange}
+                            onBlur={input.onBlur}
                           />
-                          <Text
-                            sx={{
-                              fontSize: 2,
-                            }}
-                          >
+                          <span className="text-sm">
                             I agree to the{' '}
-                            <ExternalLink href="/terms">Terms of Service</ExternalLink>
-                            <span> and </span>
-                            <ExternalLink href="/privacy">Privacy Policy</ExternalLink>
-                          </Text>
+                            <a
+                              href="/terms"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-bold underline-offset-4 hover:underline"
+                            >
+                              Terms of Service
+                            </a>{' '}
+                            and{' '}
+                            <a
+                              href="/privacy"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-bold underline-offset-4 hover:underline"
+                            >
+                              Privacy Policy
+                            </a>
+                          </span>
                         </Label>
-                      </Flex>
+                      )}
+                    </Field>
 
-                      <Flex>
-                        <Button
-                          large
-                          sx={{
-                            borderRadius: 3,
-                            width: '100%',
-                            justifyContent: 'center',
-                          }}
-                          data-cy="submit"
-                          variant="primary"
-                          disabled={disabled}
-                          type="submit"
-                        >
-                          Create account
-                        </Button>
-                      </Flex>
-                    </Flex>
-                  </Card>
-                </Flex>
-              </Flex>
+                    <Field name="cf-turnstile-token">
+                      {({ input }) => (
+                        <>
+                          <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                          <input {...input} type="hidden" />
+                        </>
+                      )}
+                    </Field>
+
+                    <Button
+                      data-cy="submit"
+                      size="lg"
+                      className="w-full justify-center"
+                      disabled={disabled}
+                      type="submit"
+                    >
+                      Create account
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </form>
           );
         }}

@@ -49,4 +49,30 @@ describe('[Research - List Articles]', () => {
     cy.url().should('include', 'page=2');
     cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', 0);
   });
+
+  it('[Pagination - Resets when filtering or searching]', () => {
+    cy.visit(`${researchPageUrl}?page=2`);
+    cy.url().should('include', 'sort=LatestUpdated');
+
+    cy.step('Select a category while viewing a later page');
+    cy.get('[data-cy=CategoryHorizonalList]').within(() => {
+      cy.contains('Machines').click();
+    });
+
+    cy.step('Verify the category filter resets pagination');
+    cy.url().should('include', 'category=');
+    cy.url().should('not.include', 'page=');
+    cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', 0);
+
+    cy.visit(`${researchPageUrl}?page=2`);
+    cy.url().should('include', 'sort=LatestUpdated');
+
+    cy.step('Search while viewing a later page');
+    cy.get('[data-cy=research-search-box]').should('be.enabled').clear().type('test');
+
+    cy.step('Verify the search resets pagination');
+    cy.url().should('include', 'q=test');
+    cy.url().should('not.include', 'page=');
+    cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', 0);
+  });
 });

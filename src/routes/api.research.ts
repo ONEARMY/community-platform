@@ -3,6 +3,7 @@ import type { DBMedia, DBResearchItem, ResearchDTO, ResearchStatus } from 'oa-sh
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants';
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -41,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const count = countResult.data || 0;
 
   if (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { status: 500, headers });
   }
 
@@ -166,7 +167,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error creating research', status: 500 }, { status: 500 });
   }
 };

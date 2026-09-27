@@ -3,7 +3,10 @@ import { faker } from '@faker-js/faker';
 import type { News, NewsFormData } from 'oa-shared';
 
 export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): NewsFormData => ({
-  body: faker.lorem.paragraph(),
+  body: {
+    type: 'doc',
+    content: [{ type: 'paragraph', content: [{ type: 'text', text: faker.lorem.paragraph() }] }],
+  },
   category: {
     label: faker.lorem.words(1),
     value: faker.number.int().toString(),
@@ -19,12 +22,14 @@ export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): News
   profileBadges: null,
   tags: [faker.number.int(), faker.number.int()],
   title: faker.lorem.sentence(),
+  poll: null,
   ...overloads,
 });
 
 export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   body: faker.lorem.paragraph(),
   bodyHtml: faker.lorem.paragraph(),
+  content: null,
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
   contentReach: null,
@@ -90,5 +95,6 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   usefulCount: faker.number.int(),
   profileBadges: null,
   publishedAt: faker.date.past(),
+  poll: null,
   ...newsOverloads,
 });

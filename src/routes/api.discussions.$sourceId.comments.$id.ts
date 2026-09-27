@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBComment, DBProfile } from 'oa-shared';
 import { data, type LoaderFunctionArgs, type Params } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { isUserAdmin } from 'src/utils/isAdmin';
@@ -47,7 +48,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
     return updateComment(supabase, request, commentId, profile);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return data(error, { headers });
   }
 }
@@ -79,7 +80,7 @@ async function updateComment(
   const result = await client.from('comments').update({ comment: json.comment }).eq('id', id);
 
   if (result.error) {
-    console.error(result.error);
+    logger.error(result.error);
     return data({}, { headers, status: 500, statusText: 'Error updating comment' });
   }
 
@@ -104,7 +105,7 @@ async function deleteComment({ client, headers }: Supabase, id: string, user: DB
   const result = await client.from('comments').update({ deleted: true }).eq('id', id);
 
   if (result.error) {
-    console.error(result.error);
+    logger.error(result.error);
     return data({}, { headers, status: 500, statusText: 'Error deleting comment' });
   }
 

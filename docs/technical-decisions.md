@@ -24,6 +24,20 @@ How?
 - Each table has a tenant_id column
 - On each request, to supabase (via its sdk) we pass a header 'x-tenant-id' with the process.env.TENANT_ID variable, which is set for each app, via Fly.io secret.
 
+## Role Checks
+
+Roles live per-tenant in `profiles.roles`, not the Supabase JWT (a Custom Access Token Hook can't know which tenant to read - see Multi-tenant above). Checking a role therefore meant a DB query per protected route.
+
+Decision: `requireRole()` middleware, backed by a signed roles cookie, instead of a DB query per route.
+
+How?
+
+- `sessionMiddleware` trusts a valid cookie (signed with `TOKEN_SECRET`, bound to authId/tenantId) or falls back to `profiles` and re-signs it (10 min TTL).
+- `requireRole(role, page)`/`requireAnyRole(roles, page)` read the resolved roles from context and redirect - no DB access. Page routes only.
+- `requireRoleApi(role)`/`requireAnyRoleApi(roles)` do the same for `api.*` routes, throwing a JSON error `Response` instead of redirecting, since a redirect breaks `fetch()` callers.
+- Both run as route `middleware`, which completes fully before any loader runs, so roles are guaranteed resolved in time. Mounted only on routes that need it, not globally. A route that gates only some HTTP methods (e.g. a public GET + a role-gated POST) wraps the gate in a small conditional middleware instead of gating the whole route.
+- This is server-side gating only. Client-side conditional UI (e.g. showing/hiding admin buttons) still reads `profile.roles` from the profile store - it doesn't go through `sessionContext`/the roles cookie.
+
 ## Comment Counts
 
 Currently we can sort questions/research/library by the number of comments.
@@ -150,3 +164,49 @@ Place in `src/routes/_.tsx` inside `ProfileStoreProvider`:
 const { isSubscribed, subscribe, unsubscribe } = useSubscriptionStore();
 const subscribed = isSubscribed('comments', 123);
 ```
+
+
+## Polls
+
+Polls can be attached to news when creating or editing news. Authenticated users can vote once per poll and then see the results. Admins/editors can always see the results.
+
+### DB Changes
+
+The DB schema for this feature is the following:
+
+<img src="assets/polls-db-schema.png" alt="DB-schema" width="800px"/>
+
+* All the fields are mandatory/not null as it would break functionality of the feature.
+* The only change to existing db structures is the field `poll` in `public.news`, that references a poll if it is added to the news during creation/edit.
+  * This will be set to `null` per default and if the poll gets deleted. 
+  * The ui checks for a value in this field when deciding if the poll-related components should be rendered or not.
+  * This also leaves the possibilities to attach polls to other items apart from news in the future.
+* `vote_count` in `poll_options` is updated automatically via the db-function `update_vote_count()` on every INSERT or DELETE of the table `poll_votes`.
+
+### Server-Side
+
+#### DTOs
+* Most data is transferred via the `PollDTO` and `PollOptionDTO`.
+* The objects get build directly within sql with the custom query `get_poll_with_permissions()` that checks if
+  * the user is authenticated
+  * the user has voted in this poll
+  * the user is an admin/editor 
+* The DTOs are populated with the information that the user has permission to see:
+  * not authenticated: only poll title and description of options
+  * user has voted/admin/editor: title + descriptions and the number of votes per option
+* The additional (optional) fields `PollDTO.hasVoted` and `PollOptionDTO.wasVotedByUser` are populated to make the ui-logic cleaner and to prevent the need for another query to display the options the users voted on to themselves.
+
+#### Service + API
+* The `pollService.server` provides methods to `create`, `update`, `delete`, `get` and `vote` on polls.
+* When updating polls and their options, the existing votes are carried over to the new version as long as the options are still present (same id). During the update process, the existing options that are no longer referenced in the poll are deleted.
+* The API has 2 endpoints on the path `api/polls/{poll_id}`: 
+  * `GET` to retrieve the whole `PollDTO` object with all the information the user is allowed to see.
+  * `POST` to vote on a poll.
+    * Payload: `selectedIds: number[]`
+* In most of the cases, the poll service is called from the news services.
+
+### UI-Side
+
+* Both new UI components `PollForm` and `PollDisplay` work with `PollDTO` and `PollOptionDTO` as well.
+* `PollForm` can be integrated into any kind of form and its content gets validated before submit.
+  * The surrounding `Form` needs the property `mutators={{...arrayMutators}}` for the poll form to be able to dynamically add and remove poll-options.

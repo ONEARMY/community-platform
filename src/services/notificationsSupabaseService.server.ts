@@ -10,6 +10,7 @@ import type {
   SubscribedUser,
 } from 'oa-shared';
 import { DBNotification } from 'oa-shared';
+import { logger } from 'src/logger';
 import { NotificationEmailServiceServer } from './notificationEmailService.server';
 
 export class NotificationsSupabaseServiceServer {
@@ -21,7 +22,7 @@ export class NotificationsSupabaseServiceServer {
       const response = await this.client.from('profiles').select(`id`);
       return response.data;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw new Error(error);
     }
   }
@@ -60,7 +61,7 @@ export class NotificationsSupabaseServiceServer {
         return profile;
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw new Error(error);
     }
   }
@@ -99,7 +100,7 @@ export class NotificationsSupabaseServiceServer {
         return profile;
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw new Error(error);
     }
   }
@@ -143,7 +144,7 @@ export class NotificationsSupabaseServiceServer {
         return profile;
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw new Error(error);
     }
   }
@@ -163,7 +164,7 @@ export class NotificationsSupabaseServiceServer {
 
       return data as SubscribedUser[];
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw new Error(error);
     }
   }
@@ -203,7 +204,7 @@ export class NotificationsSupabaseServiceServer {
         throw response.error;
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
 
     return;
@@ -257,7 +258,7 @@ export class NotificationsSupabaseServiceServer {
         requestOrigin,
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 
@@ -347,7 +348,7 @@ export class NotificationsSupabaseServiceServer {
         }
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 
@@ -381,7 +382,7 @@ export class NotificationsSupabaseServiceServer {
         requestOrigin,
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 }

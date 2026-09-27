@@ -4,46 +4,37 @@ import { useSearchParams } from 'react-router';
 import { toast as sonnerToast } from 'sonner';
 import { CustomToast } from 'src/common/Toast/CustomToast';
 import { useToast } from 'src/common/Toast/useToast';
+import { logger } from 'src/logger';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { stripeService } from 'src/services/stripeService';
 import type { SupporterPrice, TierConfigMap } from 'src/services/stripeService.server';
+import { currencySymbol, formatCurrency } from 'src/utils/currency';
 import { CheckoutView } from './CheckoutView';
 import { type Interval, SupporterProvider } from './SupporterContext';
 import { SupporterForm } from './SupporterForm';
 import { ThankYouAccountForm } from './ThankYouAccountForm';
 import { ThankYouAuthenticatedView } from './ThankYouAuthenticatedView';
 import { ThankYouLoginForm } from './ThankYouLoginForm';
+
 import { TIER_CONFIG } from './tierConfig';
 
-export const formatPrice = (cents: number, currency: string) => {
-  const fractionDigits = cents % 100 === 0 ? 0 : 2;
-  return new Intl.NumberFormat(navigator.language, {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(cents / 100);
-};
+export const formatPrice = (minorUnits: number, currency: string) =>
+  formatCurrency(minorUnits, currency, navigator.language);
 
-export const getCurrencySymbol = (currency: string) =>
-  new Intl.NumberFormat(navigator.language, {
-    style: 'currency',
-    currency,
-    currencyDisplay: 'narrowSymbol',
-  })
-    .formatToParts(0)
-    .find((p) => p.type === 'currency')?.value || currency.toUpperCase();
+export const getCurrencySymbol = (currency: string) => currencySymbol(currency, navigator.language);
 
 type PageState = 'form' | 'checkout' | 'thank-you';
 
 export const SupporterPage = ({
   prices,
   tierConfig: dbTierConfig,
+  thankYouImageUrl,
   isAuthenticated,
   userEmail,
 }: {
   prices: SupporterPrice[];
   tierConfig?: TierConfigMap;
+  thankYouImageUrl?: string | null;
   isAuthenticated: boolean;
   userEmail: string;
 }) => {
@@ -74,6 +65,9 @@ export const SupporterPage = ({
       ? preview
       : null;
   }, [searchParams]);
+
+  // In preview mode, override server-side isAuthenticated so that ?preview=create always shows the create form, etc.
+  const effectiveIsAuthenticated = previewMode ? previewMode === 'authenticated' : isAuthenticated;
 
   const [initialTier] = useState(() => {
     const tier = searchParams.get('tier');
@@ -195,7 +189,7 @@ export const SupporterPage = ({
           setAccountCreated(true);
         }
       } catch (err) {
-        console.error('Auto-create account failed:', err);
+        logger.error('Auto-create account failed:', err);
       }
     };
 
@@ -280,7 +274,7 @@ export const SupporterPage = ({
           setAccountCreated(true);
         }
       } catch (err) {
-        console.error('Auto-create account failed:', err);
+        logger.error('Auto-create account failed:', err);
       }
     }
 
@@ -310,7 +304,7 @@ export const SupporterPage = ({
     selectedTier,
     selectedTierName,
     symbol,
-    isAuthenticated,
+    isAuthenticated: effectiveIsAuthenticated,
     isLoading,
     error,
     accountExists,
@@ -321,6 +315,7 @@ export const SupporterPage = ({
     siteImage,
     tierConfig,
     siteName,
+    thankYouImageUrl: thankYouImageUrl ?? null,
     previewMode: !!previewMode,
     onSupport: handleSupport,
     onPaymentSuccess: handlePaymentSuccess,
@@ -329,7 +324,7 @@ export const SupporterPage = ({
 
   return (
     <SupporterProvider value={ctx}>
-      {pageState === 'thank-you' && (isAuthenticated || previewMode === 'authenticated') ? (
+      {pageState === 'thank-you' && effectiveIsAuthenticated ? (
         <ThankYouAuthenticatedView />
       ) : pageState === 'thank-you' && stripeCustomerId && accountExists ? (
         <ThankYouLoginForm />

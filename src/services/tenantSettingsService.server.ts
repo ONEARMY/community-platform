@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
 import { PWAIcons, TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
+import { logger } from 'src/logger';
 
 const CACHE_TTL_MS = 1000 * 60 * 60;
 const MEMBERSHIP_TIERS_ERROR_TTL_MS = 1000 * 30;
@@ -52,6 +53,7 @@ export class TenantSettingsService {
       hasMembershipTiers,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
       gaTrackingId: data?.ga_tracking_id,
+      membershipTerms: data?.membership_terms,
       pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
     });
 
@@ -85,7 +87,8 @@ export class TenantSettingsService {
         show_impact,
         create_research_roles,
         ga_tracking_id,
-        pwa_icons`,
+        pwa_icons,
+        membership_terms`,
       )
       .single();
 
@@ -119,13 +122,13 @@ export class TenantSettingsService {
         .select('id', { count: 'exact', head: true });
 
       if (error) {
-        console.error('Error checking membership tiers:', error);
+        logger.error('Error checking membership tiers:', error);
         return null;
       }
 
       return (count ?? 0) > 0;
     } catch (error) {
-      console.error('Error checking membership tiers:', error);
+      logger.error('Error checking membership tiers:', error);
       return null;
     }
   }

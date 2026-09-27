@@ -1,4 +1,6 @@
 import { users } from 'oa-shared/mocks/data';
+
+import { MOCK_DATA } from '../../data';
 import { generateAlphaNumeric, getTenantUser, generateNewUserDetails } from '../../utils/TestUtils';
 
 describe('[News.Write]', () => {
@@ -51,9 +53,9 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
 
-    cy.addToMarkdownField(initialNewsBodyOne);
-    cy.addToMarkdownField(initialNewsBodyTwo);
-    cy.addToMarkdownField(initialNewsBodyThree);
+    cy.addToRichTextField(initialNewsBodyOne);
+    cy.addToRichTextField(initialNewsBodyTwo);
+    cy.addToRichTextField(initialNewsBodyThree);
 
     cy.selectCard(category, '[data-cy=category-select]');
     cy.selectTag(tag1, '[data-cy="tag-select"]');
@@ -103,12 +105,12 @@ describe('[News.Write]', () => {
     cy.url().should('include', `${initialExpectedSlug}/edit`);
 
     cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
-    cy.get('.mdxeditor-root-contenteditable').type('{selectAll}{del}');
+    cy.get('[data-cy="field-body"] .ProseMirror').type('{selectAll}{del}');
 
-    cy.addToMarkdownField(updatedNewsBody);
-    cy.addToMarkdownField(initialNewsBodyOne);
-    cy.addToMarkdownField(initialNewsBodyTwo);
-    cy.addToMarkdownField(initialNewsBodyThree);
+    cy.addToRichTextField(updatedNewsBody);
+    cy.addToRichTextField(initialNewsBodyOne);
+    cy.addToRichTextField(initialNewsBodyTwo);
+    cy.addToRichTextField(initialNewsBodyThree);
 
     cy.step('Replace hero image');
     cy.get('[data-cy=existingHeroImage]').should('exist');
@@ -165,7 +167,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField(content);
+    cy.addToRichTextField(content);
     cy.selectTag('PRO', '[data-cy=profileBadges-select]');
     cy.selectByValue('important', '[data-cy=contentReach-select]');
 
@@ -219,9 +221,42 @@ describe('[News.Write]', () => {
     cy.url().should('contain', '/sign-in?returnUrl=%2Fnews%2Fcreate');
   });
 
-  // it('[Admin]', () => {
-  // Should check an admin can edit other's content
-  // })
+  it('[By Admin]', () => {
+    const newsItem = MOCK_DATA.news[1];
+    const adminEdit = 'Edited by admin';
+    const admin = getTenantUser(users.admin);
+
+    cy.signIn(admin.email, admin.password);
+
+    cy.step('Visit a seeded news item, which is authored by another user');
+    cy.visit(`/news/${newsItem.slug}`);
+    cy.contains(newsItem.title!);
+
+    cy.step("Admin can see the edit button on another user's news");
+    cy.get('[data-cy=edit]').should('be.visible');
+
+    cy.step('Admin can access the edit page');
+    cy.get('[data-cy=edit]').click();
+    cy.url().should('include', `/news/${newsItem.slug}/edit`);
+
+    cy.step('Admin can edit the news body');
+    cy.get('[data-cy=field-title]', { timeout: 20000 }).should('be.visible');
+    cy.addToRichTextField(adminEdit);
+
+    cy.step('Add the hero image required to publish');
+    cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+    cy.get('[data-cy=existingHeroImage]').should('exist');
+
+    cy.get('[data-cy=errors-container]').should('not.exist');
+    cy.get('[data-cy=submit]').click();
+
+    cy.step('Admin edit is saved and visible');
+    cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('News published');
+    cy.get('[data-cy=toast-action-link]').click();
+    cy.url().should('include', `/news/${newsItem.slug}`);
+    cy.contains(adminEdit);
+  });
 });
 
 describe('[Delete a news item]', () => {
@@ -238,7 +273,7 @@ describe('[Delete a news item]', () => {
     cy.get('[data-cy=field-title]', { timeout: 20000 });
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-    cy.addToMarkdownField('This news will be deleted.');
+    cy.addToRichTextField('This news will be deleted.');
     cy.get('[data-cy=submit]').click();
     cy.wait(2000);
     cy.get('[data-cy=toast]').contains('News published');

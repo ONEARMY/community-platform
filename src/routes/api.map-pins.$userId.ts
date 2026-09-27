@@ -1,5 +1,6 @@
 import type { DBMapPin } from 'oa-shared';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 // runs on the server
@@ -63,7 +64,7 @@ export const loader = async ({ request, params }) => {
       .eq('moderation', 'accepted');
 
     if (error) {
-      console.error(error);
+      logger.error(error);
 
       return Response.json({}, { headers, status: 500, statusText: 'Error fetching map-pins' });
     }
@@ -78,7 +79,7 @@ export const loader = async ({ request, params }) => {
 
     return Response.json({ mapPin }, { headers });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { status: 500, headers });
   }
 };

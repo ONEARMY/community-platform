@@ -18,6 +18,7 @@ import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
+import { PollDisplay } from '../common/Polls/PollDisplay';
 
 interface IProps {
   news: News;
@@ -137,33 +138,70 @@ export const NewsPage = observer(({ news }: IProps) => {
             sx={{
               alignSelf: 'stretch',
               fontFamily: 'body',
-              lineHeight: 2,
+              lineHeight: 1.5,
               a: {
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
               },
-              h1: {
-                lineHeight: 1.2,
+              p: {
+                marginBottom: 2,
+              },
+              'blockQuote p': {
+                marginBottom: 0,
               },
               h2: {
+                fontSize: '1.875rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h3: {
+                fontSize: '1.5rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h4: {
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
               h5: {
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                letterSpacing: '-0.025em',
                 lineHeight: 1.2,
+                marginTop: 4,
+                marginBottom: 2,
               },
-              h6: {
-                lineHeight: 1.2,
+              'ul, ol': {
+                marginBottom: 2,
+                paddingLeft: 8,
+              },
+              ul: {
+                listStyle: 'disc',
+              },
+              ol: {
+                listStyle: 'decimal',
+              },
+              li: {
+                marginBottom: 0,
+                '> p': {
+                  marginBottom: 0,
+                },
               },
               blockQuote: {
                 paddingX: 4,
                 paddingY: 2,
                 margin: 0,
+                marginBottom: 4,
                 backgroundColor: '#f4f8fd',
                 borderLeft: '3px solid #c8d8ec',
               },
@@ -173,6 +211,16 @@ export const NewsPage = observer(({ news }: IProps) => {
                 display: 'block',
                 margin: '0 auto',
               },
+              figure: {
+                margin: 0,
+                marginBottom: 4,
+              },
+              figcaption: {
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                textAlign: 'center',
+                marginTop: 1,
+              },
               iframe: {
                 maxHeight: ['300px', '370px', '420px'],
               },
@@ -180,6 +228,8 @@ export const NewsPage = observer(({ news }: IProps) => {
           >
             <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
           </Box>
+
+          {news.poll && <PollDisplay pollData={news.poll} profile={profile} />}
 
           <Divider />
 

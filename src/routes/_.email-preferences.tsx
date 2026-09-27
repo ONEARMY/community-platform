@@ -3,7 +3,8 @@ import { data, redirect, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { SupabaseNotificationsViaEmail } from 'src/pages/UserSettings/SupabaseNotificationsViaEmail';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { Alert, Card, Flex } from 'theme-ui';
+import { Card, Flex } from 'theme-ui';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -32,10 +33,13 @@ export default function Index() {
     <Main style={{ flex: 1 }}>
       <Flex sx={{ justifyContent: 'center', width: '100%', padding: [2, 4, 6] }}>
         {data.error && (
-          <Alert variant="failure">
-            {data.error}
-            <br />
-            Click a link in a notification email again, otherwise please report the problem.
+          <Alert variant="destructive">
+            <AlertDescription>
+              <p>{data.error}</p>
+              <p>
+                Click a link in a notification email again, otherwise please report the problem.
+              </p>
+            </AlertDescription>
           </Alert>
         )}
         {data.code && (

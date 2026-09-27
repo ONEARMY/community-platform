@@ -10,10 +10,10 @@ export const ButtonCallToAction = ({ href }: IProps) => {
   return (
     <Section style={{ paddingTop: '15px' }}>
       <Heading as="h2" customStyle={{ textAlign: 'center' }}>
-        Liked this post?
+        Got a question or thought?
       </Heading>
       <Button customStyle={{ fontSize: '14px', padding: '12px 24px' }} href={href}>
-        Join the discussion
+        Leave a comment
       </Button>
     </Section>
   );

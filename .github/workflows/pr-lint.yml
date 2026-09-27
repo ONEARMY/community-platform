@@ -1,0 +1,121 @@
+name: PR description lint
+
+# Uses pull_request_target so the token can comment on fork PRs.
+# Safe: this workflow never checks out or runs PR code, it only reads API data.
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, labeled, unlabeled, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const MARKER = '<!-- pr-lint -->';
+            const WORD_LIMIT = 400;
+            const SKIP_LABEL = 'Skip: PR checks';
+            const UI_PATHS = [
+              /^src\/pages\//,
+              /^src\/components\//,
+              /^packages\/components\/src\//,
+              /^packages\/themes\/src\//,
+              /\.s?css$/,
+            ];
+
+            const pr = context.payload.pull_request;
+            const { owner, repo } = context.repo;
+
+            const skip =
+              pr.draft ||
+              pr.labels.some((l) => l.name === SKIP_LABEL) ||
+              ['OWNER', 'MEMBER', 'COLLABORATOR'].includes(pr.author_association);
+
+            if (skip) {
+              core.info('Skipping: draft, maintainer, or skip label.');
+              return;
+            }
+
+            const body = pr.body || '';
+            // Strip HTML comments first: the template's own comments mention the escape
+            // phrase ('No UI change') and would otherwise satisfy that check.
+            const visible = body.replace(/<!--[\s\S]*?-->/g, '');
+            const errors = [];
+
+            // 1. Template still intact
+            for (const heading of ['## What changed', '## Screenshots', '## Issue']) {
+              if (!visible.includes(heading)) {
+                errors.push(`Missing \`${heading}\` — please use the PR template instead of replacing it.`);
+              }
+            }
+
+            // 2. Length, ignoring code blocks and link URLs
+            const prose = visible
+              .replace(/```[\s\S]*?```/g, '')
+              .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+              .replace(/<[^>]+>/g, ' ');
+            const words = prose.split(/\s+/).filter(Boolean).length;
+            if (words > WORD_LIMIT) {
+              errors.push(`Description is ${words} words. Keep it under ${WORD_LIMIT}.`);
+            }
+
+            // 3. Screenshots on UI changes
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner, repo, pull_number: pr.number, per_page: 100,
+            });
+            const touchedUi = files
+              .filter((f) => f.status !== 'removed')
+              .map((f) => f.filename)
+              .filter((name) => UI_PATHS.some((re) => re.test(name)));
+
+            const hasImage =
+              /!\[[^\]]*\]\(/.test(visible) ||
+              /<img\s/i.test(visible) ||
+              /<video\s/i.test(visible) ||
+              /user-attachments\/assets/.test(visible) ||
+              /user-images\.githubusercontent\.com/.test(visible);
+
+            if (touchedUi.length && !hasImage && !/\bNo UI change\b/i.test(visible)) {
+              const sample = touchedUi.slice(0, 5).map((f) => `\`${f}\``).join(', ');
+              errors.push(
+                `This PR changes UI (${sample}${touchedUi.length > 5 ? ', …' : ''}) but has no screenshot. ` +
+                  'Add before/after screenshots and one at mobile width (375px).',
+              );
+            }
+
+            // 4. Linked issue
+            if (!/#\d+/.test(visible)) {
+              errors.push('No linked issue. Add `Closes #123`.');
+            }
+
+            const pass = errors.length === 0;
+            const comment = pass
+              ? `${MARKER}\n✅ PR description checks passed.`
+              : [
+                  MARKER,
+                  '### ⚠️ PR description needs work',
+                  '',
+                  ...errors.map((e) => `- ${e}`),
+                  '',
+                  'See [AGENTS.md](https://github.com/ONEARMY/community-platform/blob/master/AGENTS.md). ' +
+                    'Edit the description and this check re-runs automatically.',
+                ].join('\n');
+
+            const existing = (
+              await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: pr.number, per_page: 100,
+              })
+            ).find((c) => c.body?.includes(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body: comment });
+            } else if (!pass) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body: comment });
+            }
+
+            if (!pass) core.setFailed(errors.join(' | '));

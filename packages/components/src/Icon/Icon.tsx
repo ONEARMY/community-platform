@@ -3,7 +3,7 @@
 import styled from '@emotion/styled';
 import type { Colors } from 'oa-themes';
 import { IconContext } from 'react-icons';
-import { FaCloudUploadAlt, FaFilePdf, FaFilter, FaSignal } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaFilePdf, FaFilter } from 'react-icons/fa';
 import {
   MdAccessTime,
   MdAccountCircle,
@@ -68,9 +68,8 @@ export const glyphs: IGlyphs = {
   'close-modal': iconMap.crossCloseModal,
   declined: iconMap.declined,
   delete: iconMap.delete,
-  difficulty: <FaSignal />,
+  difficulty: iconMap.difficultyLevel,
   discussion: iconMap.discussion,
-  doubleTick: iconMap.doubleTick,
   download: <MdFileDownload />,
   'download-cloud': <DownloadIcon />,
   'double-arrow-left': iconMap.doubleArrowLeft,
@@ -106,6 +105,7 @@ export const glyphs: IGlyphs = {
   notifications: <MdNotifications />,
   pdf: <FaFilePdf />,
   profile: iconMap.profile,
+  remake: iconMap.remake,
   reply: iconMap.reply,
   'reply-outline': iconMap.replyOutline,
   report: iconMap.report,
@@ -147,8 +147,6 @@ export const glyphs: IGlyphs = {
   'nav-settings': iconMap.navSettings,
   'nav-supporter': iconMap.navSupporter,
   'nav-updates': iconMap.navUpdates,
-  'nav-notifications': iconMap.navNotifications,
-  'nav-notifications-active': iconMap.navNotificationsActive,
 };
 
 export type IconProps = IProps & VerticalAlignProps & SpaceProps;

@@ -1,5 +1,6 @@
 import { type NotificationContentType, NotificationContentTypes } from 'oa-shared';
 import { type LoaderFunctionArgs, redirect } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentRedirectServiceServer } from 'src/services/contentRedirectService.server';
 
@@ -27,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     return redirect(url);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 
   return redirect('/');

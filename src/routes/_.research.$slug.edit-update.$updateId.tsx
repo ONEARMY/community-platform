@@ -1,19 +1,22 @@
 import { DBResearchUpdate, ResearchItem } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
+import type { LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
+import { sessionContext } from 'src/context';
+import { sessionMiddleware } from 'src/middleware/session.server';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export const middleware: MiddlewareFunction<Response>[] = [sessionMiddleware];
+
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
+  const session = context.get(sessionContext);
 
-  const claims = await client.auth.getClaims();
-
-  if (!claims.data?.claims) {
+  if (!session) {
     return redirectServiceServer.redirectSignIn(
       `/research/${params.slug}/edit-update/${params.updateId}`,
       headers,
@@ -28,9 +31,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research', { headers });
   }
 
-  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
   const researchDb = result.item;
-  const currentUser = profile ? { id: profile.id, username: profile.username } : undefined;
+  const currentUser = session.profileId
+    ? { id: session.profileId, username: session.username }
+    : undefined;
   const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators, currentUser);
   const update = research.updates.find((x) => x.id === Number(params.updateId));
 
@@ -38,8 +42,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research', { headers });
   }
 
-  if (!profile || !(await researchService.isAllowedToEditResearch(researchDb, profile))) {
-    return redirect('/forbidden?page=research-update-edit', { headers });
+  const canEdit =
+    session.profileId &&
+    (await researchService.isAllowedToEditResearch(researchDb, {
+      id: session.profileId,
+      username: session.username,
+      roles: session.roles,
+    }));
+
+  if (!canEdit) {
+    return redirect(`/forbidden?page=${ForbiddenPage.RESEARCH_UPDATE_EDIT}`, { headers });
   }
 
   const updateDb = researchDb.updates.find((x) => x.id === Number(params.updateId));

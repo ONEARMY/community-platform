@@ -1,11 +1,12 @@
-import { Loader, MoreContainer, Pagination } from 'oa-components';
+import { Pagination } from 'oa-components';
 import type { Project } from 'oa-shared';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { TenantContext } from 'src/pages/common/TenantContext';
-import { Flex, Grid, Heading } from 'theme-ui';
+import { Flex, Grid } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ITEMS_PER_PAGE } from '../../constants';
 import { LibrarySearchParams, libraryService } from '../../library.service';
 import { LibraryListHeader } from './LibraryListHeader';
@@ -111,24 +112,13 @@ export const LibraryList = () => {
         </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
 
-      <MoreContainer
-        sx={{
-          paddingTop: [20, 70],
-          paddingBottom: [40, 90],
-          paddingX: 80,
-          alignSelf: 'center',
-        }}
-      >
-        <Flex sx={{ alignItems: 'center', flexDirection: 'column' }}>
-          <Heading as="p" sx={{ textAlign: 'center', maxWidth: '500px' }}>
-            Contribute to the {tenantContext?.siteName || 'Community Platform'} library,
-            <br />
-            share your project.
-          </Heading>
-        </Flex>
-      </MoreContainer>
+      <h3 className="mx-auto mt-5 max-w-100 text-center text-xl font-semibold">
+        Contribute to the {tenantContext?.siteName || 'Community Platform'} library
+        <br />
+        Share your project!
+      </h3>
     </Flex>
   );
 };

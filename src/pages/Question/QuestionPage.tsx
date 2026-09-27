@@ -5,7 +5,6 @@ import {
   ContentStatistics,
   DisplayDate,
   ImageGallery,
-  LinkifyText,
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
@@ -16,6 +15,7 @@ import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import PageHeader from 'src/common/PageHeader';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
+import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
@@ -23,6 +23,7 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { LinkifyText } from '@/components/ui/linkify-text';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { QuestionCommentSection } from './QuestionCommentSection';
 
@@ -51,7 +52,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
         body: JSON.stringify({ acceptedAnswerId: commentId }),
       });
     } catch (error) {
-      console.error('Failed to update accepted answer:', error);
+      logger.error('Failed to update accepted answer:', error);
     }
   };
 

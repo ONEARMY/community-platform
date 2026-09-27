@@ -4,6 +4,7 @@ import { createElement } from 'react';
 import { sendBatchEmails } from 'src/.server/resend';
 import { InstantNotificationEmail } from 'src/.server/templates/instant-notification-email';
 import { NewsEmail } from 'src/.server/templates/news-email';
+import { logger } from 'src/logger';
 import { tokens } from 'src/utils/tokens.server';
 import { NotificationMapperServiceServer } from './notificationMapperService.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
@@ -98,7 +99,7 @@ export class NotificationEmailServiceServer {
         emails: [email],
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -149,7 +150,7 @@ export class NotificationEmailServiceServer {
         emails,
       });
     } catch (error) {
-      console.error('Error creating email notification:', error);
+      logger.error('Error creating email notification:', error);
     }
   }
 }

@@ -1,16 +1,14 @@
-import Keyv from 'keyv';
 import type { DBBanner } from 'oa-shared';
 import { Banner } from 'oa-shared';
 import { data, type LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-const cache = new Keyv<Banner[]>({ ttl: 600000 }); // ttl: 10 minutes
+import { bannerCache } from 'src/services/bannerService.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const cachedBanner = await cache.get('banner');
+  const cachedBanner = await bannerCache.get('banner');
 
   if (cachedBanner && isProductionEnvironment()) {
     return data(cachedBanner, { headers, status: 200 });
@@ -23,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     banner = Banner.fromDB(bannerData[0] as DBBanner);
   }
 
-  cache.set('banner', banner);
+  bannerCache.set('banner', banner);
 
   return data(banner, { headers, status: 200 });
 }

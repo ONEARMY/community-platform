@@ -13,7 +13,11 @@ interface IFormValues {
   password: string;
 }
 
-export const DeleteAccountForm = () => {
+interface IProps {
+  hasSubscription?: boolean;
+}
+
+export const DeleteAccountForm = ({ hasSubscription }: IProps) => {
   const navigate = useNavigate();
   const toast = useToast();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -96,6 +100,7 @@ export const DeleteAccountForm = () => {
         <ul>
           <li>Permanently delete your account</li>
           <li>Permanently delete your profile data</li>
+          {hasSubscription && <li>Cancel your active supporter subscription</li>}
           <li>Sign you out</li>
         </ul>
       </ConfirmModal>

@@ -1,11 +1,14 @@
 import { HTTPException } from 'hono/http-exception';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { type ActionFunctionArgs, data } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { unauthorizedError, validationError } from 'src/utils/httpException';
+import { createSupabaseAdminServerClient } from '@/repository/supabaseAdmin.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
+  const adminClient = createSupabaseAdminServerClient();
 
   try {
     const formData = await request.formData();
@@ -19,12 +22,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw unauthorizedError();
     }
 
-    const signInResult = await client.auth.signInWithPassword({
+    const signInResult = await adminClient.auth.signInWithPassword({
       email: claims.data?.claims?.email as string,
       password,
     });
 
     if (signInResult.error) {
+      logger.error(signInResult.error);
       throw validationError('Invalid password');
     }
 
@@ -51,7 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return data({ error: 'Error changing email', status: 500 }, { status: 500 });
   }
 

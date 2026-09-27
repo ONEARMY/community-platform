@@ -2,13 +2,13 @@ import oneArmyLogo from 'packages/components/assets/images/one-army-logo.png';
 import ppLogo from 'packages/components/assets/images/precious-plastic-logo-official.svg';
 import projectKampLogo from 'packages/components/assets/images/themes/project-kamp/project-kamp-header.png';
 import type { ReactNode } from 'react';
-import thankYouLg from 'src/assets/images/thank-you-lg.webp';
-import thankYouMd from 'src/assets/images/thank-you-md.webp';
-import thankYouSm from 'src/assets/images/thank-you-sm.webp';
+import thankYouDefault from 'src/assets/images/thank-you-lg.webp';
 import fixingFashionLogo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png';
 import { Flex, Image, Text } from 'theme-ui';
+import { useSupporterContext } from './SupporterContext';
 
 export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
+  const { thankYouImageUrl } = useSupporterContext();
   // TODO: we discussed pulling the html from the blue section below
 
   return (
@@ -16,7 +16,7 @@ export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
       sx={{
         maxWidth: 1200,
         mx: 'auto',
-        my: [3, 5],
+        my: 'auto',
         px: [3, 0],
         flex: 1,
         flexDirection: ['column', 'column', 'row'],
@@ -32,11 +32,11 @@ export const ThankYouLayout = ({ children }: { children: ReactNode }) => {
           justifyContent: 'center',
         }}
       >
-        <picture>
-          <source media="(min-width: 70em)" srcSet={thankYouLg} />
-          <source media="(min-width: 52em)" srcSet={thankYouMd} />
-          <Image src={thankYouSm} alt="Thank you for your support" sx={{ maxWidth: '100%' }} />
-        </picture>
+        <Image
+          src={thankYouImageUrl || thankYouDefault}
+          alt="Thank you for your support"
+          sx={{ maxWidth: '100%' }}
+        />
       </Flex>
 
       <Flex

@@ -1,6 +1,6 @@
 import arrayMutators from 'final-form-arrays';
 import { FormApi } from 'node_modules/final-form/dist';
-import { Button, ResearchEditorOverview } from 'oa-components';
+import { Button } from 'oa-components';
 import {
   type ResearchFormData,
   type ResearchItem,
@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { TagsField } from 'src/pages/common/FormFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
@@ -22,6 +23,7 @@ import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsFi
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
 import { ResearchTitleField } from './FormFields/ResearchTitleField';
 import ResearchFieldCategory from './ResearchCategorySelect';
+import { ResearchEditorOverview } from './ResearchEditorOverview';
 
 interface IProps {
   id: number | null;
@@ -65,7 +67,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       finally: () => {
@@ -97,7 +99,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         return `Error: ${error.message}`;
       },
       duration: 10000,
@@ -159,19 +161,8 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
 
             {research && <DeleteResearchButton research={research} />}
 
-            {research?.updates && (
-              <ResearchEditorOverview
-                updates={research?.updates
-                  .filter((u) => !u.deleted)
-                  .map((u) => ({
-                    isActive: false,
-                    isDraft: u.isDraft,
-                    title: u.title,
-                    id: u.id,
-                  }))}
-                researchSlug={research?.slug}
-                showCreateUpdateButton={true}
-              />
+            {research && (
+              <ResearchEditorOverview research={research} sortable showCreateUpdateButton />
             )}
           </>
         );

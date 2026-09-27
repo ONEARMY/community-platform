@@ -5,6 +5,7 @@ import type {
   ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared';
+import { logger } from 'src/logger';
 
 export class SubscribersServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -77,7 +78,7 @@ export class SubscribersServiceServer {
         tenant_id: process.env.TENANT_ID!,
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 

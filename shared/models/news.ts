@@ -1,5 +1,5 @@
-import { marked } from 'marked';
-import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
+import type { JSONContent } from '@tiptap/core';
+import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/youtube';
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
@@ -7,6 +7,7 @@ import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
 import { DBMedia, Image, MediaWithPublicUrl } from './media';
 import { ContentReach, contentReachSettings } from './notificationPreferences';
+import { PollDTO } from './poll';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
@@ -33,19 +34,21 @@ export class DBNews implements IDBContentDoc {
   readonly summary: string | null;
   readonly tags: number[];
   readonly useful_count?: number;
+  /**
+   * @deprecated Legacy Markdown source from the pre-Tiptap editor. Every row is expected
+   * to be backfilled to `content` before this ships, so nothing reads this for rendering
+   * anymore — it's written on insert purely because the DB column is NOT NULL (new rows
+   * get a plain-text stub extracted from `content`, not real prose). Use `content`/
+   * `bodyHtml` for anything else.
+   */
   readonly body: string;
+  readonly content: JSONContent | null;
+  readonly content_search_text: string | null;
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
+  readonly poll: number | null;
 
-  static toFormData(news: DBNews, publicHeroImage: Image | null) {
-    let htmlBody = marked(news.body, {
-      breaks: true,
-      gfm: true,
-    }) as string;
-
-    htmlBody = processYouTubeLinks(htmlBody);
-    htmlBody = processStandaloneYouTubeUrls(htmlBody);
-
+  static toFormData(news: DBNews, publicHeroImage: Image | null, poll: PollDTO | null) {
     const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
 
     const setting = contentReachSettings.find((option) => option.value === news.content_reach);
@@ -54,7 +57,10 @@ export class DBNews implements IDBContentDoc {
       : null;
 
     return {
-      body: news.body,
+      // The new Tiptap-based editor edits `content` (JSON). Rows not yet backfilled
+      // (content === null) have no JSON representation to load, so the editor starts
+      // empty on edit for those rows until a real cutover decides how to handle them.
+      body: news.content,
       category: news.category
         ? { value: news.category.id.toString(), label: news.category.name }
         : null,
@@ -65,6 +71,7 @@ export class DBNews implements IDBContentDoc {
       tags: news.tags,
       title: news.title,
       contentReach: (contentReachOption?.value || null) as ContentReach,
+      poll,
     } satisfies NewsFormData;
   }
 }
@@ -76,8 +83,10 @@ export type EditNews = Omit<News, 'heroImage'> & {
 export class News implements IContentDoc {
   id: number;
   author: Author | null;
+  /** @deprecated Legacy Markdown source — see `DBNews.body`. Use `content`/`bodyHtml` instead. */
   body: string;
   bodyHtml: string;
+  content: JSONContent | null;
   category: Category | null;
   commentCount: number;
   createdAt: Date;
@@ -97,16 +106,22 @@ export class News implements IContentDoc {
   totalViews: number;
   usefulCount: number;
   contentReach: ContentReach | null;
+  poll: PollDTO | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
   }
 
-  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null) {
-    let htmlBody = marked(news.body, {
-      breaks: true,
-      gfm: true,
-    }) as string;
+  static fromDB(
+    news: DBNews,
+    tags: Tag[],
+    heroImage: Image | null,
+    poll: PollDTO | null,
+    // Tiptap-specific rendering (renderTiptapHtml/TIPTAP_EXTENSIONS) lives in the app
+    // layer (src/utils/renderNewsBodyHtml.ts), not in oa-shared, so callers pass it in.
+    renderBodyHtml: (news: DBNews) => string,
+  ) {
+    let htmlBody = renderBodyHtml(news);
 
     htmlBody = processYouTubeLinks(htmlBody);
     htmlBody = processStandaloneYouTubeUrls(htmlBody);
@@ -119,6 +134,7 @@ export class News implements IContentDoc {
       author: news.author ? Author.fromDB(news.author) : null,
       body: news.body,
       bodyHtml: htmlBody,
+      content: news.content || null,
       category: news.category ? Category.fromDB(news.category) : null,
       commentCount: news.comment_count || 0,
       createdAt: new Date(news.created_at),
@@ -138,12 +154,13 @@ export class News implements IContentDoc {
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
       contentReach: news.content_reach || null,
+      poll: poll,
     });
   }
 }
 
 export type NewsFormData = {
-  body: string | null;
+  body: JSONContent | null;
   category: SelectValue | null;
   heroImage: MediaWithPublicUrl | null;
   isDraft: boolean | null;
@@ -151,15 +168,17 @@ export type NewsFormData = {
   tags?: number[];
   title: string;
   contentReach: ContentReach | null;
+  poll: PollDTO | null;
 };
 
 export type NewsDTO = {
   title: string;
-  body: string | null;
+  body: JSONContent | null;
   category: number | null;
   heroImage: DBMedia | null;
   isDraft: boolean | null;
   profileBadges: number[] | null;
   tags: number[] | null;
   contentReach: ContentReach | null;
+  poll?: PollDTO | null;
 };

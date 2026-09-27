@@ -66,21 +66,34 @@ Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
  */
 Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message));
 
-Cypress.Commands.add('clearNotifications', () => {
-  cy.get('[data-cy=NotificationsSupabase-desktop]').click();
+const openNotifications = () => {
+  cy.get('[data-cy=NotificationsSupabase-desktop]').should('exist');
 
-  cy.get('[data-cy=NotificationListSupabase]').then(($listView) => {
-    if ($listView.text().includes('Mark all read')) {
+  cy.get('body').then(($body) => {
+    if ($body.find('[data-cy=NotificationListSupabase]').length === 0) {
+      cy.get('[data-cy=NotificationsSupabase-desktop]').click();
+    }
+  });
+
+  cy.get('[data-cy=NotificationListSupabase]').should('be.visible');
+};
+
+Cypress.Commands.add('clearNotifications', () => {
+  openNotifications();
+
+  cy.get('body').then(($body) => {
+    if ($body.find('[data-cy=NotificationListSupabase-MarkAllRead]').length > 0) {
       cy.get('[data-cy=NotificationListSupabase-MarkAllRead]').click();
     }
   });
   cy.get('[data-cy=NotificationListSupabase-CloseButton]').click();
+  cy.get('[data-cy=NotificationListSupabase]').should('not.exist');
 });
 
 Cypress.Commands.add('expectNewNotification', (props: ExpectedNewNotification) => {
   const { content, path, title, username } = props;
 
-  cy.get('[data-cy=NotificationsSupabase-desktop]').click();
+  openNotifications();
 
   if (username) {
     cy.get('[data-cy=NotificationListSupabase]').contains(username);

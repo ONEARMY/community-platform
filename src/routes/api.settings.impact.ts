@@ -2,6 +2,7 @@ import { HTTPException } from 'hono/http-exception';
 import type { IImpactDataField, IUserImpact } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { data } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImpactServiceServer } from 'src/services/impactService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -42,7 +43,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const result = await impactService.update(profile.id, fieldData.year, fields);
 
     if (result?.error) {
-      console.error(result.error);
+      logger.error(result.error);
       throw new Error(result.error.message || 'Error saving impact');
     }
 
@@ -56,7 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error saving impact' });
   }
 };

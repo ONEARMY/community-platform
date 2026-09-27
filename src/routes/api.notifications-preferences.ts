@@ -5,6 +5,7 @@ import {
   NotificationsPreferencesDefaults,
 } from 'oa-shared';
 import { type ActionFunctionArgs, data, type LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { methodNotAllowedError, unauthorizedError } from 'src/utils/httpException';
@@ -36,7 +37,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error loading preferences' }, { status: 500, headers });
   }
 };
@@ -67,7 +68,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .single();
 
     if (!profile.data) {
-      console.error(profile.error);
+      logger.error(profile.error);
       throw unauthorizedError();
     }
 
@@ -110,7 +111,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error updating preferences' }, { headers, status: 500 });
   }
 };

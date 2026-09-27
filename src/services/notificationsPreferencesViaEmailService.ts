@@ -2,13 +2,14 @@ import type {
   NotificationsPreferencesViaEmailFormData,
   PreferencesWithProfileContact,
 } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getPreferences = async (userCode: string): Promise<PreferencesWithProfileContact | null> => {
   try {
     const response = await fetch(`/api/notifications-preferences-via-email/${userCode}`);
 
     if (!response.ok) {
-      console.error(`HTTP error! status: ${response.status}`);
+      logger.error(`HTTP error! status: ${response.status}`);
       return null;
     }
 
@@ -16,7 +17,7 @@ const getPreferences = async (userCode: string): Promise<PreferencesWithProfileC
 
     return { ...preferences, isContactable, roles } satisfies PreferencesWithProfileContact;
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return null;
   }
 };

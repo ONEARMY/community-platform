@@ -1,5 +1,6 @@
 import { WebAppManifest } from 'oa-shared';
 import { data, type LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 
@@ -91,7 +92,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
   return data(null, { status: 500 });
 }

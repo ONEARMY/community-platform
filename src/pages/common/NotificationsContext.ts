@@ -4,10 +4,11 @@ import { createContext } from 'react';
 type INotificationsContext = {
   notifications: NotificationDisplay[] | null;
   isUpdatingNotifications: boolean;
-  updateNotifications?: () => void;
+  updateNotifications: () => Promise<void>;
 };
 
 export const NotificationsContext = createContext<INotificationsContext>({
   notifications: null,
   isUpdatingNotifications: false,
+  updateNotifications: async () => {},
 });

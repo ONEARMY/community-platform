@@ -51,7 +51,7 @@ export const MapList = () => {
             data-cy="ShowMapButton"
             icon="map"
             sx={{ position: 'sticky', marginTop: 2 }}
-            onClick={() => mapState.setIsMobile(false)}
+            onClick={() => mapState.setIsMobile?.(false)}
             small
           >
             Show map view

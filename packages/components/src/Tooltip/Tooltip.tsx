@@ -17,6 +17,7 @@ export const Tooltip = ({ children, id }: TooltipProps) => {
   return (
     <StyledTooltip
       id={id}
+      positionStrategy="fixed"
       openEvents={{ mouseenter: true, focus: true }}
       closeEvents={{ mouseleave: true, blur: true }}
     >

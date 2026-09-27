@@ -1,6 +1,7 @@
 import { HTTPException } from 'hono/http-exception';
 import type { ContentType, MediaWithPublicUrl } from 'oa-shared';
 import { type ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
@@ -44,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500 });
   }
 };

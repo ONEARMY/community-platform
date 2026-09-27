@@ -14,6 +14,7 @@ export const ThankYouAccountForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const signInFormRef = useRef<HTMLFormElement>(null);
+  const ticketInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -49,12 +50,16 @@ export const ThankYouAccountForm = () => {
       return;
     }
 
+    if (ticketInputRef.current) {
+      ticketInputRef.current.value = result.signInTicket;
+    }
     signInFormRef.current?.submit();
   };
 
   return (
     <ThankYouLayout>
       <Card
+        data-cy="supporter-account-form"
         sx={{
           bg: 'white',
           border: '2px solid',
@@ -98,6 +103,7 @@ export const ThankYouAccountForm = () => {
                   Password
                 </Text>
                 <Input
+                  data-cy="supporter-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -125,6 +131,7 @@ export const ThankYouAccountForm = () => {
               {error && <Text sx={{ color: 'red', fontSize: 1 }}>{error}</Text>}
 
               <Button
+                data-cy="supporter-set-password"
                 type="submit"
                 variant="primary"
                 disabled={isSubmitting || password.length < 6}
@@ -146,11 +153,10 @@ export const ThankYouAccountForm = () => {
       <form
         ref={signInFormRef}
         method="post"
-        action={`/sign-in?returnUrl=${encodeURIComponent('/settings?subscription=success')}`}
+        action={`/api/stripe/sign-in?returnUrl=${encodeURIComponent('/setup-email-preferences')}`}
         style={{ display: 'none' }}
       >
-        <input type="hidden" name="email" value={email} />
-        <input type="hidden" name="password" value={password} />
+        <input ref={ticketInputRef} type="hidden" name="ticket" />
       </form>
     </ThankYouLayout>
   );

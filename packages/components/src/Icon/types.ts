@@ -27,7 +27,6 @@ export type availableGlyphs =
   | 'delete'
   | 'difficulty'
   | 'donate'
-  | 'doubleTick'
   | 'download'
   | 'download-cloud'
   | 'edit'
@@ -59,6 +58,7 @@ export type availableGlyphs =
   | 'notifications'
   | 'pdf'
   | 'profile'
+  | 'remake'
   | 'reply'
   | 'reply-outline'
   | 'report'
@@ -104,8 +104,6 @@ export type availableGlyphs =
   | 'nav-settings'
   | 'nav-supporter'
   | 'nav-updates'
-  | 'nav-notifications'
-  | 'nav-notifications-active'
   | 'info';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

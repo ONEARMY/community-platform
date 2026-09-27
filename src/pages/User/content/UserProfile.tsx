@@ -6,7 +6,8 @@ import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
-import { Alert, Card, Flex } from 'theme-ui';
+import { Card, Flex } from 'theme-ui';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Impact } from '../impact/Impact';
 import { ProfileContact } from './ProfileContact';
 import { ProfileDetails } from './ProfileDetails';
@@ -66,7 +67,9 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
         >
           {showEmptyProfileAlert && (
             <Alert variant="info" data-cy="emptyProfileMessage">
-              Oh hey! Your profile is looking SO empty. Fancy filling it in...?
+              <AlertDescription>
+                Oh hey! Your profile is looking SO empty. Fancy filling it in...?
+              </AlertDescription>
             </Alert>
           )}
 

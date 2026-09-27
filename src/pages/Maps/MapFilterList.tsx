@@ -17,20 +17,20 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
 
   const visibleTags = useMemo(
     () =>
-      mapState.allTags.filter(
+      mapState.allTags?.filter(
         (tag) =>
-          mapState.activeTagFilters.includes(tag.id) ||
-          mapState.filteredPins.some((pin) => pin.profile?.tags?.some((t) => t.id === tag.id)),
+          mapState.activeTagFilters?.includes(tag.id) ||
+          mapState.filteredPins?.some((pin) => pin.profile?.tags?.some((t) => t.id === tag.id)),
       ),
     [mapState.allTags, mapState.activeTagFilters, mapState.filteredPins],
   );
 
   const visibleBadges = useMemo(
     () =>
-      mapState.allBadges.filter(
+      mapState.allBadges?.filter(
         (badge) =>
-          mapState.activeBadgeFilters.includes(badge.name) ||
-          mapState.filteredPins.some((pin) =>
+          mapState.activeBadgeFilters?.includes(badge.name) ||
+          mapState.filteredPins?.some((pin) =>
             pin.profile?.badges?.some((b) => b.name === badge.name),
           ),
       ),
@@ -86,11 +86,11 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
       >
         {(mapState.allProfileTypes?.length || 0) > 0 && (
           <MapFilterListWrapper title="Profiles">
-            {mapState.allProfileTypes.map((profileType, index) => (
+            {mapState.allProfileTypes?.map((profileType, index) => (
               <MapFilterListItem
-                active={mapState.activeProfileTypeFilters.includes(profileType.name)}
+                active={mapState.activeProfileTypeFilters?.includes(profileType.name) || false}
                 key={index}
-                onClick={() => mapState.toggleActiveProfileTypeFilter(profileType.name)}
+                onClick={() => mapState.toggleActiveProfileTypeFilter?.(profileType.name)}
                 filterType="profile"
               >
                 <MemberBadge size={30} profileType={profileType} />
@@ -101,14 +101,14 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
             ))}
           </MapFilterListWrapper>
         )}
-        {mapState.allTags.length > 0 && (
+        {mapState.allTags && mapState.allTags.length > 0 && (
           <MapFilterListWrapper title="Spaces activities">
-            {visibleTags.length > 0 ? (
+            {visibleTags && visibleTags.length > 0 ? (
               visibleTags.map((tag) => (
                 <MapFilterListItem
-                  active={mapState.activeTagFilters.includes(tag.id)}
+                  active={mapState.activeTagFilters?.includes(tag.id) || false}
                   key={tag.id}
-                  onClick={() => mapState.toggleActiveTagFilter(tag.id)}
+                  onClick={() => mapState.toggleActiveTagFilter?.(tag.id)}
                   sx={{ maxWidth: 'auto', width: 'auto' }}
                   filterType="tag"
                 >
@@ -127,11 +127,11 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
 
         {(mapState.allBadges?.length || 0) > 0 && (
           <MapFilterListWrapper title="Badges">
-            {visibleBadges.length > 0 ? (
+            {visibleBadges && visibleBadges.length > 0 ? (
               visibleBadges.map((badge) => (
                 <Label key={badge.id} sx={{ alignItems: 'center', gap: 0 }}>
                   <Checkbox
-                    onClick={() => mapState.toggleActiveBadgeFilter(badge.name)}
+                    onClick={() => mapState.toggleActiveBadgeFilter?.(badge.name)}
                     defaultChecked={mapState.activeBadgeFilters?.includes(badge.name)}
                   />
                   {badge.displayName}
@@ -148,11 +148,11 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
 
         {(mapState?.allProfileSettings?.length || 0) > 0 && (
           <MapFilterListWrapper title="Profile Specifications">
-            {mapState?.allProfileSettings.map((setting) => {
+            {mapState?.allProfileSettings?.map((setting) => {
               return (
                 <Label key={setting} sx={{ alignItems: 'center', gap: 0 }}>
                   <Checkbox
-                    onClick={() => mapState.toggleActiveProfileSettingFilter(setting)}
+                    onClick={() => mapState.toggleActiveProfileSettingFilter?.(setting)}
                     defaultChecked={mapState.activeBadgeFilters?.includes(setting)}
                   />
                   {/* There is only 1 for now, so it's hardcoded. */}

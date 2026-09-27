@@ -26,7 +26,7 @@ export const fields: ILabels = {
     title: 'Email reach',
   },
   body: {
-    placeholder: 'Write and structure the body of your article. Markdown is also supported.',
+    placeholder: 'Write your article...',
     title: 'Body',
   },
   profileBadge: {
@@ -49,6 +49,9 @@ export const fields: ILabels = {
   heroImage: {
     title: 'Cover image',
     description: 'This image should be landscape with 2:1 aspect ratio. We advise 1240x620px',
+  },
+  pollError: {
+    title: 'Poll',
   },
 };
 

@@ -1,10 +1,10 @@
-import { SiteFooter } from 'oa-components';
 import { useContext, useMemo } from 'react';
 import { useLocation } from 'react-router';
+import { SiteFooter } from '@/components/ui/site-footer';
 
 import { TenantContext } from '../TenantContext';
 
-const HIDDEN_PATHS = ['/', '/map', '/academy', '/support'];
+const HIDDEN_PATHS = ['/', '/map', '/academy', '/support', '/admin'];
 
 const GlobalSiteFooter = () => {
   const tenantContext = useContext(TenantContext);

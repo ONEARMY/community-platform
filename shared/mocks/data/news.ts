@@ -3,6 +3,35 @@ import type { DBNews } from '../../models/news';
 export const news: Partial<DBNews>[] = [
   {
     body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).\n![test-img](https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png)',
+    content: {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [
+            { type: 'text', text: 'Test info with a link to ' },
+            {
+              type: 'text',
+              text: 'OneArmy',
+              marks: [
+                {
+                  type: 'link',
+                  attrs: { href: 'https://www.onearmy.earth/', target: '_blank' },
+                },
+              ],
+            },
+            { type: 'text', text: '.' },
+          ],
+        },
+        {
+          type: 'image',
+          attrs: {
+            src: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+            alt: 'test-img',
+          },
+        },
+      ],
+    },
     category: null,
     comment_count: 2,
     created_at: new Date(),
@@ -21,6 +50,15 @@ export const news: Partial<DBNews>[] = [
   },
   {
     body: 'This is a test mock for the filtering question.',
+    content: {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [{ type: 'text', text: 'This is a test mock for the filtering question.' }],
+        },
+      ],
+    },
     category: null,
     comment_count: 2,
     created_at: new Date(),
@@ -39,6 +77,15 @@ export const news: Partial<DBNews>[] = [
   },
   {
     body: "What's the deal with screenings?",
+    content: {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [{ type: 'text', text: "What's the deal with screenings?" }],
+        },
+      ],
+    },
     category: null,
     comment_count: 2,
     created_at: new Date(),

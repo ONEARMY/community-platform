@@ -21,7 +21,7 @@ describe('[News.Read]', () => {
 
   describe('[Individual news]', () => {
     it('[By Everyone]', () => {
-      const { body, slug, title } = news;
+      const { summary, slug, title } = news;
 
       const pageTitle = `${title} - News - Test Site`;
 
@@ -35,15 +35,15 @@ describe('[News.Read]', () => {
 
       cy.step('[Populates title, SEO and social tags]');
       cy.title().should('eq', pageTitle);
-      cy.get('meta[name="description"]').should('have.attr', 'content', body);
+      cy.get('meta[name="description"]').should('have.attr', 'content', summary);
 
       // OpenGraph (facebook)
       cy.get('meta[property="og:title"]').should('have.attr', 'content', pageTitle);
-      cy.get('meta[property="og:description"]').should('have.attr', 'content', body);
+      cy.get('meta[property="og:description"]').should('have.attr', 'content', summary);
 
       // Twitter
       cy.get('meta[name="twitter:title"]').should('have.attr', 'content', pageTitle);
-      cy.get('meta[name="twitter:description"]').should('have.attr', 'content', body);
+      cy.get('meta[name="twitter:description"]').should('have.attr', 'content', summary);
       cy.step('Website is clickable');
       cy.contains('a', 'OneArmy').should('have.attr', 'href', 'https://www.onearmy.earth/');
 

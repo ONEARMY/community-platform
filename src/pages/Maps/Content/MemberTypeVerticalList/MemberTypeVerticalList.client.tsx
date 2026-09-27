@@ -13,8 +13,8 @@ export const MemberTypeList = () => {
 
   return (
     <VerticalList dataCy="MemberTypeVerticalList">
-      {mapState.allProfileTypes.map((profileType, index) => {
-        const isSelected = mapState.activeProfileTypeFilters.includes(profileType.name);
+      {mapState.allProfileTypes?.map((profileType, index) => {
+        const isSelected = mapState.activeProfileTypeFilters?.includes(profileType.name);
 
         return (
           <CardButton
@@ -22,7 +22,7 @@ export const MemberTypeList = () => {
             data-testid="MemberTypeVerticalList-Item"
             title={profileType.displayName}
             key={index}
-            onClick={() => mapState.toggleActiveProfileTypeFilter(profileType.name)}
+            onClick={() => mapState.toggleActiveProfileTypeFilter?.(profileType.name)}
             extrastyles={{
               background: 'none',
               flexDirection: 'column',
@@ -49,7 +49,7 @@ export const MemberTypeList = () => {
             </Text>
           </CardButton>
         );
-      })}
+      }) || []}
     </VerticalList>
   );
 };

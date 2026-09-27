@@ -1,5 +1,6 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
@@ -38,7 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       { headers, status: 200 },
     );
   } catch (error) {
-    console.error('Error fetching subscription:', error);
+    logger.error('Error fetching subscription:', error);
     return Response.json({ hasSubscription: false }, { headers, status: 200 });
   }
 };
@@ -141,6 +142,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         customerId = await StripeServiceServer.createGuestCustomer(email, name);
       }
 
+      // Clear out any earlier abandoned checkout attempts so they don't pile up
+      // as orphaned incomplete subscriptions on the customer.
+      await StripeServiceServer.cancelIncompleteSubscriptions(customerId);
+
       const clientSecret = await StripeServiceServer.createSubscriptionWithPaymentIntent(
         customerId,
         priceId,
@@ -170,7 +175,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (actionType === 'portal') {
       const portalUrl = await StripeServiceServer.createBillingPortalSession(
         customerId,
-        `${origin}/settings`,
+        `${origin}/setup-email-preferences`,
       );
 
       return Response.json({ url: portalUrl }, { headers, status: 200 });
@@ -178,7 +183,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({}, { headers, status: 400, statusText: 'invalid action' });
   } catch (error: any) {
-    console.error(error);
+    logger.error(error);
     const message = error?.message || 'An unexpected error occurred';
     return Response.json({ error: message }, { headers, status: 500 });
   }

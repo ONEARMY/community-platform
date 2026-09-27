@@ -1,34 +1,14 @@
 import { UserRole } from 'oa-shared';
-import { data, redirect } from 'react-router';
+import type { MiddlewareFunction } from 'react-router';
+import { requireAnyRole } from 'src/middleware/requireRole.server';
+import { sessionMiddleware } from 'src/middleware/session.server';
+import { ForbiddenPage } from 'src/pages/Forbidden/labels';
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm';
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
-import { redirectServiceServer } from 'src/services/redirectService.server';
 
-export async function loader({ request }) {
-  const { client, headers } = createSupabaseServerClient(request);
-
-  const claims = await client.auth.getClaims();
-
-  if (!claims.data?.claims) {
-    return redirectServiceServer.redirectSignIn('/research/create', headers);
-  }
-
-  const profileService = new ProfileServiceServer(client);
-  const profile = await profileService.getByAuthId(claims.data.claims.sub);
-  const roles = (profile?.roles || []) as string[];
-
-  // Check if user has required permissions
-  const isAdmin = roles?.includes(UserRole.ADMIN) ?? false;
-  const isResearchCreator = roles?.includes(UserRole.RESEARCH_CREATOR) ?? false;
-  const canCreate = isAdmin || isResearchCreator;
-
-  if (!canCreate) {
-    return redirect('/forbidden?page=research-create', { headers });
-  }
-
-  return data(null, { headers });
-}
+export const middleware: MiddlewareFunction<Response>[] = [
+  sessionMiddleware,
+  requireAnyRole([UserRole.ADMIN, UserRole.RESEARCH_CREATOR], ForbiddenPage.RESEARCH_CREATE),
+];
 
 export default function Index() {
   return <ResearchForm formData={null} id={null} research={null} />;

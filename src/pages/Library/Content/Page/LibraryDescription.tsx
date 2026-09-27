@@ -3,7 +3,6 @@ import {
   Category,
   ContentStatistics,
   DisplayDate,
-  LinkifyText,
   ModerationStatus,
   TagList,
   UsefulStatsButton,
@@ -18,12 +17,15 @@ import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
-import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
+import { Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { LinkifyText } from '@/components/ui/linkify-text';
 
 interface IProps {
   commentsCount: number;
   item: Project;
   loggedInUser: Profile | undefined;
+  remakeCount: number;
   votedUsefulCount?: number;
   hasUserVotedUseful: boolean;
   onUsefulClick: () => Promise<void>;
@@ -35,6 +37,7 @@ export const LibraryDescription = ({
   item,
   loggedInUser,
   onUsefulClick,
+  remakeCount,
   votedUsefulCount,
 }: IProps) => {
   const isEditable = useMemo(() => {
@@ -71,13 +74,9 @@ export const LibraryDescription = ({
           )}
 
           {showFeedback && (
-            <Alert variant="info">
-              <Box sx={{ textAlign: 'left' }} data-cy="moderationFeedback">
-                <Heading as="p" variant="small">
-                  Moderator Feedback
-                </Heading>
-                <Text sx={{ fontSize: 2 }}>{item.moderationFeedback}</Text>
-              </Box>
+            <Alert variant="info" className="text-left" data-cy="moderationFeedback">
+              <AlertTitle size="lg">Moderator Feedback</AlertTitle>
+              <AlertDescription size="sm">{item.moderationFeedback}</AlertDescription>
             </Alert>
           )}
 
@@ -258,6 +257,15 @@ export const LibraryDescription = ({
                 usePlural: true,
               }),
               stat: commentsCount || 0,
+            },
+            {
+              icon: 'remake',
+              label: buildStatisticsLabel({
+                stat: remakeCount,
+                statUnit: 'remake',
+                usePlural: true,
+              }),
+              stat: remakeCount,
             },
             {
               icon: 'update',

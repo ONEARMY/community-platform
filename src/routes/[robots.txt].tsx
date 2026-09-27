@@ -30,6 +30,8 @@ export const loader = async ({ request }: { request: Request }) => {
 
       robotText += `\n${permission}: ${pagePath}`;
     });
+
+    robotText += `Disallow: /map-embed/`;
   }
 
   return new Response(robotText, {

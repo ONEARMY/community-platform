@@ -3,6 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { IDBDownloadable } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { redirect } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { resolveType } from 'src/utils/contentType.utils';
 
@@ -86,7 +87,7 @@ async function resolveUrl(params: Params<string>, client: SupabaseClient, header
   });
 
   if (!result.data?.signedUrl) {
-    console.error(result.error);
+    logger.error({ error: result.error });
     return Response.json({}, { status: 500, headers });
   }
 
@@ -102,7 +103,7 @@ async function resolveFileLink(
   const { data, error } = await client.from(tableName).select('id,file_link').eq('id', id).single();
 
   if (!data) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { status: 500, headers });
   }
 
@@ -124,7 +125,7 @@ async function resolveFileFromStorage(
     .single<FileObject>();
 
   if (!data || error) {
-    console.error('Failed to resolve file from storage.objects:', error);
+    logger.error('Failed to resolve file from storage.objects:', error);
     return null;
   }
 

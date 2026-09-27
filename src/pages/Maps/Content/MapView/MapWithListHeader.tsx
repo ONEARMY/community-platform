@@ -1,7 +1,8 @@
 import { LatLngBounds } from 'leaflet';
-import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components';
+import { Button, MapCardList, Modal, OsmGeocoding } from 'oa-components';
 import { useContext, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import { MapContext } from '../../MapContext';
 import { MapFilterList } from '../../MapFilterList';
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client';
@@ -23,17 +24,17 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
   }
 
   const hasFiltersSelected =
-    !!mapState.activeBadgeFilters.length ||
-    !!mapState.activeProfileSettingFilters.length ||
-    !!mapState.activeProfileTypeFilters.length ||
-    !!mapState.activeTagFilters.length;
+    !!mapState.activeBadgeFilters?.length ||
+    !!mapState.activeProfileSettingFilters?.length ||
+    !!mapState.activeProfileTypeFilters?.length ||
+    !!mapState.activeTagFilters?.length;
 
   if (mapState.loadingMessage) {
     return (
       <Flex
         sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
       >
-        <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
+        <Spinner className="self-center" label={mapState.loadingMessage} />
       </Flex>
     );
   }
@@ -67,7 +68,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
                 );
                 mapState.selectPin(null);
                 mapState.fitBounds(bounds);
-                mapState.setIsMobile(false);
+                mapState.setIsMobile?.(false);
               }
             }}
             countrycodes=""
@@ -89,9 +90,9 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       </Flex>
       {mapState && (
         <MapCardList
-          list={mapState.filteredPins}
+          list={mapState.filteredPins || []}
           onPinClick={(pin) => {
-            mapState.selectPinWithClusterCheck(pin);
+            mapState.selectPinWithClusterCheck?.(pin);
           }}
           selectedPin={mapState.selectedPin}
           viewport={viewport}

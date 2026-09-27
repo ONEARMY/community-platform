@@ -91,6 +91,16 @@ export class MapPinsServiceServer {
     return mapPins;
   }
 
+  async getByProfileType(profileType: string) {
+    const allPins = await this.get();
+
+    if (!profileType) {
+      return allPins;
+    }
+
+    return allPins.filter((pin) => pin.profile?.type?.name === profileType);
+  }
+
   async delete(profileId: number) {
     const { error } = await this.client.from('map_pins').delete().eq('profile_id', profileId);
 

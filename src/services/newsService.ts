@@ -1,5 +1,6 @@
 import type { DBNews, NewsFormData } from 'oa-shared';
 import { DBMedia, News, NewsDTO } from 'oa-shared';
+import { renderNewsBodyHtml } from 'src/utils/renderNewsBodyHtml';
 import { createFormData } from './formDataHelper';
 
 const upsert = async (id: number | null, form: NewsFormData) => {
@@ -12,6 +13,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     profileBadges: form.profileBadges?.filter((pb) => pb !== null).map((pb) => Number(pb)) || null,
     tags: form.tags || null,
     contentReach: form.contentReach,
+    poll: form.poll || null,
   });
 
   const response =
@@ -32,7 +34,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   }
 
   const data: { news: DBNews } = await response.json();
-  const news = News.fromDB(data.news, []);
+  const news = News.fromDB(data.news, [], null, null, renderNewsBodyHtml);
 
   return news;
 };

@@ -1,5 +1,6 @@
 import type { DBProfile } from 'oa-shared';
 import { data, type LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { isUserAdmin } from 'src/utils/isAdmin';
@@ -76,7 +77,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       .eq('id', questionId);
 
     if (updateError) {
-      console.error(updateError);
+      logger.error(updateError);
       return data({}, { headers, status: 500, statusText: 'Error updating accepted answer' });
     }
 
@@ -84,7 +85,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
     return data({ success: true }, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return data({}, { headers, status: 500, statusText: 'Internal server error' });
   }
 }

@@ -2,6 +2,7 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import type { SubscribableContentTypes } from 'oa-shared';
 import { createContext, useContext, useEffect } from 'react';
 import { trackEvent } from 'src/common/Analytics';
+import { logger } from 'src/logger';
 import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from '../Profile/profile.store';
 
@@ -75,7 +76,7 @@ export class SubscriptionStore {
 
       return isSubscribed;
     } catch (error) {
-      console.error('Failed to check subscription:', error);
+      logger.error('Failed to check subscription:', error);
       runInAction(() => {
         this.subscriptions.set(key, { isSubscribed: false, isLoading: false });
       });
@@ -111,7 +112,7 @@ export class SubscriptionStore {
 
       return true;
     } catch (error) {
-      console.error('Failed to subscribe:', error);
+      logger.error('Failed to subscribe:', error);
 
       // Rollback optimistic update
       runInAction(() => {
@@ -153,7 +154,7 @@ export class SubscriptionStore {
 
       return true;
     } catch (error) {
-      console.error('Failed to unsubscribe:', error);
+      logger.error('Failed to unsubscribe:', error);
 
       // Rollback optimistic update
       runInAction(() => {

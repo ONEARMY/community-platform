@@ -7,6 +7,7 @@ CREATE TYPE "public"."content_types" AS ENUM (
 );
 
 CREATE TYPE "public"."content_reach" AS ENUM ('all', 'important');
+ALTER TYPE "public"."content_reach" OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_user_email_by_id"("id" "uuid") RETURNS TABLE("email" character varying)
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -39,7 +40,8 @@ CREATE OR REPLACE FUNCTION "public"."get_user_id_by_email"("email" "text") RETUR
     LANGUAGE "plpgsql" SECURITY DEFINER
     SET search_path = public, pg_temp
     AS $_$BEGIN
-  RETURN QUERY SELECT au.id FROM auth.users au WHERE au.email = $1;
+  -- is_sso_user = false matches auth.users' partial index on email, avoiding a full table scan
+  RETURN QUERY SELECT au.id FROM auth.users au WHERE au.email = $1 AND au.is_sso_user = false;
 END;$_$;
 
 CREATE OR REPLACE FUNCTION public.get_storage_object_path(

@@ -8,6 +8,7 @@ import {
   UserRole,
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 import { StorageServiceServer } from './storageService.server';
 
@@ -75,7 +76,7 @@ export class LibraryServiceServer {
     });
 
     if (error) {
-      console.error('Error fetching user projects:', error);
+      logger.error('Error fetching user projects:', error);
       return [];
     }
 
@@ -108,9 +109,11 @@ export class LibraryServiceServer {
     }
 
     const stepImages = projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || [];
+    // Deduplicate by id in case the same image is reused across/within steps
+    const uniqueStepImages = Array.from(new Map(stepImages.map((img) => [img.id, img])).values());
 
-    const publicStepImages = stepImages
-      ? storage.getPublicUrls(stepImages, IMAGE_SIZES.GALLERY)
+    const publicStepImages = uniqueStepImages.length
+      ? storage.getPublicUrls(uniqueStepImages, IMAGE_SIZES.GALLERY)
       : [];
 
     return [...allImages, ...publicStepImages.filter((x) => !!x)];

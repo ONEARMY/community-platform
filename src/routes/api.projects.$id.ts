@@ -10,6 +10,7 @@ import type {
 } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
@@ -132,7 +133,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return error.getResponse();
     }
 
-    console.error(error);
+    logger.error(error);
     return Response.json({ error: 'Error updating project', status: 500 }, { status: 500 });
   }
 };

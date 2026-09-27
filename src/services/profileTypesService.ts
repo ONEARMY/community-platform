@@ -1,4 +1,5 @@
 import type { ProfileType } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getProfileTypes = async () => {
   try {
@@ -11,7 +12,7 @@ const getProfileTypes = async () => {
 
     return ((await response.json()) as ProfileType[]) || [];
   } catch (error) {
-    console.error({ error });
+    logger.error({ error });
     return [];
   }
 };

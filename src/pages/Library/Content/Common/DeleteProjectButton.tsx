@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { trackEvent } from 'src/common/Analytics';
 import { useToast } from 'src/common/Toast';
+import { logger } from 'src/logger';
 import { libraryService } from '../../library.service';
 
 type DeleteProjectButtonProps = {
@@ -35,7 +36,7 @@ const DeleteProjectButton = observer(({ id }: DeleteProjectButtonProps) => {
         };
       },
       error: (error) => {
-        console.error(error);
+        logger.error(error);
         setIsDeleting(false);
         return `Error: ${error.message}`;
       },

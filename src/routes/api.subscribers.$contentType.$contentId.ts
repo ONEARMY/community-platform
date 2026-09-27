@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
@@ -58,7 +59,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 200 });
   } catch (error) {
     if (error) {
-      console.error(error);
+      logger.error(error);
       return Response.json({}, { headers, status: 500, statusText: 'error' });
     }
   }

@@ -4,6 +4,8 @@ Thanks for being here already! You'll find all the information you need to start
 
 If you think something is missing, consider sending us a PR.
 
+> **Using an AI coding agent?** Point it at [AGENTS.md](./AGENTS.md) before it writes any code, and read [AI-assisted contributions](#-ai-assisted-contributions) below. We review agent-written PRs by the same standard as any other — you are responsible for what you submit.
+
 ## 🍽 Summary
 
 - [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-code-of-conduct)
@@ -12,6 +14,8 @@ If you think something is missing, consider sending us a PR.
 - [Branching](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-branching)
 - [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-style-guide)
 - [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-testing)
+- [Submitting a pull request](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-submitting-a-pull-request)
+- [AI-assisted contributions](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-ai-assisted-contributions)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-joining-the-team)
 - [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-contributing-with-uxui-design)
 
@@ -25,7 +29,7 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 ### Prerequisites
 
-- [Bun 1.3.10](https://bun.sh/docs/installation)
+- [Bun 1.4.2](https://bun.sh/docs/installation)
 
 ### One time setup
 
@@ -53,6 +57,8 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 Our main technologies are [React Router 7](./docs/react-router-7.md) and [Supabase](./docs/supabase.md)
 We try to document some important [Technical Decisions](./docs/technical-decisions.md).
 
+UI components are being gradually migrated from `packages/components` (theme-ui) to a new [shadcn/Base UI + Tailwind CSS v4 library](./src/components/ui/README.md) — see that README for which library to use for new work.
+
 ## 🏠 Project Structure
 
 - **`src`**
@@ -61,7 +67,8 @@ We try to document some important [Technical Decisions](./docs/technical-decisio
   - **`services`** : client-side services to interact with our api and server-side services to interact with supabase or other external service.
   - **`assets`** : contains assets such as icons/images.
   - **`utils`** : contains utility functions.
-- **`packages/components/`**: - general stateless components that compose the app.
+  - **`components/ui`** : new component library (shadcn / Base UI, Tailwind CSS v4), gradually replacing `packages/components` — see [its README](./src/components/ui/README.md) before adding or migrating components.
+- **`packages/components/`**: - general stateless components that compose the app. Legacy theme-ui based library, being migrated to `src/components/ui` opportunistically.
 - **`packages/themes/`**: - theme definitions for presentation inherited by components
 - **`packages/cypress/`** : contains the test automation of End-to-end tests.
 - **`shared`** : contains mainly type definitions
@@ -123,9 +130,54 @@ A few practices we ensure:
 - We use `helmet` for CSP and other security checks
 - Reduce and keep packages up-to-date to reduce potential vulnerabilities
 
-## First time contributing?
+## 🚀 Submitting a pull request
 
-Early on, and especially when contributing for the first time, please only submit and work on a single issue at a time. It's likely there's lots of little changes we'd like you to make while you get up to speed with how we work and what the code already does.
+### Start from an issue
+
+Find an open issue and **ask to be assigned** before you start. We close unsolicited PRs that don't correspond to an assigned issue.
+
+Work on **one** issue at a time, especially for your first contributions. There are usually lots of small changes we'll ask for while you get up to speed with how we work.
+
+### Keep the PR small and focused
+
+One issue per PR. Don't mix in refactors, reformatting, renames or dependency bumps that the issue didn't call for.
+
+### Screenshots are required for UI changes
+
+If your PR touches anything under `src/pages`, `src/components`, `packages/components`, `packages/themes`, or any `.css` file, run the app and look at your change before you submit it. Then attach to the PR description:
+
+- a **before** and **after** screenshot
+- the same view at **mobile width** (375px)
+
+A UI change with no screenshot gets closed.
+
+### Write a short description
+
+Use the PR template and keep it **under 400 words**. Say what changed. Don't restate the diff, don't narrate how you arrived at the solution, and don't replace the template with your own format. Link the issue with `Closes #123`.
+
+### What we close without review
+
+- No assigned issue (for first-time contributors)
+- UI change with no screenshot
+- PR template deleted or ignored
+- A description that is mostly generated filler
+- Unrelated refactors, reformatting or dependency bumps bundled in
+- Code the author clearly hasn't run
+
+## 🤖 AI-assisted contributions
+
+Using an AI agent is fine. Submitting its output unread is not.
+
+If you used one, you're expected to have:
+
+1. **Run the app** and tested the change yourself.
+2. **Read the whole diff** and be able to explain any line of it in review.
+3. **Checked it against this guide** — especially [style](#-style-guide), [testing](#-testing), and the screenshot requirement above.
+4. **Said so in the PR.** We don't mind; it helps us review.
+
+Agents should read [AGENTS.md](./AGENTS.md), which carries the same rules in a form they follow well.
+
+The most common failures we see in agent-written PRs, in order: no screenshot on a UI change, a description many times longer than the diff deserves, the PR template discarded, code comments added (we almost never need them).
 
 ## 🤝 Joining the team
 
@@ -144,4 +196,7 @@ We always welcome UX/UI design contributions in various shapes and forms. Whethe
 
 The best way to start would be to look at [open design issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Task%3A%20Design%22) here in our GitHub Repository to see if anything sparks your interest. Another way is to get in touch with us [through Discord](https://discord.gg/p4hWHYeG), the introduce-yourself channel is a good place for that. :) Then we can chat about what would be interesting for you to help out with, as well as what we are currently working on.
 
-In the meantime you can check out our [UI Component library in Storybook](https://storybook.onearmy.earth).
+In the meantime you can check out our UI component libraries in Storybook. There are currently two, side by side during the migration described in [src/components/ui/README.md](./src/components/ui/README.md):
+
+- Legacy `oa-components` (theme-ui): [storybook.onearmy.earth](https://storybook.onearmy.earth), or run `bun run storybook` locally.
+- New shadcn/Base UI library: run `bun run storybook:ui` locally (port 6008).

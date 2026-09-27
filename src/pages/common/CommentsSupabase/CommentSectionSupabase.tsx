@@ -5,6 +5,7 @@ import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
+import { logger } from 'src/logger';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -15,20 +16,33 @@ import { CommentSort } from './CommentSort';
 import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 
+export interface CommentSectionLabels {
+  title?: string;
+  createButtonLabel?: string;
+  createPlaceholder?: string;
+  logInPrompt?: string;
+  incompleteProfilePrompt?: string;
+}
+
 interface IProps {
-  authors: Array<number>;
+  authors: number[];
   sourceId: number;
   sourceType: DiscussionContentType;
   setSubscribersCount?: Dispatch<SetStateAction<number>>;
+  pinnedCommentId?: number;
+  defaultSortBy?: CommentSortOption;
+  labels?: CommentSectionLabels;
 }
 const commentPageSize = 10;
 
 export const CommentSectionSupabase = observer((props: IProps) => {
-  const { authors, sourceId, sourceType } = props;
+  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
-  const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Oldest);
+  const [sortBy, setSortBy] = useState<CommentSortOption>(
+    defaultSortBy ?? CommentSortOption.Oldest,
+  );
   const { isSubscribed, toggle: toggleFollowReplies } = useSubscription(sourceType, sourceId);
   const { profile } = useProfileStore();
   const location = useLocation();
@@ -36,8 +50,16 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const displayedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
     const sorted = [...comments].sort(sortFn);
+
+    if (pinnedCommentId) {
+      const pinnedIndex = sorted.findIndex((x) => x.id === pinnedCommentId);
+      if (pinnedIndex > 0) {
+        sorted.unshift(...sorted.splice(pinnedIndex, 1));
+      }
+    }
+
     return sorted.slice(0, commentLimit);
-  }, [comments, commentLimit, sortBy]);
+  }, [comments, commentLimit, sortBy, pinnedCommentId]);
 
   const remainingCommentsCount = useMemo(() => {
     return Math.max(0, comments.length - commentLimit);
@@ -78,7 +100,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
 
         setComments(comments || []);
       } catch (err) {
-        console.error(err);
+        logger.error(err);
       }
     };
 
@@ -106,7 +128,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -129,7 +151,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -150,7 +172,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   };
 
@@ -172,7 +194,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   };
 
@@ -199,7 +221,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -225,7 +247,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
       return result;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return err;
     }
   };
@@ -263,7 +285,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
               flex: '1 1 auto',
             }}
           >
-            <CommentsTitle comments={comments} />
+            <CommentsTitle comments={comments} noun={labels?.title} />
 
             <FollowButton
               isFollowing={isSubscribed}
@@ -304,7 +326,14 @@ export const CommentSectionSupabase = observer((props: IProps) => {
           </Flex>
         )}
 
-        <CreateCommentSupabase onSubmit={postComment} sourceType={sourceType} />
+        <CreateCommentSupabase
+          onSubmit={postComment}
+          sourceType={sourceType}
+          buttonLabel={labels?.createButtonLabel}
+          placeholder={labels?.createPlaceholder}
+          logInPrompt={labels?.logInPrompt}
+          incompleteProfilePrompt={labels?.incompleteProfilePrompt}
+        />
       </Flex>
     </AuthorsContext.Provider>
   );

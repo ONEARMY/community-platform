@@ -26,6 +26,7 @@ export const FRIENDLY_MESSAGES = {
   'sign-up/password-required': 'A password is required unfortunately',
   'sign-up/password-mismatch': 'Your new password does not match',
   'sign-up/password-weak': "Your password isn't strong enough, try something else?",
+  'sign-up/captcha-required': 'Please complete the verification challenge',
   'sign-up/terms': 'Consent is required. Gotta tick that box',
   'sign-up/username-short': 'Username must be at least 2 characters',
   'sign-up/username-taken': 'Oh wow, that username is already taken!',

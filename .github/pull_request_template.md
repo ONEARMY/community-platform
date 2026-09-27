@@ -1,35 +1,39 @@
-## PR Checklist
-
-- [ ] - Unit and/or e2e tests for the changes that have been added (for bug fixes / features)
-
 ## What kind of change does this PR introduce?
 
-- [ ] 🐛 Bugfix — fixes incorrect behavior without changing functionality
-- [ ] ✨ Feature — adds new functionality
-- [ ] ♻️ Refactoring — improves code structure with no functional changes
-- [ ] ⚡️ Performance — improves speed, memory, or efficiency
-- [ ] 🧪 Tests — adds or updates tests only
-- [ ] 🔧 Tools / CI — changes to build, deploy, or developer tooling
-- [ ] 📝 Documentation — updates docs, comments, or READMEs
-- [ ] 📦 Dependencies — upgrades, downgrades, or removes packages
-- [ ] 🔖 Other:
+- [ ] 🐛 Bugfix
+- [ ] ✨ Feature
+- [ ] ♻️ Refactoring
+- [ ] ⚡️ Performance
+- [ ] 🧪 Tests
+- [ ] 🔧 Tools / CI
+- [ ] 📝 Documentation
+- [ ] 📦 Dependencies
 
-## What is the new behavior?
+## What changed
 
-_Describe the new behaviour_
-_If useful, provide screenshot or capture to highlight main changes_
+<!--
+Keep this description under 400 words.
+-->
 
-## Does this PR introduce a DB Schema Change or Migration?
+## Screenshots
 
-- [ ] Yes
-- [ ] No
+<!--
+Required if you touched src/pages, src/components, packages/components,
+packages/themes or any .css file. Include before + after, and mobile width (375px).
+For src/components/ui, include a Storybook screenshot.
+If this PR changes no UI, replace this comment with exactly: No UI change
+-->
 
-## Git Issues
+## Issue
 
 Closes #
 
-## What happens next?
+## Database
 
-Thank you for the contribution! We will review it ASAP.
+- [ ] This PR includes a schema change or migration
 
-If you need more immediate feedback you can reach out to us on Discord in the [Community Platform `development` channel](https://discord.com/channels/586676777334865928/938781727017558018).
+## Checklist
+
+- [ ] I ran the app and checked this change myself
+- [ ] `bun run format` and `bun run test:unit` pass
+- [ ] Tests added or updated for this change

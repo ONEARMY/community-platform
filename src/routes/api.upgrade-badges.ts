@@ -3,6 +3,7 @@ import type { DBUpgradeBadge } from 'oa-shared';
 import { UpgradeBadge } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
+import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 const cache = new Keyv<UpgradeBadge[]>({ ttl: 1800000 }); // ttl: 30 minutes
@@ -41,7 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     return Response.json(upgradeBadges, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return Response.json({}, { headers, status: 500 });
   }
 }

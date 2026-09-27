@@ -18,8 +18,8 @@ Create a .env.local file at the project root (same level as .env) and fill in th
 
 ```
 SUPABASE_API_URL=<API URL>
-SUPABASE_KEY=<anon key>
-SUPABASE_SERVICE_ROLE_KEY=<service_role key>
+SUPABASE_KEY=<Authentication Key - Publishable>
+SUPABASE_SERVICE_ROLE_KEY=<Authentication Key - Secret>
 ```
 
 Run `bun run db:seed` to run the DB migration scripts and update your local database schema. You will have to run this again whenever there are DB schema changes. For more in-depth seeding, please check [Seeding](./db-seeding.md).

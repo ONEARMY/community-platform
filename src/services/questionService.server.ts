@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBQuestion, Question } from 'oa-shared';
+import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 
 export class QuestionServiceServer {
@@ -55,7 +56,7 @@ export class QuestionServiceServer {
     });
 
     if (functionResult.error || functionResult.count === 0) {
-      console.error('Error fetching user questions:', functionResult.error);
+      logger.error('Error fetching user questions:', functionResult.error);
       return [];
     }
 

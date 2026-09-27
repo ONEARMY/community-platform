@@ -13,7 +13,7 @@ import type {
   questionsChildInputs,
   questionsScalars,
   researchScalars,
-  stripe_badge_productsScalars,
+  stripe_tier_configScalars,
   subscribersChildInputs,
   subscribersScalars,
   tagsChildInputs,
@@ -214,15 +214,22 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   },
 ];
 
-const seedStripeBadgeProducts = (
+const TIER_COLORS: Record<number, string> = {
+  1: '#BFDEBA',
+  2: '#77BDE3',
+  3: '#FEE77B',
+};
+
+const seedStripeTierConfig = (
   badges: profile_badgesScalars[],
-): Partial<stripe_badge_productsScalars>[] => {
+): Partial<stripe_tier_configScalars>[] => {
   const tierBadges = badges.filter((b) => b.name?.startsWith('stripe-tier-'));
   return tierBadges.map((badge) => ({
     tenant_id,
-    stripe_product_id: `prod_tier${badge.premium_tier}`,
-    name: `Tier ${badge.premium_tier} Membership`,
     badge_id: badge.id,
+    description: 'You help us develop new features, get videos in 4K without ads!',
+    color: TIER_COLORS[badge.premium_tier ?? 0] ?? '#BFDEBA',
+    thank_you_image_url: null,
   }));
 };
 
@@ -661,7 +668,7 @@ const main = async () => {
   const { profile_badges } = await seed.profile_badges(seedBadges());
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
   await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
-  await seed.stripe_badge_products(seedStripeBadgeProducts(profile_badges));
+  await seed.stripe_tier_config(seedStripeTierConfig(profile_badges));
 
   await seed.map_pins(seedMapPins(profiles));
   const { tags } = await seed.tags(seedTags());

@@ -91,4 +91,13 @@ describe('[Admin]', () => {
     cy.get('button').contains("Delete").click({ force: true })
     cy.get('body').should("not.contain.text", "Delete Question")
   })
+
+  it('[Admin can access the profile types page]', () => {
+    cy.signIn(admin.email, admin.password)
+
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/profile-types"]').click()
+    cy.url().should('include', '/admin/profile-types')
+    cy.get('h1').contains('Profile Types')
+  })
 });

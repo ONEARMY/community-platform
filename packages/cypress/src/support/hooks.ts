@@ -28,7 +28,7 @@ afterEach(() => {
   cy.logout();
 });
 
-after(async () => {
+after(() => {
   Cypress.log({
     displayName: 'Clearing database for tenant',
     message: Cypress.env('TENANT_ID'),

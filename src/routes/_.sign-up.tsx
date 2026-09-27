@@ -1,5 +1,5 @@
 import { HeroBanner } from 'oa-components';
-import { FRIENDLY_MESSAGES } from 'oa-shared';
+import { FRIENDLY_MESSAGES, SignupSource } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
@@ -76,7 +76,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
     }
 
-    const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
+    const response = await authServiceServer.createUserProfile({
+      user: signupResult.data.user,
+      signupSource: SignupSource.SIGN_UP,
+    });
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {

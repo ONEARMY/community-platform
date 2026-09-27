@@ -1,8 +1,10 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
+import type { SignupSource } from 'oa-shared';
 import { logger } from 'src/logger';
 
 type CreateProfileArgs = {
   user: User;
+  signupSource: SignupSource;
   displayName?: string;
 };
 
@@ -32,6 +34,7 @@ export class AuthServiceServer {
       display_name: args.displayName || '',
       tenant_id: process.env.TENANT_ID,
       profile_type: data[0].id,
+      signup_source: args.signupSource,
     };
 
     const result = await this.client.from('profiles').insert(profile);

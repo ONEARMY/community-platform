@@ -1,8 +1,9 @@
-import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components';
+import { ImageGallery, VideoPlayer } from 'oa-components';
 import type { ProjectStep } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
+import { LinkifyText } from '@/components/ui/linkify-text';
 
 interface IProps {
   step: ProjectStep;

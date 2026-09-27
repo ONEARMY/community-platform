@@ -48,7 +48,6 @@ export { ImageInputDeleteOverlay } from './ImageInput/ImageInputDeleteOverlay';
 export { ImageInputV2 } from './ImageInput/ImageInputV2';
 export { InformationTooltip } from './InformationTooltip/InformationTooltip';
 export { InternalLink } from './InternalLink/InternalLink';
-export { LinkifyText } from './LinkifyText/LinkifyText';
 export { type IProps as MapProps, Map } from './Map/Map.client';
 export { MapCardList } from './MapCardList/MapCardList';
 export { MapFilterListItem } from './MapFilterListItem/MapFilterListItem';

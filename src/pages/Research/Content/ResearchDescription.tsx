@@ -1,9 +1,10 @@
 import { max } from 'date-fns';
-import { AuthorDisplay, Category, DisplayDate, LinkifyText, TagList } from 'oa-components';
+import { AuthorDisplay, Category, DisplayDate, TagList } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 import { useMemo } from 'react';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { LinkifyText } from '@/components/ui/linkify-text';
 import { researchStatusColour } from '../researchHelpers';
 import { ResearchContributors } from './ResearchContributors';
 import ResearchFooter from './ResearchFooter';

@@ -1250,6 +1250,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Cory-Kim",
+      "name": "Cory Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72359104?v=4",
+      "profile": "https://github.com/Cory-Kim",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

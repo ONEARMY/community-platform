@@ -15,6 +15,7 @@ import { ProfileTypeFormDialog } from './ProfileTypeFormDialog';
 
 interface IProps {
   profileTypes: ProfileType[];
+  profiles: Set<number>;
 }
 
 function ProfileTypeImage({ imageUrl, name }: { imageUrl: string | null; name: string }) {
@@ -37,7 +38,7 @@ function ProfileTypeImage({ imageUrl, name }: { imageUrl: string | null; name: s
     />
   );
 }
-export function ProfileTypesPage({ profileTypes }: IProps) {
+export function ProfileTypesPage({ profileTypes, profiles }: IProps) {
   const [editingProfileType, setEditingProfileType] = useState<ProfileType | null | undefined>(
     undefined,
   );
@@ -86,14 +87,26 @@ export function ProfileTypesPage({ profileTypes }: IProps) {
                   >
                     <PencilIcon />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Delete ${profileType.name}`}
-                    onClick={() => setDeletingProfileType(profileType)}
-                  >
-                    <TrashIcon />
-                  </Button>
+                  {!profiles.has(profileType.id) ? (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`Delete ${profileType.name}`}
+                      onClick={() => setDeletingProfileType(profileType)}
+                    >
+                      <TrashIcon />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`Can't delete ${profileType.name}`}
+                      onClick={() => {}}
+                      disabled
+                    >
+                      <TrashIcon />
+                    </Button>
+                  )}
                 </div>
               </TableCell>
             </TableRow>

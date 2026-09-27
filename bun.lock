@@ -146,7 +146,6 @@
         "country-to-iso": "^1.6.1",
         "date-fns": "^4.4.0",
         "linkify-plugin-mention": "^4.3.2",
-        "linkify-react": "^4.3.2",
         "linkifyjs": "^4.3.2",
         "oa-themes": "workspace:^",
         "photoswipe": "^5.4.4",

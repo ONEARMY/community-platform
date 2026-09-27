@@ -5,7 +5,6 @@ import ForumIcon from '../../assets/icons/icon-forum.svg';
 import HowToCountIcon from '../../assets/icons/icon-library.svg';
 import ResearchIcon from '../../assets/icons/icon-research.svg';
 import starActiveSVG from '../../assets/icons/icon-star-active.svg';
-import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon';
 import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
 import { InternalLink } from '../InternalLink/InternalLink';
@@ -76,10 +75,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           ))}
 
           {props.usefulCount > 0 && (
-            <Flex data-testid="useful-stat">
-              <ElWithBeforeIcon icon={starActiveSVG} />
+            <div className="flex items-center gap-2" data-testid="useful-stat">
+              <img className="size-[22px] shrink-0 object-contain" src={starActiveSVG} alt="" />
               {`Useful: ${props.usefulCount}`}
-            </Flex>
+            </div>
           )}
 
           {props.libraryCount > 0 && props.profile.username && (
@@ -88,10 +87,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="library-link"
             >
-              <Flex data-testid="library-stat">
-                <ElWithBeforeIcon icon={HowToCountIcon} />
+              <div className="flex items-center gap-2" data-testid="library-stat">
+                <img className="size-[22px] shrink-0 object-contain" src={HowToCountIcon} alt="" />
                 {`Library: ${props.libraryCount}`}
-              </Flex>
+              </div>
             </InternalLink>
           )}
 
@@ -101,10 +100,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="research-link"
             >
-              <Flex data-testid="research-stat">
-                <ElWithBeforeIcon icon={ResearchIcon} />
+              <div className="flex items-center gap-2" data-testid="research-stat">
+                <img className="size-[22px] shrink-0 object-contain" src={ResearchIcon} alt="" />
                 {`Research: ${props.researchCount}`}
-              </Flex>
+              </div>
             </InternalLink>
           )}
 
@@ -114,10 +113,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="questions-link"
             >
-              <Flex data-testid="questions-stat">
-                <ElWithBeforeIcon icon={ForumIcon} />
+              <div className="flex items-center gap-2" data-testid="questions-stat">
+                <img className="size-[22px] shrink-0 object-contain" src={ForumIcon} alt="" />
                 {`Questions: ${props.questionCount}`}
-              </Flex>
+              </div>
             </InternalLink>
           )}
 

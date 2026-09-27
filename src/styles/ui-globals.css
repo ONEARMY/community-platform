@@ -65,8 +65,10 @@
   --radius-control-xs: min(var(--radius-md), 10px);
   --radius-control-sm: min(var(--radius-md), 12px);
   --radius-card: 15px;
+  --radius-card-flat: 5px;
   --radius-checkbox: 4px;
   --text-control-sm: 0.8rem;
+  --text-card-heading: 1.375rem;
   --spacing-hairline: 2px;
   --container-dialog: calc(100% - 2rem);
   --shadow-sidebar-ring: 0 0 0 1px var(--sidebar-border);
@@ -158,6 +160,12 @@
   --success: oklch(0.765 0.177 163.223);
   --warning: oklch(0.828 0.189 84.429);
   --info: oklch(0.707 0.165 254.624);
+}
+
+@utility grid-cols-alert {
+  /* Alert's two-column layout when it has an icon: the icon column sized to the
+     icon, the content column taking the rest. */
+  grid-template-columns: auto 1fr;
 }
 
 @utility z-above-header {

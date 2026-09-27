@@ -1,10 +1,11 @@
-import { Loader, Pagination } from 'oa-components';
+import { Pagination } from 'oa-components';
 import type { News } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import { newsContentService } from 'src/pages/News/newsContent.service';
 import { Flex, Heading } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import useDrafts from '../common/Drafts/useDraftsSupabase';
 import { ITEMS_PER_PAGE } from './constants';
 import { listing } from './labels';
@@ -119,7 +120,7 @@ export const NewsListing = () => {
           </Flex>
         )}
       </Flex>
-      {(isFetching || isFetchingDrafts) && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
     </Flex>
   );
 };

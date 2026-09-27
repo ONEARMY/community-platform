@@ -9,6 +9,7 @@ const cardVariants = cva(
       variant: {
         default: 'border',
         outline: 'border-2 border-outline',
+        flat: 'gap-2.5 rounded-card-flat border-2 border-outline p-2.5 shadow-none sm:p-4 md:p-5',
       },
     },
     defaultVariants: {

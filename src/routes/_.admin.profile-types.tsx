@@ -10,6 +10,8 @@ export const handle = { breadcrumb: 'Profile Types' };
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = createSupabaseServerClient(request);
 
+  const profileData = await client.from('profiles').select('profile_type');
+
   const { data } = await client
     .from('profile_types')
     .select(
@@ -21,11 +23,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     ProfileType.fromDB(profile_type as DBProfileType),
   );
 
-  return { profileTypes };
+  const profiles = new Set();
+  profileData.data?.forEach((item) => profiles.add(item.profile_type));
+
+  return { profileTypes, profiles };
 }
 
 export default function Index() {
-  const { profileTypes } = useLoaderData<typeof loader>();
+  const { profileTypes, profiles } = useLoaderData<typeof loader>();
 
-  return <ProfileTypesPage profileTypes={profileTypes} />;
+  return <ProfileTypesPage profileTypes={profileTypes} profiles={profiles as Set<number>} />;
 }

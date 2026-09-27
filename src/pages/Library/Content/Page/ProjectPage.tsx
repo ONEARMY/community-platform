@@ -1,10 +1,5 @@
 import { observer } from 'mobx-react';
-import {
-  ArticleCallToActionSupabase,
-  Button,
-  UsefulStatsButton,
-  UserEngagementWrapper,
-} from 'oa-components';
+import { Button, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
 import type { Project, ProjectStep } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
@@ -18,6 +13,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card, Flex } from 'theme-ui';
+import { ArticleCallToAction } from '@/components/ui/article-call-to-action';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 import { RemakesSection } from './Remakes/RemakesSection';
@@ -94,7 +90,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <UserEngagementWrapper>
-            <ArticleCallToActionSupabase author={item.author!}>
+            <ArticleCallToAction author={item.author!}>
               <Button
                 type="button"
                 sx={{ fontSize: 2, justifyContent: 'center' }}
@@ -145,7 +141,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                   </Button>
                 </>
               )}
-            </ArticleCallToActionSupabase>
+            </ArticleCallToAction>
             <Card sx={engagementCardSx}>
               <CommentSectionSupabase
                 authors={item.author?.id ? [item.author?.id] : []}

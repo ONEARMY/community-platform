@@ -1,11 +1,5 @@
 import { observer } from 'mobx-react';
-import {
-  ArticleCallToActionSupabase,
-  Button,
-  FollowButton,
-  UsefulStatsButton,
-  UserEngagementWrapper,
-} from 'oa-components';
+import { Button, FollowButton, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
 import type { ResearchItem } from 'oa-shared';
 import { useState } from 'react';
 import { trackEvent } from 'src/common/Analytics';
@@ -14,6 +8,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box } from 'theme-ui';
+import { ArticleCallToAction } from '@/components/ui/article-call-to-action';
 
 type ResearchEngagementSectionProps = {
   research: ResearchItem;
@@ -37,10 +32,7 @@ const ResearchEngagementSection = observer(({ research }: ResearchEngagementSect
         }}
       >
         {research.author && (
-          <ArticleCallToActionSupabase
-            author={research.author}
-            contributors={research.collaborators}
-          >
+          <ArticleCallToAction author={research.author} contributors={research.collaborators}>
             <UsefulStatsButton
               isLoggedIn={!!profile}
               hasUserVotedUseful={hasVoted}
@@ -79,7 +71,7 @@ const ResearchEngagementSection = observer(({ research }: ResearchEngagementSect
                 </Button>
               </>
             )}
-          </ArticleCallToActionSupabase>
+          </ArticleCallToAction>
         )}
       </Box>
     </UserEngagementWrapper>

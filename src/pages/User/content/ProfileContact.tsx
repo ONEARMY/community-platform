@@ -5,7 +5,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { UserAction } from 'src/common/UserAction';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { isUserContactable } from 'src/utils/helpers';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import { UserContactFormAvailable } from '../contact';
 import { UserContactForm } from '../contact/UserContactForm';
 import { UserContactFormNotLoggedIn } from '../contact/UserContactFormNotLoggedIn';
@@ -20,10 +20,15 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const tenantContext = useContext(TenantContext);
   const shouldShowContactOutput = !tenantContext?.noMessaging;
 
+  if (!shouldShowContactOutput && !user.website) {
+    return null;
+  }
+
   return (
-    <Flex sx={{ flexDirection: 'column' }}>
+    <Flex sx={{ flexDirection: 'column', gap: '1rem' }}>
+      <Text variant="h2">Contact</Text>
       {shouldShowContactOutput && (
-        <Box data-cy="UserContactWrapper">
+        <Box data-cy="UserContactWrapper" sx={{}}>
           <ClientOnly fallback={<></>}>
             {() => (
               <UserAction
@@ -48,7 +53,7 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
       )}
 
       {user.website && (
-        <Flex sx={{ flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
+        <Flex sx={{ flexDirection: 'column', gap: '0.5rem' }}>
           <span>Website</span>
           <ProfileLink url={user.website} />
         </Flex>

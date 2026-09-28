@@ -187,7 +187,7 @@ describe('[Library]', () => {
       cy.step("Drafted project should not appear on user's profile");
       cy.visit('/u/' + creator.displayName);
       cy.get('[data-testid=library-stat]').should('not.exist');
-      cy.get('[data-cy=ContribTab]').should('not.exist');
+      cy.get('[data-testid="library-contributions"]').should('not.exist');
 
       cy.step('Back to completing the project');
       cy.visit(firstSlug);
@@ -267,7 +267,6 @@ describe('[Library]', () => {
       // cy.step('Published project should appear on users profile')
       // cy.visit('/u/' + creator.displayName)
       // cy.get('[data-testid=library-stat]').contains('1')
-      // cy.get('[data-cy=ContribTab]').click()
       // cy.get('[data-cy="library-contributions"]').should('be.visible')
     });
 

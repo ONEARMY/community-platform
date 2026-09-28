@@ -33,6 +33,11 @@ const config: StorybookConfig = {
 
     return mergeConfig(config, {
       plugins: [tailwindcss(), svgr(), tsconfigPaths({ root: '../' })],
+      resolve: {
+        alias: {
+          '@': join(__dirname, '../src'),
+        },
+      },
     });
   },
 };

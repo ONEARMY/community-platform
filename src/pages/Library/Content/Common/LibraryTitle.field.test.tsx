@@ -12,6 +12,6 @@ describe('LibraryTitleField', () => {
       </LibraryFormProvider>,
     );
 
-    await screen.findByText('0 / 50');
+    await screen.findByText(/50 characters remaining/i);
   });
 });

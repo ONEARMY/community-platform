@@ -135,6 +135,7 @@ export default defineConfig({
     alias: {
       'oa-shared': resolve(__dirname, './shared/index.ts'),
       'oa-components': resolve(__dirname, './packages/components/src/index.ts'),
+      '@': resolve(__dirname, './src'),
     },
   },
   test: vitestConfig.test,

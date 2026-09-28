@@ -1,8 +1,11 @@
 import { faker } from '@faker-js/faker';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ThemeProvider } from '@theme-ui/core';
+import { Button, UsefulStatsButton } from 'oa-components';
 import type { Author } from 'oa-shared';
+import { theme } from 'oa-themes';
+import type { ReactNode } from 'react';
 import { ArticleCallToAction } from './article-call-to-action';
-import { Button } from './button';
 
 const makeFakeUser = (): Author => ({
   id: faker.number.int(),
@@ -22,6 +25,14 @@ const makeFakeUser = (): Author => ({
   username: faker.internet.username(),
 });
 
+// The app still passes the oa-components Button and UsefulStatsButton as
+// children here, and UsefulStatsButton reads the theme-ui theme directly. This
+// Storybook has no theme-ui provider, so the stories supply one locally to
+// render the real controls rather than stand-ins.
+const WithLegacyTheme = ({ children }: { children: ReactNode }) => (
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+);
+
 const meta: Meta<typeof ArticleCallToAction> = {
   title: 'ui/ArticleCallToAction',
   component: ArticleCallToAction,
@@ -30,39 +41,59 @@ export default meta;
 
 type Story = StoryObj<typeof ArticleCallToAction>;
 
-/** The engagement controls are supplied by the call site as `children`. */
+/**
+ * The engagement controls come from the call site as `children`. The app still
+ * passes the oa-components Button and UsefulStatsButton here, so these stories
+ * use the same ones the legacy story did.
+ */
 export const CommentAndUseful: Story = {
   render: () => (
-    <ArticleCallToAction author={makeFakeUser()}>
-      <Button>Leave a comment</Button>
-      <Button variant="outline">Useful</Button>
-    </ArticleCallToAction>
+    <WithLegacyTheme>
+      <ArticleCallToAction author={makeFakeUser()}>
+        <Button sx={{ fontSize: 2 }}>Leave a comment</Button>
+        <UsefulStatsButton
+          isLoggedIn={false}
+          hasUserVotedUseful={false}
+          onUsefulClick={() => Promise.resolve()}
+        />
+      </ArticleCallToAction>
+    </WithLegacyTheme>
   ),
 };
 
-export const SingleAction: Story = {
+export const Useful: Story = {
   render: () => (
-    <ArticleCallToAction author={makeFakeUser()}>
-      <Button variant="outline">Useful</Button>
-    </ArticleCallToAction>
+    <WithLegacyTheme>
+      <ArticleCallToAction author={makeFakeUser()}>
+        <UsefulStatsButton
+          isLoggedIn={false}
+          hasUserVotedUseful={false}
+          onUsefulClick={() => Promise.resolve()}
+        />
+      </ArticleCallToAction>
+    </WithLegacyTheme>
   ),
 };
 
 export const SingleContributor: Story = {
   render: () => (
-    <ArticleCallToAction author={makeFakeUser()} contributors={[makeFakeUser()]}>
-      <Button>Action</Button>
-    </ArticleCallToAction>
+    <WithLegacyTheme>
+      <ArticleCallToAction author={makeFakeUser()} contributors={[makeFakeUser()]}>
+        <Button sx={{ fontSize: 2 }}>Action</Button>
+      </ArticleCallToAction>
+    </WithLegacyTheme>
   ),
 };
 
 export const MultipleContributors: Story = {
   render: () => (
-    <ArticleCallToAction
-      author={makeFakeUser()}
-      contributors={faker.helpers.uniqueArray(makeFakeUser, 5)}
-    >
-      <Button>Action</Button>
-    </ArticleCallToAction>
+    <WithLegacyTheme>
+      <ArticleCallToAction
+        author={makeFakeUser()}
+        contributors={faker.helpers.uniqueArray(makeFakeUser, 5)}
+      >
+        <Button sx={{ fontSize: 2 }}>Action</Button>
+      </ArticleCallToAction>
+    </WithLegacyTheme>
   ),
 };

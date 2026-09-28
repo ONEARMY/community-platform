@@ -136,12 +136,11 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     const comment = commentResult.data as DBComment;
     const profile = currentUser.data[0] as DBProfile;
 
-    addSubscriptions(comment, profile, client);
+    await addSubscriptions(comment, profile, client);
 
-    new NotificationsSupabaseServiceServer(client).createNotificationsNewComment(
-      comment,
-      new URL(request.url).origin,
-    );
+    new NotificationsSupabaseServiceServer(client)
+      .createNotificationsNewComment(comment, new URL(request.url).origin)
+      .catch((error) => logger.error(error));
   }
 
   const commentDb = new DBComment({
@@ -160,18 +159,18 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   });
 }
 
-function addSubscriptions(comment: DBComment, profile: DBProfile, client: SupabaseClient) {
+async function addSubscriptions(comment: DBComment, profile: DBProfile, client: SupabaseClient) {
   const subscribersServiceServer = new SubscribersServiceServer(client);
   if (comment.source_id && !comment.parent_id) {
     // Subscribe to peer comments...
-    subscribersServiceServer.add(comment.source_type, comment.source_id, profile.id);
+    await subscribersServiceServer.add(comment.source_type, comment.source_id, profile.id);
     // ...add replies to this comment
-    subscribersServiceServer.add('comments', comment.id, profile.id);
+    await subscribersServiceServer.add('comments', comment.id, profile.id);
   }
 
   if (comment.source_id && comment.parent_id) {
     // Subscribe to the parent of this reply
-    subscribersServiceServer.add('comments', comment.parent_id, profile.id);
+    await subscribersServiceServer.add('comments', comment.parent_id, profile.id);
   }
 }
 

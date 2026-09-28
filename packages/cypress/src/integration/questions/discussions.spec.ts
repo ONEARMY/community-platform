@@ -35,7 +35,6 @@ describe('[Questions.Discussions]', () => {
     cy.contains('Start the discussion');
     cy.get('[data-cy=follow-button]').should('contain', 'Follow Comments');
     cy.addComment(newComment);
-    cy.wait(2000);
     cy.reload();
     cy.get('[data-cy=follow-button]').should('contain', 'Following Comments');
 

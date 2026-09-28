@@ -68,9 +68,7 @@ export class SupabaseTestsService {
     }
 
     console.log(`Deleting ${toDelete.length} auth users for tenant ${this.tenantId}`);
-    for (const id of toDelete) {
-      await this.adminClient.auth.admin.deleteUser(id);
-    }
+    await Promise.all(toDelete.map((id) => this.adminClient.auth.admin.deleteUser(id)));
   }
 
   async seedDatabase(data: SeedData) {
@@ -225,10 +223,10 @@ export class SupabaseTestsService {
           const { comments } = await this.seedComment(
             profiles,
             research_updates,
-            'research_update',
+            'research_updates',
           );
 
-          await this.seedReply(profiles, comments, research);
+          await this.seedReply(profiles, comments, research_updates);
         }
       }
     }
@@ -495,28 +493,24 @@ export class SupabaseTestsService {
   }
 
   async seedAccounts(profileBadges, profileTags, profileTypes, profileImages) {
-    await this.deleteAccounts();
-
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
       ...user,
       email: user['email'].replace('@', `+${this.tenantId}@`),
       password: user['password'],
     }));
 
-    const profiles: DBProfile[] = [];
-
-    for (const account of accounts) {
-      const profileType =
-        profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
-      const profile = await this.createAuthAndProfile(
-        account,
-        profileBadges[0].id,
-        [profileTags[0].id, profileTags[1].id],
-        profileType.id,
-        profileImages,
-      );
-      profiles.push(profile);
-    }
+    const profiles: DBProfile[] = await Promise.all(
+      accounts.map((account) => {
+        const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
+        return this.createAuthAndProfile(
+          account,
+          profileBadges[0].id,
+          [profileTags[0].id, profileTags[1].id],
+          profileType.id,
+          profileImages,
+        );
+      }),
+    );
 
     return { profiles };
   }

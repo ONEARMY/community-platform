@@ -1,5 +1,5 @@
 import { HeroBanner } from 'oa-components';
-import { FRIENDLY_MESSAGES } from 'oa-shared';
+import { FRIENDLY_MESSAGES, SignupSource } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
@@ -81,7 +81,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
     }
 
-    const response = await authServiceServer.createUserProfile({ user: signupResult.data.user });
+    const response = await authServiceServer.createUserProfile({
+      user: signupResult.data.user,
+      signupSource: SignupSource.SIGN_UP,
+    });
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
@@ -131,7 +134,7 @@ export default function Index() {
           const disabled = invalid || isSubmitting;
           return (
             <form method="post">
-              <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
+              <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
                 <HeroBanner type="celebration" />
                 <Card variant="outline">
                   <CardHeader>
@@ -159,7 +162,7 @@ export default function Index() {
                       </p>
                     )} */}
                   </CardHeader>
-                  <CardContent className="flex flex-col gap-4">
+                  <CardContent gap="md" className="flex flex-col">
                     {actionResponse?.error && pristine && (
                       <div
                         className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
@@ -210,7 +213,7 @@ export default function Index() {
                     </div>
                     <Field name="consent" type="checkbox" validate={required}>
                       {({ input }) => (
-                        <Label htmlFor="consent" className="items-start gap-2 font-normal">
+                        <Label htmlFor="consent" weight="normal" className="items-start">
                           <Checkbox
                             id="consent"
                             data-cy="consent"

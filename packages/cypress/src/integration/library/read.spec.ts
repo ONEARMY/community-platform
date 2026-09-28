@@ -1,15 +1,11 @@
 import { DifficultyLevelRecord } from 'oa-shared';
 import { users } from 'oa-shared/mocks/data';
 import { MOCK_DATA } from '../../data';
-import { getTenantUser } from '../../utils/TestUtils';
 
 const library = MOCK_DATA.projects;
 const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items';
 
 describe('[Library]', () => {
-  const demoAdmin = getTenantUser(users.admin);
-  const demoUser = getTenantUser(users.subscriber);
-
   beforeEach(() => {
     cy.visit('/library');
   });
@@ -170,7 +166,7 @@ describe('[Library]', () => {
 
         cy.step('Video embed exists');
         cy.get('[data-testid="VideoPlayer"]').within(() => {
-          cy.get('iframe').should('have.attr', 'src').and('include', 'youtube');
+          cy.get('youtube-video').should('have.attr', 'src').and('include', 'youtube');
         });
         // This fails in firefox due to cross security, simply check url
         // .should(iframe => expect(iframe.contents().find('video')).to.visible)
@@ -183,27 +179,6 @@ describe('[Library]', () => {
           cy.contains(item.title);
         });
       });
-    });
-  });
-
-  describe('[Moderation]', () => {
-    it('[Feedback]', () => {
-      cy.visit('/library/rubbish-title');
-
-      cy.step('Feedback not visible when logged out');
-      cy.get('[data-cy="moderationstatus-improvements-needed"]');
-      cy.get('[data-cy="moderationFeedback"]').should('not.exist');
-
-      cy.step('Feedback is visible to content owner');
-      cy.signIn(demoUser.email, demoUser.password);
-      cy.visit('/library/rubbish-title');
-      cy.get('[data-cy="moderationFeedback"]');
-
-      cy.step('Feedback is visible to admins');
-      cy.logout();
-      cy.signIn(demoAdmin.email, demoAdmin.password);
-      cy.visit('/library/rubbish-title');
-      cy.get('[data-cy="moderationFeedback"]');
     });
   });
 

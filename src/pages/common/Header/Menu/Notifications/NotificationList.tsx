@@ -42,7 +42,6 @@ export const NotificationList = (props: IProps) => {
           size="icon"
           onClick={modalDismiss}
           aria-label="Close notifications"
-          className="rounded-full hover:bg-[var(--color-primary-hover)]"
         >
           <CloseIcon />
         </Button>
@@ -93,8 +92,8 @@ export const NotificationList = (props: IProps) => {
 
       {isInitialLoad && (
         <div className="flex flex-col gap-2.5">
-          <Skeleton className="h-20 rounded-xl" />
-          <Skeleton className="h-20 rounded-xl" />
+          <Skeleton shape="rounded" className="h-20" />
+          <Skeleton shape="rounded" className="h-20" />
         </div>
       )}
 

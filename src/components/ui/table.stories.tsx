@@ -39,7 +39,7 @@ export const Default: Story = {
           <TableRow key={category.name}>
             <TableCell>{category.name}</TableCell>
             <TableCell>{category.type}</TableCell>
-            <TableCell className="text-muted-foreground">{category.description}</TableCell>
+            <TableCell variant="muted">{category.description}</TableCell>
           </TableRow>
         ))}
       </TableBody>

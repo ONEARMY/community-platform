@@ -211,11 +211,11 @@ export default function Index() {
                         />
                       </div>
 
-                      <Alert className="gap-3 border-transparent bg-[#e2edf7]">
+                      <Alert className="gap-3 border-transparent bg-[#e2edf7] text-left">
                         <AlertTitle>
                           Heads up. After this you need to fill in some information.
                         </AlertTitle>
-                        <AlertDescription className="text-foreground">
+                        <AlertDescription size="sm" className="text-foreground">
                           A <strong className="font-bold">link to your website</strong> or social
                           media and <strong className="font-bold">pictures</strong> to verify{' '}
                           {activityClause}.

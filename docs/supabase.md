@@ -10,10 +10,13 @@ To install the supabase locally, follow https://supabase.com/docs/guides/local-d
 Installing as a dev dependency doesn't always work well, so it is recommended to install for your OS.
 
 Install Docker Desktop.
+
 Make sure you have the docker app open.
 
 Run `supabase start` (Ensure you run it on the project folder root.)
+
 Run `supabase status`
+
 Create a .env.local file at the project root (same level as .env) and fill in the keys with values from the command above:
 
 ```
@@ -50,8 +53,8 @@ To finish you should fill the .env.local file with the values from the "Data API
 
 ```
 SUPABASE_API_URL=<API URL>
-SUPABASE_KEY=<anon key>
-SUPABASE_SERVICE_ROLE_KEY=<service_role key>
+SUPABASE_KEY=<Authentication Key - Publishable>
+SUPABASE_SERVICE_ROLE_KEY=<Authentication Key - Secret>
 ```
 
 ## Migrations
@@ -72,9 +75,11 @@ For each test run, a new tenant_id is generated, which has a few benefits:
   For each test file, there should be a `before` and `after` block to, respectively, seed and clean the database.
 
 Create a .env.local file at the packages/cypress folder
-SUPABASE_API_URL=your_api_key (probably http://127.0.0.1:54321)
-SUPABASE_KEY=your_key
-SUPABASE_SERVICE_ROLE_KEY=your service key
+```
+SUPABASE_API_URL=<API URL>
+SUPABASE_KEY=<Authentication Key - Publishable>
+SUPABASE_SERVICE_ROLE_KEY=<Authentication Key - Secret>
+```
 
 All done! Tests will use your local database. More info about how it works below.
 

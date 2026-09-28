@@ -12,19 +12,35 @@ import {
 import { logger } from 'src/logger';
 import { createFormData } from './formDataHelper';
 
+const PROFILE_FETCH_ATTEMPTS = 3;
+
 const get = async (): Promise<Profile | undefined> => {
-  try {
-    const url = new URL('/api/profile', window.location.origin);
+  const url = new URL('/api/profile', window.location.origin);
 
-    const response = await fetch(url);
+  for (let attempt = 1; attempt <= PROFILE_FETCH_ATTEMPTS; attempt++) {
+    try {
+      const response = await fetch(url);
 
-    if (!response.ok) {
-      return undefined;
+      if (response.ok) {
+        return (await response.json()) as Profile;
+      }
+
+      if (response.status < 500) {
+        return undefined;
+      }
+
+      if (attempt === PROFILE_FETCH_ATTEMPTS) {
+        logger.error('Failed to fetch profile', { status: response.status });
+      }
+    } catch (error) {
+      if (attempt === PROFILE_FETCH_ATTEMPTS) {
+        logger.error('Failed to fetch profile', { error });
+      }
     }
 
-    return (await response.json()) as Profile;
-  } catch (error) {
-    logger.error('Failed to fetch profile', { error });
+    if (attempt < PROFILE_FETCH_ATTEMPTS) {
+      await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+    }
   }
 };
 

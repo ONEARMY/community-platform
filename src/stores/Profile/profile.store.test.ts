@@ -76,6 +76,31 @@ describe('ProfileStore', () => {
       const result = store.upgradeBadgeForCurrentUser;
       expect(result).toBeUndefined(); // member doesn't see workspace badge
     });
+
+    it.each([
+      { isSpace: true, expectedLabel: 'Go PRO Space' },
+      { isSpace: false, expectedLabel: 'Go PRO Member' },
+    ])('returns the badge matching profile type (isSpace: $isSpace)', ({ isSpace, expectedLabel }) => {
+      const store = new ProfileStore();
+      store.profile = { type: { isSpace }, badges: [] } as any;
+      store.upgradeBadges = [
+        createMockUpgradeBadge(1, true, 'Go PRO Space'),
+        createMockUpgradeBadge(2, false, 'Go PRO Member'),
+      ];
+
+      expect(store.upgradeBadgeForCurrentUser?.actionLabel).toBe(expectedLabel);
+    });
+
+    it('returns undefined when workspace already has the space badge', () => {
+      const store = new ProfileStore();
+      store.profile = { type: { isSpace: true }, badges: [{ id: 1 }] } as any;
+      store.upgradeBadges = [
+        createMockUpgradeBadge(1, true, 'Go PRO Space'),
+        createMockUpgradeBadge(2, false, 'Go PRO Member'),
+      ];
+
+      expect(store.upgradeBadgeForCurrentUser).toBeUndefined();
+    });
   });
 
   describe('isProfileComplete', () => {

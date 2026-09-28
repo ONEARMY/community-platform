@@ -40,8 +40,8 @@ export const ImageNodeView = ({ node, updateAttributes, selected }: NodeViewProp
       />
       {/* field-sizing-content (from the base Textarea component) grows this to fit its
           wrapped content, so long captions break onto new lines exactly like the real
-          figcaption on the news page/email — the same styling (text-sm/leading-normal/
-          mt-1/text-[#6b7280]) matches renderTiptapHtml.ts and renderTiptapEmail.tsx too.
+          figcaption on the news page/email — the Textarea "caption" variant matches
+          renderTiptapHtml.ts and renderTiptapEmail.tsx too.
           The caption itself stays a single line of text (no manual paragraph breaks):
           Enter is swallowed and any pasted newlines are stripped. */}
       <Textarea
@@ -57,7 +57,8 @@ export const ImageNodeView = ({ node, updateAttributes, selected }: NodeViewProp
             e.currentTarget.blur();
           }
         }}
-        className="mt-1 min-h-0 resize-none rounded-none border-none bg-transparent p-0 text-center text-sm leading-normal text-[#6b7280] shadow-none focus-visible:border-transparent focus-visible:ring-0"
+        variant="caption"
+        className="mt-1 min-h-0 resize-none text-center"
       />
     </NodeViewWrapper>
   );

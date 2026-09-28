@@ -27,8 +27,14 @@ export interface DisplayDateProps {
   showLabel?: boolean;
   modifiedAt?: DateType | null;
   publishedAt?: DateType | null;
+  variant?: 'default' | 'muted';
   className?: string;
 }
+
+const displayDateVariants = {
+  default: '',
+  muted: 'text-xs text-muted-foreground',
+};
 
 /**
  * Relative timestamp, abbreviated below `md` so it survives narrow layouts.
@@ -40,6 +46,7 @@ export function DisplayDate({
   publishedAt,
   publishedAction = 'Published',
   showLabel = true,
+  variant = 'default',
   className,
 }: DisplayDateProps) {
   const modifiedTime = modifiedAt ? new Date(modifiedAt).getTime() : null;
@@ -65,7 +72,7 @@ export function DisplayDate({
       data-slot="display-date"
       dateTime={primaryDate.toISOString()}
       title={wasEdited ? `${primaryFormatted} (edited ${modifiedFormatted})` : primaryFormatted}
-      className={cn(className)}
+      className={cn(displayDateVariants[variant], className)}
     >
       <span className="md:hidden">
         {label}

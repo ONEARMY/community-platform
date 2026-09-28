@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "profile_type" bigint,
     "donations_enabled" boolean DEFAULT false NOT NULL,
     "moderation" "text",
-    "moderation_feedback" "text"
+    "moderation_feedback" "text",
+    "signup_source" "text" DEFAULT 'sign_up'::"text" NOT NULL
 );
 
 ALTER TABLE ONLY "public"."profiles"

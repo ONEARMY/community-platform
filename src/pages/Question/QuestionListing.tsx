@@ -1,9 +1,10 @@
-import { Loader, Pagination } from 'oa-components';
+import { Pagination } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import { Card, Flex, Heading } from 'theme-ui';
+import { Spinner } from '@/components/ui/spinner';
 import useDrafts from '../common/Drafts/useDraftsSupabase';
 import { ITEMS_PER_PAGE } from './constants';
 import { listing } from './labels';
@@ -124,7 +125,7 @@ export const QuestionListing = () => {
         </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Spinner />}
     </Flex>
   );
 };

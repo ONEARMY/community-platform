@@ -1,3 +1,4 @@
+import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -38,16 +39,28 @@ function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
   );
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
+const tableRowVariants = cva(
+  'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
+  {
+    variants: {
+      variant: {
+        default: '',
+        muted: 'bg-muted text-muted-foreground',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  },
+);
+
+function TableRow({
+  className,
+  variant = 'default',
+  ...props
+}: React.ComponentProps<'tr'> & VariantProps<typeof tableRowVariants>) {
   return (
-    <tr
-      data-slot="table-row"
-      className={cn(
-        'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
-        className,
-      )}
-      {...props}
-    />
+    <tr data-slot="table-row" className={cn(tableRowVariants({ variant, className }))} {...props} />
   );
 }
 
@@ -64,11 +77,34 @@ function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
   );
 }
 
-function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
+const tableCellVariants = cva('p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0', {
+  variants: {
+    variant: {
+      default: '',
+      muted: 'text-muted-foreground',
+      strong: 'font-medium',
+    },
+    truncate: {
+      true: 'truncate',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    truncate: false,
+  },
+});
+
+function TableCell({
+  className,
+  variant = 'default',
+  truncate = false,
+  ...props
+}: React.ComponentProps<'td'> & VariantProps<typeof tableCellVariants>) {
   return (
     <td
       data-slot="table-cell"
-      className={cn('p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0', className)}
+      className={cn(tableCellVariants({ variant, truncate, className }))}
       {...props}
     />
   );
@@ -84,4 +120,15 @@ function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) 
   );
 }
 
-export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+  tableCellVariants,
+  tableRowVariants,
+};

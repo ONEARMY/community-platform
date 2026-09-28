@@ -154,15 +154,16 @@ export class NotificationsSupabaseServiceServer {
     contentType: SubscribableContentTypes,
   ): Promise<SubscribedUser[]> {
     try {
-      let data;
-
       const response = await this.client.rpc('get_subscribed_users_emails_to_notify', {
         p_content_id: contentId,
         p_content_type: contentType,
       });
-      data = response.data;
 
-      return data as SubscribedUser[];
+      if (response.error) {
+        throw response.error;
+      }
+
+      return (response.data || []) as SubscribedUser[];
     } catch (error) {
       logger.error(error);
       throw new Error(error);

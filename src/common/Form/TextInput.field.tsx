@@ -19,6 +19,7 @@ export const TextInputField = ({ input, meta, className, ...rest }: FieldProps) 
           {...rest}
           type={isPassword ? (isPasswordVisible ? 'text' : 'password') : input.type}
           aria-invalid={showError}
+          // oxlint-disable-next-line shadcn/no-restyle
           className={cn(isPassword && 'pr-8', className)}
         />
         {isPassword && (

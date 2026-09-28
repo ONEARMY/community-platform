@@ -121,8 +121,13 @@ export class ResearchItem implements IContentDoc {
 
     const processedUpdates =
       filteredUpdates
-        ?.map((update) => ResearchUpdate.fromDB(update, images))
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) || [];
+        ?.slice()
+        .sort(
+          (a, b) =>
+            (a.order ?? Infinity) - (b.order ?? Infinity) ||
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+        )
+        .map((update) => ResearchUpdate.fromDB(update, images)) || [];
 
     return new ResearchItem({
       id: obj.id,
@@ -165,6 +170,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly comment_count?: number;
   readonly file_download_count?: number;
   readonly update_author?: DBAuthor;
+  readonly order?: number | null;
   created_by: number | null;
   modified_at: Date | null;
   title: string;

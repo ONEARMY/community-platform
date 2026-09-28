@@ -24,6 +24,20 @@ Add new components the normal way:
 bunx shadcn@latest add <component>
 ```
 
+## Design-system lint
+
+`bun run lint:design` runs [@shadcn/lint](https://github.com/shadcn-ui/lint) via oxlint (config: `.oxlintrc.json`), enforcing Tailwind rules — no raw palette colors, no arbitrary values, no restyling a component from its call site. Biome still handles everything else.
+
+Follow the rules. Prefer a theme token, a component variant, or an `@utility` in `src/styles/ui-globals.css` over an arbitrary value.
+
+The one exception is code vendored from shadcn: where a violation can't be fixed trivially (e.g. `transition-[width]`, which has no token form), disable the rule for that file rather than rewriting upstream code:
+
+```js
+// oxlint-disable shadcn/no-restyle shadcn/no-arbitrary-values
+```
+
+Code we write gets no exception.
+
 ## Theming: tenant colors via CSS variables
 
 Tenant brand colors (`primary`, `accent`, each with a `-hover` variant) come from the `tenant_settings` table in Supabase, and are already wired up independently of this library:

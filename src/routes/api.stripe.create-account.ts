@@ -1,4 +1,4 @@
-import { FRIENDLY_MESSAGES } from 'oa-shared';
+import { FRIENDLY_MESSAGES, SignupSource } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -56,7 +56,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const { client } = createSupabaseServerClient(request);
     const authService = new AuthServiceServer(client);
-    await authService.createUserProfile({ user: newUser.user, displayName: name });
+    await authService.createUserProfile({
+      user: newUser.user,
+      displayName: name,
+      signupSource: SignupSource.MEMBERSHIP,
+    });
 
     await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, newUser.user.id, tenantId);
 

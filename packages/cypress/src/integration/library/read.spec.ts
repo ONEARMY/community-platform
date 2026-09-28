@@ -170,7 +170,7 @@ describe('[Library]', () => {
 
         cy.step('Video embed exists');
         cy.get('[data-testid="VideoPlayer"]').within(() => {
-          cy.get('iframe').should('have.attr', 'src').and('include', 'youtube');
+          cy.get('youtube-video').should('have.attr', 'src').and('include', 'youtube');
         });
         // This fails in firefox due to cross security, simply check url
         // .should(iframe => expect(iframe.contents().find('video')).to.visible)

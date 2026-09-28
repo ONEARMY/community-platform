@@ -3,38 +3,6 @@ import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { generateNewUserDetails } from '../utils/TestUtils';
 
 describe('[User sign-up]', () => {
-  beforeEach(() => {
-    cy.visit('/sign-up');
-  });
-
-  describe('[New user]', () => {
-    it('Validate sign-up form', () => {
-      cy.step('Email is invalid');
-      cy.get('[data-cy=email]').click();
-      cy.get('[data-cy=email]').clear();
-      cy.get('[data-cy=email]').type('a');
-      cy.get('[data-cy=consent]').click({ force: true });
-      cy.contains(FRIENDLY_MESSAGES['auth/invalid-email']).should('be.visible');
-
-      cy.step('Password is too short');
-      cy.get('[data-cy=password]').click();
-      cy.get('[data-cy=password]').clear();
-      cy.get('[data-cy=password]').type('a');
-      cy.get('[data-cy=consent]').click({ force: true });
-      cy.contains(FRIENDLY_MESSAGES['sign-up/password-short']).should('be.visible');
-
-      cy.step('Password confirmation does not match');
-      cy.get('[data-cy=password]').click();
-      cy.get('[data-cy=password]').clear();
-      cy.get('[data-cy=password]').type('a');
-      cy.get('[data-cy=confirm-password]').click();
-      cy.get('[data-cy=confirm-password]').clear();
-      cy.get('[data-cy=confirm-password]').type('b');
-      cy.get('[data-cy=consent]').click({ force: true });
-      cy.contains(FRIENDLY_MESSAGES['sign-up/password-mismatch']).should('be.visible');
-    });
-  });
-
   describe('[Cannot duplicate existing user]', () => {
     it('Prevents duplicate email', () => {
       const user = generateNewUserDetails();

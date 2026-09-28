@@ -35,4 +35,3 @@ export * from './user';
 export * from './userCreatedDocs';
 export * from './userEmailData';
 export * from './voteUseful';
-export * from './webmanifest';

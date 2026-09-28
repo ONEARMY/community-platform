@@ -201,9 +201,9 @@ export class SupabaseTestsService {
 
         // Only seed comments for first research
         if (i === 0) {
-          const { comments } = await this.seedComment(profiles, research_updates, 'research_update');
+          const { comments } = await this.seedComment(profiles, research_updates, 'research_updates');
 
-          await this.seedReply(profiles, comments, research);
+          await this.seedReply(profiles, comments, research_updates);
         }
       }
     }

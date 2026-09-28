@@ -78,6 +78,7 @@ describe('BanUserButton', () => {
     { role: UserRole.ADMIN, roleName: 'ADMIN' },
     { role: UserRole.MODERATOR, roleName: 'MODERATOR' },
     { role: UserRole.EDITOR, roleName: 'EDITOR' },
+    { role: UserRole.RESEARCH_CREATOR, roleName: 'RESEARCH_CREATOR' },
   ])('should show disabled button with tooltip when target has $roleName role', ({ role }) => {
     const currentUser = FactoryUser({
       username: 'admin',

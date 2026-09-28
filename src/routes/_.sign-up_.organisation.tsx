@@ -142,9 +142,9 @@ export default function Index() {
           const disabled = invalid || submitting;
           return (
             <form method="post">
-              <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
-                <div className="mx-auto flex w-full max-w-[548px] flex-col gap-6">
-                  <div className="flex max-w-[508px] flex-col items-center gap-2 self-center text-center">
+              <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
+                <div className="mx-auto flex w-full max-w-110 flex-col gap-6">
+                  <div className="flex max-w-102 flex-col items-center gap-2 self-center text-center">
                     <div data-cy="organisation-signup-badges" className="flex justify-center">
                       {spaceProfileTypes.map((profileType, index) => (
                         <MemberBadge
@@ -166,11 +166,13 @@ export default function Index() {
                   </div>
 
                   <Card variant="outline">
-                    <CardHeader className="gap-4">
-                      <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={0} />
-                      <h2 className="text-2xl font-semibold">Create an account</h2>
+                    <CardHeader>
+                      <div className="flex flex-col gap-4">
+                        <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={0} />
+                        <h2 className="text-2xl font-semibold">Create an account</h2>
+                      </div>
                     </CardHeader>
-                    <CardContent className="flex flex-col gap-4">
+                    <CardContent gap="md" className="flex flex-col">
                       {actionResponse?.error && pristine && (
                         <div
                           className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
@@ -211,35 +213,37 @@ export default function Index() {
                         />
                       </div>
 
-                      <Alert className="gap-3 border-transparent bg-[#e2edf7] text-left">
-                        <AlertTitle>
-                          Heads up. After this you need to fill in some information.
-                        </AlertTitle>
-                        <AlertDescription size="sm" className="text-foreground">
-                          A <strong className="font-bold">link to your website</strong> or social
-                          media and <strong className="font-bold">pictures</strong> to verify{' '}
-                          {activityClause}.
-                        </AlertDescription>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-fit border-[#1b1b1b]"
-                          render={
-                            <Link
-                              to="/academy"
-                              data-cy="organisation-signup-learn-more"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            />
-                          }
-                        >
-                          Learn more
-                        </Button>
+                      <Alert variant="info" className="text-left">
+                        <div className="flex flex-col gap-3">
+                          <AlertTitle>
+                            Heads up. After this you need to fill in some information.
+                          </AlertTitle>
+                          <AlertDescription size="sm">
+                            A <strong className="font-bold">link to your website</strong> or social
+                            media and <strong className="font-bold">pictures</strong> to verify{' '}
+                            {activityClause}.
+                          </AlertDescription>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-fit border-outline"
+                            render={
+                              <Link
+                                to="/academy"
+                                data-cy="organisation-signup-learn-more"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              />
+                            }
+                          >
+                            Learn more
+                          </Button>
+                        </div>
                       </Alert>
 
                       <Field name="consent" type="checkbox" validate={required}>
                         {({ input }) => (
-                          <Label htmlFor="consent" className="items-start gap-2 font-normal">
+                          <Label htmlFor="consent" weight="normal" className="items-start">
                             <Checkbox
                               id="consent"
                               data-cy="consent"

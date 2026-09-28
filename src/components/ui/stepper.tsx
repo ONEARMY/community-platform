@@ -25,9 +25,7 @@ function Stepper({
             data-active={isActive || undefined}
             className="flex flex-1 flex-col items-center gap-2.5"
           >
-            <div
-              className={cn('h-[5px] w-full rounded-full', isReached ? 'bg-[#00c3a9]' : 'bg-muted')}
-            />
+            <div className={cn('h-1 w-full rounded-full', isReached ? 'bg-green' : 'bg-muted')} />
             <span
               className={cn(
                 'text-base leading-none',

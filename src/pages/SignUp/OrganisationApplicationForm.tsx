@@ -100,8 +100,8 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
 
         return (
           <form data-cy="organisation-application-form" onSubmit={handleSubmit}>
-            <div className="mx-auto mt-10 mb-4 w-full max-w-[620px] px-2 md:mt-20">
-              <div className="mx-auto flex w-full max-w-[548px] flex-col gap-4">
+            <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
+              <div className="mx-auto flex w-full max-w-110 flex-col gap-4">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <div data-cy="organisation-application-badges" className="flex justify-center">
                     {profileTypes.map((profileType, index) => (
@@ -125,16 +125,18 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                 </div>
 
                 <Card variant="outline">
-                  <CardHeader className="gap-4">
-                    <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={2} />
-                    <div className="flex flex-col gap-1">
-                      <h2 className="text-2xl font-semibold">Application form</h2>
-                      <p className="text-sm text-muted-foreground">
-                        This info will be then shown in your public profile.
-                      </p>
+                  <CardHeader>
+                    <div className="flex flex-col gap-4">
+                      <Stepper steps={ORGANISATION_SIGNUP_STEPS} activeStep={2} />
+                      <div className="flex flex-col gap-1">
+                        <h2 className="text-2xl font-semibold">Application form</h2>
+                        <p className="text-sm text-muted-foreground">
+                          This info will be then shown in your public profile.
+                        </p>
+                      </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="flex flex-col gap-6">
+                  <CardContent gap="lg" className="flex flex-col">
                     {submitError && (
                       <div
                         className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive"
@@ -145,7 +147,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     )}
 
                     <div data-cy="FocusSection" className="flex flex-col gap-2">
-                      <Label className="text-base">
+                      <Label size="base">
                         Your focus <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -176,7 +178,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                       {selectedType?.description && (
                         <div
                           data-cy="type-description"
-                          className="rounded-[5px] bg-[#e2edf7] p-[15px] text-sm"
+                          className="rounded-s bg-softblue p-3 text-sm"
                         >
                           <span className="block font-bold">Definition:</span>
                           <span>{selectedType.description}</span>
@@ -185,7 +187,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="username" className="text-base">
+                      <Label htmlFor="username" size="base">
                         Username <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -203,7 +205,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="displayName" className="text-base">
+                      <Label htmlFor="displayName" size="base">
                         Display Name <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -221,7 +223,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="about" className="text-base">
+                      <Label htmlFor="about" size="base">
                         Tell us a bit about your organisation{' '}
                         <span className="text-destructive">*</span>
                       </Label>
@@ -242,7 +244,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="website" className="text-base">
+                      <Label htmlFor="website" size="base">
                         Website or social media
                       </Label>
                       <p className="text-sm text-muted-foreground">
@@ -260,7 +262,7 @@ export const OrganisationApplicationForm = ({ profileTypes }: IProps) => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <Label className="text-base">
+                      <Label size="base">
                         Upload pictures of your workspace{' '}
                         <span className="text-destructive">*</span>
                       </Label>

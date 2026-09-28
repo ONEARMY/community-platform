@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react-vite';
 import { useEffect } from 'react';
+import { createRoutesStub } from 'react-router';
 import '../src/styles/ui-globals.css';
 
 // Mirrors packages/components/.storybook/preview.tsx's tenant switcher so both
@@ -90,12 +91,19 @@ const preview: Preview = {
     (Story, context) => {
       const themeName = themeMap[context.globals.theme] || 'precious-plastic';
 
-      return (
-        <>
-          <ThemeVariables themeName={themeName} />
-          <Story />
-        </>
-      );
+      const RouterStub = createRoutesStub([
+        {
+          path: '/',
+          Component: () => (
+            <>
+              <ThemeVariables themeName={themeName} />
+              <Story />
+            </>
+          ),
+        },
+      ]);
+
+      return <RouterStub />;
     },
   ],
 };

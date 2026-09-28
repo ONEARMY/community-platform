@@ -45,6 +45,7 @@ export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithToolti
 export { ImageGallery } from './ImageGallery/ImageGallery';
 export { ImageInputDeleteOverlay } from './ImageInput/ImageInputDeleteOverlay';
 export { ImageInputV2 } from './ImageInput/ImageInputV2';
+export { MultipleImageInput } from './ImageInput/MultipleImageInput';
 export { InformationTooltip } from './InformationTooltip/InformationTooltip';
 export { InternalLink } from './InternalLink/InternalLink';
 export { type IProps as MapProps, Map } from './Map/Map.client';

@@ -3,7 +3,15 @@ import { createClient } from '@supabase/supabase-js';
 import { MOCK_DATA } from '../data';
 
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBProfile, DBProfileBadge, DBProfileTag, DBProfileType, DBResearchItem, Profile, TenantSettings } from 'oa-shared';
+import type {
+  DBProfile,
+  DBProfileBadge,
+  DBProfileTag,
+  DBProfileType,
+  DBResearchItem,
+  Profile,
+  TenantSettings,
+} from 'oa-shared';
 
 type SeedData = {
   [tableName: string]: Array<Record<string, any>>;
@@ -42,7 +50,10 @@ export class SupabaseTestsService {
     const toDelete: string[] = [];
 
     while (true) {
-      const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
+      const { data, error } = await this.adminClient.auth.admin.listUsers({
+        perPage: 1000,
+        page,
+      });
       if (error) throw new Error(`listUsers failed: ${error.message}`);
       if (!data.users.length) break;
 
@@ -78,7 +89,7 @@ export class SupabaseTestsService {
         code: result.error?.code,
         details: result.error?.details,
         hint: result.error?.hint,
-        rowCount: rows.length
+        rowCount: rows.length,
       });
 
       results[table] = result;
@@ -110,7 +121,7 @@ export class SupabaseTestsService {
     await this.adminClient.storage.deleteBucket(tenantId + '-documents');
   }
 
-  async manuallyEmptyBucket (bucketName: string, path = '') {
+  async manuallyEmptyBucket(bucketName: string, path = '') {
     const limit = 100;
     let offset = 0;
 
@@ -137,10 +148,14 @@ export class SupabaseTestsService {
       if (data.length < limit) break; // last page
       offset += limit;
     }
-  };
+  }
 
   async getUserProfileByUsername(username: string) {
-    const { data, error } = await this.client.from('profiles').select().eq('username', username).maybeSingle();
+    const { data, error } = await this.client
+      .from('profiles')
+      .select()
+      .eq('username', username)
+      .maybeSingle();
 
     if (error || !data) {
       return error;
@@ -156,7 +171,9 @@ export class SupabaseTestsService {
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
       const item = MOCK_DATA.research[i];
-      const createdBy: number = profiles.find((profile) => profile.username === item.created_by_username)?.id || profiles[0].id;
+      const createdBy: number =
+        profiles.find((profile) => profile.username === item.created_by_username)?.id ||
+        profiles[0].id;
 
       researchData.push({
         created_at: item.created_at,
@@ -182,7 +199,9 @@ export class SupabaseTestsService {
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
       const researchItem = MOCK_DATA.research[i];
-      const createdBy = profiles.find((profile) => profile.username === researchItem.created_by_username)?.id || profiles[0].id;
+      const createdBy =
+        profiles.find((profile) => profile.username === researchItem.created_by_username)?.id ||
+        profiles[0].id;
 
       if (researchItem.updates) {
         const { research_updates } = await this.seedDatabase({
@@ -201,7 +220,11 @@ export class SupabaseTestsService {
 
         // Only seed comments for first research
         if (i === 0) {
-          const { comments } = await this.seedComment(profiles, research_updates, 'research_updates');
+          const { comments } = await this.seedComment(
+            profiles,
+            research_updates,
+            'research_updates',
+          );
 
           await this.seedReply(profiles, comments, research_updates);
         }
@@ -266,6 +289,9 @@ export class SupabaseTestsService {
           show_impact: true,
           create_research_roles: undefined,
           ga_tracking_id: 'G-TEST123456',
+          organisation_signup_description:
+            'Are you working with small-scale plastic recycling? Do you wish to become part of <a href="/academy">our universe</a>? Then apply as an organisation here. It usually takes a day or two to get approved.',
+          organisation_activity: 'small-scale recycling',
           tenant_id: this.tenantId,
         },
       ],
@@ -455,9 +481,13 @@ export class SupabaseTestsService {
   }
 
   async seedProfileImages(): Promise<{ id: string; path: string; fullPath: string }[]> {
-    const { data: image1Data } = await this.client.storage.from(this.tenantId).upload('profiles/image1.png', new Blob());
+    const { data: image1Data } = await this.client.storage
+      .from(this.tenantId)
+      .upload('profiles/image1.png', new Blob());
 
-    const { data: image2Data } = await this.client.storage.from(this.tenantId).upload('profiles/image2.png', new Blob());
+    const { data: image2Data } = await this.client.storage
+      .from(this.tenantId)
+      .upload('profiles/image2.png', new Blob());
 
     return [image1Data, image2Data];
   }
@@ -503,24 +533,33 @@ export class SupabaseTestsService {
       let page = 1;
 
       while (!found) {
-        const { data, error } = await this.adminClient.auth.admin.listUsers({ perPage: 1000, page });
+        const { data, error } = await this.adminClient.auth.admin.listUsers({
+          perPage: 1000,
+          page,
+        });
         if (error) throw new Error(`listUsers failed: ${error.message}`);
         if (!data.users.length) break;
-        found = data.users.find(u => u.email?.toLowerCase() === user.email.toLowerCase());
+        found = data.users.find((u) => u.email?.toLowerCase() === user.email.toLowerCase());
         if (data.users.length < 1000) break;
         page++;
       }
 
       if (!found) throw new Error(`User ${user.email} not found after email_exists error`);
       authId = found.id;
-
     } else if (authUser.error) {
       throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
     } else {
       authId = authUser.data.user.id;
     }
 
-    return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
+    return await this.createProfile(
+      user,
+      authId,
+      profileBadgeId,
+      profilTagIds,
+      profileTypeId,
+      profileImages,
+    );
   }
 
   async createProfile(
@@ -531,14 +570,22 @@ export class SupabaseTestsService {
     profileTypeId: number,
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
-    const { data } = await this.adminClient.from('profiles').select('*').eq('auth_id', authId).eq('tenant_id', this.tenantId).maybeSingle();
+    const { data } = await this.adminClient
+      .from('profiles')
+      .select('*')
+      .eq('auth_id', authId)
+      .eq('tenant_id', this.tenantId)
+      .maybeSingle();
 
     if (data) {
       console.log(`Profile already exists for ${user.username}, reusing...`);
       return data;
     }
 
-    console.log(`Creating profile for ${user.username} with auth_id ${authId} and roles:`, user.roles);
+    console.log(
+      `Creating profile for ${user.username} with auth_id ${authId} and roles:`,
+      user.roles,
+    );
 
     const profileDB: Partial<DBProfile> & { tenant_id: string } = {
       created_at: user.createdAt,
@@ -562,7 +609,9 @@ export class SupabaseTestsService {
     const profileResult = await this.adminClient.from('profiles').insert(profileDB).select('*');
 
     if (profileResult.error) {
-      throw new Error(`Failed to create profile for ${user.username}: ${profileResult.error.message}`);
+      throw new Error(
+        `Failed to create profile for ${user.username}: ${profileResult.error.message}`,
+      );
     }
 
     if (!profileResult.data || profileResult.data.length === 0) {

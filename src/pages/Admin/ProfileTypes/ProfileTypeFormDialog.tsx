@@ -132,7 +132,7 @@ export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProp
               <Label htmlFor="profile-type-name">Order</Label>
               <Input
                 type="number"
-                id="profile-type-name"
+                id="profile-type-order"
                 value={form.order}
                 onChange={(event) =>
                   setForm((f) => ({ ...f, order: parseInt(event.target.value) }))

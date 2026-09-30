@@ -1,4 +1,5 @@
-import { Button, ProfileTagsList, UserStatistics, VisitorModal } from 'oa-components';
+import { Button, ProfileTagsList, VisitorModal } from 'oa-components';
+import { UserStatistics } from '@/components/ui/user-statistics';
 import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';

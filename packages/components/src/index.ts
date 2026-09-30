@@ -78,6 +78,5 @@ export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWra
 export { DisplayName } from './Username/DisplayName';
 export { UserBadge } from './Username/UserBadge';
 export { Username } from './Username/Username';
-export { UserStatistics } from './UserStatistics/UserStatistics';
 export { VerticalList } from './VerticalList/VerticalList.client';
 export { VisitorModal, visitorDisplayData } from './VisitorModal/VisitorModal';

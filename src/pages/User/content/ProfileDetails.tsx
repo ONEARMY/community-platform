@@ -1,4 +1,4 @@
-import { Button, ProfileTagsList, UserStatistics, VisitorModal } from 'oa-components';
+import { Button, ProfileTagsList, VisitorModal } from 'oa-components';
 import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
@@ -8,6 +8,7 @@ import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { logger } from 'src/logger';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { Box, Divider, Flex, Paragraph } from 'theme-ui';
+import { UserStatistics } from '@/components/ui/user-statistics';
 
 interface IProps {
   docs: UserCreatedDocs;

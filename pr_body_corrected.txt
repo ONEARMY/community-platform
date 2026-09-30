@@ -1,0 +1,14 @@
+Resolves #4940 
+
+## Context
+Migrated the `UserStatistics` component from `oa-components` (theme-ui) into `src/components/ui/` (Tailwind CSS v4) following the strangler-fig approach.
+
+## Changes
+* Created new `src/components/ui/user-statistics.tsx` mirroring the legacy layout structure.
+* Swapped `Card` and `CardContent` wrappers for plain `div` tags to replicate the legacy `border: 0`, transparent background layout while satisfying `@shadcn/lint` rules.
+* Ported the required SVGs directly to `src/components/ui/icons/` and imported them using `vite-plugin-svgr` (`?react`) as per the UI README conventions.
+* Created a new Storybook story in `src/components/ui/user-statistics.stories.tsx`.
+* Replaced the call sites in `ProfileDetails.tsx`.
+* Deleted the legacy component from `packages/components/src/UserStatistics/`.
+
+All `bun run lint:design` and `bunx tsc` checks pass locally!

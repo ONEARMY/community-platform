@@ -119,12 +119,6 @@ describe('[Admin - Profile Type Page', () => {
     cy.get('body').should('not.contain', 'Testy McTestFace')
   })
 
-  // Test for adding a profile type
-  // /it('[Admin can add a new profile type]', () => {
-    // /cy.url().should('include', '/admin/profile-types')
-    // /cy.get('button').contains('New Profile Type').click()
-  // /})
-
   it('[Admin can edit profile type]', () => {
     cy.visit('/admin')
     cy.get('a[href*="/admin/profile-types"]').click()
@@ -136,7 +130,11 @@ describe('[Admin - Profile Type Page', () => {
     cy.get('body').should('contain', 'Testy McTestFace')
   })
 
-  // test for deleting unused profile type
-  // test for not being able to delete used profile type
+  it('Admin cannot delete a profile type that is in use', () => {
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/profile-types"]').click()
+    cy.url().should('include', '/admin/profile-types')
+    cy.get('button[aria-label="Can\'t delete member"]').should('have.class', "disabled:pointer-events-none")
+  })
 
 })

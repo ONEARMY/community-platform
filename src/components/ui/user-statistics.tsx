@@ -1,13 +1,11 @@
-import { Link } from 'react-router';
 import type { MapPin, Profile } from 'oa-shared';
-import { Card, CardContent } from './card';
-
+import { Link } from 'react-router';
+import EyeIcon from './icons/eye.svg?react';
 import ForumIcon from './icons/icon-forum.svg?react';
 import HowToCountIcon from './icons/icon-library.svg?react';
 import ResearchIcon from './icons/icon-research.svg?react';
 import StarActiveIcon from './icons/icon-star-active.svg?react';
 import MapIcon from './icons/map.svg?react';
-import EyeIcon from './icons/eye.svg?react';
 
 export interface UserStatisticsProps {
   profile: Pick<Profile, 'id' | 'username' | 'badges' | 'totalViews' | 'country'>;
@@ -36,8 +34,8 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   }
 
   return (
-    <Card className={`border-0 bg-background p-1 ${props.className || ''}`}>
-      <CardContent className="flex flex-row sm:flex-col items-center sm:items-start justify-center sm:justify-start gap-4 p-0">
+    <div className={`p-1 ${props.className || ''}`}>
+      <div className="flex flex-row sm:flex-col items-center sm:items-start justify-center sm:justify-start gap-4">
         <div className="flex flex-col gap-4">
           {props.pin && props.profile.username && (
             <Link
@@ -46,7 +44,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               data-testid="location-link"
             >
               <div className="flex items-center gap-2">
-                <MapIcon className="size-[22px]" />
+                <MapIcon className="size-5" />
                 <span>Location: {props.pin.country || 'View on Map'}</span>
               </div>
             </Link>
@@ -78,7 +76,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.usefulCount > 0 && (
             <div className="flex items-center gap-2" data-testid="useful-stat">
-              <StarActiveIcon className="size-[22px] shrink-0" />
+              <StarActiveIcon className="size-5 shrink-0" />
               Useful: {props.usefulCount}
             </div>
           )}
@@ -90,7 +88,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               data-testid="library-link"
             >
               <div className="flex items-center gap-2" data-testid="library-stat">
-                <HowToCountIcon className="size-[22px] shrink-0" />
+                <HowToCountIcon className="size-5 shrink-0" />
                 Library: {props.libraryCount}
               </div>
             </Link>
@@ -103,7 +101,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               data-testid="research-link"
             >
               <div className="flex items-center gap-2" data-testid="research-stat">
-                <ResearchIcon className="size-[22px] shrink-0" />
+                <ResearchIcon className="size-5 shrink-0" />
                 Research: {props.researchCount}
               </div>
             </Link>
@@ -116,7 +114,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               data-testid="questions-link"
             >
               <div className="flex items-center gap-2" data-testid="questions-stat">
-                <ForumIcon className="size-[22px] shrink-0" />
+                <ForumIcon className="size-5 shrink-0" />
                 Questions: {props.questionCount}
               </div>
             </Link>
@@ -124,12 +122,12 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.showViews && props.profile.totalViews > 0 && (
             <div className="flex items-center gap-2" data-testid="profile-views-stat">
-              <EyeIcon className="size-[22px] shrink-0" />
+              <EyeIcon className="size-5 shrink-0" />
               <span>Views: {props.profile.totalViews}</span>
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

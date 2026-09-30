@@ -72,9 +72,7 @@ export function ProfileTypesPage({ profileTypes, profiles }: IProps) {
                 <ProfileTypeImage imageUrl={profileType.smallImageUrl} name={profileType.name} />
               </TableCell>
               <TableCell>{profileType.displayName}</TableCell>
-              <TableCell className="max-w-xs truncate text-muted-foreground">
-                {profileType.description}
-              </TableCell>
+              <TableCell className="max-w-xs">{profileType.description}</TableCell>
               <TableCell>{profileType.isSpace ? 'Yes' : 'No'}</TableCell>
               <TableCell>{profileType.mapPinName}</TableCell>
               <TableCell>

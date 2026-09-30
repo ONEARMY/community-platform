@@ -1,5 +1,5 @@
 import arrayMutators from 'final-form-arrays';
-import { Button, ConfirmModal } from 'oa-components';
+import { Button } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
@@ -22,6 +22,7 @@ import { storageService } from 'src/services/storageService';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { NEWS_MIN_TITLE_LENGTH } from './constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';

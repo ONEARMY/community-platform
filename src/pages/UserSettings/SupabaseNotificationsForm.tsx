@@ -1,8 +1,9 @@
-import { ConfirmModal, FieldSwitch, InformationTooltip, InternalLink } from 'oa-components';
+import { FieldSwitch, InformationTooltip, InternalLink } from 'oa-components';
 import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Button, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { Spinner } from '@/components/ui/spinner';
 import { TenantContext } from '../common/TenantContext';
 import { ContentReachRadioOptions } from './content/fields/ContentReachPreferenceField';

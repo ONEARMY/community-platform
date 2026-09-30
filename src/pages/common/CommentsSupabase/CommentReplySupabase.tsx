@@ -3,7 +3,6 @@ import {
   ActionSet,
   Button,
   CommentDisplay,
-  ConfirmModal,
   EditComment,
   Icon,
   Modal,
@@ -15,6 +14,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex, Text } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
 const DELETED_COMMENT = 'The original comment got deleted';

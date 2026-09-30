@@ -1,5 +1,5 @@
 import { FormApi } from 'node_modules/final-form/dist';
-import { Button, ConfirmModal } from 'oa-components';
+import { Button } from 'oa-components';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
@@ -17,6 +17,7 @@ import {
 import * as LABELS from 'src/pages/Question/labels';
 import { questionService } from 'src/services/questionService';
 import { composeValidators, endsWithQuestionMark, minValue, required } from 'src/utils/validators';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants';
 
 interface IProps {

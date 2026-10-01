@@ -1,4 +1,3 @@
-import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Guidelines } from './Guidelines';
 
 import type { Meta, StoryFn } from '@storybook/react-vite';
@@ -20,12 +19,16 @@ export const DefaultComponent = () => (
       </>,
       <>
         Read{' '}
-        <ExternalLink sx={{ color: 'blue' }} href="/academy/guides/research">
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+          style={{ color: 'blue' }}
+          href="/academy/guides/research">
           our guidelines{' '}
           <span role="img" aria-label="nerd-face">
             🤓
           </span>
-        </ExternalLink>
+        </a>
       </>,
       <>
         Write your introduction{' '}

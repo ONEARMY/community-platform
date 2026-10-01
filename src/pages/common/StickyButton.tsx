@@ -1,4 +1,4 @@
-import { Button, ExternalLink } from 'oa-components';
+import { Button } from 'oa-components';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { MOBILE_NAV_HEIGHT } from 'src/pages/common/Header/navLayout';
@@ -28,7 +28,7 @@ export const StickyButton = () => {
         zIndex: 3000,
       }}
     >
-      <ExternalLink href={href} data-cy="feedback">
+      <a target="_blank" rel="noopener noreferrer" href={href} data-cy="feedback">
         <Button type="button" sx={{ display: ['none', 'inherit'] }} variant="primary" icon="update">
           <Text>Report a Problem</Text>
         </Button>
@@ -42,7 +42,7 @@ export const StickyButton = () => {
         >
           <Text>Problem?</Text>
         </Button>
-      </ExternalLink>
+      </a>
     </Box>
   );
 };

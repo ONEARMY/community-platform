@@ -5,7 +5,6 @@ import ForumIcon from '../../assets/icons/icon-forum.svg';
 import HowToCountIcon from '../../assets/icons/icon-library.svg';
 import ResearchIcon from '../../assets/icons/icon-research.svg';
 import starActiveSVG from '../../assets/icons/icon-star-active.svg';
-import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
 import { InternalLink } from '../InternalLink/InternalLink';
 
@@ -64,9 +63,9 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               <Image width={20} height={20} src={badge.imageUrl} />
               <Box>
                 {badge.actionUrl ? (
-                  <ExternalLink href={badge.actionUrl} target="_blank">
+                  <a target="_blank" rel="noopener noreferrer" href={badge.actionUrl}>
                     <Text sx={{ color: 'black' }}>{badge.displayName}</Text>
-                  </ExternalLink>
+                  </a>
                 ) : (
                   <Text sx={{ color: 'black' }}>{badge.displayName}</Text>
                 )}

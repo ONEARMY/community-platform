@@ -1,4 +1,4 @@
-import { ExternalLink, Guidelines } from 'oa-components';
+import { Guidelines } from 'oa-components';
 
 export const LibraryPostingGuidelines = () => (
   <Guidelines
@@ -12,12 +12,17 @@ export const LibraryPostingGuidelines = () => (
       </>,
       <>
         Read{' '}
-        <ExternalLink sx={{ color: 'blue' }} href="/academy/create/library">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'blue' }}
+          href="/academy/create/library"
+        >
           our guidelines{' '}
           <span role="img" aria-label="nerd-face">
             🤓
           </span>
-        </ExternalLink>
+        </a>
       </>,
       <>
         Prepare your text & images{' '}

@@ -23,7 +23,8 @@ export const DefaultComponent = () => (
           rel="noopener noreferrer"
           target="_blank"
           style={{ color: 'blue' }}
-          href="/academy/guides/research">
+          href="/academy/guides/research"
+        >
           our guidelines{' '}
           <span role="img" aria-label="nerd-face">
             🤓

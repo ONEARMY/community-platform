@@ -5,6 +5,7 @@ import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { CommentServiceServer } from 'src/services/commentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { NotificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -15,6 +16,14 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   if (!params.sourceId) {
     return data({}, { headers, status: 400, statusText: 'sourceId is required' });
+  }
+  if (!DiscussionContentTypes.includes(params.sourceType as DiscussionContentType)) {
+    return data({}, { headers, status: 400, statusText: 'invalid sourceType' });
+  }
+  const highlightedParam = new URL(request.url).searchParams.get('commentId');
+  const highlightedId = highlightedParam === null ? null : Number(highlightedParam);
+  if (highlightedId !== null && (!Number.isSafeInteger(highlightedId) || highlightedId <= 0)) {
+    return data({}, { headers, status: 400, statusText: 'invalid commentId' });
   }
   try {
     const claims = await client.auth.getClaims();
@@ -33,13 +42,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       }
     }
 
-    const result = await client.rpc('get_comments_with_votes', {
-      p_source_type: params.sourceType,
-      p_source_id: params.sourceId,
-      p_current_user_id: currentUserId || null,
-    });
-
-    const dbComments = result.data as DBComment[];
+    const dbComments = await new CommentServiceServer(client).getDiscussionComments(
+      params.sourceType!,
+      params.sourceId,
+      currentUserId,
+      highlightedId,
+    );
 
     const commentFactory = new CommentFactory(new ImageServiceServer(client));
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments);

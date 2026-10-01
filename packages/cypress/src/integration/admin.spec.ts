@@ -16,6 +16,24 @@ describe('[Admin]', () => {
     cy.contains('Overview');
   });
 
+  it('[Admin can open the comments overview]', () => {
+    cy.signIn(admin.email, admin.password);
+
+    cy.visit('/admin');
+    cy.contains('a', 'Comments').click();
+    cy.url().should('include', '/admin/comments');
+    cy.get('h1').should('contain', 'Comments');
+
+    cy.visit('/admin/comments?page=999');
+    cy.url().should('include', '/admin/comments?page=').and('not.include', 'page=999');
+
+    cy.visit('/admin/comments?page=abc');
+    cy.url().should('include', '/admin/comments?page=1');
+
+    cy.visit('/admin/comments');
+    cy.url().should('match', /\/admin\/comments$/);
+  });
+
   it('[Admin can access the admin questions overview]', () => {
     cy.signIn(admin.email, admin.password)
 

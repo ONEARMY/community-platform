@@ -1,3 +1,4 @@
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -5,6 +6,7 @@ import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { SupporterPage } from 'src/pages/Supporter/SupporterPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { isBlockedRegion } from 'src/services/geoBlock.server';
 import {
   StripeServiceServer,
   type SupporterPrice,
@@ -13,6 +15,17 @@ import {
 import { Flex, Heading, Text } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  if (await isBlockedRegion(request)) {
+    return data({
+      blocked: true,
+      prices: [],
+      tierConfig: {},
+      thankYouImageUrl: null,
+      isAuthenticated: false,
+      userEmail: '',
+    });
+  }
+
   const { client } = createSupabaseServerClient(request);
 
   let isAuthenticated = false;
@@ -43,15 +56,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const { prices, tierConfig, thankYouImageUrl, isAuthenticated, userEmail } = useLoaderData<{
-    prices: SupporterPrice[];
-    tierConfig: TierConfigMap;
-    thankYouImageUrl: string | null;
-    isAuthenticated: boolean;
-    userEmail: string;
-  }>();
+  const { blocked, prices, tierConfig, thankYouImageUrl, isAuthenticated, userEmail } =
+    useLoaderData<{
+      blocked?: boolean;
+      prices: SupporterPrice[];
+      tierConfig: TierConfigMap;
+      thankYouImageUrl: string | null;
+      isAuthenticated: boolean;
+      userEmail: string;
+    }>();
 
-  if (!prices.length) {
+  if (blocked || !prices.length) {
     return (
       <Main style={{ flex: 1 }}>
         <Flex
@@ -64,7 +79,11 @@ export default function Index() {
           }}
         >
           <Heading as="h1">Supporter plans unavailable</Heading>
-          <Text variant="quiet">We're having trouble loading pricing. Please try again later.</Text>
+          <Text variant="quiet">
+            {blocked
+              ? FRIENDLY_MESSAGES['supporter/region-blocked']
+              : "We're having trouble loading pricing. Please try again later."}
+          </Text>
         </Flex>
       </Main>
     );

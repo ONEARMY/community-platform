@@ -69,6 +69,14 @@ Successful payments, cancellations, tier changes and failed renewals post to an 
 channel. Set `DISCORD_MEMBERSHIP_WEBHOOK_URL` in `.env.local` to a Discord webhook URL to see
 them; leave it unset and nothing is posted.
 
+### 6. Geo-blocking (optional)
+
+Checkout is blocked for sanctioned countries/regions (see [technical decisions](./technical-decisions.md#geo-blocking-stripe)). It is disabled unless `geo/GeoLite2-City.mmdb` exists. To test it, download GeoLite2-City from [MaxMind](https://www.maxmind.com/en/geolite2/signup) into `geo/` and fake the client IP:
+
+```bash
+curl -H "Fly-Client-IP: <ip>" http://localhost:3000/support
+```
+
 ## Database Tables
 
 - **`stripe_customers`** — Maps auth users to Stripe customer IDs

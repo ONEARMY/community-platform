@@ -31,7 +31,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
       }}
     >
       <Flex sx={{ flexDirection: 'column' }}>
-        <Flex>
+        <Flex sx={{ gap: 1, alignItems: 'center' }}>
           <Text
             sx={{
               color: 'black',

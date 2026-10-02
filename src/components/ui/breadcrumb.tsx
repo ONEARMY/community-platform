@@ -40,7 +40,7 @@ function BreadcrumbLink({ className, render, ...props }: useRender.ComponentProp
     props: mergeProps<'a'>(
       {
         className: cn(
-          'rounded-sm border border-transparent px-3 py-1 whitespace-nowrap transition-colors hover:border-border hover:bg-softblue hover:text-foreground',
+          'rounded-s border border-transparent px-3 py-1 whitespace-nowrap transition-colors hover:border-input hover:bg-softblue',
           className,
         ),
       },

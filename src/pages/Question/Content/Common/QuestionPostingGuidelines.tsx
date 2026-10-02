@@ -1,3 +1,4 @@
+import { useThemeUI } from '@theme-ui/core';
 import { Guidelines } from 'oa-components';
 import { useContext } from 'react';
 import { TenantContext } from 'src/pages/common/TenantContext';
@@ -5,6 +6,7 @@ import { TenantContext } from 'src/pages/common/TenantContext';
 export const QuestionPostingGuidelines = () => {
   const tenantContext = useContext(TenantContext);
   const guidelinesUrl = tenantContext?.questionsGuidelines;
+  const { theme } = useThemeUI() as any;
 
   const steps = [
     ...(guidelinesUrl
@@ -14,7 +16,7 @@ export const QuestionPostingGuidelines = () => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'blue' }}
+              style={{ color: theme.colors.blue }}
               href={guidelinesUrl}
             >
               question guidelines.
@@ -30,7 +32,12 @@ export const QuestionPostingGuidelines = () => {
     </>,
     <>
       Double check if it's already made and{' '}
-      <a target="_blank" rel="noopener noreferrer" style={{ color: 'blue' }} href="/questions">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: theme.colors.blue }}
+        href="/questions"
+      >
         search{' '}
       </a>
     </>,

@@ -27,7 +27,6 @@ export { DonationRequestModal } from './DonationRequestModal/DonationRequestModa
 export { DownloadButton } from './DownloadButton/DownloadButton';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
-export { ExternalLink } from './ExternalLink/ExternalLink';
 export { FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { FieldInput } from './FieldInput/FieldInput';
 export { FieldSwitch } from './FieldSwitch/FieldSwitch';

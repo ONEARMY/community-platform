@@ -78,9 +78,11 @@ export const CommentSectionSupabase = observer((props: IProps) => {
     setLoadError(null);
     const fetchComments = async () => {
       try {
-        const highlightedCommentId = location.hash?.startsWith('#comment:')
+        const commentId = location.hash?.startsWith('#comment:')
           ? location.hash.replace('#comment:', '')
           : null;
+        const highlightedCommentId =
+          Number.isSafeInteger(Number(commentId)) && Number(commentId) > 0 ? commentId : null;
         const comments = await commentService.getComments(
           sourceType,
           sourceId,

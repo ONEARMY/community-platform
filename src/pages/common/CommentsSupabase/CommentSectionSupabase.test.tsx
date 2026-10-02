@@ -123,6 +123,23 @@ const fixtures = () =>
     replies: [],
   }));
 describe('actual comment-section permalink destination', () => {
+  it.each(['abc', '', '0', '-1', '1.5', 'Infinity', '9007199254740992'])(
+    'loads ordinary comments for an invalid comment fragment %s',
+    async (fragment) => {
+      mockGetComments.mockReset().mockResolvedValue(buildComments(12));
+      render(
+        <MemoryRouter initialEntries={[`/library/example#comment:${fragment}`]}>
+          <CommentSectionSupabase authors={[]} sourceId={1} sourceType="projects" />
+        </MemoryRouter>,
+      );
+
+      await waitFor(() => expect(screen.getAllByTestId(/comment-/)).toHaveLength(10));
+      expect(mockGetComments).toHaveBeenCalledWith('projects', 1, undefined);
+      expect(screen.getByText('show 2 more comments')).toBeInTheDocument();
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    },
+  );
+
   it('reveals the linked question comment after MostUseful sorting', async () => {
     mockGetComments.mockResolvedValue(fixtures() as any);
     render(
@@ -136,6 +153,7 @@ describe('actual comment-section permalink destination', () => {
       </MemoryRouter>,
     );
     await waitFor(() => expect(screen.getAllByTestId(/comment-/)).toHaveLength(12));
+    expect(mockGetComments).toHaveBeenCalledWith('questions', 1, '1');
     expect(screen.getByTestId('comment-1')).toBeTruthy();
     expect(screen.queryByText('show 2 more comments')).toBeNull();
   });

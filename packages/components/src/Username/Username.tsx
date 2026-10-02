@@ -1,10 +1,10 @@
 import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
+import { ReactCountryFlag } from 'react-country-flag';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Text } from 'theme-ui';
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg';
-import { FlagIcon } from '../FlagIcon/FlagIcon';
 import { InternalLink } from '../InternalLink/InternalLink';
 import { UserBadge } from './UserBadge';
 
@@ -39,7 +39,18 @@ export const Username = (props: IProps) => {
     >
       {countryCode ? (
         <Flex data-testid="Username: known flag">
-          <FlagIcon countryCode={countryCode} />
+          <ReactCountryFlag
+            data-cy={`country:${countryCode}`}
+            countryCode={countryCode}
+            title={countryCode}
+            svg={true}
+            style={{
+              borderRadius: '3px',
+              backgroundSize: 'cover',
+              width: '21px',
+              height: '14px',
+            }}
+          />
         </Flex>
       ) : (
         <Flex

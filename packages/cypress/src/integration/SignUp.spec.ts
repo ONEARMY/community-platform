@@ -55,7 +55,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="deleteAccountSubmit"]').click();
 
       cy.step('Check confirmation checkbox and confirm deletion');
-      cy.get('[data-cy="Confirm.modal: Checkbox"]').check({ force: true });
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').click({ force: true });
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Shows error message');
@@ -66,7 +66,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="deleteAccountSubmit"]').click();
 
       cy.step('Check confirmation checkbox and confirm deletion');
-      cy.get('[data-cy="Confirm.modal: Checkbox"]').check({ force: true });
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').click({ force: true });
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Account deletion successful');

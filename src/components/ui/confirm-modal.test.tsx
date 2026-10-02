@@ -356,6 +356,31 @@ describe('ConfirmModal', () => {
       );
     });
 
+    it('portals into the enclosing native dialog when nested in one', () => {
+      // A ConfirmModal rendered inside an oa-components Modal lives inside a
+      // native <dialog> (top layer); the portal must join it there or the
+      // confirm dialog paints behind the form modal and cannot be clicked.
+      const dialog = document.createElement('dialog');
+      document.body.appendChild(dialog);
+      dialog.showModal();
+      const mount = document.createElement('div');
+      dialog.appendChild(mount);
+
+      render(<Harness />, { container: mount, baseElement: document.body });
+
+      const popup = screen.getByTestId('Confirm.modal: Modal');
+      expect(dialog.contains(popup)).toBe(true);
+
+      dialog.remove();
+    });
+
+    it('portals to the body when not nested in a native dialog', () => {
+      render(<Harness />);
+
+      const popup = screen.getByTestId('Confirm.modal: Modal');
+      expect(popup.closest('dialog')).toBeNull();
+    });
+
     it('exposes the confirm aria-label pattern from the legacy component', () => {
       render(<Harness confirmButtonText="Delete" />);
 

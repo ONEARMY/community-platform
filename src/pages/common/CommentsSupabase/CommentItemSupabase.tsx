@@ -5,7 +5,6 @@ import {
   Button,
   ButtonShowReplies,
   CommentDisplay,
-  ConfirmModal,
   EditComment,
   FollowButton,
   FollowIcon,
@@ -22,6 +21,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';

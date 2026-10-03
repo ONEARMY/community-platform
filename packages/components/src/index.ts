@@ -14,7 +14,6 @@ export { CategoryHorizonalList } from './CategoryHorizonalList/CategoryHorizonal
 export { CommentAvatar } from './CommentAvatar/CommentAvatar';
 export { CommentDisplay } from './CommentDisplay/CommentDisplay';
 export { CommentsTitle } from './CommentsTitle/CommentsTitle';
-export { ConfirmModal } from './ConfirmModal/ConfirmModal';
 export { ContentStatistics } from './ContentStatistics/ContentStatistics';
 export type { IStatistic } from './ContentStatistics/types';
 export { CreateComment } from './CreateComment/CreateComment';

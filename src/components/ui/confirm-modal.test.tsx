@@ -292,7 +292,7 @@ describe('ConfirmModal', () => {
   });
 
   describe('variants', () => {
-    it('styles Confirm with the primary variant by default', () => {
+    it('styles Confirm with the default variant by default', () => {
       render(<Harness />);
 
       expect(

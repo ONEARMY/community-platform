@@ -6,15 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
-type ConfirmModalButtonVariant = 'outline' | 'destructive' | 'primary';
-
-// Legacy prop names kept so call sites migrate by import path only
-const buttonVariantMap = {
-  primary: 'default',
-  outline: 'outline',
-  destructive: 'destructive',
-} as const;
-
 export interface ConfirmModalProps {
   message: string;
   confirmButtonText: string;
@@ -22,8 +13,8 @@ export interface ConfirmModalProps {
   handleCancel: () => void;
   handleConfirm: () => void;
   width?: number;
-  cancelVariant?: ConfirmModalButtonVariant;
-  confirmVariant?: ConfirmModalButtonVariant;
+  cancelVariant?: 'default' | 'outline' | 'destructive';
+  confirmVariant?: 'default' | 'outline' | 'destructive';
   children?: ReactNode;
   checkboxLabel?: string;
 }
@@ -36,7 +27,7 @@ export function ConfirmModal({
   handleConfirm,
   width,
   cancelVariant = 'outline',
-  confirmVariant = 'primary',
+  confirmVariant = 'default',
   children,
   checkboxLabel,
 }: ConfirmModalProps) {
@@ -100,7 +91,7 @@ export function ConfirmModal({
 
             <div className={cn('flex flex-wrap gap-2', (children || checkboxLabel) && 'mt-2')}>
               <AlertDialogPrimitive.Close
-                render={<Button type="button" variant={buttonVariantMap[cancelVariant]} />}
+                render={<Button type="button" variant={cancelVariant} />}
                 data-cy="Confirm.modal: Cancel"
                 data-testid="Confirm.modal: Cancel"
                 onClick={onCancel}
@@ -109,11 +100,7 @@ export function ConfirmModal({
               </AlertDialogPrimitive.Close>
               <AlertDialogPrimitive.Close
                 render={
-                  <Button
-                    type="button"
-                    variant={buttonVariantMap[confirmVariant]}
-                    disabled={isConfirmDisabled}
-                  />
+                  <Button type="button" variant={confirmVariant} disabled={isConfirmDisabled} />
                 }
                 aria-label={`Confirm ${confirmButtonText} action`}
                 data-cy="Confirm.modal: Confirm"

@@ -22,17 +22,6 @@ const REMAKE_SELECT = `
   profile:profiles(id, display_name, username, photo, country)
 `;
 
-const ADMIN_REMAKE_SELECT = `
-  id,
-  created_at,
-  description,
-  images,
-  project:projects(slug, title, deleted),
-  profile:profiles(username, display_name)
-`;
-
-const ADMIN_REMAKE_BATCH_SIZE = 1000;
-
 export class RemakeServiceServer {
   private imageService: ImageServiceServer;
 
@@ -61,10 +50,17 @@ export class RemakeServiceServer {
     while (true) {
       let query = this.client
         .from('remakes')
-        .select(ADMIN_REMAKE_SELECT)
+        .select(`
+          id,
+          created_at,
+          description,
+          images,
+          project:projects(slug, title, deleted),
+          profile:profiles(username, display_name)
+        `)
         .order('created_at', { ascending: false })
         .order('id', { ascending: false })
-        .limit(ADMIN_REMAKE_BATCH_SIZE);
+        .limit(1000);
 
       if (cursor) {
         query = query.or(

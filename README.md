@@ -235,6 +235,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="http://shoaibchoudry.com"><img src="https://avatars.githubusercontent.com/u/77904054?v=4?s=60" width="60px;" alt="Mohammed Shoaib Choudry"/><br /><sub><b>Mohammed Shoaib Choudry</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=DevShoaib78" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Cory-Kim"><img src="https://avatars.githubusercontent.com/u/72359104?v=4?s=60" width="60px;" alt="Cory Kim"/><br /><sub><b>Cory Kim</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Cory-Kim" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ius-sharma"><img src="https://avatars.githubusercontent.com/u/176735086?v=4?s=60" width="60px;" alt="AYUSH SHARMA"/><br /><sub><b>AYUSH SHARMA</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ius-sharma" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://a-ryan-1.github.io/Portfolio-Website/"><img src="https://avatars.githubusercontent.com/u/146423646?v=4?s=60" width="60px;" alt="Aryan Padmakar Deshmukh"/><br /><sub><b>Aryan Padmakar Deshmukh</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=A-RYAN-1" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

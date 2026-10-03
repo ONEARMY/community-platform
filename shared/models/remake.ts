@@ -1,6 +1,7 @@
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { IDBDocSB, IDoc } from './document';
+import type { DBProject } from './library';
 import type { DBMedia, Image, MediaWithPublicUrl } from './media';
 
 export const REMAKE_MAX_IMAGES = 10;
@@ -60,3 +61,41 @@ export type RemakeDTO = {
   images: DBMedia[];
   description: string | null;
 };
+
+export type DBAdminRemake = Pick<DBRemake, 'id' | 'description' | 'images'> & {
+  created_at: string;
+  project: Pick<DBProject, 'slug' | 'title' | 'deleted'> | null;
+  profile: Pick<DBAuthor, 'username' | 'display_name'> | null;
+};
+
+export class AdminRemake {
+  id: number;
+  createdAt: Date;
+  description: string | null;
+  imageUrl: string | null;
+  project: { slug: string; title: string; deleted: boolean } | null;
+  author: { username: string | null; displayName: string } | null;
+
+  constructor(obj: AdminRemake) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminRemake, image?: Image) {
+    return new AdminRemake({
+      id: obj.id,
+      createdAt: new Date(obj.created_at),
+      description: obj.description,
+      imageUrl: image?.publicUrl ?? null,
+      project: obj.project
+        ? {
+            slug: obj.project.slug,
+            title: obj.project.title,
+            deleted: obj.project.deleted || false,
+          }
+        : null,
+      author: obj.profile
+        ? { username: obj.profile.username, displayName: obj.profile.display_name }
+        : null,
+    });
+  }
+}

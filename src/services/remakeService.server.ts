@@ -1,6 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBRemake, RemakeDTO } from 'oa-shared';
-import { REMAKE_MAX_DESCRIPTION_LENGTH, REMAKE_MAX_IMAGES, Remake, UserRole } from 'oa-shared';
+import type { DBAdminRemake, DBProfile, DBRemake, RemakeDTO } from 'oa-shared';
+import {
+  AdminRemake,
+  REMAKE_MAX_DESCRIPTION_LENGTH,
+  REMAKE_MAX_IMAGES,
+  Remake,
+  UserRole,
+} from 'oa-shared';
 import { logger } from 'src/logger';
 import { forbiddenError, notFoundError, validationError } from 'src/utils/httpException';
 import { ImageServiceServer } from './imageService.server';
@@ -35,6 +41,52 @@ export class RemakeServiceServer {
     }
 
     return (data as unknown as DBRemake[]).map((remake) => this.toRemake(remake));
+  }
+
+  async getAll(): Promise<AdminRemake[]> {
+    const remakes: AdminRemake[] = [];
+    let cursor: Pick<DBAdminRemake, 'created_at' | 'id'> | undefined;
+
+    while (true) {
+      let query = this.client
+        .from('remakes')
+        .select(`
+          id,
+          created_at,
+          description,
+          images,
+          project:projects(slug, title, deleted),
+          profile:profiles(username, display_name)
+        `)
+        .order('created_at', { ascending: false })
+        .order('id', { ascending: false })
+        .limit(1000);
+
+      if (cursor) {
+        query = query.or(
+          `created_at.lt.${cursor.created_at},and(created_at.eq.${cursor.created_at},id.lt.${cursor.id})`,
+        );
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        throw error;
+      }
+
+      const batch = data as unknown as DBAdminRemake[];
+
+      if (batch.length === 0) {
+        return remakes;
+      }
+
+      remakes.push(
+        ...batch.map((remake) =>
+          AdminRemake.fromDB(remake, this.imageService.getPublicUrl(remake.images?.[0] ?? null)),
+        ),
+      );
+      cursor = batch.at(-1);
+    }
   }
 
   async getCountByProjectId(projectId: number): Promise<number> {

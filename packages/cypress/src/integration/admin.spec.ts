@@ -16,6 +16,14 @@ describe('[Admin]', () => {
     cy.contains('Overview');
   });
 
+  it('[Admin can reach the remakes overview from the admin navigation]', () => {
+    cy.signIn(admin.email, admin.password);
+
+    cy.visit('/admin');
+    cy.contains('a', 'Remakes').click();
+    cy.url().should('include', '/admin/remakes');
+    cy.contains('h1', 'Remakes');
+  });
   it('[Admin can access the admin questions overview]', () => {
     cy.signIn(admin.email, admin.password)
 

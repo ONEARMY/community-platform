@@ -1,6 +1,7 @@
 import {
   ChevronRightIcon,
   FolderIcon,
+  HammerIcon,
   MapPinIcon,
   MegaphoneIcon,
   MessageCircleQuestionMarkIcon,
@@ -34,6 +35,7 @@ const ADMIN_NAV_ITEMS = [
   },
   { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
   { label: 'Tags', href: '/admin/tags', icon: TagsIcon },
+  { label: 'Remakes', href: '/admin/remakes', icon: HammerIcon },
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map Pins', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },

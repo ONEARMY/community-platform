@@ -1,16 +1,19 @@
 import '@testing-library/jest-dom/vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
 import type { Comment } from 'oa-shared';
 import { theme } from 'oa-themes';
 import { MemoryRouter } from 'react-router';
+import { logger } from 'src/logger';
 import { FactoryComment } from 'src/test/factories/Comment';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CommentSectionSupabase } from './CommentSectionSupabase';
 import { CommentSortOption } from './CommentSortOptions';
 
 const mockGetComments = vi.hoisted(() => vi.fn());
+
+vi.mock('src/logger', () => ({ logger: { error: vi.fn() } }));
 
 vi.mock('src/services/commentService', () => ({
   commentService: { getComments: mockGetComments },
@@ -105,5 +108,62 @@ describe('CommentSectionSupabase', () => {
       'comment 4',
       'comment 5',
     ]);
+  });
+});
+
+const getWrapper = (onLoaded: () => void) =>
+  render(
+    <ThemeProvider theme={theme}>
+      <MemoryRouter>
+        <CommentSectionSupabase
+          authors={[]}
+          sourceId={1}
+          sourceType="projects"
+          onLoaded={onLoaded}
+        />
+      </MemoryRouter>
+    </ThemeProvider>,
+  );
+
+describe('CommentSectionSupabase onLoaded', () => {
+  beforeEach(() => {
+    mockGetComments.mockReset();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('reports onLoaded once the comments have been fetched', async () => {
+    mockGetComments.mockResolvedValue([]);
+    const onLoaded = vi.fn();
+
+    act(() => {
+      getWrapper(onLoaded);
+    });
+
+    await waitFor(() => {
+      expect(onLoaded).toHaveBeenCalledTimes(1);
+    });
+    await act(async () => {});
+    expect(mockGetComments).toHaveBeenCalledTimes(1);
+    expect(onLoaded).toHaveBeenCalledTimes(1);
+  });
+
+  it('reports onLoaded when the fetch fails', async () => {
+    const error = new Error('Network error');
+    mockGetComments.mockRejectedValue(error);
+    const onLoaded = vi.fn();
+
+    act(() => {
+      getWrapper(onLoaded);
+    });
+
+    await waitFor(() => {
+      expect(onLoaded).toHaveBeenCalledTimes(1);
+    });
+    await act(async () => {});
+    expect(logger.error).toHaveBeenCalledWith(error);
+    expect(onLoaded).toHaveBeenCalledTimes(1);
   });
 });

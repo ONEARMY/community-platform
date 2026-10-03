@@ -43,13 +43,13 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   try {
     if (request.method === 'DELETE') {
-      return deleteComment(supabase, commentId, profile);
+      return await deleteComment(supabase, commentId, params.sourceId!, profile);
     }
 
-    return updateComment(supabase, request, commentId, profile);
+    return await updateComment(supabase, request, commentId, params.sourceId!, profile);
   } catch (error) {
     logger.error(error);
-    return data(error, { headers });
+    return data({ error: 'Could not modify comment' }, { headers, status: 500 });
   }
 }
 
@@ -57,15 +57,21 @@ async function updateComment(
   { client, headers }: Supabase,
   request: Request,
   id: string,
+  sourceId: string,
   user: DBProfile,
 ) {
-  const json = await request.json();
+  const json = await request.json().catch(() => null);
 
-  if (!json.comment) {
+  if (typeof json?.comment !== 'string' || !json.comment.trim()) {
     return data({}, { headers, status: 400, statusText: 'comment is required' });
   }
 
-  const { data: commentData, error } = await client.from('comments').select().eq('id', id).single();
+  const { data: commentData, error } = await client
+    .from('comments')
+    .select()
+    .eq('id', id)
+    .eq('source_id', sourceId)
+    .single();
 
   if (error || !commentData) {
     return data({}, { headers, status: 404, statusText: 'comment not found' });
@@ -89,8 +95,18 @@ async function updateComment(
   return new Response(null, { headers, status: 204 });
 }
 
-async function deleteComment({ client, headers }: Supabase, id: string, user: DBProfile) {
-  const { data: commentData, error } = await client.from('comments').select().eq('id', id).single();
+async function deleteComment(
+  { client, headers }: Supabase,
+  id: string,
+  sourceId: string,
+  user: DBProfile,
+) {
+  const { data: commentData, error } = await client
+    .from('comments')
+    .select()
+    .eq('id', id)
+    .eq('source_id', sourceId)
+    .single();
 
   if (error || !commentData) {
     return data({}, { headers, status: 404, statusText: 'comment not found' });

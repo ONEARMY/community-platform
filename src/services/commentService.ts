@@ -30,8 +30,16 @@ const postComment = async (
   });
 };
 
-const getComments = async (sourceType: DiscussionContentType, sourceId: string | number) => {
-  const result = await fetch(`/api/discussions/${sourceType}/${sourceId}/comments`);
+const getComments = async (
+  sourceType: DiscussionContentType,
+  sourceId: string | number,
+  commentId?: string,
+) => {
+  const search = commentId ? `?${new URLSearchParams({ commentId })}` : '';
+  const result = await fetch(`/api/discussions/${sourceType}/${sourceId}/comments${search}`);
+  if (!result.ok) {
+    throw new Error('Could not load comments. Please try again.');
+  }
   const { comments } = (await result.json()) as { comments: Comment[] };
   return comments;
 };

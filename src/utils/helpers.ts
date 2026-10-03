@@ -56,6 +56,24 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`;
 };
 
+const UTC_MONTH_NAMES = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+export const formatUtcDate = (date: Date) =>
+  `${date.getUTCDate()} ${UTC_MONTH_NAMES[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+
 export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   if (!user) {
     return false;

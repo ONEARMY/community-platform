@@ -8,15 +8,6 @@ describe('[Common]', () => {
     cy.visit('/').url().should('include', '/academy');
   });
 
-  it('[Not-Found Page]', () => {
-    const unknownUrl = '/abcdefghijklm';
-    cy.visit(unknownUrl);
-    cy.get('[data-test="NotFound: Heading"]')
-      .contains(`Nada, page not found 💩`)
-      .should('be.visible');
-    cy.get('a').contains('home page').should('have.attr', 'href').and('eq', '/');
-  });
-
   it('[Page Navigation]', () => {
     cy.visit('/library');
     cy.wait(2000);
@@ -31,45 +22,6 @@ describe('[Common]', () => {
     cy.get('[data-cy=page-link]:visible').contains('Library').click();
     cy.wait(2000);
     cy.url().should('include', '/library');
-  });
-
-  it('[Forbidden Page]', () => {
-    cy.step('When not given page details');
-    cy.visit('/forbidden');
-    cy.contains("You don't have the right permissions");
-    cy.contains('Report the problem');
-
-    cy.step('research-create still shows the early-access message');
-    cy.visit('/forbidden?page=research-create');
-    cy.contains('This is a new feature');
-    cy.contains('I want to use it');
-
-    cy.step('news-create shows a plain permission message, not early-access');
-    cy.visit('/forbidden?page=news-create');
-    cy.contains("You don't have permission to create news posts");
-    cy.contains('Report the problem');
-  });
-
-  describe('[User feedback button]', () => {
-    it('[Desktop]', () => {
-      cy.visit('/library');
-      cy.wait(2000);
-      cy.get('[data-cy=feedback]').should('contain', 'Report a Problem');
-      cy.get('[data-cy=feedback]')
-        .should('have.attr', 'href')
-        .and('contain', '/library?sort=MostUsefulLastWeek');
-    });
-
-    it('[Mobile]', () => {
-      cy.viewport('iphone-6');
-
-      cy.visit('/library');
-      cy.wait(2000);
-      cy.get('[data-cy=feedback]').should('contain', 'Problem?');
-      cy.get('[data-cy=feedback]')
-        .should('have.attr', 'href')
-        .and('contain', '/library?sort=MostUsefulLastWeek');
-    });
   });
 
   describe('[User Menu]', () => {

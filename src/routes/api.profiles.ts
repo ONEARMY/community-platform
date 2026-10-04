@@ -40,6 +40,7 @@ export const loader = async ({ request }) => {
       )`,
     )
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
+    .or('moderation.is.null,moderation.eq.accepted')
     .limit(10);
   const profileFactory = new ProfileFactory(client);
 

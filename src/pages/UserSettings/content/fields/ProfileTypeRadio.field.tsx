@@ -76,6 +76,12 @@ export const ProfileTypeRadioField = (props: IProps) => {
         gap: 2,
         borderRadius: 2,
         border: '2px solid transparent',
+        // GlobalStyles whitens every emotion-classed sibling of a focused input,
+        // which would otherwise flash the badge and label while this radio has focus
+        // we could also just remove the global style for this most likely?
+        'input:focus ~ [class^="css-"], input:focus ~ [class*=" css-"]': {
+          backgroundColor: 'transparent',
+        },
         ':hover': {
           backgroundColor: 'background',
           cursor: 'pointer',

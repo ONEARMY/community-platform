@@ -77,7 +77,7 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
           />
         </Flex>
 
-        <ProfileTags typeName={formValues.type || ''} />
+        <ProfileTags typeName={profile?.type?.name || ''} />
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>

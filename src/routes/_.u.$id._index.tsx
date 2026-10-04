@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
-import { AuthorVotes } from 'oa-shared';
+import { AuthorVotes, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
@@ -46,6 +46,28 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     if (!profileDb) {
       return data({ profile: null, tenantSettings }, { headers });
+    }
+
+    // Hide profiles awaiting moderation from everyone except their owner and staff.
+    // Runs before the id -> username redirect so an unapproved username isn't revealed.
+    const isPendingModeration = !!profileDb.moderation && profileDb.moderation !== 'accepted';
+
+    if (isPendingModeration) {
+      const claims = await client.auth.getClaims();
+      const viewerAuthId = claims.data?.claims?.sub;
+      const isOwner = !!viewerAuthId && profileDb.auth_id === viewerAuthId;
+
+      let isStaff = false;
+      if (viewerAuthId && !isOwner) {
+        const viewerProfile = await profileService.getByAuthId(viewerAuthId);
+        isStaff =
+          !!viewerProfile?.roles?.includes(UserRole.ADMIN) ||
+          !!viewerProfile?.roles?.includes(UserRole.MODERATOR);
+      }
+
+      if (!isOwner && !isStaff) {
+        return data({ profile: null, tenantSettings }, { headers });
+      }
     }
 
     // Supporters get linked by profile id before they pick a username

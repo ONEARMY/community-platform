@@ -1,6 +1,6 @@
 import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
-import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
 import { logger } from 'src/logger';
 import { requireRoleApi } from 'src/middleware/requireRole.server';
 import { sessionMiddleware } from 'src/middleware/session.server';
@@ -12,6 +12,21 @@ export const middleware: MiddlewareFunction<Response>[] = [
   sessionMiddleware,
   requireRoleApi(UserRole.ADMIN),
 ];
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const profileService = new ProfileTypesServiceServer(client);
+    const profileTypes = await profileService.get();
+
+    return Response.json(profileTypes, { headers, status: 200 });
+  } catch (error) {
+    logger.error(error);
+  }
+
+  return Response.json({}, { headers, status: 500 });
+}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

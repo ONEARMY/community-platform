@@ -113,7 +113,9 @@ describe('[Admin - Profile Type Page', () => {
 
   it('Admin cannot delete a profile type that is in use', () => {
     cy.visit('/admin/profile-types')
-    cy.get('button[aria-label="Can\'t delete member"]').should('have.class', "disabled:pointer-events-none")
+    cy.wait(500)
+    cy.get('button[aria-label="Can\'t delete member"]').click({force: true})
+    cy.get('body').should('contain', 'Cannot be deleted')
   })
 
 })

@@ -1,6 +1,7 @@
 import { ImageOffIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import type { ProfileType } from 'oa-shared';
 import { useState } from 'react';
+import { useToast } from '@/common/Toast';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -43,6 +44,7 @@ export function ProfileTypesPage({ profileTypes, profiles }: IProps) {
     undefined,
   );
   const [deletingProfileType, setDeletingProfileType] = useState<ProfileType | null>(null);
+  const toast = useToast();
 
   return (
     <div className="flex flex-col gap-4">
@@ -99,8 +101,8 @@ export function ProfileTypesPage({ profileTypes, profiles }: IProps) {
                       variant="ghost"
                       size="icon-sm"
                       aria-label={`Can't delete ${profileType.name}`}
-                      onClick={() => {}}
-                      disabled
+                      onClick={() => toast.info('Profile type in use. Cannot be deleted')}
+                      style={{ color: 'gray' }}
                     >
                       <TrashIcon />
                     </Button>

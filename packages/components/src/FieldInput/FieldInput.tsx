@@ -1,6 +1,7 @@
 import type { FieldRenderProps } from 'react-final-form';
 import { Box, Flex, Input, Text } from 'theme-ui';
-import { CharacterCount } from '../CharacterCount/CharacterCount';
+// @ts-ignore - strangler-fig migration: importing from app
+import { CharacterCount } from '@/components/ui/character-count';
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode };
 

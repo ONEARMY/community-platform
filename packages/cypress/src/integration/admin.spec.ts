@@ -108,9 +108,7 @@ describe('[Admin - Profile Type Page', () => {
    })
 
   it('[Admin cannot add a new profile type if form fields are empty]', () => {
-    cy.visit('/admin')
-    cy.get('a[href*="/admin/profile-types"]').click()
-    cy.url().should('include', '/admin/profile-types')
+    cy.visit('/admin/profile-types')
     cy.wait(500)
     cy.get('button').contains('New').click({force: true})
     cy.get('input[id="profile-type-name"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
@@ -120,9 +118,7 @@ describe('[Admin - Profile Type Page', () => {
   })
 
   it('[Admin can edit profile type]', () => {
-    cy.visit('/admin')
-    cy.get('a[href*="/admin/profile-types"]').click()
-    cy.url().should('include', '/admin/profile-types')
+    cy.visit('/admin/profile-types')
     cy.wait(500)
     cy.get('button[aria-label="Edit member"]').click({force: true})
     cy.get('textArea[id*="profile-type-description"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
@@ -131,9 +127,7 @@ describe('[Admin - Profile Type Page', () => {
   })
 
   it('Admin cannot delete a profile type that is in use', () => {
-    cy.visit('/admin')
-    cy.get('a[href*="/admin/profile-types"]').click()
-    cy.url().should('include', '/admin/profile-types')
+    cy.visit('/admin/profile-types')
     cy.get('button[aria-label="Can\'t delete member"]').should('have.class', "disabled:pointer-events-none")
   })
 

@@ -101,7 +101,9 @@ export function ProfileTypesPage({ profileTypes, profiles }: IProps) {
                       variant="ghost"
                       size="icon-sm"
                       aria-label={`Can't delete ${profileType.name}`}
-                      onClick={() => toast.info('Profile type in use. Cannot be deleted')}
+                      onClick={() =>
+                        toast.info(`Profile type ${profileType.name} in use. Cannot be deleted`)
+                      }
                       style={{ color: 'gray' }}
                     >
                       <TrashIcon />

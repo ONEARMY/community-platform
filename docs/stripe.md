@@ -77,6 +77,13 @@ Checkout is blocked for sanctioned countries/regions (see [technical decisions](
 curl -H "Fly-Client-IP: <ip>" http://localhost:3000/support
 ```
 
+PR previews don't download the database. To test on one, deploy it from a local checkout that has `geo/`, and block your own country:
+
+```bash
+fly deploy -a community-platform-pr-<number> --config fly-preview.toml
+fly secrets set -a community-platform-pr-<number> GEO_BLOCK_EXTRA_COUNTRIES=<your country code>
+```
+
 ## Database Tables
 
 - **`stripe_customers`** — Maps auth users to Stripe customer IDs

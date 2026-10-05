@@ -2,7 +2,14 @@ import { join } from 'node:path';
 import maxmind, { type CityResponse, type Reader } from 'maxmind';
 import { logger } from 'src/logger';
 
-const BLOCKED_COUNTRIES = ['CU', 'IR', 'KP', 'SY', 'RU'];
+const BLOCKED_COUNTRIES = [
+  'CU',
+  'IR',
+  'KP',
+  'SY',
+  'RU',
+  ...(process.env.GEO_BLOCK_EXTRA_COUNTRIES?.split(',').map((code) => code.trim()) ?? []),
+];
 const BLOCKED_REGIONS = ['UA-43', 'UA-40', 'UA-09', 'UA-14'];
 
 let reader: Promise<Reader<CityResponse> | null> | undefined;

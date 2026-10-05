@@ -232,4 +232,5 @@ How?
 - The CircleCI `geoip` job downloads `geo/GeoLite2-City.mmdb` (keys in the `fly-deploy` context) at most once a day, caches it, and shares it with all tenant deploys via the workspace. `ADD . .` puts it in the image. GeoLite accounts are limited to 30 downloads/day.
 - `isBlockedRegion(request)` looks up the `Fly-Client-IP` header against country and subdivision ISO codes.
 - Checked only in the `/support` loader and the `elements_subscription` action. Never the Stripe webhook.
+- `GEO_BLOCK_EXTRA_COUNTRIES` (comma-separated ISO codes) adds countries, e.g. your own to test on a preview.
 - Fails open: no DB file or no IP header (local dev, PR previews, forks) means no blocking.

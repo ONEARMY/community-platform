@@ -35,6 +35,15 @@ describe('isBlockedRegion', () => {
     expect(await isBlockedRegion(requestFrom('1.2.3.4'))).toBe(true);
   });
 
+  it('blocks extra countries from GEO_BLOCK_EXTRA_COUNTRIES', async () => {
+    vi.stubEnv('GEO_BLOCK_EXTRA_COUNTRIES', 'PT, ES');
+    mockGet.mockReturnValue({ country: { iso_code: 'ES' } });
+    const { isBlockedRegion } = await loadService();
+    vi.unstubAllEnvs();
+
+    expect(await isBlockedRegion(requestFrom('1.2.3.4'))).toBe(true);
+  });
+
   it('blocks a sanctioned region', async () => {
     mockGet.mockReturnValue({ country: { iso_code: 'UA' }, subdivisions: [{ iso_code: '43' }] });
     const { isBlockedRegion } = await loadService();

@@ -237,7 +237,7 @@ export default function Index() {
                             className="w-fit border-outline"
                             render={
                               <Link
-                                to="/academy"
+                                to="/academy/guides/community-program"
                                 data-cy="organisation-signup-learn-more"
                                 target="_blank"
                                 rel="noopener noreferrer"

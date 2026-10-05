@@ -1,9 +1,6 @@
-import { useThemeUI } from '@theme-ui/core';
 import { Guidelines } from 'oa-components';
 
 export const LibraryPostingGuidelines = () => {
-  const { theme } = useThemeUI() as any;
-
   return (
     <Guidelines
       title="How does it work?"
@@ -19,7 +16,7 @@ export const LibraryPostingGuidelines = () => {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: theme.colors.blue }}
+            className="text-info"
             href="/academy/create/library"
           >
             our guidelines{' '}

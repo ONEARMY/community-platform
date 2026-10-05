@@ -1,7 +1,6 @@
 import { Guidelines } from './Guidelines';
 
 import type { Meta, StoryFn } from '@storybook/react-vite';
-import { useThemeUI } from "@theme-ui/core";
 
 export default {
   title: 'Forms/Guidelines',
@@ -9,7 +8,6 @@ export default {
 } as Meta<typeof Guidelines>;
 
 export const DefaultComponent = () => {
-  const { theme } = useThemeUI() as any;
 
   return (
     <Guidelines
@@ -26,7 +24,7 @@ export const DefaultComponent = () => {
           <a
             rel="noopener noreferrer"
             target="_blank"
-            style={{color: theme.colors.blue}}
+            className="text-info"
             href="/academy/guides/research"
           >
             our guidelines{' '}

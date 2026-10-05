@@ -63,3 +63,47 @@ export class Comment implements IDoc {
 }
 
 export type Reply = Omit<Comment, 'replies'>;
+
+export type DBAdminComment = Pick<
+  DBComment,
+  'id' | 'comment' | 'source_id' | 'source_type' | 'parent_id' | 'created_at'
+> & {
+  readonly deleted: boolean | null;
+  readonly profile: Pick<DBAuthor, 'username' | 'display_name'> | null;
+};
+
+export type AdminCommentAuthor = Pick<Author, 'username' | 'displayName'>;
+
+export class AdminComment {
+  id: number;
+  comment: string;
+  sourceType: DiscussionContentType;
+  sourceId: number | null;
+  liveUrl: string | null;
+  isReply: boolean;
+  createdAt: Date;
+  deleted: boolean;
+  author: AdminCommentAuthor | null;
+  notificationCount: number;
+
+  constructor(obj: AdminComment) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminComment, notificationCount: number, liveUrl: string | null) {
+    return new AdminComment({
+      id: obj.id,
+      comment: obj.comment,
+      sourceType: obj.source_type,
+      sourceId: obj.source_id,
+      liveUrl,
+      isReply: obj.parent_id !== null,
+      createdAt: new Date(obj.created_at),
+      deleted: obj.deleted ?? false,
+      author: obj.profile
+        ? { username: obj.profile.username, displayName: obj.profile.display_name }
+        : null,
+      notificationCount,
+    });
+  }
+}

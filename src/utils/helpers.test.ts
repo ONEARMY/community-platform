@@ -6,6 +6,7 @@ import {
   arrayToJson,
   capitalizeFirstLetter,
   formatLowerNoSpecial,
+  formatUtcDate,
   hasAdminRights,
   isContactable,
   isUserBlockedFromMessaging,
@@ -107,5 +108,12 @@ describe('src/utils/helpers', () => {
       const expectation = '1,000';
       expect(numberWithCommas(1000)).toEqual(expectation);
     });
+  });
+
+  it('formatUtcDate renders the UTC calendar date whatever the local time zone', () => {
+    expect(formatUtcDate(new Date('2026-09-05T23:30:00Z'))).toBe('5 Sep 2026');
+    expect(formatUtcDate(new Date('2026-01-01T00:30:00Z'))).toBe('1 Jan 2026');
+    expect(formatUtcDate(new Date('2011-12-30T12:00:00Z'))).toBe('30 Dec 2011');
+    expect(formatUtcDate(new Date('2024-02-29T23:59:59Z'))).toBe('29 Feb 2024');
   });
 });

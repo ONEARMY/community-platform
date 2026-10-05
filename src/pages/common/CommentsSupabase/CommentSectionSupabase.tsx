@@ -5,6 +5,7 @@ import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer';
 import { logger } from 'src/logger';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
@@ -39,6 +40,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
   const [sortBy, setSortBy] = useState<CommentSortOption>(
     defaultSortBy ?? CommentSortOption.Oldest,
@@ -47,7 +49,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const { profile } = useProfileStore();
   const location = useLocation();
 
-  const displayedComments = useMemo(() => {
+  const sortedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
     const sorted = [...comments].sort(sortFn);
 
@@ -58,20 +60,37 @@ export const CommentSectionSupabase = observer((props: IProps) => {
       }
     }
 
-    return sorted.slice(0, commentLimit);
-  }, [comments, commentLimit, sortBy, pinnedCommentId]);
+    return sorted;
+  }, [comments, sortBy, pinnedCommentId]);
+
+  const highlightedIndex = sortedComments.findIndex(
+    (comment) => comment.highlighted || comment.replies?.some((reply) => reply.highlighted),
+  );
+  const displayedComments = sortedComments.slice(0, Math.max(commentLimit, highlightedIndex + 1));
 
   const remainingCommentsCount = useMemo(() => {
-    return Math.max(0, comments.length - commentLimit);
-  }, [comments.length, commentLimit]);
+    return comments.length - displayedComments.length;
+  }, [comments.length, displayedComments.length]);
 
   useEffect(() => {
+    let cancelled = false;
+    setCommentLimit(commentPageSize);
+    setLoadError(null);
     const fetchComments = async () => {
       try {
-        const comments = await commentService.getComments(sourceType, sourceId);
-        const highlightedCommentId = location.hash?.startsWith('#comment:')
+        const commentId = location.hash?.startsWith('#comment:')
           ? location.hash.replace('#comment:', '')
           : null;
+        const highlightedCommentId =
+          Number.isSafeInteger(Number(commentId)) && Number(commentId) > 0 ? commentId : null;
+        const comments = await commentService.getComments(
+          sourceType,
+          sourceId,
+          highlightedCommentId ?? undefined,
+        );
+        if (cancelled) {
+          return;
+        }
 
         if (highlightedCommentId) {
           const highlightedComment = comments.find((x) => x.id === +highlightedCommentId);
@@ -87,25 +106,22 @@ export const CommentSectionSupabase = observer((props: IProps) => {
               highlightedReply.highlighted = true;
             }
           }
-
-          // ensure highlighted comment is visible
-          const index = comments.findIndex(
-            (x) => x.highlighted || x.replies?.some((y) => y.highlighted),
-          );
-
-          if (index > 5) {
-            setCommentLimit(index + 1);
-          }
         }
 
         setComments(comments || []);
       } catch (err) {
         logger.error(err);
+        if (!cancelled) {
+          setLoadError('Could not load comments. Please try again.');
+        }
       }
     };
 
     fetchComments();
-  }, [sourceId, location?.hash]);
+    return () => {
+      cancelled = true;
+    };
+  }, [sourceId, sourceType, location?.hash]);
 
   useEffect(() => {
     if (location.hash && location.hash === '#discussion') {
@@ -266,6 +282,11 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   return (
     <AuthorsContext.Provider value={{ authors }}>
       <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
+        {loadError && (
+          <div role="alert">
+            <ErrorsContainer serverErrors={[loadError]} />
+          </div>
+        )}
         <Flex
           sx={{
             flexDirection: 'row',
@@ -319,7 +340,9 @@ export const CommentSectionSupabase = observer((props: IProps) => {
               sx={{ margin: '0 auto' }}
               variant="outline"
               data-cy="show-more-comments"
-              onClick={() => setCommentLimit((prev) => prev + commentPageSize)}
+              onClick={() =>
+                setCommentLimit((prev) => Math.max(prev, highlightedIndex + 1) + commentPageSize)
+              }
             >
               {`show ${remainingCommentsCount} more comment${remainingCommentsCount === 1 ? '' : 's'}`}
             </Button>

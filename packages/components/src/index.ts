@@ -3,7 +3,6 @@ export { ActionSet } from './ActionSet/ActionSet';
 export { AuthorDisplay } from './AuthorDisplay/AuthorDisplay';
 export { Banner } from './Banner/Banner';
 export { BlockedRoute } from './BlockedRoute/BlockedRoute';
-export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
 export { Button } from './Button/Button';
 export { ButtonIcon } from './ButtonIcon/ButtonIcon';
 export { ButtonShowReplies } from './ButtonShowReplies/ButtonShowReplies';

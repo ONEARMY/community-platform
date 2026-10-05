@@ -151,19 +151,6 @@ export const buttons = {
       backgroundColor: softblue,
     },
   },
-  breadcrumb: {
-    ...BASE_BUTTON,
-    padding: '1',
-    border: '1px solid transparent',
-    backgroundColor: 'transparent',
-    height: 'auto',
-    color: 'dimgray',
-    fontSize: 15,
-    '&:hover': {
-      backgroundColor: softblue,
-      border: '1px solid ' + lightgrey,
-    },
-  },
 };
 
 export type ButtonVariants = 'primary' | 'secondary' | 'outline' | 'disabled' | 'subtle';

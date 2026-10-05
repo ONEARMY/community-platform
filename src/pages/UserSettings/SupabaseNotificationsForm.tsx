@@ -1,8 +1,9 @@
-import { ConfirmModal, FieldSwitch, InformationTooltip, InternalLink } from 'oa-components';
+import { ConfirmModal, FieldSwitch, InternalLink } from 'oa-components';
 import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Button, Flex } from 'theme-ui';
+import { InformationTooltip } from '@/components/ui/information-tooltip';
 import { Spinner } from '@/components/ui/spinner';
 import { TenantContext } from '../common/TenantContext';
 import { ContentReachRadioOptions } from './content/fields/ContentReachPreferenceField';
@@ -115,10 +116,8 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                 description="Password resets, email verifications and other service emails"
                 control={
                   <InformationTooltip
-                    glyph="information"
-                    size={22}
-                    tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
-                    sx={{ marginRight: 2 }}
+                    tooltip="Afraid we've got to send these to you, so you can't opt-out."
+                    className="mr-2.5"
                   />
                 }
               />

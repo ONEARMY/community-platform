@@ -1,17 +1,11 @@
 import { formatDistanceToNow } from 'date-fns';
 import { observer } from 'mobx-react';
-import {
-  Category,
-  FollowIcon,
-  Icon,
-  IconCountWithTooltip,
-  InternalLink,
-  Username,
-} from 'oa-components';
+import { Category, FollowIcon, Icon, InternalLink, Username } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
+import { IconCountWithTooltip } from '@/components/ui/icon-count-with-tooltip';
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
 import { researchStatusColour } from '../researchHelpers';
 
@@ -272,11 +266,13 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                   >
                     <IconCountWithTooltip
                       count={usefulDisplayCount}
+                      dataCy="ItemUsefulText"
                       icon="star-active"
                       text="How useful is it"
                     />
                     <IconCountWithTooltip
                       count={item.commentCount || 0}
+                      dataCy="ItemCommentText"
                       icon="comment"
                       text="Total comments"
                     />

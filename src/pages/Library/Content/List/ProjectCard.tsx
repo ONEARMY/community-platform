@@ -1,10 +1,11 @@
-import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
+import { Category, ModerationStatus, Username } from 'oa-components';
 import { type Project, UserRole } from 'oa-shared';
 import { Link as RouterLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
+import { IconCountWithTooltip } from '@/components/ui/icon-count-with-tooltip';
 
 type ProjectCardProps = {
   item: Project;

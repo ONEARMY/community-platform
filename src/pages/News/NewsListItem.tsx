@@ -1,7 +1,6 @@
 import {
   Category,
   Icon,
-  IconCountWithTooltip,
   InternalLink,
   ProfileBadgeContentLabel,
   // ModerationStatus,
@@ -10,6 +9,7 @@ import type { News } from 'oa-shared';
 import { Highlighter } from 'src/common/Highlighter';
 import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
+import { IconCountWithTooltip } from '@/components/ui/icon-count-with-tooltip';
 import { listing } from './labels';
 
 interface IProps {

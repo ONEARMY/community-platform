@@ -1,10 +1,11 @@
-import { Category, IconCountWithTooltip, InternalLink, Tooltip } from 'oa-components';
+import { Category, InternalLink, Tooltip } from 'oa-components';
 import type { Question } from 'oa-shared';
 import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
 import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { Highlighter } from 'src/common/Highlighter';
 import { Avatar, Box, Card, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
+import { IconCountWithTooltip } from '@/components/ui/icon-count-with-tooltip';
 import { listing } from './labels';
 
 interface IProps {
@@ -156,6 +157,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
               )}
               <IconCountWithTooltip
                 count={question.commentCount || 0}
+                dataCy="question-list-item-comments"
                 icon="comment"
                 text={listing.totalComments}
               />

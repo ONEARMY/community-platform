@@ -1,7 +1,7 @@
-import { IconCountWithTooltip } from 'oa-components';
 import type { Image as ImageType } from 'oa-shared';
 import { Link } from 'react-router';
 import { Box, Flex, Image, Text } from 'theme-ui';
+import { IconCountWithTooltip } from '@/components/ui/icon-count-with-tooltip';
 
 interface IProps {
   type: 'library' | 'research' | 'questions';

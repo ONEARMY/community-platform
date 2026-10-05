@@ -9,6 +9,7 @@ import { ORGANISATION_SIGNUP_STEPS, organisationActivityClause } from 'src/pages
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
+import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
@@ -19,6 +20,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Stepper } from '@/components/ui/stepper';
+import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -39,6 +41,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const spaceProfileTypes = profileTypes.filter((type) => type.isSpace);
+  const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
   return data(
     {
@@ -46,6 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       descriptionHtml: tenantSettings.organisationSignupDescriptionHtml,
       activityClause: organisationActivityClause(tenantSettings.organisationActivity),
       spaceProfileTypes,
+      turnstileSiteKey,
     },
     { headers },
   );
@@ -76,12 +80,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const captchaToken = formData.get('cf-turnstile-token') as string;
 
   const signupResult = await client.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo,
+      captchaToken,
     },
   });
 
@@ -110,7 +116,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { activityClause, descriptionHtml, spaceProfileTypes } = useLoaderData<typeof loader>();
+  const { activityClause, descriptionHtml, spaceProfileTypes, turnstileSiteKey } =
+    useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
@@ -119,6 +126,7 @@ export default function Index() {
       .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])
       .required(FRIENDLY_MESSAGES['sign-up/password-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
+    'cf-turnstile-token': string().required(FRIENDLY_MESSAGES['sign-up/captcha-required']),
   });
 
   return (
@@ -272,6 +280,15 @@ export default function Index() {
                               </a>
                             </span>
                           </Label>
+                        )}
+                      </Field>
+
+                      <Field name="cf-turnstile-token">
+                        {({ input }) => (
+                          <>
+                            <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                            <input {...input} type="hidden" />
+                          </>
                         )}
                       </Field>
 

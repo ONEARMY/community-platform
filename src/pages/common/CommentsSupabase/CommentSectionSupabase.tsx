@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { AuthorsContext, CommentsTitle, FollowButton } from 'oa-components';
+import { CommentsTitle, FollowButton } from 'oa-components';
 import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
@@ -11,6 +11,7 @@ import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { Box, Button, Flex } from 'theme-ui';
+import { AuthorsContext } from './AuthorsContext';
 import { CommentItemSupabase } from './CommentItemSupabase';
 import { CommentSort } from './CommentSort';
 import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';

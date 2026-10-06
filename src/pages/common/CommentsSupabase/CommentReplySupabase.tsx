@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import {
   ActionSet,
   Button,
-  CommentDisplay,
   ConfirmModal,
   EditComment,
   Icon,
@@ -14,10 +13,9 @@ import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
+import { CommentDisplay } from './CommentDisplay';
 import { useCopyCommentLink } from './useCopyCommentLink';
-
-const DELETED_COMMENT = 'The original comment got deleted';
 
 export interface ICommentItemProps {
   comment: Reply;
@@ -74,69 +72,55 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
         sx={{ flexDirection: 'column', width: '100%' }}
       >
         <Flex sx={{ gap: 2 }} ref={commentRef as any}>
-          {comment.deleted ? (
-            <Box
-              sx={{
-                marginBottom: 2,
-                border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
-              }}
-              data-cy="deletedComment"
-            >
-              <Text sx={{ color: 'grey' }}>[{DELETED_COMMENT}]</Text>
-            </Box>
-          ) : (
-            <CommentDisplay
-              isEditable={isEditable}
-              itemType={item}
-              comment={comment}
-              menuActions={
-                <ActionSet itemType="ReplyItem">
-                  {isEditable && (
-                    <Button
-                      type="button"
-                      data-cy="ReplyItem: edit button"
-                      variant="subtle"
-                      icon="edit"
-                      onClick={() => setShowEditModal(true)}
-                      sx={{ fontSize: 1 }}
-                    >
-                      Edit
-                    </Button>
-                  )}
+          <CommentDisplay
+            comment={comment}
+            menuActions={
+              <ActionSet itemType="ReplyItem">
+                {isEditable && (
                   <Button
                     type="button"
-                    data-cy="ReplyItem: copy link button"
+                    data-cy="ReplyItem: edit button"
                     variant="subtle"
-                    icon="copy-link"
-                    onClick={copyCommentLink}
+                    icon="edit"
+                    onClick={() => setShowEditModal(true)}
                     sx={{ fontSize: 1 }}
                   >
-                    Copy Link
+                    Edit
                   </Button>
-                  {isEditable && (
-                    <Button
-                      type="button"
-                      data-cy="ReplyItem: delete button"
-                      variant="subtle"
-                      icon="delete"
-                      onClick={() => setShowDeleteModal(true)}
-                      sx={{ fontSize: 1 }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                </ActionSet>
-              }
-              footerActions={
-                <UsefulButtonLite
-                  onUsefulClick={async () => await toggleVote()}
-                  hasUserVotedUseful={hasVoted}
-                  votedUsefulCount={usefulCount}
-                  isLoggedIn={!!loggedInUser}
-                />
-              }
-            />
-          )}
+                )}
+                <Button
+                  type="button"
+                  data-cy="ReplyItem: copy link button"
+                  variant="subtle"
+                  icon="copy-link"
+                  onClick={copyCommentLink}
+                  sx={{ fontSize: 1 }}
+                >
+                  Copy Link
+                </Button>
+                {isEditable && (
+                  <Button
+                    type="button"
+                    data-cy="ReplyItem: delete button"
+                    variant="subtle"
+                    icon="delete"
+                    onClick={() => setShowDeleteModal(true)}
+                    sx={{ fontSize: 1 }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </ActionSet>
+            }
+            footerActions={
+              <UsefulButtonLite
+                onUsefulClick={async () => await toggleVote()}
+                hasUserVotedUseful={hasVoted}
+                votedUsefulCount={usefulCount}
+                isLoggedIn={!!loggedInUser}
+              />
+            }
+          />
         </Flex>
 
         <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>

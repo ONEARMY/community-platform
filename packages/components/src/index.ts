@@ -11,8 +11,6 @@ export { CardListItem } from './CardListItem/CardListItem';
 export { CardProfile } from './CardProfile/CardProfile';
 export { Category } from './Category/Category';
 export { CategoryHorizonalList } from './CategoryHorizonalList/CategoryHorizonalList';
-export { CommentAvatar } from './CommentAvatar/CommentAvatar';
-export { CommentDisplay } from './CommentDisplay/CommentDisplay';
 export { CommentsTitle } from './CommentsTitle/CommentsTitle';
 export { ConfirmModal } from './ConfirmModal/ConfirmModal';
 export { ContentStatistics } from './ContentStatistics/ContentStatistics';
@@ -63,7 +61,6 @@ export { ProfileBadgeContentLabel } from './ProfileBadgeContentLabel/ProfileBadg
 export { ProfileLink } from './ProfileLink/ProfileLink';
 export { ProfileList } from './ProfileList/ProfileList';
 export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList';
-export { AuthorsContext } from './providers/AuthorsContext';
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';

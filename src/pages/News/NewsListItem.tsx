@@ -1,6 +1,5 @@
 import {
   Category,
-  DisplayDate,
   Icon,
   IconCountWithTooltip,
   InternalLink,
@@ -10,6 +9,7 @@ import {
 import type { News } from 'oa-shared';
 import { Highlighter } from 'src/common/Highlighter';
 import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
+import { DisplayDate } from '@/components/ui/display-date';
 import { listing } from './labels';
 
 interface IProps {

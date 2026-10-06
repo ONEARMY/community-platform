@@ -1,4 +1,4 @@
-import { ActionSet, Button, DisplayDate, Modal, Username } from 'oa-components';
+import { ActionSet, Button, Modal, Username } from 'oa-components';
 import type { Remake } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -6,6 +6,7 @@ import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Image, Text } from 'theme-ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DisplayDate } from '@/components/ui/display-date';
 import { REMAKE_IMAGE_ASPECT_RATIO } from './constants';
 
 interface IProps {

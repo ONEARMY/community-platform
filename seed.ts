@@ -23,6 +23,7 @@ import type {
   useful_votesScalars,
 } from '@snaplet/seed';
 import { createSeedClient } from '@snaplet/seed';
+import { Client } from 'pg';
 import libraryJson from './.snaplet/library.json';
 import questionsJson from './.snaplet/questions.json';
 import { profilesSeed } from './seed/profilesSeed';
@@ -191,7 +192,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-1',
-    display_name: 'Starter',
+    display_name: 'Start',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
     premium_tier: 1,
@@ -199,7 +200,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-2',
-    display_name: 'Hero',
+    display_name: 'Power',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
     premium_tier: 2,
@@ -207,7 +208,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   {
     ..._BADGES_BASE,
     name: 'stripe-tier-3',
-    display_name: 'Legend',
+    display_name: 'Boost',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
     premium_tier: 3,
@@ -579,24 +580,29 @@ const seedResearch: Partial<researchScalars>[] = [
   },
 ];
 
+const seedBuckets = async () => {
+  const client = new Client({
+    connectionString: 'postgresql://postgres:postgres@localhost:54322/postgres',
+  });
+  await client.connect();
+  await client.query(
+    `insert into storage.buckets (id, name, public, allowed_mime_types)
+     values ($1, $1, true, '{}'), ($2, $2, false, '{}')
+     on conflict (id) do update
+       set name = excluded.name,
+           public = excluded.public,
+           allowed_mime_types = excluded.allowed_mime_types`,
+    [tenant_id, `${tenant_id}-documents`],
+  );
+  await client.end();
+};
+
 const main = async () => {
   const seed = await createSeedClient();
 
   await seed.$resetDatabase();
 
-  await seed.buckets([
-    {
-      id: tenant_id,
-      name: tenant_id,
-      public: true,
-      allowed_mime_types: [],
-    },
-    {
-      id: `${tenant_id}-documents`,
-      name: `${tenant_id}-documents`,
-      allowed_mime_types: [],
-    },
-  ]);
+  await seedBuckets();
 
   await seed.tenant_settings([
     {

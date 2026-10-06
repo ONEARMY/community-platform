@@ -25,13 +25,13 @@ describe('[Admin]', () => {
     cy.contains('h1', 'Remakes');
   });
   it('[Admin can access the admin questions overview]', () => {
-    cy.signIn(admin.email, admin.password)
+     cy.signIn(admin.email, admin.password)
 
     cy.visit('/admin')
     cy.get('a[href*="/admin/questions"]').click()
     cy.url().should('include', '/admin/questions')
     cy.get('h1').contains('Questions')
-  })
+   })
 
   it('[Admin can click on the question title to go to the question page]', () => {
     cy.signIn(admin.email, admin.password)
@@ -41,7 +41,7 @@ describe('[Admin]', () => {
     cy.get('a[href*="/questions/"').first().click()
     cy.url().should('include', '/questions/')
 
-  })
+   })
 
   it('[Admin can click on the question author to go to the autors profile page]', () => {
     cy.signIn(admin.email, admin.password)
@@ -50,7 +50,7 @@ describe('[Admin]', () => {
     cy.get('a[href*="/admin/questions"]').click()
     cy.get('a[href*="/u/"').first().click()
     cy.url().should('include', '/u/')
-  })
+   })
 
   it('[Admin can click on the edit button to go to the question edit page]', () => {
     cy.signIn(admin.email, admin.password)
@@ -71,7 +71,7 @@ describe('[Admin]', () => {
     cy.contains('Delete Question')
     cy.get('button').contains("Cancel").click({ force: true })
     cy.get('body').should("not.contain.text", "Delete Question")
-  })
+   })
 
 
   it('[Admin can delete questions from the question page]', () => {
@@ -83,5 +83,47 @@ describe('[Admin]', () => {
     cy.contains('Delete Question')
     cy.get('button').contains("Delete").click({ force: true })
     cy.get('body').should("not.contain.text", "Delete Question")
-  })
+   })
+
 });
+
+describe('[Admin - Profile Type Page', () => {
+  beforeEach(() => {
+    cy.visit('/')
+    cy.signIn(admin.email, admin.password)
+  })
+
+  it('[Admin can access the profile types page]', () => {
+    cy.visit('/admin')
+    cy.get('a[href*="/admin/profile-types"]').click()
+    cy.url().should('include', '/admin/profile-types')
+    cy.get('h1').contains('Profile Types')
+   })
+
+  it('[Admin cannot add a new profile type if form fields are empty]', () => {
+    cy.visit('/admin/profile-types')
+    cy.wait(500)
+    cy.get('button').contains('New').click({force: true})
+    cy.get('input[id="profile-type-name"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
+    cy.get('button').contains('Create').click()
+    cy.get('button[data-slot="dialog-close"]').click()
+    cy.get('body').should('not.contain', 'Testy McTestFace')
+  })
+
+  it('[Admin can edit profile type]', () => {
+    cy.visit('/admin/profile-types')
+    cy.wait(500)
+    cy.get('button[aria-label="Edit member"]').click({force: true})
+    cy.get('textArea[id*="profile-type-description"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
+    cy.get('button').contains('Save').click()
+    cy.get('body').should('contain', 'Testy McTestFace')
+  })
+
+  it('Admin cannot delete a profile type that is in use', () => {
+    cy.visit('/admin/profile-types')
+    cy.wait(500)
+    cy.get('button[aria-label="Can\'t delete member"]').click({force: true})
+    cy.get('body').should('contain', 'Cannot be deleted')
+  })
+
+})

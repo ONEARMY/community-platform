@@ -4,8 +4,12 @@ import { Category, FollowIcon, Icon, InternalLink, Username } from 'oa-component
 import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
+import { shortFormatNumber } from 'src/utils/helpers';
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
-import { IconCountWithTooltip } from '@/components/ui/icon-count-with-tooltip';
+import CommentIcon from '@/components/ui/icons/comment.svg?react';
+import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
+import UpdateIcon from '@/components/ui/icons/update.svg?react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
 import { researchStatusColour } from '../researchHelpers';
 
@@ -264,25 +268,43 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                       gap: 2,
                     }}
                   >
-                    <IconCountWithTooltip
-                      count={usefulDisplayCount}
-                      dataCy="ItemUsefulText"
-                      icon="star-active"
-                      text="How useful is it"
-                    />
-                    <IconCountWithTooltip
-                      count={item.commentCount || 0}
-                      dataCy="ItemCommentText"
-                      icon="comment"
-                      text="Total comments"
-                    />
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={<span tabIndex={0} />}
+                        data-cy="ItemUsefulText"
+                        aria-label={`How useful is it: ${usefulDisplayCount}`}
+                        className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                      >
+                        {shortFormatNumber(usefulDisplayCount)}
+                        <StarActiveIcon className="ml-1 size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>How useful is it</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={<span tabIndex={0} />}
+                        data-cy="ItemCommentText"
+                        aria-label={`Total comments: ${item.commentCount || 0}`}
+                        className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                      >
+                        {shortFormatNumber(item.commentCount || 0)}
+                        <CommentIcon className="ml-1 size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>Total comments</TooltipContent>
+                    </Tooltip>
 
-                    <IconCountWithTooltip
-                      count={item.updateCount}
-                      dataCy="ItemUpdateText"
-                      icon="update"
-                      text="Amount of updates"
-                    />
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={<span tabIndex={0} />}
+                        data-cy="ItemUpdateText"
+                        aria-label={`Amount of updates: ${item.updateCount}`}
+                        className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                      >
+                        {shortFormatNumber(item.updateCount)}
+                        <UpdateIcon className="ml-1 size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>Amount of updates</TooltipContent>
+                    </Tooltip>
                   </Box>
                   {/* Show these on mobile, hide on tablet & above. */}
                   <Box

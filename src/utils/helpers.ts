@@ -36,6 +36,21 @@ export const numberWithCommas = (number: number) => {
   return new Intl.NumberFormat('en-US').format(number);
 };
 
+export const shortFormatNumber = (num: number): string => {
+  const units = [
+    { value: 1000000, suffix: 'M' },
+    { value: 1000, suffix: 'K' },
+  ];
+
+  for (const { value, suffix } of units) {
+    if (num >= value) {
+      return (num / value).toFixed(1).replace(/\.0$/, '') + suffix;
+    }
+  }
+
+  return num.toString();
+};
+
 // Take a string and capitalises the first letter
 // hello world => Hello world
 export const capitalizeFirstLetter = (str: string) => {

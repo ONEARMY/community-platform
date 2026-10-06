@@ -3,8 +3,9 @@ import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Button, Flex } from 'theme-ui';
-import { InformationTooltip } from '@/components/ui/information-tooltip';
+import InformationIcon from '@/components/ui/icons/information.svg?react';
 import { Spinner } from '@/components/ui/spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { TenantContext } from '../common/TenantContext';
 import { ContentReachRadioOptions } from './content/fields/ContentReachPreferenceField';
 import { ContentReachSwitch } from './content/fields/ContentReachSwitch';
@@ -115,10 +116,18 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                 name="Service emails"
                 description="Password resets, email verifications and other service emails"
                 control={
-                  <InformationTooltip
-                    tooltip="Afraid we've got to send these to you, so you can't opt-out."
-                    className="mr-2.5"
-                  />
+                  <Tooltip>
+                    <TooltipTrigger
+                      render={<span tabIndex={0} />}
+                      aria-label="Afraid we've got to send these to you, so you can't opt-out."
+                      className="mr-2.5 inline-flex text-muted-foreground"
+                    >
+                      <InformationIcon className="size-5" />
+                    </TooltipTrigger>
+                    <TooltipContent className="text-center">
+                      Afraid we've got to send these to you, so you can't opt-out.
+                    </TooltipContent>
+                  </Tooltip>
                 }
               />
 

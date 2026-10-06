@@ -75,9 +75,9 @@ export function DisplayDate({
       className={cn(displayDateVariants[variant], className)}
     >
       <span className="md:hidden">
-        {label}
-        {formatDistanceShort(primaryDate)}
-        {wasEdited && modifiedDate ? `. Edited ${formatDistanceShort(modifiedDate)}` : ''}
+        {wasEdited && modifiedDate
+          ? `Edited ${formatDistanceShort(modifiedDate)}`
+          : `${label}${formatDistanceShort(primaryDate)}`}
       </span>
       <span className="hidden md:inline">
         {label}

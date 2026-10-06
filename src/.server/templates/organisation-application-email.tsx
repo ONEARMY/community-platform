@@ -1,4 +1,5 @@
 import type { Moderation, TenantSettings } from 'oa-shared';
+import React from 'react';
 import { Section, Text } from 'react-email';
 
 import { Button } from './components/button';

@@ -8,7 +8,7 @@ import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { logger } from 'src/logger';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { Box, Divider, Flex, Paragraph } from 'theme-ui';
-import { UserStatistics } from '@/components/ui/user-statistics';
+import { UserStatistics } from './UserStatistics';
 
 interface IProps {
   docs: UserCreatedDocs;

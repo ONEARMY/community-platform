@@ -18,6 +18,7 @@ export const FRIENDLY_MESSAGES = {
   'generic-error':
     "We couldn't complete your registration. If you already have an account, try logging in or resetting your password.",
   'supporter/already-subscribed': 'This account already has an active subscription.',
+  'supporter/region-blocked': "Supporter memberships aren't available in your region.",
   required: 'Required field',
   'reset email sent': 'Reset email sent, check your inbox/spam',
   'profile saved': 'Profile Saved',

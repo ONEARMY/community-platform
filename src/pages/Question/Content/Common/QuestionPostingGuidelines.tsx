@@ -1,4 +1,4 @@
-import { ExternalLink, Guidelines } from 'oa-components';
+import { Guidelines } from 'oa-components';
 import { useContext } from 'react';
 import { TenantContext } from 'src/pages/common/TenantContext';
 
@@ -11,9 +11,9 @@ export const QuestionPostingGuidelines = () => {
       ? [
           <>
             Have a look at our{' '}
-            <ExternalLink sx={{ color: 'blue' }} href={guidelinesUrl}>
+            <a target="_blank" rel="noopener noreferrer" className="text-info" href={guidelinesUrl}>
               question guidelines.
-            </ExternalLink>
+            </a>
           </>,
         ]
       : []),
@@ -25,9 +25,9 @@ export const QuestionPostingGuidelines = () => {
     </>,
     <>
       Double check if it's already made and{' '}
-      <ExternalLink sx={{ color: 'blue' }} href="/questions">
+      <a target="_blank" rel="noopener noreferrer" className="text-info" href="/questions">
         search{' '}
-      </ExternalLink>
+      </a>
     </>,
     <>
       Provide enough info for people to help{' '}

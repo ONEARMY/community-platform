@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import {
   Category,
   ContentStatistics,
-  DisplayDate,
   ProfileBadgeContentLabel,
   TagList,
   useImageLightbox,
@@ -16,6 +15,7 @@ import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
+import { DisplayDate } from '@/components/ui/display-date';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { PollDisplay } from '../common/Polls/PollDisplay';

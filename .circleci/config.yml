@@ -166,6 +166,46 @@ jobs:
           at: '.'
       - run:
           command: bun run storybook:build
+  # Downloads GeoLite2 once per day for all deploys (GeoLite accounts are limited to 30 downloads/day)
+  geoip:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - run:
+          name: Set cache date
+          command: date -u +%F > geo-date
+      - restore_cache:
+          keys:
+            - v1-geoip-{{ checksum "geo-date" }}
+            - v1-geoip-
+      - run:
+          name: Download GeoLite2-City
+          command: |
+            if cmp -s geo-date geo/date; then
+              echo "Using today's cached database"
+              exit 0
+            fi
+            mkdir -p geo-new
+            if curl -fsSL -u "$MAXMIND_ACCOUNT_ID:$MAXMIND_LICENSE_KEY" \
+              "https://download.maxmind.com/geoip/databases/GeoLite2-City/download?suffix=tar.gz" \
+              -o geo.tar.gz &&
+              tar -xzf geo.tar.gz -C geo-new --strip-components=1 --wildcards '*.mmdb'; then
+              rm -rf geo && mv geo-new geo && cp geo-date geo/date
+            elif [ -f geo/GeoLite2-City.mmdb ]; then
+              echo "Download failed, using cached database from $(cat geo/date)"
+            else
+              echo "Download failed and no cached database available"
+              exit 1
+            fi
+      - save_cache:
+          key: v1-geoip-{{ checksum "geo-date" }}
+          paths:
+            - geo
+      - persist_to_workspace:
+          root: .
+          paths:
+            - geo
   deploy:
     docker:
       - image: cimg/node:22.18.0
@@ -314,10 +354,17 @@ workflows:
       #     <<: *filter_only_default_branch
       #     context:
       #       - supabase-deploy
+      - geoip:
+          name: 'Download GeoIP database'
+          requires:
+            - 'Approve Production deployment'
+          <<: *filter_only_default_branch
+          context:
+            - fly-deploy
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Approve Production deployment'
+            - 'Download GeoIP database'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
@@ -329,7 +376,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Approve Production deployment'
+            - 'Download GeoIP database'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
@@ -341,7 +388,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Approve Production deployment'
+            - 'Download GeoIP database'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk

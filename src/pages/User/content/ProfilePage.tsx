@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, ExternalLink, InternalLink } from 'oa-components';
+import { Button, InternalLink } from 'oa-components';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -54,7 +54,9 @@ export const ProfilePage = observer((props: IProps) => {
                 }}
               >
                 {shouldShowUpgrade && (
-                  <ExternalLink
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
                     href={upgradeBadge.actionUrl}
                     data-cy="UpgradeBadge"
                     onClick={() => {
@@ -64,7 +66,7 @@ export const ProfilePage = observer((props: IProps) => {
                         label: upgradeBadge.actionLabel,
                       });
                     }}
-                    sx={{ textDecoration: 'none' }}
+                    style={{ textDecoration: 'none' }}
                   >
                     <Button
                       type="button"
@@ -83,7 +85,7 @@ export const ProfilePage = observer((props: IProps) => {
                         {upgradeBadge.actionLabel}
                       </Flex>
                     </Button>
-                  </ExternalLink>
+                  </a>
                 )}
                 <InternalLink to="/settings">
                   <Button type="button" data-cy="EditYourProfile">

@@ -2,7 +2,6 @@ import {
   AuthorDisplay,
   Category,
   ContentStatistics,
-  DisplayDate,
   ModerationStatus,
   TagList,
   UsefulStatsButton,
@@ -19,6 +18,7 @@ import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
 
 interface IProps {

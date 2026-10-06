@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router';
 import { ThemeProvider } from '@theme-ui/core';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { theme } from 'oa-themes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TenantContext } from 'src/pages/common/TenantContext';

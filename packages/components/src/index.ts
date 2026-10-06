@@ -3,7 +3,6 @@ export { ActionSet } from './ActionSet/ActionSet';
 export { AuthorDisplay } from './AuthorDisplay/AuthorDisplay';
 export { Banner } from './Banner/Banner';
 export { BlockedRoute } from './BlockedRoute/BlockedRoute';
-export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
 export { Button } from './Button/Button';
 export { ButtonIcon } from './ButtonIcon/ButtonIcon';
 export { ButtonShowReplies } from './ButtonShowReplies/ButtonShowReplies';
@@ -27,7 +26,6 @@ export { DonationRequestModal } from './DonationRequestModal/DonationRequestModa
 export { DownloadButton } from './DownloadButton/DownloadButton';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
 export { EditComment } from './EditComment/EditComment';
-export { ExternalLink } from './ExternalLink/ExternalLink';
 export { FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { FieldInput } from './FieldInput/FieldInput';
 export { FieldSwitch } from './FieldSwitch/FieldSwitch';

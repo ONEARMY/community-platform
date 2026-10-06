@@ -1,27 +1,30 @@
-import styled from '@emotion/styled';
+import { useThemeUI } from '@theme-ui/core';
 import Linkify from 'linkify-react';
 import { useEffect, useRef, useState } from 'react';
 import { Text } from 'theme-ui';
-
-import { ExternalLink } from '../ExternalLink/ExternalLink';
 
 interface IProps {
   body: string;
 }
 const SHORT_COMMENT = 129;
 
-const CommentLink = styled(ExternalLink)`
-  color: ${({ theme }) => (theme as any).colors.grey} !important;
-  text-decoration: underline;
-`;
-
 const renderExternalLink = ({ attributes = {} as any, content = '' }) => {
   const { href, ...props } = attributes;
+  const { theme } = useThemeUI() as any;
 
   return (
-    <CommentLink href={href} {...props}>
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={href}
+      style={{
+        color: theme.colors.grey,
+        textDecoration: 'underline',
+      }}
+      {...props}
+    >
       {content}
-    </CommentLink>
+    </a>
   );
 };
 

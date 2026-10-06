@@ -3,7 +3,7 @@ import { AuthorsContext, CommentsTitle, FollowButton } from 'oa-components';
 import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { logger } from 'src/logger';
 import { commentService } from 'src/services/commentService';
@@ -32,11 +32,12 @@ interface IProps {
   pinnedCommentId?: number;
   defaultSortBy?: CommentSortOption;
   labels?: CommentSectionLabels;
+  onLoaded?: () => void;
 }
 const commentPageSize = 10;
 
 export const CommentSectionSupabase = observer((props: IProps) => {
-  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels } = props;
+  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels, onLoaded } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
@@ -46,6 +47,9 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const { isSubscribed, toggle: toggleFollowReplies } = useSubscription(sourceType, sourceId);
   const { profile } = useProfileStore();
   const location = useLocation();
+
+  const onLoadedRef = useRef(onLoaded);
+  onLoadedRef.current = onLoaded;
 
   const displayedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
@@ -101,6 +105,8 @@ export const CommentSectionSupabase = observer((props: IProps) => {
         setComments(comments || []);
       } catch (err) {
         logger.error(err);
+      } finally {
+        onLoadedRef.current?.();
       }
     };
 

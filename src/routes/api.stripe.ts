@@ -2,6 +2,7 @@ import { FRIENDLY_MESSAGES } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { isBlockedRegion } from 'src/services/geoBlock.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
@@ -70,6 +71,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     if (actionType === 'elements_subscription') {
+      if (await isBlockedRegion(request)) {
+        return Response.json(
+          { error: FRIENDLY_MESSAGES['supporter/region-blocked'] },
+          { headers, status: 451 },
+        );
+      }
+
       if (!priceId || !currency) {
         return Response.json(
           {},

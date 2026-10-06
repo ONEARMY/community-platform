@@ -188,4 +188,7 @@
   html {
     @apply font-sans;
   }
+  a {
+    @apply no-underline hover:underline;
+  }
 }

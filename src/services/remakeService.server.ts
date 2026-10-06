@@ -80,11 +80,11 @@ export class RemakeServiceServer {
         return remakes;
       }
 
-      remakes.push(
-        ...batch.map((remake) =>
+      for (const remake of batch) {
+        remakes.push(
           AdminRemake.fromDB(remake, this.imageService.getPublicUrl(remake.images?.[0] ?? null)),
-        ),
-      );
+        );
+      }
       cursor = batch.at(-1);
     }
   }

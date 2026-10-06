@@ -466,48 +466,6 @@
           "maxLength": null
         },
         {
-          "id": "storage.buckets.versioning_status",
-          "name": "versioning_status",
-          "columnName": "versioning_status",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "storage.buckets.lifecycle_configuration",
-          "name": "lifecycle_configuration",
-          "columnName": "lifecycle_configuration",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "storage.buckets.lifecycle_configuration_generation",
-          "name": "lifecycle_configuration_generation",
-          "columnName": "lifecycle_configuration_generation",
-          "type": "uuid",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "objects",
           "type": "objects",
           "isRequired": false,
@@ -4175,20 +4133,6 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
-        },
-        {
-          "name": "mfa_recovery_code_sets",
-          "type": "mfa_recovery_code_sets",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "mfa_recovery_code_setsTomfa_factors",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -4210,268 +4154,6 @@
         {
           "name": "unique_phone_factor_per_user",
           "fields": ["phone", "user_id"],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "mfa_recovery_code_sets": {
-      "id": "auth.mfa_recovery_code_sets",
-      "schemaName": "auth",
-      "tableName": "mfa_recovery_code_sets",
-      "fields": [
-        {
-          "id": "auth.mfa_recovery_code_sets.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_code_sets.user_id",
-          "name": "user_id",
-          "columnName": "user_id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_code_sets.mfa_factor_id",
-          "name": "mfa_factor_id",
-          "columnName": "mfa_factor_id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_code_sets.failed_verification_count",
-          "name": "failed_verification_count",
-          "columnName": "failed_verification_count",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_code_sets.verification_locked_until",
-          "name": "verification_locked_until",
-          "columnName": "verification_locked_until",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_code_sets.created_at",
-          "name": "created_at",
-          "columnName": "created_at",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_code_sets.updated_at",
-          "name": "updated_at",
-          "columnName": "updated_at",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "mfa_factors",
-          "type": "mfa_factors",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "mfa_recovery_code_setsTomfa_factors",
-          "relationFromFields": ["mfa_factor_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "users",
-          "type": "users",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "mfa_recovery_code_setsTousers",
-          "relationFromFields": ["user_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "mfa_recovery_codes",
-          "type": "mfa_recovery_codes",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "mfa_recovery_codesTomfa_recovery_code_sets",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "mfa_recovery_code_sets_mfa_factor_id_key",
-          "fields": ["mfa_factor_id"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "mfa_recovery_code_sets_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "mfa_recovery_code_sets_user_id_key",
-          "fields": ["user_id"],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "mfa_recovery_codes": {
-      "id": "auth.mfa_recovery_codes",
-      "schemaName": "auth",
-      "tableName": "mfa_recovery_codes",
-      "fields": [
-        {
-          "id": "auth.mfa_recovery_codes.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_codes.mfa_recovery_code_set_id",
-          "name": "mfa_recovery_code_set_id",
-          "columnName": "mfa_recovery_code_set_id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_codes.code_hash",
-          "name": "code_hash",
-          "columnName": "code_hash",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_codes.consumed_at",
-          "name": "consumed_at",
-          "columnName": "consumed_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.mfa_recovery_codes.created_at",
-          "name": "created_at",
-          "columnName": "created_at",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "mfa_recovery_code_sets",
-          "type": "mfa_recovery_code_sets",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "mfa_recovery_codesTomfa_recovery_code_sets",
-          "relationFromFields": ["mfa_recovery_code_set_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "mfa_recovery_codes_pkey",
-          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -4905,48 +4587,6 @@
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.news.content",
-          "name": "content",
-          "columnName": "content",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.news.content_search_text",
-          "name": "content_search_text",
-          "columnName": "content_search_text",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.news.content_fts",
-          "name": "content_fts",
-          "columnName": "content_fts",
-          "type": "tsvector",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": true,
           "sequence": false,
           "hasDefaultValue": false,
           "isId": false,
@@ -6460,48 +6100,6 @@
           "maxLength": null
         },
         {
-          "id": "storage.objects.archived_at",
-          "name": "archived_at",
-          "columnName": "archived_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "storage.objects.is_delete_marker",
-          "name": "is_delete_marker",
-          "columnName": "is_delete_marker",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "storage.objects.is_versioned",
-          "name": "is_versioned",
-          "columnName": "is_versioned",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "buckets",
           "type": "buckets",
           "isRequired": false,
@@ -6523,18 +6121,8 @@
           "nullNotDistinct": false
         },
         {
-          "name": "idx_objects_current_version",
+          "name": "bucketid_objname",
           "fields": ["bucket_id", "name"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "idx_objects_null_version",
-          "fields": ["bucket_id", "name"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "objects_bucket_id_name_version_key",
-          "fields": ["bucket_id", "name", "version"],
           "nullNotDistinct": false
         }
       ]
@@ -6639,20 +6227,6 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.one_time_tokens.expires_at",
-          "name": "expires_at",
-          "columnName": "expires_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -8178,20 +7752,6 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.profiles.signup_source",
-          "name": "signup_source",
-          "columnName": "signup_source",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
         },
@@ -10368,20 +9928,6 @@
           "maxLength": null
         },
         {
-          "id": "public.research_updates.order",
-          "name": "order",
-          "columnName": "order",
-          "type": "int4",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "profiles",
           "type": "profiles",
           "isRequired": false,
@@ -11251,343 +10797,6 @@
         }
       ]
     },
-    "scim_tokens": {
-      "id": "auth.scim_tokens",
-      "schemaName": "auth",
-      "tableName": "scim_tokens",
-      "fields": [
-        {
-          "id": "auth.scim_tokens.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.sso_provider_id",
-          "name": "sso_provider_id",
-          "columnName": "sso_provider_id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.token_hash",
-          "name": "token_hash",
-          "columnName": "token_hash",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.prefix",
-          "name": "prefix",
-          "columnName": "prefix",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.created_at",
-          "name": "created_at",
-          "columnName": "created_at",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.expires_at",
-          "name": "expires_at",
-          "columnName": "expires_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.revoked_at",
-          "name": "revoked_at",
-          "columnName": "revoked_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_tokens.last_used_at",
-          "name": "last_used_at",
-          "columnName": "last_used_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "sso_providers",
-          "type": "sso_providers",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "scim_tokensTosso_providers",
-          "relationFromFields": ["sso_provider_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "scim_tokens_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "scim_tokens_token_hash_key",
-          "fields": ["token_hash"],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "scim_users": {
-      "id": "auth.scim_users",
-      "schemaName": "auth",
-      "tableName": "scim_users",
-      "fields": [
-        {
-          "id": "auth.scim_users.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.sso_provider_id",
-          "name": "sso_provider_id",
-          "columnName": "sso_provider_id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.user_id",
-          "name": "user_id",
-          "columnName": "user_id",
-          "type": "uuid",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.resource",
-          "name": "resource",
-          "columnName": "resource",
-          "type": "jsonb",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.user_name",
-          "name": "user_name",
-          "columnName": "user_name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": true,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.external_id",
-          "name": "external_id",
-          "columnName": "external_id",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": true,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.active",
-          "name": "active",
-          "columnName": "active",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": true,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.created_at",
-          "name": "created_at",
-          "columnName": "created_at",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.updated_at",
-          "name": "updated_at",
-          "columnName": "updated_at",
-          "type": "timestamptz",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "auth.scim_users.deleted_at",
-          "name": "deleted_at",
-          "columnName": "deleted_at",
-          "type": "timestamptz",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "sso_providers",
-          "type": "sso_providers",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "scim_usersTosso_providers",
-          "relationFromFields": ["sso_provider_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "users",
-          "type": "users",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "scim_usersTousers",
-          "relationFromFields": ["user_id"],
-          "relationToFields": ["id"],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "scim_users_pkey",
-          "fields": ["id"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "scim_users_external_id_key",
-          "fields": ["external_id", "sso_provider_id"],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "scim_users_user_name_key",
-          "fields": ["sso_provider_id", "user_name"],
-          "nullNotDistinct": false
-        }
-      ]
-    },
     "secrets": {
       "id": "vault.secrets",
       "schemaName": "vault",
@@ -12243,34 +11452,6 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "saml_relay_statesTosso_providers",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "scim_tokens",
-          "type": "scim_tokens",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "scim_tokensTosso_providers",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "scim_users",
-          "type": "scim_users",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "scim_usersTosso_providers",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -14562,20 +13743,6 @@
           "hasDefaultValue": false
         },
         {
-          "name": "mfa_recovery_code_sets",
-          "type": "mfa_recovery_code_sets",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "mfa_recovery_code_setsTousers",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
           "name": "oauth_authorizations",
           "type": "oauth_authorizations",
           "isRequired": false,
@@ -14609,20 +13776,6 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "one_time_tokensTousers",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "scim_users",
-          "type": "scim_users",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "scim_usersTousers",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -15302,9 +14455,6 @@
       "values": [
         {
           "name": "phone"
-        },
-        {
-          "name": "recovery_code"
         },
         {
           "name": "totp"

@@ -39,7 +39,7 @@ const invoiceEvent = (
       amount_paid: 1000,
       amount_due: 1000,
       lines: {
-        data: [{ pricing: { price_details: { product: 'prod_legend', price: 'price_1' } } }],
+        data: [{ pricing: { price_details: { product: 'prod_boost', price: 'price_1' } } }],
       },
       ...overrides,
     },
@@ -270,7 +270,7 @@ describe('notifyMembershipEvent', () => {
     const upgrade = subscriptionEvent(
       'customer.subscription.updated',
       { items: { data: [{ price: { product: 'prod_power' } }] } },
-      { items: { data: [{ price: { product: 'prod_legend' } }] } },
+      { items: { data: [{ price: { product: 'prod_boost' } }] } },
     );
 
     it('names the tier on each side of the switch', async () => {
@@ -295,8 +295,8 @@ describe('notifyMembershipEvent', () => {
       await notify(
         subscriptionEvent(
           'customer.subscription.updated',
-          { items: { data: [{ price: { product: 'prod_legend' } }] } },
-          { items: { data: [{ price: { product: 'prod_legend' } }] } },
+          { items: { data: [{ price: { product: 'prod_boost' } }] } },
+          { items: { data: [{ price: { product: 'prod_boost' } }] } },
         ),
       );
 

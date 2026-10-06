@@ -588,7 +588,10 @@ const seedBuckets = async () => {
   await client.query(
     `insert into storage.buckets (id, name, public, allowed_mime_types)
      values ($1, $1, true, '{}'), ($2, $2, false, '{}')
-     on conflict (id) do nothing`,
+     on conflict (id) do update
+       set name = excluded.name,
+           public = excluded.public,
+           allowed_mime_types = excluded.allowed_mime_types`,
     [tenant_id, `${tenant_id}-documents`],
   );
   await client.end();

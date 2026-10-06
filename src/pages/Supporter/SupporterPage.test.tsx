@@ -321,16 +321,6 @@ describe('SupporterPage', () => {
       expect(getStepParam(router)).toBeNull();
     });
 
-    it.each(['form', 'checkout'])('shows the restricted regions notice on %s', async (preview) => {
-      renderPage(`/support?preview=${preview}`);
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(FRIENDLY_MESSAGES['supporter/restricted-regions']),
-        ).toBeInTheDocument();
-      });
-    });
-
     it('does not treat old ?step=login as preview mode', async () => {
       const { router } = renderPage('/support?step=login');
 

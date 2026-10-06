@@ -19,8 +19,6 @@ export const FRIENDLY_MESSAGES = {
     "We couldn't complete your registration. If you already have an account, try logging in or resetting your password.",
   'supporter/already-subscribed': 'This account already has an active subscription.',
   'supporter/region-blocked': "Supporter memberships aren't available in your region.",
-  'supporter/restricted-regions':
-    "We can't accept memberships or payments from Cuba, Iran, North Korea, Syria, or the Crimea, Donetsk and Luhansk regions of Ukraine.",
   required: 'Required field',
   'reset email sent': 'Reset email sent, check your inbox/spam',
   'profile saved': 'Profile Saved',

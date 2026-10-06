@@ -1,5 +1,4 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { type FormEvent, useState } from 'react';
 import { Box, Flex, Link, Text } from 'theme-ui';
 import { SupporterCard } from './SupporterCard';
@@ -112,13 +111,6 @@ const CheckoutForm = () => {
             >
               here
             </Link>
-          </Text>
-
-          <Text
-            data-cy="restricted-regions"
-            sx={{ fontSize: '12px', lineHeight: 1.4, color: 'darkGrey', textAlign: 'center' }}
-          >
-            {FRIENDLY_MESSAGES['supporter/restricted-regions']}
           </Text>
         </Flex>
       </Flex>

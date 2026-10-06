@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router';
 import { ThemeProvider } from '@theme-ui/core';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { theme } from 'oa-themes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TenantContext } from 'src/pages/common/TenantContext';
@@ -318,6 +319,16 @@ describe('SupporterPage', () => {
 
       expect(getPreviewParam(router)).toBe('checkout');
       expect(getStepParam(router)).toBeNull();
+    });
+
+    it.each(['form', 'checkout'])('shows the restricted regions notice on %s', async (preview) => {
+      renderPage(`/support?preview=${preview}`);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(FRIENDLY_MESSAGES['supporter/restricted-regions']),
+        ).toBeInTheDocument();
+      });
     });
 
     it('does not treat old ?step=login as preview mode', async () => {

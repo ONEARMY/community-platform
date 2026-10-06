@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { useState } from 'react';
 import { Box, Flex, Input, Link, Text } from 'theme-ui';
 import { CurrencyDropdown } from './CurrencyDropdown';
@@ -292,6 +293,13 @@ export const SupporterForm = () => {
             >
               Privacy Policy
             </Link>
+          </Text>
+
+          <Text
+            data-cy="restricted-regions"
+            sx={{ fontSize: '12px', lineHeight: 1.4, color: 'darkGrey', textAlign: 'center' }}
+          >
+            {FRIENDLY_MESSAGES['supporter/restricted-regions']}
           </Text>
         </Flex>
       </SupporterCard>

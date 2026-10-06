@@ -101,11 +101,12 @@ describe('ConfirmModal', () => {
       expect(screen.getByRole('alertdialog')).toHaveStyle({ width: '500px' });
     });
 
-    it('does not set an inline width when no width is given', () => {
+    it('defaults to the legacy 300px width when no width is given', () => {
       render(<Harness />);
 
-      // Base UI sets its own --nested-dialogs variable, so check for width
-      expect(screen.getByRole('alertdialog').style.width).toBe('');
+      // the old oa-components Modal defaulted to width=300
+      expect(screen.getByRole('alertdialog').style.width).toBe('300px');
+      expect(screen.getByRole('alertdialog').style.maxWidth).toBe('90vw');
     });
   });
 

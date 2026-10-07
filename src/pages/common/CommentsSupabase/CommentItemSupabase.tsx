@@ -22,7 +22,6 @@ import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
-import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';

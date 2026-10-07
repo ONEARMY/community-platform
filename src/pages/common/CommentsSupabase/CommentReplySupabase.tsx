@@ -13,9 +13,8 @@ import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
-import { CommentDisplay } from './CommentDisplay';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
 export interface ICommentItemProps {

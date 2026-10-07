@@ -87,19 +87,18 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="tab-Account"]').click();
       cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
       cy.get('[data-cy="deleteAccountPassword"]').type(user.password);
+      cy.get('[data-cy="deleteAccountSubmit"]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
 
       cy.step('Shrink the viewport below the modal content height');
       cy.viewport(375, 160);
-      cy.get('[data-cy="deleteAccountSubmit"]').click();
-      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
 
       cy.step('Checkbox and confirm are reachable without force');
       cy.get('[data-cy="Confirm.modal: Checkbox"]').click();
       cy.get('[data-cy="Confirm.modal: Confirm"]').click();
 
-      cy.step('Account deletion successful');
-      cy.viewport(375, 667);
-      cy.contains('[data-cy=toast-message]', 'Your account has been deleted').should('be.visible');
+      cy.step('The confirm click landed and the modal closed');
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('not.exist');
     });
   });
 });

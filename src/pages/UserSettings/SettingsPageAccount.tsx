@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { headings } from 'src/pages/UserSettings/labels';
 import { stripeService } from 'src/services/stripeService';
 import { Flex, Heading, Text } from 'theme-ui';
-
+import { Accordion } from '@/components/ui/accordion';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 import { DeleteAccountForm } from './content/sections/DeleteAccount.form';
@@ -119,10 +119,11 @@ export const SettingsPageAccount = observer(() => {
         </Flex>
       )}
       */}
-
-      <ChangePasswordForm />
-      <ChangeEmailForm />
-      <DeleteAccountForm hasSubscription={hasSubscription} />
+      <Accordion multiple>
+        <ChangePasswordForm />
+        <ChangeEmailForm />
+        <DeleteAccountForm hasSubscription={hasSubscription} />
+      </Accordion>
     </Flex>
   );
 });

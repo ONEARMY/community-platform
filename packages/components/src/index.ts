@@ -53,7 +53,6 @@ export { Pagination } from './Pagination/Pagination';
 export { PaginationIcons } from './PaginationIcons/PaginationIcons';
 export { PinProfile } from './PinProfile/PinProfile';
 export { ProfileBadgeContentLabel } from './ProfileBadgeContentLabel/ProfileBadgeContentLabel';
-export { ProfileLink } from './ProfileLink/ProfileLink';
 export { ProfileList } from './ProfileList/ProfileList';
 export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList';
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';

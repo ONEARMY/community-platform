@@ -1,4 +1,4 @@
-import { ProfileLink } from 'oa-components';
+import { ProfileLink } from '@/components/ui/profile-link';
 import type { Profile } from 'oa-shared';
 import { useContext } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';

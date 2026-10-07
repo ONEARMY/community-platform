@@ -14,6 +14,7 @@ import Search from './search.svg?react';
 import StarActive from './star-active.svg?react';
 import Thunderbolt from './thunderbolt.svg?react';
 import Update from './update.svg?react';
+import Website from './website.svg?react';
 
 const icons = {
   Account,
@@ -31,6 +32,7 @@ const icons = {
   Information,
   Eye,
   StarActive,
+  Website,
 };
 
 const meta: Meta = {

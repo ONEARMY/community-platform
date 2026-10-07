@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, ExternalLink } from 'oa-components';
+import { Button } from 'oa-components';
 import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared';
 import { Link } from 'react-router';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -47,9 +47,9 @@ export const ImpactMissing = observer((props: Props) => {
       {!isPageOwner && isReportYear && (
         <>
           <Text>{reportYearLabel}</Text>
-          <ExternalLink href={IMPACT_REPORT_LINKS[year]}>
+          <a target="_blank" rel="noopener noreferrer" href={IMPACT_REPORT_LINKS[year]}>
             <Button type="button">{button}</Button>
-          </ExternalLink>
+          </a>
         </>
       )}
       {isPageOwner && (

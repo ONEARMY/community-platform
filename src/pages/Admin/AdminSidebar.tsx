@@ -1,10 +1,13 @@
 import {
+  AwardIcon,
   ChevronRightIcon,
   FolderIcon,
+  HammerIcon,
   MapPinIcon,
   MegaphoneIcon,
   MessageCircleQuestionMarkIcon,
   TagsIcon,
+  UserPen,
   UsersIcon,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
@@ -34,9 +37,12 @@ const ADMIN_NAV_ITEMS = [
   },
   { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
   { label: 'Tags', href: '/admin/tags', icon: TagsIcon },
+  { label: 'Remakes', href: '/admin/remakes', icon: HammerIcon },
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map Pins', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
+  { label: 'Profile Types', href: '/admin/profile-types', icon: UserPen },
+  { label: 'Badges', href: '/admin/badges', icon: AwardIcon },
 ];
 
 export function AdminSidebar() {

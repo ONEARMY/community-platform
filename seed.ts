@@ -18,11 +18,11 @@ import type {
   subscribersScalars,
   tagsChildInputs,
   tagsScalars,
-  upgrade_badgeScalars,
   useful_votesChildInputs,
   useful_votesScalars,
 } from '@snaplet/seed';
 import { createSeedClient } from '@snaplet/seed';
+import { Client } from 'pg';
 import libraryJson from './.snaplet/library.json';
 import questionsJson from './.snaplet/questions.json';
 import { profilesSeed } from './seed/profilesSeed';
@@ -91,6 +91,9 @@ const _USEFUL_VOTES_BASE: Partial<useful_votesScalars> = {
 
 const _BADGES_BASE: Partial<profile_badgesScalars> = {
   tenant_id,
+  grants_badge_id: null,
+  available_to: null,
+  action_label: null,
 };
 
 const _TYPES_BASE: Partial<profile_typesScalars> = {
@@ -171,14 +174,49 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   },
 ];
 
-const seedBadges = (): Partial<profile_badgesScalars>[] => [
+const seedMemberBadge = (): Partial<profile_badgesScalars> => ({
+  ..._BADGES_BASE,
+  name: 'member',
+  display_name: 'Member',
+  image_url:
+    'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+  action_url: '/support',
+  premium_tier: null,
+  is_audience: true,
+  available_to: 'non_space',
+  action_label: 'Become a member',
+});
+
+const seedBadges = (memberBadgeId: number): Partial<profile_badgesScalars>[] => [
   {
     ..._BADGES_BASE,
-    name: 'supporter',
-    display_name: 'Supporter',
+    name: 'stripe-tier-1',
+    display_name: 'Start',
     image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
-    premium_tier: null,
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
+    premium_tier: 1,
+    is_audience: false,
+    grants_badge_id: memberBadgeId,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-2',
+    display_name: 'Power',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
+    premium_tier: 2,
+    is_audience: false,
+    grants_badge_id: memberBadgeId,
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'stripe-tier-3',
+    display_name: 'Boost',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
+    premium_tier: 3,
+    is_audience: false,
+    grants_badge_id: memberBadgeId,
   },
   {
     ..._BADGES_BASE,
@@ -186,31 +224,12 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     display_name: 'PRO',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
+    action_url: 'https://www.preciousplastic.com/pro-membership',
     premium_tier: 1,
-  },
-  {
-    ..._BADGES_BASE,
-    name: 'stripe-tier-1',
-    display_name: 'Starter',
-    image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/1%20star.svg',
-    premium_tier: 1,
-  },
-  {
-    ..._BADGES_BASE,
-    name: 'stripe-tier-2',
-    display_name: 'Hero',
-    image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/2%20stars.svg',
-    premium_tier: 2,
-  },
-  {
-    ..._BADGES_BASE,
-    name: 'stripe-tier-3',
-    display_name: 'Legend',
-    image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/3%20stars.svg',
-    premium_tier: 3,
+    is_audience: true,
+    grants_badge_id: memberBadgeId,
+    available_to: 'space',
+    action_label: 'Go PRO',
   },
 ];
 
@@ -231,25 +250,6 @@ const seedStripeTierConfig = (
     color: TIER_COLORS[badge.premium_tier ?? 0] ?? '#BFDEBA',
     thank_you_image_url: null,
   }));
-};
-
-const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_badgeScalars>[] => {
-  const proBadge = badges.find((badge) => badge.name === 'pro');
-  // const supporterBadge = badges.find((badge) => badge.name === 'supporter');
-
-  const upgradeBadges: Partial<upgrade_badgeScalars>[] = [];
-
-  if (proBadge) {
-    upgradeBadges.push({
-      tenant_id,
-      action_label: 'Go PRO',
-      badge_id: proBadge.id,
-      is_space: true,
-      action_url: 'https://www.preciousplastic.com/pro-membership',
-    });
-  }
-
-  return upgradeBadges;
 };
 
 /// populates badges: 2/3 of profiles to have: 1 and 2 badges, others remain with no badge
@@ -579,24 +579,29 @@ const seedResearch: Partial<researchScalars>[] = [
   },
 ];
 
+const seedBuckets = async () => {
+  const client = new Client({
+    connectionString: 'postgresql://postgres:postgres@localhost:54322/postgres',
+  });
+  await client.connect();
+  await client.query(
+    `insert into storage.buckets (id, name, public, allowed_mime_types)
+     values ($1, $1, true, '{}'), ($2, $2, false, '{}')
+     on conflict (id) do update
+       set name = excluded.name,
+           public = excluded.public,
+           allowed_mime_types = excluded.allowed_mime_types`,
+    [tenant_id, `${tenant_id}-documents`],
+  );
+  await client.end();
+};
+
 const main = async () => {
   const seed = await createSeedClient();
 
   await seed.$resetDatabase();
 
-  await seed.buckets([
-    {
-      id: tenant_id,
-      name: tenant_id,
-      public: true,
-      allowed_mime_types: [],
-    },
-    {
-      id: `${tenant_id}-documents`,
-      name: `${tenant_id}-documents`,
-      allowed_mime_types: [],
-    },
-  ]);
+  await seedBuckets();
 
   await seed.tenant_settings([
     {
@@ -670,9 +675,11 @@ const main = async () => {
     })),
   );
 
-  const { profile_badges } = await seed.profile_badges(seedBadges());
+  const {
+    profile_badges: [memberBadge],
+  } = await seed.profile_badges([seedMemberBadge()]);
+  const { profile_badges } = await seed.profile_badges(seedBadges(memberBadge.id));
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
-  await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
   await seed.stripe_tier_config(seedStripeTierConfig(profile_badges));
 
   await seed.map_pins(seedMapPins(profiles));

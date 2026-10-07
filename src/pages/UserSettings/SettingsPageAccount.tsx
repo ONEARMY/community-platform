@@ -3,13 +3,15 @@ import { Button, Icon } from 'oa-components';
 import { useEffect, useState } from 'react';
 import { headings } from 'src/pages/UserSettings/labels';
 import { stripeService } from 'src/services/stripeService';
-import { Flex, Heading, Text } from 'theme-ui';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { Flex, Heading, Image, Text } from 'theme-ui';
 import { Accordion } from '@/components/ui/accordion';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 import { DeleteAccountForm } from './content/sections/DeleteAccount.form';
 
 export const SettingsPageAccount = observer(() => {
+  const { profile } = useProfileStore();
   const [hasSubscription, setHasSubscription] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -30,6 +32,10 @@ export const SettingsPageAccount = observer(() => {
     window.addEventListener('pageshow', handlePageShow);
     return () => window.removeEventListener('pageshow', handlePageShow);
   }, []);
+
+  const tierBadge = profile?.badges
+    ?.filter((badge) => badge.premiumTier && badge.imageUrl)
+    .sort((a, b) => (b.premiumTier ?? 0) - (a.premiumTier ?? 0))[0];
 
   const handleManageSubscription = async () => {
     setIsRedirecting(true);
@@ -66,7 +72,20 @@ export const SettingsPageAccount = observer(() => {
           }}
         >
           <Flex sx={{ flexDirection: 'row', gap: [2, 4] }}>
-            <Icon glyph="supporter" size={45} sx={{ color: '#d61f30' }} />
+            {tierBadge ? (
+              <Image
+                src={tierBadge.imageUrl}
+                alt={tierBadge.displayName}
+                sx={{
+                  width: 45,
+                  height: 45,
+                  flexShrink: 0,
+                  objectFit: 'contain',
+                }}
+              />
+            ) : (
+              <Icon glyph="supporter" size={45} sx={{ color: '#d61f30' }} />
+            )}
             <Flex sx={{ flexDirection: 'column', flex: 1, gap: 2 }}>
               <Heading as="h2" variant="small">
                 Manage your subscription

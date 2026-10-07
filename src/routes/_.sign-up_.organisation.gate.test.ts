@@ -8,6 +8,9 @@ import { loader } from './_.sign-up_.organisation';
 vi.mock('src/repository/supabase.server');
 vi.mock('src/services/profileTypesService.server');
 vi.mock('src/services/tenantSettingsService.server');
+vi.mock('src/services/secretsService.server', () => ({
+  getSecret: vi.fn().mockResolvedValue('test-turnstile-site-key'),
+}));
 
 // biome-ignore lint/suspicious/noExplicitAny: minimal LoaderFunctionArgs stub
 const loaderArgs = () =>

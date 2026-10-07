@@ -30,7 +30,6 @@ export * from './supporter';
 export * from './tag';
 export * from './tags';
 export * from './tenantSettings';
-export * from './upgradeBadge';
 export * from './user';
 export * from './userCreatedDocs';
 export * from './userEmailData';

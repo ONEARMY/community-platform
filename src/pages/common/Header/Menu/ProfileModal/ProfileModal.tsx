@@ -6,13 +6,12 @@ import { observer } from 'mobx-react';
 import { FlagIcon, Icon, MemberBadge, ReturnPathLink } from 'oa-components';
 import { UserRole } from 'oa-shared';
 import { theme } from 'oa-themes';
-import { type ReactNode, useContext } from 'react';
+import type { ReactNode } from 'react';
 import { NavLink } from 'react-router';
 import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Avatar, Box, Flex, Text } from 'theme-ui';
-import { TenantContext } from '../../../TenantContext';
+import { Avatar, Box, Flex, Image, Text } from 'theme-ui';
 
 const rowStyles = ({ theme }: { theme: Theme }) => `
   display: flex;
@@ -45,20 +44,32 @@ const RowReturnLink = styled(ReturnPathLink)`
 
 type ProfileGlyph = 'nav-profile' | 'nav-settings' | 'nav-supporter' | 'nav-logout';
 
-const RowContent = ({ icon, children }: { icon: ProfileGlyph; children: ReactNode }) => (
+const RowContent = ({
+  icon,
+  imageUrl,
+  children,
+}: {
+  icon: ProfileGlyph;
+  imageUrl?: string;
+  children: ReactNode;
+}) => (
   <>
-    <Icon glyph={icon} size={22} />
+    {imageUrl ? (
+      <Image
+        src={imageUrl}
+        alt=""
+        sx={{ width: 22, height: 22, flexShrink: 0, objectFit: 'contain' }}
+      />
+    ) : (
+      <Icon glyph={icon} size={22} />
+    )}
     <span>{children}</span>
   </>
 );
 
 export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
-  const { profile } = useProfileStore();
-  const tenantContext = useContext(TenantContext);
+  const { profile, upgradeBadgeForCurrentUser: upgradeBadge } = useProfileStore();
   const profilePath = profile?.username ? '/u/' + profile.username : '/settings/profile';
-
-  const isSupporter = profile?.badges?.some((badge) => !!badge.premiumTier) ?? false;
-  const showSupporter = !!tenantContext?.hasMembershipTiers && !isSupporter;
 
   const rawCountry = profile?.country?.trim() || null;
   const iso2 = rawCountry ? countryToAlpha2(rawCountry) : null;
@@ -159,13 +170,21 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
             <RowContent icon="nav-settings">Admin</RowContent>
           </RowLink>
         </AuthWrapper>
-        {showSupporter && (
+        {upgradeBadge?.actionUrl && (
           <RowLink
-            to="/support"
+            to={upgradeBadge.actionUrl}
             data-cy="menu-Supporter"
-            onClick={() => trackEvent({ action: 'clickSupport', category: 'profiles' })}
+            onClick={() =>
+              trackEvent({
+                action: 'clickSupport',
+                category: 'profiles',
+                label: upgradeBadge.actionLabel,
+              })
+            }
           >
-            <RowContent icon="nav-supporter">Become a supporter</RowContent>
+            <RowContent icon="nav-supporter" imageUrl={upgradeBadge.imageUrl}>
+              {upgradeBadge.actionLabel}
+            </RowContent>
           </RowLink>
         )}
         <RowReturnLink to="/logout" data-cy="menu-Logout">

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import type { Author, MediaWithPublicUrl } from 'oa-shared';
-import { Remake } from 'oa-shared';
+import { AdminRemake, Remake } from 'oa-shared';
 
 export const FactoryRemakeImage = (
   overloads: Partial<MediaWithPublicUrl> = {},
@@ -31,5 +31,16 @@ export const FactoryRemake = (overloads: Partial<Remake> = {}): Remake =>
     description: faker.lorem.paragraph(),
     images: [FactoryRemakeImage()],
     author: FactoryRemakeAuthor(),
+    ...overloads,
+  });
+
+export const FactoryAdminRemake = (overloads: Partial<AdminRemake> = {}): AdminRemake =>
+  new AdminRemake({
+    id: faker.number.int(),
+    createdAt: faker.date.past(),
+    description: faker.lorem.sentence(),
+    imageUrl: faker.image.url(),
+    project: { slug: faker.lorem.slug(), title: faker.lorem.words(3), deleted: false },
+    author: { username: faker.internet.username(), displayName: faker.person.fullName() },
     ...overloads,
   });

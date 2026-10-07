@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router';
 import { ThemeProvider } from '@theme-ui/core';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { theme } from 'oa-themes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TenantContext } from 'src/pages/common/TenantContext';
@@ -161,9 +162,9 @@ const mockPrices: SupporterPrice[] = [
 ];
 
 const mockTierConfig = {
-  1: { color: 'green', name: 'Starter', description: 'You help us develop new features, get videos in 4K without ads!' },
-  2: { color: 'blue', name: 'Hero', description: 'You help us develop new features, get videos in 4K without ads!' },
-  3: { color: '#F5C207', name: 'Legend', description: 'You help us develop new features, get videos in 4K without ads!' },
+  1: { color: 'green', name: 'Start', description: 'You help us develop new features, get videos in 4K without ads!' },
+  2: { color: 'blue', name: 'Power', description: 'You help us develop new features, get videos in 4K without ads!' },
+  3: { color: '#F5C207', name: 'Boost', description: 'You help us develop new features, get videos in 4K without ads!' },
 };
 
 const mockTenantSettings = {

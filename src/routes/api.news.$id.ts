@@ -9,6 +9,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
+import { ProfileBadgeServiceServer } from 'src/services/profileBadgeService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
 import { getSummaryFromTiptapJson } from 'src/utils/getSummaryFromTiptapJson';
@@ -285,5 +286,9 @@ async function validateRequest(
     !profile.roles?.includes(UserRole.EDITOR)
   ) {
     throw forbiddenError();
+  }
+
+  if (!(await new ProfileBadgeServiceServer(client).areAudience(data.profileBadges || []))) {
+    throw validationError('News can only be restricted to audience badges', 'profileBadges');
   }
 }

@@ -96,5 +96,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   profileBadges: null,
   publishedAt: faker.date.past(),
   poll: null,
+  isLocked: false,
+  ctaBadgeId: null,
   ...newsOverloads,
 });

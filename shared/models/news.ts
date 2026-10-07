@@ -47,6 +47,8 @@ export class DBNews implements IDBContentDoc {
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
   readonly poll: number | null;
+  readonly is_locked?: boolean;
+  readonly cta_badge_id?: number | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null, poll: PollDTO | null) {
     const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
@@ -107,6 +109,8 @@ export class News implements IContentDoc {
   usefulCount: number;
   contentReach: ContentReach | null;
   poll: PollDTO | null;
+  isLocked: boolean;
+  ctaBadgeId: number | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
@@ -155,6 +159,8 @@ export class News implements IContentDoc {
       usefulCount: news.useful_count || 0,
       contentReach: news.content_reach || null,
       poll: poll,
+      isLocked: news.is_locked || false,
+      ctaBadgeId: news.cta_badge_id || null,
     });
   }
 }

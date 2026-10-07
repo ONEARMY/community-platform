@@ -58,6 +58,18 @@ export class NewsServiceServer {
       .single();
   }
 
+  async getAccess(newsId: number, profileId: number, isAdmin: boolean) {
+    const { data } = await this.client
+      .rpc('get_news_access', {
+        p_user_profile_id: profileId,
+        p_is_admin: isAdmin,
+        p_news_id: newsId,
+      })
+      .maybeSingle();
+
+    return data as { is_readable: boolean; cta_badge_id: number | null } | null;
+  }
+
   async getHeroImage(dbImage: DBMedia | null) {
     if (!dbImage) {
       return null;

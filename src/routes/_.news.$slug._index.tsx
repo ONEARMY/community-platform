@@ -52,10 +52,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     profile.roles?.includes(UserRole.EDITOR) ||
     profile.roles?.includes(UserRole.MODERATOR)
   );
-  const hasAnyRequiredBadge =
-    profile?.badges?.some((badge) => requiredBadgeIds.includes(badge.id)) ?? false;
+  const access = await new NewsServiceServer(client).getAccess(dbNews.id, profile.id, isAdmin);
 
-  if (isAdmin || hasAnyRequiredBadge) {
+  if (access?.is_readable) {
     const news = await loadNews(client, dbNews);
     return data({ news, tenantSettings }, { headers });
   }

@@ -1,16 +1,17 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import { IUserImpact, Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
+import { IUserImpact, Profile, ProfileBadge, ProfileType, UserRole } from 'oa-shared';
 import { createContext, useContext, useEffect } from 'react';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
+import { ProfileBadgeService } from 'src/services/profileBadgeService';
 import { profileService } from 'src/services/profileService';
 import { profileTypesService } from 'src/services/profileTypesService';
-import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
+import { grantsClosure } from 'src/utils/profileBadges';
 
 export class ProfileStore {
   profile?: Profile = undefined;
   profileTypes?: ProfileType[] = undefined;
-  upgradeBadges?: UpgradeBadge[] = undefined;
+  profileBadges?: ProfileBadge[] = undefined;
 
   refresh = async () => {
     const profile = await profileService.get();
@@ -37,11 +38,11 @@ export class ProfileStore {
     });
   };
 
-  initUpgradeBadges = async () => {
-    const upgradeBadges = await upgradeBadgeService.getUpgradeBadges();
+  initProfileBadges = async () => {
+    const profileBadges = await ProfileBadgeService.getProfileBadges();
 
     runInAction(() => {
-      this.upgradeBadges = upgradeBadges;
+      this.profileBadges = profileBadges;
     });
   };
 
@@ -75,7 +76,7 @@ export class ProfileStore {
     makeObservable(this, {
       profile: observable,
       profileTypes: observable,
-      upgradeBadges: observable,
+      profileBadges: observable,
       upgradeBadgeForCurrentUser: computed,
       isComplete: computed,
       missingFields: computed,
@@ -84,23 +85,28 @@ export class ProfileStore {
       clear: action,
       update: action,
       initProfileTypes: action,
-      initUpgradeBadges: action,
+      initProfileBadges: action,
       updateImpact: action,
     });
   }
 
   get upgradeBadgeForCurrentUser() {
-    if (!this.profile || !this.upgradeBadges || !Array.isArray(this.upgradeBadges)) {
+    if (!this.profile || !Array.isArray(this.profileBadges)) {
       return undefined;
     }
 
-    const isSpace = this.profile.type?.isSpace || false;
-    const upgradeBadge = this.upgradeBadges.find((badge) => badge.isSpace === isSpace);
+    const kind = this.profile.type?.isSpace ? 'space' : 'non_space';
+    const heldIds = grantsClosure(
+      this.profile.badges?.map((badge) => badge.id) || [],
+      this.profileBadges,
+    );
 
-    const userBadgeIds = this.profile.badges?.map((badge) => badge.id) || [];
-    const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
-
-    return hasUpgradeBadge ? undefined : upgradeBadge;
+    return this.profileBadges
+      .filter(
+        (badge) =>
+          (badge.availableTo === kind || badge.availableTo === 'all') && !heldIds.has(badge.id),
+      )
+      .sort((a, b) => (a.premiumTier ?? Infinity) - (b.premiumTier ?? Infinity) || a.id - b.id)[0];
   }
 
   get isComplete() {
@@ -203,7 +209,7 @@ export const ProfileStoreProvider = ({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     profileStore.initProfileTypes();
-    profileStore.initUpgradeBadges();
+    profileStore.initProfileBadges();
   }, []);
 
   return (

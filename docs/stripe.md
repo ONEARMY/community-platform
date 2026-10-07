@@ -32,6 +32,8 @@ Replace `prod_xxx`, `prod_yyy`, `prod_zzz` with the actual product IDs from your
 
 You can find badge IDs by querying: `SELECT id, name FROM profile_badges WHERE name LIKE 'stripe-tier-%';`
 
+Tier badges should not be audience badges, and should grant your Member badge, so news is restricted to Member instead of each tier. See [badges](./badges.md).
+
 ### 3. Set environment variables
 
 Add the following to your `.env.local`:

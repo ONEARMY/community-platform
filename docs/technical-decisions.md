@@ -234,3 +234,24 @@ How?
 - Checked only in the `/support` loader and the `elements_subscription` action. Never the Stripe webhook.
 - `GEO_BLOCK_EXTRA_COUNTRIES` (comma-separated ISO codes) adds countries, e.g. your own to test on a preview.
 - Fails open: no DB file or no IP header (local dev, PR previews, forks) means no blocking.
+
+## Badge Audiences
+
+News used to be restricted by tagging every Stripe tier badge, so cards showed every tier. Editors now tag one audience badge (e.g. Member), and badges that grant it give access.
+
+Options:
+
+1. Collapse tier labels on the card only
+2. A separate audiences table
+3. Columns on `profile_badges`: `is_audience`, `grants_badge_id`, `available_to`, `action_label`
+
+Decision: 3. Why?
+
+- Option 1 still makes editors tag every tier; forgetting one silently hides the article from that tier.
+- Option 2 needs new tables, and news would reference either badges or audiences.
+- One row holds the whole configuration, and it replaces the `upgrade_badge` table.
+
+How?
+
+- `get_news_access` holds the access rules, used by the news feed and the news page. See [badges](./badges.md).
+- Usernames keep showing held badges only.

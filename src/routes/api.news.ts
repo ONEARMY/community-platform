@@ -12,6 +12,7 @@ import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
+import { ProfileBadgeServiceServer } from 'src/services/profileBadgeService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
@@ -260,5 +261,9 @@ async function validateRequest(
 
   if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
     throw conflictError('This news already exists');
+  }
+
+  if (!(await new ProfileBadgeServiceServer(client).areAudience(data.profileBadges))) {
+    throw validationError('News can only be restricted to audience badges', 'profileBadges');
   }
 }

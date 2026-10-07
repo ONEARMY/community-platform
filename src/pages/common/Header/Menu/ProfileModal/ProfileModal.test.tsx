@@ -35,12 +35,15 @@ describe('ProfileModal', () => {
         id: 1,
         name: 'member',
         displayName: 'Member',
+        imageUrl: 'https://example.com/member.svg',
         actionUrl: '/support',
         actionLabel: 'Become a member',
       }),
     );
 
-    expect(screen.getByText('Become a member').closest('a')).toHaveAttribute('href', '/support');
+    const link = screen.getByText('Become a member').closest('a');
+    expect(link).toHaveAttribute('href', '/support');
+    expect(link?.querySelector('img')).toHaveAttribute('src', 'https://example.com/member.svg');
   });
 
   it('shows no offer when there is none', () => {

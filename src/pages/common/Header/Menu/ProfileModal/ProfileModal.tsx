@@ -11,7 +11,7 @@ import { NavLink } from 'react-router';
 import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Avatar, Box, Flex, Text } from 'theme-ui';
+import { Avatar, Box, Flex, Image, Text } from 'theme-ui';
 
 const rowStyles = ({ theme }: { theme: Theme }) => `
   display: flex;
@@ -44,9 +44,25 @@ const RowReturnLink = styled(ReturnPathLink)`
 
 type ProfileGlyph = 'nav-profile' | 'nav-settings' | 'nav-supporter' | 'nav-logout';
 
-const RowContent = ({ icon, children }: { icon: ProfileGlyph; children: ReactNode }) => (
+const RowContent = ({
+  icon,
+  imageUrl,
+  children,
+}: {
+  icon: ProfileGlyph;
+  imageUrl?: string;
+  children: ReactNode;
+}) => (
   <>
-    <Icon glyph={icon} size={22} />
+    {imageUrl ? (
+      <Image
+        src={imageUrl}
+        alt=""
+        sx={{ width: 22, height: 22, flexShrink: 0, objectFit: 'contain' }}
+      />
+    ) : (
+      <Icon glyph={icon} size={22} />
+    )}
     <span>{children}</span>
   </>
 );
@@ -166,7 +182,9 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
               })
             }
           >
-            <RowContent icon="nav-supporter">{upgradeBadge.actionLabel}</RowContent>
+            <RowContent icon="nav-supporter" imageUrl={upgradeBadge.imageUrl}>
+              {upgradeBadge.actionLabel}
+            </RowContent>
           </RowLink>
         )}
         <RowReturnLink to="/logout" data-cy="menu-Logout">

@@ -390,4 +390,69 @@ describe('ConfirmModal', () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe('short viewport scrolling', () => {
+    it('caps the popup height to the viewport', () => {
+      render(<Harness />);
+
+      expect(screen.getByTestId('Confirm.modal: Modal')).toHaveClass('max-h-screen');
+    });
+
+    it('scrolls the body, not the buttons', () => {
+      render(
+        <Harness checkboxLabel="I understand">
+          <ul>
+            <li>first consequence</li>
+            <li>second consequence</li>
+          </ul>
+        </Harness>,
+      );
+
+      const popup = screen.getByTestId('Confirm.modal: Modal');
+      const body = popup.querySelector('[data-slot="confirm-modal-body"]');
+      expect(body).not.toBeNull();
+      expect(body).toHaveClass('overflow-y-auto');
+      expect(body).toHaveClass('min-h-0');
+
+      // The scrollable body carries the title, children and checkbox...
+      expect(body?.contains(screen.getByText('Are you sure?'))).toBe(true);
+      expect(body?.contains(screen.getByText('first consequence'))).toBe(true);
+      expect(body?.contains(screen.getByTestId('Confirm.modal: Checkbox'))).toBe(true);
+
+      // ...while the action buttons stay outside it so they remain reachable
+      // when the content is taller than the viewport.
+      const cancel = screen.getByTestId('Confirm.modal: Cancel');
+      const confirm = screen.getByTestId('Confirm.modal: Confirm');
+      expect(body?.contains(cancel)).toBe(false);
+      expect(body?.contains(confirm)).toBe(false);
+      expect(popup.contains(cancel)).toBe(true);
+      expect(popup.contains(confirm)).toBe(true);
+    });
+
+    it('keeps the buttons as the last row of the popup', () => {
+      render(<Harness />);
+
+      const popup = screen.getByTestId('Confirm.modal: Modal');
+      const buttons = screen.getByTestId('Confirm.modal: Cancel').parentElement;
+      expect(popup.lastElementChild).toBe(buttons);
+    });
+
+    it('keeps tall content inside the scrollable body', () => {
+      render(
+        <Harness>
+          <div>
+            {Array.from({ length: 20 }, (_, i) => (
+              <p key={i}>line {i}</p>
+            ))}
+          </div>
+        </Harness>,
+      );
+
+      const body = screen
+        .getByTestId('Confirm.modal: Modal')
+        .querySelector('[data-slot="confirm-modal-body"]');
+      expect(body?.contains(screen.getByText('line 0'))).toBe(true);
+      expect(body?.contains(screen.getByText('line 19'))).toBe(true);
+    });
+  });
 });

@@ -68,3 +68,31 @@ export const WithChildren: Story = {
     </ConfirmModalHarness>
   ),
 };
+
+// Mirrors the Delete Account confirm: shrink the viewport (or the Storybook
+// canvas) below the content height to see the body scroll while the action
+// buttons stay pinned at the bottom.
+export const TallContent: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+      defaultSize: { width: 375, height: 320 },
+    },
+  },
+  render: () => (
+    <ConfirmModalHarness
+      message="Delete Account - This action will:"
+      confirmButtonText="Delete my account"
+      confirmVariant="destructive"
+      checkboxLabel="I understand this action cannot be undone"
+      width={500}
+    >
+      <ul>
+        <li>Permanently delete your account</li>
+        <li>Permanently delete your profile data</li>
+        <li>Cancel your active supporter subscription</li>
+        <li>Sign you out</li>
+      </ul>
+    </ConfirmModalHarness>
+  ),
+};

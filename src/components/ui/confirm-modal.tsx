@@ -68,26 +68,31 @@ export function ConfirmModal({
             data-slot="confirm-modal"
             data-cy="Confirm.modal: Modal"
             data-testid="Confirm.modal: Modal"
-            className="fixed top-1/2 left-1/2 z-50 grid w-full max-w-dialog -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg bg-white p-4 text-sm text-popover-foreground duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+            className="fixed top-1/2 left-1/2 z-50 flex max-h-screen w-full max-w-dialog -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-4 text-sm text-popover-foreground duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
             style={width ? { width, maxWidth: '90vw' } : { width: 300, maxWidth: '90vw' }}
           >
-            <AlertDialogPrimitive.Title className="self-stretch font-heading text-base leading-none font-medium font-bold">
-              {message}
-            </AlertDialogPrimitive.Title>
+            <div
+              data-slot="confirm-modal-body"
+              className="flex min-h-0 flex-col gap-4 overflow-y-auto"
+            >
+              <AlertDialogPrimitive.Title className="self-stretch font-heading text-base leading-none font-medium font-bold">
+                {message}
+              </AlertDialogPrimitive.Title>
 
-            {children ? <div className="flex flex-col gap-4">{children}</div> : null}
+              {children ? <div className="flex flex-col gap-4">{children}</div> : null}
 
-            {checkboxLabel ? (
-              <label className="flex cursor-pointer items-center gap-2 self-stretch text-sm font-bold">
-                <Checkbox
-                  checked={isCheckboxChecked}
-                  onCheckedChange={(checked) => setIsCheckboxChecked(checked !== false)}
-                  data-cy="Confirm.modal: Checkbox"
-                  data-testid="Confirm.modal: Checkbox"
-                />
-                {checkboxLabel}
-              </label>
-            ) : null}
+              {checkboxLabel ? (
+                <label className="flex cursor-pointer items-center gap-2 self-stretch text-sm font-bold">
+                  <Checkbox
+                    checked={isCheckboxChecked}
+                    onCheckedChange={(checked) => setIsCheckboxChecked(checked !== false)}
+                    data-cy="Confirm.modal: Checkbox"
+                    data-testid="Confirm.modal: Checkbox"
+                  />
+                  {checkboxLabel}
+                </label>
+              ) : null}
+            </div>
 
             <div className={cn('flex flex-wrap gap-2', (children || checkboxLabel) && 'mt-2')}>
               <AlertDialogPrimitive.Close

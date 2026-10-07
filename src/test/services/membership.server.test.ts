@@ -28,7 +28,7 @@ describe('membershipNotifications', () => {
     it('does not post at all', () => {
       vi.stubEnv('DISCORD_MEMBERSHIP_WEBHOOK_URL', '');
 
-      membership.newSupporter('Michael', 'Legend', '€10', null);
+      membership.newSupporter('Michael', 'Boost', '€10', null);
 
       expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
     });
@@ -37,7 +37,7 @@ describe('membershipNotifications', () => {
       vi.stubEnv('DISCORD_MEMBERSHIP_WEBHOOK_URL', '');
       vi.stubEnv('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/activity');
 
-      membership.newSupporter('Michael', 'Legend', '€10', null);
+      membership.newSupporter('Michael', 'Boost', '€10', null);
 
       expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled();
     });
@@ -65,9 +65,9 @@ describe('membershipNotifications', () => {
     const profileUrl = 'https://community.preciousplastic.com/u/11';
 
     it('names the tier and the amount, and links to the profile', () => {
-      membership.newSupporter('Michael', 'Legend', '€10', profileUrl);
+      membership.newSupporter('Michael', 'Boost', '€10', profileUrl);
 
-      expect(lastMessage()).toBe(`Michael is now a new Legend Supporter (€10)\n<${profileUrl}>`);
+      expect(lastMessage()).toBe(`Michael is now a new Boost Supporter (€10)\n<${profileUrl}>`);
     });
 
     it('omits the tier when it cannot be resolved', () => {
@@ -77,23 +77,23 @@ describe('membershipNotifications', () => {
     });
 
     it('omits the link when given nothing to link to', () => {
-      membership.newSupporter('Michael', 'Legend', '€10', null);
+      membership.newSupporter('Michael', 'Boost', '€10', null);
 
-      expect(lastMessage()).toBe('Michael is now a new Legend Supporter (€10)');
+      expect(lastMessage()).toBe('Michael is now a new Boost Supporter (€10)');
     });
   });
 
   describe('recurringPayment', () => {
     it('describes a monthly plan', () => {
-      membership.recurringPayment('Michael', 'Legend', 'month', '€10');
+      membership.recurringPayment('Michael', 'Boost', 'month', '€10');
 
-      expect(lastMessage()).toBe('Michael paid their monthly Legend membership (€10)');
+      expect(lastMessage()).toBe('Michael paid their monthly Boost membership (€10)');
     });
 
     it('describes a yearly plan', () => {
-      membership.recurringPayment('Michael', 'Legend', 'year', '€100');
+      membership.recurringPayment('Michael', 'Boost', 'year', '€100');
 
-      expect(lastMessage()).toBe('Michael paid their yearly Legend membership (€100)');
+      expect(lastMessage()).toBe('Michael paid their yearly Boost membership (€100)');
     });
 
     it('drops the unknown parts rather than guessing', () => {
@@ -107,15 +107,15 @@ describe('membershipNotifications', () => {
     const stripeUrl = 'https://dashboard.stripe.com/customers/cus_1';
 
     it('reports the failure and links to Stripe for contact details', () => {
-      membership.paymentFailed('Michael', 'Legend', '€10', stripeUrl);
+      membership.paymentFailed('Michael', 'Boost', '€10', stripeUrl);
 
       expect(lastMessage()).toBe(
-        `Michael had a failed payment for their Legend membership (€10)\n<${stripeUrl}>`,
+        `Michael had a failed payment for their Boost membership (€10)\n<${stripeUrl}>`,
       );
     });
 
     it('does not include a decline reason', () => {
-      membership.paymentFailed('Michael', 'Legend', '€10', stripeUrl);
+      membership.paymentFailed('Michael', 'Boost', '€10', stripeUrl);
 
       expect(lastMessage()).not.toMatch(/insufficient|declined|card_/i);
     });
@@ -131,9 +131,9 @@ describe('membershipNotifications', () => {
 
   describe('tierChanged', () => {
     it('names both tiers', () => {
-      membership.tierChanged('Michael', 'Legend', 'Hero');
+      membership.tierChanged('Michael', 'Boost', 'Power');
 
-      expect(lastMessage()).toBe('Michael changed their membership from Legend to Hero');
+      expect(lastMessage()).toBe('Michael changed their membership from Boost to Power');
     });
   });
 

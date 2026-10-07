@@ -1,4 +1,5 @@
 import {
+  AwardIcon,
   ChevronRightIcon,
   FolderIcon,
   HammerIcon,
@@ -41,6 +42,7 @@ const ADMIN_NAV_ITEMS = [
   { label: 'Map Pins', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
   { label: 'Profile Types', href: '/admin/profile-types', icon: UserPen },
+  { label: 'Badges', href: '/admin/badges', icon: AwardIcon },
 ];
 
 export function AdminSidebar() {

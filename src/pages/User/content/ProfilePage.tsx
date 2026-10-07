@@ -75,11 +75,11 @@ export const ProfilePage = observer((props: IProps) => {
                       }}
                     >
                       <Flex sx={{ alignItems: 'center', gap: 1 }}>
-                        {upgradeBadge.badge?.imageUrl && (
+                        {upgradeBadge.imageUrl && (
                           <Image
-                            src={upgradeBadge.badge.imageUrl}
+                            src={upgradeBadge.imageUrl}
                             sx={{ height: 20, width: 20, flexShrink: 0 }}
-                            alt={upgradeBadge.badge.displayName || 'badge'}
+                            alt={upgradeBadge.displayName || 'badge'}
                           />
                         )}
                         {upgradeBadge.actionLabel}

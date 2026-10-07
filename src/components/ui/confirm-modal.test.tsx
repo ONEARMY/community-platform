@@ -398,6 +398,20 @@ describe('ConfirmModal', () => {
       expect(screen.getByTestId('Confirm.modal: Modal')).toHaveClass('max-h-screen');
     });
 
+    it('stacks above the fixed page chrome', () => {
+      // The legacy modal lived in a native <dialog> top layer, above the
+      // header/bottom-nav z-index (3000). The portal replacement must stack
+      // above that chrome too, or on short viewports the fixed bottom nav
+      // covers the action buttons and they cannot be clicked.
+      render(<Harness />);
+
+      const popup = screen.getByTestId('Confirm.modal: Modal');
+      expect(popup).toHaveClass('z-above-header');
+      expect(document.querySelector('[data-slot="confirm-modal-overlay"]')).toHaveClass(
+        'z-above-header',
+      );
+    });
+
     it('scrolls the body, not the buttons', () => {
       render(
         <Harness checkboxLabel="I understand">

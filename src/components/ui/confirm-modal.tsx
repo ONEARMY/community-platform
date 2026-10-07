@@ -62,13 +62,13 @@ export function ConfirmModal({
         <AlertDialogPrimitive.Portal container={portalContainer ?? undefined}>
           <AlertDialogPrimitive.Backdrop
             data-slot="confirm-modal-overlay"
-            className="fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+            className="fixed inset-0 isolate z-above-header bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
           />
           <AlertDialogPrimitive.Popup
             data-slot="confirm-modal"
             data-cy="Confirm.modal: Modal"
             data-testid="Confirm.modal: Modal"
-            className="fixed top-1/2 left-1/2 z-50 flex max-h-screen w-full max-w-dialog -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-4 text-sm text-popover-foreground duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+            className="fixed top-1/2 left-1/2 z-above-header flex max-h-screen w-full max-w-dialog -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-4 text-sm text-popover-foreground duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
             style={width ? { width, maxWidth: '90vw' } : { width: 300, maxWidth: '90vw' }}
           >
             <div

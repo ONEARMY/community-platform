@@ -1,4 +1,3 @@
-export { Accordion } from './Accordion/Accordion';
 export { ActionSet } from './ActionSet/ActionSet';
 export { AuthorDisplay } from './AuthorDisplay/AuthorDisplay';
 export { Banner } from './Banner/Banner';

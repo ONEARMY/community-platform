@@ -1,7 +1,15 @@
-import { ActionSet, Button, CommentAvatar, DisplayDate, Modal, Username } from 'oa-components';
+import { Button, CommentAvatar, DisplayDate, Icon, Modal, Username } from 'oa-components';
 import type { Remake } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Button as UiButton } from 'src/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'src/components/ui/dropdown-menu';
+import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Image, Text } from 'theme-ui';
 import { REMAKE_IMAGE_ASPECT_RATIO } from './constants';
@@ -25,6 +33,11 @@ export const RemakeViewModal = (props: IProps) => {
 
   const entersRemakeFromEndRef = useRef(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [dialogContainer, setDialogContainer] = useState<HTMLDialogElement | null>(null);
+  const setContentRef = useCallback((node: HTMLDivElement | null) => {
+    contentRef.current = node;
+    setDialogContainer(node?.closest('dialog') ?? null);
+  }, []);
 
   useEffect(() => {
     contentRef.current?.focus();
@@ -45,6 +58,10 @@ export const RemakeViewModal = (props: IProps) => {
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.target instanceof Element && event.target.closest('[role="menu"]')) {
+        return;
+      }
+
       if (event.key === 'ArrowRight') {
         if (imageIndex < imageCount - 1) {
           setImageIndex(imageIndex + 1);
@@ -191,7 +208,7 @@ export const RemakeViewModal = (props: IProps) => {
       )}
 
       <Flex
-        ref={contentRef}
+        ref={setContentRef}
         tabIndex={-1}
         data-cy="remake-view-modal"
         sx={{
@@ -225,30 +242,39 @@ export const RemakeViewModal = (props: IProps) => {
               <DisplayDate createdAt={remake.createdAt} showLabel={false} />
             </Text>
             {isEditable && (
-              <ActionSet itemType="RemakeItem" menuMinWidth="170px">
-                <Button
-                  type="button"
-                  data-cy="remake-edit"
-                  variant="subtle"
-                  icon="edit"
-                  iconSize={18}
-                  onClick={() => onEdit(remake)}
-                  sx={{ fontSize: 2 }}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <UiButton
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      data-cy="RemakeItem: actions button"
+                    />
+                  }
                 >
-                  Edit
-                </Button>
-                <Button
-                  type="button"
-                  data-cy="remake-delete"
-                  variant="subtle"
-                  icon="delete"
-                  iconSize={18}
-                  onClick={() => onDelete(remake)}
-                  sx={{ fontSize: 2 }}
-                >
-                  Delete
-                </Button>
-              </ActionSet>
+                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <span className="sr-only">Show Actions</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent container={dialogContainer} className="min-w-34">
+                  <DropdownMenuItem
+                    size="default"
+                    data-cy="remake-edit"
+                    onClick={() => onEdit(remake)}
+                  >
+                    <Icon aria-hidden="true" glyph="edit" size={18} />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    size="default"
+                    data-cy="remake-delete"
+                    onClick={() => onDelete(remake)}
+                  >
+                    <Icon aria-hidden="true" glyph="delete" size={18} />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </Flex>
           {remake.description && (

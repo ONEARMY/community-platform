@@ -244,7 +244,7 @@ Cypress.Commands.add('addComment', (newComment: string) => {
 });
 
 Cypress.Commands.add('editDiscussionItem', (element, oldComment, updatedNewComment) => {
-  cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click();
+  cy.get(`[data-cy="${element}: actions button"]`).last().click();
   cy.get(`[data-cy="${element}: edit button"]`).click();
   cy.get('[data-cy=edit-comment]').as('editField');
   cy.get('@editField').clear({ force: true });
@@ -259,7 +259,7 @@ Cypress.Commands.add('editDiscussionItem', (element, oldComment, updatedNewComme
 });
 
 Cypress.Commands.add('deleteDiscussionItem', (element, item) => {
-  cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click();
+  cy.get(`[data-cy="${element}: actions button"]`).last().click();
   cy.get(`[data-cy="${element}: delete button"]`).click();
   cy.get('[data-cy="Confirm.modal: Confirm"]').last().click();
 

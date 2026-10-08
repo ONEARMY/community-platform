@@ -53,7 +53,6 @@ export type availableGlyphs =
   | 'megaphone-active'
   | 'megaphone-inactive'
   | 'menu'
-  | 'more-vert'
   | 'news'
   | 'notifications'
   | 'pdf'

@@ -38,6 +38,9 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-secondary-hover: color-mix(in oklch, var(--brand-secondary), var(--foreground) 5%);
+  --color-primary-soft: color-mix(in srgb, var(--primary) 50%, white);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -72,6 +75,8 @@
   --text-card-heading: 1.375rem;
   --spacing-hairline: 2px;
   --container-dialog: calc(100% - 2rem);
+  --aspect-hero: 2 / 1;
+  --breakpoint-desktop-nav: 52em;
   --shadow-sidebar-ring: 0 0 0 1px var(--sidebar-border);
   --shadow-sidebar-ring-hover: 0 0 0 1px var(--sidebar-accent);
 }
@@ -87,6 +92,7 @@
        by the SSR <style> tag in src/root.tsx, sourced from tenant_settings in the DB. */
   --primary: var(--color-primary);
   --primary-hover: var(--color-primary-hover);
+  --brand-secondary: var(--color-brand-secondary);
   --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -135,6 +141,7 @@
   /* No separate dark-mode brand colors exist in tenant_settings; reuse the same vars. */
   --primary: var(--color-primary);
   --primary-hover: var(--color-primary-hover);
+  --brand-secondary: var(--color-brand-secondary);
   --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -176,6 +183,26 @@
 
 @utility z-above-header {
   z-index: var(--z-above-header);
+}
+
+@utility full-bleed-primary-soft {
+  background-color: var(--color-primary-soft);
+  box-shadow: 0 0 0 100vmax var(--color-primary-soft);
+  clip-path: inset(0 -100vmax);
+}
+
+@utility color-swatch {
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: calc(var(--radius-sm) - 2px);
+  }
+  &::-moz-color-swatch {
+    border: none;
+    border-radius: calc(var(--radius-sm) - 2px);
+  }
 }
 
 @layer base {

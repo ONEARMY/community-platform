@@ -58,7 +58,7 @@ export class NewsServiceServer {
       .single();
   }
 
-  async getAccess(newsId: number, profileId: number, isAdmin: boolean) {
+  async getAccess(newsId: number, profileId: number | null, isAdmin: boolean) {
     const { data } = await this.client
       .rpc('get_news_access', {
         p_user_profile_id: profileId,

@@ -640,6 +640,11 @@ const main = async () => {
       color_primary_hover: '#ffde45',
       color_accent: '#fee77b',
       color_accent_hover: '#ffde45',
+      color_secondary: '#fff0b4',
+      news_cta_title: 'Just for members',
+      news_cta_body: 'Become a member to read every article and support the project.',
+      news_cta_image:
+        'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
       show_impact: true,
       create_research_roles: ['admin', 'research_creator'],
       ga_tracking_id: 'test_ga_id',

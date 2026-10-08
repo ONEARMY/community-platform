@@ -1,14 +1,16 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
+import type { DBNews, TenantSettings } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
+import type { NewsCta } from 'src/pages/News/NewsMemberCta';
 import { NewsPage } from 'src/pages/News/NewsPage';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
+import { ProfileBadgeServiceServer } from 'src/services/profileBadgeService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -24,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const tenantSettings = await new TenantSettingsService(client).get();
 
   if (result.error || !result.data) {
-    return data({ news: null, tenantSettings }, { headers });
+    return data({ news: null, tenantSettings, cta: null }, { headers });
   }
 
   const dbNews = result.data as unknown as DBNews;
@@ -33,38 +35,78 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   // No badge restrictions - allow public access
   if (requiredBadgeIds.length === 0) {
     const news = await loadNews(client, dbNews);
-    return data({ news, tenantSettings }, { headers });
+    return data({ news, tenantSettings, cta: null }, { headers });
   }
 
-  // Badge restrictions exist - check authentication
   const claims = await client.auth.getClaims();
-
-  if (!claims.data?.claims) {
-    return redirectServiceServer.redirectSignIn(`/news/${dbNews.slug}`, headers);
-  }
-
-  const profileService = new ProfileServiceServer(client);
-  const dbProfile = await profileService.getByAuthId(claims.data.claims.sub);
-  const profile = new ProfileFactory(client).fromDB(dbProfile!);
+  const dbProfile = claims.data?.claims
+    ? await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub)
+    : null;
+  const profile = dbProfile ? new ProfileFactory(client).fromDB(dbProfile) : null;
 
   const isAdmin = !!(
-    profile.roles?.includes(UserRole.ADMIN) ||
-    profile.roles?.includes(UserRole.EDITOR) ||
-    profile.roles?.includes(UserRole.MODERATOR)
+    profile?.roles?.includes(UserRole.ADMIN) ||
+    profile?.roles?.includes(UserRole.EDITOR) ||
+    profile?.roles?.includes(UserRole.MODERATOR)
   );
-  const access = await new NewsServiceServer(client).getAccess(dbNews.id, profile.id, isAdmin);
+  const access = await new NewsServiceServer(client).getAccess(
+    dbNews.id,
+    profile?.id ?? null,
+    isAdmin,
+  );
 
   if (access?.is_readable) {
     const news = await loadNews(client, dbNews);
-    return data({ news, tenantSettings }, { headers });
+    return data({ news, tenantSettings, cta: null }, { headers });
+  }
+
+  if (access?.cta_badge_id) {
+    const news = await loadNews(client, lockNews(dbNews, access.cta_badge_id));
+    const cta = await getNewsCta(client, tenantSettings, access.cta_badge_id);
+    return data({ news, tenantSettings, cta }, { headers });
+  }
+
+  if (!profile) {
+    return redirectServiceServer.redirectSignIn(`/news/${dbNews.slug}`, headers);
   }
 
   return redirect('/news', { headers });
 }
 
+function lockNews(dbNews: DBNews, ctaBadgeId: number): DBNews {
+  return {
+    ...dbNews,
+    body: '',
+    content: null,
+    content_search_text: null,
+    poll: null,
+    is_locked: true,
+    cta_badge_id: ctaBadgeId,
+  };
+}
+
+async function getNewsCta(
+  client: SupabaseClient,
+  tenantSettings: TenantSettings,
+  badgeId: number,
+): Promise<NewsCta> {
+  const badges = await new ProfileBadgeServiceServer(client).getAll();
+  const badge = badges.find((x) => x.id === badgeId);
+
+  return {
+    title: tenantSettings.newsCtaTitle ?? null,
+    body: tenantSettings.newsCtaBody ?? null,
+    imageUrl: tenantSettings.newsCtaImageUrl ?? null,
+    actionLabel: badge?.actionLabel ?? null,
+    actionUrl: badge?.actionUrl ?? null,
+  };
+}
+
 async function loadNews(client: SupabaseClient, dbNews: DBNews) {
   const contentService = new ContentServiceServer(client);
-  await contentService.incrementViewCount('news', dbNews.total_views, dbNews!.id);
+  if (!dbNews.is_locked) {
+    await contentService.incrementViewCount('news', dbNews.total_views, dbNews!.id);
+  }
 
   const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
     dbNews.id,
@@ -120,5 +162,5 @@ export default function Index() {
     return <NotFoundPage />;
   }
 
-  return <NewsPage news={data.news} />;
+  return <NewsPage news={data.news} cta={data.cta} />;
 }

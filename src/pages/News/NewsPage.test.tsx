@@ -8,6 +8,7 @@ import { UserRole } from 'oa-shared';
 import { FactoryNewsItem } from 'src/test/factories/News';
 import { FactoryUser } from 'src/test/factories/User';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { NewsCta } from './NewsMemberCta';
 import { NewsPage } from './NewsPage';
 import { theme } from 'oa-themes';
 import { FactoryPollData, FactoryPollOption } from "../../test/factories/Poll";
@@ -115,10 +116,54 @@ describe('News', () => {
       });
     });
   });
+
+  describe('Locked', () => {
+    it('shows the summary, blurred image and call to action instead of the body', async () => {
+      const news = FactoryNewsItem({
+        isLocked: true,
+        summary: 'A short preview',
+        bodyHtml: '',
+        poll: null,
+        heroImage: { id: 'hero', publicUrl: 'https://example.com/hero.jpg' },
+      });
+      const cta = {
+        title: 'Join us',
+        body: 'Members read everything',
+        imageUrl: 'https://example.com/icon.png',
+        actionLabel: 'Become a member',
+        actionUrl: '/support',
+      };
+
+      let wrapper;
+      act(() => {
+        wrapper = getWrapper(news, cta);
+      });
+
+      await waitFor(() => {
+        expect(wrapper.getByTestId('news-title')).toBeInTheDocument();
+      });
+
+      const container = wrapper.container as HTMLElement;
+      expect(container.querySelector('[data-cy="news-preview"]')).toHaveTextContent('A short preview');
+      expect(container.querySelector('[data-cy="news-body"]')).toBeNull();
+      expect(container.querySelector('[data-cy="news-locked-image"]')).toHaveTextContent(
+        'Just for members',
+      );
+
+      const banner = container.querySelector('[data-cy="news-member-cta"]') as HTMLElement;
+      expect(banner).toHaveTextContent('Join us');
+      expect(banner).toHaveTextContent('Members read everything');
+      expect(banner.querySelector('img')).toHaveAttribute('src', 'https://example.com/icon.png');
+      expect(within(banner).getByRole('link', { name: 'Become a member' })).toHaveAttribute(
+        'href',
+        '/support',
+      );
+    });
+  });
 });
 
-const getWrapper = (news: News) => {
-  const router = createMemoryRouter(createRoutesFromElements(<Route path="/news/:slug" key={1} element={<NewsPage news={news} />} />), {
+const getWrapper = (news: News, cta: NewsCta | null = null) => {
+  const router = createMemoryRouter(createRoutesFromElements(<Route path="/news/:slug" key={1} element={<NewsPage news={news} cta={cta} />} />), {
     initialEntries: ['/news/news'],
   });
 

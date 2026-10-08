@@ -19,12 +19,15 @@ import { DisplayDate } from '@/components/ui/display-date';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { PollDisplay } from '../common/Polls/PollDisplay';
+import { NewsLockedImage } from './NewsLockedImage';
+import { type NewsCta, NewsMemberCta } from './NewsMemberCta';
 
 interface IProps {
   news: News;
+  cta?: NewsCta | null;
 }
 
-export const NewsPage = observer(({ news }: IProps) => {
+export const NewsPage = observer(({ news, cta }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(news.subscriberCount);
   const heroImageRef = useRef<HTMLImageElement>(null);
   const { profile, isUserAuthorized } = useProfileStore();
@@ -42,7 +45,7 @@ export const NewsPage = observer(({ news }: IProps) => {
       alt?: string;
     }[] = [];
 
-    if (news.heroImage) {
+    if (news.heroImage && !news.isLocked) {
       images.push({ src: news.heroImage.publicUrl, alt: news.title });
     }
 
@@ -68,7 +71,11 @@ export const NewsPage = observer(({ news }: IProps) => {
           marginBottom: 4,
         }}
       >
-        {news.heroImage && (
+        {news.heroImage && news.isLocked && (
+          <NewsLockedImage src={news.heroImage.publicUrl} className="rounded-t-lg" />
+        )}
+
+        {news.heroImage && !news.isLocked && (
           <AspectRatio ratio={2 / 1}>
             <Image
               key={news.id}
@@ -133,101 +140,107 @@ export const NewsPage = observer(({ news }: IProps) => {
 
           <Divider />
 
-          <Box
-            data-cy="news-body"
-            sx={{
-              alignSelf: 'stretch',
-              fontFamily: 'body',
-              lineHeight: 1.5,
-              a: {
-                textDecoration: 'underline',
-                '&:hover': { textDecoration: 'none' },
-              },
-              p: {
-                marginBottom: 2,
-              },
-              'blockQuote p': {
-                marginBottom: 0,
-              },
-              h2: {
-                fontSize: '1.875rem',
-                fontWeight: 600,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.2,
-                marginTop: 4,
-                marginBottom: 2,
-              },
-              h3: {
-                fontSize: '1.5rem',
-                fontWeight: 600,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.2,
-                marginTop: 4,
-                marginBottom: 2,
-              },
-              h4: {
-                fontSize: '1.25rem',
-                fontWeight: 600,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.2,
-                marginTop: 4,
-                marginBottom: 2,
-              },
-              h5: {
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.2,
-                marginTop: 4,
-                marginBottom: 2,
-              },
-              'ul, ol': {
-                marginBottom: 2,
-                paddingLeft: 8,
-              },
-              ul: {
-                listStyle: 'disc',
-              },
-              ol: {
-                listStyle: 'decimal',
-              },
-              li: {
-                marginBottom: 0,
-                '> p': {
+          {news.isLocked ? (
+            <Text data-cy="news-preview" sx={{ fontFamily: 'body', lineHeight: 1.5, paddingY: 2 }}>
+              {news.summary}
+            </Text>
+          ) : (
+            <Box
+              data-cy="news-body"
+              sx={{
+                alignSelf: 'stretch',
+                fontFamily: 'body',
+                lineHeight: 1.5,
+                a: {
+                  textDecoration: 'underline',
+                  '&:hover': { textDecoration: 'none' },
+                },
+                p: {
+                  marginBottom: 2,
+                },
+                'blockQuote p': {
                   marginBottom: 0,
                 },
-              },
-              blockQuote: {
-                paddingX: 4,
-                paddingY: 2,
-                margin: 0,
-                marginBottom: 4,
-                backgroundColor: '#f4f8fd',
-                borderLeft: '3px solid #c8d8ec',
-              },
-              img: {
-                borderRadius: 2,
-                maxWidth: '100%',
-                display: 'block',
-                margin: '0 auto',
-              },
-              figure: {
-                margin: 0,
-                marginBottom: 4,
-              },
-              figcaption: {
-                fontSize: '0.875rem',
-                color: '#6b7280',
-                textAlign: 'center',
-                marginTop: 1,
-              },
-              iframe: {
-                maxHeight: ['300px', '370px', '420px'],
-              },
-            }}
-          >
-            <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
-          </Box>
+                h2: {
+                  fontSize: '1.875rem',
+                  fontWeight: 600,
+                  letterSpacing: '-0.025em',
+                  lineHeight: 1.2,
+                  marginTop: 4,
+                  marginBottom: 2,
+                },
+                h3: {
+                  fontSize: '1.5rem',
+                  fontWeight: 600,
+                  letterSpacing: '-0.025em',
+                  lineHeight: 1.2,
+                  marginTop: 4,
+                  marginBottom: 2,
+                },
+                h4: {
+                  fontSize: '1.25rem',
+                  fontWeight: 600,
+                  letterSpacing: '-0.025em',
+                  lineHeight: 1.2,
+                  marginTop: 4,
+                  marginBottom: 2,
+                },
+                h5: {
+                  fontSize: '1.125rem',
+                  fontWeight: 600,
+                  letterSpacing: '-0.025em',
+                  lineHeight: 1.2,
+                  marginTop: 4,
+                  marginBottom: 2,
+                },
+                'ul, ol': {
+                  marginBottom: 2,
+                  paddingLeft: 8,
+                },
+                ul: {
+                  listStyle: 'disc',
+                },
+                ol: {
+                  listStyle: 'decimal',
+                },
+                li: {
+                  marginBottom: 0,
+                  '> p': {
+                    marginBottom: 0,
+                  },
+                },
+                blockQuote: {
+                  paddingX: 4,
+                  paddingY: 2,
+                  margin: 0,
+                  marginBottom: 4,
+                  backgroundColor: '#f4f8fd',
+                  borderLeft: '3px solid #c8d8ec',
+                },
+                img: {
+                  borderRadius: 2,
+                  maxWidth: '100%',
+                  display: 'block',
+                  margin: '0 auto',
+                },
+                figure: {
+                  margin: 0,
+                  marginBottom: 4,
+                },
+                figcaption: {
+                  fontSize: '0.875rem',
+                  color: '#6b7280',
+                  textAlign: 'center',
+                  marginTop: 1,
+                },
+                iframe: {
+                  maxHeight: ['300px', '370px', '420px'],
+                },
+              }}
+            >
+              <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
+            </Box>
+          )}
 
           {news.poll && <PollDisplay pollData={news.poll} profile={profile} />}
 
@@ -281,25 +294,29 @@ export const NewsPage = observer(({ news }: IProps) => {
         </Flex>
       </Flex>
 
-      <ClientOnly fallback={<></>}>
-        {() => (
-          <Card
-            variant="responsive"
-            sx={{
-              background: 'softblue',
-              borderTop: 0,
-              padding: [3, 4],
-            }}
-          >
-            <CommentSectionSupabase
-              authors={news.author?.id ? [news.author?.id] : []}
-              sourceId={news.id}
-              sourceType="news"
-              setSubscribersCount={setSubscribersCount}
-            />
-          </Card>
-        )}
-      </ClientOnly>
+      {news.isLocked ? (
+        cta?.title && <NewsMemberCta cta={cta} />
+      ) : (
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <Card
+              variant="responsive"
+              sx={{
+                background: 'softblue',
+                borderTop: 0,
+                padding: [3, 4],
+              }}
+            >
+              <CommentSectionSupabase
+                authors={news.author?.id ? [news.author?.id] : []}
+                sourceId={news.id}
+                sourceType="news"
+                setSubscribersCount={setSubscribersCount}
+              />
+            </Card>
+          )}
+        </ClientOnly>
+      )}
     </Flex>
   );
 });

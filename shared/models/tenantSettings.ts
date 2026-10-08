@@ -19,6 +19,7 @@ export class TenantSettings {
   colorPrimaryHover: string;
   colorAccent: string;
   colorAccentHover: string;
+  colorSecondary?: string;
   showImpact: boolean;
   hasMembershipTiers: boolean;
   createResearchRoles: UserRole[];
@@ -27,6 +28,9 @@ export class TenantSettings {
   membershipTerms?: string;
   organisationSignupDescriptionHtml?: string;
   organisationActivity?: string;
+  newsCtaTitle?: string;
+  newsCtaBody?: string;
+  newsCtaImageUrl?: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

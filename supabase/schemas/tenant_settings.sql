@@ -30,6 +30,10 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "membership_terms" "text",
     "organisation_signup_description" "text",
     "organisation_activity" "text",
+    "color_secondary" "text",
+    "news_cta_title" "text",
+    "news_cta_body" "text",
+    "news_cta_image" "text",
     CONSTRAINT "check_pwa_icons_schema" CHECK (
         "pwa_icons" IS NULL
         OR (

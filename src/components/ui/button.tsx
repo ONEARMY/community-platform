@@ -10,6 +10,8 @@ const buttonVariants = cva(
         default: 'border-outline bg-primary text-primary-foreground hover:bg-primary-hover',
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+        'brand-secondary':
+          'rounded-card-flat! border-outline! bg-brand-secondary text-foreground hover:bg-brand-secondary-hover',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary-hover aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
         ghost:

@@ -1,10 +1,13 @@
-import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
+import { Category, ModerationStatus, Username } from 'oa-components';
 import { type Project, UserRole } from 'oa-shared';
 import { Link as RouterLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
-import { capitalizeFirstLetter } from 'src/utils/helpers';
+import { capitalizeFirstLetter, shortFormatNumber } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
+import EyeIcon from '@/components/ui/icons/eye.svg?react';
+import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 type ProjectCardProps = {
   item: Project;
@@ -100,12 +103,28 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <IconCountWithTooltip count={item.totalViews || 0} icon="show" text="Views" />
-              <IconCountWithTooltip
-                count={item.usefulCount || 0}
-                icon="star-active"
-                text="How useful is it"
-              />
+              <Tooltip>
+                <TooltipTrigger
+                  render={<span tabIndex={0} />}
+                  aria-label={`Views: ${item.totalViews || 0}`}
+                  className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                >
+                  {shortFormatNumber(item.totalViews || 0)}
+                  <EyeIcon className="ml-1 size-4" />
+                </TooltipTrigger>
+                <TooltipContent>Views</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={<span tabIndex={0} />}
+                  aria-label={`How useful is it: ${item.usefulCount || 0}`}
+                  className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                >
+                  {shortFormatNumber(item.usefulCount || 0)}
+                  <StarActiveIcon className="ml-1 size-4" />
+                </TooltipTrigger>
+                <TooltipContent>How useful is it</TooltipContent>
+              </Tooltip>
             </Flex>
           </Flex>
         </Flex>

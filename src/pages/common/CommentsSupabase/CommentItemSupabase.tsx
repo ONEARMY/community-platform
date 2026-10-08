@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import {
   Button,
   ButtonShowReplies,
-  CommentDisplay,
   ConfirmModal,
   EditComment,
   FollowIcon,
@@ -30,6 +29,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
+import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';
@@ -88,8 +88,6 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
 
   const acceptedAnswer = useAcceptedAnswer(comment.id);
 
-  const item = 'CommentItem';
-
   // Update parent component with new vote count when it changes
   useEffect(() => {
     updateUsefulCount?.(comment.id, usefulCount);
@@ -124,8 +122,6 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         variant="borderless"
       >
         <CommentDisplay
-          isEditable={isEditable}
-          itemType={item}
           comment={comment}
           menuActions={
             <>

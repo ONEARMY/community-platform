@@ -165,7 +165,6 @@ const { isSubscribed, subscribe, unsubscribe } = useSubscriptionStore();
 const subscribed = isSubscribed('comments', 123);
 ```
 
-
 ## Polls
 
 Polls can be attached to news when creating or editing news. Authenticated users can vote once per poll and then see the results. Admins/editors can always see the results.
@@ -176,37 +175,83 @@ The DB schema for this feature is the following:
 
 <img src="assets/polls-db-schema.png" alt="DB-schema" width="800px"/>
 
-* All the fields are mandatory/not null as it would break functionality of the feature.
-* The only change to existing db structures is the field `poll` in `public.news`, that references a poll if it is added to the news during creation/edit.
-  * This will be set to `null` per default and if the poll gets deleted. 
-  * The ui checks for a value in this field when deciding if the poll-related components should be rendered or not.
-  * This also leaves the possibilities to attach polls to other items apart from news in the future.
-* `vote_count` in `poll_options` is updated automatically via the db-function `update_vote_count()` on every INSERT or DELETE of the table `poll_votes`.
+- All the fields are mandatory/not null as it would break functionality of the feature.
+- The only change to existing db structures is the field `poll` in `public.news`, that references a poll if it is added to the news during creation/edit.
+  - This will be set to `null` per default and if the poll gets deleted.
+  - The ui checks for a value in this field when deciding if the poll-related components should be rendered or not.
+  - This also leaves the possibilities to attach polls to other items apart from news in the future.
+- `vote_count` in `poll_options` is updated automatically via the db-function `update_vote_count()` on every INSERT or DELETE of the table `poll_votes`.
 
 ### Server-Side
 
 #### DTOs
-* Most data is transferred via the `PollDTO` and `PollOptionDTO`.
-* The objects get build directly within sql with the custom query `get_poll_with_permissions()` that checks if
-  * the user is authenticated
-  * the user has voted in this poll
-  * the user is an admin/editor 
-* The DTOs are populated with the information that the user has permission to see:
-  * not authenticated: only poll title and description of options
-  * user has voted/admin/editor: title + descriptions and the number of votes per option
-* The additional (optional) fields `PollDTO.hasVoted` and `PollOptionDTO.wasVotedByUser` are populated to make the ui-logic cleaner and to prevent the need for another query to display the options the users voted on to themselves.
+
+- Most data is transferred via the `PollDTO` and `PollOptionDTO`.
+- The objects get build directly within sql with the custom query `get_poll_with_permissions()` that checks if
+  - the user is authenticated
+  - the user has voted in this poll
+  - the user is an admin/editor
+- The DTOs are populated with the information that the user has permission to see:
+  - not authenticated: only poll title and description of options
+  - user has voted/admin/editor: title + descriptions and the number of votes per option
+- The additional (optional) fields `PollDTO.hasVoted` and `PollOptionDTO.wasVotedByUser` are populated to make the ui-logic cleaner and to prevent the need for another query to display the options the users voted on to themselves.
 
 #### Service + API
-* The `pollService.server` provides methods to `create`, `update`, `delete`, `get` and `vote` on polls.
-* When updating polls and their options, the existing votes are carried over to the new version as long as the options are still present (same id). During the update process, the existing options that are no longer referenced in the poll are deleted.
-* The API has 2 endpoints on the path `api/polls/{poll_id}`: 
-  * `GET` to retrieve the whole `PollDTO` object with all the information the user is allowed to see.
-  * `POST` to vote on a poll.
-    * Payload: `selectedIds: number[]`
-* In most of the cases, the poll service is called from the news services.
+
+- The `pollService.server` provides methods to `create`, `update`, `delete`, `get` and `vote` on polls.
+- When updating polls and their options, the existing votes are carried over to the new version as long as the options are still present (same id). During the update process, the existing options that are no longer referenced in the poll are deleted.
+- The API has 2 endpoints on the path `api/polls/{poll_id}`:
+  - `GET` to retrieve the whole `PollDTO` object with all the information the user is allowed to see.
+  - `POST` to vote on a poll.
+    - Payload: `selectedIds: number[]`
+- In most of the cases, the poll service is called from the news services.
 
 ### UI-Side
 
-* Both new UI components `PollForm` and `PollDisplay` work with `PollDTO` and `PollOptionDTO` as well.
-* `PollForm` can be integrated into any kind of form and its content gets validated before submit.
-  * The surrounding `Form` needs the property `mutators={{...arrayMutators}}` for the poll form to be able to dynamically add and remove poll-options.
+- Both new UI components `PollForm` and `PollDisplay` work with `PollDTO` and `PollOptionDTO` as well.
+- `PollForm` can be integrated into any kind of form and its content gets validated before submit.
+  - The surrounding `Form` needs the property `mutators={{...arrayMutators}}` for the poll form to be able to dynamically add and remove poll-options.
+
+## Geo-blocking (Stripe)
+
+Supporter checkout (unfortunately and due to Stripe policy) must be blocked for sanctioned countries and regions (e.g. Cuba, Iran, Crimea).
+
+Options:
+
+1. ipapi.co (hosted API)
+2. MaxMind GeoLite2-City (local `.mmdb` file)
+
+Decision: 2. Why?
+
+- ipapi.co's free plan isn't allowed in production, and it sends user IPs to a third party.
+- Local lookups are in-memory: no latency, rate limits or outages.
+- GeoLite2-City includes ISO subdivision codes, needed for regions like `UA-43`.
+
+How?
+
+- The CircleCI `geoip` job downloads `geo/GeoLite2-City.mmdb` (keys in the `fly-deploy` context) at most once a day, caches it, and shares it with all tenant deploys via the workspace. `ADD . .` puts it in the image. GeoLite accounts are limited to 30 downloads/day.
+- `isBlockedRegion(request)` looks up the `Fly-Client-IP` header against country and subdivision ISO codes.
+- Checked only in the `/support` loader and the `elements_subscription` action. Never the Stripe webhook.
+- `GEO_BLOCK_EXTRA_COUNTRIES` (comma-separated ISO codes) adds countries, e.g. your own to test on a preview.
+- Fails open: no DB file or no IP header (local dev, PR previews, forks) means no blocking.
+
+## Badge Audiences
+
+News used to be restricted by tagging every Stripe tier badge, so cards showed every tier. Editors now tag one audience badge (e.g. Member), and badges that grant it give access.
+
+Options:
+
+1. Collapse tier labels on the card only
+2. A separate audiences table
+3. Columns on `profile_badges`: `is_audience`, `grants_badge_id`, `available_to`, `action_label`
+
+Decision: 3. Why?
+
+- Option 1 still makes editors tag every tier; forgetting one silently hides the article from that tier.
+- Option 2 needs new tables, and news would reference either badges or audiences.
+- One row holds the whole configuration, and it replaces the `upgrade_badge` table.
+
+How?
+
+- `get_news_access` holds the access rules, used by the news feed and the news page. See [badges](./badges.md).
+- Usernames keep showing held badges only.

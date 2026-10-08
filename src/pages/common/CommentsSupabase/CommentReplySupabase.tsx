@@ -1,12 +1,5 @@
 import { observer } from 'mobx-react';
-import {
-  CommentDisplay,
-  ConfirmModal,
-  EditComment,
-  Icon,
-  Modal,
-  UsefulButtonLite,
-} from 'oa-components';
+import { ConfirmModal, EditComment, Icon, Modal, UsefulButtonLite } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -20,10 +13,9 @@ import {
 import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
+import { CommentDisplay } from './CommentDisplay';
 import { useCopyCommentLink } from './useCopyCommentLink';
-
-const DELETED_COMMENT = 'The original comment got deleted';
 
 export interface ICommentItemProps {
   comment: Reply;
@@ -80,75 +72,58 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
         sx={{ flexDirection: 'column', width: '100%' }}
       >
         <Flex sx={{ gap: 2 }} ref={commentRef as any}>
-          {comment.deleted ? (
-            <Box
-              sx={{
-                marginBottom: 2,
-                border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
-              }}
-              data-cy="deletedComment"
-            >
-              <Text sx={{ color: 'grey' }}>[{DELETED_COMMENT}]</Text>
-            </Box>
-          ) : (
-            <CommentDisplay
-              isEditable={isEditable}
-              itemType={item}
-              comment={comment}
-              menuActions={
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <UiButton
-                        type="button"
-                        variant="ghost"
-                        size="icon-xs"
-                        data-cy="ReplyItem: actions button"
-                      />
-                    }
-                  >
-                    <MoreVertIcon aria-hidden="true" className="size-3" />
-                    <span className="sr-only">Show Actions</span>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="min-w-40">
-                    {isEditable && (
-                      <DropdownMenuItem
-                        data-cy="ReplyItem: edit button"
-                        onClick={() => setShowEditModal(true)}
-                      >
-                        <Icon aria-hidden="true" glyph="edit" />
-                        Edit
-                      </DropdownMenuItem>
-                    )}
+          <CommentDisplay
+            comment={comment}
+            menuActions={
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <UiButton
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      data-cy="ReplyItem: actions button"
+                    />
+                  }
+                >
+                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <span className="sr-only">Show Actions</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-40">
+                  {isEditable && (
                     <DropdownMenuItem
-                      data-cy="ReplyItem: copy link button"
-                      onClick={copyCommentLink}
+                      data-cy="ReplyItem: edit button"
+                      onClick={() => setShowEditModal(true)}
                     >
-                      <Icon aria-hidden="true" glyph="copy-link" />
-                      Copy Link
+                      <Icon aria-hidden="true" glyph="edit" />
+                      Edit
                     </DropdownMenuItem>
-                    {isEditable && (
-                      <DropdownMenuItem
-                        data-cy="ReplyItem: delete button"
-                        onClick={() => setShowDeleteModal(true)}
-                      >
-                        <Icon aria-hidden="true" glyph="delete" />
-                        Delete
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              }
-              footerActions={
-                <UsefulButtonLite
-                  onUsefulClick={async () => await toggleVote()}
-                  hasUserVotedUseful={hasVoted}
-                  votedUsefulCount={usefulCount}
-                  isLoggedIn={!!loggedInUser}
-                />
-              }
-            />
-          )}
+                  )}
+                  <DropdownMenuItem data-cy="ReplyItem: copy link button" onClick={copyCommentLink}>
+                    <Icon aria-hidden="true" glyph="copy-link" />
+                    Copy Link
+                  </DropdownMenuItem>
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="ReplyItem: delete button"
+                      onClick={() => setShowDeleteModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="delete" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            }
+            footerActions={
+              <UsefulButtonLite
+                onUsefulClick={async () => await toggleVote()}
+                hasUserVotedUseful={hasVoted}
+                votedUsefulCount={usefulCount}
+                isLoggedIn={!!loggedInUser}
+              />
+            }
+          />
         </Flex>
 
         <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>

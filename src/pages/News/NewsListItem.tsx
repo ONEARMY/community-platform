@@ -1,15 +1,17 @@
 import {
   Category,
-  DisplayDate,
   Icon,
-  IconCountWithTooltip,
   InternalLink,
   ProfileBadgeContentLabel,
   // ModerationStatus,
 } from 'oa-components';
 import type { News } from 'oa-shared';
 import { Highlighter } from 'src/common/Highlighter';
+import { shortFormatNumber } from 'src/utils/helpers';
 import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
+import { DisplayDate } from '@/components/ui/display-date';
+import CommentIcon from '@/components/ui/icons/comment.svg?react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { listing } from './labels';
 
 interface IProps {
@@ -106,11 +108,17 @@ export const NewsListItem = ({ news, query }: IProps) => {
               </Button>
             </InternalLink>
 
-            <IconCountWithTooltip
-              count={(news as any).commentCount || 0}
-              icon="comment"
-              text={listing.totalComments}
-            />
+            <Tooltip>
+              <TooltipTrigger
+                render={<span tabIndex={0} />}
+                aria-label={`${listing.totalComments}: ${(news as any).commentCount || 0}`}
+                className="inline-flex items-center text-xs text-foreground sm:text-sm"
+              >
+                {shortFormatNumber((news as any).commentCount || 0)}
+                <CommentIcon className="ml-1 size-4" />
+              </TooltipTrigger>
+              <TooltipContent>{listing.totalComments}</TooltipContent>
+            </Tooltip>
           </Flex>
         </Flex>
       </Flex>

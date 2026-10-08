@@ -27,7 +27,7 @@ describe('[Questions]', () => {
           cy.get('[data-cy=category]');
           cy.get('[data-cy=question-list-item-avatar]');
           cy.get('[data-cy=question-list-item-description]');
-          cy.get('[data-tooltip-content="Total comments"]');
+          cy.get('[data-cy=question-list-item-comments]');
         });
     });
   });

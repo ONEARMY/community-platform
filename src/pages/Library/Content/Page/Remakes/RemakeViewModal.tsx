@@ -1,7 +1,8 @@
-import { Button, CommentAvatar, DisplayDate, Icon, Modal, Username } from 'oa-components';
+import { Button, Icon, Modal, Username } from 'oa-components';
 import type { Remake } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { Button as UiButton } from 'src/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +13,8 @@ import {
 import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Image, Text } from 'theme-ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DisplayDate } from '@/components/ui/display-date';
 import { REMAKE_IMAGE_ASPECT_RATIO } from './constants';
 
 interface IProps {
@@ -233,10 +236,18 @@ export const RemakeViewModal = (props: IProps) => {
           }}
         >
           <Flex sx={{ alignItems: 'center', gap: 2 }}>
-            <CommentAvatar
-              displayName={remake.author?.displayName}
-              photo={remake.author?.photo?.publicUrl}
-            />
+            <Avatar className="size-6 sm:size-10">
+              {remake.author?.photo && (
+                <AvatarImage
+                  src={remake.author.photo.publicUrl}
+                  alt={`Avatar of ${remake.author.displayName || 'remake author'}`}
+                  loading="lazy"
+                />
+              )}
+              <AvatarFallback>
+                <img src={DefaultMemberImage} alt="" />
+              </AvatarFallback>
+            </Avatar>
             {remake.author && <Username user={remake.author} />}
             <Text sx={{ fontFamily: 'body', fontSize: 1, color: 'darkGrey', flex: 1 }}>
               <DisplayDate createdAt={remake.createdAt} showLabel={false} />

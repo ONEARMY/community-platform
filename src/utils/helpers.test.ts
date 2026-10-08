@@ -11,6 +11,7 @@ import {
   isUserBlockedFromMessaging,
   isUserContactable,
   numberWithCommas,
+  shortFormatNumber,
   stripSpecialCharacters,
 } from './helpers';
 
@@ -106,6 +107,18 @@ describe('src/utils/helpers', () => {
     it('adds a comma between every three digits', () => {
       const expectation = '1,000';
       expect(numberWithCommas(1000)).toEqual(expectation);
+    });
+  });
+
+  describe('shortFormatNumber', () => {
+    it('returns small numbers unchanged', () => {
+      expect(shortFormatNumber(345)).toEqual('345');
+    });
+
+    it('shortens thousands and millions', () => {
+      expect(shortFormatNumber(1000)).toEqual('1K');
+      expect(shortFormatNumber(1500)).toEqual('1.5K');
+      expect(shortFormatNumber(2099999)).toEqual('2.1M');
     });
   });
 });

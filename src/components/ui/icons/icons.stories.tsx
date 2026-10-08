@@ -6,9 +6,12 @@ import ChevronRight from './chevron-right.svg?react';
 import ChevronUp from './chevron-up.svg?react';
 import Close from './close.svg?react';
 import Comment from './comment.svg?react';
+import Eye from './eye.svg?react';
+import Information from './information.svg?react';
 import Notifications from './notifications.svg?react';
 import NotificationsActive from './notifications-active.svg?react';
 import Search from './search.svg?react';
+import StarActive from './star-active.svg?react';
 import Thunderbolt from './thunderbolt.svg?react';
 import Update from './update.svg?react';
 
@@ -25,6 +28,9 @@ const icons = {
   Comment,
   Update,
   Thunderbolt,
+  Information,
+  Eye,
+  StarActive,
 };
 
 const meta: Meta = {

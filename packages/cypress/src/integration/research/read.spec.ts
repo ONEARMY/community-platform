@@ -42,9 +42,9 @@ describe('[Research]', () => {
           cy.get('[data-cy=category]').contains('Machines');
           cy.get('a').should('have.attr', 'href').and('eq', researchUrl);
           cy.get('[data-cy=ItemResearchStatus]').contains('In Progress');
-          cy.get('[data-tooltip-content="How useful is it"]');
-          cy.get('[data-tooltip-content="Total comments"]');
-          cy.get('[data-tooltip-content="Amount of updates"]');
+          cy.get('[data-cy=ItemUsefulText]');
+          cy.get('[data-cy=ItemCommentText]');
+          cy.get('[data-cy=ItemUpdateText]');
         });
 
         cy.step('Can clear search');

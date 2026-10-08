@@ -55,7 +55,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="deleteAccountSubmit"]').click();
 
       cy.step('Check confirmation checkbox and confirm deletion');
-      cy.get('[data-cy="Confirm.modal: Checkbox"]').check({ force: true });
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').click({ force: true });
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Shows error message');
@@ -66,11 +66,39 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="deleteAccountSubmit"]').click();
 
       cy.step('Check confirmation checkbox and confirm deletion');
-      cy.get('[data-cy="Confirm.modal: Checkbox"]').check({ force: true });
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').click({ force: true });
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Account deletion successful');
       cy.contains('[data-cy=toast-message]', 'Your account has been deleted').should('be.visible');
+    });
+  });
+
+  describe('[Short viewport]', () => {
+    // Regression: the migrated confirm modal must cap its height to the
+    // viewport and scroll its body, so a normal (non-forced) click on the
+    // confirm actions still works when the content is taller than the screen.
+    it('Confirm modal actions stay clickable when the viewport is short', () => {
+      const user = generateNewUserDetails();
+      cy.signUpNewUser(user);
+
+      cy.step('Open the delete account confirmation');
+      cy.visit('/settings');
+      cy.get('[data-cy="tab-Account"]').click();
+      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
+      cy.get('[data-cy="deleteAccountPassword"]').type(user.password);
+      cy.get('[data-cy="deleteAccountSubmit"]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
+
+      cy.step('Shrink the viewport below the modal content height');
+      cy.viewport(375, 160);
+
+      cy.step('Checkbox and confirm are reachable without force');
+      cy.get('[data-cy="Confirm.modal: Checkbox"]').click();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+
+      cy.step('The confirm click landed and the modal closed');
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('not.exist');
     });
   });
 });

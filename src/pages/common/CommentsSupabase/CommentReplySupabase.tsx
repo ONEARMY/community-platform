@@ -1,19 +1,12 @@
 import { observer } from 'mobx-react';
-import {
-  ActionSet,
-  Button,
-  ConfirmModal,
-  EditComment,
-  Icon,
-  Modal,
-  UsefulButtonLite,
-} from 'oa-components';
+import { ActionSet, Button, EditComment, Icon, Modal, UsefulButtonLite } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { CommentDisplay } from './CommentDisplay';
 import { useCopyCommentLink } from './useCopyCommentLink';
 

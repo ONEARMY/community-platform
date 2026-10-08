@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, ConfirmModal, Tooltip } from 'oa-components';
+import { Button, Tooltip } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { useToast } from 'src/common/Toast';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 
 interface BanUserButtonProps {
   profile: Profile;

@@ -17,7 +17,7 @@ interface IProps {
 export const NewsMemberCta = ({ cta }: IProps) => (
   <div
     data-cy="news-member-cta"
-    className="sticky -mb-9 bottom-16 z-50 full-bleed-primary-soft text-foreground desktop-nav:bottom-0"
+    className="sticky bottom-16 mt-auto -mb-9 z-50 full-bleed-primary-soft text-foreground desktop-nav:bottom-0"
   >
     <div className="mx-auto flex max-w-100 flex-col items-center gap-3 p-4 text-center">
       <div className="flex flex-col gap-1 items-center">

@@ -24,14 +24,7 @@ export const NewsLockedImage = ({ news, className }: IProps) => {
       <div className="absolute inset-0 flex items-center justify-center">
         <span className="flex items-center gap-2 rounded-full bg-background px-4 py-2 font-heading text-sm text-foreground shadow-sm">
           <LockIcon className="size-4" />
-          {badge ? (
-            <>
-              Just for <img src={badge.imageUrl} alt="" className="size-5 object-contain" />
-              {badge.displayName}
-            </>
-          ) : (
-            listing.locked
-          )}
+          {badge ? <>Just for {badge.displayName}s</> : listing.locked}
         </span>
       </div>
     </div>

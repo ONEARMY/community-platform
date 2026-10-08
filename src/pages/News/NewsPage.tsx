@@ -59,7 +59,15 @@ export const NewsPage = observer(({ news, cta }: IProps) => {
   useImageLightbox({ images: allImages });
 
   return (
-    <Flex sx={{ flexDirection: 'column', maxWidth: '690px', width: '100%', alignSelf: 'center' }}>
+    <Flex
+      sx={{
+        flex: 1,
+        flexDirection: 'column',
+        maxWidth: '690px',
+        width: '100%',
+        alignSelf: 'center',
+      }}
+    >
       <PageHeader>
         <Breadcrumbs steps={[{ text: 'News', link: '/news' }, { text: news.title }]} />
       </PageHeader>

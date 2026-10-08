@@ -32,7 +32,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="tab-Account"]').click();
 
       cy.step('Update Email');
-      cy.get('[data-cy="accordionContainer"]').click({ multiple: true });
+      cy.contains('[data-cy="accordionTrigger"]', 'Change Email').click();
       cy.get('[data-cy="changeEmailContainer"]').contains(`Current email address: ${email}`).should('be.visible');
       cy.get('[data-cy="newEmail"]').clear().type(newEmail);
       cy.get('[data-cy="password"]').clear().type(password);
@@ -40,7 +40,8 @@ describe('[User sign-up]', () => {
       cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['auth/email-changed']).should('be.visible');
 
       cy.step('Update Password');
-      cy.get('[data-cy="accordionContainer"]').click({ multiple: true });
+      cy.contains('[data-cy="accordionTrigger"]', 'Change Password').click();
+
       cy.get('[data-cy="oldPassword"]').clear().type(password);
       cy.get('[data-cy="newPassword"]').clear().type(newPassword);
       cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword);
@@ -48,7 +49,7 @@ describe('[User sign-up]', () => {
       cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['auth/password-changed']).should('be.visible');
 
       cy.step('Open delete account section');
-      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
+      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionTrigger"]').click();
 
       cy.step('Submit with wrong password');
       cy.get('[data-cy="deleteAccountPassword"]').type('wrong_password');

@@ -1,8 +1,9 @@
-import { Accordion, Button, FieldInput } from 'oa-components';
+import { Button, FieldInput } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Form } from 'react-final-form';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import { useToast } from 'src/common/Toast/useToast';
+import { AccordionContent, AccordionItem, AccordionTrigger } from 'src/components/ui/accordion';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { buttons, fields } from 'src/pages/UserSettings/labels';
 import { Flex } from 'theme-ui';
@@ -32,78 +33,81 @@ export const ChangePasswordForm = () => {
 
   return (
     <Flex data-cy="changePasswordContainer" sx={{ flexDirection: 'column', gap: 2 }}>
-      <Accordion
-        title="Change Password"
-        subtitle="Here you can change your password to a stronger one."
-      >
-        <Form
-          onSubmit={onSubmit}
-          id={formId}
-          render={({ handleSubmit, submitting, values }) => {
-            const { oldPassword, newPassword, repeatNewPassword } = values;
-            const disabled =
-              submitting ||
-              !oldPassword ||
-              !newPassword ||
-              repeatNewPassword !== newPassword ||
-              oldPassword === newPassword;
-
-            return (
-              <Flex data-cy="changePasswordForm" sx={{ flexDirection: 'column', gap: 1 }}>
-                <FormFieldWrapper text={fields.oldPassword.title} htmlFor="oldPassword" required>
-                  <PasswordField
-                    autoComplete="off"
-                    component={FieldInput}
-                    data-cy="oldPassword"
-                    name="oldPassword"
-                    placeholder={fields.oldPassword.placeholder}
-                    required
-                  />
-                </FormFieldWrapper>
-
-                <FormFieldWrapper text={fields.newPassword.title} htmlFor="newPassword" required>
-                  <PasswordField
-                    autoComplete="off"
-                    component={FieldInput}
-                    data-cy="newPassword"
-                    name="newPassword"
-                    placeholder={fields.newPassword.placeholder}
-                    required
-                  />
-                </FormFieldWrapper>
-
-                <FormFieldWrapper
-                  text={fields.repeatNewPassword.title}
-                  htmlFor="repeatNewPassword"
-                  required
-                >
-                  <PasswordField
-                    autoComplete="off"
-                    component={FieldInput}
-                    data-cy="repeatNewPassword"
-                    name="repeatNewPassword"
-                    placeholder={fields.repeatNewPassword.placeholder}
-                    required
-                  />
-                </FormFieldWrapper>
-
-                <Button
-                  data-cy="changePasswordSubmit"
-                  disabled={disabled}
-                  form={formId}
-                  onClick={handleSubmit}
-                  type="submit"
-                  sx={{
-                    alignSelf: 'flex-start',
-                  }}
-                >
-                  {buttons.submitNewPassword}
-                </Button>
-              </Flex>
-            );
-          }}
+      <AccordionItem>
+        <AccordionTrigger
+          title="Change Password"
+          subtitle="Here you can change your password to a stronger one."
         />
-      </Accordion>
+        <AccordionContent>
+          <Form
+            onSubmit={onSubmit}
+            id={formId}
+            render={({ handleSubmit, submitting, values }) => {
+              const { oldPassword, newPassword, repeatNewPassword } = values;
+              const disabled =
+                submitting ||
+                !oldPassword ||
+                !newPassword ||
+                repeatNewPassword !== newPassword ||
+                oldPassword === newPassword;
+
+              return (
+                <Flex data-cy="changePasswordForm" sx={{ flexDirection: 'column', gap: 1 }}>
+                  <FormFieldWrapper text={fields.oldPassword.title} htmlFor="oldPassword" required>
+                    <PasswordField
+                      autoComplete="off"
+                      component={FieldInput}
+                      data-cy="oldPassword"
+                      name="oldPassword"
+                      placeholder={fields.oldPassword.placeholder}
+                      required
+                    />
+                  </FormFieldWrapper>
+
+                  <FormFieldWrapper text={fields.newPassword.title} htmlFor="newPassword" required>
+                    <PasswordField
+                      autoComplete="off"
+                      component={FieldInput}
+                      data-cy="newPassword"
+                      name="newPassword"
+                      placeholder={fields.newPassword.placeholder}
+                      required
+                    />
+                  </FormFieldWrapper>
+
+                  <FormFieldWrapper
+                    text={fields.repeatNewPassword.title}
+                    htmlFor="repeatNewPassword"
+                    required
+                  >
+                    <PasswordField
+                      autoComplete="off"
+                      component={FieldInput}
+                      data-cy="repeatNewPassword"
+                      name="repeatNewPassword"
+                      placeholder={fields.repeatNewPassword.placeholder}
+                      required
+                    />
+                  </FormFieldWrapper>
+
+                  <Button
+                    data-cy="changePasswordSubmit"
+                    disabled={disabled}
+                    form={formId}
+                    onClick={handleSubmit}
+                    type="submit"
+                    sx={{
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    {buttons.submitNewPassword}
+                  </Button>
+                </Flex>
+              );
+            }}
+          />
+        </AccordionContent>
+      </AccordionItem>
     </Flex>
   );
 };

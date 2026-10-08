@@ -5,7 +5,7 @@ import { headings } from 'src/pages/UserSettings/labels';
 import { stripeService } from 'src/services/stripeService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Heading, Image, Text } from 'theme-ui';
-
+import { Accordion } from '@/components/ui/accordion';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 import { DeleteAccountForm } from './content/sections/DeleteAccount.form';
@@ -76,7 +76,12 @@ export const SettingsPageAccount = observer(() => {
               <Image
                 src={tierBadge.imageUrl}
                 alt={tierBadge.displayName}
-                sx={{ width: 45, height: 45, flexShrink: 0, objectFit: 'contain' }}
+                sx={{
+                  width: 45,
+                  height: 45,
+                  flexShrink: 0,
+                  objectFit: 'contain',
+                }}
               />
             ) : (
               <Icon glyph="supporter" size={45} sx={{ color: '#d61f30' }} />
@@ -133,10 +138,11 @@ export const SettingsPageAccount = observer(() => {
         </Flex>
       )}
       */}
-
-      <ChangePasswordForm />
-      <ChangeEmailForm />
-      <DeleteAccountForm hasSubscription={hasSubscription} />
+      <Accordion multiple>
+        <ChangePasswordForm />
+        <ChangeEmailForm />
+        <DeleteAccountForm hasSubscription={hasSubscription} />
+      </Accordion>
     </Flex>
   );
 });

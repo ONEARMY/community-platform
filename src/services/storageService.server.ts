@@ -4,6 +4,7 @@ import type { DBMedia } from 'oa-shared';
 import { Image, MediaFile } from 'oa-shared';
 import sharp from 'sharp';
 import { logger } from 'src/logger';
+import { isGif } from 'src/utils/storage';
 
 export class StorageServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -12,7 +13,7 @@ export class StorageServiceServer {
     try {
       const { data } = this.client.storage.from(process.env.TENANT_ID as string).getPublicUrl(
         image.path,
-        size
+        size && !isGif(image.path)
           ? {
               transform: size,
             }
@@ -36,7 +37,7 @@ export class StorageServiceServer {
       try {
         const { data } = this.client.storage.from(process.env.TENANT_ID as string).getPublicUrl(
           x.path,
-          size
+          size && !isGif(x.path)
             ? {
                 transform: size,
               }
@@ -96,7 +97,8 @@ export class StorageServiceServer {
         const buffer = Buffer.from(arrayBuffer);
 
         // Determine format and dimensions
-        const metadata = await sharp(buffer).metadata();
+        const metadata = await sharp(buffer, { animated: true }).metadata();
+        const height = metadata.pageHeight ?? metadata.height;
 
         // Check if image needs processing
         // Always process JPEG/PNG for WebP conversion
@@ -107,9 +109,7 @@ export class StorageServiceServer {
         const needsProcessing =
           !isSvg &&
           (isJpegOrPng ||
-            (metadata.width &&
-              metadata.height &&
-              (metadata.width > 2048 || metadata.height > 2048)) ||
+            (metadata.width && height && (metadata.width > 2048 || height > 2048)) ||
             buffer.length > 1024 * 1024); // 1MB in bytes
 
         let finalBuffer: Buffer;
@@ -117,11 +117,10 @@ export class StorageServiceServer {
         let finalFileName = file.name;
 
         if (needsProcessing) {
-          let processedImage = sharp(buffer);
+          let processedImage = sharp(buffer, { animated: true });
 
           // Only resize if dimensions exceed limits
-          const needsResize =
-            metadata.width && metadata.height && (metadata.width > 2048 || metadata.height > 2048);
+          const needsResize = metadata.width && height && (metadata.width > 2048 || height > 2048);
 
           if (needsResize) {
             processedImage = processedImage.resize(2048, 2048, {

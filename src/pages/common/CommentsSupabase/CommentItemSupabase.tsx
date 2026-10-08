@@ -1,13 +1,12 @@
 import { format } from 'date-fns';
 import { observer } from 'mobx-react';
 import {
-  ActionSet,
   Button,
   ButtonShowReplies,
   ConfirmModal,
   EditComment,
-  FollowButton,
   FollowIcon,
+  Icon,
   Modal,
   Tooltip,
   UsefulButtonLite,
@@ -15,8 +14,17 @@ import {
 import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import CheckmarkEmptyIcon from 'src/assets/icons/checkmark-empty.svg?react';
 import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
+import { Button as UiButton } from 'src/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'src/components/ui/dropdown-menu';
+import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
@@ -61,6 +69,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     () => !!comment.replies?.some((x) => x.highlighted),
   );
   const { profile } = useProfileStore();
+  const navigate = useNavigate();
   const {
     hasVoted,
     usefulCount,
@@ -121,65 +130,74 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                   <FollowIcon tooltip="Following replies" />
                 </Flex>
               )}
-              <ActionSet itemType="CommentItem">
-                <FollowButton
-                  isLoggedIn={!!profile}
-                  isFollowing={isFollowingReplies}
-                  onFollowClick={toggleFollowReplies}
-                  labelFollow="Follow replies"
-                  labelUnfollow="Unfollow replies"
-                  variant="subtle"
-                  sx={{ fontSize: 1 }}
-                />
-                {isEditable && (
-                  <Button
-                    type="button"
-                    data-cy="CommentItem: edit button"
-                    variant="subtle"
-                    icon="edit"
-                    onClick={() => setShowEditModal(true)}
-                    sx={{ fontSize: 1 }}
-                  >
-                    Edit
-                  </Button>
-                )}
-                <Button
-                  type="button"
-                  data-cy="CommentItem: copy link button"
-                  variant="subtle"
-                  icon="copy-link"
-                  onClick={copyCommentLink}
-                  sx={{ fontSize: 1 }}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <UiButton
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      data-cy="CommentItem: actions button"
+                    />
+                  }
                 >
-                  Copy Link
-                </Button>
-                {isEditable && (
-                  <Button
-                    type="button"
-                    data-cy="CommentItem: delete button"
-                    variant="subtle"
-                    icon="delete"
-                    onClick={() => setShowDeleteModal(true)}
-                    sx={{ fontSize: 1 }}
+                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <span className="sr-only">Show Actions</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-40">
+                  <DropdownMenuItem
+                    data-testid={profile ? 'follow-button' : 'follow-redirect'}
+                    data-cy={profile ? 'follow-button' : 'follow-redirect'}
+                    onClick={() =>
+                      profile
+                        ? toggleFollowReplies()
+                        : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
+                    }
                   >
-                    Delete
-                  </Button>
-                )}
-                {acceptedAnswer?.canMarkAsAccepted && (
-                  <Button
-                    type="button"
-                    data-cy="CommentItem: mark-as-accepted button"
-                    variant="subtle"
-                    onClick={acceptedAnswer.onAccept}
-                    disabled={acceptedAnswer.isLoading}
-                    sx={{ fontSize: 1 }}
+                    <Icon
+                      aria-hidden="true"
+                      glyph={isFollowingReplies ? 'thunderbolt' : 'thunderbolt-grey'}
+                    />
+                    {isFollowingReplies ? 'Unfollow replies' : 'Follow replies'}
+                  </DropdownMenuItem>
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="CommentItem: edit button"
+                      onClick={() => setShowEditModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="edit" />
+                      Edit
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    data-cy="CommentItem: copy link button"
+                    onClick={copyCommentLink}
                   >
-                    {acceptedAnswer.isAccepted
-                      ? 'Unmark as accepted answer'
-                      : 'Mark as accepted answer'}
-                  </Button>
-                )}
-              </ActionSet>
+                    <Icon aria-hidden="true" glyph="copy-link" />
+                    Copy Link
+                  </DropdownMenuItem>
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="CommentItem: delete button"
+                      onClick={() => setShowDeleteModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="delete" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
+                  {acceptedAnswer?.canMarkAsAccepted && (
+                    <DropdownMenuItem
+                      data-cy="CommentItem: mark-as-accepted button"
+                      onClick={acceptedAnswer.onAccept}
+                      disabled={acceptedAnswer.isLoading}
+                    >
+                      {acceptedAnswer.isAccepted
+                        ? 'Unmark as accepted answer'
+                        : 'Mark as accepted answer'}
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           }
           footerActions={

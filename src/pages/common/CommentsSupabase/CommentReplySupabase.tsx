@@ -1,16 +1,16 @@
 import { observer } from 'mobx-react';
-import {
-  ActionSet,
-  Button,
-  ConfirmModal,
-  EditComment,
-  Icon,
-  Modal,
-  UsefulButtonLite,
-} from 'oa-components';
+import { ConfirmModal, EditComment, Icon, Modal, UsefulButtonLite } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Button as UiButton } from 'src/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'src/components/ui/dropdown-menu';
+import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex } from 'theme-ui';
@@ -75,42 +75,45 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
           <CommentDisplay
             comment={comment}
             menuActions={
-              <ActionSet itemType="ReplyItem">
-                {isEditable && (
-                  <Button
-                    type="button"
-                    data-cy="ReplyItem: edit button"
-                    variant="subtle"
-                    icon="edit"
-                    onClick={() => setShowEditModal(true)}
-                    sx={{ fontSize: 1 }}
-                  >
-                    Edit
-                  </Button>
-                )}
-                <Button
-                  type="button"
-                  data-cy="ReplyItem: copy link button"
-                  variant="subtle"
-                  icon="copy-link"
-                  onClick={copyCommentLink}
-                  sx={{ fontSize: 1 }}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <UiButton
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      data-cy="ReplyItem: actions button"
+                    />
+                  }
                 >
-                  Copy Link
-                </Button>
-                {isEditable && (
-                  <Button
-                    type="button"
-                    data-cy="ReplyItem: delete button"
-                    variant="subtle"
-                    icon="delete"
-                    onClick={() => setShowDeleteModal(true)}
-                    sx={{ fontSize: 1 }}
-                  >
-                    Delete
-                  </Button>
-                )}
-              </ActionSet>
+                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <span className="sr-only">Show Actions</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-40">
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="ReplyItem: edit button"
+                      onClick={() => setShowEditModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="edit" />
+                      Edit
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem data-cy="ReplyItem: copy link button" onClick={copyCommentLink}>
+                    <Icon aria-hidden="true" glyph="copy-link" />
+                    Copy Link
+                  </DropdownMenuItem>
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="ReplyItem: delete button"
+                      onClick={() => setShowDeleteModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="delete" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             }
             footerActions={
               <UsefulButtonLite

@@ -24,7 +24,7 @@ export const ProfileLink = (props: Props) => {
       <a
         rel="noopener noreferrer"
         target="_blank"
-        className={`ml-2`}
+        className="ml-2 hover:underline"
         color="black"
         data-cy="profile-website"
         href={props.url}

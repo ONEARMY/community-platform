@@ -63,7 +63,12 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               <Image width={20} height={20} src={badge.imageUrl} />
               <Box>
                 {badge.actionUrl ? (
-                  <a target="_blank" rel="noopener noreferrer" href={badge.actionUrl}>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                    href={badge.actionUrl}
+                  >
                     <Text sx={{ color: 'black' }}>{badge.displayName}</Text>
                   </a>
                 ) : (

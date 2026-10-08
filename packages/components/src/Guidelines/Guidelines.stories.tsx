@@ -24,7 +24,7 @@ export const DefaultComponent = () => {
           <a
             rel="noopener noreferrer"
             target="_blank"
-            className="text-info"
+            className="text-info hover:underline"
             href="/academy/guides/research"
           >
             our guidelines{' '}

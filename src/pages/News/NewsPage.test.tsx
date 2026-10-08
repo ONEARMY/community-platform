@@ -118,6 +118,32 @@ describe('News', () => {
   });
 
   describe('Locked', () => {
+    it('names the badge that unlocks the news when it is one of its badges', async () => {
+      const news = FactoryNewsItem({
+        isLocked: true,
+        ctaBadgeId: 3,
+        profileBadges: [
+          { id: 3, name: 'pro', displayName: 'PRO', imageUrl: 'https://example.com/pro.png' },
+        ],
+        poll: null,
+        heroImage: { id: 'hero', publicUrl: 'https://example.com/hero.jpg' },
+      });
+
+      let wrapper;
+      act(() => {
+        wrapper = getWrapper(news);
+      });
+
+      await waitFor(() => {
+        expect(wrapper.getByTestId('news-title')).toBeInTheDocument();
+      });
+
+      const image = (wrapper.container as HTMLElement).querySelector(
+        '[data-cy="news-locked-image"]',
+      );
+      expect(image).toHaveTextContent('Just for PRO');
+    });
+
     it('shows the summary, blurred image and call to action instead of the body', async () => {
       const news = FactoryNewsItem({
         isLocked: true,

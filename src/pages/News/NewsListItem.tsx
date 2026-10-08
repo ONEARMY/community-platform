@@ -43,7 +43,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
       >
         {news.heroImage && news.isLocked && (
           <InternalLink to={url}>
-            <NewsLockedImage src={news.heroImage.publicUrl} />
+            <NewsLockedImage news={news} />
           </InternalLink>
         )}
 

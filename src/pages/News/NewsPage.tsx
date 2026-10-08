@@ -72,7 +72,7 @@ export const NewsPage = observer(({ news, cta }: IProps) => {
         }}
       >
         {news.heroImage && news.isLocked && (
-          <NewsLockedImage src={news.heroImage.publicUrl} className="rounded-t-lg" />
+          <NewsLockedImage news={news} className="rounded-t-lg" />
         )}
 
         {news.heroImage && !news.isLocked && (

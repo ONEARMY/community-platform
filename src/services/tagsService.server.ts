@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBTag } from 'oa-shared';
+import type { Database } from 'oa-shared';
 import { Tag } from 'oa-shared';
 
 export interface TagInput {
@@ -7,7 +7,7 @@ export interface TagInput {
 }
 
 export class TagsServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getTags(tagIds: number[]) {
     let tags: Tag[] = [];
@@ -47,7 +47,7 @@ export class TagsServiceServer {
       .from('tags')
       .insert({
         name: data.name,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select('id,name,created_at,modified_at')
       .single();
@@ -56,7 +56,7 @@ export class TagsServiceServer {
       throw result.error;
     }
 
-    return Tag.fromDB(result.data as DBTag);
+    return Tag.fromDB(result.data);
   }
 
   async update(id: number, data: TagInput) {
@@ -73,6 +73,6 @@ export class TagsServiceServer {
       throw result.error;
     }
 
-    return Tag.fromDB(result.data as DBTag);
+    return Tag.fromDB(result.data);
   }
 }

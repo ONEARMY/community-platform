@@ -1,17 +1,10 @@
-import type { IDBDocSB, IDoc } from './document';
+import type { Tables } from '../database.types';
+import type { IDoc } from './document';
 
-export class DBBanner implements IDBDocSB {
-  id: number;
-  created_at: Date;
-  modified_at: Date | null;
-
-  text: string;
-  url: string;
-
-  constructor(obj: any) {
-    Object.assign(this, obj);
-  }
-}
+export type DBBanner = Pick<
+  Tables<'banners'>,
+  'id' | 'created_at' | 'modified_at' | 'text' | 'url'
+>;
 
 export class Banner implements IDoc {
   id: number;

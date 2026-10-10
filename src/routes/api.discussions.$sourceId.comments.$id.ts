@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBComment, DBProfile } from 'oa-shared';
+import type { Database, DBComment, DBProfile } from 'oa-shared';
 import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -8,7 +8,7 @@ import { isUserAdmin } from 'src/utils/isAdmin';
 
 type Supabase = {
   headers: Headers;
-  client: SupabaseClient<any, 'public', any>;
+  client: SupabaseClient<Database>;
 };
 
 export async function action({ params, request }: LoaderFunctionArgs) {
@@ -39,7 +39,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     );
   }
 
-  const commentId: string = params.id!;
+  const commentId = Number(params.id);
 
   try {
     if (request.method === 'DELETE') {
@@ -56,7 +56,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 async function updateComment(
   { client, headers }: Supabase,
   request: Request,
-  id: string,
+  id: number,
   user: DBProfile,
 ) {
   const json = await request.json();
@@ -89,7 +89,7 @@ async function updateComment(
   return new Response(null, { headers, status: 204 });
 }
 
-async function deleteComment({ client, headers }: Supabase, id: string, user: DBProfile) {
+async function deleteComment({ client, headers }: Supabase, id: number, user: DBProfile) {
   const { data: commentData, error } = await client.from('comments').select().eq('id', id).single();
 
   if (error || !commentData) {

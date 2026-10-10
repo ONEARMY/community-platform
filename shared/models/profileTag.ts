@@ -4,7 +4,7 @@ export class DBProfileTag {
   id: number;
   created_at: string;
   name: string;
-  profile_type: string;
+  profile_type: string | null;
 
   constructor(obj: Partial<DBProfileTag>) {
     Object.assign(this, obj);
@@ -19,7 +19,7 @@ export class ProfileTag {
   id: number;
   createdAt: Date;
   name: string;
-  profileType: string;
+  profileType: string | null;
 
   constructor(obj: Partial<ProfileTag>) {
     Object.assign(this, obj);

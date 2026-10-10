@@ -7,7 +7,7 @@ import type { DifficultyLevel } from './models/library';
 import type { DBMedia, IMediaFile } from './models/media';
 import type { Moderation } from './models/moderation';
 import type { BadgeAvailability } from './models/profileBadge';
-import type { PWAIcons } from './models/tenantSettings';
+import type { DBDonationSettings, PWAIcons } from './models/tenantSettings';
 
 type Overlay<T, U> = Flatten<Omit<T, keyof U> & U>;
 type Flatten<T> = { [K in keyof T]: T[K] };
@@ -52,6 +52,7 @@ type ColumnOverrides = {
     moderation: Moderation;
   };
   tenant_settings: {
+    donation_settings: DBDonationSettings | null;
     pwa_icons: PWAIcons | null;
   };
 };

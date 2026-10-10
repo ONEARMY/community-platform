@@ -1,10 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBQuestion, Question } from 'oa-shared';
+import type { Database, DBQuestion, Question } from 'oa-shared';
 import { logger } from 'src/logger';
 import { ImageServiceServer } from './imageService.server';
 
 export class QuestionServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getById(id: number): Promise<DBQuestion> {
     const result = await this.client.from('questions').select().eq('id', id).single();

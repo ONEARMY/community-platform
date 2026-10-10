@@ -1,5 +1,7 @@
 import type { JSONContent } from '@tiptap/core';
 import type { Database as GeneratedDatabase } from './database.types';
+import type { DBAuthor } from './models/author';
+import type { DBCategory } from './models/category';
 import type { DBMedia } from './models/media';
 import type { BadgeAvailability } from './models/profileBadge';
 
@@ -8,6 +10,7 @@ type Flatten<T> = { [K in keyof T]: T[K] };
 
 type GeneratedSchema = GeneratedDatabase['public'];
 type GeneratedTables = GeneratedSchema['Tables'];
+type GeneratedFunctions = GeneratedSchema['Functions'];
 
 type ColumnOverrides = {
   news: {
@@ -16,6 +19,20 @@ type ColumnOverrides = {
   };
   profile_badges: {
     available_to: BadgeAvailability | null;
+  };
+  questions: {
+    images: DBMedia[] | null;
+  };
+};
+
+type ReturnOverrides = {
+  get_questions: {
+    author: DBAuthor | null;
+    category: DBCategory | null;
+    images: DBMedia[] | null;
+  };
+  get_user_questions: {
+    images: DBMedia[] | null;
   };
 };
 
@@ -32,7 +49,16 @@ type PublicTables = {
     : GeneratedTables[T];
 };
 
-type PublicSchema = Overlay<GeneratedSchema, { Tables: PublicTables }>;
+type PublicFunctions = {
+  [F in keyof GeneratedFunctions]: F extends keyof ReturnOverrides
+    ? Overlay<
+        GeneratedFunctions[F],
+        { Returns: Overlay<GeneratedFunctions[F]['Returns'][number], ReturnOverrides[F]>[] }
+      >
+    : GeneratedFunctions[F];
+};
+
+type PublicSchema = Overlay<GeneratedSchema, { Tables: PublicTables; Functions: PublicFunctions }>;
 
 export type Database = Overlay<GeneratedDatabase, { public: PublicSchema }>;
 

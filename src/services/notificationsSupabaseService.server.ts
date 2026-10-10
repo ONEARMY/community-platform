@@ -354,7 +354,7 @@ export class NotificationsSupabaseServiceServer {
   }
 
   async createNotificationsResearchUpdate(
-    research: DBResearchItem,
+    research: Pick<DBResearchItem, 'id' | 'title'>,
     researchUpdate: ResearchUpdate,
     profile: DBProfile,
     requestOrigin: string,

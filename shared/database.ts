@@ -2,7 +2,7 @@ import type { JSONContent } from '@tiptap/core';
 import type { Database as GeneratedDatabase } from './database.types';
 import type { DBAuthor } from './models/author';
 import type { DBCategory } from './models/category';
-import type { DBMedia } from './models/media';
+import type { DBMedia, IMediaFile } from './models/media';
 import type { BadgeAvailability } from './models/profileBadge';
 
 type Overlay<T, U> = Flatten<Omit<T, keyof U> & U>;
@@ -23,6 +23,13 @@ type ColumnOverrides = {
   questions: {
     images: DBMedia[] | null;
   };
+  research: {
+    image: DBMedia | null;
+  };
+  research_updates: {
+    images: DBMedia[] | null;
+    files: IMediaFile[] | null;
+  };
 };
 
 type ReturnOverrides = {
@@ -33,6 +40,14 @@ type ReturnOverrides = {
   };
   get_user_questions: {
     images: DBMedia[] | null;
+  };
+  get_research: {
+    author: DBAuthor | null;
+    category: DBCategory | null;
+    image: DBMedia | null;
+  };
+  get_user_research: {
+    image: DBMedia | null;
   };
 };
 

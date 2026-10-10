@@ -16,7 +16,7 @@ export interface IDBContentDoc extends IDBDocSB {
   readonly total_views?: number | null;
   readonly previous_slugs: string[] | null;
   readonly slug: string;
-  readonly tags: number[] | null;
+  readonly tags: number[] | string[] | null;
   readonly useful_count?: number;
 }
 

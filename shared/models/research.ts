@@ -1,3 +1,4 @@
+import type { Enums } from '../database';
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
@@ -25,10 +26,10 @@ export class DBResearchItem implements IDBContentDoc {
   readonly useful_count?: number;
   readonly useful_votes_last_week?: number;
   readonly subscriber_count?: number;
-  readonly comment_count?: number;
-  readonly total_views?: number;
+  readonly comment_count?: number | null;
+  readonly total_views?: number | null;
   readonly category: DBCategory | null;
-  readonly updates: DBResearchUpdate[];
+  readonly updates?: DBResearchUpdate[];
   created_by: number | null;
   modified_at: string | null;
   title: string;
@@ -37,9 +38,9 @@ export class DBResearchItem implements IDBContentDoc {
   description: string;
   image: DBMedia | null;
   category_id?: number;
-  tags: number[];
-  status: ResearchStatus;
-  is_draft: boolean;
+  tags: string[] | null;
+  status: Enums<'research_status'> | null;
+  is_draft: boolean | null;
   collaborators: string[] | null;
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
@@ -54,7 +55,7 @@ export class DBResearchItem implements IDBContentDoc {
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
         : null,
-      tags: obj.tags,
+      tags: obj.tags?.map(Number) ?? null,
       collaborators: obj.collaborators || [],
     } satisfies ResearchFormData;
   }
@@ -81,7 +82,7 @@ export class ResearchItem implements IContentDoc {
   totalViews: number;
   tags: Tag[];
   tagIds?: number[];
-  status: ResearchStatus;
+  status?: ResearchStatus;
   collaborators: Author[];
   collaboratorsUsernames: string[] | null;
   updates: ResearchUpdate[];
@@ -145,7 +146,7 @@ export class ResearchItem implements IContentDoc {
       totalViews: obj.total_views || 0,
       tagIds: obj.tags?.map((x) => Number(x)),
       tags: tags,
-      status: obj.status,
+      status: obj.status === 'archived' ? undefined : (obj.status ?? undefined),
       updateCount: obj.update_count || obj.updates?.length || 0,
       subscriberCount: obj.subscriber_count || 0,
       commentCount: calculateUpdateCommentCount(obj),
@@ -167,8 +168,8 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly deleted: boolean | null;
   readonly is_draft: boolean | null;
   readonly published_at: string | null;
-  readonly comment_count?: number;
-  readonly file_download_count?: number;
+  readonly comment_count?: number | null;
+  readonly file_download_count?: number | null;
   readonly update_author?: DBAuthor;
   readonly order?: number | null;
   created_by: number | null;
@@ -220,7 +221,10 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   researchId: number;
   title: string;
   videoUrl: string | null;
-  research?: DBResearchItem;
+  research?: Pick<
+    DBResearchItem,
+    'id' | 'title' | 'slug' | 'is_draft' | 'created_by' | 'collaborators'
+  >;
 
   constructor(obj: ResearchUpdate) {
     Object.assign(this, obj);
@@ -259,9 +263,11 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
     return research.comment_count;
   }
 
-  return research.updates
-    ?.filter((x) => x.deleted !== true && x.is_draft !== true)
-    .reduce((acc, x) => acc + (x.comment_count || 0), 0);
+  return (
+    research.updates
+      ?.filter((x) => x.deleted !== true && x.is_draft !== true)
+      .reduce((acc, x) => acc + (x.comment_count || 0), 0) ?? 0
+  );
 }
 
 export type ResearchFormData = {

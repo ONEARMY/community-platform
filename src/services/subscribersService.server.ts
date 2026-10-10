@@ -82,7 +82,10 @@ export class SubscribersServiceServer {
     }
   }
 
-  async updateResearchSubscribers(oldResearch: DBResearchItem, newResearch: ResearchItem) {
+  async updateResearchSubscribers(
+    oldResearch: Pick<DBResearchItem, 'collaborators'>,
+    newResearch: ResearchItem,
+  ) {
     const oldCollaborators = oldResearch.collaborators || [];
     const newCollaborators = newResearch.collaboratorsUsernames || [];
 

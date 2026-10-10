@@ -7,9 +7,9 @@ describe('ResearchItem.fromDB', () => {
   it('sorts updates by order', () => {
     const research = FactoryDBResearchItem({
       updates: [
-        FactoryDBResearchItemUpdate({ id: 1, order: 2, created_at: new Date('2024-01-01') }),
-        FactoryDBResearchItemUpdate({ id: 2, order: 0, created_at: new Date('2024-01-03') }),
-        FactoryDBResearchItemUpdate({ id: 3, order: 1, created_at: new Date('2024-01-02') }),
+        FactoryDBResearchItemUpdate({ id: 1, order: 2, created_at: new Date('2024-01-01').toISOString() }),
+        FactoryDBResearchItemUpdate({ id: 2, order: 0, created_at: new Date('2024-01-03').toISOString() }),
+        FactoryDBResearchItemUpdate({ id: 3, order: 1, created_at: new Date('2024-01-02').toISOString() }),
       ],
     });
 
@@ -21,9 +21,9 @@ describe('ResearchItem.fromDB', () => {
   it('falls back to creation date when order is missing', () => {
     const research = FactoryDBResearchItem({
       updates: [
-        FactoryDBResearchItemUpdate({ id: 1, order: null, created_at: new Date('2024-01-03') }),
-        FactoryDBResearchItemUpdate({ id: 2, order: null, created_at: new Date('2024-01-01') }),
-        FactoryDBResearchItemUpdate({ id: 3, order: 0, created_at: new Date('2024-01-05') }),
+        FactoryDBResearchItemUpdate({ id: 1, order: null, created_at: new Date('2024-01-03').toISOString() }),
+        FactoryDBResearchItemUpdate({ id: 2, order: null, created_at: new Date('2024-01-01').toISOString() }),
+        FactoryDBResearchItemUpdate({ id: 3, order: 0, created_at: new Date('2024-01-05').toISOString() }),
       ],
     });
 

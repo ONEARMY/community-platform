@@ -20,9 +20,9 @@ export const DifficultyLevelRecord: Record<DifficultyLevel, string> = {
 
 export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
-  readonly published_at: Date | null;
+  readonly published_at: string | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
@@ -33,7 +33,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   readonly category: DBCategory | null;
   readonly steps: DBProjectStep[] | null;
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   slug: string;
   previous_slugs: string[] | null;

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
 
 /**
  * Tracks auth accounts that chose the organisation sign-up path but have not
@@ -6,12 +7,12 @@ import type { SupabaseClient } from '@supabase/supabase-js';
  * submission, at which point the application row is deleted.
  */
 export class OrganisationApplicationsServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async create(authId: string) {
     return await this.client.from('organisation_applications').insert({
       auth_id: authId,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     });
   }
 

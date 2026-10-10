@@ -7,6 +7,7 @@ import type { DifficultyLevel } from './models/library';
 import type { DBMedia, IMediaFile } from './models/media';
 import type { Moderation } from './models/moderation';
 import type { BadgeAvailability } from './models/profileBadge';
+import type { PWAIcons } from './models/tenantSettings';
 
 type Overlay<T, U> = Flatten<Omit<T, keyof U> & U>;
 type Flatten<T> = { [K in keyof T]: T[K] };
@@ -25,6 +26,8 @@ type ColumnOverrides = {
   };
   profiles: {
     photo: DBMedia | null;
+    cover_images: DBMedia[] | null;
+    moderation: Moderation | null;
   };
   questions: {
     images: DBMedia[] | null;
@@ -44,6 +47,12 @@ type ColumnOverrides = {
   research_updates: {
     images: DBMedia[] | null;
     files: IMediaFile[] | null;
+  };
+  map_pins: {
+    moderation: Moderation;
+  };
+  tenant_settings: {
+    pwa_icons: PWAIcons | null;
   };
 };
 

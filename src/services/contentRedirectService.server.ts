@@ -1,9 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBComment, DBResearchItem, NotificationContentType } from 'oa-shared';
+import type { Database, DBComment, DBResearchItem, NotificationContentType } from 'oa-shared';
 
 // TODO: Add Tests
 export class ContentRedirectServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getUrl(id: number, contentType: NotificationContentType): Promise<string | null> {
     switch (contentType) {

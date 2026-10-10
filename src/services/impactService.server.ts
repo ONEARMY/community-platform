@@ -1,8 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { IImpactDataField, IUserImpact } from 'oa-shared';
+import type { Database, IImpactDataField, IUserImpact } from 'oa-shared';
 
 export class ImpactServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async update(profileId: number, year: number, fields: IImpactDataField[]) {
     const existingImpact = await this.client

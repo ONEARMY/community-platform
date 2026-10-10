@@ -1,4 +1,5 @@
 import type { JSONContent } from '@tiptap/core';
+import type { Json } from '../database';
 import type { Comment } from './comment';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
@@ -15,29 +16,37 @@ import type { ResearchUpdate } from './research';
 import { Tag } from './tag';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
+function parseJsonColumn<T>(value: Json | null): T | null {
+  if (!value) {
+    return null;
+  }
+
+  return (typeof value === 'string' ? JSON.parse(value) : value) as T;
+}
+
 export class DBProfile {
   readonly id: number;
   readonly created_at: string;
   readonly tags?: DBProfileTagJoin[];
   readonly badges?: DBProfileBadgeJoin[];
-  readonly pin?: DBMapPin;
-  readonly type?: DBProfileType;
+  readonly pin?: Pick<DBMapPin, 'id' | 'moderation'>[];
+  readonly type?: DBProfileType | null;
   username: string | null;
   display_name: string;
   photo: DBMedia | null;
   cover_images: DBMedia[] | null;
-  country: string;
+  country: string | null;
   roles: string[] | null;
-  visitor_policy: string | null;
+  visitor_policy: Json | null;
   is_blocked_from_messaging: boolean | null;
   about: string | null;
-  impact: string | null;
+  impact: Json | null;
   is_contactable: boolean | null;
   last_active: string | null;
   website: string | null;
-  total_views: number;
-  auth_id: string;
-  profile_type: number;
+  total_views: number | null;
+  auth_id: string | null;
+  profile_type: number | null;
   donations_enabled: boolean;
   moderation: Moderation | null;
   moderation_feedback: string | null;
@@ -82,10 +91,10 @@ export class Profile {
     coverImages: MediaWithPublicUrl[] | null = null,
     authorVotes?: AuthorVotes[],
   ) {
-    let impact = null;
+    let impact: IUserImpact | null = null;
 
     try {
-      impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null;
+      impact = parseJsonColumn<IUserImpact>(dbProfile.impact);
     } catch (_) {
       console.error('error parsing impact');
     }
@@ -93,15 +102,13 @@ export class Profile {
     return new Profile({
       id: dbProfile.id,
       createdAt: new Date(dbProfile.created_at),
-      country: dbProfile.country,
+      country: dbProfile.country ?? '',
       displayName: dbProfile.display_name,
       username: dbProfile.username,
       photo: photo ?? null,
       roles: dbProfile.roles || null,
       type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
-      visitorPolicy: dbProfile.visitor_policy
-        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
-        : null,
+      visitorPolicy: parseJsonColumn<UserVisitorPreference>(dbProfile.visitor_policy),
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages ?? null,
@@ -109,7 +116,7 @@ export class Profile {
       isContactable: dbProfile.is_contactable || null,
       lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
-      totalViews: dbProfile.total_views,
+      totalViews: dbProfile.total_views ?? 0,
       authorUsefulVotes: authorVotes,
       donationsEnabled: dbProfile.donations_enabled,
       moderation: dbProfile.moderation ?? null,

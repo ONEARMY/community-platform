@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import type { DBProfileBadge } from 'oa-shared';
+import type { Database, DBProfileBadge } from 'oa-shared';
 import { ProfileBadge } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import type { AdminProfileBadge, ProfileBadgeInput } from 'src/utils/profileBadges';
@@ -20,7 +20,7 @@ const toDB = (input: ProfileBadgeInput) => ({
 const firstCount = (value: unknown) => (value as { count: number }[] | null)?.[0]?.count ?? 0;
 
 export class ProfileBadgeServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getAll() {
     const cachedProfileBadges = await profileBadgesCache.get('profileBadges');
@@ -84,7 +84,7 @@ export class ProfileBadgeServiceServer {
   async create(input: ProfileBadgeInput) {
     const result = await this.client
       .from('profile_badges')
-      .insert({ ...toDB(input), name: input.name, tenant_id: process.env.TENANT_ID })
+      .insert({ ...toDB(input), name: input.name, tenant_id: process.env.TENANT_ID! })
       .select()
       .single();
 

@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
+import type { Database } from 'oa-shared';
 import { DBProfileType, ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 
@@ -17,10 +18,10 @@ export interface ProfileTypeInput {
 }
 
 export class ProfileTypesServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getById(id: number): Promise<DBProfileType> {
-    const result = await this.client.from('questions').select().eq('id', id).single();
+    const result = await this.client.from('profile_types').select().eq('id', id).single();
     return result.data as DBProfileType;
   }
 
@@ -65,12 +66,12 @@ export class ProfileTypesServiceServer {
         name: data.name.toLocaleLowerCase(),
         order: data.order,
         display_name: data.name,
-        description: data.description,
-        image_url: data.imageUrl,
-        small_image_url: data.smallImageUrl,
-        map_pin_name: data.mapPinName,
+        description: data.description ?? '',
+        image_url: data.imageUrl ?? '',
+        small_image_url: data.smallImageUrl ?? '',
+        map_pin_name: data.mapPinName ?? '',
         is_space: data.isSpace,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select()
       .single();
@@ -91,12 +92,12 @@ export class ProfileTypesServiceServer {
         name: data.name.toLocaleLowerCase(),
         order: data.order,
         display_name: data.name,
-        description: data.description,
-        image_url: data.imageUrl,
-        small_image_url: data.smallImageUrl,
-        map_pin_name: data.mapPinName,
+        description: data.description ?? '',
+        image_url: data.imageUrl ?? '',
+        small_image_url: data.smallImageUrl ?? '',
+        map_pin_name: data.mapPinName ?? '',
         is_space: data.isSpace,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .eq('id', id)
       .select()

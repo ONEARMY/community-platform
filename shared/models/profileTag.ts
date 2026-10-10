@@ -12,7 +12,7 @@ export class DBProfileTag {
 }
 
 export class DBProfileTagJoin {
-  profile_tags: DBProfileTag;
+  profile_tags: Pick<DBProfileTag, 'id' | 'name'>;
 }
 
 export class ProfileTag {
@@ -29,9 +29,7 @@ export class ProfileTag {
     const tag = value.profile_tags;
     return new ProfileTag({
       id: tag.id,
-      createdAt: new Date(tag.created_at),
       name: tag.name,
-      profileType: tag.profile_type,
     });
   }
 

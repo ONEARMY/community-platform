@@ -84,7 +84,7 @@ async function updateComment(
     return data({}, { headers, status: 500, statusText: 'Error updating comment' });
   }
 
-  new ProfileServiceServer(client).updateUserActivity(user.auth_id);
+  new ProfileServiceServer(client).updateUserActivity(user.auth_id!);
 
   return new Response(null, { headers, status: 204 });
 }
@@ -109,7 +109,7 @@ async function deleteComment({ client, headers }: Supabase, id: string, user: DB
     return data({}, { headers, status: 500, statusText: 'Error deleting comment' });
   }
 
-  new ProfileServiceServer(client).updateUserActivity(user.auth_id);
+  new ProfileServiceServer(client).updateUserActivity(user.auth_id!);
 
   return new Response(null, { headers, status: 204 });
 }

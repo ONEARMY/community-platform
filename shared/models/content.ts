@@ -5,7 +5,7 @@ import type { Tag } from './tag';
 
 export interface IDBContentDoc extends IDBDocSB {
   readonly author?: DBAuthor;
-  readonly comment_count?: number;
+  readonly comment_count?: number | null;
   readonly category: DBCategory | null;
   readonly category_id?: number;
   readonly created_by: number | null;
@@ -13,10 +13,10 @@ export interface IDBContentDoc extends IDBDocSB {
   is_draft: boolean | null;
   readonly subscriber_count?: number;
   readonly title: string;
-  readonly total_views?: number;
+  readonly total_views?: number | null;
   readonly previous_slugs: string[] | null;
   readonly slug: string;
-  readonly tags: number[];
+  readonly tags: number[] | null;
   readonly useful_count?: number;
 }
 

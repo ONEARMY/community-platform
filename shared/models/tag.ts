@@ -1,4 +1,4 @@
-import type { Tables } from '../database.types';
+import type { Tables } from '../database';
 import type { IDoc } from './document';
 
 export type DBTag = Pick<Tables<'tags'>, 'id' | 'created_at' | 'modified_at' | 'name'>;

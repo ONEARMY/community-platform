@@ -1,6 +1,5 @@
 import type { JSONContent } from '@tiptap/core';
 import type { Comment } from './comment';
-import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
@@ -133,23 +132,22 @@ export type ProfileListItem = Pick<
 >;
 
 type NotificationContent = News | Comment | Question | ResearchUpdate;
-type NotificationSourceContentType = SubscribableContentTypes;
 
 export class DBNotification implements IDBDocSB {
   readonly id: number;
-  readonly title: string;
+  readonly title: string | null;
   readonly action_type: NotificationActionType;
   readonly content_id: number;
   readonly content_type: NotificationContentType;
   readonly created_at: string;
-  is_read: boolean;
+  is_read: boolean | null;
   modified_at: string | null;
-  readonly source_content_type: NotificationSourceContentType;
-  readonly source_content_id: number;
-  readonly owned_by: DBProfile;
+  readonly source_content_type: string | null;
+  readonly source_content_id: number | null;
+  readonly owned_by?: DBProfile;
   readonly owned_by_id: number;
-  readonly triggered_by: DBProfile;
-  readonly triggered_by_id: number;
+  readonly triggered_by?: Pick<DBProfile, 'id' | 'username' | 'photo'> | null;
+  readonly triggered_by_id: number | null;
   readonly tenant_id: string;
 
   constructor(obj: Partial<DBNotification>) {
@@ -167,8 +165,8 @@ export class Notification implements IDoc {
   modifiedAt: Date | null;
   ownedById: number;
   isRead: boolean;
-  sourceContentType: NotificationSourceContentType;
-  sourceContentId: number;
+  sourceContentType: string | null;
+  sourceContentId: number | null;
 
   content?: NotificationContent;
   ownedBy?: BasicAuthorDetails;
@@ -181,7 +179,7 @@ export class Notification implements IDoc {
   static fromDB(dbNotification: DBNotification) {
     return new Notification({
       id: dbNotification.id,
-      title: dbNotification.title,
+      title: dbNotification.title ?? '',
       actionType: dbNotification.action_type,
       contentType: dbNotification.content_type,
       contentId: dbNotification.content_id,
@@ -190,9 +188,13 @@ export class Notification implements IDoc {
       createdAt: new Date(dbNotification.created_at),
       modifiedAt: dbNotification.modified_at ? new Date(dbNotification.modified_at) : null,
       ownedById: dbNotification.owned_by_id,
-      isRead: dbNotification.is_read,
+      isRead: !!dbNotification.is_read,
       triggeredBy: dbNotification.triggered_by
-        ? Profile.fromDB(dbNotification.triggered_by)
+        ? {
+            id: dbNotification.triggered_by.id,
+            username: dbNotification.triggered_by.username,
+            photo: null,
+          }
         : undefined,
       ownedBy: dbNotification.owned_by ? Profile.fromDB(dbNotification.owned_by) : undefined,
     });
@@ -565,8 +567,8 @@ export type SubscribedUser = {
   profile_created_at: string;
   email: string;
   is_unsubscribed: boolean;
-  badge_ids: number[];
-  roles: string[];
+  badge_ids?: number[];
+  roles?: string[];
   replies: boolean;
   comments: boolean;
   research_updates: boolean;

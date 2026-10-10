@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
+  Database,
   DBComment,
   DBNews,
   DBProfile,
@@ -14,7 +15,7 @@ import { logger } from 'src/logger';
 import { NotificationEmailServiceServer } from './notificationEmailService.server';
 
 export class NotificationsSupabaseServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getAllProfiles() {
     // Currently simplified to direct client request (and not a function) as not emailing all users yet
@@ -163,7 +164,7 @@ export class NotificationsSupabaseServiceServer {
         throw response.error;
       }
 
-      return (response.data || []) as SubscribedUser[];
+      return response.data || [];
     } catch (error) {
       logger.error(error);
       throw new Error(error);
@@ -183,21 +184,18 @@ export class NotificationsSupabaseServiceServer {
         return;
       }
 
-      const notificationsToInsert = validSubscriberIds.map(
-        (subscriberId) =>
-          new DBNotification({
-            action_type: notification.action_type,
-            content_id: notification.content_id,
-            content_type: notification.content_type,
-            source_content_id: notification.source_content_id,
-            source_content_type: notification.source_content_type,
-            title: notification.title,
-            triggered_by_id: notification.triggered_by_id,
-            owned_by_id: subscriberId,
-            is_read: false,
-            tenant_id: process.env.TENANT_ID!,
-          }),
-      );
+      const notificationsToInsert = validSubscriberIds.map((subscriberId) => ({
+        action_type: notification.action_type,
+        content_id: notification.content_id,
+        content_type: notification.content_type,
+        source_content_id: notification.source_content_id,
+        source_content_type: notification.source_content_type,
+        title: notification.title,
+        triggered_by_id: notification.triggered_by_id,
+        owned_by_id: subscriberId,
+        is_read: false,
+        tenant_id: process.env.TENANT_ID!,
+      }));
 
       const response = await this.client.from('notifications').insert(notificationsToInsert);
 
@@ -230,9 +228,9 @@ export class NotificationsSupabaseServiceServer {
         const sourceItem = await this.client
           .from(comment.source_type)
           .select('title')
-          .eq('id', comment.source_id)
+          .eq('id', contentId)
           .single();
-        title = sourceItem.data?.title;
+        title = sourceItem.data?.title ?? '';
       }
 
       const subscribers = (await this.getSubscribedUsers(contentId, contentType)).filter(

@@ -2,6 +2,7 @@ import type { JSONContent } from '@tiptap/core';
 import type { Database as GeneratedDatabase } from './database.types';
 import type { DBAuthor } from './models/author';
 import type { DBCategory } from './models/category';
+import type { DiscussionContentType } from './models/common';
 import type { DifficultyLevel } from './models/library';
 import type { DBMedia, IMediaFile } from './models/media';
 import type { Moderation } from './models/moderation';
@@ -21,6 +22,9 @@ type ColumnOverrides = {
   };
   profile_badges: {
     available_to: BadgeAvailability | null;
+  };
+  profiles: {
+    photo: DBMedia | null;
   };
   questions: {
     images: DBMedia[] | null;
@@ -44,6 +48,10 @@ type ColumnOverrides = {
 };
 
 type ReturnOverrides = {
+  get_comments_with_votes: {
+    profile: DBAuthor | null;
+    source_type: DiscussionContentType;
+  };
   get_questions: {
     author: DBAuthor | null;
     category: DBCategory | null;

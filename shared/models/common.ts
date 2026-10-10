@@ -18,7 +18,18 @@ export type Collaborator = {
 
 export type ContentType = 'questions' | 'projects' | 'research' | 'news';
 
-export type UsefulContentType = 'questions' | 'projects' | 'research' | 'news' | 'comments';
+export const UsefulContentTypes = [
+  'questions',
+  'projects',
+  'research',
+  'news',
+  'comments',
+] as const;
+export type UsefulContentType = (typeof UsefulContentTypes)[number];
+
+export function isUsefulContentType(value: string | undefined): value is UsefulContentType {
+  return UsefulContentTypes.includes(value as UsefulContentType);
+}
 
 export type ContentFormType = 'questions' | 'projects' | 'research' | 'researchUpdate' | 'news';
 

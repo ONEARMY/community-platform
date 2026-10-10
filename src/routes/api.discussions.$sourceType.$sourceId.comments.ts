@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
+import type { Database, DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
 import { DBComment, DiscussionContentTypes } from 'oa-shared';
 import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
@@ -34,9 +34,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     }
 
     const result = await client.rpc('get_comments_with_votes', {
-      p_source_type: params.sourceType,
-      p_source_id: params.sourceId,
-      p_current_user_id: currentUserId || null,
+      p_source_type: params.sourceType!,
+      p_source_id: Number(params.sourceId),
+      p_current_user_id: currentUserId || undefined,
     });
 
     const dbComments = result.data as DBComment[];
@@ -98,11 +98,11 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: requestData.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: params.sourceType,
+    source_type: params.sourceType!,
     created_by: currentUser.data[0].id,
     parent_id: requestData.parentId ?? null,
-    tenant_id: process.env.TENANT_ID,
-  } as Partial<DBComment>;
+    tenant_id: process.env.TENANT_ID!,
+  };
 
   const commentResult = await client
     .from('comments')
@@ -159,7 +159,11 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   });
 }
 
-async function addSubscriptions(comment: DBComment, profile: DBProfile, client: SupabaseClient) {
+async function addSubscriptions(
+  comment: DBComment,
+  profile: DBProfile,
+  client: SupabaseClient<Database>,
+) {
   const subscribersServiceServer = new SubscribersServiceServer(client);
   if (comment.source_id && !comment.parent_id) {
     // Subscribe to peer comments...

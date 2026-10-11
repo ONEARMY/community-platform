@@ -32,7 +32,7 @@ describe('[Library]', () => {
         // cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.get('[data-cy=Username]').contains(users.settings_workplace_new.username);
         cy.get('[data-cy=category]').contains('Machines');
-        cy.get('a').should('have.attr', 'href').and('eq', projectUrl);
+        cy.get('h2 a').should('have.attr', 'href').and('eq', projectUrl);
       });
 
       cy.step('Can clear search');

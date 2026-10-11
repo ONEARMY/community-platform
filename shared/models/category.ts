@@ -1,4 +1,4 @@
-import type { Tables } from '../database.types';
+import type { Tables } from '../database';
 import type { ContentType } from './common';
 import type { IDoc } from './document';
 

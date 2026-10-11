@@ -28,27 +28,27 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   readonly useful_count?: number;
   readonly useful_votes_last_week?: number;
   readonly subscriber_count?: number;
-  readonly comment_count?: number;
-  readonly total_views?: number;
+  readonly comment_count?: number | null;
+  readonly total_views?: number | null;
   readonly category: DBCategory | null;
-  readonly steps: DBProjectStep[] | null;
+  readonly steps?: DBProjectStep[] | null;
   created_by: number | null;
   modified_at: string | null;
   title: string;
   slug: string;
   previous_slugs: string[] | null;
   description: string;
-  difficulty_level: DifficultyLevel;
+  difficulty_level: DifficultyLevel | null;
   cover_image: DBMedia | null;
   file_link: string | null;
   files: IMediaFile[] | null;
   category_id?: number;
-  tags: number[];
+  tags: string[] | null;
   is_draft: boolean | null;
-  time?: string;
-  file_download_count?: number;
-  moderation: Moderation;
-  moderation_feedback: string;
+  time?: string | null;
+  file_download_count?: number | null;
+  moderation: Moderation | null;
+  moderation_feedback: string | null;
 
   constructor(obj: Omit<DBProject, 'id'>) {
     Object.assign(this, obj);
@@ -65,7 +65,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
         : null,
-      tags: obj.tags,
+      tags: obj.tags?.map(Number) ?? null,
       difficultyLevel: obj.difficulty_level,
       files: obj.files,
       fileLink: obj.file_link,
@@ -97,7 +97,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   hasFileLink: boolean;
   tags: Tag[];
   tagIds?: number[];
-  difficultyLevel: DifficultyLevel;
+  difficultyLevel: DifficultyLevel | null;
   steps: ProjectStep[];
   isDraft: boolean;
   usefulCount: number;
@@ -141,11 +141,11 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       isDraft: obj.is_draft || false,
       fileDownloadCount: obj.file_download_count || 0,
       files: obj.files,
-      moderation: obj.moderation,
-      moderationFeedback: obj.moderation_feedback,
+      moderation: obj.moderation ?? 'awaiting-moderation',
+      moderationFeedback: obj.moderation_feedback ?? undefined,
       // no fileLink as it must be shown only for authenticated users
       hasFileLink: !!obj.file_link,
-      time: obj.time,
+      time: obj.time ?? undefined,
       steps,
     });
   }

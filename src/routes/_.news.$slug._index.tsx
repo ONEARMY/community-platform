@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
+import type { Database, DBNews } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs } from 'react-router';
@@ -62,7 +62,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return redirect('/news', { headers });
 }
 
-async function loadNews(client: SupabaseClient, dbNews: DBNews) {
+async function loadNews(client: SupabaseClient<Database>, dbNews: DBNews) {
   const contentService = new ContentServiceServer(client);
   await contentService.incrementViewCount('news', dbNews.total_views, dbNews!.id);
 

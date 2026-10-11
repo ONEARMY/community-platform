@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBQuestion, QuestionDTO } from 'oa-shared';
+import type { Database, DBMedia, DBQuestion, QuestionDTO } from 'oa-shared';
 import { Question, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -61,7 +61,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const isFirstPublish =
       currentQuestion.is_draft && !data.isDraft && !currentQuestion.published_at;
 
-    const now = new Date();
+    const now = new Date().toISOString();
 
     const questionResult = await client
       .from('questions')
@@ -77,15 +77,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         modified_at: now,
         ...(isFirstPublish && { published_at: now }),
       })
-      .eq('id', params.id)
-      .select();
+      .eq('id', id)
+      .select('*, category:categories(*)');
 
     if (questionResult.error || !questionResult.data) {
       throw questionResult.error;
     }
 
     const newImages = new StorageServiceServer(client).getPublicUrls(
-      questionResult.data[0].images,
+      questionResult.data[0].images ?? [],
       IMAGE_SIZES.GALLERY,
     );
 
@@ -140,7 +140,7 @@ async function deleteQuestion(request: Request, id: number) {
     await client
       .from('questions')
       .update({
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         deleted: true,
       })
       .eq('id', id);
@@ -162,7 +162,7 @@ async function validateRequest(
   userAuthId: string,
   data: QuestionDTO,
   currentQuestion: DBQuestion,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ) {
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();

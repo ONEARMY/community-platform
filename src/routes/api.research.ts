@@ -26,7 +26,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   const { data, error } = await client.rpc('get_research', {
-    search_query: q || null,
+    search_query: q || undefined,
     category_id: category,
     research_status: status || null,
     sort_by: sort,
@@ -35,7 +35,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 
   const countResult = await client.rpc('get_research_count', {
-    search_query: q || null,
+    search_query: q || undefined,
     category_id: category,
     research_status: status || null,
   });
@@ -136,27 +136,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         description: data.description,
         slug,
         category: data.category,
-        tags: data.tags,
+        tags: data.tags?.map(String),
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
         image: data.coverImage,
-        published_at: data.isDraft ? null : new Date(),
-        tenant_id: process.env.TENANT_ID,
+        published_at: data.isDraft ? null : new Date().toISOString(),
+        tenant_id: process.env.TENANT_ID!,
       })
-      .select()
+      .select('*, category:categories(*)')
       .single();
 
     if (researchResult.error || !researchResult.data) {
       throw researchResult.error;
     }
 
-    const research = ResearchItem.fromDB(
-      researchResult.data,
-      [],
-      [],
-      researchResult.data.collaborators,
-    );
+    const research = ResearchItem.fromDB(researchResult.data, []);
 
     await new SubscribersServiceServer(client).addResearchSubscribers(research, profile.id);
     profileService.updateUserActivity(claims.data.claims.sub);

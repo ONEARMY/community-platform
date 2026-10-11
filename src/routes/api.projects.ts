@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type {
+  Database,
   DBMedia,
   DBProfile,
   DBProject,
@@ -43,18 +44,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const { data, error } = await client.rpc('get_projects', {
-    search_query: q || null,
+    search_query: q || undefined,
     category_id: category,
     sort_by: sort,
     offset_val: skip,
     limit_val: ITEMS_PER_PAGE,
-    current_username: username,
+    current_username: username ?? undefined,
   });
 
   const countResult = await client.rpc('get_projects_count', {
-    search_query: q || null,
+    search_query: q || undefined,
     category_id: category,
-    current_username: username,
+    current_username: username ?? undefined,
   });
   const count = countResult.data || 0;
 
@@ -171,7 +172,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-async function uploadSteps(data, formData: FormData, projectDb: DBProject, client: SupabaseClient) {
+async function uploadSteps(
+  data,
+  formData: FormData,
+  projectDb: DBProject,
+  client: SupabaseClient<Database>,
+) {
   const steps: ProjectStep[] = [];
   const storage = new StorageServiceServer(client);
 
@@ -205,7 +211,7 @@ async function validateRequest(
   request: Request,
   data: ProjectDTO,
   slug: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ): Promise<void> {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
@@ -233,7 +239,7 @@ async function validateRequest(
 }
 
 async function createProject(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   data: ProjectDTO,
   slug: string,
   moderation: Moderation | null,
@@ -247,28 +253,28 @@ async function createProject(
       description: data.description,
       slug: slug,
       category: data.category,
-      tags: data.tags,
+      tags: data.tags?.map(String),
       is_draft: data.isDraft,
-      published_at: data.isDraft ? null : new Date(),
+      published_at: data.isDraft ? null : new Date().toISOString(),
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,
       files: data.files,
       cover_image: data.coverImage,
       moderation: moderation,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     })
-    .select();
+    .select('*, category:categories(*)');
 
   if (projectResult.error || !projectResult.data) {
     throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject;
+  return projectResult.data[0];
 }
 
 async function createStep(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   projectId: number,
   values: ProjectStepDTO,
   order: number,
@@ -282,7 +288,7 @@ async function createStep(
       video_url: values.videoUrl,
       images: values.images,
       order: order,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     })
     .select();
 

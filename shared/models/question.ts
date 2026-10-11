@@ -14,17 +14,17 @@ export class DBQuestion implements IDBContentDoc {
   readonly modified_at: string | null;
   readonly published_at: string | null;
   readonly author?: DBAuthor;
-  readonly comment_count?: number;
+  readonly comment_count?: number | null;
   readonly category: DBCategory | null;
   readonly category_id?: number;
   readonly created_by: number | null;
   readonly deleted: boolean | null;
   readonly subscriber_count?: number;
   readonly title: string;
-  readonly total_views?: number;
-  readonly previous_slugs: string[];
+  readonly total_views?: number | null;
+  readonly previous_slugs: string[] | null;
   readonly slug: string;
-  readonly tags: number[];
+  readonly tags: number[] | null;
   readonly useful_count?: number;
   readonly accepted_answer_id?: number | null;
   readonly accepted_answer_date?: string | null;
@@ -97,11 +97,11 @@ export class Question implements IContentDoc {
       images: images || [],
       isDraft: obj.is_draft || false,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
-      previousSlugs: obj.previous_slugs,
+      previousSlugs: obj.previous_slugs || [],
       publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       slug: obj.slug,
       subscriberCount: obj.subscriber_count || 0,
-      tagIds: obj.tags,
+      tagIds: obj.tags ?? undefined,
       tags: tags,
       title: obj.title,
       totalViews: obj.total_views || 0,

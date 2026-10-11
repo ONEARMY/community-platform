@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { DBQuestion, UserRole } from 'oa-shared';
+import { type Database, DBQuestion, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ForbiddenPage } from 'src/pages/Forbidden/labels';
@@ -46,7 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 async function isUserAllowedToEdit(
   dbQuestion: DBQuestion,
   userAuthId: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ) {
   const profileResult = await client
     .from('profiles')

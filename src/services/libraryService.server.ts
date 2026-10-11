@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
+  type Database,
   type DBProject,
   type DBProjectStep,
   Image,
@@ -13,7 +14,7 @@ import { ImageServiceServer } from './imageService.server';
 import { StorageServiceServer } from './storageService.server';
 
 export class LibraryServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   getBySlug(slug: string) {
     return this.client
@@ -146,8 +147,12 @@ export class LibraryServiceServer {
   }
 
   async getById(id: number) {
-    const result = await this.client.from('projects').select().eq('id', id).single();
-    return result.data as DBProject;
+    const result = await this.client
+      .from('projects')
+      .select('*, category:categories(*)')
+      .eq('id', id)
+      .single();
+    return result.data;
   }
 
   async getProjectStepIds(id: number): Promise<number[]> {
@@ -188,7 +193,7 @@ export class LibraryServiceServer {
           project_id: projectId,
           video_url: values.videoUrl,
           images: values.images,
-          tenant_id: process.env.TENANT_ID,
+          tenant_id: process.env.TENANT_ID!,
           order,
         })
         .select();

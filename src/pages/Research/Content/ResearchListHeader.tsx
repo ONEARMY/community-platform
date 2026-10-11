@@ -5,7 +5,6 @@ import {
   ReturnPathLink,
   SearchField,
   Select,
-  Tooltip,
 } from 'oa-components';
 import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord } from 'oa-shared';
@@ -22,6 +21,7 @@ import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { listing } from '../labels';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { ResearchSortOptions } from '../ResearchSortOptions';
@@ -179,18 +179,14 @@ export const ResearchFilterHeader = (props: IProps) => {
     <UserAction
       incompleteProfile={
         <AuthWrapper roleRequired={tenantContext?.createResearchRoles}>
-          <Link to="/settings">
-            <Button
-              type="button"
-              variant="disabled"
-              data-cy="complete-profile-research"
-              data-tooltip-id="tooltip"
-              data-tooltip-content={listing.incompleteProfile}
-            >
-              {listing.create}
-            </Button>
-          </Link>
-          <Tooltip id="tooltip" />
+          <Tooltip>
+            <TooltipTrigger render={<Link to="/settings" />}>
+              <Button type="button" variant="disabled" data-cy="complete-profile-research">
+                {listing.create}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{listing.incompleteProfile}</TooltipContent>
+          </Tooltip>
         </AuthWrapper>
       }
       loggedIn={

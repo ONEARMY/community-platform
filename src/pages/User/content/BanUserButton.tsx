@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, Tooltip } from 'oa-components';
+import { Button } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useState } from 'react';
@@ -8,6 +8,7 @@ import { useToast } from 'src/common/Toast';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface BanUserButtonProps {
   profile: Profile;
@@ -43,8 +44,6 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
       ? 'Cannot ban users with protected roles (Admin, Editor, Moderator, Research Creator)'
       : '';
 
-  const tooltipId = 'ban-user-button-tooltip';
-
   const handleBanUser = async () => {
     if (!profile?.id) {
       return;
@@ -67,22 +66,26 @@ export const BanUserButton = observer(({ profile }: BanUserButtonProps) => {
     });
   };
 
+  const handleClick = () => {
+    if (!isDisabled) {
+      setShowBanModal(true);
+    }
+  };
+
   return (
     <>
-      <Button
-        type="button"
-        variant="destructive"
-        data-cy="BanUserButton"
-        data-testid="BanUserButton"
-        data-tooltip-id={tooltipId}
-        data-tooltip-content={tooltipMessage}
-        onClick={() => setShowBanModal(true)}
-        disabled={isDisabled}
-      >
-        Ban User
-      </Button>
-
-      {isDisabled && <Tooltip id={tooltipId} />}
+      <Tooltip disabled={!isDisabled}>
+        <TooltipTrigger
+          render={<Button type="button" variant="destructive" />}
+          data-cy="BanUserButton"
+          data-testid="BanUserButton"
+          aria-disabled={isDisabled}
+          onClick={handleClick}
+        >
+          Ban User
+        </TooltipTrigger>
+        <TooltipContent>{tooltipMessage}</TooltipContent>
+      </Tooltip>
 
       <ConfirmModal
         isOpen={showBanModal}

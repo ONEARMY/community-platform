@@ -1,4 +1,4 @@
-import { Category, InternalLink, Tooltip as LegacyTooltip } from 'oa-components';
+import { Category, InternalLink } from 'oa-components';
 import type { Question } from 'oa-shared';
 import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
 import DefaultMemberImage from 'src/assets/images/default_member.svg';
@@ -146,16 +146,16 @@ export const QuestionListItem = ({ question, query }: IProps) => {
                 />
               </Text>
               {question.acceptedAnswerId && (
-                <>
-                  <CheckmarkSuccessIcon
-                    data-tooltip-id={question.acceptedAnswerId.toString()}
-                    data-tooltip-content="Answered"
-                    width={20}
-                    height={20}
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<span tabIndex={0} />}
                     aria-label="Answered"
-                  />
-                  <LegacyTooltip id={question.acceptedAnswerId.toString()} />
-                </>
+                    className="inline-flex"
+                  >
+                    <CheckmarkSuccessIcon width={20} height={20} aria-hidden="true" />
+                  </TooltipTrigger>
+                  <TooltipContent>Answered</TooltipContent>
+                </Tooltip>
               )}
               <Tooltip>
                 <TooltipTrigger

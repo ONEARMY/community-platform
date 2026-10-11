@@ -32,7 +32,6 @@ describe('[Polls.Vote]', () => {
     cy.step('Publish news');
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
     cy.get('[data-cy=toast]').contains('News published');
 
     cy.step('Log in as first user and vote on poll');
@@ -76,7 +75,6 @@ describe('[Polls.Vote]', () => {
     cy.contains("50%");
     cy.contains("0%");
     cy.contains("2 votes");
-    cy.wait(2000);
 
     cy.step('Poll results change after voting')
     cy.get('[data-cy=poll-option-1]').click();

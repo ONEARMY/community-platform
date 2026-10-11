@@ -46,7 +46,6 @@ describe('[Questions.Discussions]', () => {
     cy.logout();
     cy.signUpCompletedUser(replier);
     cy.visit(questionPath);
-    cy.wait(1000);
     cy.get('[data-cy=CommentItem]').contains(updatedNewComment).should('be.visible');
     cy.addReply(newReply);
     cy.contains('Answers');
@@ -96,11 +95,11 @@ describe('[Questions.Discussions]', () => {
     const demoAdmin = getTenantUser(users.admin);
     const question = MOCK_DATA.questions[0];
     const questionPath = `/questions/${question.slug}`;
+    cy.intercept('POST', '/api/questions/*/accept-answer').as('acceptAnswer');
 
     cy.step('Sign in as an admin (not the question author)');
     cy.signIn(demoAdmin.email, demoAdmin.password);
     cy.visit(questionPath);
-    cy.wait(1000);
 
     cy.step('No accepted answer initially');
     cy.get('[data-cy=OwnCommentItem]').should('be.visible');
@@ -109,7 +108,7 @@ describe('[Questions.Discussions]', () => {
     cy.step('Admin marks the existing comment as the accepted answer');
     cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
     cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Mark as accepted answer').click();
-    cy.wait(1000);
+    cy.wait('@acceptAnswer');
     cy.get('[data-cy=OwnCommentItem]').contains('Accepted answer').should('be.visible');
 
     cy.step('Accepted answer persists after reload');
@@ -119,7 +118,7 @@ describe('[Questions.Discussions]', () => {
     cy.step('Admin can unmark the accepted answer');
     cy.get('[data-cy="CommentItem: ActionSetButton"]').first().click();
     cy.get('[data-cy="CommentItem: mark-as-accepted button"]').should('contain', 'Unmark as accepted answer').click();
-    cy.wait(1000);
+    cy.wait('@acceptAnswer');
     cy.get('[data-cy=OwnCommentItem]').should('not.contain', 'Accepted answer');
 
     cy.step('Unmarked state persists after reload');

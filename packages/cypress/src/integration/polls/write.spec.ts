@@ -51,7 +51,6 @@ describe('[Polls.Write]', () => {
     cy.step('Publish news');
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
     cy.get('[data-cy=toast]').contains('News published');
 
     cy.step('Poll is shown in news');
@@ -66,7 +65,7 @@ describe('[Polls.Write]', () => {
 
     cy.step('Navigate to edit page');
     cy.get('[data-cy=edit]').click();
-    cy.wait(2000);
+    cy.url().should('include', '/edit');
 
     cy.step('Change title and option descriptions');
     cy.get('[data-cy=field-poll-title]').clear().type(updatedPollTitle).blur({ force: true });
@@ -82,7 +81,6 @@ describe('[Polls.Write]', () => {
     cy.step('Publish updated news');
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
     cy.get('[data-cy=toast]').contains('News published');
 
     cy.step('Updated poll is shown in news');
@@ -124,7 +122,6 @@ describe('[Polls.Write]', () => {
 
     cy.step('Publish and view news with poll')
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
     cy.get('[data-cy=toast]').contains('News published');
     cy.visit('/news');
     cy.get('[data-cy=news-list-item]').contains(newsTitle).click();
@@ -132,12 +129,12 @@ describe('[Polls.Write]', () => {
 
     cy.step('Delete poll');
     cy.get('[data-cy=edit]').click();
-    cy.wait(2000);
+    cy.url().should('include', '/edit');
     cy.get('[data-cy=delete-poll]').click();
 
     cy.step('Save and view news without poll')
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
+    cy.get('[data-cy=toast]').contains('News published');
     cy.visit('/news');
     cy.get('[data-cy=news-list-item]').contains(newsTitle).click();
 

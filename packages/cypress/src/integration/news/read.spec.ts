@@ -55,16 +55,18 @@ describe('[News.Read]', () => {
 
       cy.step('News images are clickable');
 
-      cy.wait(500);
-
       // Check content images
       cy.get('[data-cy=news-body] img').first().should('have.css', 'cursor', 'pointer').click();
 
       // Lightbox should open
-      cy.get('.pswp').should('be.visible');
-
-      // Wait for PhotoSwipe animation/initialization
-      cy.wait(1000);
+      cy.get('.pswp').should('be.visible').and('have.class', 'pswp--open');
+      cy.get('.pswp').should(($pswp) => {
+        const animated = [$pswp[0], $pswp.find('.pswp__bg')[0]];
+        const finished = animated.some(
+          (el) => el && getComputedStyle(el).transitionProperty === 'none',
+        );
+        expect(finished, 'lightbox opening animation finished').to.be.true;
+      });
 
       // Close lightbox
       cy.get('button[title="Close"]').click();

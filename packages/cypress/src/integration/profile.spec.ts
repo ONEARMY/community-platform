@@ -43,7 +43,6 @@ describe('[Profile]', () => {
 
       cy.step('Go to Profile');
       cy.clickMenuItem(UserMenuItem.Profile);
-      cy.wait(1000);
       cy.url().should('include', `/u/${user.username}`);
       cy.get('[data-cy=SpaceProfile]').should('not.exist');
       cy.get('[data-cy=MemberProfile]').should('be.visible');
@@ -63,7 +62,6 @@ describe('[Profile]', () => {
 
       cy.step("Logged out people can see that they're contactable");
       cy.logout();
-      cy.wait(2000);
       cy.visit(`/u/${contactee.username}`);
       cy.get('[data-cy=contact-tab]').click();
       cy.get('[data-cy="UserContactNotLoggedIn"]');
@@ -198,7 +196,6 @@ describe('[Profile]', () => {
       cy.get('[data-cy=ContribTab]').click();
 
       cy.get('[data-cy="the-first-test-question-link"]').click();
-      cy.wait(2000);
       cy.url().should('include', `/questions/the-first-test-question?utm_source=user-profile`);
       cy.get('[data-cy="question-title"]').should('be.visible').contains('The first test question?');
     });

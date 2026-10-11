@@ -30,9 +30,8 @@ describe('[News.Write]', () => {
 
     cy.step('Can add draft news');
     cy.get('[data-cy=draft]').click();
-    cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('Draft news saved');
-    cy.get('[data-cy=toast-action-link]').click();
+    cy.contains('[data-cy=toast]', 'Draft news saved');
+    cy.visitToastLink('View draft news');
     cy.url().should('include', initialExpectedSlug);
 
     cy.step('Can get to drafts');
@@ -63,12 +62,10 @@ describe('[News.Write]', () => {
     cy.selectByValue('important', '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
-    cy.wait(2000);
+    cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-
-    cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published');
-    cy.get('[data-cy=toast-action-link]').click();
+    cy.contains('[data-cy=toast]', 'News published');
+    cy.openToastLink('View news');
     cy.url().should('include', initialExpectedSlug);
 
     cy.step('All news fields shown');
@@ -90,8 +87,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=follow-button]').contains('Following Comments');
 
     cy.step('Notification generated for update');
-    cy.wait(2000);
-    cy.reload(); // Annoying delay generating the notification
+    cy.waitForUnreadNotification();
+    cy.reload();
     cy.expectNewNotification({
       path: initialExpectedSlug,
       title: initialTitle,
@@ -99,9 +96,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy="NotificationListSupabase-CloseButton"]').click();
 
     cy.step('Edit fields');
-    cy.wait(2000);
     cy.get('[data-cy=edit]').click();
-    cy.wait(2000);
     cy.url().should('include', `${initialExpectedSlug}/edit`);
 
     cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
@@ -122,11 +117,10 @@ describe('[News.Write]', () => {
     // cy.get('[data-cy=contentReach-select]').find('[class=data-cy--is-disabled]')
 
     cy.step('Updated news details shown');
-    cy.wait(2000);
+    cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published');
-    cy.get('[data-cy=toast-action-link]').click();
+    cy.contains('[data-cy=toast]', 'News published');
+    cy.openToastLink('View news');
     cy.url().should('include', updatedExpectedSlug);
     cy.contains(updatedNewsBody);
 
@@ -172,27 +166,24 @@ describe('[News.Write]', () => {
     cy.selectByValue('important', '[data-cy=contentReach-select]');
 
     cy.get('[data-cy=errors-container]').should('not.exist');
-    cy.wait(2000);
+    cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-
-    cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published');
-    cy.get('[data-cy=toast-action-link]').click();
+    cy.contains('[data-cy=toast]', 'News published');
+    cy.openToastLink('View news');
     cy.url().should('include', path);
 
     cy.step("Shows it's for PRO badgers only");
     cy.get('[data-cy=profileBadge]').contains('PRO');
 
     cy.step('For creator, notification generated for update');
-    cy.wait(2000);
-    cy.reload(); // Annoying delay generating the notification
+    cy.waitForUnreadNotification();
+    cy.reload();
     cy.expectNewNotification({
       path,
       title,
     });
 
     cy.step('Not visible to logged out users');
-    cy.wait(1000);
     cy.logout();
     cy.reload();
     cy.url().should('include', `/sign-in?returnUrl=%2Fnews%2Fimportant-update-for-pro-${initialRandomId}`);
@@ -251,9 +242,8 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=submit]').click();
 
     cy.step('Admin edit is saved and visible');
-    cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published');
-    cy.get('[data-cy=toast-action-link]').click();
+    cy.contains('[data-cy=toast]', 'News published');
+    cy.openToastLink('View news');
     cy.url().should('include', `/news/${newsItem.slug}`);
     cy.contains(adminEdit);
   });
@@ -274,15 +264,15 @@ describe('[Delete a news item]', () => {
     cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
     cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
     cy.addToRichTextField('This news will be deleted.');
+    cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-    cy.wait(2000);
-    cy.get('[data-cy=toast]').contains('News published');
-    cy.get('[data-cy=toast-action-link]').click();
+    cy.contains('[data-cy=toast]', 'News published');
+    cy.openToastLink('View news');
     cy.url().should('include', '/news/');
 
     cy.step('Navigate to edit page');
     cy.get('[data-cy=edit]').click();
-    cy.wait(2000);
+    cy.url().should('include', '/edit');
 
     cy.step('Click delete button');
     cy.get('[data-cy=delete]').click();

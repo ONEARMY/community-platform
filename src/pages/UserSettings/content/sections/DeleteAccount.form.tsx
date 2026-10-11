@@ -1,4 +1,4 @@
-import { Button, ConfirmModal, FieldInput } from 'oa-components';
+import { Button, FieldInput } from 'oa-components';
 import { useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
@@ -8,6 +8,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { buttons, fields } from 'src/pages/UserSettings/labels';
 import { Flex } from 'theme-ui';
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { accountService } from '../../services/account.service';
 
 interface IFormValues {

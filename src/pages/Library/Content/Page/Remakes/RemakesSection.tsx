@@ -1,4 +1,4 @@
-import { Button, ConfirmModal, Pagination } from 'oa-components';
+import { Button, Pagination } from 'oa-components';
 import type { Project, Remake } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -8,6 +8,7 @@ import { SessionContext } from 'src/pages/common/SessionContext';
 import { remakeService } from 'src/services/remakeService';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { Box, Flex, Image, Text } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { REMAKE_DELETE_CONFIRM_MESSAGE, REMAKES_PER_PAGE } from './constants';
 import { useRemakes } from './hooks/useRemakes';
 import { RemakeCard } from './RemakeCard';

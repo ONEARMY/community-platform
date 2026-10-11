@@ -57,7 +57,7 @@ describe('[Library.Remakes]', () => {
     cy.get('[data-cy=remake-description]').contains(description);
 
     cy.step('Can edit their own remake');
-    cy.get('[data-cy="RemakeItem: ActionSetButton"]').click();
+    cy.get('[data-cy="RemakeItem: actions button"]').click();
     cy.get('[data-cy=remake-edit]').click();
     cy.get('[data-cy=remake-form-modal]').should('be.visible');
     cy.get('[data-cy=remake-description-input]').clear().type(updatedDescription);
@@ -70,7 +70,7 @@ describe('[Library.Remakes]', () => {
 
     cy.step('Warns about unsaved changes when leaving the form');
     cy.get('[data-cy=remake-card]').first().click();
-    cy.get('[data-cy="RemakeItem: ActionSetButton"]').click();
+    cy.get('[data-cy="RemakeItem: actions button"]').click();
     cy.get('[data-cy=remake-edit]').click();
     cy.get('[data-cy=remake-description-input]').clear().type('Unsaved change');
     cy.get('[data-cy=remake-cancel]').click();
@@ -83,7 +83,7 @@ describe('[Library.Remakes]', () => {
     cy.get('[data-cy="Confirm.modal: Confirm"]').click();
 
     cy.get('[data-cy=remake-card]').first().click();
-    cy.get('[data-cy="RemakeItem: ActionSetButton"]').click();
+    cy.get('[data-cy="RemakeItem: actions button"]').click();
     cy.get('[data-cy=remake-edit]').click();
     cy.get('[data-cy=remake-form-delete]').click();
     cy.contains('Are you sure you want to delete this remake?');

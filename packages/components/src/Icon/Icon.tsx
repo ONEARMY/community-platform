@@ -18,7 +18,6 @@ import {
   MdLock,
   MdMailOutline,
   MdMenu,
-  MdMoreVert,
   MdNotifications,
   MdTurnedIn,
 } from 'react-icons/md';
@@ -100,7 +99,6 @@ export const glyphs: IGlyphs = {
   'megaphone-active': iconMap.megaphoneActive,
   'megaphone-inactive': iconMap.megaphoneInactive,
   menu: <MdMenu />,
-  'more-vert': <MdMoreVert />,
   news: iconMap.news,
   notifications: <MdNotifications />,
   pdf: <FaFilePdf />,

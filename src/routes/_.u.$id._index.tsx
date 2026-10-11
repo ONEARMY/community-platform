@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Profile, UserCreatedDocs } from 'oa-shared';
+import type { Database, Profile, UserCreatedDocs } from 'oa-shared';
 import { AuthorVotes, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
@@ -16,7 +16,7 @@ import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Text } from 'theme-ui';
 
 async function getUserCreatedDocs(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   username: string | null,
 ): Promise<UserCreatedDocs> {
   if (!username) {

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBAdminRemake, DBProfile, DBRemake, RemakeDTO } from 'oa-shared';
+import type { Database, DBAdminRemake, DBProfile, DBRemake, RemakeDTO } from 'oa-shared';
 import {
   AdminRemake,
   REMAKE_MAX_DESCRIPTION_LENGTH,
@@ -25,7 +25,7 @@ const REMAKE_SELECT = `
 export class RemakeServiceServer {
   private imageService: ImageServiceServer;
 
-  constructor(private client: SupabaseClient) {
+  constructor(private client: SupabaseClient<Database>) {
     this.imageService = new ImageServiceServer(client);
   }
 
@@ -113,7 +113,7 @@ export class RemakeServiceServer {
         created_by: profile.id,
         description: dto.description || null,
         images: this.toDbImages(dto),
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select(REMAKE_SELECT)
       .single();

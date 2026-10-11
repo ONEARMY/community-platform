@@ -7,6 +7,7 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import {
   forbiddenError,
   methodNotAllowedError,
+  notFoundError,
   tooManyRequestsError,
   unauthorizedError,
   validationError,
@@ -91,7 +92,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       : await client.rpc('get_user_email_by_username', {
           username: data.to,
         });
-    const receiver = emailResult.data[0];
+    const receiver = emailResult.data?.at(0);
+
+    if (!receiver) {
+      throw notFoundError('Receiver');
+    }
 
     const emailTemplate = (
       <ReceiverMessage

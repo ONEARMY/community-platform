@@ -45,6 +45,7 @@ export const loader = async ({ request }) => {
           id,
           name,
           display_name,
+          order,
           image_url,
           small_image_url,
           description,

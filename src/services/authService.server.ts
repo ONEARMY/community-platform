@@ -1,5 +1,5 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { SignupSource } from 'oa-shared';
+import type { Database, SignupSource } from 'oa-shared';
 import { logger } from 'src/logger';
 
 type CreateProfileArgs = {
@@ -14,7 +14,7 @@ type CreateProfileArgs = {
 const FOREIGN_KEY_VIOLATION = '23503';
 
 export class AuthServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async createUserProfile(args: CreateProfileArgs) {
     // Should add more typing here about the required fields needed to create a profile
@@ -32,7 +32,7 @@ export class AuthServiceServer {
     const profile = {
       auth_id: args.user.id,
       display_name: args.displayName || '',
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
       profile_type: data[0].id,
       signup_source: args.signupSource,
     };

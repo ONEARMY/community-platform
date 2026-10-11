@@ -40,3 +40,10 @@ export interface PWAIcons {
   256: string;
   512: string;
 }
+
+export type DBDonationSettings = {
+  defaultCampaignId?: string;
+  defaultDescription?: string;
+  defaultImageUrl?: string;
+  spaceDescription?: string;
+};

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type {
+  Database,
   DBMedia,
   DBProfile,
   DBProject,
@@ -61,6 +62,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const libraryService = new LibraryServiceServer(client);
 
     const currentProject = await libraryService.getById(id);
+
+    if (!currentProject) {
+      throw validationError('Project not found', 'project');
+    }
+
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     const slug = convertToSlug(data.title);
@@ -144,7 +150,7 @@ async function validateRequest(
   data: ProjectDTO,
   currentProject: DBProject,
   slug: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ): Promise<void> {
   if (!profile) {
     throw validationError('User not found');
@@ -181,7 +187,7 @@ async function validateRequest(
 }
 
 async function updateProject(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   profile: DBProfile,
   currentProject: DBProject,
   data: ProjectDTO,
@@ -197,7 +203,7 @@ async function updateProject(
     moderation = profile?.roles?.includes(UserRole.ADMIN) ? 'accepted' : 'awaiting-moderation';
   }
 
-  const now = new Date();
+  const now = new Date().toISOString();
 
   const projectResult = await client
     .from('projects')
@@ -207,7 +213,7 @@ async function updateProject(
       slug,
       previous_slugs: previousSlugs,
       category: data.category,
-      tags: data.tags,
+      tags: data.tags?.map(String),
       is_draft: data.isDraft,
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
@@ -215,17 +221,17 @@ async function updateProject(
       files: data.files,
       moderation,
       cover_image: data.coverImage || null,
-      modified_at: new Date(),
+      modified_at: new Date().toISOString(),
       ...(isFirstPublish && { published_at: now }),
     })
     .eq('id', currentProject.id)
-    .select();
+    .select('*, category:categories(*)');
 
   if (projectResult.error || !projectResult.data) {
     throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject;
+  return projectResult.data[0];
 }
 
 async function deleteProject(request: Request, id: number) {
@@ -249,7 +255,7 @@ async function deleteProject(request: Request, id: number) {
     await client
       .from('projects')
       .update({
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         deleted: true,
       })
       .eq('id', id);

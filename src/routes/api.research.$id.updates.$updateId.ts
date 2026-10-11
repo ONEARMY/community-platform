@@ -78,13 +78,13 @@ export const action = async ({ request, params, context }: ActionFunctionArgs) =
         description: data.description,
         is_draft: data.isDraft,
         images: data.images,
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         video_url: data.videoUrl,
         files: data.files,
-        ...(isFirstPublish && { published_at: new Date() }),
+        ...(isFirstPublish && { published_at: new Date().toISOString() }),
       })
       .eq('id', oldResearchUpdate.id)
-      .select('*,research:research(id,title,slug,is_draft)')
+      .select('*,research:research(id,title,collaborators,created_by,is_draft,slug)')
       .single();
 
     if (researchUpdateAfterUpdating.error || !researchUpdateAfterUpdating.data) {
@@ -137,7 +137,7 @@ async function deleteResearchUpdate(
   await client
     .from('research_updates')
     .update({
-      modified_at: new Date(),
+      modified_at: new Date().toISOString(),
       deleted: true,
     })
     .eq('id', updateId);

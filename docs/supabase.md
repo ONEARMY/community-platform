@@ -64,6 +64,9 @@ Schema changes must be made in the /supabase/schemas folder, following the curre
 After making the schema changes, a migration file needs to be generated, use this command:
 `supabase db diff --file [migration_name]`
 
+Then regenerate the TypeScript types in `shared/database.types.ts` from your local database:
+`bun run db:types`
+
 ## Running Cypress Tests
 
 Running cypress tests locally will use the local database, while running on CI will use the QA database.

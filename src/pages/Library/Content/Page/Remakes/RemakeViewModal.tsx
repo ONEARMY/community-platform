@@ -1,3 +1,4 @@
+import { EllipsisVerticalIcon } from 'lucide-react';
 import { Button, Icon, Modal, Username } from 'oa-components';
 import type { Remake } from 'oa-shared';
 import { UserRole } from 'oa-shared';
@@ -10,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'src/components/ui/dropdown-menu';
-import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Image, Text } from 'theme-ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -264,7 +264,7 @@ export const RemakeViewModal = (props: IProps) => {
                     />
                   }
                 >
-                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
                   <span className="sr-only">Show Actions</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent container={dialogContainer} className="min-w-34">

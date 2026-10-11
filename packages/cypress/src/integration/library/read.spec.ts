@@ -112,11 +112,7 @@ describe('[Library]', () => {
           //   .to.have.attr('src')
           //   .match(coverFileRegex)
         });
-        cy.wait(2000);
-        cy.get('[data-cy=tag-list]').then(($tagList) => {
-          expect($tagList).to.contain('product');
-          expect($tagList).to.contain('exhibition');
-        });
+        cy.get('[data-cy=tag-list]').should('contain', 'product').and('contain', 'exhibition');
         // cy.get('[data-cy=file-download-counter]').should(
         //   'contain',
         //   '1,234 downloads',

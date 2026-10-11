@@ -24,6 +24,15 @@ describe('[Admin]', () => {
     cy.url().should('include', '/admin/remakes');
     cy.contains('h1', 'Remakes');
   });
+
+  it('[Admin can reach the news overview from the admin navigation]', () => {
+    cy.signIn(admin.email, admin.password);
+
+    cy.visit('/admin');
+    cy.contains('a', 'News').click();
+    cy.url().should('include', '/admin/news');
+    cy.contains('h1', 'News');
+  });
   it('[Admin can access the admin questions overview]', () => {
      cy.signIn(admin.email, admin.password)
 
@@ -66,7 +75,6 @@ describe('[Admin]', () => {
     cy.signIn(admin.email, admin.password)
 
     cy.visit('/admin/questions')
-    cy.wait(500)
     cy.get('button[aria-label*="Delete"]').first().click({ force: true })
     cy.contains('Delete Question')
     cy.get('button').contains("Cancel").click({ force: true })
@@ -78,7 +86,6 @@ describe('[Admin]', () => {
     cy.signIn(admin.email, admin.password)
 
     cy.visit('/admin/questions')
-    cy.wait(500)
     cy.get('button[aria-label*="Delete"]').first().click({ force: true })
     cy.contains('Delete Question')
     cy.get('button').contains("Delete").click({ force: true })
@@ -102,7 +109,6 @@ describe('[Admin - Profile Type Page', () => {
 
   it('[Admin cannot add a new profile type if form fields are empty]', () => {
     cy.visit('/admin/profile-types')
-    cy.wait(500)
     cy.get('button').contains('New').click({force: true})
     cy.get('input[id="profile-type-name"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
     cy.get('button').contains('Create').click()
@@ -112,7 +118,6 @@ describe('[Admin - Profile Type Page', () => {
 
   it('[Admin can edit profile type]', () => {
     cy.visit('/admin/profile-types')
-    cy.wait(500)
     cy.get('button[aria-label="Edit member"]').click({force: true})
     cy.get('textArea[id*="profile-type-description"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
     cy.get('button').contains('Save').click()
@@ -121,7 +126,6 @@ describe('[Admin - Profile Type Page', () => {
 
   it('Admin cannot delete a profile type that is in use', () => {
     cy.visit('/admin/profile-types')
-    cy.wait(500)
     cy.get('button[aria-label="Can\'t delete member"]').click({force: true})
     cy.get('body').should('contain', 'Cannot be deleted')
   })

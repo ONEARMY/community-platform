@@ -30,7 +30,7 @@ describe('[Settings]', () => {
 
     cy.step('Go to User Settings');
     cy.clickMenuItem(UserMenuItem.Settings);
-    cy.wait(1000);
+    cy.url().should('include', '/settings');
     cy.get('[data-cy=displayName').clear().type('Wrong user');
 
     cy.step('Confirm shown when attempting to go to another page');

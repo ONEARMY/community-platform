@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
 import { DBNews, NewsFormData, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
@@ -47,7 +48,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return data({ formData, id: result.data.id }, { headers });
 }
 
-async function isAllowedToEdit(userProfileId: string, userAuthId: string, client: SupabaseClient) {
+async function isAllowedToEdit(
+  userProfileId: number | null,
+  userAuthId: string,
+  client: SupabaseClient<Database>,
+) {
   const { data } = await client
     .from('profiles')
     .select('id,roles')

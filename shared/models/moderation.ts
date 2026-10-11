@@ -4,7 +4,7 @@ export interface IModeration {
 }
 
 export interface IDBModeration {
-  moderation: Moderation;
+  moderation: Moderation | null;
   moderation_feedback: string | null;
 }
 

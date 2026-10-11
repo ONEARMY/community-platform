@@ -76,9 +76,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').type(expected.description).blur();
 
       cy.get('[data-cy=draft]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
+      cy.visitToastLink('View draft');
 
       cy.get('[data-cy=draft-tag]').should('be.visible');
       cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
@@ -103,9 +101,7 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.openToastLink('View research');
 
       cy.url().should('include', researchURL);
       cy.visit(researchURL);
@@ -137,8 +133,6 @@ describe('[Research]', () => {
       cy.contains('New update');
 
       cy.step('Cannot be published when empty');
-      cy.wait(1000);
-
       cy.get('label[for=files]').should('exist');
       cy.get('[data-cy=submit]').should('be.visible').click();
       cy.get('[data-cy=errors-container]').should('be.visible');
@@ -159,9 +153,7 @@ describe('[Research]', () => {
       cy.step('Published when fields are populated correctly');
       cy.get('[data-cy=submit]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+      cy.openToastLink('View research update');
 
       cy.contains(updateTitle).should('be.visible');
       cy.contains(updateDescription).should('be.visible');
@@ -224,7 +216,6 @@ describe('[Research]', () => {
 
       cy.step('Create a research article with image');
       cy.visit('/research/create');
-      cy.wait(2000);
       cy.contains('Start your Research');
       cy.get('[data-cy=intro-title').clear().type(title).blur();
       cy.get('[data-cy=intro-description]').clear().type(description).blur();
@@ -232,9 +223,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=delete-image]').should('exist');
       cy.selectCard('Machines', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.openToastLink('View research');
 
       cy.url().should('include', `/research/${slug}`);
 
@@ -284,8 +273,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=loader]').should('not.exist');
       cy.get('a[href="/research/create"]').should('be.visible');
       cy.get('[data-cy=create]:visible').click();
-
-      cy.wait(2000);
+      cy.url().should('include', '/research/create');
 
       cy.step('Enter research article details');
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
@@ -294,9 +282,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.openToastLink('View research');
 
       cy.get('[data-cy=follow-button]', { timeout: 20000 }).should('contain', 'Following');
       cy.contains(researchItem.title);
@@ -329,9 +315,7 @@ describe('[Research]', () => {
       cy.step('Save as Draft');
       cy.get('[data-cy=draft]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
+      cy.visitToastLink('View draft');
 
       cy.step('Can see Draft after refresh');
       cy.contains(updateTitle);
@@ -356,9 +340,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(finalUpdateTitle);
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+      cy.openToastLink('View research update');
       cy.contains(finalUpdateTitle);
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist');
 
@@ -390,7 +372,6 @@ describe('[Research]', () => {
       cy.step('Another user creates a research article');
       cy.signIn(researcher.email, researcher.password);
       cy.visit('/research/create');
-      cy.wait(2000);
       cy.contains('Start your Research');
       cy.get('[data-cy=intro-title]').clear().type(title).blur();
       cy.get('[data-cy=intro-description]').clear().type('Written by someone other than the admin').blur();
@@ -398,8 +379,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=delete-image]').should('exist');
       cy.selectCard('Machines', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.openToastLink('View research');
       cy.url().should('include', `/research/${slug}`);
 
       cy.step('Research is not authored by the admin');
@@ -423,8 +403,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=submit]').click();
 
       cy.step('Admin edit is saved and visible');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.openToastLink('View research');
       cy.url().should('include', `/research/${slug}`);
       cy.contains(adminEdit);
     });
@@ -442,7 +421,6 @@ describe('[Research]', () => {
 
       cy.step('Create research article');
       cy.visit('/research/create');
-      cy.wait(2000);
       cy.contains('Start your Research');
       cy.get('[data-cy=intro-title').clear().type(researchTitle).blur();
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
@@ -451,14 +429,11 @@ describe('[Research]', () => {
       cy.selectCard('Machines', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research').click();
+      cy.openToastLink('View research');
       cy.url().should('include', `/research/${researchSlug}`);
 
       cy.step('Create update with image and file');
       cy.get('[data-cy=addResearchUpdateButton]').should('exist').click();
-      cy.wait(2000);
       cy.contains('New update');
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updateTitle);
@@ -473,15 +448,12 @@ describe('[Research]', () => {
       cy.get('[data-cy=remove-file]').should('exist');
 
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+      cy.openToastLink('View research update');
 
       cy.url().should('include', `${researchSlug}#update_`);
 
       cy.step('Edit update and replace media');
       cy.get('[data-cy=edit-update]').should('be.visible').click();
-      cy.wait(2000);
       cy.contains('Edit your update');
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updatedTitle);
@@ -499,9 +471,7 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=submit]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View research update').click();
+      cy.openToastLink('View research update');
 
       cy.url().should('include', `${researchSlug}#update_`);
       cy.contains(updatedTitle);

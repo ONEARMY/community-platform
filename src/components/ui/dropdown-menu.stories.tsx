@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { EllipsisVerticalIcon } from 'lucide-react';
 import { Icon } from 'oa-components';
 import { Button } from './button';
 import {
@@ -7,7 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './dropdown-menu';
-import MoreVertIcon from './icons/more-vert.svg?react';
 
 const meta: Meta<typeof DropdownMenu> = {
   title: 'ui/DropdownMenu',
@@ -15,7 +15,7 @@ const meta: Meta<typeof DropdownMenu> = {
   render: (args) => (
     <DropdownMenu {...args}>
       <DropdownMenuTrigger render={<Button variant="ghost" size="icon-xs" />}>
-        <MoreVertIcon aria-hidden="true" className="size-3" />
+        <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
         <span className="sr-only">Show Actions</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -54,7 +54,7 @@ export const Compact: Story = {
   render: () => (
     <DropdownMenu defaultOpen>
       <DropdownMenuTrigger render={<Button variant="ghost" size="icon-xs" />}>
-        <MoreVertIcon aria-hidden="true" className="size-3" />
+        <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
         <span className="sr-only">Show Actions</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-34">
@@ -75,7 +75,7 @@ export const DisabledAction: Story = {
   render: () => (
     <DropdownMenu defaultOpen>
       <DropdownMenuTrigger render={<Button variant="ghost" size="icon-xs" />}>
-        <MoreVertIcon aria-hidden="true" className="size-3" />
+        <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
         <span className="sr-only">Show Actions</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -61,9 +61,7 @@ describe('[Question]', () => {
       });
 
       cy.get('[data-cy=draft]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View draft').click();
+      cy.visitToastLink('View draft');
 
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
 
@@ -89,9 +87,7 @@ describe('[Question]', () => {
 
       cy.step('Submit question');
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.openToastLink('View question');
 
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
 
@@ -112,9 +108,7 @@ describe('[Question]', () => {
 
       cy.step('Updated question details shown');
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.openToastLink('View question');
       cy.url().should('include', `/questions/${initialExpectedSlug}`);
       cy.contains(updatedQuestionDescription);
 
@@ -122,9 +116,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.openToastLink('View question');
       cy.url().should('include', `/questions/${updatedExpectedSlug}`);
       cy.contains(updatedTitle);
 
@@ -204,9 +196,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]').type(description, { delay: 5 });
       cy.selectCard('Moulds', '[data-cy=category-select]');
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View question').click();
+      cy.openToastLink('View question');
       cy.url().should('include', '/questions/');
 
       cy.step('Navigate to edit page');

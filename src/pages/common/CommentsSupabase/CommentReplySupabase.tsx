@@ -1,5 +1,6 @@
+import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
-import { ConfirmModal, EditComment, Icon, Modal, UsefulButtonLite } from 'oa-components';
+import { EditComment, Icon, Modal, UsefulButtonLite } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -10,10 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'src/components/ui/dropdown-menu';
-import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { CommentDisplay } from './CommentDisplay';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
@@ -86,7 +87,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
                     />
                   }
                 >
-                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
                   <span className="sr-only">Show Actions</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-40">

@@ -37,7 +37,7 @@ export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   const { data, error } = await client.rpc('get_questions', {
-    search_query: q || null,
+    search_query: q || undefined,
     category_id: category,
     sort_by: sort,
     offset_val: skip,
@@ -45,7 +45,7 @@ export const loader = async ({ request }) => {
   });
 
   const countResult = await client.rpc('get_questions_count', {
-    search_query: q || null,
+    search_query: q || undefined,
     category_id: category,
   });
 
@@ -162,13 +162,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
         images: data.images,
-        published_at: data.isDraft ? null : new Date(),
+        published_at: data.isDraft ? null : new Date().toISOString(),
         slug,
         category: data.category,
         tags: data.tags,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
-      .select();
+      .select('*, category:categories(*)');
 
     if (questionResult.error || !questionResult.data) {
       throw new Error(questionResult.error?.details || 'Error creating question');

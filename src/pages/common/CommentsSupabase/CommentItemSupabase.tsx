@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
+import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import {
   Button,
   ButtonShowReplies,
-  ConfirmModal,
   EditComment,
   FollowIcon,
   Icon,
@@ -24,11 +24,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'src/components/ui/dropdown-menu';
-import MoreVertIcon from 'src/components/ui/icons/more-vert.svg?react';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
@@ -141,7 +141,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                     />
                   }
                 >
-                  <MoreVertIcon aria-hidden="true" className="size-3" />
+                  <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
                   <span className="sr-only">Show Actions</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-40">

@@ -1,4 +1,3 @@
-export { Accordion } from './Accordion/Accordion';
 export { AuthorDisplay } from './AuthorDisplay/AuthorDisplay';
 export { Banner } from './Banner/Banner';
 export { BlockedRoute } from './BlockedRoute/BlockedRoute';
@@ -11,7 +10,6 @@ export { CardProfile } from './CardProfile/CardProfile';
 export { Category } from './Category/Category';
 export { CategoryHorizonalList } from './CategoryHorizonalList/CategoryHorizonalList';
 export { CommentsTitle } from './CommentsTitle/CommentsTitle';
-export { ConfirmModal } from './ConfirmModal/ConfirmModal';
 export { ContentStatistics } from './ContentStatistics/ContentStatistics';
 export type { IStatistic } from './ContentStatistics/types';
 export { CreateComment } from './CreateComment/CreateComment';

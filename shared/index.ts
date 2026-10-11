@@ -1,3 +1,4 @@
+export type { Database, Enums, Json, Tables, TablesInsert, TablesUpdate } from './database';
 export * from './messages';
 export * from './models';
 export * from './utils';

@@ -9,8 +9,8 @@ export const REMAKE_MAX_DESCRIPTION_LENGTH = 1000;
 
 export class DBRemake implements IDBDocSB {
   readonly id: number;
-  readonly created_at: Date;
-  readonly modified_at: Date | null;
+  readonly created_at: string;
+  readonly modified_at: string | null;
   readonly project_id: number;
   readonly created_by: number;
   readonly description: string | null;

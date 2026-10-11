@@ -17,9 +17,9 @@ export const ResearchStatusRecord: Record<ResearchStatus, string> = {
 
 export class DBResearchItem implements IDBContentDoc {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
-  readonly published_at: Date | null;
+  readonly published_at: string | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
@@ -30,7 +30,7 @@ export class DBResearchItem implements IDBContentDoc {
   readonly category: DBCategory | null;
   readonly updates: DBResearchUpdate[];
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   slug: string;
   previous_slugs: string[] | null;
@@ -163,16 +163,16 @@ export class ResearchItem implements IContentDoc {
 export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly id: number;
   readonly research_id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
   readonly is_draft: boolean | null;
-  readonly published_at: Date | null;
+  readonly published_at: string | null;
   readonly comment_count?: number;
   readonly file_download_count?: number;
   readonly update_author?: DBAuthor;
   readonly order?: number | null;
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   description: string;
   images: DBMedia[] | null;

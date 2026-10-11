@@ -15,9 +15,9 @@ import type { Tag } from './tag';
 
 export class DBNews implements IDBContentDoc {
   readonly id: number;
-  readonly created_at: Date;
-  readonly modified_at: Date | null;
-  readonly published_at: Date | null;
+  readonly created_at: string;
+  readonly modified_at: string | null;
+  readonly published_at: string | null;
   readonly author?: DBAuthor;
   readonly comment_count?: number;
   readonly category: DBCategory | null;

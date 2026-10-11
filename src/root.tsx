@@ -123,6 +123,7 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
   });
 
   // iOS PWA meta tags
+  tags.push({ name: 'mobile-web-app-capable', content: 'yes' });
   tags.push({ name: 'apple-mobile-web-app-capable', content: 'yes' });
   tags.push({
     name: 'apple-mobile-web-app-status-bar-style',

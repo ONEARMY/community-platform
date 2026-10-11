@@ -36,8 +36,7 @@ export class TenantSettingsService {
       siteUrl: data?.site_url || this.origin || 'https://community.preciousplastic.com',
       messageSignOff: data?.message_sign_off || 'One Army',
       emailFrom: data?.email_from || 'hello@onearmy.earth',
-      siteImage:
-        data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
+      siteImage: data?.site_image || '/assets/img/one-army-logo.png',
       noMessaging: data?.no_messaging || false,
       academyResource: data?.academy_resource,
       libraryHeading: data?.library_heading,

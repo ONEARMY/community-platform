@@ -42,8 +42,10 @@ const Header = observer(() => {
   };
 
   useEffect(() => {
-    updateNotifications();
-  }, []);
+    if (isLoggedIn) {
+      updateNotifications();
+    }
+  }, [isLoggedIn]);
 
   if (!showHeader) {
     return null;

@@ -11,7 +11,12 @@ export const QuestionPostingGuidelines = () => {
       ? [
           <>
             Have a look at our{' '}
-            <a target="_blank" rel="noopener noreferrer" className="text-info" href={guidelinesUrl}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-info hover:underline"
+              href={guidelinesUrl}
+            >
               question guidelines.
             </a>
           </>,
@@ -25,7 +30,12 @@ export const QuestionPostingGuidelines = () => {
     </>,
     <>
       Double check if it's already made and{' '}
-      <a target="_blank" rel="noopener noreferrer" className="text-info" href="/questions">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-info hover:underline"
+        href="/questions"
+      >
         search{' '}
       </a>
     </>,

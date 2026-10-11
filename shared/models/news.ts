@@ -188,3 +188,66 @@ export type NewsDTO = {
   contentReach: ContentReach | null;
   poll?: PollDTO | null;
 };
+
+export class DBAdminNews {
+  readonly id: number;
+  readonly title: string;
+  readonly slug: string;
+  readonly category: DBCategory | null;
+  readonly tags: number[] | null;
+  readonly moderation: string | null;
+  readonly is_draft: boolean | null;
+  readonly published_at: string | Date | null;
+  readonly comment_count?: number;
+  readonly total_views?: number;
+  readonly poll: number | null;
+  readonly deleted: boolean | null;
+  readonly profiles: { display_name: string; username: string | null } | null;
+
+  constructor(news: Partial<DBAdminNews>) {
+    Object.assign(this, news);
+  }
+}
+
+export class AdminNews {
+  id: number;
+  title: string;
+  slug: string;
+  category: { id: number; name: string } | null;
+  tags: string[];
+  moderation: string | null;
+  isDraft: boolean;
+  publishedAt: Date | null;
+  commentCount: number;
+  totalViews: number;
+  hasPoll: boolean;
+  deleted: boolean;
+  authorDisplayName: string | null;
+  authorUserName: string | null;
+
+  constructor(news: Partial<AdminNews>) {
+    Object.assign(this, news);
+  }
+
+  static fromDB(obj: DBAdminNews, tagMap?: Map<number, string>) {
+    return new AdminNews({
+      id: obj.id,
+      title: obj.title,
+      slug: obj.slug,
+      category: obj.category ? { id: obj.category.id, name: obj.category.name } : null,
+      tags:
+        obj.tags && tagMap
+          ? (obj.tags.map((id) => tagMap.get(id)).filter(Boolean) as string[])
+          : [],
+      moderation: obj.moderation,
+      isDraft: obj.is_draft || false,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
+      commentCount: obj.comment_count || 0,
+      totalViews: obj.total_views || 0,
+      hasPoll: Boolean(obj.poll),
+      deleted: obj.deleted || false,
+      authorDisplayName: obj.profiles?.display_name || null,
+      authorUserName: obj.profiles?.username || null,
+    });
+  }
+}

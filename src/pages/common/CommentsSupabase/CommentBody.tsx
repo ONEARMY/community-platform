@@ -25,7 +25,7 @@ export const CommentBody = ({ body }: IProps) => {
         data-cy="comment-text"
         data-testid="commentText"
         className={cn(
-          'm-0 text-base leading-snug break-words whitespace-pre-wrap',
+          'm-0 font-sans text-base leading-snug break-words whitespace-pre-wrap',
           !isExpanded && 'line-clamp-5',
         )}
       >

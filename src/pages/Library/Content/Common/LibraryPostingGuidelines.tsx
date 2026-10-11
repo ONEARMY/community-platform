@@ -16,7 +16,7 @@ export const LibraryPostingGuidelines = () => {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="text-info"
+            className="text-info hover:underline"
             href="/academy/create/library"
           >
             our guidelines{' '}

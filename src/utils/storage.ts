@@ -7,6 +7,8 @@ export const SUPPORTED_IMAGE_TYPES = [
   'image/bmp',
 ];
 
+export const isGif = (path: string) => /\.gif$/i.test(path);
+
 export function validateImage(image: File | null) {
   const error =
     image?.type && !SUPPORTED_IMAGE_TYPES.includes(image.type)

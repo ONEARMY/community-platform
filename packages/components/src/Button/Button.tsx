@@ -76,9 +76,7 @@ function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
   const sanitizedObj = { ...obj };
 
   keysToRemove.forEach((prop) => {
-    if (sanitizedObj[prop]) {
-      delete sanitizedObj[prop];
-    }
+    delete sanitizedObj[prop];
   });
 
   return sanitizedObj;

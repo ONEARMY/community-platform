@@ -267,11 +267,8 @@ jobs:
   test_e2e:
     docker: *docker
     resource_class: medium+
-    # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
-    parallelism: 1
+    parallelism: 4
     parameters:
-      CI_NODE:
-        type: integer
       CI_BROWSER:
         type: string
     steps:
@@ -279,14 +276,23 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
-      # call main testing script
+      # split specs across containers by timing and allow "rerun failed tests only"
       - run:
-          command: bun run --filter oa-cypress start ci prod
+          working_directory: packages/cypress
+          command: |
+            export CI_NODE=$((CIRCLE_NODE_INDEX + 1))
+            circleci tests glob "src/integration/**/*.spec.ts" \
+              | circleci tests run --command="xargs bun run start ci prod --spec" --verbose --split-by=timings
           environment:
             VITE_SITE_VARIANT: test-ci
             CI_BROWSER: << parameters.CI_BROWSER >>
-            CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
+      - store_test_results:
+          path: ./packages/cypress/test_results/
+      # raw junit xml as artifact, to debug timing splits and "rerun failed tests only"
+      - store_artifacts:
+          path: ./packages/cypress/test_results/
+      # failure screenshots taken by cypress
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
 
@@ -328,7 +334,7 @@ workflows:
           requires:
             - 'Lint code'
       - test_e2e:
-          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          name: e2e-<< matrix.CI_BROWSER >>
           requires:
             - 'Build Application'
             - 'Unit tests'
@@ -337,7 +343,6 @@ workflows:
             - e2e-tests
           matrix:
             parameters:
-              CI_NODE: [1, 2, 3, 4]
               CI_BROWSER: ['electron']
       #---------------------- Approval ----------------------
       - approve:

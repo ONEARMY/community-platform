@@ -238,6 +238,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://a-ryan-1.github.io/Portfolio-Website/"><img src="https://avatars.githubusercontent.com/u/146423646?v=4?s=60" width="60px;" alt="Aryan Padmakar Deshmukh"/><br /><sub><b>Aryan Padmakar Deshmukh</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=A-RYAN-1" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Kubo203"><img src="https://avatars.githubusercontent.com/u/187781272?v=4?s=60" width="60px;" alt="Jakub Filičko"/><br /><sub><b>Jakub Filičko</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Kubo203" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://web-nebula-tawny.vercel.app/"><img src="https://avatars.githubusercontent.com/u/79970218?v=4?s=60" width="60px;" alt="Mohammad Moaid"/><br /><sub><b>Mohammad Moaid</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=moe-moaid" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

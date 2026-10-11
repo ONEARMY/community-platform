@@ -71,7 +71,7 @@ export const news: Partial<DBNews>[] = [
     modified_at: null,
     previous_slugs: [],
     summary: 'Filtering at its best.',
-    slug: 'filtering-question',
+    slug: 'the-filtering-question',
     title: 'The Filtering Question',
     total_views: 12,
   },

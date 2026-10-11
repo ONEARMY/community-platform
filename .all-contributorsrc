@@ -1286,6 +1286,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "moe-moaid",
+      "name": "Mohammad Moaid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79970218?v=4",
+      "profile": "https://web-nebula-tawny.vercel.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

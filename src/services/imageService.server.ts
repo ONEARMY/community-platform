@@ -2,6 +2,7 @@ import type { TransformOptions } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMedia } from 'oa-shared';
 import { Image, MediaFile } from 'oa-shared';
+import { isGif } from 'src/utils/storage';
 
 export class ImageServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -14,7 +15,7 @@ export class ImageServiceServer {
     try {
       const { data } = this.client.storage.from(process.env.TENANT_ID as string).getPublicUrl(
         image.path,
-        size
+        size && !isGif(image.path)
           ? {
               transform: size,
             }

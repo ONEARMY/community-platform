@@ -169,7 +169,6 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=draft]').click();
 
-      cy.wait(1000);
       cy.contains('Error: A project with this name already exists').should('be.visible');
 
       cy.step('A basic draft is created');
@@ -177,8 +176,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=draft]').click();
       cy.contains('Draft saved!').should('be.visible');
-      cy.wait(1000);
-      cy.contains('View draft').should('be.visible').click();
+      cy.visitToastLink('View draft');
 
       const firstSlug = `/library/qwerty-${randomId}`;
       cy.url().should('include', firstSlug);
@@ -229,16 +227,14 @@ describe('[Library]', () => {
       cy.get('[data-cy=draft]').click();
       cy.get('[data-cy=errors-container]').should('not.exist');
 
-      cy.contains('View draft').should('be.visible').click();
+      cy.visitToastLink('View draft');
 
       cy.step('A full draft can be submitted for review');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
 
       cy.step('Project was created correctly');
@@ -345,8 +341,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=errors-container]').should('not.exist');
       cy.get('[data-cy=submit]').click();
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
 
       cy.step('Project is not authored by the admin');
@@ -370,8 +365,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=submit]').click();
 
       cy.step('Admin edit is saved and visible');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
       cy.contains(adminEdit);
     });
@@ -432,9 +426,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=submit]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
 
       cy.step('Edit project and replace images');
@@ -455,9 +447,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=submit]').click();
 
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
       cy.contains(updatedDescription);
     });
@@ -516,9 +506,7 @@ describe('[Library]', () => {
       });
 
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
       cy.get('[data-cy=downloadButton]').should('be.visible');
 
@@ -531,9 +519,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=remove-file]').should('exist');
 
       cy.get('[data-cy=submit]').click();
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project');
-      cy.wait(1000);
-      cy.get('a[data-cy=toast-action-link]').should('contain', 'View project').click();
+      cy.openToastLink('View project');
       cy.url().should('include', `/library/${slug}`);
       cy.get('[data-cy=downloadButton]').should('be.visible');
     });

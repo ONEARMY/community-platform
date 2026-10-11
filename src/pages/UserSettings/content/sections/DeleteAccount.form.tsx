@@ -1,4 +1,4 @@
-import { Accordion, Button, ConfirmModal, FieldInput } from 'oa-components';
+import { Button, ConfirmModal, FieldInput } from 'oa-components';
 import { useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
@@ -7,6 +7,7 @@ import { useToast } from 'src/common/Toast';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { buttons, fields } from 'src/pages/UserSettings/labels';
 import { Flex } from 'theme-ui';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { accountService } from '../../services/account.service';
 
 interface IFormValues {
@@ -48,44 +49,50 @@ export const DeleteAccountForm = ({ hasSubscription }: IProps) => {
 
   return (
     <Flex data-cy="deleteAccountContainer" sx={{ flexDirection: 'column', gap: 2 }}>
-      <Accordion title={fields.deleteAccount.title} subtitle={fields.deleteAccount.description}>
-        <Form
-          onSubmit={onSubmit}
-          id={formId}
-          render={({ handleSubmit, submitting, values }) => {
-            const disabled = submitting || !values.password;
-
-            return (
-              <Flex data-cy="deleteAccountForm" sx={{ flexDirection: 'column', gap: 2 }}>
-                <FormFieldWrapper text={fields.password.title} htmlFor="password" required>
-                  <PasswordField
-                    autoComplete="off"
-                    component={FieldInput}
-                    data-cy="deleteAccountPassword"
-                    name="password"
-                    placeholder="Password"
-                    required
-                  />
-                </FormFieldWrapper>
-
-                <Button
-                  data-cy="deleteAccountSubmit"
-                  disabled={disabled}
-                  form={formId}
-                  onClick={handleSubmit}
-                  type="submit"
-                  variant="destructive"
-                  sx={{
-                    alignSelf: 'flex-start',
-                  }}
-                >
-                  {buttons.deleteAccount}
-                </Button>
-              </Flex>
-            );
-          }}
+      <AccordionItem>
+        <AccordionTrigger
+          title={fields.deleteAccount.title}
+          subtitle={fields.deleteAccount.description}
         />
-      </Accordion>
+        <AccordionContent>
+          <Form
+            onSubmit={onSubmit}
+            id={formId}
+            render={({ handleSubmit, submitting, values }) => {
+              const disabled = submitting || !values.password;
+
+              return (
+                <Flex data-cy="deleteAccountForm" sx={{ flexDirection: 'column', gap: 2 }}>
+                  <FormFieldWrapper text={fields.password.title} htmlFor="password" required>
+                    <PasswordField
+                      autoComplete="off"
+                      component={FieldInput}
+                      data-cy="deleteAccountPassword"
+                      name="password"
+                      placeholder="Password"
+                      required
+                    />
+                  </FormFieldWrapper>
+
+                  <Button
+                    data-cy="deleteAccountSubmit"
+                    disabled={disabled}
+                    form={formId}
+                    onClick={handleSubmit}
+                    type="submit"
+                    variant="destructive"
+                    sx={{
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    {buttons.deleteAccount}
+                  </Button>
+                </Flex>
+              );
+            }}
+          />
+        </AccordionContent>
+      </AccordionItem>
 
       <ConfirmModal
         isOpen={isConfirmOpen}

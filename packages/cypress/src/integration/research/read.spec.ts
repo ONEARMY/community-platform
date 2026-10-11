@@ -28,7 +28,6 @@ describe('[Research]', () => {
         cy.contains(`${MOCK_DATA.research.filter((r) => !r.deleted && !r.is_draft).length} ${label}`);
 
         cy.step('Can search for items');
-        cy.wait(2000);
         cy.get('[data-cy=research-search-box]').click().type('qwerty');
         cy.get('[data-cy=ResearchListItem]').its('length').should('be.eq', 2);
 
@@ -77,7 +76,6 @@ describe('[Research]', () => {
       it('[Visible to everyone]', () => {
         cy.step('Can visit research');
         cy.visit(researchArticleUrl);
-        cy.wait(1000);
 
         cy.title().should('eq', `${article.title} - Research - Test Site`);
 

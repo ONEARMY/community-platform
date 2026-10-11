@@ -86,7 +86,7 @@ describe('[User sign-up]', () => {
       cy.step('Open the delete account confirmation');
       cy.visit('/settings');
       cy.get('[data-cy="tab-Account"]').click();
-      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
+      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionTrigger"]').click();
       cy.get('[data-cy="deleteAccountPassword"]').type(user.password);
       cy.get('[data-cy="deleteAccountSubmit"]').click();
       cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');

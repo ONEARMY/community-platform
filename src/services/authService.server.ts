@@ -1,11 +1,17 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { Database, SignupSource } from 'oa-shared';
+import { type Database, FRIENDLY_MESSAGES, type SignupSource } from 'oa-shared';
 import { logger } from 'src/logger';
 
 type CreateProfileArgs = {
   user: User;
   signupSource: SignupSource;
   displayName?: string;
+};
+
+type ResendConfirmationArgs = {
+  email: string;
+  emailRedirectTo: string;
+  captchaToken?: string;
 };
 
 // A just-created auth.users row can occasionally not be visible yet to the
@@ -46,5 +52,23 @@ export class AuthServiceServer {
     }
 
     return result;
+  }
+
+  async resendConfirmationEmail(args: ResendConfirmationArgs) {
+    const { error } = await this.client.auth.resend({
+      type: 'signup',
+      email: args.email,
+      options: { emailRedirectTo: args.emailRedirectTo, captchaToken: args.captchaToken },
+    });
+
+    if (!error) {
+      return null;
+    }
+
+    logger.error(error);
+
+    return error.code === 'over_email_send_rate_limit'
+      ? FRIENDLY_MESSAGES['auth/resend-rate-limited']
+      : FRIENDLY_MESSAGES['auth/resend-failed'];
   }
 }

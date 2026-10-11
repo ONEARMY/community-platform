@@ -37,6 +37,7 @@
     "docs": "bun run --filter oa-docs start",
     "db:reset": "bunx supabase db reset && bun run db:seed",
     "db:seed": "bunx @snaplet/seed sync && bunx tsx seed.ts > seed.sql",
+    "db:types": "bunx supabase gen types typescript --local --schema public > shared/database.types.ts && biome format --write shared/database.types.ts",
     "commit": "git-cz",
     "prepare": "husky"
   },

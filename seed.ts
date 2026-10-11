@@ -725,7 +725,7 @@ const main = async () => {
       ...item,
       category: categories.find((cat) => cat.type === 'projects')?.id,
       created_by: profiles[0].id,
-      tags: [tags[0].name],
+      tags: [tags[0].id],
     })),
   );
 
@@ -736,7 +736,7 @@ const main = async () => {
       ...item,
       category: categories.find((cat) => cat.type === 'research')?.id,
       created_by: profiles[0].id,
-      tags: [tags[0].id.toString()],
+      tags: [tags[0].id],
     })),
   );
 

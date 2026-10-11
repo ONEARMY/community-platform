@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
 import { isTestEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
@@ -110,7 +111,7 @@ async function getStripe(): Promise<Stripe | null> {
 }
 
 export class StripeServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   // ── Static Stripe-API-only methods (no DB access) ──
 
@@ -595,7 +596,7 @@ export class StripeServiceServer {
 // privileged DB writes that bypass RLS
 
 export class StripeAdminService {
-  private client: SupabaseClient;
+  private client: SupabaseClient<Database>;
 
   constructor() {
     this.client = createSupabaseAdminServerClient();

@@ -38,7 +38,7 @@ export class DBResearchItem implements IDBContentDoc {
   description: string;
   image: DBMedia | null;
   category_id?: number;
-  tags: string[] | null;
+  tags: number[] | null;
   status: Enums<'research_status'> | null;
   is_draft: boolean | null;
   collaborators: string[] | null;
@@ -55,7 +55,7 @@ export class DBResearchItem implements IDBContentDoc {
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
         : null,
-      tags: obj.tags?.map(Number) ?? null,
+      tags: obj.tags,
       collaborators: obj.collaborators || [],
     } satisfies ResearchFormData;
   }
@@ -144,7 +144,7 @@ export class ResearchItem implements IContentDoc {
       deleted: obj.deleted || false,
       category: obj.category ? Category.fromDB(obj.category) : null,
       totalViews: obj.total_views || 0,
-      tagIds: obj.tags?.map((x) => Number(x)),
+      tagIds: obj.tags ?? undefined,
       tags: tags,
       status: obj.status === 'archived' ? undefined : (obj.status ?? undefined),
       updateCount: obj.update_count || obj.updates?.length || 0,

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "public"."research" (
     "description" "text" NOT NULL,
     "category" bigint,
     "created_by" bigint,
-    "tags" "text"[],
+    "tags" bigint[],
     "deleted" boolean,
     "total_views" integer,
     "total_useful" integer,
@@ -82,7 +82,7 @@ CREATE OR REPLACE FUNCTION "public"."combined_research_search_fields"("research_
   WHERE ru.research_id = research_id_param;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_research"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "research_status" "public"."research_status" DEFAULT NULL::"public"."research_status", "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 10, "offset_val" integer DEFAULT 0, "days_back" integer DEFAULT 7) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "image" "json", "status" "public"."research_status", "category" "json", "tags" "text"[], "title" "text", "total_views" integer, "author" "json", "update_count" bigint, "comment_count" bigint, "useful_votes_last_week" integer)
+CREATE OR REPLACE FUNCTION "public"."get_research"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "research_status" "public"."research_status" DEFAULT NULL::"public"."research_status", "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 10, "offset_val" integer DEFAULT 0, "days_back" integer DEFAULT 7) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "image" "json", "status" "public"."research_status", "category" "json", "tags" bigint[], "title" "text", "total_views" integer, "author" "json", "update_count" bigint, "comment_count" bigint, "useful_votes_last_week" integer)
     LANGUAGE "plpgsql"
     SET search_path = public, pg_temp
     AS $$

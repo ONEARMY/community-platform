@@ -253,7 +253,7 @@ async function createProject(
       description: data.description,
       slug: slug,
       category: data.category,
-      tags: data.tags?.map(String),
+      tags: data.tags,
       is_draft: data.isDraft,
       published_at: data.isDraft ? null : new Date().toISOString(),
       file_link: data.fileLink,

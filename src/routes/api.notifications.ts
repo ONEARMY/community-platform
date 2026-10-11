@@ -1,13 +1,24 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification } from 'oa-shared';
+import {
+  type Database,
+  type DBNotification,
+  type NotificationContentType,
+  NotificationContentTypes,
+} from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NotificationMapperServiceServer } from 'src/services/notificationMapperService.server';
 
+function hasSupportedContentType<T extends { content_type: string }>(
+  notification: T,
+): notification is T & { content_type: NotificationContentType } {
+  return NotificationContentTypes.includes(notification.content_type as NotificationContentType);
+}
+
 const transformNotificationList = async (
   dbNotifications: DBNotification[],
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ) => {
   const notificationMapperService = new NotificationMapperServiceServer(client);
 
@@ -54,7 +65,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       throw error;
     }
 
-    const notifications = data?.length ? await transformNotificationList(data, client) : [];
+    const notifications = data?.length
+      ? await transformNotificationList(data.filter(hasSupportedContentType), client)
+      : [];
 
     return Response.json({ notifications }, { headers, status: 200 });
   } catch (error) {

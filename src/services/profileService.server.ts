@@ -1,5 +1,12 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBMedia, DBProfile, Moderation, ProfileDTO } from 'oa-shared';
+import type {
+  Database,
+  DBAuthorVotes,
+  DBMedia,
+  DBProfile,
+  Moderation,
+  ProfileDTO,
+} from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
 
@@ -14,7 +21,7 @@ type CreateOrganisationProfileArgs = {
 };
 
 export class ProfileServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getByAuthId(id: string): Promise<DBProfile | null> {
     const { data } = await this.client
@@ -186,7 +193,7 @@ export class ProfileServiceServer {
     return data as DBProfile;
   }
 
-  async incrementViewCount(id: number, totalViews: number) {
+  async incrementViewCount(id: number, totalViews: number | null) {
     return await this.client
       .from('profiles')
       .update({ total_views: (totalViews || 0) + 1 })
@@ -322,7 +329,7 @@ export class ProfileServiceServer {
       .from('profiles')
       .insert({
         auth_id: values.authId,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
         username: values.username,
         display_name: values.displayName,
         about: values.about,
@@ -426,7 +433,7 @@ export class ProfileServiceServer {
       const newRelations = tagsToAdd.map((tagId) => ({
         profile_id: profileId,
         profile_tag_id: tagId,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       }));
 
       const { error } = await this.client.from('profile_tags_relations').insert(newRelations);
@@ -459,7 +466,7 @@ export class ProfileServiceServer {
       display_name: '',
       is_contactable: true,
       profile_type: profileType.data?.at(0)?.id || null,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     });
 
     if (error) {

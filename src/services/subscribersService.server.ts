@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
+  Database,
   DBResearchItem,
   ResearchItem,
   ResearchUpdate,
@@ -8,7 +9,7 @@ import type {
 import { logger } from 'src/logger';
 
 export class SubscribersServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async combineSubscribers(
     ids: (number | null | undefined)[],

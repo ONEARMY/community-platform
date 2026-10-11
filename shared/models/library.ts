@@ -43,7 +43,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   file_link: string | null;
   files: IMediaFile[] | null;
   category_id?: number;
-  tags: string[] | null;
+  tags: number[] | null;
   is_draft: boolean | null;
   time?: string | null;
   file_download_count?: number | null;
@@ -65,7 +65,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
         : null,
-      tags: obj.tags?.map(Number) ?? null,
+      tags: obj.tags,
       difficultyLevel: obj.difficulty_level,
       files: obj.files,
       fileLink: obj.file_link,
@@ -131,7 +131,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       deleted: obj.deleted || false,
       category: obj.category ? Category.fromDB(obj.category) : null,
       totalViews: obj.total_views || 0,
-      tagIds: obj.tags?.map((x) => Number(x)),
+      tagIds: obj.tags ?? undefined,
       tags: tags,
       difficultyLevel: obj.difficulty_level,
       subscriberCount: obj.subscriber_count || 0,

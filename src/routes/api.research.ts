@@ -136,7 +136,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         description: data.description,
         slug,
         category: data.category,
-        tags: data.tags?.map(String),
+        tags: data.tags,
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,

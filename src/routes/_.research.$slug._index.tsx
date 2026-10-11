@@ -43,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
     dbResearch.id,
     'research',
-    dbResearch.tags?.map(Number) ?? null,
+    dbResearch.tags,
   );
 
   const images = researchClient.getResearchPublicMedia(dbResearch);

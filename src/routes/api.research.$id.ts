@@ -72,7 +72,7 @@ export const action = async ({ request, params, context }: ActionFunctionArgs) =
         description: data.description,
         slug,
         category: data.category,
-        tags: data.tags?.map(String),
+        tags: data.tags,
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,

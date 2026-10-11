@@ -994,7 +994,7 @@ export type Database = {
           previous_slugs: string[] | null;
           published_at: string | null;
           slug: string;
-          tags: string[] | null;
+          tags: number[] | null;
           tenant_id: string;
           time: string | null;
           title: string;
@@ -1021,7 +1021,7 @@ export type Database = {
           previous_slugs?: string[] | null;
           published_at?: string | null;
           slug: string;
-          tags?: string[] | null;
+          tags?: number[] | null;
           tenant_id: string;
           time?: string | null;
           title: string;
@@ -1048,7 +1048,7 @@ export type Database = {
           previous_slugs?: string[] | null;
           published_at?: string | null;
           slug?: string;
-          tags?: string[] | null;
+          tags?: number[] | null;
           tenant_id?: string;
           time?: string | null;
           title?: string;
@@ -1231,7 +1231,7 @@ export type Database = {
           published_at: string | null;
           slug: string;
           status: Database['public']['Enums']['research_status'] | null;
-          tags: string[] | null;
+          tags: number[] | null;
           tenant_id: string;
           title: string;
           total_useful: number | null;
@@ -1253,7 +1253,7 @@ export type Database = {
           published_at?: string | null;
           slug: string;
           status?: Database['public']['Enums']['research_status'] | null;
-          tags?: string[] | null;
+          tags?: number[] | null;
           tenant_id: string;
           title: string;
           total_useful?: number | null;
@@ -1275,7 +1275,7 @@ export type Database = {
           published_at?: string | null;
           slug?: string;
           status?: Database['public']['Enums']['research_status'] | null;
-          tags?: string[] | null;
+          tags?: number[] | null;
           tenant_id?: string;
           title?: string;
           total_useful?: number | null;
@@ -1822,7 +1822,7 @@ export type Database = {
           moderation: string;
           modified_at: string;
           slug: string;
-          tags: string[];
+          tags: number[];
           title: string;
           total_views: number;
           useful_votes_last_week: number;
@@ -1890,7 +1890,7 @@ export type Database = {
           modified_at: string;
           slug: string;
           status: Database['public']['Enums']['research_status'];
-          tags: string[];
+          tags: number[];
           title: string;
           total_views: number;
           update_count: number;

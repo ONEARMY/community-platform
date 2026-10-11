@@ -213,7 +213,7 @@ async function updateProject(
       slug,
       previous_slugs: previousSlugs,
       category: data.category,
-      tags: data.tags?.map(String),
+      tags: data.tags,
       is_draft: data.isDraft,
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "public"."projects" (
     "cover_image" "json",
     "file_link" "text",
     "files" "json"[],
-    "tags" "text"[],
+    "tags" bigint[],
     "is_draft" boolean,
     "time" "text",
     "file_download_count" integer,
@@ -74,7 +74,7 @@ CREATE OR REPLACE FUNCTION "public"."combined_project_search_fields"("project_id
   WHERE ps.project_id = project_id_param;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_projects"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 12, "offset_val" integer DEFAULT 0, "current_username" "text" DEFAULT NULL::"text", "days_back" integer DEFAULT 7) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "cover_image" "json", "category" "json", "tags" "text"[], "title" "text", "moderation" "text", "total_views" bigint, "author" "json", "comment_count" integer, "useful_votes_last_week" integer)
+CREATE OR REPLACE FUNCTION "public"."get_projects"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 12, "offset_val" integer DEFAULT 0, "current_username" "text" DEFAULT NULL::"text", "days_back" integer DEFAULT 7) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "cover_image" "json", "category" "json", "tags" bigint[], "title" "text", "moderation" "text", "total_views" bigint, "author" "json", "comment_count" integer, "useful_votes_last_week" integer)
     LANGUAGE "plpgsql"
     SET search_path = public, pg_temp
     AS $$DECLARE

@@ -145,16 +145,18 @@ function runTests() {
   const CI_GROUP = e.CI_GROUP || '1x-chrome';
   // not currently used, but can pass variables accessed by Cypress.env()
   const CYPRESS_ENV = `VITE_SITE_VARIANT=test-ci`;
-  // use workflow ID so that jobs running in parallel can be assigned to same cypress build
-  // cypress will use this to split tests between parallel runs
+  // use workflow ID so that jobs running in parallel are recorded under the same cypress build,
+  // with one group per circleci container. Spec splitting is done by `circleci tests run`.
   const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8);
+  const group = e.CIRCLE_NODE_INDEX ? `${CI_GROUP}-${e.CIRCLE_NODE_INDEX}` : CI_GROUP;
+  const specArg = getSpecArg();
 
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used
   const { CY_BIN, CROSSENV_BIN } = PATHS;
 
   const testCMD = isCi
-    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --headless --browser ${CI_BROWSER} --group ${group} --ci-build-id ${buildId} --reporter cypress-circleci-reporter${specArg}`
     : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`;
 
   console.log(`Running cypress with cmd: ${testCMD}`);
@@ -169,4 +171,13 @@ function runTests() {
     console.error('error', spawn.stderr.toString());
   }
   process.exit(spawn.status);
+}
+
+function getSpecArg() {
+  const specIndex = process.argv.indexOf('--spec');
+  if (specIndex === -1) {
+    return '';
+  }
+  const specs = process.argv.slice(specIndex + 1).filter((arg) => !arg.startsWith('-'));
+  return specs.length > 0 ? ` --spec ${specs.join(',')}` : '';
 }

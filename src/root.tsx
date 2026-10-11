@@ -68,6 +68,10 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     reinjectStylesRef.current = false;
   }, [clientStyleData, emotionCache.sheet]);
 
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = 'true';
+  }, []);
+
   return (
     <html lang="en">
       <head>

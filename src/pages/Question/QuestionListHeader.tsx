@@ -5,7 +5,6 @@ import {
   ReturnPathLink,
   SearchField,
   Select,
-  Tooltip,
 } from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useEffect, useState } from 'react';
@@ -17,6 +16,7 @@ import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
 import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import DraftButton from '../common/Drafts/DraftButton';
 import { ListHeader } from '../common/Layout/ListHeader';
 import { headings, listing } from './labels';
@@ -154,18 +154,14 @@ export const QuestionListHeader = (props: IProps) => {
   const actionComponents = (
     <UserAction
       incompleteProfile={
-        <>
-          <Link
-            to="/settings"
-            data-tooltip-id="tooltip"
-            data-tooltip-content={listing.incompleteProfile}
-          >
+        <Tooltip>
+          <TooltipTrigger render={<Link to="/settings" />}>
             <Button type="button" data-cy="complete-profile-question" variant="disabled">
               {listing.create}
             </Button>
-          </Link>
-          <Tooltip id="tooltip" />
-        </>
+          </TooltipTrigger>
+          <TooltipContent>{listing.incompleteProfile}</TooltipContent>
+        </Tooltip>
       }
       loggedIn={
         <>

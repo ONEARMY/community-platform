@@ -1,6 +1,4 @@
 import type { ProfileBadge } from 'oa-shared';
-import { useId } from 'react';
-import { Tooltip } from 'react-tooltip';
 import { Image } from 'theme-ui';
 
 interface IProps {
@@ -8,18 +6,12 @@ interface IProps {
 }
 
 export const UserBadge = ({ badge }: IProps) => {
-  const uuid = useId();
-
   return (
-    <>
-      <Image
-        src={badge.imageUrl}
-        sx={{ height: 16, width: 'auto', objectFit: 'contain', flexShrink: 0 }}
-        data-testid={`Username: ${badge.name} badge`}
-        data-tooltip-id={uuid}
-        data-tooltip-content={badge.displayName}
-      />
-      <Tooltip id={uuid} />
-    </>
+    <Image
+      src={badge.imageUrl}
+      alt={badge.displayName}
+      sx={{ height: 16, width: 'auto', objectFit: 'contain', flexShrink: 0 }}
+      data-testid={`Username: ${badge.name} badge`}
+    />
   );
 };

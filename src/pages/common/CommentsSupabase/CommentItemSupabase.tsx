@@ -8,7 +8,6 @@ import {
   FollowIcon,
   Icon,
   Modal,
-  Tooltip,
   UsefulButtonLite,
 } from 'oa-components';
 import type { Comment, DiscussionContentType } from 'oa-shared';
@@ -29,6 +28,7 @@ import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
@@ -47,7 +47,6 @@ export interface ICommentItemProps {
 }
 
 interface IAcceptedAnswerLabelProps {
-  commentId: number;
   acceptedDate?: Date;
 }
 
@@ -203,10 +202,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           footerActions={
             <>
               {acceptedAnswer?.isAccepted && (
-                <AcceptedAnswerLabel
-                  commentId={comment.id}
-                  acceptedDate={acceptedAnswer.acceptedDate}
-                />
+                <AcceptedAnswerLabel acceptedDate={acceptedAnswer.acceptedDate} />
               )}
               {!acceptedAnswer?.hasAcceptedAnswer && acceptedAnswer?.canMarkAsAccepted && (
                 <AcceptAnswerButton onAccept={acceptedAnswer.onAccept} />
@@ -285,34 +281,38 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   );
 });
 
-const AcceptedAnswerLabel = ({ commentId, acceptedDate }: IAcceptedAnswerLabelProps) => {
-  const tooltipId = commentId.toString() + '-accepted-answer';
+const AcceptedAnswerLabel = ({ acceptedDate }: IAcceptedAnswerLabelProps) => {
+  const label = (
+    <Flex
+      as="span"
+      sx={{
+        fontSize: '12px',
+        color: '#095A4F',
+        alignItems: 'center',
+        gap: 1,
+        padding: 1,
+        borderRadius: 1,
+        backgroundColor: '#00C3A933',
+      }}
+    >
+      <CheckmarkSuccessIcon width={20} height={20} aria-hidden="true" />
+      Accepted answer
+    </Flex>
+  );
+
+  if (!acceptedDate) {
+    return label;
+  }
 
   return (
-    <>
-      <Flex
-        as="span"
-        data-tooltip-id={tooltipId}
-        data-tooltip-content={
-          acceptedDate
-            ? 'Author accepted this answer on ' + format(new Date(acceptedDate), 'd MMM yyyy')
-            : undefined
-        }
-        sx={{
-          fontSize: '12px',
-          color: '#095A4F',
-          alignItems: 'center',
-          gap: 1,
-          padding: 1,
-          borderRadius: 1,
-          backgroundColor: '#00C3A933',
-        }}
-      >
-        <CheckmarkSuccessIcon width={20} height={20} aria-hidden="true" />
-        Accepted answer
-      </Flex>
-      {acceptedDate && <Tooltip id={tooltipId} />}
-    </>
+    <Tooltip>
+      <TooltipTrigger render={<span tabIndex={0} />} className="inline-flex">
+        {label}
+      </TooltipTrigger>
+      <TooltipContent>
+        Author accepted this answer on {format(new Date(acceptedDate), 'd MMM yyyy')}
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

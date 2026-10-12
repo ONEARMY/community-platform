@@ -5,7 +5,6 @@ import {
   ReturnPathLink,
   SearchField,
   Select,
-  Tooltip,
 } from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -20,6 +19,7 @@ import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { listing } from '../../labels';
 import { LibrarySearchParams } from '../../library.service';
 import type { LibrarySortOption } from './LibrarySortOptions';
@@ -200,18 +200,14 @@ export const LibraryListHeader = (props: IProps) => {
   const actionComponents = (
     <UserAction
       incompleteProfile={
-        <>
-          <Link
-            to="/settings"
-            data-tooltip-id="tooltip"
-            data-tooltip-content={listing.incompleteProfile}
-          >
+        <Tooltip>
+          <TooltipTrigger render={<Link to="/settings" />}>
             <Button type="button" data-cy="complete-profile-project" variant="disabled">
               {listing.create}
             </Button>
-          </Link>
-          <Tooltip id="tooltip" />
-        </>
+          </TooltipTrigger>
+          <TooltipContent>{listing.incompleteProfile}</TooltipContent>
+        </Tooltip>
       }
       loggedIn={
         <Flex sx={{ gap: 2 }}>

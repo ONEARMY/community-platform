@@ -25,11 +25,11 @@ export const buttons = {
     '&:hover': {
       backgroundColor: 'var(--color-primary-hover)',
     },
-    '&[disabled]': {
+    '&[disabled], &[aria-disabled="true"]': {
       opacity: 0.5,
       cursor: 'not-allowed',
     },
-    '&[disabled]:hover': {
+    '&[disabled]:hover, &[aria-disabled="true"]:hover': {
       backgroundColor: 'var(--color-primary)',
     },
   },
@@ -51,10 +51,10 @@ export const buttons = {
       backgroundColor: white,
       cursor: 'pointer',
     },
-    '&[disabled]': {
+    '&[disabled], &[aria-disabled="true"]': {
       opacity: 0.5,
     },
-    '&[disabled]:hover': {
+    '&[disabled]:hover, &[aria-disabled="true"]:hover': {
       backgroundColor: softblue,
     },
   },
@@ -66,11 +66,11 @@ export const buttons = {
     '&:hover': {
       backgroundColor: white,
     },
-    '&[disabled]': {
+    '&[disabled], &[aria-disabled="true"]': {
       opacity: 0.5,
       cursor: 'not-allowed',
     },
-    '&[disabled]:hover': {
+    '&[disabled]:hover, &[aria-disabled="true"]:hover': {
       backgroundColor: red2,
     },
   },
@@ -82,11 +82,11 @@ export const buttons = {
     '&:hover': {
       filter: 'brightness(90%)',
     },
-    '&[disabled]': {
+    '&[disabled], &[aria-disabled="true"]': {
       opacity: 0.5,
       cursor: 'not-allowed',
     },
-    '&[disabled]:hover': {
+    '&[disabled]:hover, &[aria-disabled="true"]:hover': {
       backgroundColor: betaGreen,
     },
   },
@@ -98,11 +98,11 @@ export const buttons = {
     '&:hover': {
       filter: 'brightness(90%)',
     },
-    '&[disabled]': {
+    '&[disabled], &[aria-disabled="true"]': {
       opacity: 0.5,
       cursor: 'not-allowed',
     },
-    '&[disabled]:hover': {
+    '&[disabled]:hover, &[aria-disabled="true"]:hover': {
       backgroundColor: blue,
     },
   },
@@ -114,7 +114,7 @@ export const buttons = {
     '&:hover': {
       backgroundColor: softblue,
     },
-    '&:disabled': {
+    '&:disabled, &[aria-disabled="true"]': {
       color: 'lightgrey',
       cursor: 'not-allowed',
       borderColor: lightgrey,
@@ -144,10 +144,10 @@ export const buttons = {
     '&:hover': {
       backgroundColor: softblue,
     },
-    '&[disabled]': {
+    '&[disabled], &[aria-disabled="true"]': {
       opacity: 0.5,
     },
-    '&[disabled]:hover': {
+    '&[disabled]:hover, &[aria-disabled="true"]:hover': {
       backgroundColor: softblue,
     },
   },

@@ -21,6 +21,19 @@ export const Default: Story = {
   ),
 };
 
+export const OnDisabledControl: Story = {
+  render: () => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger render={<Button variant="outline" />} aria-disabled>
+          Ban user
+        </TooltipTrigger>
+        <TooltipContent>Cannot ban your own profile</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  ),
+};
+
 export const Sides: Story = {
   render: () => (
     <TooltipProvider>

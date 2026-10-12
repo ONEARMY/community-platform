@@ -4,8 +4,8 @@ import { getTenantUser } from '../utils/TestUtils';
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
-    cy.step('The home page is /academy');
-    cy.visit('/').url().should('include', '/academy');
+    cy.step('The home page is /news');
+    cy.visit('/').url().should('include', '/news');
   });
 
   it('[Page Navigation]', () => {

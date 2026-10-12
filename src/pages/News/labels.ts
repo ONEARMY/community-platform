@@ -13,7 +13,9 @@ export const buttons = {
 export const headings = {
   create: 'Add news',
   edit: 'Edit your news',
-  list: 'Latest news from the community',
+  greeting: 'Hello',
+  welcome: 'Welcome to our online community',
+  tagline: 'The place where people meet, share and collaborate.',
 };
 
 export const fields: ILabels = {

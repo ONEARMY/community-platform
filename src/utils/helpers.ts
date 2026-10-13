@@ -71,14 +71,6 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`;
 };
 
-export const formatUtcDate = (date: Date) =>
-  new Intl.DateTimeFormat('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(date);
-
 export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   if (!user) {
     return false;

@@ -87,7 +87,7 @@ export class AdminComment {
   sourceId: number | null;
   liveUrl: string | null;
   isReply: boolean;
-  createdAt: Date;
+  createdAtLabel: string;
   deleted: boolean;
   author: AdminCommentAuthor | null;
   notificationCount: number;
@@ -104,7 +104,12 @@ export class AdminComment {
       sourceId: obj.source_id,
       liveUrl,
       isReply: obj.parent_id !== null,
-      createdAt: new Date(obj.created_at),
+      createdAtLabel: new Intl.DateTimeFormat('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(obj.created_at)),
       deleted: obj.deleted ?? false,
       author: obj.profile
         ? { username: obj.profile.username, displayName: obj.profile.display_name }

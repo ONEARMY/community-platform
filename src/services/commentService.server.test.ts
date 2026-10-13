@@ -58,6 +58,20 @@ const buildClient = ({
 };
 
 describe('CommentServiceServer.getAdminPage', () => {
+  it.each([
+    ['2026-09-05T23:30:00Z', /^5 Sept? 2026$/],
+    ['2026-01-01T00:30:00Z', /^1 Jan 2026$/],
+    ['2011-12-30T12:00:00Z', /^30 Dec 2011$/],
+    ['2024-02-29T23:59:59Z', /^29 Feb 2024$/],
+  ])('serializes the UTC date label for %s before rendering', async (created_at, label) => {
+    const { client } = buildClient({
+      response: { comments: [{ ...row, created_at }], page: 1, total_pages: 1 },
+    });
+    const result = await new CommentServiceServer(client).getAdminPage(1);
+
+    expect(JSON.parse(JSON.stringify(result)).comments[0].createdAtLabel).toMatch(label);
+  });
+
   it('loads comments, links and counts in one paginated RPC', async () => {
     const { client, requests } = buildClient();
     const result = await new CommentServiceServer(client).getAdminPage(1);
@@ -68,7 +82,7 @@ describe('CommentServiceServer.getAdminPage', () => {
       deleted: false,
       author: { displayName: 'Maker One' },
     });
-    expect(result.comments[0].createdAt).toEqual(new Date(row.created_at));
+    expect(result.comments[0].createdAtLabel).toBe('20 Aug 2026');
     expect(requests).toHaveLength(1);
     expect(requests[0].url.pathname).toBe('/rest/v1/rpc/get_admin_comments');
     expect(requests[0].body).toEqual({ p_page: 1, p_page_size: 20 });

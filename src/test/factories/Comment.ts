@@ -58,7 +58,7 @@ export const FactoryAdminComment = (overloads: Partial<AdminComment> = {}): Admi
     'research_updates',
   ]),
   isReply: false,
-  createdAt: faker.date.past(),
+  createdAtLabel: '20 Aug 2026',
   deleted: false,
   author: { username: faker.internet.username(), displayName: faker.person.firstName() },
   notificationCount: faker.number.int({ min: 0, max: 20 }),

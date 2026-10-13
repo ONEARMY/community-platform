@@ -2,7 +2,6 @@ import type { AdminComment, AdminCommentAuthor, DiscussionContentType } from 'oa
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { TablePagination } from 'src/pages/Admin/TablePagination';
-import { formatUtcDate } from 'src/utils/helpers';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -104,7 +103,7 @@ export function CommentsPage({ comments, page, totalPages }: IProps) {
                   <CreatorCell author={comment.author} />
                 </TableCell>
                 <TableCell variant="muted" className="whitespace-nowrap">
-                  {formatUtcDate(comment.createdAt)}
+                  {comment.createdAtLabel}
                 </TableCell>
                 <TableCell className="text-right">
                   <span className="tabular-nums">{comment.notificationCount}</span>

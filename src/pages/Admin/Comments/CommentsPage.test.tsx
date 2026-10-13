@@ -17,7 +17,7 @@ const comment = FactoryAdminComment({
   comment: 'Nice build, how long did the mould take?',
   sourceType: 'projects',
   isReply: false,
-  createdAt: new Date('2026-08-20T10:00:00Z'),
+  createdAtLabel: '20 Aug 2026',
   deleted: false,
   author: { username: 'maker', displayName: 'Maker One' },
   notificationCount: 2,
@@ -40,6 +40,15 @@ const renderPage = (comments: AdminComment[], page = 1, totalPages = 1) => {
 };
 
 describe('CommentsPage', () => {
+  it.each(['5 Sep 2026', '5 Sept 2026'])(
+    'preserves the server date label %s without browser reformatting',
+    (createdAtLabel) => {
+      renderPage([{ ...comment, createdAtLabel }]);
+
+      expect(screen.getByText(createdAtLabel)).toBeInTheDocument();
+    },
+  );
+
   it('lists each comment with its type, preview link, creator, date and notification count', () => {
     renderPage([comment]);
 

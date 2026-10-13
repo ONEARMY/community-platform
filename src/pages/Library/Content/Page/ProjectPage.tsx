@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import { Button, UserEngagementWrapper } from 'oa-components';
 import type { Project, ProjectStep } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
@@ -14,6 +14,7 @@ import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card, Flex } from 'theme-ui';
 import { ArticleCallToAction } from '@/components/ui/article-call-to-action';
+import { UsefulButton } from '@/components/ui/useful-button';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 import { RemakesSection } from './Remakes/RemakesSection';
@@ -121,7 +122,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 Leave a comment
               </Button>
               {item.moderation === 'accepted' && (
-                <UsefulStatsButton
+                <UsefulButton
                   hasUserVotedUseful={hasVoted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={toggleVote}

@@ -71,6 +71,8 @@
   --text-control-sm: 0.8rem;
   --text-card-heading: 1.375rem;
   --spacing-hairline: 2px;
+  --spacing-useful-control: 2.75rem;
+  --spacing-useful-icon: 1rem;
   --container-dialog: calc(100% - 2rem);
   --shadow-sidebar-ring: 0 0 0 1px var(--sidebar-border);
   --shadow-sidebar-ring-hover: 0 0 0 1px var(--sidebar-accent);

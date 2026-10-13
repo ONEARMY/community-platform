@@ -70,6 +70,7 @@ export const loader = async ({ request }) => {
     p_sort: sort || 'Newest',
     p_skip: skip,
     p_limit: ITEMS_PER_PAGE,
+    p_include_locked: true,
   });
 
   if (rpcResult.error) {

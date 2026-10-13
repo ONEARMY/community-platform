@@ -7,6 +7,7 @@ import {
   MegaphoneIcon,
   MessageCircleQuestionMarkIcon,
   NewspaperIcon,
+  SettingsIcon,
   TagsIcon,
   UserPen,
   UsersIcon,
@@ -45,6 +46,14 @@ const ADMIN_NAV_ITEMS = [
   { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
   { label: 'Profile Types', href: '/admin/profile-types', icon: UserPen },
   { label: 'Badges', href: '/admin/badges', icon: AwardIcon },
+  {
+    label: 'Settings',
+    icon: SettingsIcon,
+    items: [
+      { label: 'Colour theme', href: '/admin/settings/theme' },
+      { label: 'News CTA', href: '/admin/settings/news-cta' },
+    ],
+  },
 ];
 
 export function AdminSidebar() {

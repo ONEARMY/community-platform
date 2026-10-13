@@ -1,6 +1,6 @@
 // Folders the generic image picker/upload feature is allowed to browse and write to.
 // Checked server-side on every request - never trust a path coming from the client alone.
-export const IMAGE_PICKER_PATHS = ['categories', 'badges'] as const;
+export const IMAGE_PICKER_PATHS = ['categories', 'badges', 'settings'] as const;
 
 export type ImagePickerPath = (typeof IMAGE_PICKER_PATHS)[number];
 

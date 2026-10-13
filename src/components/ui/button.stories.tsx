@@ -20,6 +20,10 @@ export const Secondary: Story = {
   args: { variant: 'secondary' },
 };
 
+export const BrandSecondary: Story = {
+  args: { variant: 'brand-secondary' },
+};
+
 export const Outline: Story = {
   args: { variant: 'outline' },
 };
@@ -44,6 +48,9 @@ export const AllVariants: Story = {
       </Button>
       <Button {...args} variant="secondary">
         Secondary
+      </Button>
+      <Button {...args} variant="brand-secondary">
+        Brand secondary
       </Button>
       <Button {...args} variant="outline">
         Outline

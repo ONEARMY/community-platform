@@ -51,7 +51,7 @@ This library's theme (`src/styles/ui-globals.css`) maps shadcn's expected tokens
 --accent: var(--color-accent);
 ```
 
-So this library and the legacy `oa-themes`/theme-ui setup both read from the exact same DB-driven CSS variables — no duplicate theming logic, no backend changes needed. Only `primary` and `accent` are actually DB-driven; there is no separate `secondary` tenant color, so `secondary`/`muted`/`destructive` keep shadcn's static defaults.
+So this library and the legacy `oa-themes`/theme-ui setup both read from the exact same DB-driven CSS variables — no duplicate theming logic, no backend changes needed. `primary`, `accent` and `brand-secondary` are DB-driven, editable at `/admin/settings/theme`. `brand-secondary` (`bg-brand-secondary`, button variant `brand-secondary`) falls back to `primary-soft` (primary mixed 50% with white) when unset. shadcn's `secondary`/`muted`/`destructive` keep their static defaults.
 
 For exact hover-color parity with the legacy `Button` (which swaps to `--color-primary-hover` outright rather than an opacity-based hover), the default button variant uses an arbitrary Tailwind value: `hover:bg-[var(--color-primary-hover)]`.
 

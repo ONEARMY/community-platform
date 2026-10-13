@@ -1533,6 +1533,7 @@ export type Database = {
           color_accent_hover: string | null;
           color_primary: string | null;
           color_primary_hover: string | null;
+          color_secondary: string | null;
           create_research_roles: string[] | null;
           created_at: string;
           donation_settings: Json | null;
@@ -1543,6 +1544,9 @@ export type Database = {
           library_heading: string | null;
           membership_terms: string | null;
           message_sign_off: string | null;
+          news_cta_body: string | null;
+          news_cta_image: string | null;
+          news_cta_title: string | null;
           no_messaging: boolean;
           organisation_activity: string | null;
           organisation_signup_description: string | null;
@@ -1566,6 +1570,7 @@ export type Database = {
           color_accent_hover?: string | null;
           color_primary?: string | null;
           color_primary_hover?: string | null;
+          color_secondary?: string | null;
           create_research_roles?: string[] | null;
           created_at?: string;
           donation_settings?: Json | null;
@@ -1576,6 +1581,9 @@ export type Database = {
           library_heading?: string | null;
           membership_terms?: string | null;
           message_sign_off?: string | null;
+          news_cta_body?: string | null;
+          news_cta_image?: string | null;
+          news_cta_title?: string | null;
           no_messaging?: boolean;
           organisation_activity?: string | null;
           organisation_signup_description?: string | null;
@@ -1599,6 +1607,7 @@ export type Database = {
           color_accent_hover?: string | null;
           color_primary?: string | null;
           color_primary_hover?: string | null;
+          color_secondary?: string | null;
           create_research_roles?: string[] | null;
           created_at?: string;
           donation_settings?: Json | null;
@@ -1609,6 +1618,9 @@ export type Database = {
           library_heading?: string | null;
           membership_terms?: string | null;
           message_sign_off?: string | null;
+          news_cta_body?: string | null;
+          news_cta_image?: string | null;
+          news_cta_title?: string | null;
           no_messaging?: boolean;
           organisation_activity?: string | null;
           organisation_signup_description?: string | null;

@@ -13,6 +13,7 @@ import { DisplayDate } from '@/components/ui/display-date';
 import CommentIcon from '@/components/ui/icons/comment.svg?react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { listing } from './labels';
+import { NewsLockedImage } from './NewsLockedImage';
 
 interface IProps {
   news: News;
@@ -40,7 +41,13 @@ export const NewsListItem = ({ news, query }: IProps) => {
           justifyContent: 'space-between',
         }}
       >
-        {news.heroImage && (
+        {news.heroImage && news.isLocked && (
+          <InternalLink to={url}>
+            <NewsLockedImage news={news} />
+          </InternalLink>
+        )}
+
+        {news.heroImage && !news.isLocked && (
           <InternalLink to={url}>
             <AspectRatio ratio={2 / 1}>
               <Image

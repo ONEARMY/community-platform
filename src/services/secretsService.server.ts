@@ -15,12 +15,14 @@ export const getSecret = async (name: string, fallback?: string): Promise<string
     return cached;
   }
 
-  const client = createSupabaseAdminServerClient();
-  const { data } = await client.rpc('read_secret', { secret_name: prefixedName });
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const client = createSupabaseAdminServerClient();
+    const { data } = await client.rpc('read_secret', { secret_name: prefixedName });
 
-  if (data) {
-    cache.set(prefixedName, data);
-    return data;
+    if (data) {
+      cache.set(prefixedName, data);
+      return data;
+    }
   }
 
   // Fall back to environment variable (e.g. from .env.local) for local dev

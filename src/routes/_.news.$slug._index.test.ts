@@ -2,6 +2,7 @@ import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
+import { ProfileBadgeServiceServer } from 'src/services/profileBadgeService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
@@ -11,6 +12,7 @@ import { loader } from './_.news.$slug._index';
 
 vi.mock('src/repository/supabase.server');
 vi.mock('src/services/newsService.server');
+vi.mock('src/services/profileBadgeService.server');
 vi.mock('src/services/tenantSettingsService.server');
 vi.mock('src/services/profileService.server');
 vi.mock('src/factories/profileFactory.server');
@@ -29,7 +31,8 @@ const dbNews = (badgeIds: number[]) => ({
   tags: [],
   hero_image: null,
   poll: null,
-  content: null,
+  body: 'secret body',
+  content: { type: 'doc', content: [] },
   profile_badges: badgeIds.map((id) => ({ profile_badges: { id, name: `badge-${id}` } })),
 });
 
@@ -59,7 +62,14 @@ const setup = (opts: {
   });
 
   (TenantSettingsService as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
-    return { get: vi.fn().mockResolvedValue({ siteName: 'Test' }) };
+    return {
+      get: vi.fn().mockResolvedValue({
+        siteName: 'Test',
+        newsCtaTitle: 'Join us',
+        newsCtaBody: 'Members read everything',
+        newsCtaImageUrl: 'https://example.com/icon.png',
+      }),
+    };
   });
 
   (ProfileServiceServer as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
@@ -70,17 +80,31 @@ const setup = (opts: {
     return { fromDB: vi.fn().mockReturnValue({ id: 7, roles: opts.roles ?? [] }) };
   });
 
+  const incrementViewCount = vi.fn();
+
   (ContentServiceServer as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
     return {
-      incrementViewCount: vi.fn(),
+      incrementViewCount,
       getMetaFields: vi.fn().mockResolvedValue([{ count: 0 }, { count: 0 }, []]),
     };
   });
 
+  (ProfileBadgeServiceServer as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+    function () {
+      return {
+        getAll: vi
+          .fn()
+          .mockResolvedValue([
+            { id: 3, actionLabel: 'Become a member', actionUrl: '/support' },
+          ]),
+      };
+    },
+  );
+
   const signInRedirect = new Response(null, { status: 302 });
   vi.mocked(redirectServiceServer.redirectSignIn).mockReturnValue(signInRedirect);
 
-  return { getAccess, signInRedirect };
+  return { getAccess, signInRedirect, incrementViewCount };
 };
 
 const args = {
@@ -103,8 +127,11 @@ describe('news page loader', () => {
     expect(getAccess).not.toHaveBeenCalled();
   });
 
-  it('sends anonymous visitors of restricted news to sign in', async () => {
-    const { getAccess, signInRedirect } = setup({ badgeIds: [3] });
+  it('sends anonymous visitors of news without a preview to sign in', async () => {
+    const { getAccess, signInRedirect } = setup({
+      badgeIds: [3],
+      access: { is_readable: false, cta_badge_id: null },
+    });
 
     const result = await loader(args);
 
@@ -113,11 +140,47 @@ describe('news page loader', () => {
       '/news/members-only',
       expect.any(Headers),
     );
-    expect(getAccess).not.toHaveBeenCalled();
+    expect(getAccess).toHaveBeenCalledWith(11, null, false);
+  });
+
+  it('shows anonymous visitors a locked preview with the badge call to action', async () => {
+    const { incrementViewCount } = setup({
+      badgeIds: [3],
+      access: { is_readable: false, cta_badge_id: 3 },
+    });
+
+    const result: any = await loader(args);
+    const news = loadedNews(result);
+
+    expect(incrementViewCount).not.toHaveBeenCalled();
+    expect(news.isLocked).toBe(true);
+    expect(news.ctaBadgeId).toBe(3);
+    expect(news.body).toBe('');
+    expect(news.content).toBeNull();
+    expect(result.data.cta).toEqual({
+      title: 'Join us',
+      body: 'Members read everything',
+      imageUrl: 'https://example.com/icon.png',
+      actionLabel: 'Become a member',
+      actionUrl: '/support',
+    });
+  });
+
+  it('shows a locked preview to signed in viewers without the badge', async () => {
+    const { getAccess } = setup({
+      badgeIds: [3],
+      authed: true,
+      access: { is_readable: false, cta_badge_id: 3 },
+    });
+
+    const result = await loader(args);
+
+    expect(loadedNews(result)?.isLocked).toBe(true);
+    expect(getAccess).toHaveBeenCalledWith(11, 7, false);
   });
 
   it('loads restricted news the viewer can read', async () => {
-    const { getAccess } = setup({
+    const { getAccess, incrementViewCount } = setup({
       badgeIds: [3],
       authed: true,
       access: { is_readable: true, cta_badge_id: null },
@@ -126,6 +189,7 @@ describe('news page loader', () => {
     const result = await loader(args);
 
     expect(loadedNews(result)?.id).toBe(11);
+    expect(incrementViewCount).toHaveBeenCalled();
     expect(getAccess).toHaveBeenCalledWith(11, 7, false);
   });
 
@@ -142,8 +206,8 @@ describe('news page loader', () => {
     expect(getAccess).toHaveBeenCalledWith(11, 7, true);
   });
 
-  it('redirects to the news list when the viewer cannot read it', async () => {
-    setup({ badgeIds: [3], authed: true, access: { is_readable: false, cta_badge_id: 3 } });
+  it('redirects to the news list when the viewer cannot read or preview it', async () => {
+    setup({ badgeIds: [3], authed: true, access: { is_readable: false, cta_badge_id: null } });
 
     const result = (await loader(args)) as Response;
 

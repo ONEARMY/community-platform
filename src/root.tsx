@@ -24,6 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     colorPrimaryHover: settings.colorPrimaryHover,
     colorAccent: settings.colorAccent,
     colorAccentHover: settings.colorAccentHover,
+    colorSecondary: settings.colorSecondary,
     siteName: settings.siteName,
     siteDescription: settings.siteDescription,
     siteImage: settings.siteImage,
@@ -41,6 +42,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     --color-primary-hover: ${loaderData.colorPrimaryHover};
     --color-accent: ${loaderData.colorAccent};
     --color-accent-hover: ${loaderData.colorAccentHover};
+    --color-brand-secondary: ${loaderData.colorSecondary};
   `;
 
   // const isProd = import.meta.env.VITE_BRANCH === 'production';

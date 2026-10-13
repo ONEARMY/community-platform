@@ -41,7 +41,7 @@ export const NewsListHeader = (props: IProps) => {
           </Heading>
         ) : (
           <>
-            <Heading as="h1" sx={{ fontSize: [8, 10, 11] }}>
+            <Heading as="h1" sx={{ fontSize: ['42px', '64px'], lineHeight: 1.2 }}>
               {headings.welcome}
             </Heading>
             <Text sx={{ fontSize: [3, 5], color: 'grey' }}>{headings.tagline}</Text>

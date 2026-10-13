@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, CommentAvatar, MemberBadge, ReturnPathLink } from 'oa-components';
+import { Button, MemberBadge, ReturnPathLink } from 'oa-components';
 import type { DiscussionContentType } from 'oa-shared';
 import type { ChangeEvent } from 'react';
 import { useMemo, useState } from 'react';
@@ -9,6 +9,7 @@ import { MAX_COMMENT_LENGTH } from 'src/constants';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Text, Textarea } from 'theme-ui';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 import './CreateCommentSupabase.css';
 
@@ -71,7 +72,12 @@ export const CreateCommentSupabase = observer((props: IProps) => {
             }}
           >
             {profile?.photo?.publicUrl ? (
-              <CommentAvatar displayName={profile?.displayName} photo={profile?.photo?.publicUrl} />
+              <Avatar className="size-10">
+                <AvatarImage
+                  src={profile.photo.publicUrl}
+                  alt={`Avatar of ${profile.displayName || 'comment author'}`}
+                />
+              </Avatar>
             ) : (
               <MemberBadge profileType={profileType} useLowDetailVersion />
             )}

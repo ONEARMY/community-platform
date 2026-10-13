@@ -5,7 +5,6 @@ import { MOCK_DATA } from '../data';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import type {
   DBProfile,
-  DBProfileBadge,
   DBProfileTag,
   DBProfileType,
   DBResearchItem,
@@ -453,28 +452,6 @@ export class SupabaseTestsService {
         ...badge,
         tenant_id: this.tenantId,
       })),
-    });
-
-    return response;
-  }
-
-  async seedUpgradeBadges(profileBadges: DBProfileBadge[]) {
-    const proBadge = profileBadges.find((badge) => badge.name === 'pro');
-
-    if (!proBadge) {
-      return { upgrade_badge: { data: [] } };
-    }
-
-    const response = await this.seedDatabase({
-      upgrade_badge: [
-        {
-          tenant_id: this.tenantId,
-          action_label: 'Go PRO',
-          badge_id: proBadge.id,
-          is_space: true, // Only for workspaces
-          action_url: 'https://www.preciousplastic.com/pro-membership',
-        },
-      ],
     });
 
     return response;

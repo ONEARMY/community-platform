@@ -2,10 +2,8 @@ import {
   AuthorDisplay,
   Category,
   ContentStatistics,
-  DisplayDate,
   ModerationStatus,
   TagList,
-  UsefulStatsButton,
 } from 'oa-components';
 import type { Profile, Project } from 'oa-shared';
 import { DifficultyLevelRecord, PremiumTier } from 'oa-shared';
@@ -19,7 +17,9 @@ import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { UsefulButton } from '@/components/ui/useful-button';
 
 interface IProps {
   commentsCount: number;
@@ -223,7 +223,7 @@ export const LibraryDescription = ({
         <Flex sx={{ gap: 2 }}>
           <ClientOnly fallback={<></>}>
             {() => (
-              <UsefulStatsButton
+              <UsefulButton
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}

@@ -1,6 +1,14 @@
 import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { ContentReach, DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
+import type {
+  ContentReach,
+  Database,
+  DBMedia,
+  DBNews,
+  DBProfile,
+  Moderation,
+  NewsDTO,
+} from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
@@ -12,6 +20,7 @@ import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
+import { ProfileBadgeServiceServer } from 'src/services/profileBadgeService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
@@ -55,12 +64,13 @@ export const loader = async ({ request }) => {
   }
 
   const rpcResult = await client.rpc('get_news_feed_by_content', {
-    p_user_profile_id: userProfileId,
+    p_user_profile_id: userProfileId ?? undefined,
     p_is_admin: isAdmin,
-    p_search: q || null,
+    p_search: q || undefined,
     p_sort: sort || 'Newest',
     p_skip: skip,
     p_limit: ITEMS_PER_PAGE,
+    p_include_locked: true,
   });
 
   if (rpcResult.error) {
@@ -163,14 +173,14 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
-        published_at: data.isDraft ? null : new Date(),
+        published_at: data.isDraft ? null : new Date().toISOString(),
         slug,
         summary: getSummaryFromTiptapJson(data.body),
         tags: data.tags,
         hero_image: data.heroImage,
         title: data.title,
         content_reach: data.contentReach,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
         poll: pollId,
       })
       .select('*');
@@ -186,7 +196,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       const badgeRelations = data.profileBadges.map((badgeId) => ({
         news_id: newsId,
         profile_badge_id: badgeId,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       }));
 
       const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
@@ -201,7 +211,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     // Fetch the complete news with badges for response
     const completeNews = await client
       .from('news')
-      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
+      .select('*, category:categories(*), profile_badges:news_badges_relations(profile_badges(*))')
       .eq('id', newsId)
       .single();
 
@@ -231,7 +241,7 @@ async function validateRequest(
   bodyPlainText: string,
   slug: string,
   authError: AuthError | null,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ) {
   const notDraft = data.isDraft === false;
 
@@ -260,5 +270,9 @@ async function validateRequest(
 
   if (await new ContentServiceServer(client).isDuplicateNewSlug(slug, 'news')) {
     throw conflictError('This news already exists');
+  }
+
+  if (!(await new ProfileBadgeServiceServer(client).areAudience(data.profileBadges))) {
+    throw validationError('News can only be restricted to audience badges', 'profileBadges');
   }
 }

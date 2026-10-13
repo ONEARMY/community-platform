@@ -1,27 +1,35 @@
 import { format } from 'date-fns';
+import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import {
-  ActionSet,
   Button,
   ButtonShowReplies,
-  CommentDisplay,
-  ConfirmModal,
   EditComment,
-  FollowButton,
   FollowIcon,
+  Icon,
   Modal,
-  Tooltip,
   UsefulButtonLite,
 } from 'oa-components';
 import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import CheckmarkEmptyIcon from 'src/assets/icons/checkmark-empty.svg?react';
 import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
+import { Button as UiButton } from 'src/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'src/components/ui/dropdown-menu';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';
@@ -39,7 +47,6 @@ export interface ICommentItemProps {
 }
 
 interface IAcceptedAnswerLabelProps {
-  commentId: number;
   acceptedDate?: Date;
 }
 
@@ -61,6 +68,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     () => !!comment.replies?.some((x) => x.highlighted),
   );
   const { profile } = useProfileStore();
+  const navigate = useNavigate();
   const {
     hasVoted,
     usefulCount,
@@ -78,8 +86,6 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   }, [profile]);
 
   const acceptedAnswer = useAcceptedAnswer(comment.id);
-
-  const item = 'CommentItem';
 
   // Update parent component with new vote count when it changes
   useEffect(() => {
@@ -115,8 +121,6 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         variant="borderless"
       >
         <CommentDisplay
-          isEditable={isEditable}
-          itemType={item}
           comment={comment}
           menuActions={
             <>
@@ -125,74 +129,80 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                   <FollowIcon tooltip="Following replies" />
                 </Flex>
               )}
-              <ActionSet itemType="CommentItem">
-                <FollowButton
-                  isLoggedIn={!!profile}
-                  isFollowing={isFollowingReplies}
-                  onFollowClick={toggleFollowReplies}
-                  labelFollow="Follow replies"
-                  labelUnfollow="Unfollow replies"
-                  variant="subtle"
-                  sx={{ fontSize: 1 }}
-                />
-                {isEditable && (
-                  <Button
-                    type="button"
-                    data-cy="CommentItem: edit button"
-                    variant="subtle"
-                    icon="edit"
-                    onClick={() => setShowEditModal(true)}
-                    sx={{ fontSize: 1 }}
-                  >
-                    Edit
-                  </Button>
-                )}
-                <Button
-                  type="button"
-                  data-cy="CommentItem: copy link button"
-                  variant="subtle"
-                  icon="copy-link"
-                  onClick={copyCommentLink}
-                  sx={{ fontSize: 1 }}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <UiButton
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      data-cy="CommentItem: actions button"
+                    />
+                  }
                 >
-                  Copy Link
-                </Button>
-                {isEditable && (
-                  <Button
-                    type="button"
-                    data-cy="CommentItem: delete button"
-                    variant="subtle"
-                    icon="delete"
-                    onClick={() => setShowDeleteModal(true)}
-                    sx={{ fontSize: 1 }}
+                  <EllipsisVerticalIcon aria-hidden="true" className="size-3" />
+                  <span className="sr-only">Show Actions</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-40">
+                  <DropdownMenuItem
+                    data-testid={profile ? 'follow-button' : 'follow-redirect'}
+                    data-cy={profile ? 'follow-button' : 'follow-redirect'}
+                    onClick={() =>
+                      profile
+                        ? toggleFollowReplies()
+                        : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
+                    }
                   >
-                    Delete
-                  </Button>
-                )}
-                {acceptedAnswer?.canMarkAsAccepted && (
-                  <Button
-                    type="button"
-                    data-cy="CommentItem: mark-as-accepted button"
-                    variant="subtle"
-                    onClick={acceptedAnswer.onAccept}
-                    disabled={acceptedAnswer.isLoading}
-                    sx={{ fontSize: 1 }}
+                    <Icon
+                      aria-hidden="true"
+                      glyph={isFollowingReplies ? 'thunderbolt' : 'thunderbolt-grey'}
+                    />
+                    {isFollowingReplies ? 'Unfollow replies' : 'Follow replies'}
+                  </DropdownMenuItem>
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="CommentItem: edit button"
+                      onClick={() => setShowEditModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="edit" />
+                      Edit
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    data-cy="CommentItem: copy link button"
+                    onClick={copyCommentLink}
                   >
-                    {acceptedAnswer.isAccepted
-                      ? 'Unmark as accepted answer'
-                      : 'Mark as accepted answer'}
-                  </Button>
-                )}
-              </ActionSet>
+                    <Icon aria-hidden="true" glyph="copy-link" />
+                    Copy Link
+                  </DropdownMenuItem>
+                  {isEditable && (
+                    <DropdownMenuItem
+                      data-cy="CommentItem: delete button"
+                      onClick={() => setShowDeleteModal(true)}
+                    >
+                      <Icon aria-hidden="true" glyph="delete" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
+                  {acceptedAnswer?.canMarkAsAccepted && (
+                    <DropdownMenuItem
+                      data-cy="CommentItem: mark-as-accepted button"
+                      onClick={acceptedAnswer.onAccept}
+                      disabled={acceptedAnswer.isLoading}
+                    >
+                      {acceptedAnswer.isAccepted
+                        ? 'Unmark as accepted answer'
+                        : 'Mark as accepted answer'}
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           }
           footerActions={
             <>
               {acceptedAnswer?.isAccepted && (
-                <AcceptedAnswerLabel
-                  commentId={comment.id}
-                  acceptedDate={acceptedAnswer.acceptedDate}
-                />
+                <AcceptedAnswerLabel acceptedDate={acceptedAnswer.acceptedDate} />
               )}
               {!acceptedAnswer?.hasAcceptedAnswer && acceptedAnswer?.canMarkAsAccepted && (
                 <AcceptAnswerButton onAccept={acceptedAnswer.onAccept} />
@@ -271,34 +281,38 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   );
 });
 
-const AcceptedAnswerLabel = ({ commentId, acceptedDate }: IAcceptedAnswerLabelProps) => {
-  const tooltipId = commentId.toString() + '-accepted-answer';
+const AcceptedAnswerLabel = ({ acceptedDate }: IAcceptedAnswerLabelProps) => {
+  const label = (
+    <Flex
+      as="span"
+      sx={{
+        fontSize: '12px',
+        color: '#095A4F',
+        alignItems: 'center',
+        gap: 1,
+        padding: 1,
+        borderRadius: 1,
+        backgroundColor: '#00C3A933',
+      }}
+    >
+      <CheckmarkSuccessIcon width={20} height={20} aria-hidden="true" />
+      Accepted answer
+    </Flex>
+  );
+
+  if (!acceptedDate) {
+    return label;
+  }
 
   return (
-    <>
-      <Flex
-        as="span"
-        data-tooltip-id={tooltipId}
-        data-tooltip-content={
-          acceptedDate
-            ? 'Author accepted this answer on ' + format(new Date(acceptedDate), 'd MMM yyyy')
-            : undefined
-        }
-        sx={{
-          fontSize: '12px',
-          color: '#095A4F',
-          alignItems: 'center',
-          gap: 1,
-          padding: 1,
-          borderRadius: 1,
-          backgroundColor: '#00C3A933',
-        }}
-      >
-        <CheckmarkSuccessIcon width={20} height={20} aria-hidden="true" />
-        Accepted answer
-      </Flex>
-      {acceptedDate && <Tooltip id={tooltipId} />}
-    </>
+    <Tooltip>
+      <TooltipTrigger render={<span tabIndex={0} />} className="inline-flex">
+        {label}
+      </TooltipTrigger>
+      <TooltipContent>
+        Author accepted this answer on {format(new Date(acceptedDate), 'd MMM yyyy')}
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

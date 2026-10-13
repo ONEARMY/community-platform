@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
-import { AuthorsContext, CommentsTitle, FollowButton } from 'oa-components';
+import { CommentsTitle, FollowButton } from 'oa-components';
 import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer';
 import { logger } from 'src/logger';
@@ -12,6 +12,7 @@ import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { Box, Button, Flex } from 'theme-ui';
+import { AuthorsContext } from './AuthorsContext';
 import { CommentItemSupabase } from './CommentItemSupabase';
 import { CommentSort } from './CommentSort';
 import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';
@@ -33,11 +34,12 @@ interface IProps {
   pinnedCommentId?: number;
   defaultSortBy?: CommentSortOption;
   labels?: CommentSectionLabels;
+  onLoaded?: () => void;
 }
 const commentPageSize = 10;
 
 export const CommentSectionSupabase = observer((props: IProps) => {
-  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels } = props;
+  const { authors, sourceId, sourceType, pinnedCommentId, defaultSortBy, labels, onLoaded } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -48,6 +50,9 @@ export const CommentSectionSupabase = observer((props: IProps) => {
   const { isSubscribed, toggle: toggleFollowReplies } = useSubscription(sourceType, sourceId);
   const { profile } = useProfileStore();
   const location = useLocation();
+
+  const onLoadedRef = useRef(onLoaded);
+  onLoadedRef.current = onLoaded;
 
   const sortedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
@@ -113,6 +118,10 @@ export const CommentSectionSupabase = observer((props: IProps) => {
         logger.error(err);
         if (!cancelled) {
           setLoadError('Could not load comments. Please try again.');
+        }
+      } finally {
+        if (!cancelled) {
+          onLoadedRef.current?.();
         }
       }
     };

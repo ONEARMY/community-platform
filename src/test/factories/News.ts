@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import type { News, NewsFormData } from 'oa-shared';
+import { AdminNews, type News, type NewsFormData } from 'oa-shared';
 
 export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): NewsFormData => ({
   body: {
@@ -96,5 +96,29 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   profileBadges: null,
   publishedAt: faker.date.past(),
   poll: null,
+  isLocked: false,
+  ctaBadgeId: null,
   ...newsOverloads,
 });
+
+export const FactoryAdminNews = (overloads: Partial<AdminNews> = {}): AdminNews =>
+  new AdminNews({
+    id: faker.number.int(),
+    title: faker.lorem.sentence(),
+    slug: faker.lorem.slug(),
+    category: {
+      id: faker.number.int(),
+      name: faker.lorem.words(2),
+    },
+    tags: [faker.lorem.word()],
+    moderation: 'accepted',
+    isDraft: false,
+    publishedAt: faker.date.past(),
+    commentCount: faker.number.int({ min: 0, max: 100 }),
+    totalViews: faker.number.int({ min: 0, max: 1000 }),
+    hasPoll: false,
+    deleted: false,
+    authorDisplayName: faker.person.fullName(),
+    authorUserName: faker.internet.username(),
+    ...overloads,
+  });

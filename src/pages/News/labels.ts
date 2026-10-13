@@ -13,7 +13,9 @@ export const buttons = {
 export const headings = {
   create: 'Add news',
   edit: 'Edit your news',
-  list: 'Latest news from the community',
+  greeting: 'Hello',
+  welcome: 'Welcome to our online community',
+  tagline: 'The place where people meet, share and collaborate.',
 };
 
 export const fields: ILabels = {
@@ -32,7 +34,7 @@ export const fields: ILabels = {
   profileBadge: {
     title: 'Limit visibility',
     description:
-      'Leave empty to be visible for everyone. Picking a badge will hide it from the general public.',
+      'Leave empty to be visible for everyone. Others who can get the badge see a preview: the image blurred and the summary.',
     placeholder: 'Select who can see this post',
   },
   summary: {
@@ -60,6 +62,7 @@ export const listing = {
   filterCategory: 'Filter by category',
   incompleteProfile: 'Complete your profile to add news',
   loadMore: 'Load More',
+  locked: 'Just for members',
   loggedOut: 'Gotta log in please for the awesome power of news adding.',
   noNews: 'No new has been added yet',
   search: 'Search for news',

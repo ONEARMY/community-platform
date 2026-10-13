@@ -24,6 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     colorPrimaryHover: settings.colorPrimaryHover,
     colorAccent: settings.colorAccent,
     colorAccentHover: settings.colorAccentHover,
+    colorSecondary: settings.colorSecondary,
     siteName: settings.siteName,
     siteDescription: settings.siteDescription,
     siteImage: settings.siteImage,
@@ -41,6 +42,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     --color-primary-hover: ${loaderData.colorPrimaryHover};
     --color-accent: ${loaderData.colorAccent};
     --color-accent-hover: ${loaderData.colorAccentHover};
+    --color-brand-secondary: ${loaderData.colorSecondary};
   `;
 
   // const isProd = import.meta.env.VITE_BRANCH === 'production';
@@ -67,6 +69,10 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     // ensure we only do this once per mount
     reinjectStylesRef.current = false;
   }, [clientStyleData, emotionCache.sheet]);
+
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = 'true';
+  }, []);
 
   return (
     <html lang="en">
@@ -123,6 +129,7 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
   });
 
   // iOS PWA meta tags
+  tags.push({ name: 'mobile-web-app-capable', content: 'yes' });
   tags.push({ name: 'apple-mobile-web-app-capable', content: 'yes' });
   tags.push({
     name: 'apple-mobile-web-app-status-bar-style',

@@ -15,9 +15,17 @@ export const FRIENDLY_MESSAGES = {
   'auth/password-changed': 'All done. Password changed',
   'auth/user-not-found': 'No account found, typo maybe?',
   'auth/wrong-password': 'Password does not match the user account',
+  'auth/email-not-confirmed':
+    "Your email address isn't confirmed yet. Check your inbox, or request a new confirmation email.",
+  'auth/confirmation-resent': 'Confirmation email sent, check your inbox (and spam folder).',
+  'auth/confirmation-link-requested':
+    'If that address has an unconfirmed account, a new link is on its way. Check your inbox (and spam folder).',
+  'auth/resend-rate-limited': 'Please wait a minute before requesting another link.',
+  'auth/resend-failed': "We couldn't send a new link right now. Please try again in a moment.",
   'generic-error':
     "We couldn't complete your registration. If you already have an account, try logging in or resetting your password.",
   'supporter/already-subscribed': 'This account already has an active subscription.',
+  'supporter/region-blocked': "Supporter memberships aren't available in your region.",
   required: 'Required field',
   'reset email sent': 'Reset email sent, check your inbox/spam',
   'profile saved': 'Profile Saved',

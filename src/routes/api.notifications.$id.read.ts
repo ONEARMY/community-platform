@@ -19,7 +19,7 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    await client.from('notifications').update({ is_read: true }).eq('id', params.id);
+    await client.from('notifications').update({ is_read: true }).eq('id', Number(params.id));
 
     new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

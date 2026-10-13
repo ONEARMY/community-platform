@@ -1,7 +1,7 @@
-import type { PublishedAction } from 'oa-components';
-import { DisplayDate, Username } from 'oa-components';
+import { Username } from 'oa-components';
 import type { Author } from 'oa-shared';
 import { Flex, Text } from 'theme-ui';
+import { DisplayDate, type PublishedAction } from '@/components/ui/display-date';
 
 interface IProps {
   author: Author;

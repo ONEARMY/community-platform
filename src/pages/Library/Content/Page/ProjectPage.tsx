@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
-import { Button, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import { Button, UserEngagementWrapper } from 'oa-components';
 import type { Project, ProjectStep } from 'oa-shared';
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
@@ -14,6 +14,7 @@ import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card, Flex } from 'theme-ui';
 import { ArticleCallToAction } from '@/components/ui/article-call-to-action';
+import { UsefulButton } from '@/components/ui/useful-button';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 import { RemakesSection } from './Remakes/RemakesSection';
@@ -40,12 +41,23 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   } = useUsefulVote('projects', item.id, item.usefulCount);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
   const [remakeCount, setRemakeCount] = useState(item.remakeCount ?? 0);
+  const [commentsLoaded, setCommentsLoaded] = useState(false);
+  const location = useLocation();
+  const remakesCardRef = useRef<HTMLDivElement>(null);
 
   const isEditable = useMemo(() => {
     return (
       !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
     );
   }, [activeUser, item.author]);
+
+  useEffect(() => {
+    if (!commentsLoaded || location.hash !== '#remakes') {
+      return;
+    }
+
+    remakesCardRef.current?.scrollIntoView();
+  }, [commentsLoaded, location.hash]);
 
   return (
     <>
@@ -110,7 +122,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 Leave a comment
               </Button>
               {item.moderation === 'accepted' && (
-                <UsefulStatsButton
+                <UsefulButton
                   hasUserVotedUseful={hasVoted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={toggleVote}
@@ -147,9 +159,10 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 authors={item.author?.id ? [item.author?.id] : []}
                 sourceId={item.id}
                 sourceType="projects"
+                onLoaded={() => setCommentsLoaded(true)}
               />
             </Card>
-            <Card sx={engagementCardSx}>
+            <Card id="remakes" ref={remakesCardRef} sx={engagementCardSx}>
               <RemakesSection key={item.id} project={item} onRemakeCountChange={setRemakeCount} />
             </Card>
           </UserEngagementWrapper>

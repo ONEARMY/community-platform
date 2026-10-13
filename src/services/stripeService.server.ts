@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
 import { isTestEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
@@ -18,52 +19,52 @@ export type TierConfigMap = Record<number, { color: string; name: string; descri
 
 const STUB_PRICES: SupporterPrice[] = [
   {
-    id: 'stub_starter_month',
+    id: 'stub_start_month',
     unitAmount: 100,
     currency: 'eur',
     interval: 'month',
     tier: 1,
-    tierName: 'Starter',
+    tierName: 'Start',
   },
   {
-    id: 'stub_starter_year',
+    id: 'stub_start_year',
     unitAmount: 100,
     currency: 'eur',
     interval: 'year',
     tier: 1,
-    tierName: 'Starter',
+    tierName: 'Start',
   },
   {
-    id: 'stub_hero_month',
+    id: 'stub_power_month',
     unitAmount: 200,
     currency: 'eur',
     interval: 'month',
     tier: 2,
-    tierName: 'Hero',
+    tierName: 'Power',
   },
   {
-    id: 'stub_hero_year',
+    id: 'stub_power_year',
     unitAmount: 200,
     currency: 'eur',
     interval: 'year',
     tier: 2,
-    tierName: 'Hero',
+    tierName: 'Power',
   },
   {
-    id: 'stub_legend_month',
+    id: 'stub_boost_month',
     unitAmount: 300,
     currency: 'eur',
     interval: 'month',
     tier: 3,
-    tierName: 'Legend',
+    tierName: 'Boost',
   },
   {
-    id: 'stub_legend_year',
+    id: 'stub_boost_year',
     unitAmount: 300,
     currency: 'eur',
     interval: 'year',
     tier: 3,
-    tierName: 'Legend',
+    tierName: 'Boost',
   },
 ];
 
@@ -71,17 +72,17 @@ const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null 
   tiers: {
     1: {
       color: '#BFDEBA',
-      name: 'Starter',
+      name: 'Start',
       description: 'You help us develop new features, get videos in 4K without ads!',
     },
     2: {
       color: '#77BDE3',
-      name: 'Hero',
+      name: 'Power',
       description: 'You help us develop new features, get videos in 4K without ads!',
     },
     3: {
       color: '#FEE77B',
-      name: 'Legend',
+      name: 'Boost',
       description: 'You help us develop new features, get videos in 4K without ads!',
     },
   },
@@ -110,7 +111,7 @@ async function getStripe(): Promise<Stripe | null> {
 }
 
 export class StripeServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   // ── Static Stripe-API-only methods (no DB access) ──
 
@@ -595,7 +596,7 @@ export class StripeServiceServer {
 // privileged DB writes that bypass RLS
 
 export class StripeAdminService {
-  private client: SupabaseClient;
+  private client: SupabaseClient<Database>;
 
   constructor() {
     this.client = createSupabaseAdminServerClient();

@@ -12,6 +12,7 @@ import {
   isUserBlockedFromMessaging,
   isUserContactable,
   numberWithCommas,
+  shortFormatNumber,
   stripSpecialCharacters,
 } from './helpers';
 
@@ -111,9 +112,21 @@ describe('src/utils/helpers', () => {
   });
 
   it('formatUtcDate renders the UTC calendar date whatever the local time zone', () => {
-    expect(formatUtcDate(new Date('2026-09-05T23:30:00Z'))).toBe('5 Sep 2026');
+    expect(formatUtcDate(new Date('2026-09-05T23:30:00Z'))).toBe('5 Sept 2026');
     expect(formatUtcDate(new Date('2026-01-01T00:30:00Z'))).toBe('1 Jan 2026');
     expect(formatUtcDate(new Date('2011-12-30T12:00:00Z'))).toBe('30 Dec 2011');
     expect(formatUtcDate(new Date('2024-02-29T23:59:59Z'))).toBe('29 Feb 2024');
+  });
+
+  describe('shortFormatNumber', () => {
+    it('returns small numbers unchanged', () => {
+      expect(shortFormatNumber(345)).toEqual('345');
+    });
+
+    it('shortens thousands and millions', () => {
+      expect(shortFormatNumber(1000)).toEqual('1K');
+      expect(shortFormatNumber(1500)).toEqual('1.5K');
+      expect(shortFormatNumber(2099999)).toEqual('2.1M');
+    });
   });
 });

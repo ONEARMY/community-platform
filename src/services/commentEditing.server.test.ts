@@ -90,8 +90,8 @@ describe('comment delete boundary', () => {
 
   it('allows an admin to soft-delete another member comment', async () => {
     expect(status(await request('', 'DELETE'))).toBe(204);
-    expect(state.filters).toContainEqual(['id', '41']);
-    expect(state.filters).toContainEqual(['source_id', '7']);
+    expect(state.filters).toContainEqual(['id', 41]);
+    expect(state.filters).toContainEqual(['source_id', 7]);
     expect(state.update).toHaveBeenCalledWith({ deleted: true });
   });
 
@@ -132,7 +132,7 @@ describe('comment edit boundary', () => {
   });
   it('allows an admin while selecting the requested source and persisting only text', async () => {
     expect(status(await request('{"comment":"edited","deleted":true,"created_by":2}'))).toBe(204);
-    expect(state.filters).toContainEqual(['source_id', '7']);
+    expect(state.filters).toContainEqual(['source_id', 7]);
     expect(state.update).toHaveBeenCalledWith({ comment: 'edited' });
   });
   it('rejects a source/ID combination with no matching row', async () => {

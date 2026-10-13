@@ -11,6 +11,7 @@ node_modules
 # production
 /build
 /lib
+/geo
 
 # misc
 .DS_Store

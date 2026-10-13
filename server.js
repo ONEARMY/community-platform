@@ -138,7 +138,7 @@ const sharedCspOptions = {
   ],
   imgSrc: imgSrc,
   objectSrc: ["'self'"],
-  upgradeInsecureRequests: isProd ? [] : undefined,
+  ...(isProd && { upgradeInsecureRequests: [] }),
 };
 
 const sharedSecurityOptions = {

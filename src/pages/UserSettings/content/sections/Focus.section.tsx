@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, ExternalLink, MemberBadge } from 'oa-components';
+import { Button, MemberBadge } from 'oa-components';
 import { useContext, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useToast } from 'src/common/Toast';
@@ -61,13 +61,15 @@ export const FocusSection = observer(() => {
         <Heading as="h2">{headings.focus}</Heading>
         <Paragraph sx={{ color: 'grey', fontSize: 3 }}>
           {fields.activities.description}{' '}
-          <ExternalLink
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
             href={tenantContext?.profileGuidelines}
-            sx={{ textDecoration: 'underline' }}
+            style={{ textDecoration: 'underline' }}
             type="button"
           >
             {buttons.guidelines}
-          </ExternalLink>
+          </a>
         </Paragraph>
       </Flex>
 

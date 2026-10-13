@@ -49,7 +49,7 @@ describe('[Organisation sign-up]', () => {
       );
       cy.get('[data-cy=organisation-signup-learn-more]')
         .should('contain', 'Learn more')
-        .and('have.attr', 'href', '/academy')
+        .and('have.attr', 'href', '/academy/guides/community-program')
         .and('have.attr', 'target', '_blank');
 
       cy.step('Organisation sign-up links back to member sign-up');

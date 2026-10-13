@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification, NotificationDisplay, SubscribedUser } from 'oa-shared';
+import type { Database, DBNotification, NotificationDisplay, SubscribedUser } from 'oa-shared';
 import { createElement } from 'react';
 import { sendBatchEmails } from 'src/.server/resend';
 import { InstantNotificationEmail } from 'src/.server/templates/instant-notification-email';
@@ -24,7 +24,7 @@ interface SendInstantNotificationEmailsProps {
 }
 
 export class NotificationEmailServiceServer {
-  constructor(private client: SupabaseClient) {
+  constructor(private client: SupabaseClient<Database>) {
     Object.assign(this);
   }
 

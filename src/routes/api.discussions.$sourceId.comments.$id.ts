@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBComment, DBProfile } from 'oa-shared';
+import type { Database, DBComment, DBProfile } from 'oa-shared';
 import { data, type LoaderFunctionArgs, type Params } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -8,7 +8,7 @@ import { isUserAdmin } from 'src/utils/isAdmin';
 
 type Supabase = {
   headers: Headers;
-  client: SupabaseClient<any, 'public', any>;
+  client: SupabaseClient<Database>;
 };
 
 export async function action({ params, request }: LoaderFunctionArgs) {
@@ -39,14 +39,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     );
   }
 
-  const commentId: string = params.id!;
+  const commentId = Number(params.id);
 
   try {
     if (request.method === 'DELETE') {
-      return await deleteComment(supabase, commentId, params.sourceId!, profile);
+      return await deleteComment(supabase, commentId, Number(params.sourceId), profile);
     }
 
-    return await updateComment(supabase, request, commentId, params.sourceId!, profile);
+    return await updateComment(supabase, request, commentId, Number(params.sourceId), profile);
   } catch (error) {
     logger.error(error);
     return data({ error: 'Could not modify comment' }, { headers, status: 500 });
@@ -56,8 +56,8 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 async function updateComment(
   { client, headers }: Supabase,
   request: Request,
-  id: string,
-  sourceId: string,
+  id: number,
+  sourceId: number,
   user: DBProfile,
 ) {
   const json = await request.json().catch(() => null);
@@ -90,15 +90,15 @@ async function updateComment(
     return data({}, { headers, status: 500, statusText: 'Error updating comment' });
   }
 
-  new ProfileServiceServer(client).updateUserActivity(user.auth_id);
+  new ProfileServiceServer(client).updateUserActivity(user.auth_id!);
 
   return new Response(null, { headers, status: 204 });
 }
 
 async function deleteComment(
   { client, headers }: Supabase,
-  id: string,
-  sourceId: string,
+  id: number,
+  sourceId: number,
   user: DBProfile,
 ) {
   const { data: commentData, error } = await client
@@ -125,7 +125,7 @@ async function deleteComment(
     return data({}, { headers, status: 500, statusText: 'Error deleting comment' });
   }
 
-  new ProfileServiceServer(client).updateUserActivity(user.auth_id);
+  new ProfileServiceServer(client).updateUserActivity(user.auth_id!);
 
   return new Response(null, { headers, status: 204 });
 }

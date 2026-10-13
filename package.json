@@ -37,6 +37,7 @@
     "docs": "bun run --filter oa-docs start",
     "db:reset": "bunx supabase db reset && bun run db:seed",
     "db:seed": "bunx @snaplet/seed sync && bunx tsx seed.ts > seed.sql",
+    "db:types": "bunx supabase gen types typescript --local --schema public > shared/database.types.ts && biome format --write shared/database.types.ts",
     "commit": "git-cz",
     "prepare": "husky"
   },
@@ -105,6 +106,7 @@
     "linkify-react": "^4.3.2",
     "lodash": "4.18.1",
     "lucide-react": "^1.28.0",
+    "maxmind": "^5.0.7",
     "mobx": "6.16.1",
     "mobx-react": "9.2.2",
     "oa-components": "workspace:*",

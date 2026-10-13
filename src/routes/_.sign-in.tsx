@@ -1,4 +1,6 @@
 import { HeroBanner } from 'oa-components';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
+import { useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { data, Link, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
@@ -6,17 +8,27 @@ import { TextInputField } from 'src/common/Form/TextInput.field';
 import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { AuthServiceServer } from 'src/services/authService.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
-import { getReturnUrl } from 'src/utils/redirect.server';
+import { getEmailConfirmationUrl, getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
+
+type SignInActionData = {
+  email: string;
+  error?: string;
+  emailNotConfirmed?: boolean;
+  resent?: boolean;
+};
+
+const RESEND_COOLDOWN_MS = 60_000;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -53,6 +65,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const password = formData.get('password') as string;
   const captchaToken = formData.get('cf-turnstile-token') as string;
 
+  if (formData.get('intent') === 'resend-confirmation') {
+    const resendError = await new AuthServiceServer(client).resendConfirmationEmail({
+      email,
+      emailRedirectTo: getEmailConfirmationUrl(request),
+      captchaToken,
+    });
+
+    if (resendError) {
+      return data<SignInActionData>(
+        { email, emailNotConfirmed: true, error: resendError },
+        { headers, status: 400 },
+      );
+    }
+
+    return data<SignInActionData>({ email, emailNotConfirmed: true, resent: true }, { headers });
+  }
+
   const signInResult = await client.auth.signInWithPassword({
     email,
     password,
@@ -61,28 +90,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (signInResult.error) {
     if (signInResult.error.code === 'email_not_confirmed') {
-      const url = new URL(request.url);
-      const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-      const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation`;
-      await client.auth.resend({
-        type: 'signup',
-        email,
-        options: {
-          emailRedirectTo: emailRedirectUrl,
-        },
-      });
-
-      return data(
-        {
-          error: 'We need to confirm your email before logging in. Please check your inbox :)',
-          email,
-        },
-        { headers },
-      );
+      return data<SignInActionData>({ email, emailNotConfirmed: true }, { headers });
     }
 
     logger.error(signInResult.error);
-    return data(
+    return data<SignInActionData>(
       {
         error: 'Invalid email or password.',
         email,
@@ -129,6 +141,17 @@ export default function Index() {
   const actionResponse = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== 'idle';
+  const [resendOnCooldown, setResendOnCooldown] = useState(!!actionResponse?.resent);
+
+  useEffect(() => {
+    if (!actionResponse?.resent) {
+      return;
+    }
+
+    const timeout = setTimeout(() => setResendOnCooldown(false), RESEND_COOLDOWN_MS);
+
+    return () => clearTimeout(timeout);
+  }, [actionResponse?.resent]);
 
   return (
     <Main style={{ flex: 1 }}>
@@ -161,6 +184,30 @@ export default function Index() {
                         data-cy="TextNotification: failure"
                       >
                         {actionResponse.error}
+                      </div>
+                    )}
+
+                    {actionResponse?.emailNotConfirmed && (
+                      <div
+                        className="flex w-full flex-col items-start gap-3 rounded-sm bg-muted px-3 py-2 text-sm"
+                        data-cy="email-not-confirmed"
+                      >
+                        <p>
+                          {actionResponse.resent
+                            ? FRIENDLY_MESSAGES['auth/confirmation-resent']
+                            : FRIENDLY_MESSAGES['auth/email-not-confirmed']}
+                        </p>
+                        <Button
+                          data-cy="resend-confirmation"
+                          variant="outline"
+                          size="sm"
+                          type="submit"
+                          name="intent"
+                          value="resend-confirmation"
+                          disabled={isSubmitting || resendOnCooldown}
+                        >
+                          Resend confirmation email
+                        </Button>
                       </div>
                     )}
 

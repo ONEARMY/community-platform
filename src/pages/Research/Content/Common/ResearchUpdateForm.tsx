@@ -1,5 +1,5 @@
 import { FormApi } from 'node_modules/final-form/dist';
-import { Button, ConfirmModal } from 'oa-components';
+import { Button } from 'oa-components';
 import type { ResearchItem, ResearchUpdateFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
@@ -7,6 +7,7 @@ import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast/useToast';
 import { logger } from 'src/logger';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { FilesFields } from '../../../common/FormFields/FilesFields';
 import { buttons, headings, updateForm } from '../../labels';
 import { researchService } from '../../research.service';

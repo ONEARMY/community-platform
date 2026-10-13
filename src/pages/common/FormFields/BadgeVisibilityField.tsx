@@ -29,10 +29,12 @@ export const BadgeVisibilityField = ({
         return;
       }
 
-      const selectBadges = badges.map((badge) => ({
-        value: badge.id.toString(),
-        label: badge.displayName,
-      }));
+      const selectBadges = badges
+        .filter((badge) => badge.isAudience !== false)
+        .map((badge) => ({
+          value: badge.id.toString(),
+          label: badge.displayName,
+        }));
       setProfileBadges([
         ...(showPublicBadge ? [{ value: null, label: 'Public' }] : []),
         ...selectBadges,

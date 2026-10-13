@@ -5,8 +5,8 @@ import type { IDBDocSB, IDoc } from './document';
 
 export class DBComment implements IDBDocSB {
   readonly id: number;
-  readonly created_at: Date;
-  readonly modified_at: Date | null;
+  readonly created_at: string;
+  readonly modified_at: string | null;
   readonly created_by: number | null;
   readonly deleted: boolean;
 
@@ -70,6 +70,12 @@ export type DBAdminComment = Pick<
 > & {
   readonly deleted: boolean | null;
   readonly profile: Pick<DBAuthor, 'username' | 'display_name'> | null;
+};
+
+export type DBAdminCommentsPage = {
+  comments: (DBAdminComment & { notification_count: number; live_url: string | null })[];
+  page: number;
+  total_pages: number;
 };
 
 export type AdminCommentAuthor = Pick<Author, 'username' | 'displayName'>;

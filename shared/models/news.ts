@@ -15,11 +15,11 @@ import type { Tag } from './tag';
 
 export class DBNews implements IDBContentDoc {
   readonly id: number;
-  readonly created_at: Date;
-  readonly modified_at: Date | null;
-  readonly published_at: Date | null;
+  readonly created_at: string;
+  readonly modified_at: string | null;
+  readonly published_at: string | null;
   readonly author?: DBAuthor;
-  readonly comment_count?: number;
+  readonly comment_count?: number | null;
   readonly category: DBCategory | null;
   readonly category_id?: number;
   readonly created_by: number | null;
@@ -27,12 +27,12 @@ export class DBNews implements IDBContentDoc {
   is_draft: boolean | null;
   readonly subscriber_count?: number;
   readonly title: string;
-  readonly total_views?: number;
-  readonly previous_slugs: string[];
+  readonly total_views?: number | null;
+  readonly previous_slugs: string[] | null;
   readonly profile_badges: { profile_badges: DBProfileBadge }[] | null;
   readonly slug: string;
   readonly summary: string | null;
-  readonly tags: number[];
+  readonly tags: number[] | null;
   readonly useful_count?: number;
   /**
    * @deprecated Legacy Markdown source from the pre-Tiptap editor. Every row is expected
@@ -47,6 +47,8 @@ export class DBNews implements IDBContentDoc {
   readonly hero_image: DBMedia | null;
   readonly content_reach: ContentReach | null;
   readonly poll: number | null;
+  readonly is_locked?: boolean;
+  readonly cta_badge_id?: number | null;
 
   static toFormData(news: DBNews, publicHeroImage: Image | null, poll: PollDTO | null) {
     const profileBadges = news.profile_badges?.map((pb) => pb.profile_badges.id.toString()) || null;
@@ -68,7 +70,7 @@ export class DBNews implements IDBContentDoc {
       heroImage:
         news.hero_image && publicHeroImage ? { ...news.hero_image, ...publicHeroImage } : null,
       profileBadges,
-      tags: news.tags,
+      tags: news.tags ?? undefined,
       title: news.title,
       contentReach: (contentReachOption?.value || null) as ContentReach,
       poll,
@@ -107,6 +109,8 @@ export class News implements IContentDoc {
   usefulCount: number;
   contentReach: ContentReach | null;
   poll: PollDTO | null;
+  isLocked: boolean;
+  ctaBadgeId: number | null;
 
   constructor(news: Partial<News>) {
     Object.assign(this, news);
@@ -143,18 +147,20 @@ export class News implements IContentDoc {
       heroImage: heroImage || null,
       modifiedAt: news.modified_at ? new Date(news.modified_at) : null,
       profileBadges,
-      previousSlugs: news.previous_slugs,
+      previousSlugs: news.previous_slugs ?? undefined,
       publishedAt: news.published_at ? new Date(news.published_at) : null,
       slug: news.slug,
       subscriberCount: news.subscriber_count || 0,
       summary: news.summary || null,
-      tagIds: news.tags,
+      tagIds: news.tags ?? undefined,
       tags,
       title: news.title,
       totalViews: news.total_views || 0,
       usefulCount: news.useful_count || 0,
       contentReach: news.content_reach || null,
       poll: poll,
+      isLocked: news.is_locked || false,
+      ctaBadgeId: news.cta_badge_id || null,
     });
   }
 }
@@ -182,3 +188,66 @@ export type NewsDTO = {
   contentReach: ContentReach | null;
   poll?: PollDTO | null;
 };
+
+export class DBAdminNews {
+  readonly id: number;
+  readonly title: string;
+  readonly slug: string;
+  readonly category: DBCategory | null;
+  readonly tags: number[] | null;
+  readonly moderation: string | null;
+  readonly is_draft: boolean | null;
+  readonly published_at: string | Date | null;
+  readonly comment_count?: number;
+  readonly total_views?: number;
+  readonly poll: number | null;
+  readonly deleted: boolean | null;
+  readonly profiles: { display_name: string; username: string | null } | null;
+
+  constructor(news: Partial<DBAdminNews>) {
+    Object.assign(this, news);
+  }
+}
+
+export class AdminNews {
+  id: number;
+  title: string;
+  slug: string;
+  category: { id: number; name: string } | null;
+  tags: string[];
+  moderation: string | null;
+  isDraft: boolean;
+  publishedAt: Date | null;
+  commentCount: number;
+  totalViews: number;
+  hasPoll: boolean;
+  deleted: boolean;
+  authorDisplayName: string | null;
+  authorUserName: string | null;
+
+  constructor(news: Partial<AdminNews>) {
+    Object.assign(this, news);
+  }
+
+  static fromDB(obj: DBAdminNews, tagMap?: Map<number, string>) {
+    return new AdminNews({
+      id: obj.id,
+      title: obj.title,
+      slug: obj.slug,
+      category: obj.category ? { id: obj.category.id, name: obj.category.name } : null,
+      tags:
+        obj.tags && tagMap
+          ? (obj.tags.map((id) => tagMap.get(id)).filter(Boolean) as string[])
+          : [],
+      moderation: obj.moderation,
+      isDraft: obj.is_draft || false,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
+      commentCount: obj.comment_count || 0,
+      totalViews: obj.total_views || 0,
+      hasPoll: Boolean(obj.poll),
+      deleted: obj.deleted || false,
+      authorDisplayName: obj.profiles?.display_name || null,
+      authorUserName: obj.profiles?.username || null,
+    });
+  }
+}

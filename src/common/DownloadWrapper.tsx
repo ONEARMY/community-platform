@@ -1,4 +1,4 @@
-import { DownloadButton, DownloadStaticFile, ExternalLink } from 'oa-components';
+import { DownloadButton, DownloadStaticFile } from 'oa-components';
 import type { MediaFile } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -62,14 +62,16 @@ export const DownloadWrapper = (props: IProps) => {
                 alignItems: 'center',
               }}
             >
-              <ExternalLink
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
                 href={link}
                 onClick={() => setOpenModal(false)}
                 data-cy="DonationRequestSkip"
                 data-testid="DonationRequestSkip"
               >
                 <Button>Download</Button>
-              </ExternalLink>
+              </a>
             </Flex>
           </DonationRequestModalContainer>
 

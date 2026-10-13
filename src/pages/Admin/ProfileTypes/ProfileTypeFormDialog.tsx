@@ -1,0 +1,276 @@
+import { ImageOffIcon } from 'lucide-react';
+import type { ProfileType } from 'oa-shared';
+import { type FormEvent, useEffect, useState } from 'react';
+import { useRevalidator } from 'react-router';
+import { useToast } from 'src/common/Toast/useToast';
+import { ImagePickerDialog } from 'src/pages/common/ImagePicker/ImagePickerDialog';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { profileTypesService } from '@/services/profileTypesService';
+
+interface IProps {
+  open: boolean;
+  profileType: ProfileType | null;
+  onOpenChange: (open: boolean) => void;
+}
+
+const IS_SPACE_TYPE_OPTIONS: { value: boolean; label: string }[] = [
+  { value: true, label: 'Yes' },
+  { value: false, label: 'No' },
+];
+
+const emptyForm = {
+  name: '',
+  order: 0,
+  description: '',
+  mapPinName: '',
+  isSpace: false,
+  imageUrl: '',
+  smallImageUrl: '',
+};
+
+export function ProfileTypeFormDialog({ open, profileType, onOpenChange }: IProps) {
+  const [form, setForm] = useState(emptyForm);
+  const [submitting, setSubmitting] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [smallPickerOpen, setSmallPickerOpen] = useState(false);
+  const revalidator = useRevalidator();
+  const toast = useToast();
+
+  useEffect(() => {
+    if (open) {
+      setForm(
+        profileType
+          ? {
+              name: profileType.name ?? '',
+              order: profileType.order ?? 0,
+              description: profileType.description ?? '',
+              mapPinName: profileType.mapPinName ?? '',
+              isSpace: profileType.isSpace ?? false,
+              imageUrl: profileType.imageUrl ?? '',
+              smallImageUrl: profileType.smallImageUrl ?? '',
+            }
+          : emptyForm,
+      );
+    }
+  }, [open, profileType]);
+
+  const isEditing = !!profileType;
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!form.name.trim()) {
+      return;
+    }
+
+    const data = {
+      name: form.name.trim(),
+      order: form.order,
+      description: form.description.trim() || null,
+      mapPinName: form.mapPinName.trim() || null,
+      isSpace: form.isSpace || false,
+      imageUrl: form.imageUrl.trim() || null,
+      smallImageUrl: form.smallImageUrl.trim() || null,
+    };
+
+    setSubmitting(true);
+
+    const promise = (
+      isEditing
+        ? profileTypesService.updateProfileType(profileType!.id, data)
+        : profileTypesService.createProfileType(data)
+    ).finally(() => setSubmitting(false));
+
+    toast.promise(promise, {
+      loading: isEditing ? 'Saving profile type...' : 'Creating profile type...',
+      success: () => {
+        onOpenChange(false);
+        revalidator.revalidate();
+        return isEditing ? 'Profile type saved' : 'Profile type created';
+      },
+      error: (error) => error.message || 'Something went wrong',
+    });
+  };
+
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <DialogHeader>
+              <DialogTitle>{isEditing ? 'Edit profile type' : 'New profile type'}</DialogTitle>
+            </DialogHeader>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="profile-type-name">Name</Label>
+              <Input
+                id="profile-type-name"
+                value={form.name}
+                onChange={(event) => setForm((f) => ({ ...f, name: event.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="profile-type-name">Order</Label>
+              <Input
+                type="number"
+                id="profile-type-order"
+                value={form.order}
+                onChange={(event) =>
+                  setForm((f) => ({ ...f, order: parseInt(event.target.value) }))
+                }
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="profile-type-description">Description</Label>
+              <Textarea
+                id="profile-type-description"
+                value={form.description}
+                onChange={(event) => setForm((f) => ({ ...f, description: event.target.value }))}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="profile-type-map-pin-name">Map Pin Name</Label>
+              <Input
+                id="profile-type-map-pin-name"
+                value={form.mapPinName}
+                onChange={(event) => setForm((f) => ({ ...f, mapPinName: event.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="is-space">Is A Space</Label>
+              <Select
+                items={IS_SPACE_TYPE_OPTIONS}
+                value={form.isSpace}
+                onValueChange={(value) => setForm((f) => ({ ...f, isSpace: value as boolean }))}
+              >
+                <SelectTrigger id="is-space" className="w-full">
+                  <SelectValue placeholder="No" />
+                </SelectTrigger>
+                <SelectContent>
+                  {IS_SPACE_TYPE_OPTIONS.map((option) => (
+                    <SelectItem key={option.label} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>Image</Label>
+              <div className="flex items-center gap-3">
+                {form.imageUrl ? (
+                  <img src={form.imageUrl} alt="" className="size-16 rounded-md object-contain" />
+                ) : (
+                  <div className="flex size-16 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    <ImageOffIcon className="size-5" />
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPickerOpen(true)}
+                  >
+                    Choose image
+                  </Button>
+                  {form.imageUrl && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setForm((f) => ({ ...f, imageUrl: '' }))}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>Small Image</Label>
+              <div className="flex items-center gap-3">
+                {form.smallImageUrl ? (
+                  <img
+                    src={form.smallImageUrl}
+                    alt=""
+                    className="size-16 rounded-md object-contain"
+                  />
+                ) : (
+                  <div className="flex size-16 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    <ImageOffIcon className="size-5" />
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSmallPickerOpen(true)}
+                  >
+                    Choose image
+                  </Button>
+                  {form.smallImageUrl && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setForm((f) => ({ ...f, smallImageUrl: '' }))}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button type="submit" disabled={submitting}>
+                {isEditing ? 'Save' : 'Create'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <ImagePickerDialog
+        open={pickerOpen}
+        path="categories"
+        onOpenChange={setPickerOpen}
+        onSelect={(url) => setForm((f) => ({ ...f, imageUrl: url }))}
+      />
+      <ImagePickerDialog
+        open={smallPickerOpen}
+        path="categories"
+        onOpenChange={setSmallPickerOpen}
+        onSelect={(url) => setForm((f) => ({ ...f, smallImageUrl: url }))}
+      />
+    </>
+  );
+}

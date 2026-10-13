@@ -1,7 +1,6 @@
 import type { MediaFile } from 'oa-shared';
 import { Flex, Text } from 'theme-ui';
 import { DownloadButton } from '../DownloadButton/DownloadButton';
-import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -79,14 +78,16 @@ export const DownloadStaticFile = (props: IProps) => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       {forDownload && (
-        <ExternalLink
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
           onClick={() => handleClick && handleClick()}
           href={file.url}
           download={file.name}
-          sx={{ width: '300px', marginLeft: 0, marginRight: 1 }}
+          style={{ width: '300px', marginLeft: 0, marginRight: 1 }}
         >
           <FileDetails name={file.name} glyph="download-cloud" size={size} />
-        </ExternalLink>
+        </a>
       )}
 
       <DownloadButton

@@ -8,7 +8,7 @@ export interface IProps extends BoxProps {
 }
 
 export const CardButton = (props: IProps) => {
-  const { children, extrastyles, isSelected } = props;
+  const { children, extrastyles, isSelected, ...rest } = props;
 
   return (
     <Card
@@ -46,7 +46,7 @@ export const CardButton = (props: IProps) => {
           : {}),
         ...extrastyles,
       }}
-      {...props}
+      {...rest}
     >
       {children}
     </Card>

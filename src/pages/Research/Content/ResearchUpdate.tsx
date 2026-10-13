@@ -1,4 +1,4 @@
-import { AuthorDisplay, Button, DisplayDate, ImageGallery, Tooltip } from 'oa-components';
+import { AuthorDisplay, Button, ImageGallery } from 'oa-components';
 import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 import { useMemo } from 'react';
 import { Link } from 'react-router';
@@ -7,7 +7,9 @@ import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
+import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { VideoPlayer } from '@/components/ui/video-player';
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
 
@@ -50,19 +52,21 @@ const ResearchUpdate = (props: IProps) => {
       }}
     >
       {update.isDraft && (
-        <>
-          <Button
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                sx={{ alignSelf: 'flex-start', backgroundColor: 'softblue' }}
+                variant="subtle"
+                small
+              />
+            }
             data-cy="DraftUpdateLabel"
-            data-tooltip-id="visible-tooltip"
-            data-tooltip-content="Only visible to you (and other collaborators)"
-            sx={{ alignSelf: 'flex-start', backgroundColor: 'softblue' }}
-            variant="subtle"
-            small
           >
             Draft Update
-          </Button>
-          <Tooltip id="visible-tooltip" />
-        </>
+          </TooltipTrigger>
+          <TooltipContent>Only visible to you (and other collaborators)</TooltipContent>
+        </Tooltip>
       )}
 
       <Flex

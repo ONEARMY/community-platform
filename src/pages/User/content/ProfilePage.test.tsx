@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { render } from '@testing-library/react';
-import { UpgradeBadge } from 'oa-shared';
+import { ProfileBadge } from 'oa-shared';
 import { MemoryRouter } from 'react-router';
 import { FactoryUser } from 'src/test/factories/User';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -24,21 +24,16 @@ vi.mock('./UserProfile', () => ({
   UserProfile: () => null,
 }));
 
-const upgradeBadge = UpgradeBadge.fromDB({
+const upgradeBadge = ProfileBadge.fromDB({
   id: 1,
-  tenant_id: 'test-tenant',
-  badge_id: 1,
-  is_space: true,
+  name: 'pro',
+  display_name: 'PRO',
+  image_url: 'https://example.com/badge.png',
+  action_url: 'https://example.com/pro',
+  premium_tier: 1,
+  is_audience: true,
+  available_to: 'space',
   action_label: 'Go PRO',
-  action_url: 'https://example.com',
-  badge: {
-    id: 1,
-    name: 'pro',
-    display_name: 'PRO',
-    image_url: 'https://example.com/badge.png',
-    action_url: 'https://example.com',
-    premium_tier: 1,
-  },
 });
 
 const docs = { projects: [], research: [], questions: [] };
@@ -65,6 +60,8 @@ describe('ProfilePage upgrade badge', () => {
 
     const link = document.querySelector('[data-cy="UpgradeBadge"]');
     expect(link).toHaveTextContent('Go PRO');
+    expect(link).toHaveAttribute('href', 'https://example.com/pro');
+    expect(link?.querySelector('img')).toHaveAttribute('src', 'https://example.com/badge.png');
   });
 
   it('hides the upgrade button on another profile', () => {

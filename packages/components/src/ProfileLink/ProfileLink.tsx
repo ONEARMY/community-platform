@@ -1,6 +1,5 @@
 import type { ThemeUICSSObject } from 'theme-ui';
 import { Box, Flex } from 'theme-ui';
-import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
 
 export interface Props {
@@ -22,9 +21,16 @@ export const ProfileLink = (props: Props) => {
       <Box>
         <Icon glyph="website" size={22} />
       </Box>
-      <ExternalLink marginLeft={2} color="black" data-cy="profile-website" href={props.url}>
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        className="ml-2 hover:underline"
+        color="black"
+        data-cy="profile-website"
+        href={props.url}
+      >
         {props.url}
-      </ExternalLink>
+      </a>
     </Flex>
   );
 };

@@ -39,7 +39,7 @@ const invoiceEvent = (
       amount_paid: 1000,
       amount_due: 1000,
       lines: {
-        data: [{ pricing: { price_details: { product: 'prod_legend', price: 'price_1' } } }],
+        data: [{ pricing: { price_details: { product: 'prod_boost', price: 'price_1' } } }],
       },
       ...overrides,
     },
@@ -77,7 +77,7 @@ describe('notifyMembershipEvent', () => {
     });
     vi.spyOn(StripeServiceServer, 'getPriceInterval').mockResolvedValue('month');
 
-    vi.mocked(stripeService.getTierNameForProduct).mockResolvedValue('Legend');
+    vi.mocked(stripeService.getTierNameForProduct).mockResolvedValue('Boost');
     vi.mocked(stripeService.getProfileIdentityByStripeCustomerId).mockResolvedValue(null);
   });
 
@@ -121,7 +121,7 @@ describe('notifyMembershipEvent', () => {
     it('reports the name, tier and amount paid', async () => {
       await notify(invoiceEvent('invoice.payment_succeeded', 'subscription_create'));
 
-      expect(lastMessage()).toContain('Michael is now a new Legend Supporter (€10)');
+      expect(lastMessage()).toContain('Michael is now a new Boost Supporter (€10)');
     });
 
     it('reads the amount actually paid, not the amount due', async () => {
@@ -182,7 +182,7 @@ describe('notifyMembershipEvent', () => {
     it('reports the billing interval from the price', async () => {
       await notify(invoiceEvent('invoice.payment_succeeded', 'subscription_cycle'));
 
-      expect(lastMessage()).toBe('Michael paid their monthly Legend membership (€10)');
+      expect(lastMessage()).toBe('Michael paid their monthly Boost membership (€10)');
     });
 
     it('drops the interval when the price is not a plain recurring one', async () => {
@@ -190,7 +190,7 @@ describe('notifyMembershipEvent', () => {
 
       await notify(invoiceEvent('invoice.payment_succeeded', 'subscription_cycle'));
 
-      expect(lastMessage()).toBe('Michael paid their Legend membership (€10)');
+      expect(lastMessage()).toBe('Michael paid their Boost membership (€10)');
     });
 
     it('does not link anywhere', async () => {
@@ -210,7 +210,7 @@ describe('notifyMembershipEvent', () => {
       );
 
       expect(lastMessage()).toBe(
-        `Michael had a failed payment for their Legend membership (€10)\n<${STRIPE_CUSTOMER_URL}>`,
+        `Michael had a failed payment for their Boost membership (€10)\n<${STRIPE_CUSTOMER_URL}>`,
       );
     });
   });
@@ -269,18 +269,18 @@ describe('notifyMembershipEvent', () => {
   describe('a tier change', () => {
     const upgrade = subscriptionEvent(
       'customer.subscription.updated',
-      { items: { data: [{ price: { product: 'prod_hero' } }] } },
-      { items: { data: [{ price: { product: 'prod_legend' } }] } },
+      { items: { data: [{ price: { product: 'prod_power' } }] } },
+      { items: { data: [{ price: { product: 'prod_boost' } }] } },
     );
 
     it('names the tier on each side of the switch', async () => {
       vi.mocked(stripeService.getTierNameForProduct).mockImplementation(async (productId) =>
-        productId === 'prod_hero' ? 'Hero' : 'Legend',
+        productId === 'prod_power' ? 'Power' : 'Boost',
       );
 
       await notify(upgrade);
 
-      expect(lastMessage()).toBe('Michael changed their membership from Legend to Hero');
+      expect(lastMessage()).toBe('Michael changed their membership from Boost to Power');
     });
 
     it('stays quiet rather than naming a tier it cannot resolve', async () => {
@@ -295,8 +295,8 @@ describe('notifyMembershipEvent', () => {
       await notify(
         subscriptionEvent(
           'customer.subscription.updated',
-          { items: { data: [{ price: { product: 'prod_legend' } }] } },
-          { items: { data: [{ price: { product: 'prod_legend' } }] } },
+          { items: { data: [{ price: { product: 'prod_boost' } }] } },
+          { items: { data: [{ price: { product: 'prod_boost' } }] } },
         ),
       );
 

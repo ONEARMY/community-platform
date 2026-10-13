@@ -37,7 +37,8 @@ describe('BanUserButton', () => {
     (global.fetch as any).mockClear();
   });
 
-  it('should show disabled button with tooltip when viewing own profile', () => {
+  it('should show disabled button with tooltip when viewing own profile', async () => {
+    const user = userEvent.setup();
     const currentUser = FactoryUser({
       username: 'testuser',
       roles: [UserRole.ADMIN],
@@ -50,8 +51,13 @@ describe('BanUserButton', () => {
 
     render(<BanUserButton profile={currentUser as any} />);
     const button = screen.getByTestId('BanUserButton');
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-disabled', 'true');
+
+    await user.tab();
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Cannot ban your own profile');
+
+    await user.click(button);
+    expect(screen.queryByText('Ban User - This action will:')).not.toBeInTheDocument();
   });
 
   it('should not render when user lacks permission', () => {
@@ -98,7 +104,7 @@ describe('BanUserButton', () => {
     render(<BanUserButton profile={targetUser as any} />);
     const button = screen.getByTestId('BanUserButton');
     expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('should render button when admin views regular user', () => {

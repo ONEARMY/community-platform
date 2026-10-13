@@ -84,24 +84,24 @@ describe('deletionIsWorthAnnouncing', () => {
 
 describe('tierChange', () => {
   it('reports the products either side of a switch', () => {
-    const changes = { items: { data: [{ price: { product: 'prod_hero' } }] } };
+    const changes = { items: { data: [{ price: { product: 'prod_power' } }] } };
 
-    expect(tierChange(subscriptionOn('prod_legend'), changes)).toEqual({
-      from: 'prod_hero',
-      to: 'prod_legend',
+    expect(tierChange(subscriptionOn('prod_boost'), changes)).toEqual({
+      from: 'prod_power',
+      to: 'prod_boost',
     });
   });
 
   it('ignores an update that did not touch the product', () => {
-    const changes = { items: { data: [{ price: { product: 'prod_hero' } }] } };
+    const changes = { items: { data: [{ price: { product: 'prod_power' } }] } };
 
-    expect(tierChange(subscriptionOn('prod_hero'), changes)).toBeNull();
+    expect(tierChange(subscriptionOn('prod_power'), changes)).toBeNull();
   });
 
   it('returns null when Stripe omits the previous items', () => {
-    expect(tierChange(subscriptionOn('prod_hero'), {})).toBeNull();
-    expect(tierChange(subscriptionOn('prod_hero'), undefined)).toBeNull();
-    expect(tierChange(subscriptionOn('prod_hero'), { items: { data: [] } })).toBeNull();
+    expect(tierChange(subscriptionOn('prod_power'), {})).toBeNull();
+    expect(tierChange(subscriptionOn('prod_power'), undefined)).toBeNull();
+    expect(tierChange(subscriptionOn('prod_power'), { items: { data: [] } })).toBeNull();
   });
 });
 

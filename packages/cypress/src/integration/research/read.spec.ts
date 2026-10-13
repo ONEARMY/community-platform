@@ -28,7 +28,6 @@ describe('[Research]', () => {
         cy.contains(`${MOCK_DATA.research.filter((r) => !r.deleted && !r.is_draft).length} ${label}`);
 
         cy.step('Can search for items');
-        cy.wait(2000);
         cy.get('[data-cy=research-search-box]').click().type('qwerty');
         cy.get('[data-cy=ResearchListItem]').its('length').should('be.eq', 2);
 
@@ -42,9 +41,9 @@ describe('[Research]', () => {
           cy.get('[data-cy=category]').contains('Machines');
           cy.get('a').should('have.attr', 'href').and('eq', researchUrl);
           cy.get('[data-cy=ItemResearchStatus]').contains('In Progress');
-          cy.get('[data-tooltip-content="How useful is it"]');
-          cy.get('[data-tooltip-content="Total comments"]');
-          cy.get('[data-tooltip-content="Amount of updates"]');
+          cy.get('[data-cy=ItemUsefulText]');
+          cy.get('[data-cy=ItemCommentText]');
+          cy.get('[data-cy=ItemUpdateText]');
         });
 
         cy.step('Can clear search');
@@ -77,7 +76,6 @@ describe('[Research]', () => {
       it('[Visible to everyone]', () => {
         cy.step('Can visit research');
         cy.visit(researchArticleUrl);
-        cy.wait(1000);
 
         cy.title().should('eq', `${article.title} - Research - Test Site`);
 

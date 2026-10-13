@@ -1,18 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { loader } from 'src/routes/_.admin.comments';
 
-const mocks = vi.hoisted(() => ({ getAdminPage: vi.fn(), getSettings: vi.fn() }));
+const mocks = vi.hoisted(() => ({ getAdminPage: vi.fn() }));
 vi.mock('src/repository/supabase.server', () => ({
   createSupabaseServerClient: () => ({ client: {} }),
 }));
 vi.mock('src/services/commentService.server', () => ({
   CommentServiceServer: class {
     getAdminPage = mocks.getAdminPage;
-  },
-}));
-vi.mock('src/services/tenantSettingsService.server', () => ({
-  TenantSettingsService: class {
-    get = mocks.getSettings;
   },
 }));
 vi.mock('src/pages/Admin/Comments/CommentsPage', () => ({ CommentsPage: () => null }));
@@ -22,20 +17,19 @@ const load = (search = '') =>
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.getSettings.mockResolvedValue({ supportedModules: 'questions' });
   mocks.getAdminPage.mockResolvedValue({ comments: [], page: 1, totalPages: 3 });
 });
 
 describe('admin comments page URL', () => {
   it('loads page one without redirecting when the page parameter is absent', async () => {
     expect(await load('?keep=x')).toEqual({ comments: [], page: 1, totalPages: 3 });
-    expect(mocks.getAdminPage).toHaveBeenCalledWith(1, 'questions');
+    expect(mocks.getAdminPage).toHaveBeenCalledWith(1);
   });
 
   it('returns a valid canonical page without redirecting', async () => {
     mocks.getAdminPage.mockResolvedValue({ comments: [], page: 2, totalPages: 3 });
     expect(await load('?page=2&keep=x')).toEqual({ comments: [], page: 2, totalPages: 3 });
-    expect(mocks.getAdminPage).toHaveBeenCalledWith(2, 'questions');
+    expect(mocks.getAdminPage).toHaveBeenCalledWith(2);
   });
 
   it('removes duplicate page values while preserving unrelated repeated parameters', async () => {
@@ -48,7 +42,7 @@ describe('admin comments page URL', () => {
     expect(url.pathname).toBe('/admin/comments');
     expect(url.searchParams.getAll('page')).toEqual(['2']);
     expect(url.searchParams.getAll('keep')).toEqual(['x', 'y']);
-    expect(mocks.getAdminPage).toHaveBeenCalledWith(2, 'questions');
+    expect(mocks.getAdminPage).toHaveBeenCalledWith(2);
   });
 
   it.each([
@@ -59,6 +53,7 @@ describe('admin comments page URL', () => {
     ['02', 2, 2],
     ['2.5', 2, 2],
     ['999', 999, 3],
+    ['999999999999999999999999', Number.MAX_SAFE_INTEGER, 3],
   ])('canonicalizes page=%s to the effective page', async (rawPage, requestedPage, effectivePage) => {
     mocks.getAdminPage.mockResolvedValue({ comments: [], page: effectivePage, totalPages: 3 });
     const result = await load(`?page=${rawPage}&keep=x`);
@@ -66,6 +61,6 @@ describe('admin comments page URL', () => {
     expect((result as Response).headers.get('Location')).toBe(
       `/admin/comments?page=${effectivePage}&keep=x`,
     );
-    expect(mocks.getAdminPage).toHaveBeenCalledWith(requestedPage, 'questions');
+    expect(mocks.getAdminPage).toHaveBeenCalledWith(requestedPage);
   });
 });

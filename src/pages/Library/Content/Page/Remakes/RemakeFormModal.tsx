@@ -1,4 +1,4 @@
-import { Button, ConfirmModal, Icon, ImageInputV2, Modal, Username } from 'oa-components';
+import { Button, Icon, ImageInputV2, Modal, Username } from 'oa-components';
 import type { MediaWithPublicUrl, Project, Remake } from 'oa-shared';
 import { DBMedia, REMAKE_MAX_DESCRIPTION_LENGTH, REMAKE_MAX_IMAGES } from 'oa-shared';
 import { useMemo, useState } from 'react';
@@ -8,6 +8,7 @@ import { ImageInputFieldWrapper } from 'src/pages/common/FormFields/ImageInputFi
 import { remakeService } from 'src/services/remakeService';
 import { storageService } from 'src/services/storageService';
 import { Box, Flex, Image, Spinner, Text, Textarea } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { REMAKE_DELETE_CONFIRM_MESSAGE } from './constants';
 
 interface IProps {

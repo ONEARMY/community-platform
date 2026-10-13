@@ -1,12 +1,13 @@
 import type { LatLngBounds, Map as LeafletMap, Marker } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import {
   HEADER_HEIGHT_DESKTOP,
   HEADER_HEIGHT_MOBILE,
   MOBILE_NAV_HEIGHT,
 } from 'src/pages/common/Header/navLayout';
+import { SessionContext } from 'src/pages/common/SessionContext';
 import { Box, Flex } from 'theme-ui';
 import { MapList } from './Content/MapView/MapList';
 import { MapView } from './Content/MapView/MapView.client';
@@ -19,6 +20,7 @@ import './styles.css';
 const MapsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isLoggedIn = !!useContext(SessionContext)?.sub;
 
   const [boundaries, setBoundaries] = useState<LatLngBounds | null>(null);
   const [allPins, setAllPins] = useState<MapPin[] | null>(null);
@@ -137,7 +139,7 @@ const MapsPage = () => {
         const [pins, filters, userPin] = await Promise.all([
           mapPinService.getMapPins(),
           mapPinService.getMapFilters(),
-          mapPinService.getCurrentUserMapPin(),
+          isLoggedIn ? mapPinService.getCurrentUserMapPin() : null,
         ]);
         let pinsToSet: MapPin[] = [];
         if (pins) {

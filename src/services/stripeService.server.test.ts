@@ -79,7 +79,7 @@ const makeClient = (tierRows: unknown[]): SupabaseClient =>
 const activeTierRows = [
   {
     stripe_product_id: 'prod_active',
-    profile_badges: { premium_tier: 1, display_name: 'Starter' },
+    profile_badges: { premium_tier: 1, display_name: 'Start' },
   },
   {
     stripe_product_id: 'prod_archived',

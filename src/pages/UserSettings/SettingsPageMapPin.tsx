@@ -1,6 +1,6 @@
 import type { DivIcon, Map as LeafletMap } from 'leaflet';
 import { observer } from 'mobx-react';
-import { Button, ConfirmModal, FlagIcon, Icon, MapWithPin, ModerationRecord } from 'oa-components';
+import { Button, FlagIcon, Icon, MapWithPin, ModerationRecord } from 'oa-components';
 import type { ILatLng, MapPin } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Field, Form } from 'react-final-form';
@@ -12,6 +12,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { getLocationData } from 'src/utils/getLocationData';
 import { Card, Flex, Heading, Text } from 'theme-ui';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
 import { mapPinService } from '../Maps/map.service';
 

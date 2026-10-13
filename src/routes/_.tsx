@@ -51,6 +51,29 @@ export default function Index() {
   return (
     <TenantContext.Provider value={tenantSettings}>
       <SessionContext.Provider value={claims}>
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <>
+              <style>
+                {`
+                  [data-sonner-toast] [data-icon] {
+                    display: none !important;
+                  }
+                `}
+              </style>
+              <Toaster
+                position="bottom-center"
+                expand={true}
+                richColors={false}
+                closeButton={false}
+                toastOptions={{
+                  unstyled: true,
+                  duration: 4000,
+                }}
+              />
+            </>
+          )}
+        </ClientOnly>
         <ProfileStoreProvider key={claims?.sub ?? 'anonymous'}>
           <SubscriptionStoreProvider>
             <UsefulVoteStoreProvider>
@@ -65,29 +88,6 @@ export default function Index() {
                 <Analytics />
                 <Header />
                 <Alerts />
-                <ClientOnly fallback={<></>}>
-                  {() => (
-                    <>
-                      <style>
-                        {`
-                          [data-sonner-toast] [data-icon] {
-                            display: none !important;
-                          }
-                        `}
-                      </style>
-                      <Toaster
-                        position="bottom-center"
-                        expand={true}
-                        richColors={false}
-                        closeButton={false}
-                        toastOptions={{
-                          unstyled: true,
-                          duration: 4000,
-                        }}
-                      />
-                    </>
-                  )}
-                </ClientOnly>
 
                 <Outlet />
 

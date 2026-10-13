@@ -1,3 +1,4 @@
+import { CharacterCount } from '@/components/ui/character-count';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
@@ -30,15 +31,7 @@ export const TextareaField = ({
         className={cn(className)}
       />
       {showCharacterCount && maxLength && (
-        <p
-          data-cy="character-count"
-          className={cn(
-            'ml-auto text-sm text-muted-foreground',
-            currentLength >= maxLength && 'font-bold text-destructive',
-          )}
-        >
-          {currentLength} / {maxLength}
-        </p>
+        <CharacterCount current={currentLength} max={maxLength} />
       )}
     </div>
   );

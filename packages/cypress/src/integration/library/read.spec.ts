@@ -32,7 +32,7 @@ describe('[Library]', () => {
         // cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.get('[data-cy=Username]').contains(users.settings_workplace_new.username);
         cy.get('[data-cy=category]').contains('Machines');
-        cy.get('a').should('have.attr', 'href').and('eq', projectUrl);
+        cy.get('h2 a').should('have.attr', 'href').and('eq', projectUrl);
       });
 
       cy.step('Can clear search');
@@ -112,11 +112,7 @@ describe('[Library]', () => {
           //   .to.have.attr('src')
           //   .match(coverFileRegex)
         });
-        cy.wait(2000);
-        cy.get('[data-cy=tag-list]').then(($tagList) => {
-          expect($tagList).to.contain('product');
-          expect($tagList).to.contain('exhibition');
-        });
+        cy.get('[data-cy=tag-list]').should('contain', 'product').and('contain', 'exhibition');
         // cy.get('[data-cy=file-download-counter]').should(
         //   'contain',
         //   '1,234 downloads',

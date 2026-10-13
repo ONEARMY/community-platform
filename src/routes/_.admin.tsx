@@ -1,5 +1,5 @@
-import { ChevronRightIcon } from 'lucide-react';
 import { UserRole } from 'oa-shared';
+import { Fragment } from 'react';
 import type { MiddlewareFunction } from 'react-router';
 import { Outlet, useMatches } from 'react-router';
 import { requireRole } from 'src/middleware/requireRole.server';
@@ -7,6 +7,13 @@ import { sessionMiddleware } from 'src/middleware/session.server';
 import { AdminSidebar } from 'src/pages/Admin/AdminSidebar';
 import Main from 'src/pages/common/Layout/Main';
 import { ForbiddenPage } from 'src/pages/Forbidden/labels';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 interface AdminRouteHandle {
@@ -35,20 +42,25 @@ export default function AdminLayout() {
         <SidebarInset>
           <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger />
-            <nav className="flex items-center gap-1 text-sm">
-              {crumbs.map((crumb, index) => (
-                <span key={crumb} className="flex items-center gap-1">
-                  {index > 0 && <ChevronRightIcon className="size-4 text-muted-foreground" />}
-                  <span
-                    className={
-                      index === crumbs.length - 1 ? 'font-medium' : 'text-muted-foreground'
-                    }
-                  >
-                    {crumb}
-                  </span>
-                </span>
-              ))}
-            </nav>
+            <Breadcrumb>
+              <BreadcrumbList>
+                {crumbs.map((crumb, index) => {
+                  const isLast = index === crumbs.length - 1;
+                  return (
+                    <Fragment key={crumb}>
+                      <BreadcrumbItem>
+                        {isLast ? (
+                          <BreadcrumbPage>{crumb}</BreadcrumbPage>
+                        ) : (
+                          <span className="px-3 py-1 whitespace-nowrap">{crumb}</span>
+                        )}
+                      </BreadcrumbItem>
+                      {!isLast && <BreadcrumbSeparator />}
+                    </Fragment>
+                  );
+                })}
+              </BreadcrumbList>
+            </Breadcrumb>
           </header>
           <div className="flex-1 overflow-auto p-4">
             <Outlet />

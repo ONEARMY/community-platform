@@ -2,8 +2,9 @@ import styled from '@emotion/styled';
 import { Tab as BaseTab, tabClasses } from '@mui/base/Tab';
 import { TabsList as BaseTabsList } from '@mui/base/TabsList';
 import { prepareForSlot } from '@mui/base/utils';
-import { Icon, InternalLink, Select } from 'oa-components';
+import { Icon, Select } from 'oa-components';
 import { useMemo } from 'react';
+import { Link } from 'react-router';
 import { Flex } from 'theme-ui';
 
 import type { ISettingsTab } from './types';
@@ -92,7 +93,7 @@ export const SettingsFormTabList = (props: IProps) => {
                 to={route}
                 value={route}
                 data-cy={`tab-${title}`}
-                slots={{ root: prepareForSlot(InternalLink) }}
+                slots={{ root: prepareForSlot(Link) }}
               >
                 <Icon glyph={glyph} size={20} /> {title}
               </Tab>

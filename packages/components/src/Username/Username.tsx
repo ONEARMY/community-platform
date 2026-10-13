@@ -1,11 +1,12 @@
+import { ClassNames } from '@emotion/react';
 import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
+import { Link } from 'react-router';
 import type { ThemeUIStyleObject } from 'theme-ui';
-import { Flex, Text } from 'theme-ui';
+import { css, Flex, Text, useThemeUI } from 'theme-ui';
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg';
 import { FlagIcon } from '../FlagIcon/FlagIcon';
-import { InternalLink } from '../InternalLink/InternalLink';
 import { UserBadge } from './UserBadge';
 
 export interface IProps {
@@ -23,6 +24,7 @@ const getCountryCode = (country: string | undefined) => {
 };
 
 export const Username = (props: IProps) => {
+  const { theme } = useThemeUI();
   const { user, sx = {}, target = '_self', isLink = true } = props;
   const { username, badges } = user;
 
@@ -86,35 +88,19 @@ export const Username = (props: IProps) => {
   }
 
   return (
-    <InternalLink
-      to={`/u/${username}`}
-      target={target}
-      sx={{
-        border: '1px solid transparent',
-        display: 'inline-flex',
-        minWidth: 0,
-        paddingY: '3px',
-        borderRadius: 1,
-        marginLeft: -1,
-        color: 'black',
-        fontSize: 2,
-        maxWidth: '100%',
-        transition: '80ms ease-out all',
-        '&:focus': {
-          borderColor: '#20B7EB',
-          background: 'softblue',
-          outline: 'none',
-          color: 'bluetag',
-        },
-        '&:hover': {
-          borderColor: '#20B7EB',
-          background: 'softblue',
-          textcolor: 'bluetag',
-        },
-        ...sx,
-      }}
-    >
-      {UserNameBody}
-    </InternalLink>
+    <ClassNames>
+      {({ css: emotionCss, cx }) => (
+        <Link
+          to={`/u/${username}`}
+          target={target}
+          className={cx(
+            '-ml-1 inline-flex min-w-0 max-w-full rounded-s border border-transparent py-0.5 text-sm text-legacy-ink transition-all duration-75 hover:border-highlight hover:bg-softblue focus:border-highlight focus:bg-softblue focus:text-bluetag focus:outline-none',
+            emotionCss(css(sx)(theme)),
+          )}
+        >
+          {UserNameBody}
+        </Link>
+      )}
+    </ClassNames>
   );
 };

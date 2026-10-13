@@ -49,6 +49,9 @@
   --color-background: var(--background);
   --color-green: var(--green);
   --color-softblue: var(--softblue);
+  --color-legacy-ink: #1b1b1b;
+  --color-highlight: #20b7eb;
+  --color-bluetag: #5683b0;
   --color-highlight-hover: var(--highlight-hover);
   --color-outline: var(--outline);
   --color-footer: var(--footer);

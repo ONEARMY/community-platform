@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react';
-import { Button, InternalLink } from 'oa-components';
+import { Button } from 'oa-components';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { useMemo } from 'react';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -87,11 +88,11 @@ export const ProfilePage = observer((props: IProps) => {
                     </Button>
                   </a>
                 )}
-                <InternalLink to="/settings">
+                <Link to="/settings">
                   <Button type="button" data-cy="EditYourProfile">
                     Edit Your Profile
                   </Button>
-                </InternalLink>
+                </Link>
               </Flex>
             )}
             <Flex

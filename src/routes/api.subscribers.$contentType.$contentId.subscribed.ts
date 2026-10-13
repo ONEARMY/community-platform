@@ -12,8 +12,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { data } = await client
     .from('subscribers')
     .select('id, profiles!inner(id)')
-    .eq('content_id', params.contentId)
-    .eq('content_type', params.contentType)
+    .eq('content_id', Number(params.contentId))
+    .eq('content_type', params.contentType!)
     .eq('profiles.auth_id', claims.data.claims.sub);
 
   const subscribed = !!data && !(data.length === 0);

@@ -1,8 +1,8 @@
 // Base level for all content on supabase
 export interface IDBDocSB {
   readonly id: number;
-  readonly created_at: Date;
-  readonly modified_at: Date | null;
+  readonly created_at: string;
+  readonly modified_at: string | null;
 }
 
 export interface IDoc {

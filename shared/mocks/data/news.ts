@@ -34,7 +34,7 @@ export const news: Partial<DBNews>[] = [
     },
     category: null,
     comment_count: 2,
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
     deleted: false,
     // hero_image: {
     //   id: '30',
@@ -61,7 +61,7 @@ export const news: Partial<DBNews>[] = [
     },
     category: null,
     comment_count: 2,
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
     deleted: false,
     // hero_image: {
     //   id: '31',
@@ -88,7 +88,7 @@ export const news: Partial<DBNews>[] = [
     },
     category: null,
     comment_count: 2,
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
     deleted: false,
     // hero_image: {
     //   id: '32',

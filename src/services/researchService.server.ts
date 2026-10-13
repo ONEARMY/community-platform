@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   Author,
+  type Database,
   DBAuthor,
   DBResearchItem,
   DBResearchUpdate,
@@ -16,7 +17,7 @@ import { StorageServiceServer } from './storageService.server';
 type EditorProfile = { id: number; username: string | null; roles: string[] | null };
 
 export class ResearchServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getBySlug(slug: string) {
     const { data, error } = await this.client
@@ -224,8 +225,12 @@ export class ResearchServiceServer {
   }
 
   async getById(id: number) {
-    const result = await this.client.from('research').select().eq('id', id).single();
-    return result.data as DBResearchItem;
+    const result = await this.client
+      .from('research')
+      .select('*, category:categories(*)')
+      .eq('id', id)
+      .single();
+    return result.data;
   }
 
   async getUpdateById(id: number) {
@@ -237,7 +242,7 @@ export class ResearchServiceServer {
     const research = await this.getById(researchId);
     const researchUpdate = await this.getUpdateById(updateId);
 
-    if (research.id !== researchUpdate.research_id) {
+    if (!research || research.id !== researchUpdate.research_id) {
       return false;
     }
 

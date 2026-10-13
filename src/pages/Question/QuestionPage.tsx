@@ -1,12 +1,5 @@
 import { observer } from 'mobx-react';
-import {
-  AuthorDisplay,
-  Category,
-  ContentStatistics,
-  ImageGallery,
-  TagList,
-  UsefulStatsButton,
-} from 'oa-components';
+import { AuthorDisplay, Category, ContentStatistics, ImageGallery, TagList } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useMemo, useState } from 'react';
@@ -24,6 +17,7 @@ import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { UsefulButton } from '@/components/ui/useful-button';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { QuestionCommentSection } from './QuestionCommentSection';
 
@@ -145,7 +139,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
           <Box>
             <ClientOnly fallback={<></>}>
               {() => (
-                <UsefulStatsButton
+                <UsefulButton
                   hasUserVotedUseful={hasVoted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={toggleVote}

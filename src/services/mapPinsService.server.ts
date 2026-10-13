@@ -1,13 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import type { DBMapPin, MapPin } from 'oa-shared';
+import type { Database, DBMapPin, MapPin } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 
 const cache = new Keyv<MapPin[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export class MapPinsServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async get() {
     const cachedMappins = await cache.get('mappins');

@@ -1,6 +1,5 @@
-import { Category, ModerationStatus, Username } from 'oa-components';
+import { Category, InternalLink, ModerationStatus, Username } from 'oa-components';
 import { type Project, UserRole } from 'oa-shared';
-import { Link as RouterLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter, shortFormatNumber } from 'src/utils/helpers';
@@ -19,7 +18,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
 
   return (
     <Card data-cy="card">
-      <RouterLink to={`/library/${encodeURIComponent(item.slug)}`} style={{ display: 'block' }}>
+      <Box sx={{ position: 'relative' }}>
         <Flex
           sx={{
             background: 'background',
@@ -64,15 +63,28 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
         >
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
             <Heading as="h2" variant="small" color="black">
-              <Highlighter
-                searchWords={searchWords}
-                textToHighlight={capitalizeFirstLetter(item.title)}
-              />
+              <InternalLink
+                to={`/library/${encodeURIComponent(item.slug)}`}
+                sx={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    inset: 0,
+                  },
+                }}
+              >
+                <Highlighter
+                  searchWords={searchWords}
+                  textToHighlight={capitalizeFirstLetter(item.title)}
+                />
+              </InternalLink>
             </Heading>
 
             {item.author && (
               <Box>
-                <Username user={item.author} />
+                <Username user={item.author} sx={{ position: 'relative' }} />
               </Box>
             )}
           </Flex>
@@ -101,6 +113,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               sx={{
                 gap: 2,
                 justifyContent: 'flex-end',
+                position: 'relative',
               }}
             >
               <Tooltip>
@@ -128,7 +141,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
             </Flex>
           </Flex>
         </Flex>
-      </RouterLink>
+      </Box>
     </Card>
   );
 };

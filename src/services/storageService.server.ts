@@ -1,13 +1,13 @@
 import type { TransformOptions } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia } from 'oa-shared';
+import type { Database, DBMedia } from 'oa-shared';
 import { Image, MediaFile } from 'oa-shared';
 import sharp from 'sharp';
 import { logger } from 'src/logger';
 import { isGif } from 'src/utils/storage';
 
 export class StorageServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   getPublicUrl(image: DBMedia, size?: TransformOptions): Image | null {
     try {

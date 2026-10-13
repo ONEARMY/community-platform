@@ -1,5 +1,5 @@
-import { ConfirmModal } from 'oa-components';
 import { useBlocker } from 'react-router';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 
 const CONFIRM_DIALOG_MSG = 'You have unsaved changes. Are you sure you want to leave this page?';
 

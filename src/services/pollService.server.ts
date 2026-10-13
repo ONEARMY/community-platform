@@ -1,9 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import { conflictError, validationError } from '../utils/httpException';
 
 export class PollServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async createPoll(dto: PollDTO): Promise<number> {
     if (dto.id) {
@@ -23,7 +24,7 @@ export class PollServiceServer {
       .insert({
         title: dto.title,
         single_choice: dto.singleChoice,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select('id')
       .single();
@@ -37,7 +38,7 @@ export class PollServiceServer {
     const options = dto.options.map((option) => ({
       poll_id: pollId,
       description: option.description,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     }));
 
     const optionsResult = await this.client.from('poll_options').insert(options);
@@ -102,7 +103,7 @@ export class PollServiceServer {
         .update({
           description: option.description,
         })
-        .eq('id', option.id);
+        .eq('id', option.id!);
 
       if (updateOptionsResult.error) {
         throw updateOptionsResult.error;
@@ -116,7 +117,7 @@ export class PollServiceServer {
         newOptions.map((x) => ({
           poll_id: dto.id,
           description: x.description,
-          tenant_id: process.env.TENANT_ID,
+          tenant_id: process.env.TENANT_ID!,
         })),
       );
 
@@ -147,7 +148,7 @@ export class PollServiceServer {
   ): Promise<PollDTO | null> {
     const result = await this.client.rpc('get_poll_with_permissions', {
       p_poll_id: pollId,
-      p_profile_id: profileId,
+      p_profile_id: profileId ?? undefined,
       p_is_admin: isAdmin,
     });
 
@@ -205,16 +206,20 @@ export class PollServiceServer {
     const votes = optionIds.map((optionId) => ({
       poll_option_id: optionId,
       profile_id: profileId,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     }));
 
     const previousVotes = await this.client
       .from('poll_votes')
-      .select('*')
-      .eq('poll_id', pollId)
+      .select('id, poll_options!inner(poll_id)')
+      .eq('poll_options.poll_id', pollId)
       .eq('profile_id', profileId);
 
-    if ((previousVotes.data?.length ?? 0) > 0) {
+    if (previousVotes.error) {
+      throw previousVotes.error;
+    }
+
+    if (previousVotes.data.length > 0) {
       throw new Error('This user already voted for this poll');
     }
 

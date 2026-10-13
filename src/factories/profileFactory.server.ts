@@ -1,12 +1,18 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { AuthorVotes, DBProfile } from 'oa-shared';
+import type {
+  AuthorVotes,
+  Database,
+  DBProfile,
+  IUserImpact,
+  UserVisitorPreference,
+} from 'oa-shared';
 import { Profile, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { logger } from 'src/logger';
 import { ImageServiceServer } from 'src/services/imageService.server';
 
 export class ProfileFactory {
   private imageService: ImageServiceServer;
-  constructor(client: SupabaseClient) {
+  constructor(client: SupabaseClient<Database>) {
     this.imageService = new ImageServiceServer(client);
   }
 
@@ -18,15 +24,15 @@ export class ProfileFactory {
         ? this.imageService.getPublicUrls(dbProfile.cover_images)
         : null;
 
-    let impact = null;
-    let visitorPolicy = null;
+    let impact: IUserImpact | null = null;
+    let visitorPolicy: UserVisitorPreference | null = null;
 
     try {
       if (dbProfile.impact) {
         if (typeof dbProfile.impact === 'string') {
           impact = JSON.parse(dbProfile.impact);
         } else if (typeof dbProfile.impact === 'object') {
-          impact = dbProfile.impact;
+          impact = dbProfile.impact as unknown as IUserImpact;
         }
       }
     } catch (_) {
@@ -41,7 +47,7 @@ export class ProfileFactory {
           typeof dbProfile.impact === 'object' &&
           (dbProfile.visitor_policy as any)?.policy
         ) {
-          visitorPolicy = dbProfile.visitor_policy;
+          visitorPolicy = dbProfile.visitor_policy as UserVisitorPreference;
         }
       }
     } catch (_) {
@@ -51,7 +57,7 @@ export class ProfileFactory {
     return new Profile({
       id: dbProfile.id,
       createdAt: new Date(dbProfile.created_at),
-      country: dbProfile.country,
+      country: dbProfile.country ?? '',
       displayName: dbProfile.display_name,
       username: dbProfile.username,
       photo: dbProfile.photo && photo ? { ...dbProfile.photo, ...photo } : null,
@@ -73,7 +79,7 @@ export class ProfileFactory {
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
-      totalViews: dbProfile.total_views,
+      totalViews: dbProfile.total_views ?? 0,
       authorUsefulVotes: authorVotes,
       donationsEnabled: !!dbProfile.donations_enabled,
       moderation: dbProfile.moderation ?? null,

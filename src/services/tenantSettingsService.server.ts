@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import { PWAIcons, TenantSettings, UserRole } from 'oa-shared';
+import type { Database } from 'oa-shared';
+import { TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
 
@@ -22,7 +23,7 @@ export interface TenantSettingsInput {
 
 export class TenantSettingsService {
   constructor(
-    private client: SupabaseClient,
+    private client: SupabaseClient<Database>,
     private origin?: string,
   ) {}
 
@@ -50,23 +51,23 @@ export class TenantSettingsService {
       siteImage:
         data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
       noMessaging: data?.no_messaging || false,
-      academyResource: data?.academy_resource,
-      libraryHeading: data?.library_heading,
-      profileGuidelines: data?.profile_guidelines,
-      questionsGuidelines: data?.questions_guidelines,
-      supportedModules: data?.supported_modules,
-      hiddenModules: data?.hidden_modules,
-      colorPrimary: data?.color_primary,
-      colorPrimaryHover: data?.color_primary_hover,
-      colorAccent: data?.color_accent,
-      colorAccentHover: data?.color_accent_hover,
+      academyResource: data?.academy_resource ?? undefined,
+      libraryHeading: data?.library_heading ?? undefined,
+      profileGuidelines: data?.profile_guidelines ?? undefined,
+      questionsGuidelines: data?.questions_guidelines ?? undefined,
+      supportedModules: data?.supported_modules ?? undefined,
+      hiddenModules: data?.hidden_modules ?? undefined,
+      colorPrimary: data?.color_primary ?? undefined,
+      colorPrimaryHover: data?.color_primary_hover ?? undefined,
+      colorAccent: data?.color_accent ?? undefined,
+      colorAccentHover: data?.color_accent_hover ?? undefined,
       colorSecondary: data?.color_secondary ?? undefined,
-      showImpact: data?.show_impact,
+      showImpact: data?.show_impact ?? undefined,
       hasMembershipTiers,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
-      gaTrackingId: data?.ga_tracking_id,
-      membershipTerms: data?.membership_terms,
-      pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
+      gaTrackingId: data?.ga_tracking_id ?? undefined,
+      membershipTerms: data?.membership_terms ?? undefined,
+      pwaIcons: data?.pwa_icons ?? undefined,
       organisationSignupDescriptionHtml: data?.organisation_signup_description ?? undefined,
       organisationActivity: data?.organisation_activity ?? undefined,
       newsCtaTitle: data?.news_cta_title ?? undefined,
@@ -92,7 +93,7 @@ export class TenantSettingsService {
         news_cta_body: input.newsCtaBody,
         news_cta_image: input.newsCtaImageUrl,
       })
-      .eq('tenant_id', process.env.TENANT_ID);
+      .eq('tenant_id', process.env.TENANT_ID!);
 
     if (error) {
       throw error;

@@ -1,6 +1,5 @@
 import { Box, Button, Flex } from 'theme-ui';
 
-import { UsefulStatsButton } from '..';
 import { UserEngagementWrapper } from './UserEngagementWrapper';
 
 import type { Meta, StoryFn } from '@storybook/react-vite';
@@ -18,11 +17,7 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
           <Button sx={{ fontSize: 2 }} onClick={() => null}>
             Leave a comment
           </Button>
-          <UsefulStatsButton
-            hasUserVotedUseful={false}
-            isLoggedIn={false}
-            onUsefulClick={() => new Promise(() => {})}
-          />
+          <Button>Mark as useful</Button>
         </Flex>
       </Box>
     </UserEngagementWrapper>

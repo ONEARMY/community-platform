@@ -1,15 +1,15 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBNews } from 'oa-shared';
+import type { Database, DBMedia, DBNews } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { StorageServiceServer } from './storageService.server';
 
 export class NewsServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getById(id: number) {
     const result = await this.client
       .from('news')
-      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
+      .select('*, category:categories(*), profile_badges:news_badges_relations(profile_badges(*))')
       .eq('id', id)
       .single();
     return result.data as DBNews;
@@ -61,7 +61,7 @@ export class NewsServiceServer {
   async getAccess(newsId: number, profileId: number | null, isAdmin: boolean) {
     const { data } = await this.client
       .rpc('get_news_access', {
-        p_user_profile_id: profileId,
+        p_user_profile_id: profileId ?? undefined,
         p_is_admin: isAdmin,
         p_news_id: newsId,
       })

@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews, TenantSettings } from 'oa-shared';
+import type { Database, DBNews, TenantSettings } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs } from 'react-router';
@@ -86,7 +86,7 @@ function lockNews(dbNews: DBNews, ctaBadgeId: number): DBNews {
 }
 
 async function getNewsCta(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   tenantSettings: TenantSettings,
   badgeId: number,
 ): Promise<NewsCta> {
@@ -102,7 +102,7 @@ async function getNewsCta(
   };
 }
 
-async function loadNews(client: SupabaseClient, dbNews: DBNews) {
+async function loadNews(client: SupabaseClient<Database>, dbNews: DBNews) {
   const contentService = new ContentServiceServer(client);
   if (!dbNews.is_locked) {
     await contentService.incrementViewCount('news', dbNews.total_views, dbNews!.id);

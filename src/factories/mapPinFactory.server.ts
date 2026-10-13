@@ -1,11 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMapPin, DBPinProfile, PinProfile } from 'oa-shared';
+import type { Database, DBMapPin, DBPinProfile, PinProfile } from 'oa-shared';
 import { MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { ImageServiceServer } from 'src/services/imageService.server';
 
 export class MapPinFactory {
   private imageService: ImageServiceServer;
-  constructor(client: SupabaseClient) {
+  constructor(client: SupabaseClient<Database>) {
     this.imageService = new ImageServiceServer(client);
   }
 

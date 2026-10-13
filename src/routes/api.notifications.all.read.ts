@@ -25,10 +25,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .eq('auth_id', claims.data.claims.sub)
       .single();
 
-    await client
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('owned_by_id', profile?.data?.id);
+    if (!profile.data) {
+      return Response.json({}, { headers, status: 400, statusText: 'user not found' });
+    }
+
+    await client.from('notifications').update({ is_read: true }).eq('owned_by_id', profile.data.id);
 
     new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

@@ -1,10 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews, DBProfile, DBResearchUpdate, ResearchUpdate } from 'oa-shared';
+import type { Database, DBNews, DBProfile, DBResearchUpdate, ResearchUpdate } from 'oa-shared';
 import { discordServiceServer } from './discordService.server';
 import { NotificationsSupabaseServiceServer } from './notificationsSupabaseService.server';
 
 export class BroadcastCoordinationServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   news(dbNews: DBNews, profile: DBProfile | null, request: Request, oldDBNews?: DBNews) {
     const beforeCheck = oldDBNews ? !!oldDBNews.is_draft : true;

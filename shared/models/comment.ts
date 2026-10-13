@@ -5,8 +5,8 @@ import type { IDBDocSB, IDoc } from './document';
 
 export class DBComment implements IDBDocSB {
   readonly id: number;
-  readonly created_at: Date;
-  readonly modified_at: Date | null;
+  readonly created_at: string;
+  readonly modified_at: string | null;
   readonly created_by: number | null;
   readonly deleted: boolean;
 

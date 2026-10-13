@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Moderation } from 'oa-shared';
+import type { Database, Moderation } from 'oa-shared';
 import { createElement } from 'react';
 import { sendEmail } from 'src/.server/resend';
 import { OrganisationApplicationEmail } from 'src/.server/templates/organisation-application-email';
@@ -16,7 +16,7 @@ const SUBJECTS: Record<Moderation, string> = {
 
 type SendArgs = {
   authId: string | null;
-  client: SupabaseClient;
+  client: SupabaseClient<Database>;
   feedback: string | null;
   moderation: Moderation;
   requestOrigin: string;

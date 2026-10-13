@@ -9,10 +9,10 @@ export interface TagInput {
 export class TagsServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
 
-  async getTags(tagIds: number[]) {
+  async getTags(tagIds: number[] | null) {
     let tags: Tag[] = [];
 
-    if (tagIds?.length > 0) {
+    if (tagIds?.length) {
       const tagsResult = await this.client
         .from('tags')
         .select('id,name,created_at,modified_at')

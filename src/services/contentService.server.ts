@@ -1,12 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ContentType, IDBContentDoc } from 'oa-shared';
+import type { ContentType, Database, IDBContentDoc } from 'oa-shared';
 import { TagsServiceServer } from 'src/services/tagsService.server';
 
 type Slug = string;
 type Id = number;
 
 export class ContentServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getDraftCount(profileId: number, table: ContentType) {
     const { count } = await this.client
@@ -19,7 +19,7 @@ export class ContentServiceServer {
     return count;
   }
 
-  async getMetaFields(id: Id, table: ContentType, tagIds: number[]) {
+  async getMetaFields(id: Id, table: ContentType, tagIds: number[] | null) {
     return await Promise.all([
       this.client
         .from('useful_votes')
@@ -35,7 +35,7 @@ export class ContentServiceServer {
     ]);
   }
 
-  async incrementViewCount(table: ContentType, totalViews: number | undefined, id: Id) {
+  async incrementViewCount(table: ContentType, totalViews: number | null | undefined, id: Id) {
     return await this.client
       .from(table)
       .update({ total_views: (totalViews || 0) + 1 })

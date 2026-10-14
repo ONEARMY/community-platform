@@ -394,6 +394,16 @@ export class ProfileServiceServer {
             action_url,
             premium_tier
           )
+        ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
         )`,
       )
       .single();

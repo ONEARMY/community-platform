@@ -66,4 +66,14 @@ describe('MapServiceServer pin moderation', () => {
     expect(insertedModeration(mocks)).toBe('accepted');
   });
 
+  it('auto-accepts pins of any non-space profile type', async () => {
+    const { client, mocks } = createMockSupabaseClient();
+
+    await new MapServiceServer(client).upsert(
+      pin,
+      profileOf({ type: { name: 'maker', isSpace: false } as Profile['type'], moderation: null }),
+    );
+
+    expect(insertedModeration(mocks)).toBe('accepted');
+  });
 });

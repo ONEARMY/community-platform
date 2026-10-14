@@ -48,6 +48,7 @@ export const NewsMemberCta = ({ cta }: IProps) => (
       {cta.helpLink && (
         <Link
           to={cta.helpLink}
+          className="font-sans text-xs text-muted-foreground underline"
           onClick={() =>
             trackEvent({
               action: 'clickSupportHelp',

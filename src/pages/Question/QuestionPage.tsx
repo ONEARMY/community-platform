@@ -1,11 +1,5 @@
 import { observer } from 'mobx-react';
-import {
-  AuthorDisplay,
-  Category,
-  ContentStatistics,
-  ImageGallery,
-  TagList,
-} from 'oa-components';
+import { AuthorDisplay, Category, ContentStatistics, ImageGallery, TagList } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useMemo, useState } from 'react';

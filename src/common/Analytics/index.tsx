@@ -4,6 +4,7 @@ import { GoogleAnalytics } from './GoogleAnalytics';
 
 export type EventAction =
   | 'clickSupport'
+  | 'clickSupportHelp'
   | 'donationModalOpened'
   | 'unsubscribed'
   | 'subscribed'

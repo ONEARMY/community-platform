@@ -15,6 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     newsCtaTitle: settings.newsCtaTitle ?? null,
     newsCtaBody: settings.newsCtaBody ?? null,
     newsCtaImageUrl: settings.newsCtaImageUrl ?? null,
+    newsCtaHelpLink: settings.newsCtaHelpLink ?? null,
   };
 }
 

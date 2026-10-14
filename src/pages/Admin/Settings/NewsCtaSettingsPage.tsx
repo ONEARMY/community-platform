@@ -11,6 +11,7 @@ interface IProps {
   newsCtaTitle: string | null;
   newsCtaBody: string | null;
   newsCtaImageUrl: string | null;
+  newsCtaHelpLink: string | null;
 }
 
 export function NewsCtaSettingsPage(props: IProps) {
@@ -18,6 +19,7 @@ export function NewsCtaSettingsPage(props: IProps) {
     newsCtaTitle: props.newsCtaTitle ?? '',
     newsCtaBody: props.newsCtaBody ?? '',
     newsCtaImageUrl: props.newsCtaImageUrl ?? '',
+    newsCtaHelpLink: props.newsCtaHelpLink ?? '',
   });
   const [pickerOpen, setPickerOpen] = useState(false);
   const { save, submitting } = useSaveSettings();
@@ -88,6 +90,16 @@ export function NewsCtaSettingsPage(props: IProps) {
             id="settings-news-cta-body"
             value={form.newsCtaBody}
             onChange={(event) => setForm((f) => ({ ...f, newsCtaBody: event.target.value }))}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="settings-news-cta-help-link">"How does it work?" link</Label>
+          <Input
+            id="settings-news-cta-help-link"
+            value={form.newsCtaHelpLink}
+            placeholder="https://... or /academy"
+            onChange={(event) => setForm((f) => ({ ...f, newsCtaHelpLink: event.target.value }))}
           />
         </div>
 

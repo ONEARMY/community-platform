@@ -48,7 +48,7 @@ describe('membershipNotifications', () => {
       membership.subscriptionCancelled('Michael');
 
       expect(discordServiceServer.postWebhookRequest).toHaveBeenCalledWith(
-        '👋 Michael canceled their support',
+        '💔 Michael canceled their support',
         MEMBERSHIP_WEBHOOK,
       );
     });

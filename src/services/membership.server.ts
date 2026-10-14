@@ -72,7 +72,7 @@ export const membershipNotifications = () => {
     },
 
     subscriptionCancelled(name: string) {
-      post(`👋 ${name} canceled their support`);
+      post(`💔 ${name} canceled their support`);
     },
 
     subscriptionResumed(name: string) {

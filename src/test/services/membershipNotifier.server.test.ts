@@ -225,13 +225,13 @@ describe('notifyMembershipEvent', () => {
         ),
       );
 
-      expect(lastMessage()).toBe('👋 Michael canceled their support');
+      expect(lastMessage()).toBe('💔 Michael canceled their support');
     });
 
     it('announces a subscription deleted outright', async () => {
       await notify(subscriptionEvent('customer.subscription.deleted', { status: 'canceled' }));
 
-      expect(lastMessage()).toBe('👋 Michael canceled their support');
+      expect(lastMessage()).toBe('💔 Michael canceled their support');
     });
 
     it('does not announce the deletion of an already scheduled cancellation', async () => {

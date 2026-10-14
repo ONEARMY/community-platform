@@ -66,7 +66,7 @@ describe('reset-password route', () => {
     const { container } = renderRoute();
     const user = userEvent.setup();
 
-    await screen.findByText('Reset Password');
+    await screen.findByRole('heading', { name: 'Reset password' });
     await user.type(getEmailField(container)!, 'user@example.com');
 
     const submit = screen.getByRole('button', { name: 'Reset password' });

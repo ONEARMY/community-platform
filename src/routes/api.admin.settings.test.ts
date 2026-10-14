@@ -74,6 +74,7 @@ describe('admin settings', () => {
       newsCtaTitle: undefined,
       newsCtaBody: undefined,
       newsCtaImageUrl: undefined,
+      newsCtaHelpLink: undefined,
     });
   });
 
@@ -84,6 +85,7 @@ describe('admin settings', () => {
       newsCtaTitle: ' Join us ',
       newsCtaBody: 'Members read everything',
       newsCtaImageUrl: 'https://example.com/icon.png',
+      newsCtaHelpLink: '/academy',
     });
 
     expect(res.status).toBe(200);
@@ -93,6 +95,7 @@ describe('admin settings', () => {
         newsCtaTitle: 'Join us',
         newsCtaBody: 'Members read everything',
         newsCtaImageUrl: 'https://example.com/icon.png',
+        newsCtaHelpLink: '/academy',
       }),
     );
   });
@@ -101,6 +104,15 @@ describe('admin settings', () => {
     const { update } = setup();
 
     const res = await put({ newsCtaImageUrl: 'javascript:alert(1)' });
+
+    expect(res.status).toBe(400);
+    expect(update).not.toHaveBeenCalled();
+  });
+
+  it('rejects a help link that is not a url or path', async () => {
+    const { update } = setup();
+
+    const res = await put({ newsCtaHelpLink: 'javascript:alert(1)' });
 
     expect(res.status).toBe(400);
     expect(update).not.toHaveBeenCalled();

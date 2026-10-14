@@ -158,6 +158,7 @@ describe('News', () => {
         imageUrl: 'https://example.com/icon.png',
         actionLabel: 'Become a member',
         actionUrl: '/support',
+        helpLink: '/academy',
       };
 
       let wrapper;
@@ -183,6 +184,10 @@ describe('News', () => {
       expect(within(banner).getByRole('link', { name: 'Become a member' })).toHaveAttribute(
         'href',
         '/support',
+      );
+      expect(within(banner).getByRole('link', { name: 'How does it work?' })).toHaveAttribute(
+        'href',
+        '/academy',
       );
     });
   });

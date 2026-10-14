@@ -7,6 +7,7 @@ export interface AdminSettingsFormData {
   newsCtaTitle?: string;
   newsCtaBody?: string;
   newsCtaImageUrl?: string;
+  newsCtaHelpLink?: string;
 }
 
 const update = async (form: AdminSettingsFormData) => {

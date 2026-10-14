@@ -99,6 +99,7 @@ async function getNewsCta(
     imageUrl: tenantSettings.newsCtaImageUrl ?? null,
     actionLabel: badge?.actionLabel ?? null,
     actionUrl: badge?.actionUrl ?? null,
+    helpLink: tenantSettings.newsCtaHelpLink ?? null,
   };
 }
 

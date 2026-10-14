@@ -68,6 +68,7 @@ const setup = (opts: {
         newsCtaTitle: 'Join us',
         newsCtaBody: 'Members read everything',
         newsCtaImageUrl: 'https://example.com/icon.png',
+        newsCtaHelpLink: '/academy',
       }),
     };
   });
@@ -163,6 +164,7 @@ describe('news page loader', () => {
       imageUrl: 'https://example.com/icon.png',
       actionLabel: 'Become a member',
       actionUrl: '/support',
+      helpLink: '/academy',
     });
   });
 

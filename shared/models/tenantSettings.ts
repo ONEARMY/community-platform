@@ -31,6 +31,7 @@ export class TenantSettings {
   newsCtaTitle?: string;
   newsCtaBody?: string;
   newsCtaImageUrl?: string;
+  newsCtaHelpLink?: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

@@ -1,10 +1,10 @@
-import { Username } from 'oa-components';
 import type { Author, Comment } from 'oa-shared';
 import { useContext } from 'react';
 import AuthorBalloon from 'src/assets/images/author.svg';
 import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DisplayDate } from '@/components/ui/display-date';
+import { Username } from '@/components/ui/username';
 import { cn } from '@/lib/utils';
 import { AuthorsContext } from './AuthorsContext';
 import { CommentBody } from './CommentBody';

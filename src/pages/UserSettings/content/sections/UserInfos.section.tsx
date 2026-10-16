@@ -1,6 +1,6 @@
 import { getCountryDataList, getEmojiFlag } from 'countries-list';
 import { observer } from 'mobx-react';
-import { FieldInput, FieldTextarea, Username } from 'oa-components';
+import { FieldInput, FieldTextarea } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { Field } from 'react-final-form';
@@ -14,6 +14,7 @@ import {
   validateUrl,
 } from 'src/utils/validators';
 import { Flex, Heading, Text } from 'theme-ui';
+import { Username } from '@/components/ui/username';
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,

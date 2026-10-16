@@ -1,5 +1,5 @@
 import { EllipsisVerticalIcon } from 'lucide-react';
-import { Button, Icon, Modal, Username } from 'oa-components';
+import { Button, Icon, Modal } from 'oa-components';
 import type { Remake } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +15,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Image, Text } from 'theme-ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DisplayDate } from '@/components/ui/display-date';
+import { Username } from '@/components/ui/username';
 import { REMAKE_IMAGE_ASPECT_RATIO } from './constants';
 
 interface IProps {

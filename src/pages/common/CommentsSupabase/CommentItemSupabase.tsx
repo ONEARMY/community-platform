@@ -1,15 +1,7 @@
 import { format } from 'date-fns';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
-import {
-  Button,
-  ButtonShowReplies,
-  EditComment,
-  FollowIcon,
-  Icon,
-  Modal,
-  UsefulButtonLite,
-} from 'oa-components';
+import { Button, ButtonShowReplies, FollowIcon, Icon, UsefulButtonLite } from 'oa-components';
 import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -28,6 +20,7 @@ import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
+import { EditCommentModal } from '@/components/ui/edit-comment-modal';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
@@ -254,17 +247,12 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         </Flex>
       </Card>
 
-      <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>
-        <EditComment
-          comment={comment.comment}
-          handleSubmit={async (commentText) => {
-            return await onEdit(comment.id, commentText);
-          }}
-          setShowEditModal={setShowEditModal}
-          handleCancel={() => setShowEditModal(false)}
-          isReply={false}
-        />
-      </Modal>
+      <EditCommentModal
+        isOpen={showEditModal}
+        comment={comment.comment}
+        onClose={() => setShowEditModal(false)}
+        onSubmit={(commentText) => onEdit(comment.id, commentText)}
+      />
 
       <ConfirmModal
         isOpen={showDeleteModal}

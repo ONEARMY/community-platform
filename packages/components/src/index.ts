@@ -17,7 +17,6 @@ export { CreateReply } from './CreateReply/CreateReply';
 export { DonationRequestModal } from './DonationRequestModal/DonationRequestModal';
 export { DownloadButton } from './DownloadButton/DownloadButton';
 export { DownloadStaticFile } from './DownloadStaticFile/DownloadStaticFile';
-export { EditComment } from './EditComment/EditComment';
 export { FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { FieldInput } from './FieldInput/FieldInput';
 export { FieldSwitch } from './FieldSwitch/FieldSwitch';

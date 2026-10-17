@@ -79,6 +79,7 @@ export class AdminComment {
   id: number;
   comment: string;
   sourceType: DiscussionContentType;
+  sourceId: number | null;
   isReply: boolean;
   createdAt: Date;
   deleted: boolean;
@@ -95,6 +96,7 @@ export class AdminComment {
       id: obj.id,
       comment: obj.comment,
       sourceType: obj.source_type,
+      sourceId: obj.source_id,
       isReply: obj.parent_id !== null,
       createdAt: new Date(obj.created_at),
       deleted: obj.deleted || false,

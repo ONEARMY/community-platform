@@ -52,6 +52,7 @@ export const FactoryAdminComment = (overloads: Partial<AdminComment> = {}): Admi
     id: faker.number.int(),
     comment: faker.lorem.paragraph(),
     sourceType: 'questions',
+    sourceId: faker.number.int(),
     isReply: false,
     createdAt: faker.date.past(),
     deleted: false,

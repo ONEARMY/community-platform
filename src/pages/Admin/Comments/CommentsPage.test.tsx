@@ -1,10 +1,17 @@
 import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { AdminComment } from 'oa-shared';
 import { MemoryRouter } from 'react-router';
 import { FactoryAdminComment } from 'src/test/factories/Comment';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { CommentsPage } from './CommentsPage';
+
+vi.mock('src/common/Toast/useToast', () => ({ useToast: () => ({ promise: vi.fn() }) }));
+vi.mock('react-router', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react-router')>()),
+  useRevalidator: () => ({ revalidate: vi.fn() }),
+}));
 
 const comment = FactoryAdminComment({
   comment: 'Have you tried a finer mesh?',
@@ -50,6 +57,24 @@ describe('CommentsPage', () => {
     expect(
       screen.queryByRole('link', { name: 'Have you tried a finer mesh?' }),
     ).not.toBeInTheDocument();
+  });
+
+  it('opens the edit and delete modals', async () => {
+    renderPage([FactoryAdminComment({ ...comment, id: 7 })]);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Edit comment 7' }));
+    expect(screen.getByRole('textbox')).toHaveValue('Have you tried a finer mesh?');
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    await userEvent.click(screen.getByRole('button', { name: 'Delete comment 7' }));
+    expect(screen.getByText('Are you sure you want to delete this comment?')).toBeInTheDocument();
+  });
+
+  it('disables actions on deleted comments', () => {
+    renderPage([FactoryAdminComment({ ...comment, id: 7, deleted: true })]);
+
+    expect(screen.getByRole('button', { name: 'Edit comment 7' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Delete comment 7' })).toBeDisabled();
   });
 
   it('shows an empty state', () => {

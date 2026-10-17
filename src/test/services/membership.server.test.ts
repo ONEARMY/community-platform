@@ -48,7 +48,7 @@ describe('membershipNotifications', () => {
       membership.subscriptionCancelled('Michael');
 
       expect(discordServiceServer.postWebhookRequest).toHaveBeenCalledWith(
-        'Michael canceled their support',
+        '💔 Michael canceled their support',
         MEMBERSHIP_WEBHOOK,
       );
     });
@@ -67,19 +67,19 @@ describe('membershipNotifications', () => {
     it('names the tier and the amount, and links to the profile', () => {
       membership.newSupporter('Michael', 'Boost', '€10', profileUrl);
 
-      expect(lastMessage()).toBe(`Michael is now a new Boost Supporter (€10)\n<${profileUrl}>`);
+      expect(lastMessage()).toBe(`🆕 Michael is now a new Boost Supporter (€10)\n<${profileUrl}>`);
     });
 
     it('omits the tier when it cannot be resolved', () => {
       membership.newSupporter('Michael', null, '€10', profileUrl);
 
-      expect(lastMessage()).toBe(`Michael is now a new Supporter (€10)\n<${profileUrl}>`);
+      expect(lastMessage()).toBe(`🆕 Michael is now a new Supporter (€10)\n<${profileUrl}>`);
     });
 
     it('omits the link when given nothing to link to', () => {
       membership.newSupporter('Michael', 'Boost', '€10', null);
 
-      expect(lastMessage()).toBe('Michael is now a new Boost Supporter (€10)');
+      expect(lastMessage()).toBe('🆕 Michael is now a new Boost Supporter (€10)');
     });
   });
 
@@ -87,19 +87,19 @@ describe('membershipNotifications', () => {
     it('describes a monthly plan', () => {
       membership.recurringPayment('Michael', 'Boost', 'month', '€10');
 
-      expect(lastMessage()).toBe('Michael paid their monthly Boost membership (€10)');
+      expect(lastMessage()).toBe('🔄 Michael paid their monthly Boost membership (€10)');
     });
 
     it('describes a yearly plan', () => {
       membership.recurringPayment('Michael', 'Boost', 'year', '€100');
 
-      expect(lastMessage()).toBe('Michael paid their yearly Boost membership (€100)');
+      expect(lastMessage()).toBe('🔄 Michael paid their yearly Boost membership (€100)');
     });
 
     it('drops the unknown parts rather than guessing', () => {
       membership.recurringPayment('Michael', null, null, '€10');
 
-      expect(lastMessage()).toBe('Michael paid their membership (€10)');
+      expect(lastMessage()).toBe('🔄 Michael paid their membership (€10)');
     });
   });
 
@@ -110,7 +110,7 @@ describe('membershipNotifications', () => {
       membership.paymentFailed('Michael', 'Boost', '€10', stripeUrl);
 
       expect(lastMessage()).toBe(
-        `Michael had a failed payment for their Boost membership (€10)\n<${stripeUrl}>`,
+        `🚫 Michael had a failed payment for their Boost membership (€10)\n<${stripeUrl}>`,
       );
     });
 
@@ -125,7 +125,7 @@ describe('membershipNotifications', () => {
     it('reports an un-cancelled subscription', () => {
       membership.subscriptionResumed('Michael');
 
-      expect(lastMessage()).toBe('Michael changed their mind and resumed their support');
+      expect(lastMessage()).toBe('💚 Michael changed their mind and resumed their support');
     });
   });
 
@@ -133,7 +133,7 @@ describe('membershipNotifications', () => {
     it('names both tiers', () => {
       membership.tierChanged('Michael', 'Boost', 'Power');
 
-      expect(lastMessage()).toBe('Michael changed their membership from Boost to Power');
+      expect(lastMessage()).toBe('🔀 Michael changed their membership from Boost to Power');
     });
   });
 

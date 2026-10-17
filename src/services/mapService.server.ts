@@ -13,7 +13,7 @@ export class MapServiceServer {
       return existingModeration === 'accepted' ? 'accepted' : 'awaiting-moderation';
     }
 
-    return profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation';
+    return 'accepted';
   }
 
   async upsert(pin: UpsertPin, profile: Profile) {

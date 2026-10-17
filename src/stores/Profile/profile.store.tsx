@@ -165,7 +165,7 @@ export class ProfileStore {
       missing.push('About');
     }
 
-    const isMember = profile.type?.name === 'member';
+    const isMember = !profile.type?.isSpace;
 
     if (isMember && !photo?.id) {
       missing.push('Profile photo');
@@ -181,7 +181,7 @@ export class ProfileStore {
 
     const isBasicInfoFilled = !!(username && about && displayName);
 
-    const isMember = profile.type?.name === 'member';
+    const isMember = !profile.type?.isSpace;
     const isSpace = !isMember;
 
     const isMemberFilled = isMember && !!photo?.id;

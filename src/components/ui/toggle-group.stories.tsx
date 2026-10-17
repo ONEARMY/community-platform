@@ -59,6 +59,17 @@ export const Variants: Story = {
   ),
 };
 
+export const Tiles: Story = {
+  render: () => (
+    <ToggleGroup variant="tile" size="tile" defaultValue={['moulds']} aria-label="Filter by category">
+      <ToggleGroupItem value="machines">Machines</ToggleGroupItem>
+      <ToggleGroupItem value="moulds">Moulds</ToggleGroupItem>
+      <ToggleGroupItem value="recycling">Recycling</ToggleGroupItem>
+      <ToggleGroupItem value="connect">Connect &amp; Meet</ToggleGroupItem>
+    </ToggleGroup>
+  ),
+};
+
 /** Each size lines up with the Button of the same size. */
 export const AlignsWithButton: Story = {
   render: () => (

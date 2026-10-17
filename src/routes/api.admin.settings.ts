@@ -48,6 +48,16 @@ const toUrl = (value: unknown, field: string) => {
   return url;
 };
 
+const toLink = (value: unknown, field: string) => {
+  const link = toText(value);
+
+  if (link && !/^(https?:\/\/|\/(?!\/))/.test(link)) {
+    throw validationError('Use a full URL or a path starting with /', field);
+  }
+
+  return link;
+};
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
@@ -67,6 +77,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       newsCtaTitle: toText(body.newsCtaTitle),
       newsCtaBody: toText(body.newsCtaBody),
       newsCtaImageUrl: toUrl(body.newsCtaImageUrl, 'newsCtaImageUrl'),
+      newsCtaHelpLink: toLink(body.newsCtaHelpLink, 'newsCtaHelpLink'),
     });
 
     return Response.json({}, { headers });

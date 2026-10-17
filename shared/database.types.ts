@@ -1545,6 +1545,7 @@ export type Database = {
           membership_terms: string | null;
           message_sign_off: string | null;
           news_cta_body: string | null;
+          news_cta_help_link: string | null;
           news_cta_image: string | null;
           news_cta_title: string | null;
           no_messaging: boolean;
@@ -1582,6 +1583,7 @@ export type Database = {
           membership_terms?: string | null;
           message_sign_off?: string | null;
           news_cta_body?: string | null;
+          news_cta_help_link?: string | null;
           news_cta_image?: string | null;
           news_cta_title?: string | null;
           no_messaging?: boolean;
@@ -1619,6 +1621,7 @@ export type Database = {
           membership_terms?: string | null;
           message_sign_off?: string | null;
           news_cta_body?: string | null;
+          news_cta_help_link?: string | null;
           news_cta_image?: string | null;
           news_cta_title?: string | null;
           no_messaging?: boolean;

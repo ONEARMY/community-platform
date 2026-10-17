@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { AuthorDisplay, Category, ContentStatistics, ImageGallery, TagList } from 'oa-components';
+import { Category, ContentStatistics, ImageGallery, TagList } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useMemo, useState } from 'react';
@@ -18,6 +18,7 @@ import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
 import { UsefulButton } from '@/components/ui/useful-button';
+import { Username } from '@/components/ui/username';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { QuestionCommentSection } from './QuestionCommentSection';
 
@@ -93,7 +94,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
           </Heading>
 
           <Flex sx={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-            <AuthorDisplay author={question.author} />
+            {question.author && <Username user={question.author} showAvatar />}
 
             <Text variant="auxiliary">
               <DisplayDate

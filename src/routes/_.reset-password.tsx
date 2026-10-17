@@ -1,7 +1,16 @@
-import { Button, FieldInput, HeroBanner } from 'oa-components';
+import { HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { data, Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import {
+  data,
+  Link,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from 'react-router';
+import { TextInputField } from 'src/common/Form/TextInput.field';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { getSecret } from 'src/services/secretsService.server';
@@ -9,7 +18,10 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { Card, Flex, Heading, Label, Text } from 'theme-ui';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import ChevronLeft from '@/components/ui/icons/chevron-left.svg?react';
+import { Label } from '@/components/ui/label';
 import { TURNSTILE_TEST_SITE_KEY, Turnstile } from '@/components/ui/turnstile';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -54,122 +66,99 @@ export default function Index() {
   const { turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== 'idle';
 
   return (
     <Main style={{ flex: 1 }}>
       <Form
         onSubmit={() => {}}
-        render={({ submitting, invalid }) => {
+        render={({ invalid }) => {
           return (
             <form data-cy="reset-password-form" method="post">
-              <Flex
-                sx={{
-                  bg: 'inherit',
-                  px: 2,
-                  width: '100%',
-                  maxWidth: '620px',
-                  mx: 'auto',
-                  mt: [5, 10],
-                  mb: 3,
-                }}
-              >
-                <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type="celebration" />
-                  <Card sx={{ borderRadius: 3 }}>
-                    <Flex
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        padding: 4,
-                        gap: 4,
-                        width: '100%',
-                      }}
-                    >
-                      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>Reset Password</Heading>
-                        {actionResponse?.success ? (
-                          <Text sx={{ fontSize: 3 }} color="black">
-                            We've sent a message to{' '}
-                            <Text
-                              sx={{
-                                background: 'linear-gradient(0deg, #FFE2E1 60%, #FFF 40%)',
-                                paddingX: 1,
-                              }}
-                            >
-                              {actionResponse?.email || 'your email address'}
-                            </Text>
-                            . If it's a registered account you will receive an email with
-                            instructions.
-                            <br />
-                            <br />
-                            Please check you inbox (and spam folder).
-                          </Text>
-                        ) : (
-                          <Text sx={{ fontSize: 1 }} color="grey">
-                            <Link to="/sign-in" data-cy="no-account">
-                              Go back to Login
-                            </Link>
-                          </Text>
-                        )}
-                      </Flex>
+              <div className="mx-auto mt-10 mb-4 w-full max-w-124 px-2 md:mt-20">
+                <HeroBanner type="celebration" />
+                <Card variant="outline">
+                  <CardHeader>
+                    <h1 className="text-2xl font-semibold">Reset password</h1>
+                    {!actionResponse?.success && (
+                      <p className="text-sm text-muted-foreground">
+                        <Link
+                          to="/sign-in"
+                          data-cy="no-account"
+                          className="underline underline-offset-3 hover:no-underline"
+                        >
+                          Go back to Login
+                        </Link>
+                      </p>
+                    )}
+                  </CardHeader>
+                  <CardContent gap="md" className="flex flex-col">
+                    {actionResponse?.error && (
+                      <div className="w-full rounded-sm bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                        {actionResponse.error}
+                      </div>
+                    )}
 
-                      {actionResponse?.error && <Text color="red">{actionResponse?.error}</Text>}
-
-                      {actionResponse?.success ? (
+                    {actionResponse?.success ? (
+                      <>
+                        <p>
+                          We've sent a message to{' '}
+                          <span className="font-semibold">
+                            {actionResponse.email || 'your email address'}
+                          </span>
+                          . If it's a registered account you will receive an email with
+                          instructions.
+                        </p>
+                        <p>Please check your inbox (and spam folder).</p>
                         <Button
                           data-cy="go-back"
-                          variant="secondary"
-                          sx={{ width: 'fit-content' }}
+                          variant="outline"
+                          className="w-fit"
                           type="button"
                           onClick={() => navigate('.')}
-                          icon="arrow-back"
                         >
+                          <ChevronLeft data-icon="inline-start" />
                           Go back to reset form
                         </Button>
-                      ) : (
-                        <>
-                          <Flex sx={{ flexDirection: 'column' }}>
-                            <Label htmlFor="title">Email</Label>
-                            <Field
-                              name="email"
-                              type="email"
-                              data-cy="email"
-                              component={FieldInput}
-                              validate={required}
-                            />
-                          </Flex>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex flex-col gap-1.5">
+                          <Label htmlFor="email">Email</Label>
+                          <Field
+                            id="email"
+                            name="email"
+                            type="email"
+                            data-cy="email"
+                            component={TextInputField}
+                            validate={required}
+                          />
+                        </div>
 
-                          <Field name="cf-turnstile-token" validate={required}>
-                            {({ input }) => (
-                              <>
-                                <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
-                                <input {...input} type="hidden" />
-                              </>
-                            )}
-                          </Field>
+                        <Field name="cf-turnstile-token" validate={required}>
+                          {({ input }) => (
+                            <>
+                              <Turnstile siteKey={turnstileSiteKey} onVerify={input.onChange} />
+                              <input {...input} type="hidden" />
+                            </>
+                          )}
+                        </Field>
 
-                          <Flex>
-                            <Button
-                              large
-                              data-cy="submit"
-                              sx={{
-                                borderRadius: 3,
-                                width: '100%',
-                                justifyContent: 'center',
-                              }}
-                              variant="primary"
-                              disabled={submitting || invalid}
-                              type="submit"
-                            >
-                              Reset password
-                            </Button>
-                          </Flex>
-                        </>
-                      )}
-                    </Flex>
-                  </Card>
-                </Flex>
-              </Flex>
+                        <Button
+                          data-cy="submit"
+                          size="lg"
+                          className="w-full justify-center"
+                          disabled={isSubmitting || invalid}
+                          type="submit"
+                        >
+                          Reset password
+                        </Button>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             </form>
           );
         }}

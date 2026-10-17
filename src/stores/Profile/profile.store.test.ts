@@ -166,7 +166,7 @@ describe('ProfileStore', () => {
         const completeProfile: Partial<Profile> = {
           about: 'A member',
           displayName: 'Jeffo',
-          type: { id: 1, name: 'member' } as ProfileType,
+          type: { id: 1, name: 'member', isSpace: false } as ProfileType,
           photo: factoryImage,
         };
         const user = FactoryUser(completeProfile);
@@ -178,7 +178,7 @@ describe('ProfileStore', () => {
         it('no about', () => {
           const missingAbout: Partial<Profile> = {
             displayName: 'Jeffo',
-            type: { id: 1, name: 'member' } as ProfileType,
+            type: { id: 1, name: 'member', isSpace: false } as ProfileType,
             photo: factoryImage,
           };
           const user = FactoryUser(missingAbout);
@@ -189,7 +189,7 @@ describe('ProfileStore', () => {
           const missingDisplayName: Partial<Profile> = {
             about: 'A member',
             displayName: undefined,
-            type: { id: 1, name: 'member' } as ProfileType,
+            type: { id: 1, name: 'member', isSpace: false } as ProfileType,
             photo: factoryImage,
           };
           const user = FactoryUser(missingDisplayName);
@@ -200,7 +200,7 @@ describe('ProfileStore', () => {
           const missingUserImage: Partial<Profile> = {
             about: 'A member',
             displayName: 'Jeffo',
-            type: { id: 1, name: 'member' } as ProfileType,
+            type: { id: 1, name: 'member', isSpace: false } as ProfileType,
             photo: undefined,
           };
           const user = FactoryUser(missingUserImage);
@@ -215,7 +215,7 @@ describe('ProfileStore', () => {
         const completeProfile: Partial<Profile> = {
           about: 'An important space',
           displayName: 'Jeffo',
-          type: { id: 1, name: 'community-builder' } as ProfileType,
+          type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
           coverImages: [factoryImage],
         };
         const user = FactoryUser(completeProfile);
@@ -227,7 +227,7 @@ describe('ProfileStore', () => {
         it('no about', () => {
           const missingAbout: Partial<Profile> = {
             displayName: 'Jeffo',
-            type: { id: 1, name: 'community-builder' } as ProfileType,
+            type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
             coverImages: [factoryImage],
           };
           const user = FactoryUser(missingAbout);
@@ -238,7 +238,7 @@ describe('ProfileStore', () => {
           const missingDisplayName: Partial<Profile> = {
             about: 'An important space',
             displayName: undefined,
-            type: { id: 1, name: 'community-builder' } as ProfileType,
+            type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
             coverImages: [factoryImage],
           };
           const user = FactoryUser(missingDisplayName);
@@ -249,7 +249,7 @@ describe('ProfileStore', () => {
           const missingUserImage: Partial<Profile> = {
             about: 'An important space',
             displayName: 'Jeffo',
-            type: { id: 1, name: 'community-builder' } as ProfileType,
+            type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
             coverImages: [],
           };
           const user = FactoryUser(missingUserImage);
@@ -258,7 +258,7 @@ describe('ProfileStore', () => {
         });
       });
     });
-    it('returns false if profile type missing', () => {
+    it('treats a missing profile type as member', () => {
       const missingProfileType: Partial<Profile> = {
         about: 'An unknown...',
         displayName: 'Jeffo',
@@ -267,7 +267,7 @@ describe('ProfileStore', () => {
       };
       const user = FactoryUser(missingProfileType);
 
-      expect(isProfileComplete(user)).toBe(false);
+      expect(isProfileComplete(user)).toBe(true);
     });
   });
 
@@ -277,7 +277,7 @@ describe('ProfileStore', () => {
         const completeProfile: Partial<Profile> = {
           about: 'A member',
           displayName: 'Jeffo',
-          type: { id: 1, name: 'member' } as ProfileType,
+          type: { id: 1, name: 'member', isSpace: false } as ProfileType,
           photo: factoryImage,
         };
         const user = FactoryUser(completeProfile);
@@ -289,7 +289,7 @@ describe('ProfileStore', () => {
         const incompleteProfile: Partial<Profile> = {
           displayName: undefined,
           about: undefined,
-          type: { id: 1, name: 'member' } as ProfileType,
+          type: { id: 1, name: 'member', isSpace: false } as ProfileType,
           photo: undefined,
         };
         const user = FactoryUser(incompleteProfile);
@@ -304,7 +304,7 @@ describe('ProfileStore', () => {
         const profile: Partial<Profile> = {
           displayName: 'Jeffo',
           about: undefined,
-          type: { id: 1, name: 'member' } as ProfileType,
+          type: { id: 1, name: 'member', isSpace: false } as ProfileType,
           photo: factoryImage,
         };
         const user = FactoryUser(profile);
@@ -318,7 +318,7 @@ describe('ProfileStore', () => {
         const completeProfile: Partial<Profile> = {
           about: 'An important space',
           displayName: 'Jeffo',
-          type: { id: 1, name: 'community-builder' } as ProfileType,
+          type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
           coverImages: [factoryImage],
         };
         const user = FactoryUser(completeProfile);
@@ -330,7 +330,7 @@ describe('ProfileStore', () => {
         const incompleteProfile: Partial<Profile> = {
           displayName: undefined,
           about: undefined,
-          type: { id: 1, name: 'community-builder' } as ProfileType,
+          type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
           coverImages: [],
         };
         const user = FactoryUser(incompleteProfile);
@@ -345,7 +345,7 @@ describe('ProfileStore', () => {
         const profile: Partial<Profile> = {
           about: 'An important space',
           displayName: 'Jeffo',
-          type: { id: 1, name: 'community-builder' } as ProfileType,
+          type: { id: 1, name: 'community-builder', isSpace: true } as ProfileType,
           coverImages: [],
         };
         const user = FactoryUser(profile);

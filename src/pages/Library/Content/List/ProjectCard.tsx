@@ -1,4 +1,4 @@
-import { Category, ModerationStatus, Username } from 'oa-components';
+import { Category, ModerationStatus } from 'oa-components';
 import { type Project, UserRole } from 'oa-shared';
 import { Link } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
@@ -8,6 +8,7 @@ import { Box, Card, Flex, Heading, Image } from 'theme-ui';
 import EyeIcon from '@/components/ui/icons/eye.svg?react';
 import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Username } from '@/components/ui/username';
 
 type ProjectCardProps = {
   item: Project;
@@ -78,7 +79,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
 
             {item.author && (
               <Box>
-                <Username user={item.author} sx={{ position: 'relative' }} />
+                <Username user={item.author} className="relative" />
               </Box>
             )}
           </Flex>

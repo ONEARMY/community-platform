@@ -19,6 +19,7 @@ export interface TenantSettingsInput {
   newsCtaTitle?: string | null;
   newsCtaBody?: string | null;
   newsCtaImageUrl?: string | null;
+  newsCtaHelpLink?: string | null;
 }
 
 export class TenantSettingsService {
@@ -73,6 +74,7 @@ export class TenantSettingsService {
       newsCtaTitle: data?.news_cta_title ?? undefined,
       newsCtaBody: data?.news_cta_body ?? undefined,
       newsCtaImageUrl: data?.news_cta_image ?? undefined,
+      newsCtaHelpLink: data?.news_cta_help_link ?? undefined,
     });
 
     cache.set('tenant-settings', settings);
@@ -92,6 +94,7 @@ export class TenantSettingsService {
         news_cta_title: input.newsCtaTitle,
         news_cta_body: input.newsCtaBody,
         news_cta_image: input.newsCtaImageUrl,
+        news_cta_help_link: input.newsCtaHelpLink,
       })
       .eq('tenant_id', process.env.TENANT_ID!);
 
@@ -134,7 +137,8 @@ export class TenantSettingsService {
         organisation_activity,
         news_cta_title,
         news_cta_body,
-        news_cta_image`,
+        news_cta_image,
+        news_cta_help_link`,
       )
       .single();
 

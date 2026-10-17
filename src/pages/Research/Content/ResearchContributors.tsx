@@ -1,8 +1,8 @@
-import { Username } from 'oa-components';
 import type { Author } from 'oa-shared';
 import { useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Username } from '@/components/ui/username';
 
 const MAX_VISIBLE_AVATARS = 3;
 

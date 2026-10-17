@@ -8,6 +8,7 @@ export interface NewsCta {
   imageUrl: string | null;
   actionLabel: string | null;
   actionUrl: string | null;
+  helpLink: string | null;
 }
 
 interface IProps {
@@ -42,6 +43,20 @@ export const NewsMemberCta = ({ cta }: IProps) => (
           }
         >
           {cta.actionLabel}
+        </Link>
+      )}
+      {cta.helpLink && (
+        <Link
+          to={cta.helpLink}
+          className="font-sans text-xs text-muted-foreground underline"
+          onClick={() =>
+            trackEvent({
+              action: 'clickSupportHelp',
+              category: 'news',
+            })
+          }
+        >
+          How does it work?
         </Link>
       )}
     </div>

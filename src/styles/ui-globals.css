@@ -50,8 +50,8 @@
   --color-green: var(--green);
   --color-softblue: var(--softblue);
   --color-legacy-ink: #1b1b1b;
-  --color-highlight: #20b7eb;
   --color-bluetag: #5683b0;
+  --color-highlight: var(--highlight);
   --color-highlight-hover: var(--highlight-hover);
   --color-outline: var(--outline);
   --color-footer: var(--footer);
@@ -74,9 +74,14 @@
   --radius-card: 15px;
   --radius-card-flat: 5px;
   --radius-checkbox: 4px;
+  --radius-flag: 3px;
   --text-control-sm: 0.8rem;
   --text-card-heading: 1.375rem;
   --spacing-hairline: 2px;
+  --spacing-thin: 3px;
+  --spacing-icon: 1rem;
+  --spacing-flag-width: 21px;
+  --spacing-flag-height: 14px;
   --spacing-useful-control: 2.75rem;
   --spacing-useful-icon: 1rem;
   --container-dialog: calc(100% - 2rem);
@@ -127,6 +132,7 @@
   --sidebar-ring: oklch(0.708 0 0);
   --green: #00c3a9;
   --softblue: #e2edf7;
+  --highlight: #20b7eb;
   --highlight-hover: #97cdeb;
   --outline: #1b1b1b;
   --footer: #27272c;
@@ -194,6 +200,13 @@
   background-color: var(--color-primary-soft);
   box-shadow: 0 0 0 100vmax var(--color-primary-soft);
   clip-path: inset(0 -100vmax);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility color-swatch {

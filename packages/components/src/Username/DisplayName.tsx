@@ -2,10 +2,10 @@ import { ClassNames } from '@emotion/react';
 import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
+import { ReactCountryFlag } from 'react-country-flag';
 import { Link } from 'react-router';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { css, Flex, Text, useThemeUI } from 'theme-ui';
-import { FlagIcon } from '../FlagIcon/FlagIcon';
 import { UserBadge } from './UserBadge';
 
 export interface DisplayNameProps {
@@ -56,7 +56,18 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
         </Flex>
         {countryCode && (
           <Flex sx={{ alignItems: 'center', gap: 1, pt: 1 }}>
-            <FlagIcon countryCode={countryCode} />
+            <ReactCountryFlag
+              data-cy={`country:${countryCode}`}
+              countryCode={countryCode}
+              title={countryCode}
+              svg={true}
+              style={{
+                borderRadius: '3px',
+                backgroundSize: 'cover',
+                width: '21px',
+                height: '14px',
+              }}
+            />
             <Text
               sx={{
                 color: 'grey',

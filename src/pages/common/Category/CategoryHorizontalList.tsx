@@ -63,7 +63,7 @@ export const CategoryHorizontalList = ({
       {overflow.start && (
         <Button
           variant="outline"
-          size="icon-lg"
+          size="icon-sm"
           tabIndex={-1}
           aria-hidden
           onClick={() => scroll(-1)}
@@ -102,7 +102,7 @@ export const CategoryHorizontalList = ({
       {overflow.end && (
         <Button
           variant="outline"
-          size="icon-lg"
+          size="icon-sm"
           tabIndex={-1}
           aria-hidden
           onClick={() => scroll(1)}

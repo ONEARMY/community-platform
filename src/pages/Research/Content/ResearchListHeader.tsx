@@ -1,11 +1,5 @@
 import debounce from 'debounce';
-import {
-  ButtonIcon,
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-} from 'oa-components';
+import { ButtonIcon, ReturnPathLink, SearchField, Select } from 'oa-components';
 import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord } from 'oa-shared';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -14,6 +8,7 @@ import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { UserAction } from 'src/common/UserAction';
+import { CategoryHorizontalList } from 'src/pages/common/Category/CategoryHorizontalList';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
@@ -219,7 +214,7 @@ export const ResearchFilterHeader = (props: IProps) => {
   );
 
   const categoryComponent = (
-    <CategoryHorizonalList
+    <CategoryHorizontalList
       allCategories={categories}
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>

@@ -7,7 +7,6 @@ export { CardButton } from './CardButton/CardButton';
 export { CardListItem } from './CardListItem/CardListItem';
 export { CardProfile } from './CardProfile/CardProfile';
 export { Category } from './Category/Category';
-export { CategoryHorizonalList } from './CategoryHorizonalList/CategoryHorizonalList';
 export { CommentsTitle } from './CommentsTitle/CommentsTitle';
 export { ContentStatistics } from './ContentStatistics/ContentStatistics';
 export type { IStatistic } from './ContentStatistics/types';

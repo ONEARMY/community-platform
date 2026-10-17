@@ -1,17 +1,12 @@
 import debounce from 'debounce';
-import {
-  ButtonIcon,
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-} from 'oa-components';
+import { ButtonIcon, ReturnPathLink, SearchField, Select } from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { UserAction } from 'src/common/UserAction';
+import { CategoryHorizontalList } from 'src/pages/common/Category/CategoryHorizontalList';
 import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
 import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { categoryService } from 'src/services/categoryService';
@@ -188,7 +183,7 @@ export const QuestionListHeader = (props: IProps) => {
   );
 
   const categoryComponent = (
-    <CategoryHorizonalList
+    <CategoryHorizontalList
       allCategories={categories}
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>

@@ -1,6 +1,6 @@
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
-import { EditComment, Icon, Modal, UsefulButtonLite } from 'oa-components';
+import { Icon, UsefulButtonLite } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -16,6 +16,7 @@ import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { CommentDisplay } from './CommentDisplay';
+import { EditCommentDialog } from './EditCommentDialog';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
 export interface ICommentItemProps {
@@ -127,17 +128,13 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
           />
         </Flex>
 
-        <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>
-          <EditComment
-            comment={comment.comment}
-            handleSubmit={async (commentText) => {
-              return await onEdit(comment.id, commentText);
-            }}
-            setShowEditModal={setShowEditModal}
-            handleCancel={() => setShowEditModal(false)}
-            isReply={true}
-          />
-        </Modal>
+        <EditCommentDialog
+          isOpen={showEditModal}
+          comment={comment.comment}
+          isReply
+          onClose={() => setShowEditModal(false)}
+          onSubmit={(commentText) => onEdit(comment.id, commentText)}
+        />
 
         <ConfirmModal
           isOpen={showDeleteModal}

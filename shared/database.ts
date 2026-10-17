@@ -58,6 +58,15 @@ type ColumnOverrides = {
 };
 
 type ReturnOverrides = {
+  get_admin_comments: {
+    source_type: DiscussionContentType;
+    source_id: number | null;
+    parent_id: number | null;
+    deleted: boolean | null;
+    username: string | null;
+    display_name: string | null;
+    source_slug: string | null;
+  };
   get_comments_with_votes: {
     profile: DBAuthor | null;
     source_type: DiscussionContentType;

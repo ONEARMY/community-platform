@@ -1,3 +1,4 @@
+import type { Database } from '../database';
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DiscussionContentType } from './common';
@@ -63,3 +64,53 @@ export class Comment implements IDoc {
 }
 
 export type Reply = Omit<Comment, 'replies'>;
+
+export type DBAdminComment =
+  Database['public']['Functions']['get_admin_comments']['Returns'][number];
+
+const SOURCE_PATHS: Record<DiscussionContentType, string> = {
+  questions: 'questions',
+  projects: 'library',
+  research_updates: 'research',
+  news: 'news',
+};
+
+export class AdminComment {
+  id: number;
+  comment: string;
+  sourceType: DiscussionContentType;
+  sourceId: number | null;
+  isReply: boolean;
+  createdAt: Date;
+  deleted: boolean;
+  liveUrl: string | null;
+  notificationCount: number;
+  author: { username: string | null; displayName: string } | null;
+
+  constructor(obj: AdminComment) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminComment) {
+    return new AdminComment({
+      id: obj.id,
+      comment: obj.comment,
+      sourceType: obj.source_type,
+      sourceId: obj.source_id,
+      isReply: obj.parent_id !== null,
+      createdAt: new Date(obj.created_at),
+      deleted: obj.deleted || false,
+      liveUrl: AdminComment.toLiveUrl(obj),
+      notificationCount: obj.notification_count,
+      author: obj.display_name ? { username: obj.username, displayName: obj.display_name } : null,
+    });
+  }
+
+  private static toLiveUrl(obj: DBAdminComment) {
+    if (!obj.source_slug) {
+      return null;
+    }
+    const update = obj.source_type === 'research_updates' ? `?update_${obj.source_id}` : '';
+    return `/${SOURCE_PATHS[obj.source_type]}/${obj.source_slug}${update}#comment:${obj.id}`;
+  }
+}

@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import type { Comment, DiscussionContentType } from 'oa-shared';
+import { AdminComment } from 'oa-shared';
 
 export const FactoryComment = (commentOverloads: Partial<Comment> = {}): Comment => ({
   id: faker.number.int(),
@@ -45,3 +46,17 @@ export const FactoryComment = (commentOverloads: Partial<Comment> = {}): Comment
   hasVoted: faker.datatype.boolean(),
   ...commentOverloads,
 });
+
+export const FactoryAdminComment = (overloads: Partial<AdminComment> = {}): AdminComment =>
+  new AdminComment({
+    id: faker.number.int(),
+    comment: faker.lorem.paragraph(),
+    sourceType: 'questions',
+    isReply: false,
+    createdAt: faker.date.past(),
+    deleted: false,
+    liveUrl: `/questions/${faker.lorem.slug()}#comment:1`,
+    notificationCount: faker.number.int({ max: 20 }),
+    author: { username: faker.internet.username(), displayName: faker.person.fullName() },
+    ...overloads,
+  });

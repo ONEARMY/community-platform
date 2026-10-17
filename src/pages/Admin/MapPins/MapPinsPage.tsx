@@ -1,7 +1,7 @@
-import { ChevronLeftIcon, ChevronRightIcon, ExternalLinkIcon } from 'lucide-react';
+import { ExternalLinkIcon } from 'lucide-react';
 import { Link } from 'react-router';
+import { AdminPagination } from 'src/pages/Admin/AdminPagination';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -54,9 +54,6 @@ function ModerationBadge({ status }: { status: string }) {
 }
 
 export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPageProps) {
-  const hasPrevious = page > 1;
-  const hasNext = page < totalPages;
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -130,47 +127,7 @@ export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPa
         </TableBody>
       </Table>
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between py-2">
-          <span className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </span>
-          <div className="flex items-center gap-2">
-            {hasPrevious ? (
-              <Button
-                variant="outline"
-                size="sm"
-                nativeButton={false}
-                render={<Link to={`/admin/map-pins?page=${page - 1}`} />}
-              >
-                <ChevronLeftIcon className="size-4 mr-1" />
-                Previous
-              </Button>
-            ) : (
-              <Button variant="outline" size="sm" disabled>
-                <ChevronLeftIcon className="size-4 mr-1" />
-                Previous
-              </Button>
-            )}
-            {hasNext ? (
-              <Button
-                variant="outline"
-                size="sm"
-                nativeButton={false}
-                render={<Link to={`/admin/map-pins?page=${page + 1}`} />}
-              >
-                Next
-                <ChevronRightIcon className="size-4 ml-1" />
-              </Button>
-            ) : (
-              <Button variant="outline" size="sm" disabled>
-                Next
-                <ChevronRightIcon className="size-4 ml-1" />
-              </Button>
-            )}
-          </div>
-        </div>
-      )}
+      <AdminPagination page={page} totalPages={totalPages} />
     </div>
   );
 }

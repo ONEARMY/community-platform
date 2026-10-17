@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { countries } from 'countries-list';
 import { countryToAlpha2 } from 'country-to-iso';
 import { observer } from 'mobx-react';
-import { FlagIcon, Icon, MemberBadge, ReturnPathLink } from 'oa-components';
+import { Icon, MemberBadge, ReturnPathLink } from 'oa-components';
 import { UserRole } from 'oa-shared';
 import { theme } from 'oa-themes';
 import type { ReactNode } from 'react';
@@ -12,6 +12,7 @@ import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Avatar, Box, Flex, Image, Text } from 'theme-ui';
+import { FlagIcon } from '@/components/ui/flag-icon';
 
 const rowStyles = ({ theme }: { theme: Theme }) => `
   display: flex;
@@ -127,7 +128,7 @@ export const ProfileModal = observer(({ onClose }: { onClose: () => void }) => {
           )}
           {rawCountry && (
             <Flex sx={{ alignItems: 'center', gap: '6px' }}>
-              {iso2 && countryData && <FlagIcon countryCode={iso2} width="14px" height="9px" />}
+              {iso2 && countryData && <FlagIcon countryCode={iso2} size="sm" />}
               <Text
                 sx={{
                   fontFamily: 'nav',

@@ -1,7 +1,7 @@
-import { Username } from 'oa-components';
 import type { Author } from 'oa-shared';
 import { Flex, Text } from 'theme-ui';
 import { DisplayDate, type PublishedAction } from '@/components/ui/display-date';
+import { Username } from '@/components/ui/username';
 
 interface IProps {
   author: Author;
@@ -17,7 +17,7 @@ export const UserNameTag = (props: IProps) => {
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ alignItems: 'center', gap: 1 }}>
-        <Username user={author} sx={{ position: 'relative' }} />
+        <Username user={author} className="relative" />
         {createdAt && (
           <>
             <Text variant="auxiliary">|</Text>

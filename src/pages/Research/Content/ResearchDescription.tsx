@@ -1,11 +1,12 @@
 import { max } from 'date-fns';
-import { AuthorDisplay, Category, TagList } from 'oa-components';
+import { Category, TagList } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 import { useMemo } from 'react';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { Username } from '@/components/ui/username';
 import { researchStatusColour } from '../researchHelpers';
 import { ResearchContributors } from './ResearchContributors';
 import ResearchFooter from './ResearchFooter';
@@ -66,7 +67,7 @@ const ResearchDescription = (props: IProps) => {
               alignItems: 'center',
             }}
           >
-            <AuthorDisplay author={research.author} />
+            {research.author && <Username user={research.author} showAvatar />}
 
             <ResearchContributors contributors={research.collaborators ?? []} />
 

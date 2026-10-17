@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import { observer } from 'mobx-react';
-import { Category, FollowIcon, Icon, InternalLink, Username } from 'oa-components';
+import { Category, FollowIcon, Icon, InternalLink } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
@@ -10,6 +10,7 @@ import CommentIcon from '@/components/ui/icons/comment.svg?react';
 import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
 import UpdateIcon from '@/components/ui/icons/update.svg?react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Username } from '@/components/ui/username';
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
 import { researchStatusColour } from '../researchHelpers';
 
@@ -158,17 +159,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                   }}
                 >
                   {item.author && (
-                    <Username
-                      user={item.author}
-                      sx={{
-                        position: 'relative',
-                        paddingX: 0,
-                        paddingY: 0,
-                        marginLeft: 0,
-                        transform: 'translateY(-1px)',
-                        fontSize: 2,
-                      }}
-                    />
+                    <Username user={item.author} variant="inline" className="relative" />
                   )}
                   {Boolean(collaborators.length) && (
                     <Text

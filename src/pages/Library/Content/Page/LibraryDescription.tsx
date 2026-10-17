@@ -1,10 +1,4 @@
-import {
-  AuthorDisplay,
-  Category,
-  ContentStatistics,
-  ModerationStatus,
-  TagList,
-} from 'oa-components';
+import { Category, ContentStatistics, ModerationStatus, TagList } from 'oa-components';
 import type { Profile, Project } from 'oa-shared';
 import { DifficultyLevelRecord, PremiumTier } from 'oa-shared';
 import { useMemo } from 'react';
@@ -20,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
 import { UsefulButton } from '@/components/ui/useful-button';
+import { Username } from '@/components/ui/username';
 
 interface IProps {
   commentsCount: number;
@@ -92,7 +87,7 @@ export const LibraryDescription = ({
               gap: 2,
             }}
           >
-            <AuthorDisplay author={item.author} />
+            {item.author && <Username user={item.author} showAvatar />}
 
             <Text variant="auxiliary">
               <DisplayDate

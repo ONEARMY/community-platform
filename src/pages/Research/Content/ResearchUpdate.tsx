@@ -1,4 +1,4 @@
-import { AuthorDisplay, Button, ImageGallery } from 'oa-components';
+import { Button, ImageGallery } from 'oa-components';
 import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 import { useMemo } from 'react';
 import { Link } from 'react-router';
@@ -10,6 +10,7 @@ import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Username } from '@/components/ui/username';
 import { VideoPlayer } from '@/components/ui/video-player';
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
 
@@ -124,7 +125,7 @@ const ResearchUpdate = (props: IProps) => {
               <Flex sx={{ flexDirection: ['row'], alignItems: 'center', gap: 2 }}>
                 {update.author && (
                   <Box data-testid="collaborator/creator">
-                    <AuthorDisplay author={update.author} />
+                    <Username user={update.author} showAvatar />
                   </Box>
                 )}
 

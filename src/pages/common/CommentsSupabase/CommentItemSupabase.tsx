@@ -20,11 +20,11 @@ import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
-import { EditCommentModal } from '@/components/ui/edit-comment-modal';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { CommentDisplay } from './CommentDisplay';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
+import { EditCommentDialog } from './EditCommentDialog';
 import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
@@ -247,7 +247,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         </Flex>
       </Card>
 
-      <EditCommentModal
+      <EditCommentDialog
         isOpen={showEditModal}
         comment={comment.comment}
         onClose={() => setShowEditModal(false)}

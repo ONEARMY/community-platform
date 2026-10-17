@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { Link, useRevalidator } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
+import { EditCommentDialog } from 'src/pages/common/CommentsSupabase/EditCommentDialog';
 import { commentService } from 'src/services/commentService';
 import { Button } from '@/components/ui/button';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
-import { EditCommentModal } from '@/components/ui/edit-comment-modal';
 import {
   Table,
   TableBody,
@@ -151,7 +151,7 @@ export function CommentsPage({ comments, page, totalPages }: IProps) {
 
       <AdminPagination page={page} totalPages={totalPages} />
 
-      <EditCommentModal
+      <EditCommentDialog
         isOpen={!!editing}
         comment={editing?.comment ?? ''}
         isReply={editing?.isReply}

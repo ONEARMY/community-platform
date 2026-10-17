@@ -2,13 +2,13 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { EditCommentModal } from './edit-comment-modal';
+import { EditCommentDialog } from './EditCommentDialog';
 
-const renderModal = (props: Partial<Parameters<typeof EditCommentModal>[0]> = {}) => {
+const renderModal = (props: Partial<Parameters<typeof EditCommentDialog>[0]> = {}) => {
   const onClose = vi.fn();
   const onSubmit = vi.fn(async () => new Response(null, { status: 204 }));
   render(
-    <EditCommentModal
+    <EditCommentDialog
       isOpen
       comment="A short comment"
       onClose={onClose}
@@ -19,7 +19,7 @@ const renderModal = (props: Partial<Parameters<typeof EditCommentModal>[0]> = {}
   return { onClose, onSubmit };
 };
 
-describe('EditCommentModal', () => {
+describe('EditCommentDialog', () => {
   it('titles comments and replies', () => {
     renderModal({ isReply: true });
 

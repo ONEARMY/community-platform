@@ -15,8 +15,8 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
-import { EditCommentModal } from '@/components/ui/edit-comment-modal';
 import { CommentDisplay } from './CommentDisplay';
+import { EditCommentDialog } from './EditCommentDialog';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
 export interface ICommentItemProps {
@@ -128,7 +128,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
           />
         </Flex>
 
-        <EditCommentModal
+        <EditCommentDialog
           isOpen={showEditModal}
           comment={comment.comment}
           isReply

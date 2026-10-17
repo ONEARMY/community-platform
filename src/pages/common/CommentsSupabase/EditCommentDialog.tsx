@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 
-export interface EditCommentModalProps {
+interface IProps {
   isOpen: boolean;
   comment: string;
   isReply?: boolean;
@@ -18,13 +18,7 @@ export interface EditCommentModalProps {
   onSubmit: (comment: string) => Promise<Response>;
 }
 
-export function EditCommentModal({
-  isOpen,
-  comment,
-  isReply = false,
-  onClose,
-  onSubmit,
-}: EditCommentModalProps) {
+export function EditCommentDialog({ isOpen, comment, isReply = false, onClose, onSubmit }: IProps) {
   const [text, setText] = useState(comment);
   const [error, setError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);

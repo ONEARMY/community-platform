@@ -1,5 +1,6 @@
-import { Category, InternalLink } from 'oa-components';
+import { Category } from 'oa-components';
 import type { Question } from 'oa-shared';
+import { Link } from 'react-router';
 import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
 import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { Highlighter } from 'src/common/Highlighter';
@@ -81,27 +82,10 @@ export const QuestionListItem = ({ question, query }: IProps) => {
               fontSize: [3, 4, 4],
             }}
           >
-            <InternalLink
-              to={url}
-              sx={{
-                textDecoration: 'none',
-                color: 'inherit',
-                '&:focus': {
-                  outline: 'none',
-                  textDecoration: 'none',
-                },
-                '&::after': {
-                  content: '""',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                },
-              }}
-            >
+            <Link to={url} className="text-inherit no-underline focus:outline-none">
               <Highlighter searchWords={searchWords} textToHighlight={question.title} />
-            </InternalLink>
+              <span aria-hidden="true" className="absolute inset-0" />
+            </Link>
           </Heading>
 
           {question.description && (

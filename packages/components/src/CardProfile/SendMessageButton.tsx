@@ -1,6 +1,6 @@
 import type { MapPin } from 'oa-shared';
+import { Link } from 'react-router';
 import { Button } from '../Button/Button';
-import { InternalLink } from '../InternalLink/InternalLink';
 
 interface IProps {
   item: MapPin;
@@ -9,8 +9,8 @@ interface IProps {
 export const SendMessageButton = ({ item }: IProps) => {
   const isContactable = (item.profile?.isContactable ?? true) && item.profile?.username;
   return isContactable ? (
-    <InternalLink
-      sx={{ alignSelf: 'flex-end' }}
+    <Link
+      className="self-end"
       to={`/u/${item.profile?.username}#contact`}
       data-cy="PinProfileMessageLink"
       target="_blank"
@@ -18,6 +18,6 @@ export const SendMessageButton = ({ item }: IProps) => {
       <Button icon="contact" small>
         Send Message
       </Button>
-    </InternalLink>
+    </Link>
   ) : null;
 };

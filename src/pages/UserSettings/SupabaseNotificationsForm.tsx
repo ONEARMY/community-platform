@@ -1,7 +1,8 @@
-import { FieldSwitch, InternalLink } from 'oa-components';
+import { FieldSwitch } from 'oa-components';
 import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
+import { Link } from 'react-router';
 import { Button, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
 import InformationIcon from '@/components/ui/icons/information.svg?react';
@@ -139,15 +140,15 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                   name="Receiving messages"
                   description="Through the contact form on your profile page"
                   control={
-                    <InternalLink
+                    <Link
                       data-cy="messages-link"
                       to="/settings/profile#public-contact"
-                      sx={{ textAlign: 'center', ':hover': { textDecoration: 'underline' } }}
+                      className="text-center hover:underline"
                     >
                       {profileIsContactable
                         ? 'Stop receiving messages'
                         : 'Start receiving messages'}
-                    </InternalLink>
+                    </Link>
                   }
                 />
               )}

@@ -1,7 +1,8 @@
 import { formatDistanceToNow } from 'date-fns';
 import { observer } from 'mobx-react';
-import { Category, FollowIcon, Icon, InternalLink } from 'oa-components';
+import { Category, FollowIcon, Icon } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
+import { Link } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { shortFormatNumber } from 'src/utils/helpers';
@@ -121,27 +122,13 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                     wordBreak: 'break-word',
                   }}
                 >
-                  <InternalLink
+                  <Link
                     to={`/research/${encodeURIComponent(item.slug)}`}
-                    sx={{
-                      textDecoration: 'none',
-                      color: 'inherit',
-                      '&:focus': {
-                        outline: 'none',
-                        textDecoration: 'none',
-                      },
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        right: 0,
-                        height: ['120px', '175px', '175px'],
-                      },
-                    }}
+                    className="text-inherit no-underline focus:outline-none"
                   >
                     {item.title}
-                  </InternalLink>
+                    <span aria-hidden="true" className="absolute inset-x-0 top-0 h-24 sm:h-35" />
+                  </Link>
                 </Heading>
               </Flex>
               <Flex

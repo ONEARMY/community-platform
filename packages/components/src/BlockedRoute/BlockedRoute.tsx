@@ -1,7 +1,7 @@
+import { Link } from 'react-router';
 import { Box, Flex, Text } from 'theme-ui';
 
 import { Button } from '../Button/Button';
-import { InternalLink } from '../InternalLink/InternalLink';
 
 export interface BlockedRouteProps {
   children: React.ReactNode;
@@ -16,11 +16,11 @@ export const BlockedRoute = (props: BlockedRouteProps) => {
     <Flex sx={{ justifyContent: 'center', flexDirection: 'column', mt: 8 }} data-cy="BlockedRoute">
       <Text sx={{ width: '100%', textAlign: 'center' }}>{props.children}</Text>
       <Box sx={{ textAlign: 'center', mt: 2 }}>
-        <InternalLink to={redirectUrl}>
+        <Link to={redirectUrl}>
           <Button type="button" variant="subtle" small>
             {redirectLabel}
           </Button>
-        </InternalLink>
+        </Link>
       </Box>
     </Flex>
   );

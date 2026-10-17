@@ -1,10 +1,11 @@
+import { ClassNames } from '@emotion/react';
 import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
 import { ReactCountryFlag } from 'react-country-flag';
+import { Link } from 'react-router';
 import type { ThemeUIStyleObject } from 'theme-ui';
-import { Flex, Text } from 'theme-ui';
-import { InternalLink } from '../InternalLink/InternalLink';
+import { css, Flex, Text, useThemeUI } from 'theme-ui';
 import { UserBadge } from './UserBadge';
 
 export interface DisplayNameProps {
@@ -15,6 +16,7 @@ export interface DisplayNameProps {
 }
 
 export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProps) => {
+  const { theme } = useThemeUI();
   const { username, displayName, country, badges } = user;
   const countryCode = country ? countryToAlpha2(country) : null;
 
@@ -87,35 +89,19 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
   }
 
   return (
-    <InternalLink
-      to={`/u/${username}`}
-      target={target || '_self'}
-      sx={{
-        border: '1px solid transparent',
-        display: 'inline-flex',
-        minWidth: 0,
-        overflow: 'hidden',
-        paddingX: 1,
-        borderRadius: 1,
-        marginLeft: -1,
-        color: 'black',
-        fontSize: 2,
-        transition: '80ms ease-out all',
-        '&:focus': {
-          borderColor: '#20B7EB',
-          background: 'softblue',
-          outline: 'none',
-          color: 'bluetag',
-        },
-        '&:hover': {
-          borderColor: '#20B7EB',
-          background: 'softblue',
-          textcolor: 'bluetag',
-        },
-        ...(sx || {}),
-      }}
-    >
-      {DisplayNameBody}
-    </InternalLink>
+    <ClassNames>
+      {({ css: emotionCss, cx }) => (
+        <Link
+          to={`/u/${username}`}
+          target={target || '_self'}
+          className={cx(
+            '-ml-1 inline-flex min-w-0 overflow-hidden rounded-s border border-transparent px-1 text-sm text-legacy-ink transition-all duration-75 hover:border-highlight hover:bg-softblue focus:border-highlight focus:bg-softblue focus:text-bluetag focus:outline-none',
+            emotionCss(css(sx || {})(theme)),
+          )}
+        >
+          {DisplayNameBody}
+        </Link>
+      )}
+    </ClassNames>
   );
 };

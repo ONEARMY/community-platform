@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 import { render } from '@testing-library/react';
 import type { Moderation } from 'oa-shared';
+import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AlertOrganisationModeration } from './AlertOrganisationModeration';
@@ -13,14 +14,15 @@ vi.mock('src/stores/Profile/profile.store', () => ({
 
 vi.mock('oa-components', () => ({
   Banner: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  InternalLink: ({ children, to }: { children: React.ReactNode; to: string }) => (
-    <a href={to}>{children}</a>
-  ),
 }));
 
 const renderWith = (moderation: Moderation | null, hasProfile = true) => {
   mockUseProfileStore.mockReturnValue({ profile: hasProfile ? { moderation } : null });
-  return render(<AlertOrganisationModeration />);
+  return render(
+    <MemoryRouter>
+      <AlertOrganisationModeration />
+    </MemoryRouter>,
+  );
 };
 
 const banner = (container: HTMLElement) =>

@@ -1,5 +1,6 @@
-import { Category, InternalLink, ModerationStatus } from 'oa-components';
+import { Category, ModerationStatus } from 'oa-components';
 import { type Project, UserRole } from 'oa-shared';
+import { Link } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter, shortFormatNumber } from 'src/utils/helpers';
@@ -64,23 +65,15 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
         >
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
             <Heading as="h2" variant="small" color="black">
-              <InternalLink
+              <Link
                 to={`/library/${encodeURIComponent(item.slug)}`}
-                sx={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    inset: 0,
-                  },
-                }}
+                className="text-inherit no-underline after:absolute after:inset-0"
               >
                 <Highlighter
                   searchWords={searchWords}
                   textToHighlight={capitalizeFirstLetter(item.title)}
                 />
-              </InternalLink>
+              </Link>
             </Heading>
 
             {item.author && (

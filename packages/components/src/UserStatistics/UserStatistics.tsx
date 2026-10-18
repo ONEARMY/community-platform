@@ -1,4 +1,5 @@
 import type { MapPin, Profile } from 'oa-shared';
+import { Link } from 'react-router';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Card, Flex, Image, Text } from 'theme-ui';
 import ForumIcon from '../../assets/icons/icon-forum.svg';
@@ -6,7 +7,6 @@ import HowToCountIcon from '../../assets/icons/icon-library.svg';
 import ResearchIcon from '../../assets/icons/icon-research.svg';
 import starActiveSVG from '../../assets/icons/icon-star-active.svg';
 import { Icon } from '../Icon/Icon';
-import { InternalLink } from '../InternalLink/InternalLink';
 
 export interface UserStatisticsProps {
   profile: Pick<Profile, 'id' | 'username' | 'badges' | 'totalViews' | 'country'>;
@@ -43,16 +43,16 @@ export const UserStatistics = (props: UserStatisticsProps) => {
       >
         <Flex sx={{ gap: 4, flexDirection: 'column' }}>
           {props.pin && props.profile.username && (
-            <InternalLink
+            <Link
               to={'/map#' + props.profile.username}
-              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              className="hover:underline"
               data-testid="location-link"
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
                 <Icon glyph="map" size={22} />
                 <Text>Location: {props.pin.country || 'View on Map'}</Text>
               </Flex>
-            </InternalLink>
+            </Link>
           )}
           {props?.profile.badges?.map((badge) => (
             <Flex
@@ -86,42 +86,38 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           )}
 
           {props.libraryCount > 0 && props.profile.username && (
-            <InternalLink
+            <Link
               to={'/library?q=' + props.profile.username}
-              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              className="hover:underline"
               data-testid="library-link"
             >
               <div className="flex items-center gap-2" data-testid="library-stat">
                 <img className="size-[22px] shrink-0 object-contain" src={HowToCountIcon} alt="" />
                 {`Library: ${props.libraryCount}`}
               </div>
-            </InternalLink>
+            </Link>
           )}
 
           {props.researchCount > 0 && props.profile.username && (
-            <InternalLink
+            <Link
               to={'/research?q=' + props.profile.username}
-              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              className="hover:underline"
               data-testid="research-link"
             >
               <div className="flex items-center gap-2" data-testid="research-stat">
                 <img className="size-[22px] shrink-0 object-contain" src={ResearchIcon} alt="" />
                 {`Research: ${props.researchCount}`}
               </div>
-            </InternalLink>
+            </Link>
           )}
 
           {props.questionCount > 0 && (
-            <InternalLink
-              to="/questions"
-              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
-              data-testid="questions-link"
-            >
+            <Link to="/questions" className="hover:underline" data-testid="questions-link">
               <div className="flex items-center gap-2" data-testid="questions-stat">
                 <img className="size-[22px] shrink-0 object-contain" src={ForumIcon} alt="" />
                 {`Questions: ${props.questionCount}`}
               </div>
-            </InternalLink>
+            </Link>
           )}
 
           {props.showViews && props.profile.totalViews > 0 && (

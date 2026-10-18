@@ -32,7 +32,6 @@ export { ImageGallery } from './ImageGallery/ImageGallery';
 export { ImageInputDeleteOverlay } from './ImageInput/ImageInputDeleteOverlay';
 export { ImageInputV2 } from './ImageInput/ImageInputV2';
 export { MultipleImageInput } from './ImageInput/MultipleImageInput';
-export { InternalLink } from './InternalLink/InternalLink';
 export { type IProps as MapProps, Map } from './Map/Map.client';
 export { MapCardList } from './MapCardList/MapCardList';
 export { MapFilterListItem } from './MapFilterListItem/MapFilterListItem';

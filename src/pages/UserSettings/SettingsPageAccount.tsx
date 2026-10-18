@@ -130,11 +130,11 @@ export const SettingsPageAccount = observer(() => {
               </Text>
             </Flex>
           </Flex>
-          <InternalLink to="/support">
+          <Link to="/support">
             <Button type="button" variant="primary">
               Support us
             </Button>
-          </InternalLink>
+          </Link>
         </Flex>
       )}
       */}

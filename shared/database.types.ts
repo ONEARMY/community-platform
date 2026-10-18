@@ -1695,6 +1695,23 @@ export type Database = {
         Args: { source_id_input: number };
         Returns: string[];
       };
+      get_admin_comments: {
+        Args: { p_limit: number; p_offset: number };
+        Returns: {
+          comment: string;
+          created_at: string;
+          deleted: boolean;
+          display_name: string;
+          id: number;
+          notification_count: number;
+          parent_id: number;
+          source_id: number;
+          source_slug: string;
+          source_type: string;
+          total_count: number;
+          username: string;
+        }[];
+      };
       get_author_vote_counts: {
         Args: { author_id: number };
         Returns: {

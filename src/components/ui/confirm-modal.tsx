@@ -68,7 +68,7 @@ export function ConfirmModal({
             data-slot="confirm-modal"
             data-cy="Confirm.modal: Modal"
             data-testid="Confirm.modal: Modal"
-            className="fixed top-1/2 left-1/2 z-above-header flex max-h-screen w-full max-w-dialog -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-4 text-sm text-popover-foreground duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+            className="fixed top-1/2 left-1/2 z-above-header flex max-h-screen w-full max-w-dialog -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-md border-2 border-black bg-white p-4 text-sm text-popover-foreground duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
             style={width ? { width, maxWidth: '90vw' } : { width: 300, maxWidth: '90vw' }}
           >
             <div

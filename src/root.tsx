@@ -42,7 +42,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     --color-primary-hover: ${loaderData.colorPrimaryHover};
     --color-accent: ${loaderData.colorAccent};
     --color-accent-hover: ${loaderData.colorAccentHover};
-    --color-brand-secondary: ${loaderData.colorSecondary};
+    ${loaderData.colorSecondary ? `--color-brand-secondary: ${loaderData.colorSecondary};` : ''}
   `;
 
   // const isProd = import.meta.env.VITE_BRANCH === 'production';

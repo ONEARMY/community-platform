@@ -45,7 +45,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.pin && props.profile.username && (
             <Link
               to={'/map#' + props.profile.username}
-              className="text-legacy-ink hover:underline"
+              className="hover:underline"
               data-testid="location-link"
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
@@ -88,7 +88,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.libraryCount > 0 && props.profile.username && (
             <Link
               to={'/library?q=' + props.profile.username}
-              className="text-legacy-ink hover:underline"
+              className="hover:underline"
               data-testid="library-link"
             >
               <div className="flex items-center gap-2" data-testid="library-stat">
@@ -101,7 +101,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.researchCount > 0 && props.profile.username && (
             <Link
               to={'/research?q=' + props.profile.username}
-              className="text-legacy-ink hover:underline"
+              className="hover:underline"
               data-testid="research-link"
             >
               <div className="flex items-center gap-2" data-testid="research-stat">
@@ -112,11 +112,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           )}
 
           {props.questionCount > 0 && (
-            <Link
-              to="/questions"
-              className="text-legacy-ink hover:underline"
-              data-testid="questions-link"
-            >
+            <Link to="/questions" className="hover:underline" data-testid="questions-link">
               <div className="flex items-center gap-2" data-testid="questions-stat">
                 <img className="size-[22px] shrink-0 object-contain" src={ForumIcon} alt="" />
                 {`Questions: ${props.questionCount}`}

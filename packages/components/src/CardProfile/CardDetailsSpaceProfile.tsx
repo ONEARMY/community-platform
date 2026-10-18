@@ -74,7 +74,7 @@ export const CardDetailsSpaceProfile = ({ item, isLink, variant }: IProps) => {
           </Box>
           <DisplayName
             user={{ ...profile, country: item.country }}
-            sx={{ alignSelf: 'flex-start' }}
+            className="self-start"
             isLink={isLink}
             target="_blank"
           />

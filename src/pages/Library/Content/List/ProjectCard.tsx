@@ -67,13 +67,12 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
             <Heading as="h2" variant="small" color="black">
               <Link
                 to={`/library/${encodeURIComponent(item.slug)}`}
-                className="text-inherit no-underline"
+                className="text-inherit no-underline after:absolute after:inset-0"
               >
                 <Highlighter
                   searchWords={searchWords}
                   textToHighlight={capitalizeFirstLetter(item.title)}
                 />
-                <span aria-hidden="true" className="absolute inset-0" />
               </Link>
             </Heading>
 

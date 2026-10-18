@@ -124,10 +124,9 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                 >
                   <Link
                     to={`/research/${encodeURIComponent(item.slug)}`}
-                    className="text-inherit no-underline focus:outline-none"
+                    className="text-inherit no-underline focus:outline-none after:absolute after:inset-x-0 after:top-0 after:h-24 sm:after:h-35"
                   >
                     {item.title}
-                    <span aria-hidden="true" className="absolute inset-x-0 top-0 h-24 sm:h-35" />
                   </Link>
                 </Heading>
               </Flex>

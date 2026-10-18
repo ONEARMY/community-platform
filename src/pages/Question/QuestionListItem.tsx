@@ -82,9 +82,11 @@ export const QuestionListItem = ({ question, query }: IProps) => {
               fontSize: [3, 4, 4],
             }}
           >
-            <Link to={url} className="text-inherit no-underline focus:outline-none">
+            <Link
+              to={url}
+              className="text-inherit no-underline focus:outline-none after:absolute after:inset-0"
+            >
               <Highlighter searchWords={searchWords} textToHighlight={question.title} />
-              <span aria-hidden="true" className="absolute inset-0" />
             </Link>
           </Heading>
 

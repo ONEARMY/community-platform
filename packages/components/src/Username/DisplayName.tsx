@@ -1,22 +1,19 @@
-import { ClassNames } from '@emotion/react';
 import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
 import { ReactCountryFlag } from 'react-country-flag';
 import { Link } from 'react-router';
-import type { ThemeUIStyleObject } from 'theme-ui';
-import { css, Flex, Text, useThemeUI } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 import { UserBadge } from './UserBadge';
 
 export interface DisplayNameProps {
   user: Partial<Author>;
-  sx?: ThemeUIStyleObject;
+  className?: string;
   isLink?: boolean;
   target?: HTMLAttributeAnchorTarget;
 }
 
-export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProps) => {
-  const { theme } = useThemeUI();
+export const DisplayName = ({ user, className, target, isLink = true }: DisplayNameProps) => {
   const { username, displayName, country, badges } = user;
   const countryCode = country ? countryToAlpha2(country) : null;
 
@@ -89,19 +86,12 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
   }
 
   return (
-    <ClassNames>
-      {({ css: emotionCss, cx }) => (
-        <Link
-          to={`/u/${username}`}
-          target={target || '_self'}
-          className={cx(
-            '-ml-1 inline-flex min-w-0 overflow-hidden rounded-s border border-transparent px-1 text-sm text-legacy-ink transition-all duration-75 hover:border-highlight hover:bg-softblue focus:border-highlight focus:bg-softblue focus:text-bluetag focus:outline-none',
-            emotionCss(css(sx || {})(theme)),
-          )}
-        >
-          {DisplayNameBody}
-        </Link>
-      )}
-    </ClassNames>
+    <Link
+      to={`/u/${username}`}
+      target={target || '_self'}
+      className={`-ml-1 inline-flex min-w-0 overflow-hidden rounded-card-flat border border-transparent px-1 text-sm text-foreground transition-all duration-80 ease-out hover:border-highlight hover:bg-softblue focus:border-highlight focus:bg-softblue focus:outline-none ${className ?? ''}`}
+    >
+      {DisplayNameBody}
+    </Link>
   );
 };

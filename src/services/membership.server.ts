@@ -38,7 +38,7 @@ export const membershipNotifications = () => {
       const description = tierName ? `a new ${tierName} Supporter` : 'a new Supporter';
       const link = url ? `\n<${url}>` : '';
 
-      post(`${name} is now ${description} (${amount})${link}`);
+      post(`🆕 ${name} is now ${description} (${amount})${link}`);
     },
 
     recurringPayment(
@@ -51,7 +51,7 @@ export const membershipNotifications = () => {
         .filter(Boolean)
         .join(' ');
 
-      post(`${name} paid their ${description} (${amount})`);
+      post(`🔄 ${name} paid their ${description} (${amount})`);
     },
 
     paymentFailed(
@@ -63,20 +63,20 @@ export const membershipNotifications = () => {
       const description = [tierName, 'membership'].filter(Boolean).join(' ');
 
       post(
-        `${name} had a failed payment for their ${description} (${amount})\n<${stripeCustomerUrl}>`,
+        `🚫 ${name} had a failed payment for their ${description} (${amount})\n<${stripeCustomerUrl}>`,
       );
     },
 
     tierChanged(name: string, fromTierName: string, toTierName: string) {
-      post(`${name} changed their membership from ${fromTierName} to ${toTierName}`);
+      post(`🔀 ${name} changed their membership from ${fromTierName} to ${toTierName}`);
     },
 
     subscriptionCancelled(name: string) {
-      post(`${name} canceled their support`);
+      post(`💔 ${name} canceled their support`);
     },
 
     subscriptionResumed(name: string) {
-      post(`${name} changed their mind and resumed their support`);
+      post(`💚 ${name} changed their mind and resumed their support`);
     },
   };
 };

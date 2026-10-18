@@ -30,7 +30,7 @@ export const NewsMemberCta = ({ cta }: IProps) => (
         <Link
           to={cta.actionUrl}
           className={buttonVariants({
-            variant: 'brand-secondary',
+            variant: 'secondary',
             size: 'lg',
             className: 'w-full',
           })}

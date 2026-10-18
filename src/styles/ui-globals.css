@@ -38,8 +38,6 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
-  --color-brand-secondary: var(--brand-secondary);
-  --color-brand-secondary-hover: color-mix(in oklch, var(--brand-secondary), var(--foreground) 5%);
   --color-primary-soft: color-mix(in srgb, var(--primary) 50%, white);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
@@ -57,6 +55,7 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
+  --color-link: LinkText;
   --color-supporter-cta: var(--supporter-cta-color, #bfdeba);
   --spacing: 0.3125rem;
   --radius-s: var(--spacing);
@@ -100,9 +99,8 @@
        by the SSR <style> tag in src/root.tsx, sourced from tenant_settings in the DB. */
   --primary: var(--color-primary);
   --primary-hover: var(--color-primary-hover);
-  --brand-secondary: var(--color-brand-secondary);
   --primary-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: var(--color-brand-secondary, oklch(0.97 0 0));
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -150,9 +148,8 @@
   /* No separate dark-mode brand colors exist in tenant_settings; reuse the same vars. */
   --primary: var(--color-primary);
   --primary-hover: var(--color-primary-hover);
-  --brand-secondary: var(--color-brand-secondary);
   --primary-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: var(--color-brand-secondary, oklch(0.269 0 0));
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);

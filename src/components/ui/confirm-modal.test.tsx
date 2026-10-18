@@ -315,14 +315,14 @@ describe('ConfirmModal', () => {
 
       expect(
         screen.getByRole('button', { name: 'Confirm Confirm action' }),
-      ).toHaveClass('bg-destructive/10');
+      ).toHaveClass('bg-destructive/45');
     });
 
     it('styles Cancel with the destructive variant when requested', () => {
       render(<Harness cancelVariant="destructive" />);
 
       expect(screen.getByRole('button', { name: 'Cancel' })).toHaveClass(
-        'bg-destructive/10',
+        'bg-destructive/45',
       );
     });
 

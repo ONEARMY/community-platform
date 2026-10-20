@@ -1,10 +1,16 @@
 import type { TransformOptions } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, DBMedia } from 'oa-shared';
-import { Image, MediaFile } from 'oa-shared';
+import { Image, MediaFile, UserRole } from 'oa-shared';
 import sharp from 'sharp';
 import { logger } from 'src/logger';
 import { isGif } from 'src/utils/storage';
+
+export const getMaxDocumentSize = (roles: string[]) =>
+  (roles.includes(UserRole.ADMIN) ? 300 : 50) * 1048576;
+
+export const getPendingDocumentPath = (authId: string, uploadId: string) =>
+  `pending/${authId}/${uploadId}`;
 
 export class StorageServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
@@ -232,61 +238,53 @@ export class StorageServiceServer {
     return { media, errors };
   }
 
-  async uploadFile(
-    files: File[],
-    path: string,
-  ): Promise<{
-    media: MediaFile[];
-    errors: string[];
-  } | null> {
-    if (!files || files.length === 0) {
-      return null;
+  async createFileUpload(path: string): Promise<string> {
+    const { data, error } = await this.client.storage
+      .from(process.env.TENANT_ID + '-documents')
+      .createSignedUploadUrl(path);
+
+    if (error) {
+      throw error;
     }
 
-    const errors: string[] = [];
-    const media: MediaFile[] = [];
+    return data.signedUrl;
+  }
 
-    for (const file of files) {
-      // Check if file exists and determine unique filename if needed
-      let fileName = file.name;
-      const fileInfo = await this.client.storage
-        .from(process.env.TENANT_ID + '-documents')
-        .info(`${path}/${fileName}`);
+  async getFileSize(path: string): Promise<number | null> {
+    const { data } = await this.client.storage
+      .from(process.env.TENANT_ID + '-documents')
+      .info(path);
 
-      if (fileInfo.data) {
-        // File exists, find a unique name
-        const lastDotIndex = file.name.lastIndexOf('.');
-        const nameWithoutExt = lastDotIndex > 0 ? file.name.substring(0, lastDotIndex) : file.name;
-        const extension = lastDotIndex > 0 ? file.name.substring(lastDotIndex) : '';
-        let i = 1;
-        let uniqueFileInfo;
+    return data?.size ?? null;
+  }
 
-        do {
-          fileName = `${nameWithoutExt}-${i}${extension}`;
-          uniqueFileInfo = await this.client.storage
-            .from(process.env.TENANT_ID + '-documents')
-            .info(`${path}/${fileName}`);
-          i++;
-        } while (uniqueFileInfo.data);
-      }
+  async moveFile(sourcePath: string, folder: string, name: string): Promise<MediaFile> {
+    const bucket = this.client.storage.from(process.env.TENANT_ID + '-documents');
 
-      const result = await this.client.storage
-        .from(process.env.TENANT_ID + '-documents')
-        .upload(`${path}/${fileName}`, file);
+    let fileName = name;
+    const lastDotIndex = name.lastIndexOf('.');
+    const nameWithoutExt = lastDotIndex > 0 ? name.substring(0, lastDotIndex) : name;
+    const extension = lastDotIndex > 0 ? name.substring(lastDotIndex) : '';
+    let i = 1;
 
-      if (result.data === null) {
-        errors.push(result.error.message);
-        continue;
-      }
-
-      media.push({
-        id: result.data.id,
-        name: result.data.path.split('/').at(-1)!,
-        size: file.size,
-      });
+    while ((await bucket.exists(`${folder}/${fileName}`)).data) {
+      fileName = `${nameWithoutExt}-${i}${extension}`;
+      i++;
     }
 
-    return { media, errors };
+    const moveResult = await bucket.move(sourcePath, `${folder}/${fileName}`);
+
+    if (moveResult.error) {
+      throw moveResult.error;
+    }
+
+    const { data, error } = await bucket.info(`${folder}/${fileName}`);
+
+    if (error) {
+      throw error;
+    }
+
+    return new MediaFile({ id: data.id, name: fileName, size: data.size ?? 0 });
   }
 
   async removeFiles(paths: string[]): Promise<void> {

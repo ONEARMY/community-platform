@@ -59,7 +59,7 @@ aliases:
     filters:
       branches:
         only:
-          - master
+          - main
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

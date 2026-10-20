@@ -44,7 +44,7 @@ const getSiteVariant = (): siteVariants => {
   switch (_c('VITE_BRANCH')) {
     case 'production':
       return 'production';
-    case 'master':
+    case 'main':
       return 'staging';
     default:
       return 'dev_site';

@@ -200,5 +200,6 @@ ALTER TABLE ONLY "public"."questions"
     ADD CONSTRAINT "questions_category_fkey" FOREIGN KEY ("category") REFERENCES "public"."categories"("id") ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE "public"."questions" ENABLE ROW LEVEL SECURITY;
+GRANT UPDATE ("total_views") ON TABLE "public"."questions" TO "anon";
 
 CREATE POLICY "tenant_isolation" ON "public"."questions" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));

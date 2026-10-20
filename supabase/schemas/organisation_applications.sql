@@ -13,5 +13,6 @@ ALTER TABLE ONLY "public"."organisation_applications"
     ADD CONSTRAINT "organisation_applications_auth_id_fkey" FOREIGN KEY ("auth_id") REFERENCES "auth"."users"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE "public"."organisation_applications" ENABLE ROW LEVEL SECURITY;
+GRANT INSERT ON TABLE "public"."organisation_applications" TO "anon";
 
 CREATE POLICY "tenant_isolation" ON "public"."organisation_applications" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));

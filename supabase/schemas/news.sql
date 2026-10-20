@@ -54,6 +54,7 @@ ALTER TABLE ONLY "public"."news"
     ADD CONSTRAINT "news_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE "public"."news" ENABLE ROW LEVEL SECURITY;
+GRANT UPDATE ("total_views") ON TABLE "public"."news" TO "anon";
 
 CREATE POLICY "tenant_isolation" ON "public"."news" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 

@@ -78,6 +78,7 @@ BEGIN
 END;
 $$;
 
+REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM PUBLIC;
 REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "anon";
 REVOKE EXECUTE ON FUNCTION "public"."read_secret"("text") FROM "authenticated";
 
@@ -112,6 +113,8 @@ BEGIN
     AND p.tenant_id = p_tenant_id;
 END;
 $$;
+
+REVOKE EXECUTE ON FUNCTION "public"."get_supporters"("text") FROM PUBLIC, "anon";
 
 -- RPC function to count supporters per badge, for the admin Users overview
 CREATE OR REPLACE FUNCTION "public"."get_supporter_badge_counts"(p_tenant_id text)

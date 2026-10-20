@@ -14,11 +14,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const { email, password, name, stripeCustomerId, setupToken } = await request.json();
+    const { email, password, name, stripeCustomerId } = await request.json();
 
-    if (!email || !password || !name || !stripeCustomerId || !setupToken) {
+    if (!email || !password || !name || !stripeCustomerId) {
       return Response.json(
-        { error: 'Email, password, name, stripeCustomerId, and setupToken are required.' },
+        { error: 'Email, password, name, and stripeCustomerId are required.' },
         { status: 400 },
       );
     }
@@ -35,10 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }
 
-    const subscription = await StripeServiceServer.getSetupSubscription(
-      stripeCustomerId,
-      setupToken,
-    );
+    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
     if (!subscription) {
       return Response.json({ error: 'Payment not confirmed yet.' }, { status: 403 });
     }
@@ -52,6 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       email,
       password,
       email_confirm: true,
+      app_metadata: { supporter_password_pending: true },
     });
 
     if (createError) {
@@ -71,9 +69,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, newUser.user.id, tenantId);
-    await StripeServiceServer.updateSubscriptionMetadata(subscription.id, {
-      setup_auth_id: newUser.user.id,
-    });
 
     // Assign badge based on active subscription's product
     const productId = subscription.items.data[0]?.price?.product as string;

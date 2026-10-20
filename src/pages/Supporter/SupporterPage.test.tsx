@@ -555,7 +555,7 @@ describe('SupporterPage', () => {
       mockCreateSupporterAccount.mockResolvedValue({ ok: true });
 
       const { router } = renderPage(
-        '/support?payment=success&customer=cus_123&email=test@test.com&name=Test&setupToken=tok_123',
+        '/support?payment=success&customer=cus_123&email=test@test.com&name=Test',
       );
 
       await waitFor(() => {

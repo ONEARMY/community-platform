@@ -11,11 +11,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const { stripeCustomerId, setupToken, password } = await request.json();
+    const { email, stripeCustomerId, password } = await request.json();
 
-    if (!stripeCustomerId || !setupToken || !password) {
+    if (!email || !stripeCustomerId || !password) {
       return Response.json(
-        { error: 'stripeCustomerId, setupToken, and password are required.' },
+        { error: 'Email, stripeCustomerId, and password are required.' },
         { status: 400 },
       );
     }
@@ -25,32 +25,44 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const adminClient = createSupabaseAdminServerClient();
+    const stripeService = new StripeServiceServer(adminClient);
 
-    const subscription = await StripeServiceServer.getSetupSubscription(
-      stripeCustomerId,
-      setupToken,
-    );
-    const setupAuthId = subscription?.metadata.setup_auth_id;
-    if (!subscription || !setupAuthId) {
-      return Response.json({ error: 'No account found for this checkout.' }, { status: 404 });
+    const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
+    if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
+      return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }
 
-    const { data: updated, error: updateError } = await adminClient.auth.admin.updateUserById(
-      setupAuthId,
-      { password },
+    const tenantId = process.env.TENANT_ID;
+    const linkedAuthId = await stripeService.getAuthIdByStripeCustomerId(
+      stripeCustomerId,
+      tenantId,
     );
+    if (!linkedAuthId) {
+      return Response.json(
+        { error: 'No linked account found for this customer.' },
+        { status: 404 },
+      );
+    }
 
-    if (updateError || !updated.user?.email) {
+    const { data: linkedUser } = await adminClient.auth.admin.getUserById(linkedAuthId);
+    if (linkedUser.user?.app_metadata.supporter_password_pending !== true) {
+      return Response.json(
+        { error: 'No linked account found for this customer.' },
+        { status: 404 },
+      );
+    }
+
+    const { error: updateError } = await adminClient.auth.admin.updateUserById(linkedAuthId, {
+      password,
+      app_metadata: { supporter_password_pending: false },
+    });
+
+    if (updateError) {
       logger.error('Error updating password:', updateError);
       return Response.json({ error: 'Failed to update password.' }, { status: 500 });
     }
 
-    await StripeServiceServer.updateSubscriptionMetadata(subscription.id, {
-      setup_token_hash: '',
-      setup_auth_id: '',
-    });
-
-    const signInTicket = await issueSignInTicket(updated.user.email);
+    const signInTicket = await issueSignInTicket(email);
 
     return Response.json({ success: true, signInTicket }, { status: 200 });
   } catch (error: any) {

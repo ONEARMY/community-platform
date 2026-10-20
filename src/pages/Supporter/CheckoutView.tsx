@@ -14,7 +14,6 @@ const CheckoutForm = () => {
     interval,
     isAuthenticated,
     stripeCustomerId,
-    setupToken,
     email: guestEmail,
     name: guestName,
     accountExists,
@@ -50,7 +49,6 @@ const CheckoutForm = () => {
       const params = new URLSearchParams({
         payment: 'success',
         ...(stripeCustomerId && { customer: stripeCustomerId }),
-        ...(setupToken && { setupToken }),
         ...(guestEmail && { email: guestEmail }),
         ...(guestName && { name: guestName }),
         ...(accountExists && { accountExists: 'true' }),

@@ -99,7 +99,6 @@ export const SupporterPage = ({
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(
     previewMode ? 'cus_preview' : null,
   );
-  const [setupToken, setSetupToken] = useState<string | null>(null);
   const [accountExists, setAccountExists] = useState(previewMode === 'login');
   const [accountCreated, setAccountCreated] = useState(false);
 
@@ -162,14 +161,12 @@ export const SupporterPage = ({
     const emailParam = searchParams.get('email');
     const nameParam = searchParams.get('name');
     const accountExistsParam = searchParams.get('accountExists');
-    const setupTokenParam = searchParams.get('setupToken');
 
     if (!customerParam || !emailParam) {
       return;
     }
 
     setStripeCustomerId(customerParam);
-    setSetupToken(setupTokenParam);
     setEmail(emailParam);
     if (nameParam) {
       setName(nameParam);
@@ -181,17 +178,12 @@ export const SupporterPage = ({
         return;
       }
 
-      if (!setupTokenParam) {
-        return;
-      }
-
       try {
         const result = await stripeService.createSupporterAccount({
           email: emailParam,
           password: crypto.randomUUID(),
           name: nameParam || emailParam.split('@')[0],
           stripeCustomerId: customerParam,
-          setupToken: setupTokenParam,
         });
         if (result.ok) {
           setAccountCreated(true);
@@ -225,7 +217,6 @@ export const SupporterPage = ({
       setStripeInstance(loadStripe(result.publishableKey));
       setClientSecret(result.clientSecret);
       setStripeCustomerId(result.stripeCustomerId);
-      setSetupToken(result.setupToken);
       setAccountExists(result.accountExists);
       setPageState('checkout');
     } else if (result.error.includes('active subscription')) {
@@ -271,14 +262,13 @@ export const SupporterPage = ({
       return;
     }
 
-    if (!accountExists && stripeCustomerId && setupToken) {
+    if (!accountExists && stripeCustomerId) {
       try {
         const result = await stripeService.createSupporterAccount({
           email,
           password: crypto.randomUUID(),
           name: name || email.split('@')[0],
           stripeCustomerId,
-          setupToken,
         });
         if (result.ok) {
           setAccountCreated(true);
@@ -322,7 +312,6 @@ export const SupporterPage = ({
     clientSecret,
     stripeInstance,
     stripeCustomerId,
-    setupToken,
     siteImage,
     tierConfig,
     siteName,

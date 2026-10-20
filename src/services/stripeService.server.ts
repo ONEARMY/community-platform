@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from 'oa-shared';
 import { isTestEnvironment } from 'src/config/config';
@@ -110,8 +109,6 @@ async function getStripe(): Promise<Stripe | null> {
     return null;
   }
 }
-
-const hashSetupToken = (token: string) => createHash('sha256').update(token).digest('hex');
 
 export class StripeServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
@@ -245,7 +242,6 @@ export class StripeServiceServer {
     priceId: string,
     currency: string,
     name?: string,
-    setupToken?: string,
   ): Promise<string> {
     const stripe = await getStripe();
     if (!stripe) {
@@ -260,7 +256,6 @@ export class StripeServiceServer {
       customer: customerId,
       items: [{ price: priceId }],
       currency,
-      ...(setupToken && { metadata: { setup_token_hash: hashSetupToken(setupToken) } }),
       payment_behavior: 'default_incomplete',
       payment_settings: {
         save_default_payment_method: 'on_subscription',
@@ -284,37 +279,6 @@ export class StripeServiceServer {
     }
 
     return paymentIntent.client_secret;
-  }
-
-  static async getSetupSubscription(
-    customerId: string,
-    setupToken: string,
-  ): Promise<Stripe.Subscription | null> {
-    const stripe = await getStripe();
-    if (!stripe) {
-      return null;
-    }
-
-    const subscriptions = await stripe.subscriptions.list({
-      customer: customerId,
-      status: 'active',
-      limit: 10,
-    });
-
-    const tokenHash = hashSetupToken(setupToken);
-    return subscriptions.data.find((s) => s.metadata.setup_token_hash === tokenHash) || null;
-  }
-
-  static async updateSubscriptionMetadata(
-    subscriptionId: string,
-    metadata: Record<string, string>,
-  ): Promise<void> {
-    const stripe = await getStripe();
-    if (!stripe) {
-      throw new Error('Stripe is not configured');
-    }
-
-    await stripe.subscriptions.update(subscriptionId, { metadata });
   }
 
   static async createBillingPortalSession(customerId: string, returnUrl: string): Promise<string> {

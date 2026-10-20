@@ -43,7 +43,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const isActive = subscription.status === 'active';
 
         let authId = await stripeService.getAuthIdByStripeCustomerId(customerId, tenantId);
-        if (!authId) {
+        if (!authId && isActive) {
           // Guest checkout: try matching by email and auto-link
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
           if (authId && tenantId) {

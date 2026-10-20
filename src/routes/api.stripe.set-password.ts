@@ -11,11 +11,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const { email, stripeCustomerId, password } = await request.json();
+    const { stripeCustomerId, setupToken, password } = await request.json();
 
-    if (!email || !stripeCustomerId || !password) {
+    if (!stripeCustomerId || !setupToken || !password) {
       return Response.json(
-        { error: 'Email, stripeCustomerId, and password are required.' },
+        { error: 'stripeCustomerId, setupToken, and password are required.' },
         { status: 400 },
       );
     }
@@ -25,35 +25,32 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const adminClient = createSupabaseAdminServerClient();
-    const stripeService = new StripeServiceServer(adminClient);
 
-    const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
-    if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
-      return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
-    }
-
-    const tenantId = process.env.TENANT_ID;
-    const linkedAuthId = await stripeService.getAuthIdByStripeCustomerId(
+    const subscription = await StripeServiceServer.getSetupSubscription(
       stripeCustomerId,
-      tenantId,
+      setupToken,
     );
-    if (!linkedAuthId) {
-      return Response.json(
-        { error: 'No linked account found for this customer.' },
-        { status: 404 },
-      );
+    const setupAuthId = subscription?.metadata.setup_auth_id;
+    if (!subscription || !setupAuthId) {
+      return Response.json({ error: 'No account found for this checkout.' }, { status: 404 });
     }
 
-    const { error: updateError } = await adminClient.auth.admin.updateUserById(linkedAuthId, {
-      password,
-    });
+    const { data: updated, error: updateError } = await adminClient.auth.admin.updateUserById(
+      setupAuthId,
+      { password },
+    );
 
-    if (updateError) {
+    if (updateError || !updated.user?.email) {
       logger.error('Error updating password:', updateError);
       return Response.json({ error: 'Failed to update password.' }, { status: 500 });
     }
 
-    const signInTicket = await issueSignInTicket(email);
+    await StripeServiceServer.updateSubscriptionMetadata(subscription.id, {
+      setup_token_hash: '',
+      setup_auth_id: '',
+    });
+
+    const signInTicket = await issueSignInTicket(updated.user.email);
 
     return Response.json({ success: true, signInTicket }, { status: 200 });
   } catch (error: any) {

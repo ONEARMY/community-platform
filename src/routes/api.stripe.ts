@@ -89,6 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       let customerId: string;
       let accountExists = false;
+      let setupToken: string | undefined;
 
       if (isAuthenticated) {
         const { data: authUser } = await client.auth.getUser();
@@ -148,6 +149,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }
 
         customerId = await StripeServiceServer.createGuestCustomer(email, name);
+        setupToken = crypto.randomUUID();
       }
 
       // Clear out any earlier abandoned checkout attempts so they don't pile up
@@ -159,10 +161,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         priceId,
         currency,
         name,
+        setupToken,
       );
 
       return Response.json(
-        { clientSecret, publishableKey, stripeCustomerId: customerId, accountExists },
+        { clientSecret, publishableKey, stripeCustomerId: customerId, accountExists, setupToken },
         { headers, status: 200 },
       );
     }

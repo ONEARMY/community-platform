@@ -36,6 +36,7 @@ export type SupporterState = {
   clientSecret: string | null;
   stripeInstance: Promise<StripeType | null> | null;
   stripeCustomerId: string | null;
+  setupToken: string | null;
 
   siteImage: string | undefined;
   tierConfig: Record<number, { color: string; name: string; description: string }>;

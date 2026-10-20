@@ -14,11 +14,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const { email, password, name, stripeCustomerId } = await request.json();
+    const { email, password, name, stripeCustomerId, setupToken } = await request.json();
 
-    if (!email || !password || !name || !stripeCustomerId) {
+    if (!email || !password || !name || !stripeCustomerId || !setupToken) {
       return Response.json(
-        { error: 'Email, password, name, and stripeCustomerId are required.' },
+        { error: 'Email, password, name, stripeCustomerId, and setupToken are required.' },
         { status: 400 },
       );
     }
@@ -33,6 +33,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const customer = await StripeServiceServer.getStripeCustomer(stripeCustomerId);
     if (!customer || customer.email?.toLowerCase() !== email.toLowerCase()) {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
+    }
+
+    const subscription = await StripeServiceServer.getSetupSubscription(
+      stripeCustomerId,
+      setupToken,
+    );
+    if (!subscription) {
+      return Response.json({ error: 'Payment not confirmed yet.' }, { status: 403 });
     }
 
     const tenantId = process.env.TENANT_ID;
@@ -63,16 +71,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, newUser.user.id, tenantId);
+    await StripeServiceServer.updateSubscriptionMetadata(subscription.id, {
+      setup_auth_id: newUser.user.id,
+    });
 
     // Assign badge based on active subscription's product
-    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
-    if (subscription) {
-      const productId = subscription.items.data[0]?.price?.product as string;
-      if (productId) {
-        const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
-        if (badgeId) {
-          await stripeAdmin.assignBadgeForSubscription(newUser.user.id, tenantId, badgeId);
-        }
+    const productId = subscription.items.data[0]?.price?.product as string;
+    if (productId) {
+      const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
+      if (badgeId) {
+        await stripeAdmin.assignBadgeForSubscription(newUser.user.id, tenantId, badgeId);
       }
     }
 

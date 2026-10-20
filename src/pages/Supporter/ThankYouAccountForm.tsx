@@ -7,7 +7,8 @@ import { useSupporterContext } from './SupporterContext';
 import { ThankYouLayout } from './ThankYouLayout';
 
 export const ThankYouAccountForm = () => {
-  const { email, name, stripeCustomerId, accountCreated, previewMode } = useSupporterContext();
+  const { email, name, stripeCustomerId, setupToken, accountCreated, previewMode } =
+    useSupporterContext();
 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -33,8 +34,8 @@ export const ThankYouAccountForm = () => {
 
     const result = accountCreated
       ? await stripeService.setPassword({
-          email,
           stripeCustomerId: stripeCustomerId!,
+          setupToken: setupToken!,
           password,
         })
       : await stripeService.createSupporterAccount({
@@ -42,6 +43,7 @@ export const ThankYouAccountForm = () => {
           password,
           name,
           stripeCustomerId: stripeCustomerId!,
+          setupToken: setupToken!,
         });
 
     if (!result.ok) {

@@ -23,6 +23,7 @@ type ElementsSubscriptionResponse =
       publishableKey: string;
       stripeCustomerId: string;
       accountExists: boolean;
+      setupToken: string | null;
     }
   | { ok: false; error: string };
 
@@ -31,6 +32,7 @@ type CreateSupporterAccountParams = {
   password: string;
   name: string;
   stripeCustomerId: string;
+  setupToken: string;
 };
 
 type CreateSupporterAccountResponse =
@@ -48,8 +50,8 @@ type LinkExistingAccountResponse =
   | { ok: false; error: string };
 
 type SetPasswordParams = {
-  email: string;
   stripeCustomerId: string;
+  setupToken: string;
   password: string;
 };
 
@@ -88,6 +90,7 @@ const createElementsSubscription = async (
       publishableKey: data.publishableKey,
       stripeCustomerId: data.stripeCustomerId,
       accountExists: data.accountExists ?? false,
+      setupToken: data.setupToken ?? null,
     };
   } catch (error) {
     logger.error(error);

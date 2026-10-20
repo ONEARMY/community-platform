@@ -17,7 +17,12 @@ import { ContentServiceServer } from 'src/services/contentService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -160,6 +165,12 @@ async function validateRequest(
   }
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
+  }
+
+  if (
+    !(await new LibraryServiceServer(client).isAllowedToEditProjectById(currentProject.id, profile))
+  ) {
+    throw forbiddenError();
   }
 
   if (!data.title) {

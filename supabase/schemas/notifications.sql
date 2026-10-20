@@ -60,6 +60,9 @@ ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_owned_by_id_fkey" FOREIGN KEY ("owned_by_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY "public"."notifications_preferences"
+    ADD CONSTRAINT "notifications_preferences_user_id_key" UNIQUE ("user_id");
+
+ALTER TABLE ONLY "public"."notifications_preferences"
     ADD CONSTRAINT "notifications_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY "public"."notifications"
@@ -108,3 +111,23 @@ $function$
 ;
 
 REVOKE EXECUTE ON FUNCTION "public"."get_subscribed_users_emails_to_notify"(bigint, "text") FROM PUBLIC, "anon";
+
+CREATE OR REPLACE FUNCTION "public"."notify_all_profiles"(
+  "p_tenant_id" "text",
+  "p_action_type" "public"."notification_action_types",
+  "p_content_type" "public"."notification_content_types",
+  "p_content_id" bigint,
+  "p_title" "text",
+  "p_triggered_by_id" bigint
+)
+    RETURNS void
+    LANGUAGE "sql"
+    SET search_path = public, pg_temp
+    AS $$
+  INSERT INTO notifications (action_type, content_type, content_id, title, triggered_by_id, owned_by_id, is_read, tenant_id)
+  SELECT p_action_type, p_content_type, p_content_id, p_title, p_triggered_by_id, p.id, false, p_tenant_id
+  FROM profiles p
+  WHERE p.tenant_id = p_tenant_id;
+$$;
+
+REVOKE EXECUTE ON FUNCTION "public"."notify_all_profiles"("text", "public"."notification_action_types", "public"."notification_content_types", bigint, "text", bigint) FROM PUBLIC, "anon";

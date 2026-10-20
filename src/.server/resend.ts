@@ -49,8 +49,8 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
     }));
 
     if (i > 0) {
-      // To avoid hitting rate limits
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // To avoid hitting rate limits (10 req/second)
+      await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
     try {

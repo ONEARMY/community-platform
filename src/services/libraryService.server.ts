@@ -179,6 +179,7 @@ export class LibraryServiceServer {
           order,
         })
         .eq('id', stepId)
+        .eq('project_id', projectId)
         .select();
       if (error || !data) {
         throw error;

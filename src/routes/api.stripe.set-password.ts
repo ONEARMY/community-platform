@@ -44,8 +44,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
+    const { data: linkedUser } = await adminClient.auth.admin.getUserById(linkedAuthId);
+    if (linkedUser.user?.app_metadata.supporter_password_pending !== true) {
+      return Response.json(
+        { error: 'No linked account found for this customer.' },
+        { status: 404 },
+      );
+    }
+
     const { error: updateError } = await adminClient.auth.admin.updateUserById(linkedAuthId, {
       password,
+      app_metadata: { supporter_password_pending: false },
     });
 
     if (updateError) {

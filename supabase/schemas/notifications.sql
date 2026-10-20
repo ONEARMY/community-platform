@@ -67,6 +67,7 @@ ALTER TABLE ONLY "public"."notifications"
 
 ALTER TABLE "public"."notifications" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."notifications_preferences" ENABLE ROW LEVEL SECURITY;
+GRANT INSERT, UPDATE ON TABLE "public"."notifications_preferences" TO "anon";
 
 CREATE POLICY "tenant_isolation" ON "public"."notifications" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 CREATE POLICY "tenant_isolation" ON "public"."notifications_preferences" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
@@ -105,3 +106,5 @@ BEGIN
 END;
 $function$
 ;
+
+REVOKE EXECUTE ON FUNCTION "public"."get_subscribed_users_emails_to_notify"(bigint, "text") FROM PUBLIC, "anon";

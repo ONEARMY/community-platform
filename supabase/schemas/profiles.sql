@@ -132,6 +132,8 @@ ALTER TABLE "public"."profile_tags" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."profile_tags_relations" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."profile_types" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."profiles" ENABLE ROW LEVEL SECURITY;
+GRANT INSERT ON TABLE "public"."profiles" TO "anon";
+GRANT UPDATE ("total_views") ON TABLE "public"."profiles" TO "anon";
 
 CREATE POLICY "tenant_isolation" ON "public"."profile_badges" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 CREATE POLICY "tenant_isolation" ON "public"."profile_badges_relations" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
@@ -313,3 +315,25 @@ BEGIN
   ORDER BY pt."order";
 END;
 $$;
+
+REVOKE EXECUTE ON FUNCTION "public"."get_profiles_with_any_badge"("text") FROM PUBLIC, "anon";
+REVOKE EXECUTE ON FUNCTION "public"."get_profiles_by_badge_ids"(bigint[], "text") FROM PUBLIC, "anon";
+REVOKE EXECUTE ON FUNCTION "public"."get_staff_profiles"("text") FROM PUBLIC, "anon";
+
+CREATE OR REPLACE FUNCTION "public"."protect_profile_roles"()
+    RETURNS trigger
+    LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
+    AS $$
+BEGIN
+  IF current_user IN ('anon', 'authenticated') AND (
+    (TG_OP = 'INSERT' AND coalesce(cardinality(NEW.roles), 0) > 0)
+    OR (TG_OP = 'UPDATE' AND NEW.roles IS DISTINCT FROM OLD.roles)
+  ) THEN
+    RAISE EXCEPTION 'profiles.roles is read-only' USING ERRCODE = '42501';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE TRIGGER "protect_profile_roles" BEFORE INSERT OR UPDATE ON "public"."profiles" FOR EACH ROW EXECUTE FUNCTION "public"."protect_profile_roles"();

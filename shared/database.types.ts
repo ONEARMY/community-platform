@@ -520,7 +520,7 @@ export type Database = {
           {
             foreignKeyName: 'notifications_preferences_user_id_fkey';
             columns: ['user_id'];
-            isOneToOne: false;
+            isOneToOne: true;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
@@ -2070,6 +2070,17 @@ export type Database = {
         Returns: {
           error: true;
         } & 'the function public.news_search_fields with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache';
+      };
+      notify_all_profiles: {
+        Args: {
+          p_action_type: Database['public']['Enums']['notification_action_types'];
+          p_content_id: number;
+          p_content_type: Database['public']['Enums']['notification_content_types'];
+          p_tenant_id: string;
+          p_title: string;
+          p_triggered_by_id: number;
+        };
+        Returns: undefined;
       };
       questions_search_fields: {
         Args: { '': Database['public']['Tables']['questions']['Row'] };

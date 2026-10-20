@@ -14,17 +14,39 @@ import { DBNotification } from 'oa-shared';
 import { logger } from 'src/logger';
 import { NotificationEmailServiceServer } from './notificationEmailService.server';
 
+const PAGE_SIZE = 1000;
+
+async function fetchAllPages<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>,
+) {
+  const rows: T[] = [];
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data, error } = await fetchPage(from, from + PAGE_SIZE - 1);
+    if (error) {
+      throw error;
+    }
+    rows.push(...(data ?? []));
+    if (!data || data.length < PAGE_SIZE) {
+      return rows;
+    }
+  }
+}
+
 export class NotificationsSupabaseServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
 
-  async getAllProfiles() {
-    // Currently simplified to direct client request (and not a function) as not emailing all users yet
-    try {
-      const response = await this.client.from('profiles').select(`id`);
-      return response.data;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(error);
+  async notifyAllProfiles(notification: DBNotification) {
+    const response = await this.client.rpc('notify_all_profiles', {
+      p_tenant_id: process.env.TENANT_ID!,
+      p_action_type: notification.action_type,
+      p_content_type: notification.content_type,
+      p_content_id: notification.content_id,
+      p_title: notification.title ?? '',
+      p_triggered_by_id: notification.triggered_by_id!,
+    });
+
+    if (response.error) {
+      logger.error(response.error);
     }
   }
 
@@ -69,16 +91,14 @@ export class NotificationsSupabaseServiceServer {
 
   async getProfilesWithAnyBadge(): Promise<ProfileWithEmailAndPreferences[]> {
     try {
-      const response = await this.client.rpc('get_profiles_with_any_badge', {
-        p_tenant_id: process.env.TENANT_ID!,
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
+      const data = await fetchAllPages((from, to) =>
+        this.client
+          .rpc('get_profiles_with_any_badge', { p_tenant_id: process.env.TENANT_ID! })
+          .order('profile_id')
+          .range(from, to),
+      );
 
       // Map old structure to new structure if needed
-      const data = response.data ?? [];
       return data.map((profile: any) => {
         // Check if we got the old structure (with 'id' instead of 'profile_id')
         if ('id' in profile && !('profile_id' in profile)) {
@@ -112,17 +132,17 @@ export class NotificationsSupabaseServiceServer {
         return [];
       }
 
-      const response = await this.client.rpc('get_profiles_by_badge_ids', {
-        p_badge_ids: badgeIds,
-        p_tenant_id: process.env.TENANT_ID!,
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
+      const data = await fetchAllPages((from, to) =>
+        this.client
+          .rpc('get_profiles_by_badge_ids', {
+            p_badge_ids: badgeIds,
+            p_tenant_id: process.env.TENANT_ID!,
+          })
+          .order('profile_id')
+          .range(from, to),
+      );
 
       // Map old structure to new structure if needed
-      const data = response.data ?? [];
       return data.map((profile: any) => {
         // Check if we got the old structure (with 'id' instead of 'profile_id')
         if ('id' in profile && !('profile_id' in profile)) {
@@ -155,16 +175,15 @@ export class NotificationsSupabaseServiceServer {
     contentType: SubscribableContentTypes,
   ): Promise<SubscribedUser[]> {
     try {
-      const response = await this.client.rpc('get_subscribed_users_emails_to_notify', {
-        p_content_id: contentId,
-        p_content_type: contentType,
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      return response.data || [];
+      return await fetchAllPages((from, to) =>
+        this.client
+          .rpc('get_subscribed_users_emails_to_notify', {
+            p_content_id: contentId,
+            p_content_type: contentType,
+          })
+          .order('profile_id')
+          .range(from, to),
+      );
     } catch (error) {
       logger.error(error);
       throw new Error(error);
@@ -295,9 +314,7 @@ export class NotificationsSupabaseServiceServer {
 
       if (badgeIds.length === 0) {
         // No badge restrictions - platform notification goes to all users
-        const allSubscribers = await this.getAllProfiles();
-        const subscriberIds = allSubscribers?.map(({ id }) => id) || [];
-        await this.createNotifications(dbNotification, subscriberIds);
+        await this.notifyAllProfiles(dbNotification);
       } else {
         // Badge restrictions - platform notification goes to badge holders + staff only
         await this.createNotifications(

@@ -1,15 +1,5 @@
-/*************************************************************************************** 
-Switch config dependent on use case
-
-For our use case the production config is stored in environment variables passed from
-CI. You can replace this with your own config or use the same pattern to keep
-api keys secret. Note, create-react-app only passes environment variables prefixed with
-'REACT_APP'. The required info has been encrypted and stored in a circleCI deployment context.
-
-*****************************************************************************************/
-
 import type { ConfigurationOption } from './constants';
-import type { ISentryConfig, siteVariants } from './types';
+import type { ISentryConfig } from './types';
 
 /**
  * Helper function to load configuration property
@@ -25,48 +15,13 @@ const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
 
 export const getConfigurationOption = _c;
 
-/*********************************************************************************************** /
-                                        Site Variants
-/********************************************************************************************** */
+export const isProductionEnvironment = (): boolean => _c('VITE_BRANCH') === 'production';
 
-// On dev sites user can override default role
+export const isTestEnvironment = (): boolean => _c('VITE_SITE_VARIANT') === 'test-ci';
 
-const getSiteVariant = (): siteVariants => {
-  if (
-    (typeof location !== 'undefined' && location.host === 'localhost:3456') ||
-    _c('VITE_SITE_VARIANT') === 'test-ci'
-  ) {
-    return 'test-ci';
-  }
-  if (_c('VITE_SITE_VARIANT') === 'preview') {
-    return 'preview';
-  }
-  switch (_c('VITE_BRANCH')) {
-    case 'production':
-      return 'production';
-    case 'main':
-      return 'staging';
-    default:
-      return 'dev_site';
-  }
-};
-
-const siteVariant = getSiteVariant();
-
-export const isProductionEnvironment = (): boolean => {
-  const site = getSiteVariant();
-  return site === 'production';
-};
-
-export const isTestEnvironment = (): boolean => {
-  const site = getSiteVariant();
-  return site === 'test-ci';
-};
-
-export const SITE = siteVariant;
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c('VITE_SENTRY_DSN'),
-  environment: siteVariant,
+  environment: 'production',
   // Caps captured error/message event volume (not performance traces) so the
   // logger -> Sentry bridge in src/logger/index.ts can't spike quota/noise.
   sampleRate: 0.25,

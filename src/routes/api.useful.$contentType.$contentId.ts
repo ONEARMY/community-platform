@@ -36,12 +36,15 @@ export async function action({ request, params }: LoaderFunctionArgs) {
 
   let result;
   if (request.method === 'POST') {
-    result = await client.from('useful_votes').insert({
-      content_type: contentType,
-      content_id: Number(params.contentId),
-      user_id: profileResult.data[0].id,
-      tenant_id: process.env.TENANT_ID!,
-    });
+    result = await client.from('useful_votes').upsert(
+      {
+        content_type: contentType,
+        content_id: Number(params.contentId),
+        user_id: profileResult.data[0].id,
+        tenant_id: process.env.TENANT_ID!,
+      },
+      { onConflict: 'content_type,content_id,user_id', ignoreDuplicates: true },
+    );
   } else {
     result = await client
       .from('useful_votes')

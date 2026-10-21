@@ -175,56 +175,12 @@ export class PollServiceServer {
   }
 
   async vote(pollId: number, optionIds: number[], profileId: number): Promise<void> {
-    const pollResult = await this.client
-      .from('polls')
-      .select('id,single_choice')
-      .eq('id', pollId)
-      .single();
-
-    if (pollResult.error || !pollResult.data) {
-      throw pollResult.error;
-    }
-
-    if (pollResult.data.single_choice && optionIds.length > 1) {
-      throw new Error('Only one option may be selected');
-    }
-
-    const optionsResult = await this.client
-      .from('poll_options')
-      .select('id,poll_id')
-      .in('id', optionIds);
-
-    if (optionsResult.error) {
-      throw optionsResult.error;
-    }
-
-    const validOptions = optionsResult.data?.every((x) => x.poll_id === pollId) ?? false;
-
-    if (!validOptions) {
-      throw new Error('One or more options do not belong to this poll');
-    }
-
-    const votes = optionIds.map((optionId) => ({
-      poll_option_id: optionId,
-      profile_id: profileId,
-      tenant_id: process.env.TENANT_ID!,
-    }));
-
-    const previousVotes = await this.client
-      .from('poll_votes')
-      .select('id, poll_options!inner(poll_id)')
-      .eq('poll_options.poll_id', pollId)
-      .eq('profile_id', profileId);
-
-    if (previousVotes.error) {
-      throw previousVotes.error;
-    }
-
-    if (previousVotes.data.length > 0) {
-      throw new Error('This user already voted for this poll');
-    }
-
-    const voteResult = await this.client.from('poll_votes').insert(votes);
+    const voteResult = await this.client.rpc('cast_poll_vote', {
+      p_poll_id: pollId,
+      p_option_ids: optionIds,
+      p_profile_id: profileId,
+      p_tenant_id: process.env.TENANT_ID!,
+    });
 
     if (voteResult.error) {
       throw voteResult.error;

@@ -19,6 +19,8 @@ export const loader = async ({ request }) => {
     return Response.json({}, { headers, status: 401 });
   }
 
+  const term = q.replace(/[\\"]/g, '\\$&');
+
   const { data } = await client
     .from('profiles')
     .select(
@@ -39,7 +41,7 @@ export const loader = async ({ request }) => {
         )
       )`,
     )
-    .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
+    .or(`username.ilike."%${term}%",display_name.ilike."%${term}%"`)
     .or('moderation.is.null,moderation.eq.accepted')
     .limit(10);
   const profileFactory = new ProfileFactory(client);

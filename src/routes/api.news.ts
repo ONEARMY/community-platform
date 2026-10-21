@@ -155,9 +155,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     if (data.poll) {
       const pollService = new PollServiceServer(client);
       try {
-        pollId = data.poll.id
-          ? await pollService.updatePoll(data.poll)
-          : await pollService.createPoll(data.poll);
+        pollId = await pollService.createPoll(data.poll);
       } catch (e) {
         logger.error('Error saving or updating the poll: ', data.poll, e);
       }

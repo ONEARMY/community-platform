@@ -103,7 +103,8 @@ export class PollServiceServer {
         .update({
           description: option.description,
         })
-        .eq('id', option.id!);
+        .eq('id', option.id!)
+        .eq('poll_id', dto.id);
 
       if (updateOptionsResult.error) {
         throw updateOptionsResult.error;

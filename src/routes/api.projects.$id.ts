@@ -24,6 +24,7 @@ import {
   validationError,
 } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
+import { isPathInFolders } from 'src/utils/storage';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -75,21 +76,28 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     const slug = convertToSlug(data.title);
-    await validateRequest(request, profile, data, currentProject, slug, client);
+    await validateRequest(
+      request,
+      profile,
+      data,
+      currentProject,
+      slug,
+      client,
+      claims.data.claims.sub,
+    );
+
+    // 2. Update project
+    const projectDb = await updateProject(client, profile!, currentProject, data, slug);
+    const project = Project.fromDB(projectDb, []);
+    const storage = new StorageServiceServer(client);
 
     // Remove old cover image if it exists and no new image is provided or a different image is provided
     if (
       currentProject.cover_image?.path &&
       (!data.coverImage || data.coverImage.id !== currentProject.cover_image.id)
     ) {
-      await new StorageServiceServer(client).removeImages([currentProject.cover_image.path]);
+      await storage.removeImages([currentProject.cover_image.path]);
     }
-
-    // 2. Update project
-
-    const projectDb = await updateProject(client, profile!, currentProject, data, slug);
-    const project = Project.fromDB(projectDb, []);
-    const storage = new StorageServiceServer(client);
 
     project.coverImage = projectDb.cover_image
       ? storage.getPublicUrls([projectDb.cover_image])?.at(0) || null
@@ -156,6 +164,7 @@ async function validateRequest(
   currentProject: DBProject,
   slug: string,
   client: SupabaseClient<Database>,
+  authId: string,
 ): Promise<void> {
   if (!profile) {
     throw validationError('User not found');
@@ -183,6 +192,14 @@ async function validateRequest(
 
   if (!data.isDraft && (!data.stepCount || data.stepCount < 3)) {
     throw validationError('3 steps are required', 'stepCount');
+  }
+
+  if (
+    data.coverImage &&
+    data.coverImage.path !== currentProject.cover_image?.path &&
+    !isPathInFolders(data.coverImage.path, [`projects/${currentProject.id}`, `users/${authId}`])
+  ) {
+    throw validationError('Invalid cover image', 'coverImage');
   }
 
   if (

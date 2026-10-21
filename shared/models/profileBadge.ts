@@ -35,6 +35,7 @@ export class ProfileBadge {
   actionUrl?: string;
   premiumTier?: number;
   isAudience?: boolean;
+  isDisabled: boolean;
   grantsBadgeId?: number;
   availableTo?: BadgeAvailability;
   actionLabel?: string;

@@ -11,6 +11,7 @@ import { AuthServiceServer } from 'src/services/authService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { bool, object, ref, string } from 'yup';
@@ -46,9 +47,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const formData = await request.formData();
-  const url = new URL(request.url);
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
+  const emailRedirectTo = await getSiteUrl(client, '/email-confirmation');
 
   const authServiceServer = new AuthServiceServer(client);
 

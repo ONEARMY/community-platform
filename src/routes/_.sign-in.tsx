@@ -13,7 +13,7 @@ import { OrganisationApplicationsServiceServer } from 'src/services/organisation
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
-import { getEmailConfirmationUrl, getReturnUrl } from 'src/utils/redirect.server';
+import { getReturnUrl, getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Button } from '@/components/ui/button';
@@ -68,7 +68,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (formData.get('intent') === 'resend-confirmation') {
     const resendError = await new AuthServiceServer(client).resendConfirmationEmail({
       email,
-      emailRedirectTo: getEmailConfirmationUrl(request),
+      emailRedirectTo: await getSiteUrl(client, '/email-confirmation'),
       captchaToken,
     });
 

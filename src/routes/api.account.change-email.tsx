@@ -4,6 +4,7 @@ import { type ActionFunctionArgs, data } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { unauthorizedError, validationError } from 'src/utils/httpException';
+import { getSiteUrl } from 'src/utils/redirect.server';
 import { createSupabaseAdminServerClient } from '@/repository/supabaseAdmin.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -32,14 +33,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw validationError('Invalid password');
     }
 
-    const url = new URL(request.url);
-    const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-    const emailRedirectUrl = `${protocol}//${url.host}/settings/account`;
-
     const result = await client.auth.updateUser(
       { email: newEmail },
       {
-        emailRedirectTo: emailRedirectUrl,
+        emailRedirectTo: await getSiteUrl(client, '/settings/account'),
       },
     );
 

@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { action } from './_.sign-in';
@@ -23,6 +24,10 @@ const setup = (opts: { signInError?: { code: string }; resendError?: { code: str
   (createSupabaseServerClient as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
     client: { auth: { signInWithPassword, resend } },
     headers: new Headers(),
+  });
+
+  (TenantSettingsService as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
+    return { get: vi.fn().mockResolvedValue({ siteUrl: 'https://site.test' }) };
   });
 
   return { signInWithPassword, resend };
@@ -66,7 +71,7 @@ describe('signing in with an unconfirmed email', () => {
       type: 'signup',
       email: 'new@example.com',
       options: {
-        emailRedirectTo: 'http://localhost/email-confirmation',
+        emailRedirectTo: 'https://site.test/email-confirmation',
         captchaToken: 'captcha-token',
       },
     });

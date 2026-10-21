@@ -28,12 +28,13 @@ describe('AdminSidebar', () => {
     const labels = screen
       .getAllByRole('listitem')
       .filter((item) => item.dataset.sidebar === 'menu-item')
-      .map((item) => item.textContent);
+      .map((item) => item.querySelector('span')?.textContent);
 
     expect(labels).toEqual([
       'Users',
       'News',
       'Library',
+      'Research',
       'Questions',
       'Map',
       'Comments',
@@ -47,6 +48,7 @@ describe('AdminSidebar', () => {
     expect(screen.getByRole('link', { name: 'Remakes' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Projects/ })).not.toBeInTheDocument();
     expect(screen.getByText('Projects').parentElement).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('button', { name: /Research/ })).toBeDisabled();
     expect(screen.getAllByText('Coming soon')).toHaveLength(2);
   });
 

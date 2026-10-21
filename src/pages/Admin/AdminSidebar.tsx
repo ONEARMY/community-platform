@@ -1,5 +1,6 @@
 import {
   ChevronRightIcon,
+  FlaskConicalIcon,
   LibraryIcon,
   MapPinIcon,
   MessageCircleQuestionMarkIcon,
@@ -44,12 +45,9 @@ const ADMIN_NAV_ITEMS = [
   {
     label: 'Library',
     icon: LibraryIcon,
-    items: [
-      { label: 'Projects' },
-      { label: 'Remakes', href: '/admin/remakes' },
-      { label: 'Research' },
-    ],
+    items: [{ label: 'Projects' }, { label: 'Remakes', href: '/admin/remakes' }],
   },
+  { label: 'Research', icon: FlaskConicalIcon },
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Comments', href: '/admin/comments', icon: MessageSquareIcon },
@@ -122,7 +120,7 @@ export function AdminSidebar() {
                       </CollapsibleContent>
                     </Collapsible>
                   </SidebarMenuItem>
-                ) : (
+                ) : item.href ? (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       isActive={location.pathname.startsWith(item.href)}
@@ -131,6 +129,14 @@ export function AdminSidebar() {
                     >
                       <item.icon />
                       <span>{item.label}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton disabled>
+                      <item.icon />
+                      <span>{item.label}</span>
+                      <span className="ml-auto text-xs">Coming soon</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ),

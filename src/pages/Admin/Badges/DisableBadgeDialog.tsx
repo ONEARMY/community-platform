@@ -35,7 +35,7 @@ export function DisableBadgeDialog({ profileBadge, onOpenChange }: IProps) {
     );
 
     toast.promise(promise, {
-      loading: 'Deleting badge...',
+      loading: 'Disabling badge...',
       success: () => {
         onOpenChange(false);
         revalidator.revalidate();

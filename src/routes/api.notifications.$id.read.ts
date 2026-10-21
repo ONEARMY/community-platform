@@ -19,7 +19,21 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    await client.from('notifications').update({ is_read: true }).eq('id', Number(params.id));
+    const profile = await client
+      .from('profiles')
+      .select('id')
+      .eq('auth_id', claims.data.claims.sub)
+      .single();
+
+    if (!profile.data) {
+      return Response.json({}, { headers, status: 400, statusText: 'user not found' });
+    }
+
+    await client
+      .from('notifications')
+      .update({ is_read: true })
+      .eq('id', Number(params.id))
+      .eq('owned_by_id', profile.data.id);
 
     new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

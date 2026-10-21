@@ -1,11 +1,18 @@
 export const getReturnUrl = (request: Request, fallbackPath: string = '/') => {
   const url = new URL(request.url);
-  const params = new URLSearchParams(url.search);
+  const returnUrl = url.searchParams.get('returnUrl');
 
-  return params.has('returnUrl')
-    ? decodeURIComponent(params.get('returnUrl') as string)
-    : fallbackPath;
+  if (!returnUrl) {
+    return fallbackPath;
+  }
+
+  const path = decodeURIComponent(returnUrl);
+
+  return isSameOriginPath(path, url.origin) ? path : fallbackPath;
 };
+
+const isSameOriginPath = (path: string, origin: string) =>
+  path.startsWith('/') && new URL(path, origin).origin === origin;
 
 export const getEmailConfirmationUrl = (request: Request, isOrganisation = false) => {
   const url = new URL(request.url);

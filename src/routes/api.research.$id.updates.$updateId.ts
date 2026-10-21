@@ -81,6 +81,7 @@ export const action = async ({ request, params, context }: ActionFunctionArgs) =
         modified_at: new Date().toISOString(),
         video_url: data.videoUrl,
         files: data.files,
+        file_link: data.fileLink,
         ...(isFirstPublish && { published_at: new Date().toISOString() }),
       })
       .eq('id', oldResearchUpdate.id)

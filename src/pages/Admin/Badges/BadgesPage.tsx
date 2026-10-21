@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/table';
 import { BadgeFormDialog } from './BadgeFormDialog';
 import { DeleteBadgeDialog } from './DeleteBadgeDialog';
+import { DisableBadgeDialog } from './DisableBadgeDialog';
 
 interface IProps {
   profileBadges: AdminProfileBadge[];
@@ -23,6 +24,7 @@ interface IProps {
 export function BadgesPage({ profileBadges }: IProps) {
   const [editingBadge, setEditingBadge] = useState<AdminProfileBadge | null | undefined>(undefined);
   const [deletingBadge, setDeletingBadge] = useState<AdminProfileBadge | null>(null);
+  const [disablingBadge, setDisablingBadge] = useState<AdminProfileBadge | null>(null);
   const toast = useToast();
 
   const displayNames = new Map(profileBadges.map(({ badge }) => [badge.id, badge.displayName]));
@@ -93,6 +95,15 @@ export function BadgesPage({ profileBadges }: IProps) {
                       >
                         <TrashIcon />
                       </Button>
+                    ) : badge.isDisabled ? (
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`Disable ${badge.displayName}`}
+                        onClick={() => setDisablingBadge(profileBadge)}
+                      >
+                        <TrashIcon />
+                      </Button>
                     ) : (
                       <Button
                         variant="ghost"
@@ -127,6 +138,15 @@ export function BadgesPage({ profileBadges }: IProps) {
         onOpenChange={(open) => {
           if (!open) {
             setDeletingBadge(null);
+          }
+        }}
+      />
+
+      <DisableBadgeDialog
+        profileBadge={disablingBadge}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDisablingBadge(null);
           }
         }}
       />

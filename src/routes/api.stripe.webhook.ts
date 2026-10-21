@@ -69,7 +69,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           }
 
           await stripeAdmin.assignBadgeForSubscription(authId, tenantId, badgeId);
-        } else if (tenantId && !isActive) {
+        } else if (tenantId && !(await StripeServiceServer.getSubscription(customerId))) {
           await stripeAdmin.removeTierBadges(authId, tenantId);
         }
         break;
@@ -88,7 +88,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           break;
         }
 
-        if (tenantId) {
+        if (tenantId && !(await StripeServiceServer.getSubscription(customerId))) {
           await stripeAdmin.removeTierBadges(authId, tenantId);
         }
         break;

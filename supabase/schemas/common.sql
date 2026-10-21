@@ -44,7 +44,7 @@ CREATE OR REPLACE FUNCTION "public"."get_user_id_by_email"("email" "text") RETUR
     SET search_path = public, pg_temp
     AS $_$BEGIN
   -- is_sso_user = false matches auth.users' partial index on email, avoiding a full table scan
-  RETURN QUERY SELECT au.id FROM auth.users au WHERE au.email = $1 AND au.is_sso_user = false;
+  RETURN QUERY SELECT au.id FROM auth.users au WHERE au.email = lower($1) AND au.is_sso_user = false;
 END;$_$;
 
 CREATE OR REPLACE FUNCTION public.get_storage_object_path(

@@ -1,4 +1,3 @@
-import debounce from 'debounce';
 import { ButtonIcon, ReturnPathLink, SearchField, Select } from 'oa-components';
 import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord } from 'oa-shared';
@@ -16,6 +15,7 @@ import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { useDebouncedCallback } from 'use-debounce';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { listing } from '../labels';
 import type { ResearchSortOption } from '../ResearchSortOptions';
@@ -139,12 +139,9 @@ export const ResearchFilterHeader = (props: IProps) => {
     [searchParams],
   );
 
-  const onSearchInputChange = useCallback(
-    debounce((value: string) => {
-      searchValue(value);
-    }, 500),
-    [searchParams],
-  );
+  const onSearchInputChange = useDebouncedCallback((value: string) => {
+    searchValue(value);
+  }, 500);
 
   const searchValue = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());

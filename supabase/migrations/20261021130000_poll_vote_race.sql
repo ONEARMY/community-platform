@@ -52,6 +52,3 @@ AS $function$
     END;
 $function$
 ;
-
-UPDATE "public"."poll_options" o
-SET vote_count = (SELECT COUNT(*) FROM "public"."poll_votes" v WHERE v.poll_option_id = o.id);

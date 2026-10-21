@@ -5,6 +5,7 @@ import { isProductionEnvironment } from 'src/config/config';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 
 const cache = new Keyv<MapPin[]>({ ttl: 3600000 }); // ttl: 60 minutes
+const PAGE_SIZE = 1000;
 
 export class MapPinsServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
@@ -22,11 +23,13 @@ export class MapPinsServiceServer {
       return cachedMappins;
     }
 
-    // get all profile tags
-    const { data, error } = await this.client
-      .from('map_pins')
-      .select(
-        `
+    const pinsDb: DBMapPin[] = [];
+
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data, error } = await this.client
+        .from('map_pins')
+        .select(
+          `
         id,
         profile_id,
         country,
@@ -73,14 +76,22 @@ export class MapPinsServiceServer {
           )
         )
       `,
-      )
-      .eq('moderation', 'accepted');
+        )
+        .eq('moderation', 'accepted')
+        .order('id')
+        .range(from, from + PAGE_SIZE - 1);
 
-    if (!data || error) {
-      throw error;
+      if (!data || error) {
+        throw error;
+      }
+
+      pinsDb.push(...(data as unknown as DBMapPin[]));
+
+      if (data.length < PAGE_SIZE) {
+        break;
+      }
     }
 
-    const pinsDb = data as unknown as DBMapPin[];
     const pinFactory = new MapPinFactory(this.client);
     const mapPins = pinsDb
       .filter((pin) => pin.profile)

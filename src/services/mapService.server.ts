@@ -57,7 +57,7 @@ export class MapServiceServer {
             display_name,
             photo,
             type,
-            username
+            username,
             badges:profile_badges_relations(
               profile_badges(
                 id,

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, DBQuestion, Question } from 'oa-shared';
 import { logger } from 'src/logger';
+import { escapeFilterValue } from 'src/utils/helpers';
 import { ImageServiceServer } from './imageService.server';
 
 export class QuestionServiceServer {
@@ -12,6 +13,9 @@ export class QuestionServiceServer {
   }
 
   async getBySlug(slug: string) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     return this.client
       .from('questions')
       .select(
@@ -44,7 +48,7 @@ export class QuestionServiceServer {
           ))
        `,
       )
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .or('deleted.eq.false,deleted.is.null')
       .single();
   }

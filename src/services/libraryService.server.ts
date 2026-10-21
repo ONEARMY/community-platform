@@ -10,6 +10,7 @@ import {
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { logger } from 'src/logger';
+import { escapeFilterValue } from 'src/utils/helpers';
 import { ImageServiceServer } from './imageService.server';
 import { StorageServiceServer } from './storageService.server';
 
@@ -17,6 +18,9 @@ export class LibraryServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
 
   getBySlug(slug: string) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     return this.client
       .from('projects')
       .select(
@@ -65,7 +69,7 @@ export class LibraryServiceServer {
         )
      `,
       )
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .or('deleted.eq.false,deleted.is.null')
       .single();
   }

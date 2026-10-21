@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   arrayToJson,
   capitalizeFirstLetter,
+  escapeFilterValue,
   formatLowerNoSpecial,
   hasAdminRights,
   isContactable,
@@ -18,6 +19,10 @@ import {
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
     expect(stripSpecialCharacters('He%llo w@o$rl^d!')).toBe('Hello-world');
+  });
+
+  it('escapeFilterValue should escape quotes and backslashes', () => {
+    expect(escapeFilterValue('a,"b"\\c')).toBe('a,\\"b\\"\\\\c');
   });
 
   it('formatLowerNoSpecial should return lowercase without special characters', () => {

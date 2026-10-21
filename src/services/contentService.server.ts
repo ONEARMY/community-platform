@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ContentType, Database, IDBContentDoc } from 'oa-shared';
 import { TagsServiceServer } from 'src/services/tagsService.server';
+import { escapeFilterValue } from 'src/utils/helpers';
 
 type Slug = string;
 type Id = number;
@@ -43,20 +44,26 @@ export class ContentServiceServer {
   }
 
   async isDuplicateExistingSlug(slug: Slug, id: Id, table: ContentType) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     const { data } = await this.client
       .from(table)
       .select('id,slug,previous_slugs')
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .single();
 
     return !!data?.id && data.id !== id;
   }
 
   async isDuplicateNewSlug(slug: Slug, table: ContentType) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     const { data } = await this.client
       .from(table)
       .select('slug,previous_slugs')
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .single();
 
     return !!data;

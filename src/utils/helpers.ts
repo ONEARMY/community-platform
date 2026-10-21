@@ -13,6 +13,8 @@ export const stripSpecialCharacters = (text: string) => {
 export const getSpecialCharacters = (text: string): string[] =>
   Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
 
+export const escapeFilterValue = (value: string) => value.replace(/[\\"]/g, '\\$&');
+
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {
   return stripSpecialCharacters(text).toLowerCase();

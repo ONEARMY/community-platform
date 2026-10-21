@@ -1,6 +1,7 @@
 import type { DBProfile } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { escapeFilterValue } from 'src/utils/helpers';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -19,7 +20,7 @@ export const loader = async ({ request }) => {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const term = q.replace(/[\\"]/g, '\\$&');
+  const term = escapeFilterValue(q);
 
   const { data } = await client
     .from('profiles')

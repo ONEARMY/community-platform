@@ -99,8 +99,8 @@ export function BadgesPage({ profileBadges }: IProps) {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        aria-label={`Disable ${badge.displayName}`}
-                        onClick={() => setDisablingBadge(profileBadge)}
+                        aria-label={`Delete ${badge.displayName}`}
+                        onClick={() => setDeletingBadge(profileBadge)}
                       >
                         <TrashIcon />
                       </Button>
@@ -108,8 +108,8 @@ export function BadgesPage({ profileBadges }: IProps) {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        aria-label={`Delete ${badge.displayName}`}
-                        onClick={() => setDeletingBadge(profileBadge)}
+                        aria-label={`Disable ${badge.displayName}`}
+                        onClick={() => setDisablingBadge(profileBadge)}
                       >
                         <TrashIcon />
                       </Button>

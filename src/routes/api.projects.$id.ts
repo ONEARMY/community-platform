@@ -274,5 +274,5 @@ async function deleteProject(request: Request, id: number) {
     return Response.json({}, { status: 200, headers });
   }
 
-  return Response.json({}, { status: 500, headers });
+  return Response.json({}, { status: 403, headers });
 }

@@ -1,11 +1,56 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database, DBQuestion, Question } from 'oa-shared';
+import type { Database, DBQuestion, Question, QuestionDTO } from 'oa-shared';
 import { logger } from 'src/logger';
+import {
+  QUESTION_MAX_LINKS,
+  QUESTION_MAX_PER_DAY,
+  QUESTION_MAX_PER_MONTH,
+} from 'src/pages/Question/constants';
 import { escapeFilterValue } from 'src/utils/helpers';
+import { tooManyRequestsError, validationError } from 'src/utils/httpException';
 import { ImageServiceServer } from './imageService.server';
 
 export class QuestionServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
+
+  static validateNotSpam(data: Pick<QuestionDTO, 'title' | 'description'>) {
+    const text = `${data.title} ${data.description}`;
+    const linkCount = (text.match(/https?:\/\//g) || []).length;
+
+    if (linkCount > QUESTION_MAX_LINKS) {
+      throw validationError('This question looks like spam. Please rephrase and try again.');
+    }
+  }
+
+  async checkRateLimit(profileId: number) {
+    const dayAgo = new Date(Date.now() - 1000 * 60 * 60 * 24);
+    const monthAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
+
+    const [dayCount, monthCount] = await Promise.all([
+      this.client
+        .from('questions')
+        .select('id', { count: 'exact' })
+        .eq('created_by', profileId)
+        .gt('created_at', dayAgo.toISOString()),
+      this.client
+        .from('questions')
+        .select('id', { count: 'exact' })
+        .eq('created_by', profileId)
+        .gt('created_at', monthAgo.toISOString()),
+    ]);
+
+    if (dayCount.count! >= QUESTION_MAX_PER_DAY) {
+      throw tooManyRequestsError(
+        "You've posted a lot of questions today! To protect the platform from spam we haven't posted this one.",
+      );
+    }
+
+    if (monthCount.count! >= QUESTION_MAX_PER_MONTH) {
+      throw tooManyRequestsError(
+        "You've reached the monthly limit for new questions. To protect the platform from spam we haven't posted this one.",
+      );
+    }
+  }
 
   async getById(id: number): Promise<DBQuestion> {
     const result = await this.client.from('questions').select().eq('id', id).single();

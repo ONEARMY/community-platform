@@ -1,10 +1,15 @@
+import { isContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
+
+  if (!isContentType(params.contentType)) {
+    return Response.json({}, { headers, status: 404 });
+  }
 
   const claims = await client.auth.getClaims();
 
@@ -19,7 +24,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 400, statusText: 'invalid user' });
   }
 
-  const count = await new ContentServiceServer(client).getDraftCount(profile.id, 'projects');
+  const count = await new ContentServiceServer(client).getDraftCount(
+    profile.id,
+    params.contentType,
+  );
 
   return Response.json({ total: count }, { headers });
 };

@@ -16,6 +16,15 @@ describe('[Admin]', () => {
     cy.contains('Overview');
   });
 
+  it('[Admin can reach the projects overview from the admin navigation]', () => {
+    cy.signIn(admin.email, admin.password);
+
+    cy.visit('/admin');
+    cy.contains('a', 'Projects').click();
+    cy.url().should('include', '/admin/projects');
+    cy.contains('h1', 'Projects');
+  });
+
   it('[Admin can reach the remakes overview from the admin navigation]', () => {
     cy.signIn(admin.email, admin.password);
 

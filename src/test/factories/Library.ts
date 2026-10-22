@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-
 import type {
   DifficultyLevel,
   Moderation,
@@ -8,6 +7,7 @@ import type {
   ProjectStep,
   ProjectStepFormData,
 } from 'oa-shared';
+import { AdminProject } from 'oa-shared';
 
 export const FactoryProjectFormData = (
   overloads: Partial<ProjectFormData> = {},
@@ -170,3 +170,22 @@ export const FactoryLibraryItemDraft = (itemOverloads: Partial<Project> = {}): P
   publishedAt: faker.date.past(),
   ...itemOverloads,
 });
+
+export const FactoryAdminProject = (overloads: Partial<AdminProject> = {}): AdminProject =>
+  new AdminProject({
+    id: faker.number.int(),
+    title: faker.lorem.words(3),
+    slug: faker.lorem.slug(),
+    author: { username: faker.internet.username(), displayName: faker.person.fullName() },
+    category: faker.lorem.word(),
+    difficultyLevel: 'easy',
+    moderation: 'accepted',
+    isDraft: false,
+    publishedAt: faker.date.past(),
+    commentCount: faker.number.int({ max: 100 }),
+    totalViews: faker.number.int({ max: 10000 }),
+    stepCount: faker.number.int({ min: 1, max: 20 }),
+    remakeCount: 0,
+    deleted: false,
+    ...overloads,
+  });

@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
-import { Badge } from '@/components/ui/badge';
+import { ModerationBadge } from 'src/pages/Admin/ModerationBadge';
 import {
   Table,
   TableBody,
@@ -38,19 +38,6 @@ export interface MapPinsPageProps {
   page: number;
   totalPages: number;
   totalCount: number;
-}
-
-function ModerationBadge({ status }: { status: string }) {
-  const variant =
-    status === 'accepted'
-      ? 'success'
-      : status === 'awaiting-moderation'
-        ? 'warning'
-        : status === 'improvements-needed'
-          ? 'info'
-          : 'destructive';
-
-  return <Badge variant={variant}>{status}</Badge>;
 }
 
 export function MapPinsPage({ mapPins, page, totalPages, totalCount }: MapPinsPageProps) {

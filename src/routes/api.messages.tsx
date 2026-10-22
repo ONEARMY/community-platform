@@ -4,6 +4,7 @@ import { logger } from 'src/logger';
 import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { isContactable } from 'src/utils/helpers';
 import {
   forbiddenError,
   methodNotAllowedError,
@@ -37,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const userProfile = await client
       .from('profiles')
-      .select('id,username,display_name')
+      .select('id,username,display_name,is_blocked_from_messaging')
       .eq('auth_id', claims.data.claims.sub);
 
     const messenger = userProfile.data?.at(0);
@@ -46,14 +47,30 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw forbiddenError('You must have a username to send messages.');
     }
 
+    if (messenger.is_blocked_from_messaging) {
+      throw forbiddenError('You are blocked from sending messages.');
+    }
+
     const recipientProfile = await client
       .from('profiles')
-      .select('id,auth_id')
+      .select('id,auth_id,is_contactable')
       .eq('username', data.to);
 
+    const recipient = recipientProfile.data?.at(0);
+
+    if (!recipient) {
+      throw notFoundError('Receiver');
+    }
+
+    const settings = await new TenantSettingsService(client).get();
+
+    if (settings.noMessaging || !isContactable(recipient.is_contactable)) {
+      throw forbiddenError('This user is not accepting messages.');
+    }
+
     const from = messenger.id;
-    const to = recipientProfile.data!.at(0)!.id;
-    const toAuthId = recipientProfile.data!.at(0)!.auth_id;
+    const to = recipient.id;
+    const toAuthId = recipient.auth_id;
 
     const today = new Date();
     const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24);
@@ -73,19 +90,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
-    const settings = await new TenantSettingsService(client).get();
-
-    const messageResult = await client.from('messages').insert({
-      sender_id: from,
-      receiver_id: to,
-      message: data.message,
-      tenant_id: process.env.TENANT_ID!,
-    });
-
-    if (messageResult.error) {
-      throw messageResult.error;
-    }
-
     // TODO: use get_user_email_by_id only after removing firebase completely and all profiles have an auth_id
     const emailResult = toAuthId
       ? await client.rpc('get_user_email_by_id', { id: toAuthId })
@@ -96,6 +100,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (!receiver) {
       throw notFoundError('Receiver');
+    }
+
+    const messageResult = await client.from('messages').insert({
+      sender_id: from,
+      receiver_id: to,
+      message: data.message,
+      tenant_id: process.env.TENANT_ID!,
+    });
+
+    if (messageResult.error) {
+      throw messageResult.error;
     }
 
     const emailTemplate = (

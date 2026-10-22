@@ -15,7 +15,7 @@ import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
-import { getReturnUrl } from 'src/utils/redirect.server';
+import { getReturnUrl, getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Button } from '@/components/ui/button';
@@ -42,13 +42,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const formData = await request.formData();
 
-  const url = new URL(request.url);
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const emailRedirectUrl = `${protocol}//${url.host}/update-password`;
   const captchaToken = formData.get('cf-turnstile-token') as string;
 
   await client.auth.resetPasswordForEmail(formData.get('email') as string, {
-    redirectTo: emailRedirectUrl,
+    redirectTo: await getSiteUrl(client, '/update-password'),
     captchaToken,
   });
 

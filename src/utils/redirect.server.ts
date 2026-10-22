@@ -1,3 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+
 export const getReturnUrl = (request: Request, fallbackPath: string = '/') => {
   const url = new URL(request.url);
   const returnUrl = url.searchParams.get('returnUrl');
@@ -14,10 +18,12 @@ export const getReturnUrl = (request: Request, fallbackPath: string = '/') => {
 const isSameOriginPath = (path: string, origin: string) =>
   path.startsWith('/') && new URL(path, origin).origin === origin;
 
-export const getEmailConfirmationUrl = (request: Request, isOrganisation = false) => {
-  const url = new URL(request.url);
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const search = isOrganisation ? '?flow=organisation' : '';
+export const getSiteUrl = async (client: SupabaseClient<Database>, path: string) => {
+  const flyApp = process.env.FLY_APP_NAME;
+  const origin =
+    process.env.VITE_BRANCH === 'preview' && flyApp
+      ? `https://${flyApp}.fly.dev`
+      : (await new TenantSettingsService(client).get()).siteUrl;
 
-  return `${protocol}//${url.host}/email-confirmation${search}`;
+  return new URL(path, origin).toString();
 };

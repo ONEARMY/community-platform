@@ -103,6 +103,7 @@
     "leaflet": "1.9.4",
     "leaflet.markercluster": "1.5.3",
     "linkify-react": "^4.3.2",
+    "linkifyjs": "^4.3.2",
     "lucide-react": "^1.28.0",
     "maxmind": "^5.0.7",
     "mobx": "6.16.1",

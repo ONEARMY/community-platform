@@ -103,7 +103,8 @@ export class StorageServiceServer {
         const buffer = Buffer.from(arrayBuffer);
 
         // Determine format and dimensions
-        const metadata = await sharp(buffer, { animated: true }).metadata();
+        const sharpOptions = { animated: true, limitInputPixels: 100_000_000 };
+        const metadata = await sharp(buffer, sharpOptions).metadata();
         const height = metadata.pageHeight ?? metadata.height;
 
         // Check if image needs processing
@@ -123,7 +124,7 @@ export class StorageServiceServer {
         let finalFileName = file.name;
 
         if (needsProcessing) {
-          let processedImage = sharp(buffer, { animated: true });
+          let processedImage = sharp(buffer, sharpOptions);
 
           // Only resize if dimensions exceed limits
           const needsResize = metadata.width && height && (metadata.width > 2048 || height > 2048);

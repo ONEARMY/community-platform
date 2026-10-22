@@ -10,7 +10,7 @@ import { AuthServiceServer } from 'src/services/authService.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSecret } from 'src/services/secretsService.server';
-import { getEmailConfirmationUrl } from 'src/utils/redirect.server';
+import { getSiteUrl } from 'src/utils/redirect.server';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 import { Stepper } from '@/components/ui/stepper';
@@ -65,9 +65,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (formData.get('intent') === 'resend') {
     const resendError = await new AuthServiceServer(client).resendConfirmationEmail({
       email: formData.get('email') as string,
-      emailRedirectTo: getEmailConfirmationUrl(
-        request,
-        url.searchParams.get('flow') === 'organisation',
+      emailRedirectTo: await getSiteUrl(
+        client,
+        url.searchParams.get('flow') === 'organisation'
+          ? '/email-confirmation?flow=organisation'
+          : '/email-confirmation',
       ),
       captchaToken: formData.get('cf-turnstile-token') as string,
     });

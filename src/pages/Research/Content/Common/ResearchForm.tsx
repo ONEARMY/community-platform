@@ -9,6 +9,7 @@ import {
 } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast';
 import { logger } from 'src/logger';
@@ -33,6 +34,7 @@ interface IProps {
 
 const ResearchForm = ({ id, formData, research }: IProps) => {
   const toast = useToast();
+  const navigate = useNavigate();
   const [status, setStatus] = useState<ResearchStatus | undefined>(research?.status || undefined);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
@@ -105,9 +107,13 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
       duration: 10000,
     });
 
-    await promise;
+    const { research } = await promise;
 
     await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+
+    if (!id && window.location.pathname.endsWith('/create')) {
+      navigate(`/research/${research.slug}/edit`, { replace: true });
+    }
   };
 
   const heading = id ? headings.overview.edit : headings.overview.create;

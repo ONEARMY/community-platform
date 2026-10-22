@@ -1683,6 +1683,15 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      cast_poll_vote: {
+        Args: {
+          p_option_ids: number[];
+          p_poll_id: number;
+          p_profile_id: number;
+          p_tenant_id: string;
+        };
+        Returns: undefined;
+      };
       combined_project_search_fields: {
         Args: { project_id_param: number };
         Returns: string;

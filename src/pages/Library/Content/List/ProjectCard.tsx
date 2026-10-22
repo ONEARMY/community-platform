@@ -42,7 +42,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               alt={`Cover image of ${item.title}`}
             />
           )}
-          {item.moderation && item.moderation !== 'accepted' && (
+          {!item.isDraft && item.moderation && item.moderation !== 'accepted' && (
             <ModerationStatus
               status={item.moderation}
               sx={{

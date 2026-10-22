@@ -1,6 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
+  AdminProject,
   type Database,
+  type DBAdminProject,
   type DBProject,
   type DBProjectStep,
   Image,
@@ -97,6 +99,48 @@ export class LibraryServiceServer {
         usefulCount: x.total_useful,
       };
     });
+  }
+
+  async getAdminPage(page: number, pageSize: number) {
+    const from = (page - 1) * pageSize;
+    const { data, count, error } = await this.client
+      .from('projects')
+      .select(
+        `
+        id,
+        created_at,
+        title,
+        slug,
+        difficulty_level,
+        moderation,
+        is_draft,
+        published_at,
+        comment_count,
+        total_views,
+        deleted,
+        profile:profiles(username, display_name),
+        category:categories(name),
+        steps:project_steps(count),
+        remakes(count)
+      `,
+        { count: 'exact' },
+      )
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (error?.code === 'PGRST103') {
+      return { projects: [], totalCount: 0 };
+    }
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      projects: (data as unknown as DBAdminProject[]).map(AdminProject.fromDB),
+      totalCount: count ?? 0,
+    };
   }
 
   getProjectPublicMedia(projectDb: DBProject) {

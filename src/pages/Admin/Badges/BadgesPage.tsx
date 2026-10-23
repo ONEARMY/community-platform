@@ -1,4 +1,4 @@
-import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { PencilIcon, PlusIcon, RecycleIcon, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Thumbnail } from 'src/pages/Admin/Thumbnail';
 import type { AdminProfileBadge } from 'src/utils/profileBadges';
@@ -89,6 +89,16 @@ export function BadgesPage({ profileBadges }: IProps) {
                     >
                       <PencilIcon />
                     </Button>
+                    {badge.isDisabled ? (
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`re-enabled ${badge.displayName}`}
+                        onClick={() => console.log('enabled')}
+                      >
+                        <RecycleIcon />
+                      </Button>
+                    ) : null}
                     {deleteError ? (
                       <Button
                         variant="ghost"

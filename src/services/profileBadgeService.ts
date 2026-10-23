@@ -51,9 +51,25 @@ const deleteProfileBadge = async (id: number) => {
   }
 };
 
+const disableProfileBadge = async (id: number, badge: ProfileBadge) => {
+  const response = await fetch(`/api/admin/profile-badges/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Action-Type': 'Disable' },
+    body: JSON.stringify(badge),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Error updating badge' }));
+    throw new Error(errorData.error || 'Error updating badge');
+  }
+
+  return (await response.json()) as ProfileBadge;
+};
+
 export const ProfileBadgeService = {
   createProfileBadge,
   deleteProfileBadge,
+  disableProfileBadge,
   getProfileBadges,
   updateProfileBadge,
 };

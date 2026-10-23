@@ -89,16 +89,6 @@ export function BadgesPage({ profileBadges }: IProps) {
                     >
                       <PencilIcon />
                     </Button>
-                    {badge.isDisabled ? (
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        aria-label={`re-enabled ${badge.displayName}`}
-                        onClick={() => console.log('enabled')}
-                      >
-                        <RecycleIcon />
-                      </Button>
-                    ) : null}
                     {deleteError ? (
                       <Button
                         variant="ghost"
@@ -128,6 +118,16 @@ export function BadgesPage({ profileBadges }: IProps) {
                         <TrashIcon />
                       </Button>
                     )}
+                    {badge.isDisabled ? (
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`re-enabled ${badge.displayName}`}
+                        onClick={() => console.log('enabled')}
+                      >
+                        <RecycleIcon />
+                      </Button>
+                    ) : null}
                   </div>
                 </TableCell>
               </TableRow>

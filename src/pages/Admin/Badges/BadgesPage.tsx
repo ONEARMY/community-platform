@@ -4,6 +4,7 @@ import { Thumbnail } from 'src/pages/Admin/Thumbnail';
 import type { AdminProfileBadge } from 'src/utils/profileBadges';
 import { BADGE_AVAILABILITY_OPTIONS, getProfileBadgeDeleteError } from 'src/utils/profileBadges';
 import { useToast } from '@/common/Toast';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -64,7 +65,10 @@ export function BadgesPage({ profileBadges }: IProps) {
                   <Thumbnail imageUrl={badge.imageUrl} alt={badge.displayName} />
                 </TableCell>
                 <TableCell>{badge.displayName}</TableCell>
-                <TableCell>{badge.name}</TableCell>
+                <TableCell>
+                  {badge.name}
+                  {badge.isDisabled ? <Badge variant="warning">Disabled</Badge> : ''}
+                </TableCell>
                 <TableCell>{badge.isAudience ? 'Yes' : 'No'}</TableCell>
                 <TableCell>
                   {(badge.grantsBadgeId && displayNames.get(badge.grantsBadgeId)) || '—'}

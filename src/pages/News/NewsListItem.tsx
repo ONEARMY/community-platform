@@ -1,18 +1,14 @@
 import {
+  Button,
   Category,
-  Icon,
   ProfileBadgeContentLabel,
   // ModerationStatus,
 } from 'oa-components';
 import type { News } from 'oa-shared';
 import { Link } from 'react-router';
 import { Highlighter } from 'src/common/Highlighter';
-import { shortFormatNumber } from 'src/utils/helpers';
-import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
+import { AspectRatio, Card, Flex, Heading, Image, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
-import CommentIcon from '@/components/ui/icons/comment.svg?react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { listing } from './labels';
 import { NewsLockedImage } from './NewsLockedImage';
 
 interface IProps {
@@ -108,24 +104,12 @@ export const NewsListItem = ({ news, query }: IProps) => {
             </Text>
           )}
 
-          <Flex sx={{ justifyContent: 'space-between' }}>
+          <Flex>
             <Link to={url}>
-              <Button data-cy="news-list-item-button" variant="outline">
-                Read more <Icon glyph="arrow-forward" />
+              <Button data-cy="news-list-item-button" variant="outline" small>
+                Read more
               </Button>
             </Link>
-
-            <Tooltip>
-              <TooltipTrigger
-                render={<span tabIndex={0} />}
-                aria-label={`${listing.totalComments}: ${(news as any).commentCount || 0}`}
-                className="inline-flex items-center text-xs text-foreground sm:text-sm"
-              >
-                {shortFormatNumber((news as any).commentCount || 0)}
-                <CommentIcon className="ml-1 size-4" />
-              </TooltipTrigger>
-              <TooltipContent>{listing.totalComments}</TooltipContent>
-            </Tooltip>
           </Flex>
         </Flex>
       </Flex>

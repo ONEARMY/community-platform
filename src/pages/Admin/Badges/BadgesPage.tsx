@@ -17,6 +17,7 @@ import {
 import { BadgeFormDialog } from './BadgeFormDialog';
 import { DeleteBadgeDialog } from './DeleteBadgeDialog';
 import { DisableBadgeDialog } from './DisableBadgeDialog';
+import { EnableBadgeDialog } from './EnabledBadgeDialog';
 
 interface IProps {
   profileBadges: AdminProfileBadge[];
@@ -26,6 +27,7 @@ export function BadgesPage({ profileBadges }: IProps) {
   const [editingBadge, setEditingBadge] = useState<AdminProfileBadge | null | undefined>(undefined);
   const [deletingBadge, setDeletingBadge] = useState<AdminProfileBadge | null>(null);
   const [disablingBadge, setDisablingBadge] = useState<AdminProfileBadge | null>(null);
+  const [enablingBadge, setEnablingBadge] = useState<AdminProfileBadge | null>(null);
   const toast = useToast();
 
   const displayNames = new Map(profileBadges.map(({ badge }) => [badge.id, badge.displayName]));
@@ -123,7 +125,7 @@ export function BadgesPage({ profileBadges }: IProps) {
                         variant="ghost"
                         size="icon-sm"
                         aria-label={`re-enabled ${badge.displayName}`}
-                        onClick={() => console.log('enabled')}
+                        onClick={() => setEnablingBadge(profileBadge)}
                       >
                         <RecycleIcon />
                       </Button>
@@ -161,6 +163,14 @@ export function BadgesPage({ profileBadges }: IProps) {
         onOpenChange={(open) => {
           if (!open) {
             setDisablingBadge(null);
+          }
+        }}
+      />
+      <EnableBadgeDialog
+        profileBadge={enablingBadge}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEnablingBadge(null);
           }
         }}
       />

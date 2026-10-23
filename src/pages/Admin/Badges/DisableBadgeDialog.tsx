@@ -30,9 +30,10 @@ export function DisableBadgeDialog({ profileBadge, onOpenChange }: IProps) {
 
     setSubmitting(true);
 
-    const promise = ProfileBadgeService.deleteProfileBadge(profileBadge.badge.id).finally(() =>
-      setSubmitting(false),
-    );
+    const promise = ProfileBadgeService.disableProfileBadge(
+      profileBadge.badge.id,
+      profileBadge.badge,
+    ).finally(() => setSubmitting(false));
 
     toast.promise(promise, {
       loading: 'Disabling badge...',

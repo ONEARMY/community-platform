@@ -124,7 +124,7 @@ export function BadgesPage({ profileBadges }: IProps) {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        aria-label={`re-enabled ${badge.displayName}`}
+                        aria-label={`Enable ${badge.displayName}`}
                         onClick={() => setEnablingBadge(profileBadge)}
                       >
                         <RecycleIcon />

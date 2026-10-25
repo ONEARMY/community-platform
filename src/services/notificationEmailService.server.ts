@@ -9,6 +9,11 @@ import { tokens } from 'src/utils/tokens.server';
 import { NotificationMapperServiceServer } from './notificationMapperService.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
 
+const unsubscribeHeaders = (siteUrl: string, userCode: string) => ({
+  'List-Unsubscribe': `<${siteUrl}/api/notifications-preferences-via-email/${userCode}>`,
+  'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+});
+
 type Previewer = {
   email: string;
   profileId: number;
@@ -91,6 +96,7 @@ export class NotificationEmailServiceServer {
           settings: tenantSettings,
           isPreview: true,
         }),
+        headers: unsubscribeHeaders(tenantSettings.siteUrl, codes.code),
       };
 
       sendBatchEmails({
@@ -141,6 +147,7 @@ export class NotificationEmailServiceServer {
             userCode: code,
             settings: tenantSettings,
           }),
+          headers: unsubscribeHeaders(tenantSettings.siteUrl, code),
         };
       });
 

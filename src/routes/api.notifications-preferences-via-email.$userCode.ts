@@ -87,34 +87,30 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       .maybeSingle();
 
     const existingPreferencesId = existingPreferences.data?.id || null;
-    const comments = formData.get('comments') === 'true';
-    const contentReach = formData.get('contentReach') as ContentReach;
-    const replies = formData.get('replies') === 'true';
-    const researchUpdates = formData.get('researchUpdates') === 'true';
-    const isUnsubscribed = formData.get('isUnsubscribed') === 'true';
+    const preferences =
+      formData.get('List-Unsubscribe') === 'One-Click'
+        ? { is_unsubscribed: true }
+        : {
+            comments: formData.get('comments') === 'true',
+            content_reach: formData.get('contentReach') as ContentReach,
+            replies: formData.get('replies') === 'true',
+            research_updates: formData.get('researchUpdates') === 'true',
+            is_unsubscribed: formData.get('isUnsubscribed') === 'true',
+          };
 
     if (existingPreferencesId) {
       await client
         .from('notifications_preferences')
-        .update({
-          comments,
-          content_reach: contentReach,
-          replies,
-          research_updates: researchUpdates,
-          is_unsubscribed: isUnsubscribed,
-        })
+        .update(preferences)
         .eq('id', existingPreferencesId)
         .select();
       return Response.json({}, { headers, status: 200 });
     }
 
     await client.from('notifications_preferences').insert({
+      ...NotificationsPreferencesDefaults,
+      ...preferences,
       user_id: userId,
-      comments,
-      content_reach: contentReach,
-      replies,
-      research_updates: researchUpdates,
-      is_unsubscribed: isUnsubscribed,
       tenant_id: process.env.TENANT_ID!,
     });
 

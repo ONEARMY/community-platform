@@ -80,10 +80,10 @@ describe('BadgesPage', () => {
     expect(mockToast.info).toHaveBeenCalledWith(expect.stringContaining('linked to Stripe'));
   });
 
-  it('opens the delete dialog for an unused badge', async () => {
+  it('opens the disable dialog for an unused badge', async () => {
     render(<BadgesPage profileBadges={profileBadges} />);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Delete Unused' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Disable Unused' }));
 
     expect(mockDeleteDialog).toHaveBeenLastCalledWith(
       expect.objectContaining({ profileBadge: profileBadges[2] }),

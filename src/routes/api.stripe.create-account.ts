@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { AuthServiceServer } from 'src/services/authService.server';
 import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
-import { issueSignInTicket } from 'src/services/supporterSignInTicket.server';
+import { signInSupporter } from 'src/services/supporterSignIn.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -35,6 +35,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Invalid customer or email mismatch.' }, { status: 400 });
     }
 
+    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
+    if (!subscription) {
+      return Response.json({ error: 'Payment not confirmed yet.' }, { status: 403 });
+    }
+
     const tenantId = process.env.TENANT_ID;
     if (!tenantId) {
       return Response.json({ error: 'Server configuration error' }, { status: 500 });
@@ -44,6 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       email,
       password,
       email_confirm: true,
+      app_metadata: { supporter_password_pending: true },
     });
 
     if (createError) {
@@ -65,20 +71,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, newUser.user.id, tenantId);
 
     // Assign badge based on active subscription's product
-    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
-    if (subscription) {
-      const productId = subscription.items.data[0]?.price?.product as string;
-      if (productId) {
-        const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
-        if (badgeId) {
-          await stripeAdmin.assignBadgeForSubscription(newUser.user.id, tenantId, badgeId);
-        }
+    const productId = subscription.items.data[0]?.price?.product as string;
+    if (productId) {
+      const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
+      if (badgeId) {
+        await stripeAdmin.assignBadgeForSubscription(newUser.user.id, tenantId, badgeId);
       }
     }
 
-    const signInTicket = await issueSignInTicket(email);
+    const headers = await signInSupporter(request, email);
 
-    return Response.json({ success: true, signInTicket }, { status: 200 });
+    return Response.json({ success: true }, { status: 200, headers });
   } catch (error: any) {
     logger.error('Error creating supporter account:', error);
     return Response.json(

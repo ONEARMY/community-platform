@@ -72,32 +72,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw unauthorizedError();
     }
 
-    const existingPreferences = await client
-      .from('notifications_preferences')
-      .select('id')
-      .eq('user_id', profile.data.id)
-      .single();
-
-    const result = existingPreferences.data
-      ? await client
-          .from('notifications_preferences')
-          .update({
-            comments,
-            replies,
-            research_updates,
-            is_unsubscribed,
-            content_reach,
-          })
-          .eq('user_id', profile.data.id)
-      : await client.from('notifications_preferences').insert({
-          user_id: profile.data.id,
-          comments,
-          replies,
-          research_updates,
-          is_unsubscribed,
-          content_reach,
-          tenant_id: process.env.TENANT_ID!,
-        });
+    const result = await client.from('notifications_preferences').upsert(
+      {
+        user_id: profile.data.id,
+        comments,
+        replies,
+        research_updates,
+        is_unsubscribed,
+        content_reach,
+        tenant_id: process.env.TENANT_ID!,
+      },
+      { onConflict: 'user_id' },
+    );
 
     if (result.error) {
       throw new Error(result.error?.code + ': ' + result.error?.message + result.error?.details);

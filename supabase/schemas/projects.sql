@@ -58,6 +58,7 @@ ALTER TABLE ONLY "public"."projects"
 
 ALTER TABLE "public"."project_steps" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."projects" ENABLE ROW LEVEL SECURITY;
+GRANT UPDATE ("total_views") ON TABLE "public"."projects" TO "anon";
 
 CREATE POLICY "tenant_isolation" ON "public"."project_steps" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 CREATE POLICY "tenant_isolation" ON "public"."projects" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));

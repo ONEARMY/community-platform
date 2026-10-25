@@ -32,18 +32,32 @@ const imageUpload = async (id: number | null, contentType: ImageFolder, imageFil
 };
 
 const fileUpload = async (id: number | null, contentType: ContentType, file: File) => {
-  const body = new FormData();
-  if (id) {
-    body.append('id', id.toString());
-  }
-  body.append('contentType', contentType);
-  body.append('file', file, getCleanFileName(file.name));
-
-  const response = await fetch(`/api/documents`, {
+  const uploadResponse = await fetch(`/api/documents`, {
     method: 'POST',
-    body,
+    body: JSON.stringify({ size: file.size }),
   });
+  await throwOnFileError(uploadResponse);
+  const { uploadId, uploadUrl }: { uploadId: string; uploadUrl: string } =
+    await uploadResponse.json();
 
+  const body = new FormData();
+  body.append('cacheControl', '3600');
+  body.append('', file);
+
+  const storageResponse = await fetch(uploadUrl, { method: 'PUT', body });
+  await throwOnFileError(storageResponse);
+
+  const confirmResponse = await fetch(`/api/documents/confirm`, {
+    method: 'POST',
+    body: JSON.stringify({ uploadId, id, contentType, fileName: getCleanFileName(file.name) }),
+  });
+  await throwOnFileError(confirmResponse);
+
+  const data: { document: IMediaFile } = await confirmResponse.json();
+  return data.document;
+};
+
+const throwOnFileError = async (response: Response) => {
   if (response.status === 413) {
     throw new Error('The file is too large', {
       cause: response.status,
@@ -55,9 +69,6 @@ const fileUpload = async (id: number | null, contentType: ContentType, file: Fil
     const errorMessage = errorData.error || errorData.message || 'Error saving file';
     throw new Error(errorMessage, { cause: response.status });
   }
-
-  const data: { document: IMediaFile } = await response.json();
-  return data.document;
 };
 
 const getCleanFileName = (fileName: string) => {

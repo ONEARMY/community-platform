@@ -1,7 +1,7 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
-[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=master)
-[![GitHub license](https://badgen.net/github/license/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
-[![GitHub license](https://badgen.net/github/tag/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/main.svg?style=shield)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=main)
+[![GitHub license](https://badgen.net/github/license/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/main/LICENSE)
+[![GitHub license](https://badgen.net/github/tag/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/main/LICENSE)
 [![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
 [![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/gJ7Yyk4)
 
@@ -245,6 +245,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="http://www.linkedin.com/in/thielem"><img src="https://avatars.githubusercontent.com/u/8574009?v=4?s=60" width="60px;" alt="Marcio Thiele"/><br /><sub><b>Marcio Thiele</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=MarcioSThiele" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DamaskinK"><img src="https://avatars.githubusercontent.com/u/210554122?v=4?s=60" width="60px;" alt="Kostiantyn Damaskin"/><br /><sub><b>Kostiantyn Damaskin</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=DamaskinK" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kedzuchstefan2004-art"><img src="https://avatars.githubusercontent.com/u/236783157?v=4?s=60" width="60px;" alt="kedzuchstefan2004-art"/><br /><sub><b>kedzuchstefan2004-art</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=kedzuchstefan2004-art" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EyesZ"><img src="https://avatars.githubusercontent.com/u/80692627?v=4?s=60" width="60px;" alt="EyesZ"/><br /><sub><b>EyesZ</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=EyesZ" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, DBMedia, DBNews } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { escapeFilterValue } from 'src/utils/helpers';
 import { StorageServiceServer } from './storageService.server';
 
 export class NewsServiceServer {
@@ -16,6 +17,9 @@ export class NewsServiceServer {
   }
 
   getBySlug(slug: string) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     return this.client
       .from('news')
       .select(
@@ -53,7 +57,7 @@ export class NewsServiceServer {
         ))
      `,
       )
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .or('deleted.eq.false,deleted.is.null')
       .single();
   }

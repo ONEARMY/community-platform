@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from './_.email-confirmation';
@@ -8,6 +9,7 @@ import { action, loader } from './_.email-confirmation';
 vi.mock('src/repository/supabase.server');
 vi.mock('src/services/profileService.server');
 vi.mock('src/services/organisationApplicationsService.server');
+vi.mock('src/services/tenantSettingsService.server');
 vi.mock('src/services/secretsService.server', () => ({
   getSecret: vi.fn().mockResolvedValue('test-turnstile-site-key'),
 }));
@@ -40,6 +42,10 @@ const setup = (opts: {
       return { existsByAuthId: vi.fn().mockResolvedValue(opts.hasApplication ?? false) };
     },
   );
+
+  (TenantSettingsService as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
+    return { get: vi.fn().mockResolvedValue({ siteUrl: 'https://site.test' }) };
+  });
 
   return { verifyOtp, resend };
 };
@@ -142,7 +148,7 @@ describe('email-confirmation — expired link', () => {
       type: 'signup',
       email: 'someone@example.com',
       options: {
-        emailRedirectTo: 'http://localhost/email-confirmation',
+        emailRedirectTo: 'https://site.test/email-confirmation',
         captchaToken: 'captcha-token',
       },
     });
@@ -160,7 +166,7 @@ describe('email-confirmation — expired link', () => {
     expect(resend).toHaveBeenCalledWith(
       expect.objectContaining({
         options: expect.objectContaining({
-          emailRedirectTo: 'http://localhost/email-confirmation?flow=organisation',
+          emailRedirectTo: 'https://site.test/email-confirmation?flow=organisation',
         }),
       }),
     );

@@ -118,17 +118,19 @@ async function deleteResearch(request: Request, id: number, session: Session) {
       roles: session.roles,
     });
 
-    if (canEdit) {
-      await client
-        .from('research')
-        .update({
-          modified_at: new Date().toISOString(),
-          deleted: true,
-        })
-        .eq('id', id);
-
-      return Response.json({}, { status: 200, headers });
+    if (!canEdit) {
+      return Response.json({}, { status: 403, headers });
     }
+
+    await client
+      .from('research')
+      .update({
+        modified_at: new Date().toISOString(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
   } catch (error) {
     logger.error('Delete research error:', error);
   }
@@ -157,7 +159,7 @@ async function validateRequest(
   }
 
   if (!data.isDraft && !data.coverImage) {
-    throw validationError('Cover image is required', 'image');
+    throw validationError('Cover image is required', 'coverImage');
   }
 
   if (

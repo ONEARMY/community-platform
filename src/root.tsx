@@ -5,6 +5,7 @@ import { theme } from 'oa-themes';
 import { useContext, useEffect, useRef } from 'react';
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
+import { isProductionEnvironment } from './config/config';
 import { createSupabaseServerClient } from './repository/supabase.server';
 import { TenantSettingsService } from './services/tenantSettingsService.server';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
@@ -44,8 +45,6 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     --color-accent-hover: ${loaderData.colorAccentHover};
     ${loaderData.colorSecondary ? `--color-brand-secondary: ${loaderData.colorSecondary};` : ''}
   `;
-
-  // const isProd = import.meta.env.VITE_BRANCH === 'production';
 
   // Only executed on client
   // When a top level ErrorBoundary or CatchBoundary are rendered,
@@ -140,7 +139,7 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
     content: loaderData?.siteName || '',
   });
 
-  if (import.meta.env.VITE_BRANCH !== 'production') {
+  if (!isProductionEnvironment()) {
     tags.push({
       name: 'robots',
       content: 'noindex',

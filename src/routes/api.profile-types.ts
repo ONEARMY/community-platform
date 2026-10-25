@@ -1,9 +1,16 @@
 import { HTTPException } from 'hono/http-exception';
+import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MiddlewareFunction } from 'react-router';
+import { sessionContext } from 'src/context';
 import { logger } from 'src/logger';
 import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  forbiddenError,
+  methodNotAllowedError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 import { ProfileTypesServiceServer } from '@/services/profileTypesService.server';
 
 export const middleware: MiddlewareFunction<Response>[] = [sessionMiddleware];
@@ -23,12 +30,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return Response.json({}, { headers, status: 500 });
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
     if (request.method !== 'POST') {
       throw methodNotAllowedError();
+    }
+
+    const session = context.get(sessionContext);
+
+    if (!session) {
+      throw unauthorizedError();
+    }
+
+    if (!session.roles.includes(UserRole.ADMIN)) {
+      throw forbiddenError();
     }
 
     const body = await request.json();

@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS "public"."useful_votes" (
 CREATE INDEX "useful_votes_comments_content_id_idx" ON "public"."useful_votes" USING "btree" ("content_id") WHERE ("content_type" = 'comments'::"public"."useful_content_types");
 CREATE INDEX "useful_votes_comments_user_id_content_id_idx" ON "public"."useful_votes" USING "btree" ("user_id", "content_id") WHERE ("content_type" = 'comments'::"public"."useful_content_types");
 CREATE INDEX "useful_votes_content_type_content_id_idx" ON "public"."useful_votes" USING "btree" ("content_type", "content_id");
+CREATE UNIQUE INDEX "useful_votes_content_type_content_id_user_id_key" ON "public"."useful_votes" USING "btree" ("content_type", "content_id", "user_id");
 
 ALTER TABLE ONLY "public"."useful_votes"
     ADD CONSTRAINT "useful_votes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;

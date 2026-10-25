@@ -11,6 +11,7 @@ import { OrganisationApplicationsServiceServer } from 'src/services/organisation
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { bool, object, string } from 'yup';
@@ -64,9 +65,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const formData = await request.formData();
-  const url = new URL(request.url);
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation?flow=organisation`;
+  const emailRedirectTo = await getSiteUrl(client, '/email-confirmation?flow=organisation');
 
   const profileTypes = await new ProfileTypesServiceServer(client).get();
   const tenantSettings = await new TenantSettingsService(client).get();

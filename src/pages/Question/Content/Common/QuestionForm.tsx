@@ -3,6 +3,7 @@ import { Button } from 'oa-components';
 import type { QuestionFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { useToast } from 'src/common/Toast';
@@ -29,6 +30,7 @@ interface IProps {
 
 export const QuestionForm = (props: IProps) => {
   const toast = useToast();
+  const navigate = useNavigate();
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const id = props?.id || null;
@@ -95,9 +97,13 @@ export const QuestionForm = (props: IProps) => {
       duration: 10000,
     });
 
-    await promise;
+    const question = await promise;
 
     await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+
+    if (!id && window.location.pathname.endsWith('/create')) {
+      navigate(`/questions/${question.slug}/edit`, { replace: true });
+    }
   };
 
   return (

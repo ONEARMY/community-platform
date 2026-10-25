@@ -17,6 +17,24 @@ const escapeHtml = (text: string): string =>
 
 const escapeAttr = (text: string): string => escapeHtml(text).replace(/"/g, '&quot;');
 
+const TEXT_ALIGNS = ['left', 'center', 'right', 'justify'];
+
+const safeUrl = (value: unknown, protocols: string[]): string => {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  try {
+    return protocols.includes(new URL(value, 'https://localhost').protocol) ? value : '';
+  } catch {
+    return '';
+  }
+};
+
+const headingLevel = (value: unknown): number => {
+  const level = Number(value);
+  return Number.isInteger(level) && level >= 1 && level <= 6 ? level : 2;
+};
+
 /**
  * CSS `text-align` has no visual effect on an `<img>` element itself (it only affects
  * inline content inside a block container) — images are always centered via margin/display
@@ -46,7 +64,8 @@ const renderMarksOpen = (marks: JSONContent['marks'] = []): string =>
         // editor's own previous fixed behavior) when it isn't set.
         const target = mark.attrs?.target === '_self' ? '_self' : '_blank';
         const rel = target === '_blank' ? ' rel="noopener noreferrer"' : '';
-        return `<a href="${escapeAttr(mark.attrs?.href ?? '')}" target="${target}"${rel}>`;
+        const href = safeUrl(mark.attrs?.href, ['http:', 'https:', 'mailto:']);
+        return `<a href="${escapeAttr(href)}" target="${target}"${rel}>`;
       }
       const tag = MARK_TAGS[mark.type];
       return tag ? `<${tag}>` : '';
@@ -82,14 +101,14 @@ const renderListItem = (node: JSONContent): string =>
   `<li>${(node.content ?? []).map(renderBlock).join('')}</li>`;
 
 const renderBlock = (node: JSONContent): string => {
-  const textAlign = node.attrs?.textAlign as string | undefined;
-  const alignStyle = textAlign ? ` style="text-align: ${textAlign};"` : '';
+  const textAlign = node.attrs?.textAlign;
+  const alignStyle = TEXT_ALIGNS.includes(textAlign) ? ` style="text-align: ${textAlign};"` : '';
 
   switch (node.type) {
     case 'paragraph':
       return `<p${alignStyle}>${renderInline(node.content)}</p>`;
     case 'heading': {
-      const level = node.attrs?.level ?? 2;
+      const level = headingLevel(node.attrs?.level);
       return `<h${level}${alignStyle}>${renderInline(node.content)}</h${level}>`;
     }
     case 'bulletList':
@@ -103,7 +122,7 @@ const renderBlock = (node: JSONContent): string => {
     case 'horizontalRule':
       return '<hr>';
     case 'image': {
-      const src = escapeAttr(node.attrs?.src ?? '');
+      const src = escapeAttr(safeUrl(node.attrs?.src, ['http:', 'https:']));
       const alt = escapeAttr(node.attrs?.alt ?? '');
       const caption = node.attrs?.caption as string | undefined;
 

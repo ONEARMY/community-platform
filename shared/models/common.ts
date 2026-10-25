@@ -16,7 +16,12 @@ export type Collaborator = {
   isVerified: boolean;
 };
 
-export type ContentType = 'questions' | 'projects' | 'research' | 'news';
+export const ContentTypes = ['questions', 'projects', 'research', 'news'] as const;
+export type ContentType = (typeof ContentTypes)[number];
+
+export function isContentType(value: string | undefined): value is ContentType {
+  return ContentTypes.includes(value as ContentType);
+}
 
 export const UsefulContentTypes = [
   'questions',

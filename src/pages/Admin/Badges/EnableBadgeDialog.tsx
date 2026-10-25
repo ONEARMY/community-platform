@@ -30,9 +30,17 @@ export function EnableBadgeDialog({ profileBadge, onOpenChange }: IProps) {
 
     setSubmitting(true);
 
-    const promise = ProfileBadgeService.deleteProfileBadge(profileBadge.badge.id).finally(() =>
-      setSubmitting(false),
-    );
+    const promise = ProfileBadgeService.updateProfileBadge(profileBadge.badge.id, {
+      name: profileBadge.badge.name,
+      displayName: profileBadge.badge.displayName,
+      imageUrl: profileBadge.badge.imageUrl ?? '',
+      actionUrl: profileBadge.badge.actionUrl ?? '',
+      isAudience: profileBadge.badge.isAudience !== false,
+      isDisabled: false,
+      grantsBadgeId: profileBadge.badge.grantsBadgeId ?? null,
+      availableTo: profileBadge.badge.availableTo ?? null,
+      actionLabel: profileBadge.badge.actionLabel ?? '',
+    }).finally(() => setSubmitting(false));
 
     toast.promise(promise, {
       loading: 'Enabling badge badge...',

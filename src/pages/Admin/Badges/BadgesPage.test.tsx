@@ -8,6 +8,7 @@ import { BadgesPage } from './BadgesPage';
 const mockToast = vi.hoisted(() => ({ info: vi.fn() }));
 const mockDeleteDialog = vi.hoisted(() => vi.fn());
 const mockDisableDialog = vi.hoisted(() => vi.fn());
+const mockEnableDialog = vi.hoisted(() => vi.fn());
 
 vi.mock('src/common/Toast', () => ({ useToast: () => mockToast }));
 vi.mock('./BadgeFormDialog', () => ({ BadgeFormDialog: () => null }));
@@ -20,6 +21,12 @@ vi.mock('./DeleteBadgeDialog', () => ({
 vi.mock('./DisableBadgeDialog', () => ({
   DisableBadgeDialog: (props: any) => {
     mockDisableDialog(props)
+    return null;
+  }
+}))
+vi.mock('./EnableBadgeDialog', () => ({
+  EnableBadgeDialog: (props: any) => {
+    mockEnableDialog(props)
     return null;
   }
 }))
@@ -105,6 +112,16 @@ describe('BadgesPage', () => {
 
     expect(mockDisableDialog).toHaveBeenLastCalledWith(
       expect.objectContaining({ profileBadge: profileBadges[2] }),
+    );
+  });
+
+  it('opens the enable dialog for an unused, disabled, badge', async () => {
+    render(<BadgesPage profileBadges={profileBadges} />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Enable Disabled' }));
+
+    expect(mockEnableDialog).toHaveBeenLastCalledWith(
+      expect.objectContaining({ profileBadge: profileBadges[3] }),
     );
   });
 

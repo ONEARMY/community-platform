@@ -14,7 +14,7 @@ export class DBProfileBadge {
   action_url: string | null;
   premium_tier: number | null;
   is_audience?: boolean;
-  is_disabled: boolean;
+  is_disabled?: boolean;
   grants_badge_id?: number | null;
   available_to?: BadgeAvailability | null;
   action_label?: string | null;
@@ -36,7 +36,7 @@ export class ProfileBadge {
   actionUrl?: string;
   premiumTier?: number;
   isAudience?: boolean;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   grantsBadgeId?: number;
   availableTo?: BadgeAvailability;
   actionLabel?: string;

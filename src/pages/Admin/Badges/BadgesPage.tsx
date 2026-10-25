@@ -17,7 +17,7 @@ import {
 import { BadgeFormDialog } from './BadgeFormDialog';
 import { DeleteBadgeDialog } from './DeleteBadgeDialog';
 import { DisableBadgeDialog } from './DisableBadgeDialog';
-import { EnableBadgeDialog } from './EnabledBadgeDialog';
+import { EnableBadgeDialog } from './EnableBadgeDialog';
 
 interface IProps {
   profileBadges: AdminProfileBadge[];

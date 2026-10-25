@@ -35,6 +35,7 @@ const validInput: ProfileBadgeInput = {
   imageUrl: 'https://example.com/member.svg',
   actionUrl: '/support',
   isAudience: true,
+  isDisabled: false,
   grantsBadgeId: null,
   availableTo: 'non_space',
   actionLabel: 'Become a member',

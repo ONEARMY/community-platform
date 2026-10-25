@@ -25,7 +25,7 @@ export interface ProfileBadgeInput {
   imageUrl: string;
   actionUrl: string | null;
   isAudience: boolean;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   grantsBadgeId: number | null;
   availableTo: BadgeAvailability | null;
   actionLabel: string | null;

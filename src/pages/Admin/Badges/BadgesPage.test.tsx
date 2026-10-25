@@ -58,6 +58,17 @@ const profileBadges = [
     }),
     usage: { holders: 0, articles: 0, stripeLinked: false },
   },
+  {
+    badge: new ProfileBadge({
+      id: 4,
+      name: 'disabled',
+      displayName: 'Disabled',
+      imageUrl: 'https://example.com/unused.svg',
+      isAudience: true,
+      isDisabled: true
+    }),
+    usage: { holders: 0, articles: 0, stripeLinked: false },
+  },
 ];
 
 const row = (name: string) => screen.getByRole('row', { name: new RegExp(`^${name}`) });
@@ -94,6 +105,16 @@ describe('BadgesPage', () => {
 
     expect(mockDisableDialog).toHaveBeenLastCalledWith(
       expect.objectContaining({ profileBadge: profileBadges[2] }),
+    );
+  });
+
+  it('opens the delete dialog for an unused, disabled, badge', async () => {
+    render(<BadgesPage profileBadges={profileBadges} />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Delete Disabled' }));
+
+    expect(mockDeleteDialog).toHaveBeenLastCalledWith(
+      expect.objectContaining({ profileBadge: profileBadges[3] }),
     );
   });
 });

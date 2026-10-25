@@ -25,6 +25,7 @@ export interface ProfileBadgeInput {
   imageUrl: string;
   actionUrl: string | null;
   isAudience: boolean;
+  isDisabled: boolean;
   grantsBadgeId: number | null;
   availableTo: BadgeAvailability | null;
   actionLabel: string | null;
@@ -76,6 +77,7 @@ export const normalizeProfileBadgeInput = (
   value: Partial<Record<keyof ProfileBadgeInput, unknown>>,
 ): ProfileBadgeInput => {
   const isAudience = value.isAudience === true;
+  const isDisabled = value.isDisabled === true;
   const availableTo = isAudience ? (trimmed(value.availableTo) as BadgeAvailability) || null : null;
 
   return {
@@ -84,6 +86,7 @@ export const normalizeProfileBadgeInput = (
     imageUrl: trimmed(value.imageUrl),
     actionUrl: trimmed(value.actionUrl) || null,
     isAudience,
+    isDisabled,
     grantsBadgeId: Number(value.grantsBadgeId) || null,
     availableTo,
     actionLabel: availableTo ? trimmed(value.actionLabel) || null : null,

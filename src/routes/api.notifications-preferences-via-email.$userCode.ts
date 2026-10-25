@@ -80,20 +80,22 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await validateRequest(request, userId);
 
     const formData = await request.formData();
-    const comments = formData.get('comments') === 'true';
-    const contentReach = formData.get('contentReach') as ContentReach;
-    const replies = formData.get('replies') === 'true';
-    const researchUpdates = formData.get('researchUpdates') === 'true';
-    const isUnsubscribed = formData.get('isUnsubscribed') === 'true';
+    const preferences =
+      formData.get('List-Unsubscribe') === 'One-Click'
+        ? { is_unsubscribed: true }
+        : {
+            comments: formData.get('comments') === 'true',
+            content_reach: formData.get('contentReach') as ContentReach,
+            replies: formData.get('replies') === 'true',
+            research_updates: formData.get('researchUpdates') === 'true',
+            is_unsubscribed: formData.get('isUnsubscribed') === 'true',
+          };
 
     await client.from('notifications_preferences').upsert(
       {
+        ...NotificationsPreferencesDefaults,
+        ...preferences,
         user_id: userId,
-        comments,
-        content_reach: contentReach,
-        replies,
-        research_updates: researchUpdates,
-        is_unsubscribed: isUnsubscribed,
         tenant_id: process.env.TENANT_ID!,
       },
       { onConflict: 'user_id' },

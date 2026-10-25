@@ -31,7 +31,7 @@ export async function sendEmail({ from, to, subject, emailTemplate }: SendEmailA
 type SendEmailsArgs = {
   from: string;
   subject: string;
-  emails: { template: ReactNode; to: string }[];
+  emails: { template: ReactNode; to: string; headers?: Record<string, string> }[];
 };
 
 export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs) {
@@ -46,6 +46,7 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
       to: email.to,
       subject,
       react: email.template,
+      headers: email.headers,
     }));
 
     if (i > 0) {

@@ -7,6 +7,7 @@ import { BadgesPage } from './BadgesPage';
 
 const mockToast = vi.hoisted(() => ({ info: vi.fn() }));
 const mockDeleteDialog = vi.hoisted(() => vi.fn());
+const mockDisableDialog = vi.hoisted(() => vi.fn());
 
 vi.mock('src/common/Toast', () => ({ useToast: () => mockToast }));
 vi.mock('./BadgeFormDialog', () => ({ BadgeFormDialog: () => null }));
@@ -16,6 +17,12 @@ vi.mock('./DeleteBadgeDialog', () => ({
     return null;
   },
 }));
+vi.mock('./DisableBadgeDialog', () => ({
+  DisableBadgeDialog: (props: any) => {
+    mockDisableDialog(props)
+    return null;
+  }
+}))
 
 const profileBadges = [
   {
@@ -85,7 +92,7 @@ describe('BadgesPage', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Disable Unused' }));
 
-    expect(mockDeleteDialog).toHaveBeenLastCalledWith(
+    expect(mockDisableDialog).toHaveBeenLastCalledWith(
       expect.objectContaining({ profileBadge: profileBadges[2] }),
     );
   });

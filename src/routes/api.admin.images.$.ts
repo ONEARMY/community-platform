@@ -30,9 +30,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    assertAllowedPath(params.path);
+    assertAllowedPath(params['*']);
 
-    const images = await new StorageServiceServer(client).listImages(params.path);
+    const images = await new StorageServiceServer(client).listImages(params['*']);
 
     return Response.json({ images }, { headers });
   } catch (error) {
@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       throw methodNotAllowedError();
     }
 
-    assertAllowedPath(params.path);
+    assertAllowedPath(params['*']);
 
     const formData = await request.formData();
     const imageFile = formData.get('imageFile') as File | null;
@@ -73,7 +73,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     const storage = new StorageServiceServer(client);
-    const uploadResult = await storage.uploadImage([safeFile], params.path, {
+    const uploadResult = await storage.uploadImage([safeFile], params['*'], {
       preserveFileName: true,
       upsert: true,
     });

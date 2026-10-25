@@ -32,6 +32,7 @@ const ADMIN_NAV_ITEMS = [
     items: [
       { label: 'Overview', href: '/admin/users' },
       { label: 'Supporters', href: '/admin/supporters' },
+      { label: 'Welcome email', href: '/admin/settings/welcome-email' },
     ],
   },
   {

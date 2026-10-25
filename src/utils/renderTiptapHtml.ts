@@ -19,7 +19,7 @@ const escapeAttr = (text: string): string => escapeHtml(text).replace(/"/g, '&qu
 
 const TEXT_ALIGNS = ['left', 'center', 'right', 'justify'];
 
-const safeUrl = (value: unknown, protocols: string[]): string => {
+export const safeUrl = (value: unknown, protocols: string[]): string => {
   if (typeof value !== 'string') {
     return '';
   }

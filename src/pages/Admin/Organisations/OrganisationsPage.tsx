@@ -1,10 +1,11 @@
 import { ModerationRecord } from 'oa-components';
 import type { AdminOrganisation, Moderation } from 'oa-shared';
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -48,24 +49,44 @@ const CREATED_AT_FORMAT = new Intl.DateTimeFormat('en-GB', {
 interface IProps {
   organisations: AdminOrganisation[];
   status: OrganisationStatusFilter;
+  search: string | null;
   page: number;
   totalPages: number;
 }
 
-export function OrganisationsPage({ organisations, status, page, totalPages }: IProps) {
+export function OrganisationsPage({ organisations, status, search, page, totalPages }: IProps) {
   const [moderating, setModerating] = useState<AdminOrganisation | null>(null);
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const q = String(new FormData(event.currentTarget).get('q') ?? '').trim();
+    setSearchParams({ ...(searchParams.has('status') && { status }), ...(q && { q }) });
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-lg font-semibold">Organisations</h1>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <form role="search" onSubmit={handleSearch}>
+            <Input
+              key={search}
+              name="q"
+              type="search"
+              defaultValue={search ?? ''}
+              placeholder="Search name or username"
+              aria-label="Search organisations"
+              className="w-56"
+            />
+          </form>
           <Label htmlFor="organisation-status">Status</Label>
           <Select
             items={STATUS_FILTER_OPTIONS}
             value={status}
-            onValueChange={(value) => setSearchParams({ status: value as string })}
+            onValueChange={(value) =>
+              setSearchParams({ status: value as string, ...(search && { q: search }) })
+            }
           >
             <SelectTrigger id="organisation-status" className="w-48">
               <SelectValue />

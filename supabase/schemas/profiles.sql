@@ -338,7 +338,7 @@ $$;
 
 CREATE OR REPLACE TRIGGER "protect_profile_roles" BEFORE INSERT OR UPDATE ON "public"."profiles" FOR EACH ROW EXECUTE FUNCTION "public"."protect_profile_roles"();
 
-CREATE OR REPLACE FUNCTION public.get_admin_organisations(p_limit integer, p_offset integer, p_moderation text DEFAULT NULL)
+CREATE OR REPLACE FUNCTION public.get_admin_organisations(p_limit integer, p_offset integer, p_moderation text DEFAULT NULL, p_search text DEFAULT NULL)
 RETURNS TABLE(
   id bigint,
   username text,
@@ -391,7 +391,8 @@ BEGIN
     WHERE p.moderation IS NOT NULL
        OR (pt.is_space AND mp.moderation IS NOT NULL)
   ) o
-  WHERE p_moderation IS NULL OR o.moderation = p_moderation
+  WHERE (p_moderation IS NULL OR o.moderation = p_moderation)
+    AND (p_search IS NULL OR o.display_name ILIKE '%' || p_search || '%' OR o.username ILIKE '%' || p_search || '%')
   ORDER BY o.created_at DESC, o.id DESC
   LIMIT p_limit OFFSET p_offset;
 END;

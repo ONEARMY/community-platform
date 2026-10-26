@@ -1722,7 +1722,12 @@ export type Database = {
         }[];
       };
       get_admin_organisations: {
-        Args: { p_limit: number; p_moderation?: string; p_offset: number };
+        Args: {
+          p_limit: number;
+          p_moderation?: string;
+          p_offset: number;
+          p_search?: string;
+        };
         Returns: {
           about: string;
           created_at: string;

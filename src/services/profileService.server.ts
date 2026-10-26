@@ -292,6 +292,7 @@ export class ProfileServiceServer {
 
   async getOrganisationsForModeration(
     moderation: Moderation | null,
+    search: string | null,
     page: number,
     pageSize: number,
   ) {
@@ -299,6 +300,7 @@ export class ProfileServiceServer {
       p_limit: pageSize,
       p_offset: (page - 1) * pageSize,
       p_moderation: moderation ?? undefined,
+      p_search: search ?? undefined,
     });
 
     if (error) {

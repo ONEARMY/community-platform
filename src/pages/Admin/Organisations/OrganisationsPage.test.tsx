@@ -19,7 +19,10 @@ const organisations = [
   }),
 ];
 
-const renderPage = (props: Partial<Parameters<typeof OrganisationsPage>[0]> = {}) => {
+const renderPage = (
+  props: Partial<Parameters<typeof OrganisationsPage>[0]> = {},
+  url = '/admin/organisations?status=improvements-needed',
+) => {
   const router = createMemoryRouter(
     [
       {
@@ -28,6 +31,7 @@ const renderPage = (props: Partial<Parameters<typeof OrganisationsPage>[0]> = {}
           <OrganisationsPage
             organisations={organisations}
             status="improvements-needed"
+            search={null}
             page={1}
             totalPages={1}
             {...props}
@@ -35,10 +39,11 @@ const renderPage = (props: Partial<Parameters<typeof OrganisationsPage>[0]> = {}
         ),
       },
     ],
-    { initialEntries: ['/admin/organisations?status=improvements-needed'] },
+    { initialEntries: [url] },
   );
 
-  return render(<RouterProvider router={router} />);
+  render(<RouterProvider router={router} />);
+  return router;
 };
 
 describe('OrganisationsPage', () => {
@@ -75,6 +80,33 @@ describe('OrganisationsPage', () => {
     expect(screen.getByText('Next').closest('a')).toHaveAttribute(
       'href',
       '/admin/organisations?status=improvements-needed&page=2',
+    );
+  });
+
+  it('searches within the chosen status', () => {
+    const router = renderPage();
+
+    fireEvent.change(screen.getByLabelText('Search organisations'), { target: { value: ' acme ' } });
+    fireEvent.submit(screen.getByRole('search'));
+
+    expect(router.state.location.search).toBe('?status=improvements-needed&q=acme');
+  });
+
+  it('searches every status from the default view', () => {
+    const router = renderPage({ status: 'awaiting-moderation' }, '/admin/organisations');
+
+    fireEvent.change(screen.getByLabelText('Search organisations'), { target: { value: 'acme' } });
+    fireEvent.submit(screen.getByRole('search'));
+
+    expect(router.state.location.search).toBe('?q=acme');
+  });
+
+  it('keeps the search when paging', () => {
+    renderPage({ status: 'all', search: 'acme', totalPages: 2 }, '/admin/organisations?q=acme');
+
+    expect(screen.getByText('Next').closest('a')).toHaveAttribute(
+      'href',
+      '/admin/organisations?q=acme&page=2',
     );
   });
 });

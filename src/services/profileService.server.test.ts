@@ -88,12 +88,13 @@ describe('ProfileServiceServer', () => {
 
       const { organisations, totalCount } = await new ProfileServiceServer(
         client,
-      ).getOrganisationsForModeration('improvements-needed', 3, 20);
+      ).getOrganisationsForModeration('improvements-needed', 'acme', 3, 20);
 
       expect(mocks.rpc).toHaveBeenCalledWith('get_admin_organisations', {
         p_limit: 20,
         p_offset: 40,
         p_moderation: 'improvements-needed',
+        p_search: 'acme',
       });
       expect(totalCount).toBe(41);
       expect(organisations[0]).toMatchObject({
@@ -105,11 +106,12 @@ describe('ProfileServiceServer', () => {
       expect(organisations[0].createdAt).toEqual(new Date('2026-10-12T10:00:00Z'));
     });
 
-    it('omits the status for all organisations', async () => {
+    it('omits the status and search when not filtering', async () => {
       const { client, mocks } = createMockSupabaseClient();
       mocks.rpc.mockResolvedValue({ data: [], error: null });
 
       const { totalCount } = await new ProfileServiceServer(client).getOrganisationsForModeration(
+        null,
         null,
         1,
         20,
@@ -119,6 +121,7 @@ describe('ProfileServiceServer', () => {
         p_limit: 20,
         p_offset: 0,
         p_moderation: undefined,
+        p_search: undefined,
       });
       expect(totalCount).toBe(0);
     });

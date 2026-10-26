@@ -39,7 +39,7 @@ export default function AdminLayout() {
     <Main style={{ flex: 1 }} ignoreMaxWidth>
       <SidebarProvider className="min-h-0 flex-1">
         <AdminSidebar />
-        <SidebarInset>
+        <SidebarInset className="min-w-0">
           <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger />
             <Breadcrumb>

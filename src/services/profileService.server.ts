@@ -7,6 +7,7 @@ import type {
   Moderation,
   ProfileDTO,
 } from 'oa-shared';
+import { AdminOrganisation } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
 
@@ -289,23 +290,29 @@ export class ProfileServiceServer {
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
   }
 
-  // TODO: needs admin page created
-  async getProfilesAwaitingModeration() {
-    const { data, error } = await this.client
-      .from('profiles')
-      .select('id, username, display_name, moderation, moderation_feedback, created_at')
-      .not('moderation', 'is', null)
-      .neq('moderation', 'accepted')
-      .order('created_at', { ascending: true });
+  async getOrganisationsForModeration(
+    moderation: Moderation | null,
+    search: string | null,
+    page: number,
+    pageSize: number,
+  ) {
+    const { data, error } = await this.client.rpc('get_admin_organisations', {
+      p_limit: pageSize,
+      p_offset: (page - 1) * pageSize,
+      p_moderation: moderation ?? undefined,
+      p_search: search ?? undefined,
+    });
 
     if (error) {
       throw error;
     }
 
-    return data ?? [];
+    return {
+      organisations: data.map(AdminOrganisation.fromDB),
+      totalCount: data[0]?.total_count ?? 0,
+    };
   }
 
-  // TODO: needs admin page created
   async updateModeration(
     id: number,
     moderation: Moderation,

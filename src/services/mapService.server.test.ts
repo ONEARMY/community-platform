@@ -55,6 +55,32 @@ describe('MapServiceServer pin moderation', () => {
     expect(insertedModeration(mocks)).toBe('rejected');
   });
 
+  it('keeps the accepted pin of an organisation from before the signup flow', async () => {
+    const { client, mocks } = createMockSupabaseClient();
+    mocks.eq.mockReturnValueOnce({ data: [{ id: 3, moderation: 'accepted' }] });
+
+    await new MapServiceServer(client).upsert(pin, profileOf({ moderation: null }));
+
+    expect(mocks.update.mock.calls[0][0].moderation).toBe('accepted');
+  });
+
+  it('sends a changed pin of an organisation from before the signup flow back for review', async () => {
+    const { client, mocks } = createMockSupabaseClient();
+    mocks.eq.mockReturnValueOnce({ data: [{ id: 3, moderation: 'improvements-needed' }] });
+
+    await new MapServiceServer(client).upsert(pin, profileOf({ moderation: null }));
+
+    expect(mocks.update.mock.calls[0][0].moderation).toBe('awaiting-moderation');
+  });
+
+  it('holds a new pin of an organisation from before the signup flow for review', async () => {
+    const { client, mocks } = createMockSupabaseClient();
+
+    await new MapServiceServer(client).upsert(pin, profileOf({ moderation: null }));
+
+    expect(insertedModeration(mocks)).toBe('awaiting-moderation');
+  });
+
   it('leaves member pins auto-accepted as before', async () => {
     const { client, mocks } = createMockSupabaseClient();
 
@@ -64,6 +90,18 @@ describe('MapServiceServer pin moderation', () => {
     );
 
     expect(insertedModeration(mocks)).toBe('accepted');
+  });
+
+  it('accepts a member pin left waiting for review from a time as a space', async () => {
+    const { client, mocks } = createMockSupabaseClient();
+    mocks.eq.mockReturnValueOnce({ data: [{ id: 3, moderation: 'improvements-needed' }] });
+
+    await new MapServiceServer(client).upsert(
+      pin,
+      profileOf({ type: { name: 'member', isSpace: false } as Profile['type'], moderation: null }),
+    );
+
+    expect(mocks.update.mock.calls[0][0].moderation).toBe('accepted');
   });
 
   it('auto-accepts pins of any non-space profile type', async () => {

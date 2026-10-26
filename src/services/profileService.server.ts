@@ -289,23 +289,24 @@ export class ProfileServiceServer {
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
   }
 
-  // TODO: needs admin page created
-  async getProfilesAwaitingModeration() {
-    const { data, error } = await this.client
-      .from('profiles')
-      .select('id, username, display_name, moderation, moderation_feedback, created_at')
-      .not('moderation', 'is', null)
-      .neq('moderation', 'accepted')
-      .order('created_at', { ascending: true });
+  async getOrganisationsForModeration(
+    moderation: Moderation | null,
+    page: number,
+    pageSize: number,
+  ) {
+    const { data, error } = await this.client.rpc('get_admin_organisations', {
+      p_limit: pageSize,
+      p_offset: (page - 1) * pageSize,
+      p_moderation: moderation ?? undefined,
+    });
 
     if (error) {
       throw error;
     }
 
-    return data ?? [];
+    return { profiles: data, totalCount: data[0]?.total_count ?? 0 };
   }
 
-  // TODO: needs admin page created
   async updateModeration(
     id: number,
     moderation: Moderation,

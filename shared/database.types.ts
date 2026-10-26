@@ -1721,6 +1721,21 @@ export type Database = {
           username: string;
         }[];
       };
+      get_admin_organisations: {
+        Args: { p_limit: number; p_moderation?: string; p_offset: number };
+        Returns: {
+          about: string;
+          created_at: string;
+          display_name: string;
+          id: number;
+          is_map_pin: boolean;
+          moderation: string;
+          moderation_feedback: string;
+          total_count: number;
+          type_name: string;
+          username: string;
+        }[];
+      };
       get_author_vote_counts: {
         Args: { author_id: number };
         Returns: {

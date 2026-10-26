@@ -4,6 +4,7 @@ import {
   type IUserImpact,
   type MapPin,
   type MapPinFormData,
+  type Moderation,
   type OrganisationApplicationFormData,
   type Profile,
   type ProfileDTO,
@@ -240,6 +241,26 @@ const ban = async (profileId: number) => {
   return;
 };
 
+const moderateOrganisation = async (
+  profileId: number,
+  moderation: Moderation,
+  feedback: string,
+) => {
+  const response = await fetch(`/api/admin/organisations/${profileId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ moderation, feedback }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Failed to moderate organisation' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to moderate organisation';
+    throw new Error(errorMessage);
+  }
+};
+
 export const profileService = {
   get,
   update,
@@ -250,4 +271,5 @@ export const profileService = {
   deletePin,
   updateImpact,
   ban,
+  moderateOrganisation,
 };

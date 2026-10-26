@@ -6,6 +6,8 @@ import {
   cancellationJustScheduled,
   cancellationReversed,
   deletionIsWorthAnnouncing,
+  pauseEnded,
+  pauseStarted,
   priceIdOf,
   type SubscriptionChanges,
   stripeCustomerUrl,
@@ -55,6 +57,16 @@ export async function notifyMembershipEvent(
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
         const changes = event.data.previous_attributes as SubscriptionChanges | undefined;
+
+        if (pauseStarted(subscription, changes)) {
+          membership.subscriptionPaused(await nameFor(subscription.customer as string));
+          break;
+        }
+
+        if (pauseEnded(subscription, changes)) {
+          membership.subscriptionUnpaused(await nameFor(subscription.customer as string));
+          break;
+        }
 
         if (cancellationJustScheduled(subscription, changes)) {
           membership.subscriptionCancelled(await nameFor(subscription.customer as string));

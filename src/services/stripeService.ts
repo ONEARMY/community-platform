@@ -6,6 +6,7 @@ export type SubscriptionStatus = {
     status: string;
     cancelAtPeriodEnd: boolean;
     cancelAt: number | null;
+    pausedAt: number | null;
   } | null;
 };
 
@@ -116,6 +117,19 @@ const createPortalSession = async (): Promise<string | null> => {
   return null;
 };
 
+const setMembershipPaused = async (paused: boolean): Promise<void> => {
+  const response = await fetch('/api/stripe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: paused ? 'pause' : 'resume' }),
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error || 'Something went wrong.');
+  }
+};
+
 const createSupporterAccount = async (
   params: CreateSupporterAccountParams,
 ): Promise<CreateSupporterAccountResponse> => {
@@ -187,6 +201,7 @@ export const stripeService = {
   getSubscriptionStatus,
   createElementsSubscription,
   createPortalSession,
+  setMembershipPaused,
   createSupporterAccount,
   linkExistingAccount,
   setPassword,

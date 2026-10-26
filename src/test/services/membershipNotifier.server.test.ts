@@ -264,6 +264,30 @@ describe('notifyMembershipEvent', () => {
 
       expect(lastMessage()).toBe('💚 Michael changed their mind and resumed their support');
     });
+
+    it('announces a paused membership', async () => {
+      await notify(
+        subscriptionEvent(
+          'customer.subscription.updated',
+          { status: 'paused' },
+          { status: 'active' },
+        ),
+      );
+
+      expect(lastMessage()).toBe('⏸️ Michael paused their support');
+    });
+
+    it('announces a membership resumed after a pause', async () => {
+      await notify(
+        subscriptionEvent(
+          'customer.subscription.updated',
+          { status: 'active' },
+          { status: 'paused' },
+        ),
+      );
+
+      expect(lastMessage()).toBe('▶️ Michael resumed their support after a pause');
+    });
   });
 
   describe('a tier change', () => {

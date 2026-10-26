@@ -129,6 +129,22 @@ describe('membershipNotifications', () => {
     });
   });
 
+  describe('subscriptionPaused', () => {
+    it('reports a paused membership', () => {
+      membership.subscriptionPaused('Michael');
+
+      expect(lastMessage()).toBe('⏸️ Michael paused their support');
+    });
+  });
+
+  describe('subscriptionUnpaused', () => {
+    it('reports a membership resumed after a pause', () => {
+      membership.subscriptionUnpaused('Michael');
+
+      expect(lastMessage()).toBe('▶️ Michael resumed their support after a pause');
+    });
+  });
+
   describe('tierChanged', () => {
     it('names both tiers', () => {
       membership.tierChanged('Michael', 'Boost', 'Power');

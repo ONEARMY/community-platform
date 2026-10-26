@@ -6,6 +6,8 @@ const {
   mockList,
   mockCancel,
   mockCreate,
+  mockPause,
+  mockResume,
   mockCustomersList,
   mockCustomersUpdate,
   mockCustomersCreate,
@@ -17,6 +19,8 @@ const {
   mockList: vi.fn(),
   mockCancel: vi.fn(),
   mockCreate: vi.fn(),
+  mockPause: vi.fn(),
+  mockResume: vi.fn(),
   mockCustomersList: vi.fn(),
   mockCustomersUpdate: vi.fn(),
   mockCustomersCreate: vi.fn(),
@@ -29,7 +33,13 @@ vi.mock('stripe', () => ({
   __esModule: true,
   default: class {
     prices = { list: mockPricesList };
-    subscriptions = { list: mockList, cancel: mockCancel, create: mockCreate };
+    subscriptions = {
+      list: mockList,
+      cancel: mockCancel,
+      create: mockCreate,
+      pause: mockPause,
+      resume: mockResume,
+    };
     customers = { list: mockCustomersList, update: mockCustomersUpdate, create: mockCustomersCreate };
     invoicePayments = { list: mockInvoicePaymentsList };
   },
@@ -371,5 +381,85 @@ describe('createSubscriptionWithPaymentIntent', () => {
     await expect(
       StripeServiceServer.createSubscriptionWithPaymentIntent('cus_1', 'price_1', 'eur'),
     ).rejects.toThrow('Failed to get payment intent client secret');
+  });
+});
+
+describe('getSubscription', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('returns a paused subscription so the member can still resume it', async () => {
+    mockList.mockResolvedValueOnce({
+      data: [
+        { id: 'sub_old', status: 'incomplete_expired' },
+        { id: 'sub_1', status: 'paused' },
+      ],
+    });
+
+    const StripeServiceServer = await loadService();
+    const subscription = await StripeServiceServer.getSubscription('cus_1');
+
+    expect(mockList).toHaveBeenCalledWith({ customer: 'cus_1', limit: 100 });
+    expect(subscription?.id).toBe('sub_1');
+  });
+
+  it('returns an active subscription', async () => {
+    mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1', status: 'active' }] });
+
+    const StripeServiceServer = await loadService();
+
+    expect((await StripeServiceServer.getSubscription('cus_1'))?.id).toBe('sub_1');
+  });
+
+  it('returns null when nothing is active or paused', async () => {
+    mockList.mockResolvedValueOnce({ data: [{ id: 'sub_1', status: 'incomplete' }] });
+
+    const StripeServiceServer = await loadService();
+
+    expect(await StripeServiceServer.getSubscription('cus_1')).toBeNull();
+  });
+});
+
+describe('pauseSubscription', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('pauses without crediting the rest of the paid period', async () => {
+    const StripeServiceServer = await loadService();
+    await StripeServiceServer.pauseSubscription('sub_1');
+
+    expect(mockPause).toHaveBeenCalledWith('sub_1', {
+      bill_for: { unused_time_from: { type: 'none' } },
+    });
+  });
+
+  it('throws when Stripe is not configured', async () => {
+    mockGetSecret.mockRejectedValue(new Error('no key'));
+
+    const StripeServiceServer = await loadService();
+
+    await expect(StripeServiceServer.pauseSubscription('sub_1')).rejects.toThrow(
+      'Stripe is not configured',
+    );
+  });
+});
+
+describe('resumeSubscription', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('only resumes once the resumption payment succeeds', async () => {
+    const StripeServiceServer = await loadService();
+    await StripeServiceServer.resumeSubscription('sub_1');
+
+    expect(mockResume).toHaveBeenCalledWith('sub_1', {
+      payment_behavior: 'resume_on_payment_success',
+    });
   });
 });

@@ -89,6 +89,8 @@ const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null 
   thankYouImageUrl: null,
 };
 
+const CURRENT_SUBSCRIPTION_STATUSES: Stripe.Subscription.Status[] = ['active', 'paused'];
+
 let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
 
@@ -158,13 +160,35 @@ export class StripeServiceServer {
       return null;
     }
 
-    const subscriptions = await stripe.subscriptions.list({
-      customer: customerId,
-      status: 'active',
-      limit: 1,
-    });
+    const subscriptions = await stripe.subscriptions.list({ customer: customerId, limit: 100 });
 
-    return subscriptions.data[0] || null;
+    return (
+      subscriptions.data.find((subscription) =>
+        CURRENT_SUBSCRIPTION_STATUSES.includes(subscription.status),
+      ) ?? null
+    );
+  }
+
+  static async pauseSubscription(subscriptionId: string): Promise<void> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
+
+    await stripe.subscriptions.pause(subscriptionId, {
+      bill_for: { unused_time_from: { type: 'none' } },
+    });
+  }
+
+  static async resumeSubscription(subscriptionId: string): Promise<void> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
+
+    await stripe.subscriptions.resume(subscriptionId, {
+      payment_behavior: 'resume_on_payment_success',
+    });
   }
 
   static async cancelActiveSubscriptions(customerId: string): Promise<number> {

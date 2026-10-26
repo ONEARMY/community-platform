@@ -78,6 +78,14 @@ export const membershipNotifications = () => {
       post(`💔 ${name} canceled their support`);
     },
 
+    subscriptionPaused(name: string) {
+      post(`⏸️ ${name} paused their support`);
+    },
+
+    subscriptionUnpaused(name: string) {
+      post(`▶️ ${name} resumed their support after a pause`);
+    },
+
     subscriptionResumed(name: string) {
       post(`💚 ${name} changed their mind and resumed their support`);
     },

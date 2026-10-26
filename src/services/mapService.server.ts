@@ -12,10 +12,6 @@ export class MapServiceServer {
       );
     }
 
-    if (existingModeration !== undefined) {
-      return existingModeration === 'accepted' ? 'accepted' : 'awaiting-moderation';
-    }
-
     return 'accepted';
   }
 

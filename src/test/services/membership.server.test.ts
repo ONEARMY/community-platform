@@ -137,9 +137,9 @@ describe('membershipNotifications', () => {
     });
   });
 
-  describe('subscriptionUnpaused', () => {
+  describe('subscriptionPauseEnded', () => {
     it('reports a membership resumed after a pause', () => {
-      membership.subscriptionUnpaused('Michael');
+      membership.subscriptionPauseEnded('Michael');
 
       expect(lastMessage()).toBe('▶️ Michael resumed their support after a pause');
     });

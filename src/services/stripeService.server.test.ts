@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
   mockPricesList,
+  mockPricesRetrieve,
+  MockInvalidRequestError,
   mockList,
   mockCancel,
   mockCreate,
@@ -16,6 +18,12 @@ const {
   mockLoggerError,
 } = vi.hoisted(() => ({
   mockPricesList: vi.fn(),
+  mockPricesRetrieve: vi.fn(),
+  MockInvalidRequestError: class extends Error {
+    constructor(readonly code: string) {
+      super(code);
+    }
+  },
   mockList: vi.fn(),
   mockCancel: vi.fn(),
   mockCreate: vi.fn(),
@@ -32,7 +40,8 @@ const {
 vi.mock('stripe', () => ({
   __esModule: true,
   default: class {
-    prices = { list: mockPricesList };
+    static errors = { StripeInvalidRequestError: MockInvalidRequestError };
+    prices = { list: mockPricesList, retrieve: mockPricesRetrieve };
     subscriptions = {
       list: mockList,
       cancel: mockCancel,
@@ -455,11 +464,115 @@ describe('resumeSubscription', () => {
   });
 
   it('only resumes once the resumption payment succeeds', async () => {
-    const StripeServiceServer = await loadService();
-    await StripeServiceServer.resumeSubscription('sub_1');
+    mockResume.mockResolvedValueOnce({ status: 'active' });
 
+    const StripeServiceServer = await loadService();
+
+    expect(await StripeServiceServer.resumeSubscription('sub_1')).toEqual({ resumed: true });
     expect(mockResume).toHaveBeenCalledWith('sub_1', {
       payment_behavior: 'resume_on_payment_success',
+      expand: ['latest_invoice'],
     });
+  });
+
+  it('links to the open invoice when the payment needs action or was declined', async () => {
+    mockResume.mockResolvedValueOnce({
+      status: 'paused',
+      latest_invoice: { status: 'open', hosted_invoice_url: 'https://invoice.stripe.com/i/1' },
+    });
+
+    const StripeServiceServer = await loadService();
+
+    expect(await StripeServiceServer.resumeSubscription('sub_1')).toEqual({
+      resumed: false,
+      paymentUrl: 'https://invoice.stripe.com/i/1',
+    });
+  });
+
+  it('reports a customer with no payment method to charge', async () => {
+    mockResume.mockRejectedValueOnce(new MockInvalidRequestError('resource_missing'));
+
+    const StripeServiceServer = await loadService();
+
+    expect(await StripeServiceServer.resumeSubscription('sub_1')).toEqual({
+      resumed: false,
+      paymentUrl: null,
+    });
+  });
+
+  it('rethrows any other Stripe error', async () => {
+    mockResume.mockRejectedValueOnce(new MockInvalidRequestError('parameter_invalid'));
+
+    const StripeServiceServer = await loadService();
+
+    await expect(StripeServiceServer.resumeSubscription('sub_1')).rejects.toThrow(
+      'parameter_invalid',
+    );
+  });
+});
+
+describe('getPriceInterval', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  it('returns the interval of a single-interval recurring price', async () => {
+    mockPricesRetrieve.mockResolvedValueOnce({ recurring: { interval: 'year', interval_count: 1 } });
+
+    const StripeServiceServer = await loadService();
+
+    expect(await StripeServiceServer.getPriceInterval('price_1')).toBe('year');
+  });
+
+  it('returns null for an interval it has no word for', async () => {
+    mockPricesRetrieve.mockResolvedValueOnce({
+      recurring: { interval: 'fortnight', interval_count: 1 },
+    });
+
+    const StripeServiceServer = await loadService();
+
+    expect(await StripeServiceServer.getPriceInterval('price_1')).toBeNull();
+  });
+});
+
+describe('StripeAdminService.assignBadgeForActiveSubscription', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetSecret.mockResolvedValue('sk_test_123');
+  });
+
+  const loadAdmin = async () => {
+    vi.resetModules();
+    const { StripeAdminService } = await import('src/services/stripeService.server');
+    const admin = new StripeAdminService();
+    const assign = vi.spyOn(admin, 'assignBadgeForSubscription').mockResolvedValue();
+    vi.spyOn(admin, 'getBadgeIdForProduct').mockResolvedValue(42);
+
+    return { admin, assign };
+  };
+
+  const subscription = (status: string) => ({
+    id: 'sub_1',
+    status,
+    items: { data: [{ price: { product: 'prod_1' } }] },
+  });
+
+  it('assigns the tier badge for an active subscription', async () => {
+    mockList.mockResolvedValueOnce({ data: [subscription('active')] });
+    const { admin, assign } = await loadAdmin();
+
+    await admin.assignBadgeForActiveSubscription('cus_1', 'user-1', 'tenant-1');
+
+    expect(assign).toHaveBeenCalledWith('user-1', 'tenant-1', 42);
+  });
+
+  it('does not give a paused member their badge back', async () => {
+    mockList.mockResolvedValueOnce({ data: [subscription('paused')] });
+    const { admin, assign } = await loadAdmin();
+
+    await admin.assignBadgeForActiveSubscription('cus_1', 'user-1', 'tenant-1');
+
+    expect(assign).not.toHaveBeenCalled();
   });
 });

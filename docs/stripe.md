@@ -65,13 +65,19 @@ The app handles these webhook events:
 
 Hosted environments use a webhook endpoint per tenant, and each must have all five enabled.
 
+Pausing and resuming a membership arrive as `customer.subscription.updated` (status `paused`, then `active`), so they need no extra events. Webhook payloads use the endpoint's API version, so keep each endpoint on the version the `stripe` package uses (`2026-09-30.endive` for 23.x).
+
 ### 5. Membership notifications (optional)
 
-Successful payments, cancellations, tier changes and failed renewals post to an admin Discord
-channel. Set `DISCORD_MEMBERSHIP_WEBHOOK_URL` in `.env.local` to a Discord webhook URL to see
+Successful payments, cancellations, pauses, resumes, tier changes and failed renewals post to an
+admin Discord channel. Set `DISCORD_MEMBERSHIP_WEBHOOK_URL` in `.env.local` to a Discord webhook URL to see
 them; leave it unset and nothing is posted.
 
-### 6. Geo-blocking (optional)
+### 6. Pausing memberships
+
+The Stripe customer portal can't pause a subscription, so the app does it: `POST /api/stripe` with `action: 'pause'` or `'resume'`. Pausing stops invoicing with no credit for the rest of the paid period, and the tier badge is removed until the member resumes. Resuming charges straight away only if the paid period is over; if that payment fails the membership stays paused. Subscriptions must use flexible billing mode, the default for anything created through the app.
+
+### 7. Geo-blocking (optional)
 
 Checkout is blocked for sanctioned countries/regions (see [technical decisions](./technical-decisions.md#geo-blocking-stripe)). It is disabled unless `geo/GeoLite2-City.mmdb` exists. To test it, download GeoLite2-City from [MaxMind](https://www.maxmind.com/en/geolite2/signup) into `geo/` and fake the client IP:
 

@@ -9,7 +9,7 @@ const INTERVAL_WORDS: Record<BillingInterval, string> = {
   year: 'yearly',
 };
 
-const isBillingInterval = (interval: string): interval is BillingInterval =>
+export const isBillingInterval = (interval: string): interval is BillingInterval =>
   Object.hasOwn(INTERVAL_WORDS, interval);
 
 type ProfileIdentity = { id: number; displayName: string | null };
@@ -47,12 +47,12 @@ export const membershipNotifications = () => {
     recurringPayment(
       name: string,
       tierName: string | null,
-      interval: string | null,
+      interval: BillingInterval | null,
       amount: string,
     ) {
-      const intervalWord =
-        interval && isBillingInterval(interval) ? INTERVAL_WORDS[interval] : null;
-      const description = [intervalWord, tierName, 'membership'].filter(Boolean).join(' ');
+      const description = [interval ? INTERVAL_WORDS[interval] : null, tierName, 'membership']
+        .filter(Boolean)
+        .join(' ');
 
       post(`🔄 ${name} paid their ${description} (${amount})`);
     },
@@ -82,7 +82,7 @@ export const membershipNotifications = () => {
       post(`⏸️ ${name} paused their support`);
     },
 
-    subscriptionUnpaused(name: string) {
+    subscriptionPauseEnded(name: string) {
       post(`▶️ ${name} resumed their support after a pause`);
     },
 

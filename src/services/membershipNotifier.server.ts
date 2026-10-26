@@ -64,7 +64,7 @@ export async function notifyMembershipEvent(
         }
 
         if (pauseEnded(subscription, changes)) {
-          membership.subscriptionUnpaused(await nameFor(subscription.customer as string));
+          membership.subscriptionPauseEnded(await nameFor(subscription.customer as string));
           break;
         }
 

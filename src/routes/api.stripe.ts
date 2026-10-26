@@ -188,15 +188,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             { headers, status: 409 },
           );
         }
+
         await StripeServiceServer.pauseSubscription(subscription.id);
-      } else {
-        if (subscription.status !== 'paused') {
-          return Response.json(
-            { error: FRIENDLY_MESSAGES['supporter/not-paused'] },
-            { headers, status: 409 },
-          );
-        }
-        await StripeServiceServer.resumeSubscription(subscription.id);
+        return Response.json({}, { headers, status: 200 });
+      }
+
+      if (subscription.status !== 'paused') {
+        return Response.json(
+          { error: FRIENDLY_MESSAGES['supporter/not-paused'] },
+          { headers, status: 409 },
+        );
+      }
+
+      const result = await StripeServiceServer.resumeSubscription(subscription.id);
+      if (!result.resumed) {
+        const reason = result.paymentUrl
+          ? 'supporter/resume-payment-incomplete'
+          : 'supporter/resume-no-payment-method';
+
+        return Response.json(
+          { error: FRIENDLY_MESSAGES[reason], paymentUrl: result.paymentUrl },
+          { headers, status: 402 },
+        );
       }
 
       return Response.json({}, { headers, status: 200 });
@@ -227,6 +240,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({}, { headers, status: 400, statusText: 'invalid action' });
   } catch (error: any) {
     logger.error(error);
+    if (actionType === 'pause' || actionType === 'resume') {
+      return Response.json(
+        { error: FRIENDLY_MESSAGES['supporter/membership-change-failed'] },
+        { headers, status: 500 },
+      );
+    }
     const message = error?.message || 'An unexpected error occurred';
     return Response.json({ error: message }, { headers, status: 500 });
   }

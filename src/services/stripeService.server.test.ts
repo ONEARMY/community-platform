@@ -58,7 +58,7 @@ type StripePrice = {
   currency: string;
   recurring: { interval: string } | null;
   product: { id: string; active?: boolean; deleted?: boolean } | string;
-  currency_options?: Record<string, { unit_amount: number | null }>;
+  currency_options?: Record<string, { unit_amount: number | null; unit_amount_decimal?: string }>;
 };
 
 const price = (overrides: Partial<StripePrice> & { id: string }): StripePrice => ({
@@ -136,6 +136,23 @@ describe('StripeServiceServer.getPrices', () => {
     const result = await service.getPrices();
 
     expect(result.map((p) => p.id)).toEqual(['price_active']);
+  });
+
+  it('rounds a currency option priced only by its decimal string', async () => {
+    mockPricesList.mockResolvedValue({
+      data: [
+        price({
+          id: 'price_active',
+          product: { id: 'prod_active', active: true },
+          currency_options: { gbp: { unit_amount: null, unit_amount_decimal: '450.6' } },
+        }),
+      ],
+    });
+
+    const service = new StripeServiceServer(makeClient([activeTierRows[0]]));
+    const result = await service.getPrices();
+
+    expect(result.find((p) => p.currency === 'gbp')?.unitAmount).toBe(451);
   });
 });
 

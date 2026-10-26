@@ -492,7 +492,7 @@ export class StripeServiceServer {
             }
             const amount =
               opts.unit_amount ??
-              (opts.unit_amount_decimal ? Math.round(parseFloat(opts.unit_amount_decimal)) : null);
+              (opts.unit_amount_decimal ? Math.round(Number(opts.unit_amount_decimal)) : null);
             if (amount != null) {
               entries.push({
                 id: p.id,

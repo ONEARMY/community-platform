@@ -23,8 +23,10 @@ describe('[Organisation sign-up]', () => {
     });
 
     it('Renders the organisation sign-up entry page', () => {
-      cy.step('Organisation sign-up');
-      cy.visit('/sign-up/organisation');
+      cy.visit('/sign-up');
+
+      cy.step('Member sign-up links to organisation sign-up');
+      cy.get('[data-cy=sign-up-organisation]').click();
       cy.url().should('include', '/sign-up/organisation');
       cy.get('[data-cy=Stepper]').should('be.visible');
 

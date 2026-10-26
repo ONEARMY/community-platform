@@ -1,5 +1,5 @@
 import { ModerationRecord } from 'oa-components';
-import type { Moderation } from 'oa-shared';
+import type { AdminOrganisation, Moderation } from 'oa-shared';
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
@@ -23,18 +23,6 @@ import {
 } from '@/components/ui/table';
 import { ModerateOrganisationDialog } from './ModerateOrganisationDialog';
 import { MODERATIONS } from './moderation';
-
-export interface AdminOrganisation {
-  id: number;
-  username: string | null;
-  displayName: string;
-  about: string | null;
-  typeName: string | null;
-  moderation: Moderation;
-  moderationFeedback: string | null;
-  createdAt: string;
-  isMapPin: boolean;
-}
 
 export type OrganisationStatusFilter = Moderation | 'all';
 
@@ -157,7 +145,7 @@ export function OrganisationsPage({ organisations, status, page, totalPages }: I
                   {organisation.moderationFeedback ?? '-'}
                 </TableCell>
                 <TableCell variant="muted">
-                  {CREATED_AT_FORMAT.format(new Date(organisation.createdAt))}
+                  {CREATED_AT_FORMAT.format(organisation.createdAt)}
                 </TableCell>
                 <TableCell className="text-right">{organisation.id}</TableCell>
                 <TableCell>

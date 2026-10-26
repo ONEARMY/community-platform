@@ -2,11 +2,11 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import type { AdminOrganisation } from './OrganisationsPage';
+import { FactoryAdminOrganisation } from 'src/test/factories/profile';
 import { OrganisationsPage } from './OrganisationsPage';
 
-const organisations: AdminOrganisation[] = [
-  {
+const organisations = [
+  FactoryAdminOrganisation({
     id: 7,
     username: 'acme-lab',
     displayName: 'Acme Lab',
@@ -14,9 +14,9 @@ const organisations: AdminOrganisation[] = [
     typeName: 'Workspace',
     moderation: 'improvements-needed',
     moderationFeedback: 'Add a cover photo',
-    createdAt: '2026-10-12T10:00:00.000Z',
+    createdAt: new Date('2026-10-12T10:00:00.000Z'),
     isMapPin: true,
-  },
+  }),
 ];
 
 const renderPage = (props: Partial<Parameters<typeof OrganisationsPage>[0]> = {}) => {

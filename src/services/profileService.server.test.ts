@@ -1,4 +1,4 @@
-import type { DBMedia } from 'oa-shared';
+import type { DBAdminOrganisation, DBMedia } from 'oa-shared';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createMockSupabaseClient } from '../test/utils/supabaseClientMock';
@@ -15,6 +15,19 @@ const applicationValues = (coverImages: DBMedia[] | null) => ({
   coverImages,
   profileTypeId: 5,
 });
+
+const dbOrganisation: DBAdminOrganisation = {
+  id: 7,
+  username: 'acme-lab',
+  display_name: 'Acme Lab',
+  about: 'We shred plastic',
+  type_name: 'Workspace',
+  moderation: 'improvements-needed',
+  moderation_feedback: 'Add a cover photo',
+  created_at: '2026-10-12T10:00:00Z',
+  is_map_pin: true,
+  total_count: 41,
+};
 
 describe('ProfileServiceServer', () => {
   beforeEach(() => {
@@ -65,6 +78,49 @@ describe('ProfileServiceServer', () => {
           moderation: 'awaiting-moderation',
         }),
       );
+    });
+  });
+
+  describe('getOrganisationsForModeration', () => {
+    it('requests the page and status, and maps rows with the total count', async () => {
+      const { client, mocks } = createMockSupabaseClient();
+      mocks.rpc.mockResolvedValue({ data: [dbOrganisation], error: null });
+
+      const { organisations, totalCount } = await new ProfileServiceServer(
+        client,
+      ).getOrganisationsForModeration('improvements-needed', 3, 20);
+
+      expect(mocks.rpc).toHaveBeenCalledWith('get_admin_organisations', {
+        p_limit: 20,
+        p_offset: 40,
+        p_moderation: 'improvements-needed',
+      });
+      expect(totalCount).toBe(41);
+      expect(organisations[0]).toMatchObject({
+        displayName: 'Acme Lab',
+        typeName: 'Workspace',
+        moderationFeedback: 'Add a cover photo',
+        isMapPin: true,
+      });
+      expect(organisations[0].createdAt).toEqual(new Date('2026-10-12T10:00:00Z'));
+    });
+
+    it('omits the status for all organisations', async () => {
+      const { client, mocks } = createMockSupabaseClient();
+      mocks.rpc.mockResolvedValue({ data: [], error: null });
+
+      const { totalCount } = await new ProfileServiceServer(client).getOrganisationsForModeration(
+        null,
+        1,
+        20,
+      );
+
+      expect(mocks.rpc).toHaveBeenCalledWith('get_admin_organisations', {
+        p_limit: 20,
+        p_offset: 0,
+        p_moderation: undefined,
+      });
+      expect(totalCount).toBe(0);
     });
   });
 });

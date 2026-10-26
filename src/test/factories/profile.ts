@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import type { DBProfile } from 'oa-shared';
+import { AdminOrganisation } from 'oa-shared';
 
 export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): DBProfile => ({
   id: faker.number.int(),
@@ -42,3 +43,19 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   moderation_feedback: null,
   ...dbProfileOverloads,
 });
+
+export const FactoryAdminOrganisation = (
+  overloads: Partial<AdminOrganisation> = {},
+): AdminOrganisation =>
+  new AdminOrganisation({
+    id: faker.number.int(),
+    username: faker.internet.username(),
+    displayName: faker.company.name(),
+    about: faker.lorem.sentence(),
+    typeName: 'Workspace',
+    moderation: 'awaiting-moderation',
+    moderationFeedback: null,
+    createdAt: faker.date.past(),
+    isMapPin: false,
+    ...overloads,
+  });

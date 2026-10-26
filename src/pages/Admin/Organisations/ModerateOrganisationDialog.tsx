@@ -1,5 +1,5 @@
 import { ModerationRecord } from 'oa-components';
-import type { Moderation } from 'oa-shared';
+import type { AdminOrganisation, Moderation } from 'oa-shared';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useRevalidator } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';
@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { FEEDBACK_REQUIRED, MODERATIONS } from './moderation';
-import type { AdminOrganisation } from './OrganisationsPage';
 
 interface IProps {
   organisation: AdminOrganisation | null;

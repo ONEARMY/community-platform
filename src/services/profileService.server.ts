@@ -7,6 +7,7 @@ import type {
   Moderation,
   ProfileDTO,
 } from 'oa-shared';
+import { AdminOrganisation } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
 
@@ -304,7 +305,10 @@ export class ProfileServiceServer {
       throw error;
     }
 
-    return { profiles: data, totalCount: data[0]?.total_count ?? 0 };
+    return {
+      organisations: data.map(AdminOrganisation.fromDB),
+      totalCount: data[0]?.total_count ?? 0,
+    };
   }
 
   async updateModeration(

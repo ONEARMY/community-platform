@@ -51,10 +51,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client);
     const mapService = new MapServiceServer(client);
     const profile = await profileService.getById(id);
-    const isMapPin = !!profile && !profile.moderation;
+    const isMapPin = !profile?.moderation && !!profile?.type?.is_space;
     const current = isMapPin ? await mapService.getModerationByProfileId(id) : profile;
 
-    if (!profile || !current) {
+    if (!profile || !current?.moderation) {
       throw notFoundError('Organisation');
     }
 

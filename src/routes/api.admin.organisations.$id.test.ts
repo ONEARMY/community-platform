@@ -97,8 +97,21 @@ describe('admin organisation moderation', () => {
     expect(sendModerationEmail).not.toHaveBeenCalled();
   });
 
-  it('returns 404 for a profile with no status and no map pin', async () => {
-    const { updateModeration } = setup({ moderation: null });
+  it('returns 404 for a member, even with a map pin', async () => {
+    const { updateModerationByProfileId } = setup(
+      { moderation: null, type: { is_space: false } },
+      { moderation: 'improvements-needed', moderation_feedback: null },
+    );
+
+    const res = await put({ moderation: 'accepted' });
+
+    expect(res.status).toBe(404);
+    expect(updateModerationByProfileId).not.toHaveBeenCalled();
+    expect(sendModerationEmail).not.toHaveBeenCalled();
+  });
+
+  it('returns 404 for an organisation with no status and no map pin', async () => {
+    const { updateModeration } = setup({ moderation: null, type: { is_space: true } });
 
     const res = await put({ moderation: 'accepted' });
 
@@ -136,7 +149,7 @@ describe('admin organisation moderation', () => {
 
   it('updates only the map pin of an organisation from before the signup flow', async () => {
     const { updateModeration, updateModerationByProfileId } = setup(
-      { moderation: null },
+      { moderation: null, type: { is_space: true } },
       { moderation: 'improvements-needed', moderation_feedback: 'Add photos' },
     );
 
@@ -151,7 +164,10 @@ describe('admin organisation moderation', () => {
   });
 
   it('does not email when the map pin is unchanged', async () => {
-    setup({ moderation: null }, { moderation: 'accepted', moderation_feedback: null });
+    setup(
+      { moderation: null, type: { is_space: true } },
+      { moderation: 'accepted', moderation_feedback: null },
+    );
 
     const res = await put({ moderation: 'accepted' });
 

@@ -10,6 +10,7 @@ import {
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { logger } from 'src/logger';
+import { escapeFilterValue } from 'src/utils/helpers';
 import { ImageServiceServer } from './imageService.server';
 import { ProfileServiceServer } from './profileService.server';
 import { StorageServiceServer } from './storageService.server';
@@ -20,6 +21,9 @@ export class ResearchServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
 
   async getBySlug(slug: string) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     const { data, error } = await this.client
       .from('research')
       .select(
@@ -78,7 +82,7 @@ export class ResearchServiceServer {
       )
      `,
       )
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .or('deleted.eq.false,deleted.is.null')
       .single();
 

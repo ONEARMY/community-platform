@@ -57,7 +57,8 @@
     "__note1__": "Pin react version consistently in all child workspaces",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "@types/react": "19.2.7"
+    "@types/react": "19.2.7",
+    "prosemirror-view": "1.42.3"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -94,7 +95,6 @@
     "countries-list": "3.3.0",
     "country-to-iso": "1.6.3",
     "date-fns": "4.4.0",
-    "debounce": "3.0.0",
     "final-form": "4.20.2",
     "final-form-arrays": "3.0.2",
     "hono": "4.13.5",
@@ -104,7 +104,7 @@
     "leaflet": "1.9.4",
     "leaflet.markercluster": "1.5.3",
     "linkify-react": "^4.3.2",
-    "lodash": "4.18.1",
+    "linkifyjs": "^4.3.2",
     "lucide-react": "^1.28.0",
     "maxmind": "^5.0.7",
     "mobx": "6.16.1",
@@ -124,12 +124,11 @@
     "react-leaflet-markercluster": "5.0.0-rc.0",
     "react-player": "^3.4.0",
     "react-router": "7.18.2",
-    "react-spring": "10.0.3",
     "react-tooltip": "5.30.0",
     "remix-utils": "9.3.1",
     "resend": "6.14.0",
     "shadcn": "^4.16.1",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "sonner": "2.0.7",
     "stripe": "23.0.0",
     "styled-system": "5.1.5",
@@ -143,7 +142,6 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.0",
     "@shadcn/lint": "0.1.5",
-    "@tiptap/html": "^3.31.3",
     "@faker-js/faker": "10.5.0",
     "@hono/node-server": "2.0.5",
     "@react-router/dev": "7.18.2",
@@ -176,7 +174,7 @@
     "lint-staged": "16.2.7",
     "oxlint": "1.85.0",
     "pg": "8.21.0",
-    "storybook": "10.6.0",
+    "storybook": "10.6.2",
     "supabase": "2.107.0",
     "tailwindcss": "^4.3.3",
     "tsx": "4.22.4",
@@ -195,6 +193,6 @@
     }
   },
   "engines": {
-    "bun": ">=1.4.2"
+    "bun": ">=1.4.4"
   }
 }

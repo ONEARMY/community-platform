@@ -52,7 +52,19 @@ describe('profile search', () => {
 
     await loader(args('http://localhost/api/profiles?q=shop'));
 
-    expect(or).toHaveBeenCalledWith('username.ilike.%shop%,display_name.ilike.%shop%');
+    expect(or).toHaveBeenCalledWith('username.ilike."%shop%",display_name.ilike."%shop%"');
+  });
+
+  it('quotes the query so it cannot add filters', async () => {
+    const { or } = setup();
+    const q = encodeURIComponent('zz,roles.cs.{admin},username.ilike.(zz)"\\');
+
+    await loader(args(`http://localhost/api/profiles?q=${q}`));
+
+    const term = 'zz,roles.cs.{admin},username.ilike.(zz)\\"\\\\';
+    expect(or).toHaveBeenCalledWith(
+      `username.ilike."%${term}%",display_name.ilike."%${term}%"`,
+    );
   });
 
   it('rejects anonymous callers', async () => {

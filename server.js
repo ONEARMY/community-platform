@@ -46,12 +46,7 @@ app.onError((err, c) => {
 // Compression
 app.use(compress());
 
-app.use('*', async (c, next) => {
-  if (c.req.path.startsWith('/api/documents')) {
-    return next(); // Skip limit — Bun's 300MB cap is the backstop
-  }
-  return bodyLimit({ maxSize: 10 * 1024 * 1024 })(c, next);
-});
+app.use(bodyLimit({ maxSize: 10 * 1024 * 1024 }));
 
 // Security headers (replaces helmet)
 const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim()) ?? [];
@@ -92,8 +87,9 @@ const sharedCspOptions = {
     '*.sentry.io',
     'api.stripe.com',
     'challenges.cloudflare.com',
+    process.env.SUPABASE_API_URL,
     ...wsUrls,
-  ],
+  ].filter(Boolean),
   defaultSrc: [
     "'self'",
     'googletagmanager.com',
@@ -211,7 +207,7 @@ if (isProd) {
     port,
     hostname: '0.0.0.0',
     fetch: app.fetch,
-    maxRequestBodySize: 300 * 1024 * 1024, // Must accommodate /api/documents - protected by Hono middleware
+    maxRequestBodySize: 10 * 1024 * 1024,
   });
 
   console.log(`Hono server started on http://0.0.0.0:${port}`);

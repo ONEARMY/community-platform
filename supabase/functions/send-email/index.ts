@@ -15,7 +15,11 @@ import { createClient } from 'jsr:@supabase/supabase-js@2.46.1';
 import type { NotificationDisplay, UserEmailData } from 'oa-shared';
 import { ModerationEmail } from './_templates/moderation-email.tsx';
 
-const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string;
+const hookSecret = (Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string).replace(
+  'v1,whsec_',
+  '',
+);
+const signLocally = Deno.env.get('SIGN_WEBHOOK_LOCALLY') === 'true';
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string);
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
 
@@ -33,7 +37,10 @@ Deno.serve(async (req) => {
 
   const payload = await req.text();
   const webhook = new Webhook(hookSecret);
-  const headers = signWebhookHeader(webhook, req.headers, payload);
+  const requestHeaders = Object.fromEntries(req.headers);
+  const headers = signLocally
+    ? signWebhookHeader(webhook, requestHeaders, payload)
+    : requestHeaders;
 
   try {
     const { email_data, user } = webhook.verify(payload, headers) as {

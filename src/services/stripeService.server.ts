@@ -665,7 +665,7 @@ export class StripeAdminService {
     await stripe.customers.update(stripeCustomerId, {
       metadata: { supabase_user_id: authId, tenant_id: tenantId },
     });
-    await this.client.from('stripe_customers').upsert(
+    const { error } = await this.client.from('stripe_customers').upsert(
       {
         auth_id: authId,
         stripe_customer_id: stripeCustomerId,
@@ -673,6 +673,9 @@ export class StripeAdminService {
       },
       { onConflict: 'auth_id,tenant_id' },
     );
+    if (error) {
+      throw error;
+    }
   }
 
   async getBadgeIdForProduct(productId: string): Promise<number | null> {
@@ -686,11 +689,10 @@ export class StripeAdminService {
   }
 
   async assignBadgeForActiveSubscription(
-    stripeCustomerId: string,
+    subscription: Stripe.Subscription | null,
     authId: string,
     tenantId: string,
   ): Promise<void> {
-    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
     if (subscription?.status !== 'active') {
       return;
     }
@@ -714,29 +716,38 @@ export class StripeAdminService {
     }
 
     // Get all badge IDs that are stripe-linked tier badges
-    const { data: tierBadges } = await this.client
+    const { data: tierBadges, error: tierBadgesError } = await this.client
       .from('stripe_badge_products')
       .select('badge_id')
       .eq('tenant_id', tenantId);
+    if (tierBadgesError) {
+      throw tierBadgesError;
+    }
 
     const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
 
     // Remove any existing tier badges for this profile
     if (tierBadgeIds.length > 0) {
-      await this.client
+      const { error: deleteError } = await this.client
         .from('profile_badges_relations')
         .delete()
         .eq('profile_id', profileId)
         .eq('tenant_id', tenantId)
         .in('profile_badge_id', tierBadgeIds);
+      if (deleteError) {
+        throw deleteError;
+      }
     }
 
     // Assign the new badge
-    await this.client.from('profile_badges_relations').insert({
+    const { error: insertError } = await this.client.from('profile_badges_relations').insert({
       profile_id: profileId,
       profile_badge_id: badgeId,
       tenant_id: tenantId,
     });
+    if (insertError) {
+      throw insertError;
+    }
   }
 
   async removeTierBadges(authId: string, tenantId: string): Promise<void> {
@@ -746,20 +757,26 @@ export class StripeAdminService {
       return;
     }
 
-    const { data: tierBadges } = await this.client
+    const { data: tierBadges, error: tierBadgesError } = await this.client
       .from('stripe_badge_products')
       .select('badge_id')
       .eq('tenant_id', tenantId);
+    if (tierBadgesError) {
+      throw tierBadgesError;
+    }
 
     const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
 
     if (tierBadgeIds.length > 0) {
-      await this.client
+      const { error: deleteError } = await this.client
         .from('profile_badges_relations')
         .delete()
         .eq('profile_id', profileId)
         .eq('tenant_id', tenantId)
         .in('profile_badge_id', tierBadgeIds);
+      if (deleteError) {
+        throw deleteError;
+      }
     }
   }
 

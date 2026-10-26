@@ -47,6 +47,10 @@ export function conflictError(message: string) {
   return createHTTPException(409, message);
 }
 
+export function payloadTooLargeError(message = 'The file is too large') {
+  return createHTTPException(413, message);
+}
+
 export function tooManyRequestsError(message: string) {
   return createHTTPException(429, message);
 }

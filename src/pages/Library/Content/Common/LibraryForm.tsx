@@ -3,6 +3,7 @@ import { FormApi } from 'node_modules/final-form/dist';
 import type { ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { useToast } from 'src/common/Toast';
 import { logger } from 'src/logger';
@@ -29,6 +30,7 @@ interface LibraryFormProps {
 
 export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const toast = useToast();
+  const navigate = useNavigate();
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const initialValues = useMemo<ProjectFormData>(
@@ -81,9 +83,13 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
         duration: 10000,
       });
 
-      await promise;
+      const { project } = await promise;
 
       await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+
+      if (!id && window.location.pathname.endsWith('/create')) {
+        navigate(`/library/${project.slug}/edit`, { replace: true });
+      }
     } catch (_) {
       // do nothing, error is handled by toast
     }

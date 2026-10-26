@@ -1,4 +1,3 @@
-import debounce from 'debounce';
 import { ButtonIcon, ReturnPathLink, SearchField, Select } from 'oa-components';
 import type { Category } from 'oa-shared';
 import { useCallback, useEffect, useState } from 'react';
@@ -11,6 +10,7 @@ import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
 import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { useDebouncedCallback } from 'use-debounce';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import DraftButton from '../common/Drafts/DraftButton';
 import { ListHeader } from '../common/Layout/ListHeader';
@@ -88,12 +88,9 @@ export const QuestionListHeader = (props: IProps) => {
     [searchParams],
   );
 
-  const onSearchInputChange = useCallback(
-    debounce((value: string) => {
-      searchValue(value);
-    }, 500),
-    [searchParams],
-  );
+  const onSearchInputChange = useDebouncedCallback((value: string) => {
+    searchValue(value);
+  }, 500);
 
   const searchValue = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());

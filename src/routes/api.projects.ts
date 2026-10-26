@@ -25,6 +25,7 @@ import { StorageServiceServer } from 'src/services/storageService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
 import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
+import { isPathInFolders } from 'src/utils/storage';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -129,7 +130,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    await validateRequest(request, data, slug, client);
+    await validateRequest(request, data, slug, client, claims.data.claims.sub);
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
@@ -212,6 +213,7 @@ async function validateRequest(
   data: ProjectDTO,
   slug: string,
   client: SupabaseClient<Database>,
+  authId: string,
 ): Promise<void> {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
@@ -235,7 +237,9 @@ async function validateRequest(
     throw conflictError('A project with this name already exists');
   }
 
-  // No need to validate cover image since it's uploaded immediately via /api/images
+  if (data.coverImage && !isPathInFolders(data.coverImage.path, [`users/${authId}`])) {
+    throw validationError('Invalid cover image', 'coverImage');
+  }
 }
 
 async function createProject(

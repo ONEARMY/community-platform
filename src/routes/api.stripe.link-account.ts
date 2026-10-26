@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
-import { issueSignInTicket } from 'src/services/supporterSignInTicket.server';
+import { signInSupporter } from 'src/services/supporterSignIn.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -44,15 +44,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
 
-    await stripeAdmin.assignBadgeForActiveSubscription(
-      stripeCustomerId,
-      signInData.user.id,
-      tenantId,
-    );
+    const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
+    await stripeAdmin.assignBadgeForActiveSubscription(subscription, signInData.user.id, tenantId);
 
-    const signInTicket = await issueSignInTicket(email);
+    const headers = await signInSupporter(request, email);
 
-    return Response.json({ success: true, signInTicket }, { status: 200 });
+    return Response.json({ success: true }, { status: 200, headers });
   } catch (error: any) {
     logger.error('Error linking supporter account:', error);
     return Response.json(

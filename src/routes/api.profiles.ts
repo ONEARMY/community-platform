@@ -1,6 +1,7 @@
 import type { DBProfile } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { escapeFilterValue } from 'src/utils/helpers';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -18,6 +19,8 @@ export const loader = async ({ request }) => {
   if (!claims.data?.claims) {
     return Response.json({}, { headers, status: 401 });
   }
+
+  const term = escapeFilterValue(q);
 
   const { data } = await client
     .from('profiles')
@@ -39,7 +42,7 @@ export const loader = async ({ request }) => {
         )
       )`,
     )
-    .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
+    .or(`username.ilike."%${term}%",display_name.ilike."%${term}%"`)
     .or('moderation.is.null,moderation.eq.accepted')
     .limit(10);
   const profileFactory = new ProfileFactory(client);

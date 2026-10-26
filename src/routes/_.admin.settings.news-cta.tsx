@@ -4,7 +4,7 @@ import { NewsCtaSettingsPage } from 'src/pages/Admin/Settings/NewsCtaSettingsPag
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 
-export const handle = { breadcrumb: 'News CTA', breadcrumbParent: 'Settings' };
+export const handle = { breadcrumb: 'CTA', breadcrumbParent: 'News' };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = createSupabaseServerClient(request);

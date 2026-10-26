@@ -61,6 +61,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const isFirstPublish =
       currentQuestion.is_draft && !data.isDraft && !currentQuestion.published_at;
 
+    if (isFirstPublish && currentQuestion.created_by) {
+      await new QuestionServiceServer(client).checkRateLimit(currentQuestion.created_by);
+    }
+
     const now = new Date().toISOString();
 
     const questionResult = await client
@@ -179,6 +183,8 @@ async function validateRequest(
   if (!data.description) {
     throw validationError('Description is required', 'description');
   }
+
+  QuestionServiceServer.validateNotSpam(data);
 
   if (!currentQuestion) {
     throw validationError('Question not found');

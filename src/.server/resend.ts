@@ -31,7 +31,7 @@ export async function sendEmail({ from, to, subject, emailTemplate }: SendEmailA
 type SendEmailsArgs = {
   from: string;
   subject: string;
-  emails: { template: ReactNode; to: string }[];
+  emails: { template: ReactNode; to: string; headers?: Record<string, string> }[];
 };
 
 export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs) {
@@ -46,11 +46,12 @@ export async function sendBatchEmails({ from, subject, emails }: SendEmailsArgs)
       to: email.to,
       subject,
       react: email.template,
+      headers: email.headers,
     }));
 
     if (i > 0) {
-      // To avoid hitting rate limits
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // To avoid hitting rate limits (10 req/second)
+      await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
     try {

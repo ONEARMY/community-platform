@@ -1,6 +1,6 @@
 import { Button, Icon } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
-import { type FormEvent, useRef, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { stripeService } from 'src/services/stripeService';
 import { Box, Card, Flex, Heading, Input, Text } from 'theme-ui';
 import { useSupporterContext } from './SupporterContext';
@@ -13,8 +13,6 @@ export const ThankYouAccountForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const signInFormRef = useRef<HTMLFormElement>(null);
-  const ticketInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,10 +48,7 @@ export const ThankYouAccountForm = () => {
       return;
     }
 
-    if (ticketInputRef.current) {
-      ticketInputRef.current.value = result.signInTicket;
-    }
-    signInFormRef.current?.submit();
+    window.location.assign('/setup-email-preferences');
   };
 
   return (
@@ -149,15 +144,6 @@ export const ThankYouAccountForm = () => {
           </Box>
         </Flex>
       </Card>
-
-      <form
-        ref={signInFormRef}
-        method="post"
-        action={`/api/stripe/sign-in?returnUrl=${encodeURIComponent('/setup-email-preferences')}`}
-        style={{ display: 'none' }}
-      >
-        <input ref={ticketInputRef} type="hidden" name="ticket" />
-      </form>
     </ThankYouLayout>
   );
 };

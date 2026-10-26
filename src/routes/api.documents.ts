@@ -1,44 +1,46 @@
 import { HTTPException } from 'hono/http-exception';
-import type { ContentType, IMediaFile } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
+import { sessionContext } from 'src/context';
 import { logger } from 'src/logger';
+import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { StorageServiceServer } from 'src/services/storageService.server';
-import { methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  getMaxDocumentSize,
+  getPendingDocumentPath,
+  StorageServiceServer,
+} from 'src/services/storageService.server';
+import {
+  methodNotAllowedError,
+  payloadTooLargeError,
+  unauthorizedError,
+} from 'src/utils/httpException';
 
-export const action = async ({ request }: LoaderFunctionArgs) => {
+export const middleware: MiddlewareFunction<Response>[] = [sessionMiddleware];
+
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const formData = await request.formData();
-    const contentType = formData.get('contentType') as ContentType;
-    const file = formData.get('file') as File;
-    const id = formData.has('id') ? Number(formData.get('id') as string) : null;
-
-    const claims = await client.auth.getClaims();
-
-    if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
-    }
-
     await validateRequest(request);
 
-    const uploadResult = await new StorageServiceServer(client).uploadFile(
-      [file],
-      `${id ? contentType : 'users'}/${id ?? claims.data.claims.sub}`,
-    );
+    const session = context.get(sessionContext);
 
-    if (uploadResult?.errors && uploadResult?.errors.length > 0) {
-      throw validationError(uploadResult?.errors.join(', '));
+    if (!session) {
+      throw unauthorizedError();
     }
 
-    const document: IMediaFile = {
-      id: uploadResult!.media[0].id,
-      name: uploadResult!.media[0].name,
-      size: uploadResult!.media[0].size,
-    };
+    const { size } = await request.json();
 
-    return Response.json({ document }, { headers });
+    if (!(Number(size) <= getMaxDocumentSize(session.roles))) {
+      throw payloadTooLargeError();
+    }
+
+    const uploadId = crypto.randomUUID();
+    const uploadUrl = await new StorageServiceServer(client).createFileUpload(
+      getPendingDocumentPath(session.authId, uploadId),
+    );
+
+    return Response.json({ uploadId, uploadUrl }, { headers });
   } catch (error) {
     if (error instanceof HTTPException) {
       return error.getResponse();

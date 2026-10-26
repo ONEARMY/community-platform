@@ -20,6 +20,7 @@ describe('[Admin]', () => {
     cy.signIn(admin.email, admin.password);
 
     cy.visit('/admin');
+    cy.contains('button', 'Library').click();
     cy.contains('a', 'Remakes').click();
     cy.url().should('include', '/admin/remakes');
     cy.contains('h1', 'Remakes');
@@ -29,7 +30,8 @@ describe('[Admin]', () => {
     cy.signIn(admin.email, admin.password);
 
     cy.visit('/admin');
-    cy.contains('a', 'News').click();
+    cy.contains('button', 'News').click();
+    cy.contains('a', 'Posts').click();
     cy.url().should('include', '/admin/news');
     cy.contains('h1', 'News');
   });
@@ -102,6 +104,7 @@ describe('[Admin - Profile Type Page', () => {
 
   it('[Admin can access the profile types page]', () => {
     cy.visit('/admin')
+    cy.contains('button', 'Settings').click()
     cy.get('a[href*="/admin/profile-types"]').click()
     cy.url().should('include', '/admin/profile-types')
     cy.get('h1').contains('Profile Types')
@@ -109,7 +112,7 @@ describe('[Admin - Profile Type Page', () => {
 
   it('[Admin cannot add a new profile type if form fields are empty]', () => {
     cy.visit('/admin/profile-types')
-    cy.get('button').contains('New').click({force: true})
+    cy.contains('button', 'New Profile Type').click({force: true})
     cy.get('input[id="profile-type-name"]').type('Testy McTestFace').should('have.value', 'Testy McTestFace')
     cy.get('button').contains('Create').click()
     cy.get('button[data-slot="dialog-close"]').click()

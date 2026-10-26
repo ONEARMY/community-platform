@@ -11,6 +11,7 @@ import { AuthServiceServer } from 'src/services/authService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { bool, object, ref, string } from 'yup';
@@ -46,9 +47,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const formData = await request.formData();
-  const url = new URL(request.url);
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
+  const emailRedirectTo = await getSiteUrl(client, '/email-confirmation');
 
   const authServiceServer = new AuthServiceServer(client);
 
@@ -96,7 +95,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { /* showOrganisationSignup, */ turnstileSiteKey } = useLoaderData<typeof loader>();
+  const { showOrganisationSignup, turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== 'idle';
@@ -148,7 +147,6 @@ export default function Index() {
                         Sign-in here
                       </Link>
                     </p>
-                    {/* Organisation sign-up is live but intentionally unlinked for now.
                     {showOrganisationSignup && (
                       <p className="text-sm text-muted-foreground">
                         Are you an organisation?{' '}
@@ -160,7 +158,7 @@ export default function Index() {
                           Create an organisation account
                         </Link>
                       </p>
-                    )} */}
+                    )}
                   </CardHeader>
                   <CardContent gap="md" className="flex flex-col">
                     {actionResponse?.error && pristine && (

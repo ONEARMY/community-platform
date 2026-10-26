@@ -44,17 +44,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     await stripeAdmin.linkCustomerToAuthUser(stripeCustomerId, signInData.user.id, tenantId);
 
-    // Assign badge based on active subscription's product
     const subscription = await StripeServiceServer.getSubscription(stripeCustomerId);
-    if (subscription) {
-      const productId = subscription.items.data[0]?.price?.product as string;
-      if (productId) {
-        const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
-        if (badgeId) {
-          await stripeAdmin.assignBadgeForSubscription(signInData.user.id, tenantId, badgeId);
-        }
-      }
-    }
+    await stripeAdmin.assignBadgeForActiveSubscription(subscription, signInData.user.id, tenantId);
 
     const headers = await signInSupporter(request, email);
 

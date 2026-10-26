@@ -2,6 +2,8 @@ import {
   cancellationJustScheduled,
   cancellationReversed,
   deletionIsWorthAnnouncing,
+  pauseEnded,
+  pauseStarted,
   priceIdOf,
   stripeCustomerUrl,
   tierChange,
@@ -51,6 +53,35 @@ describe('cancellationReversed', () => {
 
   it('ignores a subscription that is still cancelling', () => {
     expect(cancellationReversed({ cancel_at: CANCEL_AT }, { cancel_at: CANCEL_AT })).toBe(false);
+  });
+});
+
+describe('pauseStarted', () => {
+  it('detects a subscription that just paused', () => {
+    expect(pauseStarted({ status: 'paused' }, { status: 'active' })).toBe(true);
+  });
+
+  it('ignores an unrelated update to a paused subscription', () => {
+    expect(pauseStarted({ status: 'paused' }, {})).toBe(false);
+    expect(pauseStarted({ status: 'paused' }, undefined)).toBe(false);
+  });
+
+  it('ignores a subscription that is not paused', () => {
+    expect(pauseStarted({ status: 'past_due' }, { status: 'active' })).toBe(false);
+  });
+});
+
+describe('pauseEnded', () => {
+  it('detects a paused subscription that resumed', () => {
+    expect(pauseEnded({ status: 'active' }, { status: 'paused' })).toBe(true);
+  });
+
+  it('ignores a subscription that is still paused', () => {
+    expect(pauseEnded({ status: 'paused' }, {})).toBe(false);
+  });
+
+  it('ignores a status change that did not involve a pause', () => {
+    expect(pauseEnded({ status: 'active' }, { status: 'past_due' })).toBe(false);
   });
 });
 

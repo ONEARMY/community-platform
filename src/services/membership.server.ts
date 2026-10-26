@@ -9,6 +9,9 @@ const INTERVAL_WORDS: Record<BillingInterval, string> = {
   year: 'yearly',
 };
 
+export const isBillingInterval = (interval: string): interval is BillingInterval =>
+  Object.hasOwn(INTERVAL_WORDS, interval);
+
 type ProfileIdentity = { id: number; displayName: string | null };
 
 export const supporterName = (
@@ -73,6 +76,14 @@ export const membershipNotifications = () => {
 
     subscriptionCancelled(name: string) {
       post(`💔 ${name} canceled their support`);
+    },
+
+    subscriptionPaused(name: string) {
+      post(`⏸️ ${name} paused their support`);
+    },
+
+    subscriptionPauseEnded(name: string) {
+      post(`▶️ ${name} resumed their support after a pause`);
     },
 
     subscriptionResumed(name: string) {

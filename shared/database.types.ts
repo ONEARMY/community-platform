@@ -1564,6 +1564,9 @@ export type Database = {
           site_url: string;
           supported_modules: string | null;
           tenant_id: string;
+          welcome_email_content: Json | null;
+          welcome_email_from_name: string | null;
+          welcome_email_subject: string | null;
         };
         Insert: {
           academy_resource?: string | null;
@@ -1602,6 +1605,9 @@ export type Database = {
           site_url: string;
           supported_modules?: string | null;
           tenant_id: string;
+          welcome_email_content?: Json | null;
+          welcome_email_from_name?: string | null;
+          welcome_email_subject?: string | null;
         };
         Update: {
           academy_resource?: string | null;
@@ -1640,6 +1646,9 @@ export type Database = {
           site_url?: string;
           supported_modules?: string | null;
           tenant_id?: string;
+          welcome_email_content?: Json | null;
+          welcome_email_from_name?: string | null;
+          welcome_email_subject?: string | null;
         };
         Relationships: [];
       };

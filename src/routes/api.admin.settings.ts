@@ -1,3 +1,4 @@
+import type { JSONContent } from '@tiptap/core';
 import { HTTPException } from 'hono/http-exception';
 import { UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
@@ -6,6 +7,7 @@ import { requireRoleApi } from 'src/middleware/requireRole.server';
 import { sessionMiddleware } from 'src/middleware/session.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const middleware: MiddlewareFunction<Response>[] = [
@@ -58,6 +60,18 @@ const toLink = (value: unknown, field: string) => {
   return link;
 };
 
+const toTiptapDoc = (value: unknown, field: string) => {
+  if (value === undefined || value === null) {
+    return value;
+  }
+
+  if (typeof value !== 'object' || (value as JSONContent).type !== 'doc') {
+    throw validationError('Invalid content', field);
+  }
+
+  return extractPlainTextFromTiptapJson(value as JSONContent) ? (value as JSONContent) : null;
+};
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
@@ -67,6 +81,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const body = await request.json();
+    const welcomeEmailSubject = toText(body.welcomeEmailSubject);
+    const welcomeEmailContent = toTiptapDoc(body.welcomeEmailContent, 'welcomeEmailContent');
+
+    if (welcomeEmailContent && !welcomeEmailSubject) {
+      throw validationError('Subject is required', 'welcomeEmailSubject');
+    }
 
     await new TenantSettingsService(client).update({
       colorPrimary: toRequiredColor(body.colorPrimary, 'colorPrimary'),
@@ -78,6 +98,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       newsCtaBody: toText(body.newsCtaBody),
       newsCtaImageUrl: toUrl(body.newsCtaImageUrl, 'newsCtaImageUrl'),
       newsCtaHelpLink: toLink(body.newsCtaHelpLink, 'newsCtaHelpLink'),
+      welcomeEmailFromName: toText(body.welcomeEmailFromName),
+      welcomeEmailSubject,
+      welcomeEmailContent,
     });
 
     return Response.json({}, { headers });

@@ -1,5 +1,6 @@
 import type { JSONContent } from '@tiptap/core';
 import { Column, Heading, Img, Link, Row, Text } from 'react-email';
+import { safeUrl } from 'src/utils/renderTiptapHtml';
 
 // Mirrors the live article view so an email looks like the web page it's generated from:
 // the `sx` block on the news body <Box> in src/pages/News/NewsPage.tsx, and the shared
@@ -68,7 +69,7 @@ const renderMarks = (node: JSONContent, key: number | string): React.ReactNode =
         content = (
           <Link
             key={`${key}-a`}
-            href={mark.attrs?.href}
+            href={safeUrl(mark.attrs?.href, ['http:', 'https:', 'mailto:'])}
             target="_blank"
             rel="noopener noreferrer"
             style={linkStyle}
@@ -147,10 +148,13 @@ const renderYoutube = (node: JSONContent, key: number | string): React.ReactNode
 };
 
 const renderImage = (node: JSONContent, key: number | string): React.ReactNode => {
+  const src = safeUrl(node.attrs?.src, ['http:', 'https:']);
+  if (!src) {
+    return null;
+  }
+
   const caption = node.attrs?.caption as string | undefined;
-  const img = (
-    <Img key={key} src={node.attrs?.src} alt={node.attrs?.alt ?? ''} style={imageStyle} />
-  );
+  const img = <Img key={key} src={src} alt={node.attrs?.alt ?? ''} style={imageStyle} />;
 
   // Images are always full-width, so a bare image needs no wrapper — only pay for the
   // table-based Row/Column wrapper (Outlook doesn't reliably honor margin/display-based

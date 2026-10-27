@@ -7,9 +7,13 @@ import ChevronUp from './chevron-up.svg?react';
 import Close from './close.svg?react';
 import Comment from './comment.svg?react';
 import Eye from './eye.svg?react';
+import Forum from './forum.svg?react';
 import Information from './information.svg?react';
+import Library from './library.svg?react';
+import Map from './map.svg?react';
 import Notifications from './notifications.svg?react';
 import NotificationsActive from './notifications-active.svg?react';
+import Research from './research.svg?react';
 import Search from './search.svg?react';
 import StarActive from './star-active.svg?react';
 import Thunderbolt from './thunderbolt.svg?react';
@@ -31,6 +35,10 @@ const icons = {
   Information,
   Eye,
   StarActive,
+  Map,
+  Library,
+  Research,
+  Forum,
 };
 
 const meta: Meta = {

@@ -54,6 +54,5 @@ export { UsefulButtonLite } from './UsefulStatsButton/UsefulButtonLite';
 export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWrapper';
 export { DisplayName } from './Username/DisplayName';
 export { UserBadge } from './Username/UserBadge';
-export { UserStatistics } from './UserStatistics/UserStatistics';
 export { VerticalList } from './VerticalList/VerticalList.client';
 export { VisitorModal, visitorDisplayData } from './VisitorModal/VisitorModal';

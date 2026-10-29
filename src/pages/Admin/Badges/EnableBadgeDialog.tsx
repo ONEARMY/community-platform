@@ -43,7 +43,7 @@ export function EnableBadgeDialog({ profileBadge, onOpenChange }: IProps) {
     }).finally(() => setSubmitting(false));
 
     toast.promise(promise, {
-      loading: 'Enabling badge badge...',
+      loading: 'Enabling badge...',
       success: () => {
         onOpenChange(false);
         revalidator.revalidate();

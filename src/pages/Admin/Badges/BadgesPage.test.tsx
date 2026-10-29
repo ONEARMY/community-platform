@@ -7,6 +7,8 @@ import { BadgesPage } from './BadgesPage';
 
 const mockToast = vi.hoisted(() => ({ info: vi.fn() }));
 const mockDeleteDialog = vi.hoisted(() => vi.fn());
+const mockDisableDialog = vi.hoisted(() => vi.fn());
+const mockEnableDialog = vi.hoisted(() => vi.fn());
 
 vi.mock('src/common/Toast', () => ({ useToast: () => mockToast }));
 vi.mock('./BadgeFormDialog', () => ({ BadgeFormDialog: () => null }));
@@ -16,6 +18,18 @@ vi.mock('./DeleteBadgeDialog', () => ({
     return null;
   },
 }));
+vi.mock('./DisableBadgeDialog', () => ({
+  DisableBadgeDialog: (props: any) => {
+    mockDisableDialog(props)
+    return null;
+  }
+}))
+vi.mock('./EnableBadgeDialog', () => ({
+  EnableBadgeDialog: (props: any) => {
+    mockEnableDialog(props)
+    return null;
+  }
+}))
 
 const profileBadges = [
   {
@@ -51,6 +65,17 @@ const profileBadges = [
     }),
     usage: { holders: 0, articles: 0, stripeLinked: false },
   },
+  {
+    badge: new ProfileBadge({
+      id: 4,
+      name: 'disabled',
+      displayName: 'Disabled',
+      imageUrl: 'https://example.com/unused.svg',
+      isAudience: true,
+      isDisabled: true
+    }),
+    usage: { holders: 0, articles: 0, stripeLinked: false },
+  },
 ];
 
 const row = (name: string) => screen.getByRole('row', { name: new RegExp(`^${name}`) });
@@ -80,13 +105,33 @@ describe('BadgesPage', () => {
     expect(mockToast.info).toHaveBeenCalledWith(expect.stringContaining('linked to Stripe'));
   });
 
-  it('opens the delete dialog for an unused badge', async () => {
+  it('opens the disable dialog for an unused badge', async () => {
     render(<BadgesPage profileBadges={profileBadges} />);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Delete Unused' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Disable Unused' }));
+
+    expect(mockDisableDialog).toHaveBeenLastCalledWith(
+      expect.objectContaining({ profileBadge: profileBadges[2] }),
+    );
+  });
+
+  it('opens the enable dialog for an unused, disabled, badge', async () => {
+    render(<BadgesPage profileBadges={profileBadges} />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Enable Disabled' }));
+
+    expect(mockEnableDialog).toHaveBeenLastCalledWith(
+      expect.objectContaining({ profileBadge: profileBadges[3] }),
+    );
+  });
+
+  it('opens the delete dialog for an unused, disabled, badge', async () => {
+    render(<BadgesPage profileBadges={profileBadges} />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Delete Disabled' }));
 
     expect(mockDeleteDialog).toHaveBeenLastCalledWith(
-      expect.objectContaining({ profileBadge: profileBadges[2] }),
+      expect.objectContaining({ profileBadge: profileBadges[3] }),
     );
   });
 });

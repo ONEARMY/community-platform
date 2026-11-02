@@ -11,6 +11,7 @@ interface IProps {
   activePin: MapPin;
   mapRef: React.RefObject<LeafletMap | null>;
   customPosition?: ILatLng;
+  onSendMessage?: (item: MapPin) => void;
 }
 
 export const Popup = (props: IProps) => {
@@ -45,7 +46,7 @@ export const Popup = (props: IProps) => {
       maxWidth={325}
       autoPan={false}
     >
-      <PinProfile item={props.activePin} />
+      <PinProfile item={props.activePin} onSendMessage={props.onSendMessage} />
     </LeafletPopup>
   );
 };

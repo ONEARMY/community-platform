@@ -11,9 +11,10 @@ interface IProps {
   item: MapPin;
   isLink: boolean;
   variant: CardVariant;
+  onSendMessage?: (item: MapPin) => void;
 }
 
-export const CardDetailsSpaceProfile = ({ item, isLink, variant }: IProps) => {
+export const CardDetailsSpaceProfile = ({ item, isLink, variant, onSendMessage }: IProps) => {
   const { profile } = item;
   const coverImage =
     profile.coverImages && profile.coverImages[0] && profile.coverImages[0]?.publicUrl;
@@ -99,7 +100,7 @@ export const CardDetailsSpaceProfile = ({ item, isLink, variant }: IProps) => {
             {profile.about}
           </Text>
         )}
-        {variant === 'pin' && <SendMessageButton item={item} />}
+        {variant === 'pin' && <SendMessageButton item={item} onSendMessage={onSendMessage} />}
       </Flex>
     </Flex>
   );

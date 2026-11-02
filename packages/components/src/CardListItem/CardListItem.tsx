@@ -8,11 +8,12 @@ export interface IProps {
   item: MapPin;
   isSelectedPin: boolean;
   onPinClick: (arg: MapPin) => void;
+  onSendMessage?: (item: MapPin) => void;
   viewport: string;
 }
 
 export const CardListItem = (props: IProps) => {
-  const { item, onPinClick, isSelectedPin, viewport } = props;
+  const { item, onPinClick, onSendMessage, isSelectedPin, viewport } = props;
   const testProp = `CardListItem${isSelectedPin ? '-selected' : ''}`;
 
   const Card = (
@@ -20,7 +21,7 @@ export const CardListItem = (props: IProps) => {
       isSelected={isSelectedPin}
       extrastyles={{ minWidth: '250px', maxWidth: '500px', mx: 'auto' }}
     >
-      <CardProfile item={item} variant="list" />
+      <CardProfile item={item} variant="list" onSendMessage={onSendMessage} />
     </CardButton>
   );
 

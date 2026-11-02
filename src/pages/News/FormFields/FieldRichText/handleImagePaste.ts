@@ -1,7 +1,7 @@
 import type { EditorView } from '@tiptap/pm/view';
-import type { MediaWithPublicUrl } from 'oa-shared';
+import type { Image } from 'oa-shared';
 
-type ImageUploadHandler = (image: File) => Promise<MediaWithPublicUrl | null>;
+type ImageUploadHandler = (image: File) => Promise<Image | null>;
 
 const insertImage = (view: EditorView, src: string) => {
   const { schema } = view.state;

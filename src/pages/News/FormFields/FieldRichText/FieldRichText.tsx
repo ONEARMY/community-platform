@@ -9,12 +9,12 @@ import { LinkBubbleMenu } from './LinkBubbleMenu';
 import { Toolbar } from './Toolbar';
 
 import './style.css';
-import { MediaWithPublicUrl } from 'oa-shared';
+import type { Image } from 'oa-shared';
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode };
 
 export interface IProps extends FieldProps {
-  imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
+  imageUploadHandler: (image: File) => Promise<Image | null>;
   disabled?: boolean;
   children?: React.ReactNode;
   'data-cy'?: string;

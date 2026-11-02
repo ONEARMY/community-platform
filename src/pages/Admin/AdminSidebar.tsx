@@ -33,6 +33,7 @@ const ADMIN_NAV_ITEMS = [
       { label: 'Overview', href: '/admin/users' },
       { label: 'Supporters', href: '/admin/supporters' },
       { label: 'Organisations', href: '/admin/organisations' },
+      { label: 'Welcome email', href: '/admin/settings/welcome-email' },
     ],
   },
   {

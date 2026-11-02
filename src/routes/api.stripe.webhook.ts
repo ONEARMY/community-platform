@@ -4,6 +4,7 @@ import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.se
 import { notifyMembershipEvent } from 'src/services/membershipNotifier.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { StripeAdminService, StripeServiceServer } from 'src/services/stripeService.server';
+import { sendMembershipWelcomeEmail } from 'src/services/welcomeEmailService.server';
 import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import type Stripe from 'stripe';
 
@@ -108,6 +109,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
 
     await notifyMembershipEvent(event, stripeService, tenantId, siteUrl);
+    await sendMembershipWelcomeEmail(event, stripeService, client, tenantId, siteUrl);
 
     return new Response('OK', { status: 200 });
   } catch (error) {

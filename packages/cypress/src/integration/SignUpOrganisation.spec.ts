@@ -20,6 +20,12 @@ describe('[Organisation sign-up]', () => {
       cy.get('[data-cy=password]').type('a');
       cy.get('[data-cy=consent]').click({ force: true });
       cy.contains(FRIENDLY_MESSAGES['sign-up/password-short']).should('be.visible');
+
+      cy.step('Passwords do not match');
+      cy.get('[data-cy=password]').clear().type('password1');
+      cy.get('[data-cy=confirm-password]').clear().type('password2');
+      cy.get('[data-cy=consent]').click({ force: true });
+      cy.contains(FRIENDLY_MESSAGES['sign-up/password-mismatch']).should('be.visible');
     });
 
     it('Renders the organisation sign-up entry page', () => {

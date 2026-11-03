@@ -1,11 +1,12 @@
-import { Tabs } from '@mui/base/Tabs';
 import { observer } from 'mobx-react';
 import type { availableGlyphs } from 'oa-components';
 import { useContext, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text } from 'theme-ui';
+import { Tabs } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { TenantContext } from '../common/TenantContext';
 import { OrganisationModerationSection } from './content/sections/OrganisationModeration.section';
 import { SettingsFormTab } from './SettingsFormTab';
@@ -23,8 +24,8 @@ import '../../styles/leaflet.css';
 export const SettingsPage = observer(() => {
   const tenantContext = useContext(TenantContext);
   const { isComplete, missingFields, profile } = useProfileStore();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isMobile = useIsMobile();
 
   const isMember = !profile?.type?.isSpace;
   const showImpactTab = !isMember && tenantContext?.showImpact;
@@ -103,34 +104,11 @@ export const SettingsPage = observer(() => {
         paddingX: [2, 0, 0],
       }}
     >
-      <Tabs value={pathname}>
-        <Flex
-          sx={{
-            alignContent: 'stretch',
-            alignSelf: 'stretch',
-            justifyContent: 'stretch',
-            flexDirection: ['column', 'row'],
-            gap: 4,
-          }}
-        >
-          <SettingsFormTabList
-            tabs={tabs}
-            currentTab={pathname}
-            onTabChange={(path) => navigate(path)}
-          />
-          <Flex
-            sx={{
-              alignContent: 'stretch',
-              justifyContent: 'stretch',
-              flexDirection: 'column',
-              flex: 1,
-            }}
-          >
-            {tabs.map((tab) => (
-              <SettingsFormTab key={tab.title} value={tab.route} tab={tab} />
-            ))}
-          </Flex>
-        </Flex>
+      <Tabs value={pathname} orientation={isMobile ? 'horizontal' : 'vertical'}>
+        <SettingsFormTabList tabs={tabs} />
+        {tabs.map((tab) => (
+          <SettingsFormTab key={tab.title} value={tab.route} tab={tab} />
+        ))}
       </Tabs>
     </Box>
   );

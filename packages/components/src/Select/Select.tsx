@@ -20,7 +20,7 @@ export interface Props extends ReactSelectProps {
   getOptionLabel?: any;
   getOptionValue?: any;
   defaultValue?: IOption;
-  variant?: 'form' | 'formError' | 'icons' | 'tabs';
+  variant?: 'form' | 'formError' | 'icons';
   useAlternateBackground?: boolean; // this could be a specific color passed in but keeping it simple for now
   isDisabled?: boolean;
 }
@@ -206,7 +206,6 @@ export const Select = (props: Props) => {
     form: SelectStyles,
     formError: SelectStylesError,
     icons: FilterStyles,
-    tabs: FilterStyles,
   };
 
   return (

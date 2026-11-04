@@ -255,6 +255,9 @@ inspector_port = 8083
 [functions.cleanup-pending-uploads]
 verify_jwt = false
 
+[functions.send-email]
+verify_jwt = false
+
 [analytics]
 enabled = true
 port = 54327

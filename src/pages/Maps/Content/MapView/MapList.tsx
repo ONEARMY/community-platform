@@ -1,11 +1,12 @@
 import { Button } from 'oa-components';
+import type { MapPin } from 'oa-shared';
 import { useContext } from 'react';
 import { Box, Flex } from 'theme-ui';
 
 import { MapContext } from '../../MapContext';
 import { MapWithListHeader } from './MapWithListHeader';
 
-export const MapList = () => {
+export const MapList = ({ onSendMessage }: { onSendMessage?: (item: MapPin) => void }) => {
   const mapState = useContext(MapContext);
 
   if (!mapState) {
@@ -26,7 +27,7 @@ export const MapList = () => {
           overflowX: 'hidden',
         }}
       >
-        <MapWithListHeader viewport="desktop" />
+        <MapWithListHeader viewport="desktop" onSendMessage={onSendMessage} />
       </Box>
 
       {/* Mobile/tablet list view */}
@@ -57,7 +58,7 @@ export const MapList = () => {
             Show map view
           </Button>
         </Flex>
-        <MapWithListHeader viewport="mobile" />
+        <MapWithListHeader viewport="mobile" onSendMessage={onSendMessage} />
       </Box>
     </>
   );

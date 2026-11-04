@@ -5,6 +5,7 @@ import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
+import { NEVER_PAID_STATUSES } from './stripeEvents.server';
 
 export type SupporterPrice = {
   id: string;
@@ -89,6 +90,8 @@ const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null 
   thankYouImageUrl: null,
 };
 
+const toIsoDate = (unixSeconds: number) => new Date(unixSeconds * 1000).toISOString();
+
 let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
 
@@ -165,6 +168,15 @@ export class StripeServiceServer {
     });
 
     return subscriptions.data[0] || null;
+  }
+
+  static async retrieveSubscription(subscriptionId: string): Promise<Stripe.Subscription | null> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      return null;
+    }
+
+    return stripe.subscriptions.retrieve(subscriptionId);
   }
 
   static async cancelActiveSubscriptions(customerId: string): Promise<number> {
@@ -625,6 +637,70 @@ export class StripeAdminService {
     if (error) {
       throw error;
     }
+
+    const profileId = await this.getProfileIdByAuthId(authId, tenantId);
+    if (!profileId) {
+      return;
+    }
+
+    const { error: membershipsError } = await this.client
+      .from('memberships')
+      .update({ profile_id: profileId })
+      .eq('stripe_customer_id', stripeCustomerId)
+      .eq('tenant_id', tenantId);
+    if (membershipsError) {
+      throw membershipsError;
+    }
+  }
+
+  async syncMembership(
+    subscription: Stripe.Subscription,
+    tenantId: string,
+    authId: string | null,
+  ): Promise<void> {
+    const latest =
+      (await StripeServiceServer.retrieveSubscription(subscription.id)) ?? subscription;
+    const productId = latest.items.data[0]?.price?.product as string | undefined;
+
+    const [badgeId, profileId] = await Promise.all([
+      productId ? this.getBadgeIdForProduct(productId) : null,
+      authId ? this.getProfileIdByAuthId(authId, tenantId) : null,
+    ]);
+
+    const { error } = await this.client.from('memberships').upsert(
+      {
+        tenant_id: tenantId,
+        stripe_customer_id: latest.customer as string,
+        stripe_subscription_id: latest.id,
+        ...(profileId && { profile_id: profileId }),
+        badge_id: badgeId,
+        status: latest.status,
+        started_at: toIsoDate(latest.start_date),
+        cancel_at: latest.cancel_at ? toIsoDate(latest.cancel_at) : null,
+        ended_at: latest.ended_at ? toIsoDate(latest.ended_at) : null,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'stripe_subscription_id,tenant_id' },
+    );
+    if (error) {
+      throw error;
+    }
+  }
+
+  async getMembershipSince(profileId: number, tenantId: string): Promise<string | null> {
+    const { data, error } = await this.client
+      .from('memberships')
+      .select('started_at')
+      .eq('profile_id', profileId)
+      .eq('tenant_id', tenantId)
+      .not('status', 'in', `(${NEVER_PAID_STATUSES.join(',')})`)
+      .order('started_at')
+      .limit(1);
+    if (error) {
+      throw error;
+    }
+
+    return data?.[0]?.started_at ?? null;
   }
 
   async getBadgeIdForProduct(productId: string): Promise<number | null> {
@@ -657,29 +733,50 @@ export class StripeAdminService {
       throw tierBadgesError;
     }
 
-    const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
+    const tierBadgeIds = [...new Set([...(tierBadges?.map((b) => b.badge_id) ?? []), badgeId])];
 
-    // Remove any existing tier badges for this profile
-    if (tierBadgeIds.length > 0) {
+    const [{ data: held, error: heldError }, since] = await Promise.all([
+      this.client
+        .from('profile_badges_relations')
+        .select('id')
+        .eq('profile_id', profileId)
+        .eq('tenant_id', tenantId)
+        .in('profile_badge_id', tierBadgeIds)
+        .order('id'),
+      this.getMembershipSince(profileId, tenantId),
+    ]);
+    if (heldError) {
+      throw heldError;
+    }
+
+    const [current, ...duplicates] = held ?? [];
+
+    if (duplicates.length > 0) {
       const { error: deleteError } = await this.client
         .from('profile_badges_relations')
         .delete()
-        .eq('profile_id', profileId)
-        .eq('tenant_id', tenantId)
-        .in('profile_badge_id', tierBadgeIds);
+        .in(
+          'id',
+          duplicates.map((row) => row.id),
+        );
       if (deleteError) {
         throw deleteError;
       }
     }
 
-    // Assign the new badge
-    const { error: insertError } = await this.client.from('profile_badges_relations').insert({
-      profile_id: profileId,
-      profile_badge_id: badgeId,
-      tenant_id: tenantId,
-    });
-    if (insertError) {
-      throw insertError;
+    const { error: writeError } = current
+      ? await this.client
+          .from('profile_badges_relations')
+          .update({ profile_badge_id: badgeId, ...(since && { since }) })
+          .eq('id', current.id)
+      : await this.client.from('profile_badges_relations').insert({
+          profile_id: profileId,
+          profile_badge_id: badgeId,
+          tenant_id: tenantId,
+          ...(since && { since }),
+        });
+    if (writeError) {
+      throw writeError;
     }
   }
 

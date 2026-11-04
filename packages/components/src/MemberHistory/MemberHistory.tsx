@@ -46,7 +46,7 @@ export const MemberHistory = (props: IProps) => {
     >
       {memberSince && (
         <Text variant="quiet" sx={{ fontSize: 1 }}>
-          Member since {memberSince}
+          Joined {memberSince}
         </Text>
       )}
       {memberSince && lastActive && (

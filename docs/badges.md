@@ -6,6 +6,7 @@
 - **Audience badge** (`is_audience`): can restrict news. Only these appear in the news badge picker.
 - **Grants** (`grants_badge_id`): holding a badge also counts as holding the badge it grants. Only used for news access, and grants chain.
 - **Offer** (`available_to`, `action_label`, `action_url`): which kind of profile can get an audience badge, and the buy button shown to them. Only audience badges can be offered.
+- **Since** (`profile_badges_relations.since`): the date shown on a held badge. Stripe tier badges take it from the first paid membership in `memberships`; set it by hand for other badges. Empty shows no date.
 
 ## Rules
 

@@ -41,6 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
        is_draft,
        collaborators,
        author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+        since,
         profile_badges(
           id,
           name,
@@ -65,6 +66,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         deleted,
         is_draft,
         update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,

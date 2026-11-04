@@ -225,6 +225,63 @@ export type Database = {
         };
         Relationships: [];
       };
+      memberships: {
+        Row: {
+          badge_id: number | null;
+          cancel_at: string | null;
+          ended_at: string | null;
+          id: number;
+          profile_id: number | null;
+          started_at: string;
+          status: string;
+          stripe_customer_id: string;
+          stripe_subscription_id: string;
+          tenant_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          badge_id?: number | null;
+          cancel_at?: string | null;
+          ended_at?: string | null;
+          id?: number;
+          profile_id?: number | null;
+          started_at: string;
+          status: string;
+          stripe_customer_id: string;
+          stripe_subscription_id: string;
+          tenant_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          badge_id?: number | null;
+          cancel_at?: string | null;
+          ended_at?: string | null;
+          id?: number;
+          profile_id?: number | null;
+          started_at?: string;
+          status?: string;
+          stripe_customer_id?: string;
+          stripe_subscription_id?: string;
+          tenant_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'memberships_badge_id_fkey';
+            columns: ['badge_id'];
+            isOneToOne: false;
+            referencedRelation: 'profile_badges';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'memberships_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       messages: {
         Row: {
           created_at: string;
@@ -692,6 +749,7 @@ export type Database = {
           id: number;
           profile_badge_id: number;
           profile_id: number;
+          since: string | null;
           tenant_id: string;
         };
         Insert: {
@@ -699,6 +757,7 @@ export type Database = {
           id?: number;
           profile_badge_id: number;
           profile_id: number;
+          since?: string | null;
           tenant_id: string;
         };
         Update: {
@@ -706,6 +765,7 @@ export type Database = {
           id?: number;
           profile_badge_id?: number;
           profile_id?: number;
+          since?: string | null;
           tenant_id?: string;
         };
         Relationships: [

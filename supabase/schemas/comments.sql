@@ -82,7 +82,8 @@ BEGIN
           'name', pb.name,
           'display_name', pb.display_name,
           'image_url', pb.image_url,
-          'action_url', pb.action_url
+          'action_url', pb.action_url,
+          'since', pbr.since
         )
       ) as badges_array
     FROM profile_badges_relations pbr

@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS "public"."profile_badges_relations" (
     "profile_id" bigint NOT NULL,
     "profile_badge_id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
-    "tenant_id" "text" NOT NULL
+    "tenant_id" "text" NOT NULL,
+    "since" timestamp with time zone DEFAULT "now"()
 );
 
 CREATE TABLE IF NOT EXISTS "public"."profile_tags" (

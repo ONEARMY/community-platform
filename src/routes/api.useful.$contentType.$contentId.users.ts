@@ -26,6 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             description,
             is_space
           ), badges:profile_badges_relations(
+        since,
         profile_badges(
           id,
           name,

@@ -51,6 +51,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             await stripeAdmin.linkCustomerToAuthUser(customerId, authId, tenantId);
           }
         }
+        if (tenantId) {
+          await stripeAdmin.syncMembership(subscription, tenantId, authId);
+        }
         if (!authId) {
           console.warn('Stripe customer not linked to any user:', customerId);
           break;
@@ -83,6 +86,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         let authId = await stripeService.getAuthIdByStripeCustomerId(customerId, tenantId);
         if (!authId) {
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
+        }
+        if (tenantId) {
+          await stripeAdmin.syncMembership(subscription, tenantId, authId);
         }
         if (!authId) {
           console.warn('Stripe customer not linked to any user:', customerId);

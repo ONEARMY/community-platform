@@ -83,6 +83,7 @@ export class QuestionServiceServer {
          total_views,
          images,
          author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
+            since,
             profile_badges(
               id,
               name,

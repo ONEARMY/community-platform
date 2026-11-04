@@ -49,6 +49,7 @@ export class LibraryServiceServer {
         author:profiles(id, display_name, username, photo, country, donations_enabled,
           profile_type(id, display_name, name, is_space, image_url, small_image_url),
           badges:profile_badges_relations(
+            since,
             profile_badges(
               id,
               name,

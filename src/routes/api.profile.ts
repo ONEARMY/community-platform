@@ -32,6 +32,7 @@ export const loader = async ({ request }) => {
           )
         ),
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,

@@ -50,6 +50,7 @@ export class MapPinsServiceServer {
           username,
           last_active,
           badges:profile_badges_relations(
+            since,
             profile_badges(
               id,
               name,

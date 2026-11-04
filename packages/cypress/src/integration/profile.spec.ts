@@ -235,6 +235,6 @@ describe('[By Premium Tier User]', () => {
     cy.step('Displays view count for profile with views');
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/);
     cy.step('Displays member history info');
-    cy.get('[data-cy=MemberHistory]').contains('Member since');
+    cy.get('[data-cy=MemberHistory]').contains('Joined');
   });
 });

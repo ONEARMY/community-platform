@@ -29,6 +29,7 @@ export class ProfileServiceServer {
       .select(
         `*,
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,
@@ -65,6 +66,7 @@ export class ProfileServiceServer {
       .select(
         `*,
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,
@@ -122,6 +124,7 @@ export class ProfileServiceServer {
           )
         ),
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,
@@ -157,6 +160,7 @@ export class ProfileServiceServer {
       .select(
         `*,
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,
@@ -227,6 +231,7 @@ export class ProfileServiceServer {
           )
         ),
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,
@@ -260,6 +265,7 @@ export class ProfileServiceServer {
           )
         ),
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,
@@ -386,6 +392,7 @@ export class ProfileServiceServer {
           )
         ),
         badges:profile_badges_relations(
+          since,
           profile_badges(
             id,
             name,

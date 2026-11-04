@@ -59,6 +59,7 @@ export class MapServiceServer {
             type,
             username,
             badges:profile_badges_relations(
+              since,
               profile_badges(
                 id,
                 name,
@@ -122,6 +123,7 @@ export class MapServiceServer {
             username,
             photo,
             badges:profile_badges_relations(
+              since,
               profile_badges(
                 id,
                 name,

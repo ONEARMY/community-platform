@@ -33,6 +33,7 @@ export const loader = async ({ request }) => {
       country,
       created_at,
       badges:profile_badges_relations(
+        since,
         profile_badges(
           id,
           name,

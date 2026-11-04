@@ -120,6 +120,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       source_type,
       created_by,
       profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
+        since,
         profile_badges(
           id,
           name,

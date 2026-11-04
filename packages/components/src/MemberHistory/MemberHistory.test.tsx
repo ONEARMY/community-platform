@@ -14,7 +14,7 @@ describe('MemberHistory', () => {
       lastActive: new Date(2023, 0, 1),
     };
     const { getByText } = render(<MemberHistory {...props} />);
-    expect(getByText('Member since 2020')).toBeInTheDocument();
+    expect(getByText('Joined 2020')).toBeInTheDocument();
   });
 
   it('renders only since details if given weird last active data', () => {
@@ -23,7 +23,7 @@ describe('MemberHistory', () => {
       lastActive: new Date(2020, 0, 1),
     };
     const { getByText, queryAllByText } = render(<MemberHistory {...props} />);
-    expect(getByText('Member since 2020')).toBeInTheDocument();
+    expect(getByText('Joined 2020')).toBeInTheDocument();
     expect(queryAllByText('Last active over 2 years ago')).toEqual([]);
   });
 });

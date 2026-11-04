@@ -38,6 +38,16 @@ export const TwoBadges: Story = {
   },
 };
 
+export const BadgeWithSince: Story = {
+  args: {
+    user: {
+      username: 'a-username',
+      country: 'pt',
+      badges: [{ ...supporterBadge, since: '2024-03-15T00:00:00Z' }],
+    } as Author,
+  },
+};
+
 export const WithoutFlag: Story = {
   args: {
     user: { username: 'a-username' } as Author,

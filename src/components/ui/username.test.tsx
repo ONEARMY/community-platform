@@ -1,11 +1,13 @@
 import '@testing-library/jest-dom/vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { Author } from 'oa-shared';
 import type { ReactNode } from 'react';
 import { createRoutesStub } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { Username } from './username';
 import {
+  BadgeWithSince,
   InvalidCountryCode,
   NoBadge,
   TwoBadges,
@@ -50,6 +52,14 @@ describe('Username', () => {
 
     expect(getByTestId('Username: pro badge')).toBeInTheDocument();
     expect(getByTestId('Username: supporter badge')).toBeInTheDocument();
+  });
+
+  it('shows since when a badge was held on hover', async () => {
+    renderInRouter(<Username user={BadgeWithSince.args!.user!} />);
+
+    await userEvent.hover(screen.getByTestId('Username: supporter badge'));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Supporter since Mar 2024');
   });
 
   it('links to the profile in the same tab by default', () => {

@@ -91,6 +91,7 @@ fly secrets set -a community-platform-pr-<number> GEO_BLOCK_EXTRA_COUNTRIES=<you
 - **`stripe_customers`** — Maps auth users to Stripe customer IDs
 - **`stripe_badge_products`** — Maps Stripe product IDs to profile badges/tiers
 - **`stripe_tier_config`** — UI configuration for each tier (color, description). Seeded automatically by `db:seed`
+- **`memberships`** — One row per Stripe subscription, kept in sync by the webhook. Membership history, and the source of a tier badge's `since` date
 
 All tables use Row Level Security with tenant isolation via the `x-tenant-id` header.
 

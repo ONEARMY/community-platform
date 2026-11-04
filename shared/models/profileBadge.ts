@@ -17,6 +17,7 @@ export class DBProfileBadge {
   grants_badge_id?: number | null;
   available_to?: BadgeAvailability | null;
   action_label?: string | null;
+  since?: string | null;
 
   constructor(obj: Partial<DBProfileBadge>) {
     Object.assign(this, obj);
@@ -25,6 +26,7 @@ export class DBProfileBadge {
 
 export class DBProfileBadgeJoin {
   profile_badges: DBProfileBadge;
+  since?: string | null;
 }
 
 export class ProfileBadge {
@@ -38,6 +40,7 @@ export class ProfileBadge {
   grantsBadgeId?: number;
   availableTo?: BadgeAvailability;
   actionLabel?: string;
+  since?: string;
 
   constructor(obj: Partial<ProfileBadge>) {
     Object.assign(this, obj);
@@ -52,6 +55,7 @@ export class ProfileBadge {
       imageUrl: badge.image_url,
       actionUrl: badge.action_url || undefined,
       premiumTier: badge.premium_tier || undefined,
+      since: value.since || undefined,
     });
   }
 
@@ -67,6 +71,7 @@ export class ProfileBadge {
       grantsBadgeId: value.grants_badge_id || undefined,
       availableTo: value.available_to || undefined,
       actionLabel: value.action_label || undefined,
+      since: value.since || undefined,
     });
   }
 }

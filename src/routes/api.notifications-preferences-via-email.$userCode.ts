@@ -91,7 +91,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
             is_unsubscribed: formData.get('isUnsubscribed') === 'true',
           };
 
-    await client.from('notifications_preferences').upsert(
+    const result = await client.from('notifications_preferences').upsert(
       {
         ...NotificationsPreferencesDefaults,
         ...preferences,
@@ -100,6 +100,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       },
       { onConflict: 'user_id' },
     );
+
+    if (result.error) {
+      throw new Error(result.error.code + ': ' + result.error.message + result.error.details);
+    }
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

@@ -48,7 +48,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const formData = await request.formData();
     const comments = formData.get('comments') === 'true';
-    const content_reach: ContentReach = (formData.get('contentReach') as ContentReach) || null;
+    const contentReachValue = formData.get('contentReach');
+    const content_reach: ContentReach =
+      contentReachValue === 'all' || contentReachValue === 'important' ? contentReachValue : null;
     const is_unsubscribed = formData.get('isUnsubscribed') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('researchUpdates') === 'true';

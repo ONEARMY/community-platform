@@ -6,6 +6,7 @@ export type SubscriptionStatus = {
     status: string;
     cancelAtPeriodEnd: boolean;
     cancelAt: number | null;
+    pausedAt: number | null;
   } | null;
 };
 
@@ -48,6 +49,10 @@ type SetPasswordParams = {
   stripeCustomerId: string;
   password: string;
 };
+
+type ChangeMembershipResponse =
+  | { ok: true }
+  | { ok: false; error: string; paymentUrl?: string | null };
 
 type SetPasswordResponse = { ok: true } | { ok: false; error: string };
 
@@ -111,6 +116,35 @@ const createPortalSession = async (): Promise<string | null> => {
 
   return null;
 };
+
+const changeMembership = async (action: 'pause' | 'resume'): Promise<ChangeMembershipResponse> => {
+  try {
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: data.error || 'Something went wrong.',
+        paymentUrl: data.paymentUrl,
+      };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    logger.error(error);
+    return { ok: false, error: 'Network error. Please try again.' };
+  }
+};
+
+const pauseMembership = () => changeMembership('pause');
+
+const resumeMembership = () => changeMembership('resume');
 
 const createSupporterAccount = async (
   params: CreateSupporterAccountParams,
@@ -183,6 +217,8 @@ export const stripeService = {
   getSubscriptionStatus,
   createElementsSubscription,
   createPortalSession,
+  pauseMembership,
+  resumeMembership,
   createSupporterAccount,
   linkExistingAccount,
   setPassword,

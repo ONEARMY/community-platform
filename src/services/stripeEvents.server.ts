@@ -19,6 +19,18 @@ export const cancellationReversed = (
   changes: SubscriptionChanges | undefined,
 ) => subscription.cancel_at === null && !!changes?.cancel_at;
 
+type StatusedSubscription = Pick<Stripe.Subscription, 'status'>;
+
+export const pauseStarted = (
+  subscription: StatusedSubscription,
+  changes: SubscriptionChanges | undefined,
+) => subscription.status === 'paused' && !!changes?.status && changes.status !== 'paused';
+
+export const pauseEnded = (
+  subscription: StatusedSubscription,
+  changes: SubscriptionChanges | undefined,
+) => changes?.status === 'paused' && subscription.status !== 'paused';
+
 const NEVER_PAID_STATUSES: Stripe.Subscription.Status[] = ['incomplete', 'incomplete_expired'];
 
 // An abandoned checkout leaves an unpaid subscription that Stripe later deletes

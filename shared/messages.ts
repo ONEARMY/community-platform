@@ -24,8 +24,17 @@ export const FRIENDLY_MESSAGES = {
   'auth/resend-failed': "We couldn't send a new link right now. Please try again in a moment.",
   'generic-error':
     "We couldn't complete your registration. If you already have an account, try logging in or resetting your password.",
-  'supporter/already-subscribed': 'This account already has an active subscription.',
+  'supporter/already-subscribed': 'This account already has a membership.',
   'supporter/region-blocked': "Supporter memberships aren't available in your region.",
+  'supporter/no-membership': "We couldn't find a membership on this account.",
+  'supporter/not-pausable': "Only an active membership that isn't set to cancel can be paused.",
+  'supporter/not-paused': "This membership isn't paused.",
+  'supporter/resume-payment-incomplete':
+    "We couldn't take the payment to resume your membership. Complete it on the payment page to finish resuming.",
+  'supporter/resume-no-payment-method':
+    "There's no payment method on your account. Add one under Manage subscription, then resume again.",
+  'supporter/membership-change-failed':
+    "We couldn't update your membership. Please try again later.",
   required: 'Required field',
   'reset email sent': 'Reset email sent, check your inbox/spam',
   'profile saved': 'Profile Saved',

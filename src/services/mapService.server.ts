@@ -6,11 +6,10 @@ export class MapServiceServer {
 
   private pinModeration(profile: Profile, existingModeration?: Moderation): Moderation {
     if (profile.type?.isSpace) {
-      return profile.moderation ?? 'awaiting-moderation';
-    }
-
-    if (existingModeration !== undefined) {
-      return existingModeration === 'accepted' ? 'accepted' : 'awaiting-moderation';
+      return (
+        profile.moderation ??
+        (existingModeration === 'accepted' ? 'accepted' : 'awaiting-moderation')
+      );
     }
 
     return 'accepted';
@@ -149,6 +148,37 @@ export class MapServiceServer {
           )`,
         )
         .single();
+    }
+  }
+
+  async getModerationByProfileId(profileId: number) {
+    const { data, error } = await this.client
+      .from('map_pins')
+      .select('moderation,moderation_feedback')
+      .eq('profile_id', profileId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+  async updateModerationByProfileId(
+    profileId: number,
+    moderation: Moderation,
+    feedback: string | null,
+  ) {
+    const { error } = await this.client
+      .from('map_pins')
+      .update({ moderation, moderation_feedback: feedback })
+      .eq('profile_id', profileId);
+
+    if (error) {
+      throw error;
     }
   }
 }

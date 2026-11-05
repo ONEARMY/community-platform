@@ -67,6 +67,13 @@ type ReturnOverrides = {
     display_name: string | null;
     source_slug: string | null;
   };
+  get_admin_organisations: {
+    username: string | null;
+    about: string | null;
+    type_name: string | null;
+    moderation: Moderation;
+    moderation_feedback: string | null;
+  };
   get_comments_with_votes: {
     profile: DBAuthor | null;
     source_type: DiscussionContentType;

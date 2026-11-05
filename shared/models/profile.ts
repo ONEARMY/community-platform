@@ -1,5 +1,5 @@
 import type { JSONContent } from '@tiptap/core';
-import type { Json } from '../database';
+import type { Database, Json } from '../database';
 import type { Comment } from './comment';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
@@ -580,3 +580,36 @@ export type SubscribedUser = {
   comments: boolean;
   research_updates: boolean;
 };
+
+export type DBAdminOrganisation =
+  Database['public']['Functions']['get_admin_organisations']['Returns'][number];
+
+export class AdminOrganisation {
+  id: number;
+  username: string | null;
+  displayName: string;
+  about: string | null;
+  typeName: string | null;
+  moderation: Moderation;
+  moderationFeedback: string | null;
+  createdAt: Date;
+  isMapPin: boolean;
+
+  constructor(obj: AdminOrganisation) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminOrganisation) {
+    return new AdminOrganisation({
+      id: obj.id,
+      username: obj.username,
+      displayName: obj.display_name,
+      about: obj.about,
+      typeName: obj.type_name,
+      moderation: obj.moderation,
+      moderationFeedback: obj.moderation_feedback,
+      createdAt: new Date(obj.created_at),
+      isMapPin: obj.is_map_pin,
+    });
+  }
+}

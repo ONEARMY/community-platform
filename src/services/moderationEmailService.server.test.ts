@@ -112,6 +112,16 @@ describe('sendModerationEmail', () => {
     expect(sentPayload().emailTemplate.props.username).toBe('the_shop');
   });
 
+  it('sends the map pin email for organisations from before the signup flow', async () => {
+    setup();
+
+    await sendModerationEmail({ ...args, isMapPin: true, moderation: 'accepted' });
+
+    expect(sentPayload().subject).toBe('Moderation update for your map pin');
+    expect(sentPayload().emailTemplate.props.mapUrl).toContain('/map#the_shop');
+    expect(sentPayload().emailTemplate.props.settingsUrl).toContain('/settings/map');
+  });
+
   it('skips accounts with no auth id rather than throwing', async () => {
     const { getUserById } = setup();
 

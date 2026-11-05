@@ -1,117 +1,98 @@
-import styled from '@emotion/styled';
-import { Tab as BaseTab, tabClasses } from '@mui/base/Tab';
-import { TabsList as BaseTabsList } from '@mui/base/TabsList';
-import { prepareForSlot } from '@mui/base/utils';
-import { Icon, Select } from 'oa-components';
-import { useMemo } from 'react';
+import { Icon } from 'oa-components';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
-import { Flex } from 'theme-ui';
+import { Button } from '@/components/ui/button';
+import ChevronLeftIcon from '@/components/ui/icons/chevron-left.svg?react';
+import ChevronRightIcon from '@/components/ui/icons/chevron-right.svg?react';
+import { TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import type { ISettingsTab } from './types';
 
-const Tab = styled(BaseTab)`
-  color: grey;
-  cursor: pointer;
-  background-color: transparent;
-  padding: 12px 18px;
-  outline: none;
-  border-radius: 12px;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-start;
-  font-size: 18px;
-  font-family: Varela round;
-  align-items: center;
-
-  &:hover {
-    background-color: white;
-  }
-
-  &:focus {
-    outline: 2px solid #666;
-  }
-
-  &.${tabClasses.disabled} {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &.${tabClasses.selected} {
-    color: #1b1b1b;
-    outline: 2px solid #1b1b1b;
-    background-color: #e2edf7;
-  }
-`;
-
-const TabsList = styled(BaseTabsList)`
-  width: 100%;
-  display: flex;
-  gap: 12px;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-content: flex-start;
-`;
-
 interface IProps {
-  currentTab: string;
   tabs: ISettingsTab[];
-  onTabChange: (path: string) => void;
 }
 
-export const SettingsFormTabList = (props: IProps) => {
-  const { currentTab, tabs, onTabChange } = props;
+export const SettingsFormTabList = ({ tabs }: IProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [overflow, setOverflow] = useState({ start: false, end: false });
 
-  const currentValue = useMemo(
-    () => ({
-      label: tabs.find(({ route }) => route === currentTab)?.title || '',
-      value: currentTab,
-    }),
-    [currentTab, tabs],
-  );
+  const updateOverflow = useCallback(() => {
+    const element = scrollRef.current;
+    if (!element) {
+      return;
+    }
+    setOverflow({
+      start: element.scrollLeft > 0,
+      end: element.scrollLeft + element.clientWidth < element.scrollWidth - 1,
+    });
+  }, []);
 
-  const selectOptions = useMemo(
-    () =>
-      tabs.map(({ title, route }) => ({
-        label: title,
-        value: route,
-      })),
-    [tabs],
-  );
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) {
+      return;
+    }
+    updateOverflow();
+    const observer = new ResizeObserver(updateOverflow);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [updateOverflow, tabs.length]);
 
   if (tabs.length === 1) {
     return null;
   }
 
-  return (
-    <>
-      <Flex sx={{ display: ['none', 'flex'] }}>
-        <TabsList>
-          {tabs.map(({ glyph, title, route }) => {
-            return (
-              <Tab
-                key={title}
-                to={route}
-                value={route}
-                data-cy={`tab-${title}`}
-                slots={{ root: prepareForSlot(Link) }}
-              >
-                <Icon glyph={glyph} size={20} /> {title}
-              </Tab>
-            );
-          })}
-        </TabsList>
-      </Flex>
+  const scroll = (direction: -1 | 1) => {
+    const element = scrollRef.current;
+    element?.scrollBy({ left: (direction * element.clientWidth) / 2, behavior: 'smooth' });
+  };
 
-      <Flex sx={{ display: ['flex', 'none'] }}>
-        <TabsList>
-          <Select
-            value={currentValue}
-            onChange={(event) => onTabChange(event.value)}
-            variant="tabs"
-            options={selectOptions}
-          />
-        </TabsList>
-      </Flex>
-    </>
+  return (
+    <div className="flex min-w-0 items-center gap-1 group-data-vertical/tabs:contents">
+      {overflow.start && (
+        <Button
+          variant="outline"
+          size="icon-sm"
+          tabIndex={-1}
+          aria-hidden
+          data-cy="tabs-scroll-start"
+          className="mb-2 group-data-vertical/tabs:hidden"
+          onClick={() => scroll(-1)}
+        >
+          <ChevronLeftIcon />
+        </Button>
+      )}
+      <TabsList
+        ref={scrollRef}
+        onScroll={updateOverflow}
+        variant="outline"
+        className="group-data-horizontal/tabs:min-w-0 group-data-horizontal/tabs:flex-1"
+      >
+        {tabs.map(({ glyph, title, route }) => (
+          <TabsTrigger
+            key={title}
+            value={route}
+            data-cy={`tab-${title}`}
+            nativeButton={false}
+            render={<Link to={route} />}
+          >
+            <Icon glyph={glyph} size={20} /> {title}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {overflow.end && (
+        <Button
+          variant="outline"
+          size="icon-sm"
+          tabIndex={-1}
+          aria-hidden
+          data-cy="tabs-scroll-end"
+          className="mb-2 group-data-vertical/tabs:hidden"
+          onClick={() => scroll(1)}
+        >
+          <ChevronRightIcon />
+        </Button>
+      )}
+    </div>
   );
 };

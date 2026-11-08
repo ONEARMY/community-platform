@@ -8,9 +8,16 @@ type SendEmailArgs = {
   from: string;
   subject: string;
   emailTemplate: ReactNode;
+  idempotencyKey?: string;
 };
 
-export async function sendEmail({ from, to, subject, emailTemplate }: SendEmailArgs) {
+export async function sendEmail({
+  from,
+  to,
+  subject,
+  emailTemplate,
+  idempotencyKey,
+}: SendEmailArgs) {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const response = await resend.emails.send(
@@ -21,7 +28,7 @@ export async function sendEmail({ from, to, subject, emailTemplate }: SendEmailA
       react: emailTemplate,
     },
     {
-      idempotencyKey: crypto.randomUUID(),
+      idempotencyKey: idempotencyKey ?? crypto.randomUUID(),
     },
   );
 

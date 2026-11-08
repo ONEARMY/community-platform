@@ -1,4 +1,3 @@
-import { ProfileLink } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { useContext } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -6,6 +5,7 @@ import { UserAction } from 'src/common/UserAction';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { isUserContactable } from 'src/utils/helpers';
 import { Box, Flex } from 'theme-ui';
+import WebsiteIcon from '@/components/ui/icons/website.svg?react';
 import { UserContactFormAvailable } from '../contact';
 import { UserContactForm } from '../contact/UserContactForm';
 import { UserContactFormNotLoggedIn } from '../contact/UserContactFormNotLoggedIn';
@@ -50,7 +50,18 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
       {user.website && (
         <Flex sx={{ flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
           <span>Website</span>
-          <ProfileLink url={user.website} />
+          <span className="inline-flex items-center gap-2">
+            <WebsiteIcon aria-hidden="true" className="size-5 shrink-0" />
+            <a
+              href={user.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cy="profile-website"
+              className="hover:underline"
+            >
+              {user.website}
+            </a>
+          </span>
         </Flex>
       )}
     </Flex>

@@ -109,6 +109,61 @@ describe('admin settings', () => {
     expect(update).not.toHaveBeenCalled();
   });
 
+  it('saves the welcome email', async () => {
+    const { update } = setup();
+    const content = { type: 'doc', content: [{ type: 'text', text: 'Hi {name}' }] };
+
+    const res = await put({
+      welcomeEmailFromName: ' Dave ',
+      welcomeEmailSubject: 'Welcome',
+      welcomeEmailContent: content,
+    });
+
+    expect(res.status).toBe(200);
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        welcomeEmailFromName: 'Dave',
+        welcomeEmailSubject: 'Welcome',
+        welcomeEmailContent: content,
+      }),
+    );
+  });
+
+  it('turns the welcome email off when the body is empty', async () => {
+    const { update } = setup();
+
+    const res = await put({
+      welcomeEmailSubject: '',
+      welcomeEmailContent: { type: 'doc', content: [{ type: 'paragraph' }] },
+    });
+
+    expect(res.status).toBe(200);
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ welcomeEmailSubject: null, welcomeEmailContent: null }),
+    );
+  });
+
+  it('requires a subject for the welcome email', async () => {
+    const { update } = setup();
+
+    const res = await put({
+      welcomeEmailSubject: '',
+      welcomeEmailContent: { type: 'doc', content: [{ type: 'text', text: 'Hi' }] },
+    });
+
+    expect(res.status).toBe(400);
+    expect(update).not.toHaveBeenCalled();
+  });
+
+  it('rejects welcome email content that is not a document', async () => {
+    const { update } = setup();
+
+    const res = await put({ welcomeEmailSubject: 'Hi', welcomeEmailContent: '<p>Hi</p>' });
+
+    expect(res.status).toBe(400);
+    expect(update).not.toHaveBeenCalled();
+  });
+
   it('rejects a help link that is not a url or path', async () => {
     const { update } = setup();
 

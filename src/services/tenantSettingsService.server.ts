@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { JSONContent } from '@tiptap/core';
 import Keyv from 'keyv';
-import type { Database } from 'oa-shared';
+import type { Database, Json } from 'oa-shared';
 import { TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
@@ -20,6 +21,15 @@ export interface TenantSettingsInput {
   newsCtaBody?: string | null;
   newsCtaImageUrl?: string | null;
   newsCtaHelpLink?: string | null;
+  welcomeEmailFromName?: string | null;
+  welcomeEmailSubject?: string | null;
+  welcomeEmailContent?: JSONContent | null;
+}
+
+export interface WelcomeEmailSettings {
+  fromName: string | null;
+  subject: string | null;
+  content: JSONContent | null;
 }
 
 export class TenantSettingsService {
@@ -95,6 +105,9 @@ export class TenantSettingsService {
         news_cta_body: input.newsCtaBody,
         news_cta_image: input.newsCtaImageUrl,
         news_cta_help_link: input.newsCtaHelpLink,
+        welcome_email_from_name: input.welcomeEmailFromName,
+        welcome_email_subject: input.welcomeEmailSubject,
+        welcome_email_content: input.welcomeEmailContent as Json | null | undefined,
       })
       .eq('tenant_id', process.env.TENANT_ID!);
 
@@ -103,6 +116,20 @@ export class TenantSettingsService {
     }
 
     await cache.delete('tenant-settings');
+  }
+
+  async getWelcomeEmail(): Promise<WelcomeEmailSettings> {
+    const { data } = await this.client
+      .from('tenant_settings')
+      .select('welcome_email_from_name, welcome_email_subject, welcome_email_content')
+      .eq('tenant_id', process.env.TENANT_ID!)
+      .single();
+
+    return {
+      fromName: data?.welcome_email_from_name ?? null,
+      subject: data?.welcome_email_subject ?? null,
+      content: (data?.welcome_email_content as JSONContent | null) ?? null,
+    };
   }
 
   private async fetchSettingsRow() {
@@ -140,6 +167,7 @@ export class TenantSettingsService {
         news_cta_image,
         news_cta_help_link`,
       )
+      .eq('tenant_id', process.env.TENANT_ID!)
       .single();
 
     return data;

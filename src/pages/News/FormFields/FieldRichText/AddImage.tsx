@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/react';
 import { ImageIcon } from 'lucide-react';
 import { Button, ImageInputV2, Modal } from 'oa-components';
-import type { MediaWithPublicUrl } from 'oa-shared';
+import type { Image } from 'oa-shared';
 import { useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from 'src/components/ui/tooltip';
 import { Box, Flex } from 'theme-ui';
@@ -9,7 +9,7 @@ import { Spinner } from '@/components/ui/spinner';
 
 interface IProps {
   editor: Editor;
-  imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
+  imageUploadHandler: (image: File) => Promise<Image | null>;
 }
 
 export const AddImage = ({ editor, imageUploadHandler }: IProps) => {

@@ -80,18 +80,21 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await validateRequest(request, userId);
 
     const formData = await request.formData();
+    const contentReachValue = formData.get('contentReach');
+    const content_reach: ContentReach =
+      contentReachValue === 'all' || contentReachValue === 'important' ? contentReachValue : null;
     const preferences =
       formData.get('List-Unsubscribe') === 'One-Click'
         ? { is_unsubscribed: true }
         : {
             comments: formData.get('comments') === 'true',
-            content_reach: formData.get('contentReach') as ContentReach,
+            content_reach,
             replies: formData.get('replies') === 'true',
             research_updates: formData.get('researchUpdates') === 'true',
             is_unsubscribed: formData.get('isUnsubscribed') === 'true',
           };
 
-    await client.from('notifications_preferences').upsert(
+    const result = await client.from('notifications_preferences').upsert(
       {
         ...NotificationsPreferencesDefaults,
         ...preferences,
@@ -100,6 +103,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       },
       { onConflict: 'user_id' },
     );
+
+    if (result.error) {
+      throw new Error(result.error.code + ': ' + result.error.message + result.error.details);
+    }
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

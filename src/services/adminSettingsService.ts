@@ -1,3 +1,5 @@
+import type { JSONContent } from '@tiptap/core';
+
 export interface AdminSettingsFormData {
   colorPrimary?: string;
   colorPrimaryHover?: string;
@@ -8,6 +10,9 @@ export interface AdminSettingsFormData {
   newsCtaBody?: string;
   newsCtaImageUrl?: string;
   newsCtaHelpLink?: string;
+  welcomeEmailFromName?: string;
+  welcomeEmailSubject?: string;
+  welcomeEmailContent?: JSONContent | null;
 }
 
 const update = async (form: AdminSettingsFormData) => {
@@ -23,4 +28,21 @@ const update = async (form: AdminSettingsFormData) => {
   }
 };
 
-export const adminSettingsService = { update };
+const sendWelcomeEmailPreview = async (draft: {
+  fromName: string;
+  subject: string;
+  content: JSONContent | null;
+}) => {
+  const response = await fetch('/api/admin/welcome-email/preview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(draft),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Error sending test email' }));
+    throw new Error(errorData.error || 'Error sending test email');
+  }
+};
+
+export const adminSettingsService = { update, sendWelcomeEmailPreview };

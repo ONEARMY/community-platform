@@ -32,6 +32,7 @@ const ADMIN_NAV_ITEMS = [
     items: [
       { label: 'Overview', href: '/admin/users' },
       { label: 'Supporters', href: '/admin/supporters' },
+      { label: 'Welcome email', href: '/admin/settings/welcome-email' },
     ],
   },
   {
@@ -50,7 +51,7 @@ const ADMIN_NAV_ITEMS = [
       { label: 'Remakes', href: '/admin/remakes' },
     ],
   },
-  { label: 'Research', icon: FlaskConicalIcon },
+  { label: 'Research', href: '/admin/research', icon: FlaskConicalIcon },
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Comments', href: '/admin/comments', icon: MessageSquareIcon },

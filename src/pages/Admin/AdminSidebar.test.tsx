@@ -48,8 +48,14 @@ describe('AdminSidebar', () => {
     expect(screen.getByRole('link', { name: 'Remakes' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Projects/ })).not.toBeInTheDocument();
     expect(screen.getByText('Projects').parentElement).toHaveAttribute('aria-disabled', 'true');
-    expect(screen.getByRole('button', { name: /Research/ })).toBeDisabled();
-    expect(screen.getAllByText('Coming soon')).toHaveLength(2);
+    expect(screen.getAllByText('Coming soon')).toHaveLength(1);
+  });
+
+  it('links Research to its admin page', () => {
+    renderAt('/admin/research');
+
+    expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('href', '/admin/research');
+    expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('data-active');
   });
 
   it('opens the section containing the current page', () => {

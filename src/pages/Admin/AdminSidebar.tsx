@@ -49,7 +49,7 @@ const ADMIN_NAV_ITEMS = [
     icon: LibraryIcon,
     items: [{ label: 'Projects' }, { label: 'Remakes', href: '/admin/remakes' }],
   },
-  { label: 'Research', icon: FlaskConicalIcon },
+  { label: 'Research', href: '/admin/research', icon: FlaskConicalIcon },
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Comments', href: '/admin/comments', icon: MessageSquareIcon },

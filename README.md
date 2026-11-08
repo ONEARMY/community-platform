@@ -249,6 +249,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alierguney1"><img src="https://avatars.githubusercontent.com/u/81262082?v=4?s=60" width="60px;" alt="Ali"/><br /><sub><b>Ali</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=alierguney1" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Saisinare"><img src="https://avatars.githubusercontent.com/u/104475954?v=4?s=60" width="60px;" alt="Sai Sinare"/><br /><sub><b>Sai Sinare</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Saisinare" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

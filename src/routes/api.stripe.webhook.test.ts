@@ -8,19 +8,22 @@ vi.mock('src/services/membershipNotifier.server');
 vi.mock('src/services/secretsService.server');
 vi.mock('src/services/stripeService.server');
 
-const setup = (subscription: Record<string, unknown>) => {
+const setup = (subscriptionFields: Record<string, unknown>) => {
+  const subscription = {
+    id: 'sub_1',
+    customer: 'cus_1',
+    items: { data: [{ price: { product: 'prod_1' } }] },
+    ...subscriptionFields,
+  };
+
   vi.mocked(StripeServiceServer.constructWebhookEvent).mockResolvedValue({
     type: 'customer.subscription.updated',
-    data: {
-      object: {
-        id: 'sub_1',
-        customer: 'cus_1',
-        items: { data: [{ price: { product: 'prod_1' } }] },
-        ...subscription,
-      },
-    },
+    data: { object: subscription },
     // biome-ignore lint/suspicious/noExplicitAny: event stub
   } as any);
+
+  // biome-ignore lint/suspicious/noExplicitAny: subscription stub
+  vi.mocked(StripeServiceServer.getSubscription).mockResolvedValue(subscription as any);
 
   (StripeServiceServer as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
     return { getAuthIdByStripeCustomerId: vi.fn().mockResolvedValue('user-1') };

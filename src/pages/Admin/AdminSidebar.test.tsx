@@ -46,9 +46,8 @@ describe('AdminSidebar', () => {
     renderAt('/admin/remakes');
 
     expect(screen.getByRole('link', { name: 'Remakes' })).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /Projects/ })).not.toBeInTheDocument();
-    expect(screen.getByText('Projects').parentElement).toHaveAttribute('aria-disabled', 'true');
-    expect(screen.getAllByText('Coming soon')).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/admin/projects');
+    expect(screen.queryByText('Coming soon')).not.toBeInTheDocument();
   });
 
   it('links Research to its admin page', () => {

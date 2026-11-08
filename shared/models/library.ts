@@ -252,3 +252,65 @@ export type ProjectStepDTO = {
   images: DBMedia[] | null;
   videoUrl: string | null;
 };
+
+export type DBAdminProject = Pick<
+  DBProject,
+  | 'id'
+  | 'created_at'
+  | 'title'
+  | 'slug'
+  | 'difficulty_level'
+  | 'moderation'
+  | 'is_draft'
+  | 'published_at'
+  | 'comment_count'
+  | 'total_views'
+  | 'deleted'
+> & {
+  profile: Pick<DBAuthor, 'username' | 'display_name'> | null;
+  category: Pick<DBCategory, 'name'> | null;
+  steps: { count: number }[];
+  remakes: { count: number }[];
+};
+
+export class AdminProject {
+  id: number;
+  title: string;
+  slug: string;
+  author: { username: string | null; displayName: string } | null;
+  category: string | null;
+  difficultyLevel: DifficultyLevel | null;
+  moderation: Moderation | null;
+  isDraft: boolean;
+  publishedAt: Date | null;
+  commentCount: number;
+  totalViews: number;
+  stepCount: number;
+  remakeCount: number;
+  deleted: boolean;
+
+  constructor(obj: AdminProject) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminProject) {
+    return new AdminProject({
+      id: obj.id,
+      title: obj.title,
+      slug: obj.slug,
+      author: obj.profile
+        ? { username: obj.profile.username, displayName: obj.profile.display_name }
+        : null,
+      category: obj.category?.name ?? null,
+      difficultyLevel: obj.difficulty_level,
+      moderation: obj.moderation,
+      isDraft: obj.is_draft || false,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
+      commentCount: obj.comment_count ?? 0,
+      totalViews: obj.total_views ?? 0,
+      stepCount: obj.steps[0]?.count ?? 0,
+      remakeCount: obj.remakes[0]?.count ?? 0,
+      deleted: obj.deleted || false,
+    });
+  }
+}

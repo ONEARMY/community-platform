@@ -56,6 +56,5 @@ export const FactoryAdminOrganisation = (
     moderation: 'awaiting-moderation',
     moderationFeedback: null,
     createdAt: faker.date.past(),
-    isMapPin: false,
     ...overloads,
   });

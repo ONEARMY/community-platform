@@ -1,6 +1,6 @@
 import type { DivIcon, Map as LeafletMap } from 'leaflet';
 import { observer } from 'mobx-react';
-import { Button, Icon, MapWithPin, ModerationRecord } from 'oa-components';
+import { Button, Icon, MapWithPin } from 'oa-components';
 import type { ILatLng, MapPin } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Field, Form } from 'react-final-form';
@@ -11,7 +11,6 @@ import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { getLocationData } from 'src/utils/getLocationData';
 import { Card, Flex, Heading, Text } from 'theme-ui';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { FlagIcon } from '@/components/ui/flag-icon';
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
@@ -29,6 +28,7 @@ export const SettingsPageMapPin = observer(() => {
   const { profile, isComplete } = useProfileStore();
 
   const isMember = !profile?.type?.isSpace;
+  const isPinPublic = isMember || profile?.moderation === 'accepted';
   const formId = 'MapSection';
 
   const initialValues = useMemo<{ location: ILatLng | null }>(() => {
@@ -108,9 +108,9 @@ export const SettingsPageMapPin = observer(() => {
           </Text>
         )}
 
-        {!isMember && mapPin?.moderation !== 'accepted' && (
-          <Text variant="quiet" data-cy="descriptionSpace" data-testid="descriptionSpace">
-            {mapForm.descriptionSpace}
+        {!isPinPublic && (
+          <Text variant="quiet" data-cy="notApprovedYet" data-testid="notApprovedYet">
+            {mapForm.notApprovedYet}
           </Text>
         )}
       </Flex>
@@ -132,27 +132,6 @@ export const SettingsPageMapPin = observer(() => {
                   >
                     {mapForm.noLocationLabel}
                   </Text>
-                )}
-
-                {mapPin && mapPin.moderation !== 'accepted' && (
-                  <Alert variant="warning">
-                    <AlertDescription size="xs">
-                      <div className="flex items-center gap-1">
-                        <span>
-                          Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
-                        </span>
-                        {mapPin.moderationFeedback && (
-                          <>
-                            -
-                            <span>
-                              Moderator feedback:{' '}
-                              <span className="font-bold">{mapPin.moderationFeedback}</span>
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </AlertDescription>
-                  </Alert>
                 )}
 
                 <Field

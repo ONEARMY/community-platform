@@ -1,11 +1,10 @@
 import { HTTPException } from 'hono/http-exception';
 import type { Moderation } from 'oa-shared';
-import { UserRole } from 'oa-shared';
+import { FEEDBACK_REQUIRED, MODERATIONS, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
 import { logger } from 'src/logger';
 import { requireRoleApi } from 'src/middleware/requireRole.server';
 import { sessionMiddleware } from 'src/middleware/session.server';
-import { FEEDBACK_REQUIRED, MODERATIONS } from 'src/pages/Admin/Organisations/moderation';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { MapServiceServer } from 'src/services/mapService.server';
 import { sendModerationEmail } from 'src/services/moderationEmailService.server';
@@ -31,7 +30,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw validationError('A valid id is required', 'id');
     }
 
-    const body = await request.json();
+    const body = await request.json().catch(() => {
+      throw validationError('Invalid request body');
+    });
     const moderation = body.moderation as Moderation;
 
     if (!MODERATIONS.includes(moderation)) {
@@ -51,28 +52,22 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client);
     const mapService = new MapServiceServer(client);
     const profile = await profileService.getById(id);
-    const isMapPin = !profile?.moderation && !!profile?.type?.is_space;
-    const current = isMapPin ? await mapService.getModerationByProfileId(id) : profile;
 
-    if (!profile || !current?.moderation) {
+    if (!profile?.moderation) {
       throw notFoundError('Organisation');
     }
 
     await mapService.updateModerationByProfileId(id, moderation, feedback);
-
-    if (!isMapPin) {
-      await profileService.updateModeration(id, moderation, feedback);
-    }
+    await profileService.updateModeration(id, moderation, feedback);
 
     const hasChanged =
-      current.moderation !== moderation || (current.moderation_feedback || null) !== feedback;
+      profile.moderation !== moderation || (profile.moderation_feedback || null) !== feedback;
 
     if (hasChanged && moderation !== 'awaiting-moderation') {
       await sendModerationEmail({
         authId: profile.auth_id,
         client,
         feedback,
-        isMapPin,
         moderation,
         requestOrigin: new URL(request.url).origin,
         username: profile.username,

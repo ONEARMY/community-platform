@@ -11,7 +11,7 @@ vi.mock('src/services/profileService.server');
 vi.mock('src/services/mapService.server');
 vi.mock('src/services/moderationEmailService.server');
 
-const setup = (profile: object | null = {}, pin: object | null = null) => {
+const setup = (profile: object | null = {}) => {
   (createSupabaseServerClient as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
     client: {},
     headers: new Headers(),
@@ -38,7 +38,6 @@ const setup = (profile: object | null = {}, pin: object | null = null) => {
 
   (MapServiceServer as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
     return {
-      getModerationByProfileId: vi.fn().mockResolvedValue(pin),
       updateModerationByProfileId,
     };
   });
@@ -77,6 +76,22 @@ describe('admin organisation moderation', () => {
     expect(updateModeration).not.toHaveBeenCalled();
   });
 
+  it('rejects a body that is not JSON', async () => {
+    const { updateModeration } = setup();
+
+    const res = (await action({
+      request: new Request('http://localhost/api/admin/organisations/7', {
+        method: 'PUT',
+        body: 'not json',
+      }),
+      params: { id: '7' },
+      context: {},
+    } as any)) as Response;
+
+    expect(res.status).toBe(400);
+    expect(updateModeration).not.toHaveBeenCalled();
+  });
+
   it('rejects feedback that is not text', async () => {
     const { updateModeration } = setup();
 
@@ -97,26 +112,18 @@ describe('admin organisation moderation', () => {
     expect(sendModerationEmail).not.toHaveBeenCalled();
   });
 
-  it('returns 404 for a member, even with a map pin', async () => {
-    const { updateModerationByProfileId } = setup(
-      { moderation: null, type: { is_space: false } },
-      { moderation: 'improvements-needed', moderation_feedback: null },
-    );
-
-    const res = await put({ moderation: 'accepted' });
-
-    expect(res.status).toBe(404);
-    expect(updateModerationByProfileId).not.toHaveBeenCalled();
-    expect(sendModerationEmail).not.toHaveBeenCalled();
-  });
-
-  it('returns 404 for an organisation with no status and no map pin', async () => {
-    const { updateModeration } = setup({ moderation: null, type: { is_space: true } });
+  it('returns 404 for a profile with no status, even with a map pin', async () => {
+    const { updateModeration, updateModerationByProfileId } = setup({
+      moderation: null,
+      type: { is_space: true },
+    });
 
     const res = await put({ moderation: 'accepted' });
 
     expect(res.status).toBe(404);
     expect(updateModeration).not.toHaveBeenCalled();
+    expect(updateModerationByProfileId).not.toHaveBeenCalled();
+    expect(sendModerationEmail).not.toHaveBeenCalled();
   });
 
   it('updates the profile and its map pin, then emails the organisation', async () => {
@@ -144,34 +151,6 @@ describe('admin organisation moderation', () => {
 
     expect(res.status).toBe(200);
     expect(updateModeration).toHaveBeenCalledWith(7, 'accepted', null);
-    expect(sendModerationEmail).not.toHaveBeenCalled();
-  });
-
-  it('updates only the map pin of an organisation from before the signup flow', async () => {
-    const { updateModeration, updateModerationByProfileId } = setup(
-      { moderation: null, type: { is_space: true } },
-      { moderation: 'improvements-needed', moderation_feedback: 'Add photos' },
-    );
-
-    const res = await put({ moderation: 'accepted' });
-
-    expect(res.status).toBe(200);
-    expect(updateModerationByProfileId).toHaveBeenCalledWith(7, 'accepted', null);
-    expect(updateModeration).not.toHaveBeenCalled();
-    expect(sendModerationEmail).toHaveBeenCalledWith(
-      expect.objectContaining({ isMapPin: true, moderation: 'accepted' }),
-    );
-  });
-
-  it('does not email when the map pin is unchanged', async () => {
-    setup(
-      { moderation: null, type: { is_space: true } },
-      { moderation: 'accepted', moderation_feedback: null },
-    );
-
-    const res = await put({ moderation: 'accepted' });
-
-    expect(res.status).toBe(200);
     expect(sendModerationEmail).not.toHaveBeenCalled();
   });
 

@@ -15,7 +15,6 @@ const organisations = [
     moderation: 'improvements-needed',
     moderationFeedback: 'Add a cover photo',
     createdAt: new Date('2026-10-12T10:00:00.000Z'),
-    isMapPin: true,
   }),
 ];
 
@@ -56,7 +55,6 @@ describe('OrganisationsPage', () => {
     expect(screen.getAllByText('Improvements Needed').length).toBeGreaterThan(0);
     expect(screen.getByText('Add a cover photo')).toBeInTheDocument();
     expect(screen.getByText('12 Oct 2026')).toBeInTheDocument();
-    expect(screen.getByText('Map pin only')).toBeInTheDocument();
   });
 
   it('shows an empty state', () => {

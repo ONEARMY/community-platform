@@ -4,26 +4,23 @@ import type { Database, Moderation, Profile, UpsertPin } from 'oa-shared';
 export class MapServiceServer {
   constructor(private client: SupabaseClient<Database>) {}
 
-  private pinModeration(profile: Profile, existingModeration?: Moderation): Moderation {
-    if (profile.type?.isSpace) {
-      return (
-        profile.moderation ??
-        (existingModeration === 'accepted' ? 'accepted' : 'awaiting-moderation')
-      );
+  private pinModeration(profile: Profile): Moderation {
+    if (!profile.type?.isSpace) {
+      return 'accepted';
     }
 
-    return 'accepted';
+    return profile.moderation ?? 'awaiting-moderation';
   }
 
   async upsert(pin: UpsertPin, profile: Profile) {
     const existingPin = await this.client
       .from('map_pins')
-      .select('id,moderation')
+      .select('id')
       .eq('profile_id', pin.profile_id);
     const existingPinId = existingPin.data?.at(0)?.id;
 
     if (existingPinId) {
-      const moderation = this.pinModeration(profile, existingPin.data![0].moderation);
+      const moderation = this.pinModeration(profile);
 
       return await this.client
         .from('map_pins')
@@ -149,22 +146,6 @@ export class MapServiceServer {
         )
         .single();
     }
-  }
-
-  async getModerationByProfileId(profileId: number) {
-    const { data, error } = await this.client
-      .from('map_pins')
-      .select('moderation,moderation_feedback')
-      .eq('profile_id', profileId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
   }
 
   async updateModerationByProfileId(

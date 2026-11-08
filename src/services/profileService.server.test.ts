@@ -21,12 +21,20 @@ const dbOrganisation: DBAdminOrganisation = {
   username: 'acme-lab',
   display_name: 'Acme Lab',
   about: 'We shred plastic',
-  type_name: 'Workspace',
+  type: { display_name: 'Workspace' },
   moderation: 'improvements-needed',
   moderation_feedback: 'Add a cover photo',
   created_at: '2026-10-12T10:00:00Z',
-  is_map_pin: true,
-  total_count: 41,
+};
+
+const organisationsClient = (result: { data: DBAdminOrganisation[]; count: number | null }) => {
+  const query: Record<string, ReturnType<typeof vi.fn>> = {};
+  for (const method of ['select', 'not', 'eq', 'or', 'order']) {
+    query[method] = vi.fn(() => query);
+  }
+  query.range = vi.fn().mockResolvedValue({ ...result, error: null });
+
+  return { client: { from: vi.fn(() => query) } as any, query };
 };
 
 describe('ProfileServiceServer', () => {
@@ -83,47 +91,61 @@ describe('ProfileServiceServer', () => {
 
   describe('getOrganisationsForModeration', () => {
     it('requests the page and status, and maps rows with the total count', async () => {
-      const { client, mocks } = createMockSupabaseClient();
-      mocks.rpc.mockResolvedValue({ data: [dbOrganisation], error: null });
+      const { client, query } = organisationsClient({ data: [dbOrganisation], count: 41 });
 
       const { organisations, totalCount } = await new ProfileServiceServer(
         client,
-      ).getOrganisationsForModeration('improvements-needed', 'acme', 3, 20);
-
-      expect(mocks.rpc).toHaveBeenCalledWith('get_admin_organisations', {
-        p_limit: 20,
-        p_offset: 40,
-        p_moderation: 'improvements-needed',
-        p_search: 'acme',
+      ).getOrganisationsForModeration({
+        moderation: 'improvements-needed',
+        search: 'acme',
+        page: 3,
+        pageSize: 20,
       });
+
+      expect(client.from).toHaveBeenCalledWith('profiles');
+      expect(query.not).toHaveBeenCalledWith('moderation', 'is', null);
+      expect(query.eq).toHaveBeenCalledWith('moderation', 'improvements-needed');
+      expect(query.or).toHaveBeenCalledWith('username.ilike."%acme%",display_name.ilike."%acme%"');
+      expect(query.range).toHaveBeenCalledWith(40, 59);
       expect(totalCount).toBe(41);
       expect(organisations[0]).toMatchObject({
         displayName: 'Acme Lab',
         typeName: 'Workspace',
+        moderation: 'improvements-needed',
         moderationFeedback: 'Add a cover photo',
-        isMapPin: true,
       });
       expect(organisations[0].createdAt).toEqual(new Date('2026-10-12T10:00:00Z'));
     });
 
     it('omits the status and search when not filtering', async () => {
-      const { client, mocks } = createMockSupabaseClient();
-      mocks.rpc.mockResolvedValue({ data: [], error: null });
+      const { client, query } = organisationsClient({ data: [], count: null });
 
-      const { totalCount } = await new ProfileServiceServer(client).getOrganisationsForModeration(
-        null,
-        null,
-        1,
-        20,
-      );
-
-      expect(mocks.rpc).toHaveBeenCalledWith('get_admin_organisations', {
-        p_limit: 20,
-        p_offset: 0,
-        p_moderation: undefined,
-        p_search: undefined,
+      const { totalCount } = await new ProfileServiceServer(client).getOrganisationsForModeration({
+        moderation: null,
+        search: null,
+        page: 1,
+        pageSize: 20,
       });
+
+      expect(query.eq).not.toHaveBeenCalled();
+      expect(query.or).not.toHaveBeenCalled();
+      expect(query.range).toHaveBeenCalledWith(0, 19);
       expect(totalCount).toBe(0);
+    });
+
+    it('quotes the search so it cannot add filters', async () => {
+      const { client, query } = organisationsClient({ data: [], count: 0 });
+
+      await new ProfileServiceServer(client).getOrganisationsForModeration({
+        moderation: null,
+        search: 'zz,roles.cs.{admin}"',
+        page: 1,
+        pageSize: 20,
+      });
+
+      expect(query.or).toHaveBeenCalledWith(
+        'username.ilike."%zz,roles.cs.{admin}\\"%",display_name.ilike."%zz,roles.cs.{admin}\\"%"',
+      );
     });
   });
 });

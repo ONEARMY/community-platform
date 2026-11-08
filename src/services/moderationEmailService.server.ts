@@ -2,7 +2,6 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Moderation } from 'oa-shared';
 import { createElement } from 'react';
 import { sendEmail } from 'src/.server/resend';
-import { MapPinModerationEmail } from 'src/.server/templates/map-pin-moderation-email';
 import { OrganisationApplicationEmail } from 'src/.server/templates/organisation-application-email';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 
@@ -19,7 +18,6 @@ type SendArgs = {
   authId: string | null;
   client: SupabaseClient<Database>;
   feedback: string | null;
-  isMapPin?: boolean;
   moderation: Moderation;
   requestOrigin: string;
   username: string | null;
@@ -29,12 +27,11 @@ export async function sendModerationEmail({
   authId,
   client,
   feedback,
-  isMapPin,
   moderation,
   requestOrigin,
   username,
 }: SendArgs): Promise<boolean> {
-  const subject = isMapPin ? 'Moderation update for your map pin' : SUBJECTS[moderation];
+  const subject = SUBJECTS[moderation];
 
   if (!authId || !username) {
     return false;
@@ -56,24 +53,15 @@ export async function sendModerationEmail({
       from: `${settings.messageSignOff} <${settings.emailFrom}>`,
       to: user.user.email,
       subject,
-      emailTemplate:
-        isMapPin && moderation !== 'awaiting-moderation'
-          ? createElement(MapPinModerationEmail, {
-              feedback,
-              mapUrl: `${siteUrl}/map#${username}`,
-              moderation,
-              settings,
-              settingsUrl: `${siteUrl}/settings/map`,
-            })
-          : createElement(OrganisationApplicationEmail, {
-              contactEmail: settings.emailFrom,
-              feedback,
-              moderation,
-              profileUrl: `${siteUrl}/u/${username}`,
-              settings,
-              settingsUrl: `${siteUrl}/settings/profile`,
-              username,
-            }),
+      emailTemplate: createElement(OrganisationApplicationEmail, {
+        contactEmail: settings.emailFrom,
+        feedback,
+        moderation,
+        profileUrl: `${siteUrl}/u/${username}`,
+        settings,
+        settingsUrl: `${siteUrl}/settings/profile`,
+        username,
+      }),
     });
 
     if (error) {

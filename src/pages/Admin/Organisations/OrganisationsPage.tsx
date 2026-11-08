@@ -1,5 +1,6 @@
 import { ModerationRecord } from 'oa-components';
 import type { AdminOrganisation, Moderation } from 'oa-shared';
+import { MODERATIONS } from 'oa-shared';
 import { type FormEvent, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
@@ -23,7 +24,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ModerateOrganisationDialog } from './ModerateOrganisationDialog';
-import { MODERATIONS } from './moderation';
 
 export type OrganisationStatusFilter = Moderation | 'all';
 
@@ -150,9 +150,6 @@ export function OrganisationsPage({ organisations, status, search, page, totalPa
                     <Badge variant={BADGE_VARIANTS[organisation.moderation]}>
                       {ModerationRecord[organisation.moderation]}
                     </Badge>
-                    {organisation.isMapPin && (
-                      <span className="text-xs text-muted-foreground">Map pin only</span>
-                    )}
                   </div>
                 </TableCell>
                 <TableCell truncate className="max-w-28" title={organisation.about ?? undefined}>

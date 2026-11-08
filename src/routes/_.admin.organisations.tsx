@@ -20,7 +20,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { organisations, totalCount } = await new ProfileServiceServer(
     client,
-  ).getOrganisationsForModeration(status === 'all' ? null : status, search, page, PAGE_SIZE);
+  ).getOrganisationsForModeration({
+    moderation: status === 'all' ? null : status,
+    search,
+    page,
+    pageSize: PAGE_SIZE,
+  });
   const totalPages = Math.ceil(totalCount / PAGE_SIZE) || 1;
 
   return { organisations, status, search, page, totalPages };

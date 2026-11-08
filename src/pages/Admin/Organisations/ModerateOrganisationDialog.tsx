@@ -1,5 +1,6 @@
 import { ModerationRecord } from 'oa-components';
 import type { AdminOrganisation, Moderation } from 'oa-shared';
+import { FEEDBACK_REQUIRED, MODERATIONS } from 'oa-shared';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useRevalidator } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';
@@ -21,7 +22,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { FEEDBACK_REQUIRED, MODERATIONS } from './moderation';
 
 interface IProps {
   organisation: AdminOrganisation | null;
@@ -80,13 +80,6 @@ export function ModerateOrganisationDialog({ organisation, onOpenChange }: IProp
           <DialogHeader>
             <DialogTitle>Moderate {organisation?.displayName}</DialogTitle>
           </DialogHeader>
-
-          {organisation?.isMapPin && (
-            <p className="text-sm text-muted-foreground">
-              This organisation joined before the new signup flow, so only its map pin is moderated.
-              Its profile stays public.
-            </p>
-          )}
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="organisation-moderation">Status</Label>

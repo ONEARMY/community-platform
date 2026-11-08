@@ -1,5 +1,5 @@
 import type { JSONContent } from '@tiptap/core';
-import type { Database, Json } from '../database';
+import type { Json } from '../database';
 import type { Comment } from './comment';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
@@ -581,8 +581,13 @@ export type SubscribedUser = {
   research_updates: boolean;
 };
 
-export type DBAdminOrganisation =
-  Database['public']['Functions']['get_admin_organisations']['Returns'][number];
+export type DBAdminOrganisation = Pick<
+  DBProfile,
+  'id' | 'username' | 'display_name' | 'about' | 'moderation_feedback' | 'created_at'
+> & {
+  moderation: Moderation;
+  type: Pick<DBProfileType, 'display_name'> | null;
+};
 
 export class AdminOrganisation {
   id: number;
@@ -593,7 +598,6 @@ export class AdminOrganisation {
   moderation: Moderation;
   moderationFeedback: string | null;
   createdAt: Date;
-  isMapPin: boolean;
 
   constructor(obj: AdminOrganisation) {
     Object.assign(this, obj);
@@ -605,11 +609,10 @@ export class AdminOrganisation {
       username: obj.username,
       displayName: obj.display_name,
       about: obj.about,
-      typeName: obj.type_name,
+      typeName: obj.type?.display_name ?? null,
       moderation: obj.moderation,
       moderationFeedback: obj.moderation_feedback,
       createdAt: new Date(obj.created_at),
-      isMapPin: obj.is_map_pin,
     });
   }
 }

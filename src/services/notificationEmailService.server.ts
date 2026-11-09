@@ -38,7 +38,7 @@ export class NotificationEmailServiceServer {
     dbNotification: DBNotification,
     excludeTriggerer: boolean,
   ) {
-    return emailSubscribers.filter((result) => {
+    return emailSubscribers.filter((result): result is SubscribedUser & { email: string } => {
       if (excludeTriggerer && result.profile_id === dbNotification.triggered_by_id) {
         return false;
       }
@@ -64,6 +64,7 @@ export class NotificationEmailServiceServer {
       }
 
       if (
+        !result.email ||
         result.email.endsWith('@example.com') ||
         result.email.endsWith('@test.com') ||
         result.email.endsWith('@resend.dev')

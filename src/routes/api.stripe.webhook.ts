@@ -52,20 +52,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           }
         }
         if (!authId) {
-          console.warn('Stripe customer not linked to any user:', customerId);
+          if (isActive) {
+            logger.info(
+              `Stripe customer ${customerId} paid for subscription ${subscription.id} but no account matches their email yet. They get their badge when they create or link an account. No action needed.`,
+            );
+          }
           break;
         }
 
         if (tenantId && isActive) {
           const productId = subscription.items.data[0]?.price?.product as string;
           if (!productId) {
-            console.warn('No product ID found on subscription:', subscription.id);
+            logger.warn(
+              `Subscription ${subscription.id} has no product, so Stripe customer ${customerId} did not get a badge.`,
+            );
             break;
           }
 
           const badgeId = await stripeAdmin.getBadgeIdForProduct(productId);
           if (!badgeId) {
-            console.warn('No badge mapping found for product:', productId);
+            logger.warn(
+              `No badge is linked to Stripe product ${productId}, so subscription ${subscription.id} did not get a badge. Link the product to a badge in Admin > Badges.`,
+            );
             break;
           }
 
@@ -85,7 +93,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           authId = await stripeService.getAuthIdByStripeCustomerEmail(customerId);
         }
         if (!authId) {
-          console.warn('Stripe customer not linked to any user:', customerId);
+          logger.info(
+            `Subscription ${subscription.id} ended for Stripe customer ${customerId}, who has no account, so there is no badge to remove. No action needed.`,
+          );
           break;
         }
 
@@ -98,7 +108,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       case 'invoice.payment_failed': {
         const invoice = event.data.object;
         const customerId = invoice.customer as string;
-        console.warn('Invoice payment failed for customer:', customerId, 'invoice:', invoice.id);
+
+        if (invoice.billing_reason === 'subscription_create') {
+          logger.info(
+            `First payment failed for a new subscription by Stripe customer ${customerId} (invoice ${invoice.id}). The supporter can try again at checkout. No action needed.`,
+          );
+          break;
+        }
+
+        logger.warn(
+          `Renewal payment failed for Stripe customer ${customerId} (invoice ${invoice.id}, attempt ${invoice.attempt_count}). ${
+            invoice.next_payment_attempt
+              ? 'Stripe will retry automatically.'
+              : 'Stripe has stopped retrying. Check the subscription in Stripe.'
+          }`,
+        );
         break;
       }
 

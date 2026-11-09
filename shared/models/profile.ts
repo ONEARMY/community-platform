@@ -572,7 +572,7 @@ export type UpsertPin = Omit<DBMapPin, 'id' | 'profile' | 'moderation' | 'modera
 export type SubscribedUser = {
   profile_id: number;
   profile_created_at: string;
-  email: string;
+  email: string | null;
   is_unsubscribed: boolean;
   badge_ids?: number[];
   roles?: string[];

@@ -34,6 +34,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
               status: subscription.status,
               cancelAtPeriodEnd: subscription.cancel_at_period_end,
               cancelAt: subscription.cancel_at,
+              pausedAt: subscription.status_details?.paused?.transitioned_at ?? null,
             }
           : null,
       },
@@ -167,6 +168,53 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
+    if (actionType === 'pause' || actionType === 'resume') {
+      const customerId = await stripeService.getCustomerByAuthId(claims.data!.claims!.sub);
+      const subscription = customerId
+        ? await StripeServiceServer.getSubscription(customerId)
+        : null;
+
+      if (!subscription) {
+        return Response.json(
+          { error: FRIENDLY_MESSAGES['supporter/no-membership'] },
+          { headers, status: 404 },
+        );
+      }
+
+      if (actionType === 'pause') {
+        if (subscription.status !== 'active' || subscription.cancel_at) {
+          return Response.json(
+            { error: FRIENDLY_MESSAGES['supporter/not-pausable'] },
+            { headers, status: 409 },
+          );
+        }
+
+        await StripeServiceServer.pauseSubscription(subscription.id);
+        return Response.json({}, { headers, status: 200 });
+      }
+
+      if (subscription.status !== 'paused') {
+        return Response.json(
+          { error: FRIENDLY_MESSAGES['supporter/not-paused'] },
+          { headers, status: 409 },
+        );
+      }
+
+      const result = await StripeServiceServer.resumeSubscription(subscription.id);
+      if (!result.resumed) {
+        const reason = result.paymentUrl
+          ? 'supporter/resume-payment-incomplete'
+          : 'supporter/resume-no-payment-method';
+
+        return Response.json(
+          { error: FRIENDLY_MESSAGES[reason], paymentUrl: result.paymentUrl },
+          { headers, status: 402 },
+        );
+      }
+
+      return Response.json({}, { headers, status: 200 });
+    }
+
     const { data: authUser } = await client.auth.getUser();
     if (!authUser.user?.email) {
       return Response.json({}, { headers, status: 400, statusText: 'user email not found' });
@@ -192,6 +240,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({}, { headers, status: 400, statusText: 'invalid action' });
   } catch (error: any) {
     logger.error(error);
+    if (actionType === 'pause' || actionType === 'resume') {
+      return Response.json(
+        { error: FRIENDLY_MESSAGES['supporter/membership-change-failed'] },
+        { headers, status: 500 },
+      );
+    }
     const message = error?.message || 'An unexpected error occurred';
     return Response.json({ error: message }, { headers, status: 500 });
   }

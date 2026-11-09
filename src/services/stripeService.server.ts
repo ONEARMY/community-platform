@@ -5,6 +5,7 @@ import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { getSecret } from 'src/services/secretsService.server';
 import Stripe from 'stripe';
+import { type BillingInterval, isBillingInterval } from './membership.server';
 
 export type SupporterPrice = {
   id: string;
@@ -14,6 +15,8 @@ export type SupporterPrice = {
   tier: number | null;
   tierName: string | null;
 };
+
+export type ResumeResult = { resumed: true } | { resumed: false; paymentUrl: string | null };
 
 export type TierConfigMap = Record<number, { color: string; name: string; description: string }>;
 
@@ -89,6 +92,11 @@ const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null 
   thankYouImageUrl: null,
 };
 
+const isMissingPaymentMethod = (error: unknown) =>
+  error instanceof Stripe.errors.StripeInvalidRequestError && error.code === 'resource_missing';
+
+const CURRENT_SUBSCRIPTION_STATUSES: Stripe.Subscription.Status[] = ['active', 'paused'];
+
 let stripeInstance: Stripe | null = null;
 let stripeUnavailable = false;
 
@@ -133,7 +141,7 @@ export class StripeServiceServer {
     }
   }
 
-  static async getPriceInterval(priceId: string): Promise<Stripe.Price.Recurring.Interval | null> {
+  static async getPriceInterval(priceId: string): Promise<BillingInterval | null> {
     const stripe = await getStripe();
     if (!stripe) {
       return null;
@@ -146,7 +154,9 @@ export class StripeServiceServer {
         return null;
       }
 
-      return price.recurring.interval;
+      const { interval } = price.recurring;
+
+      return isBillingInterval(interval) ? interval : null;
     } catch {
       return null;
     }
@@ -158,13 +168,54 @@ export class StripeServiceServer {
       return null;
     }
 
-    const subscriptions = await stripe.subscriptions.list({
-      customer: customerId,
-      status: 'active',
-      limit: 1,
-    });
+    const subscriptions = await stripe.subscriptions.list({ customer: customerId, limit: 100 });
 
-    return subscriptions.data[0] || null;
+    return (
+      subscriptions.data.find((subscription) =>
+        CURRENT_SUBSCRIPTION_STATUSES.includes(subscription.status),
+      ) ?? null
+    );
+  }
+
+  static async pauseSubscription(subscriptionId: string): Promise<void> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
+
+    await stripe.subscriptions.pause(subscriptionId, {
+      bill_for: { unused_time_from: { type: 'none' } },
+    });
+  }
+
+  static async resumeSubscription(subscriptionId: string): Promise<ResumeResult> {
+    const stripe = await getStripe();
+    if (!stripe) {
+      throw new Error('Stripe is not configured');
+    }
+
+    try {
+      const subscription = await stripe.subscriptions.resume(subscriptionId, {
+        payment_behavior: 'resume_on_payment_success',
+        expand: ['latest_invoice'],
+      });
+
+      if (subscription.status === 'active') {
+        return { resumed: true };
+      }
+
+      const invoice = subscription.latest_invoice as Stripe.Invoice | null;
+
+      return {
+        resumed: false,
+        paymentUrl: invoice?.status === 'open' ? (invoice.hosted_invoice_url ?? null) : null,
+      };
+    } catch (error) {
+      if (isMissingPaymentMethod(error)) {
+        return { resumed: false, paymentUrl: null };
+      }
+      throw error;
+    }
   }
 
   static async cancelActiveSubscriptions(customerId: string): Promise<number> {
@@ -492,7 +543,7 @@ export class StripeServiceServer {
             }
             const amount =
               opts.unit_amount ??
-              (opts.unit_amount_decimal ? Math.round(parseFloat(opts.unit_amount_decimal)) : null);
+              (opts.unit_amount_decimal ? Math.round(Number(opts.unit_amount_decimal)) : null);
             if (amount != null) {
               entries.push({
                 id: p.id,
@@ -635,6 +686,22 @@ export class StripeAdminService {
       .single();
 
     return data?.badge_id ?? null;
+  }
+
+  async assignBadgeForActiveSubscription(
+    subscription: Stripe.Subscription | null,
+    authId: string,
+    tenantId: string,
+  ): Promise<void> {
+    if (subscription?.status !== 'active') {
+      return;
+    }
+
+    const productId = subscription.items.data[0]?.price?.product as string;
+    const badgeId = productId ? await this.getBadgeIdForProduct(productId) : null;
+    if (badgeId) {
+      await this.assignBadgeForSubscription(authId, tenantId, badgeId);
+    }
   }
 
   async assignBadgeForSubscription(

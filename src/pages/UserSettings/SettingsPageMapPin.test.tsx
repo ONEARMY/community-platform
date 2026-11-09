@@ -72,7 +72,7 @@ describe('SettingsPageMapPin', () => {
 
     await waitFor(() => {
       expect(wrapper.getAllByTestId('descriptionMember')).toHaveLength(1);
-      expect(wrapper.queryAllByTestId('descriptionSpace')).toHaveLength(0);
+      expect(wrapper.queryAllByTestId('notApprovedYet')).toHaveLength(0);
     });
   });
 
@@ -112,9 +112,71 @@ describe('SettingsPageMapPin', () => {
 
     await waitFor(() => {
       expect(wrapper.queryAllByTestId('descriptionMember')).toHaveLength(0);
-      expect(wrapper.getAllByTestId('descriptionSpace')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('notApprovedYet')).toHaveLength(1);
       expect(wrapper.getAllByText(mockPin.name, { exact: false })).toHaveLength(1);
-      expect(wrapper.getAllByText(moderationFeedback, { exact: false })).toHaveLength(1);
+      expect(wrapper.queryAllByText(moderationFeedback, { exact: false })).toHaveLength(0);
+    });
+  });
+
+  it('lets an organisation awaiting approval add a pin that is not public yet', async () => {
+    const mockUser = FactoryUser({
+      displayName: 'Jeffo',
+      type: { id: 1, name: 'workspace', isSpace: true } as ProfileType,
+      moderation: 'awaiting-moderation',
+    });
+    mockUseProfileStore.mockReturnValue({ profile: mockUser, update: vi.fn(), isComplete: true });
+    mockGetCurrentUserMapPin.mockResolvedValue(null);
+
+    let wrapper;
+    act(() => {
+      wrapper = FormProvider(<SettingsPageMapPin />);
+    });
+
+    await waitFor(() => {
+      expect(wrapper.getAllByTestId('notApprovedYet')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('NoLocationDataTextDisplay')).toHaveLength(1);
+    });
+  });
+
+  it('treats the organisation, not an old pin status, as what makes the pin public', async () => {
+    const mockUser = FactoryUser({
+      displayName: 'Jeffo',
+      type: { id: 1, name: 'workspace', isSpace: true } as ProfileType,
+      moderation: null,
+    });
+    mockUseProfileStore.mockReturnValue({ profile: mockUser, update: vi.fn(), isComplete: true });
+    mockGetCurrentUserMapPin.mockResolvedValue(
+      FactoryMapPin({ moderation: 'accepted', profile: mockUser as PinProfile }),
+    );
+
+    let wrapper;
+    act(() => {
+      wrapper = FormProvider(<SettingsPageMapPin />);
+    });
+
+    await waitFor(() => {
+      expect(wrapper.getAllByTestId('LocationDataTextDisplay')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('notApprovedYet')).toHaveLength(1);
+    });
+  });
+
+  it('shows no approval note to an approved organisation', async () => {
+    const mockUser = FactoryUser({
+      displayName: 'Jeffo',
+      type: { id: 1, name: 'workspace', isSpace: true } as ProfileType,
+      moderation: 'accepted',
+    });
+    mockUseProfileStore.mockReturnValue({ profile: mockUser, update: vi.fn(), isComplete: true });
+    mockGetCurrentUserMapPin.mockResolvedValue(null);
+
+    let wrapper;
+    act(() => {
+      wrapper = FormProvider(<SettingsPageMapPin />);
+    });
+
+    await waitFor(() => {
+      expect(wrapper.queryAllByTestId('notApprovedYet')).toHaveLength(0);
+      expect(wrapper.getAllByTestId('NoLocationDataTextDisplay')).toHaveLength(1);
     });
   });
 

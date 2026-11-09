@@ -1,14 +1,17 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import type {
   Database,
+  DBAdminOrganisation,
   DBAuthorVotes,
   DBMedia,
   DBProfile,
   Moderation,
   ProfileDTO,
 } from 'oa-shared';
+import { AdminOrganisation } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
+import { escapeFilterValue } from 'src/utils/helpers';
 
 type CreateOrganisationProfileArgs = {
   authId: string;
@@ -289,23 +292,50 @@ export class ProfileServiceServer {
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
   }
 
-  // TODO: needs admin page created
-  async getProfilesAwaitingModeration() {
-    const { data, error } = await this.client
+  async getOrganisationsForModeration({
+    moderation,
+    search,
+    page,
+    pageSize,
+  }: {
+    moderation: Moderation | null;
+    search: string | null;
+    page: number;
+    pageSize: number;
+  }) {
+    let query = this.client
       .from('profiles')
-      .select('id, username, display_name, moderation, moderation_feedback, created_at')
-      .not('moderation', 'is', null)
-      .neq('moderation', 'accepted')
-      .order('created_at', { ascending: true });
+      .select(
+        'id,username,display_name,about,moderation,moderation_feedback,created_at,type:profile_types(display_name)',
+        { count: 'exact' },
+      )
+      .not('moderation', 'is', null);
+
+    if (moderation) {
+      query = query.eq('moderation', moderation);
+    }
+
+    if (search) {
+      const term = escapeFilterValue(search);
+      query = query.or(`username.ilike."%${term}%",display_name.ilike."%${term}%"`);
+    }
+
+    const from = (page - 1) * pageSize;
+    const { data, count, error } = await query
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(from, from + pageSize - 1);
 
     if (error) {
       throw error;
     }
 
-    return data ?? [];
+    return {
+      organisations: (data as unknown as DBAdminOrganisation[]).map(AdminOrganisation.fromDB),
+      totalCount: count ?? 0,
+    };
   }
 
-  // TODO: needs admin page created
   async updateModeration(
     id: number,
     moderation: Moderation,

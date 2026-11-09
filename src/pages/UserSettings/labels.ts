@@ -209,12 +209,12 @@ export const mapForm = {
   confirmDeletePin:
     'If you delete your location now, adding a new map pin in the future might need approving.',
   descriptionMember: 'Add yourself to the map so that people can reach out and collaborate!',
-  descriptionSpace: "Map pins undergo moderator's approval which might take several days.",
   loading: 'Loading your map pin',
   locationLabel: 'Your current map pin is here:',
   needsChanges:
     'This map pin has been marked as requiring further changes. Specifically the moderator comments are:',
   noLocationLabel: 'No map pin currently saved',
+  notApprovedYet: 'Your pin will show on the map once your organisation has been approved.',
   successfulSave: 'Map pin saved successfully - whoop',
   successfulDelete: 'Location data removed',
 };

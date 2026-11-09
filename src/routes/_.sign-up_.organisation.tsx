@@ -14,7 +14,7 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import { getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
-import { bool, object, string } from 'yup';
+import { bool, object, ref, string } from 'yup';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -124,6 +124,9 @@ export default function Index() {
     password: string()
       .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])
       .required(FRIENDLY_MESSAGES['sign-up/password-required']),
+    'confirm-password': string()
+      .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
+      .required(FRIENDLY_MESSAGES['sign-up/password-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
     'cf-turnstile-token': string().required(FRIENDLY_MESSAGES['sign-up/captcha-required']),
   });
@@ -216,6 +219,18 @@ export default function Index() {
                           type="password"
                           component={TextInputField}
                           placeholder="Password"
+                          validate={required}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <Label htmlFor="confirm-password">Confirm Password</Label>
+                        <Field
+                          id="confirm-password"
+                          data-cy="confirm-password"
+                          name="confirm-password"
+                          type="password"
+                          component={TextInputField}
+                          placeholder="Confirm your Password"
                           validate={required}
                         />
                       </div>

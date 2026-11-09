@@ -580,3 +580,39 @@ export type SubscribedUser = {
   comments: boolean;
   research_updates: boolean;
 };
+
+export type DBAdminOrganisation = Pick<
+  DBProfile,
+  'id' | 'username' | 'display_name' | 'about' | 'moderation_feedback' | 'created_at'
+> & {
+  moderation: Moderation;
+  type: Pick<DBProfileType, 'display_name'> | null;
+};
+
+export class AdminOrganisation {
+  id: number;
+  username: string | null;
+  displayName: string;
+  about: string | null;
+  typeName: string | null;
+  moderation: Moderation;
+  moderationFeedback: string | null;
+  createdAt: Date;
+
+  constructor(obj: AdminOrganisation) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminOrganisation) {
+    return new AdminOrganisation({
+      id: obj.id,
+      username: obj.username,
+      displayName: obj.display_name,
+      about: obj.about,
+      typeName: obj.type?.display_name ?? null,
+      moderation: obj.moderation,
+      moderationFeedback: obj.moderation_feedback,
+      createdAt: new Date(obj.created_at),
+    });
+  }
+}

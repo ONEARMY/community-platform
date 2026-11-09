@@ -9,3 +9,12 @@ export interface IDBModeration {
 }
 
 export type Moderation = 'awaiting-moderation' | 'improvements-needed' | 'rejected' | 'accepted';
+
+export const MODERATIONS: Moderation[] = [
+  'awaiting-moderation',
+  'improvements-needed',
+  'rejected',
+  'accepted',
+];
+
+export const FEEDBACK_REQUIRED: Moderation[] = ['improvements-needed', 'rejected'];

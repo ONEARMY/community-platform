@@ -1,5 +1,5 @@
-import { TabPanel } from '@mui/base/TabPanel';
 import { Card } from '@theme-ui/components';
+import { TabsContent } from '@/components/ui/tabs';
 
 import type { ISettingsTab } from './types';
 
@@ -19,10 +19,7 @@ export const SettingsFormTab = (props: IProps) => {
   };
 
   return (
-    <TabPanel
-      value={value}
-      style={{ display: 'flex', flexDirection: 'column', alignSelf: 'stretch' }}
-    >
+    <TabsContent value={value} className="flex flex-col">
       {tab.header && (
         <Card sx={{ ...sx, backgroundColor: 'softblue', padding: [3, 5] }}>{tab.header}</Card>
       )}
@@ -30,6 +27,6 @@ export const SettingsFormTab = (props: IProps) => {
       <Card sx={sx}>
         <tab.body />
       </Card>
-    </TabPanel>
+    </TabsContent>
   );
 };

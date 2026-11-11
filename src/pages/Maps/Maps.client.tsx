@@ -9,6 +9,7 @@ import {
 } from 'src/pages/common/Header/navLayout';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { Box, Flex } from 'theme-ui';
+import { ContactDialog } from '@/components/ui/contact-dialog';
 import { MapList } from './Content/MapView/MapList';
 import { MapView } from './Content/MapView/MapView.client';
 import { MapContext } from './MapContext';
@@ -42,6 +43,7 @@ const MapsPage = () => {
   const [zoom, setZoom] = useState<number>(2);
   const [mapRef, setMapRef] = useState<LeafletMap | null>(null);
   const [clusterGroupRef, setClusterGroupRef] = useState<any>(null);
+  const [contactUser, setContactUser] = useState<MapPin['profile'] | null>(null);
 
   const updateMapView = useCallback(
     (location: ILatLng, zoomLevel: number) => {
@@ -309,11 +311,20 @@ const MapsPage = () => {
             height: '100%',
           }}
         >
-          <MapList />
+          <MapList onSendMessage={(pin) => setContactUser(pin.profile)} />
 
-          <MapView />
+          <MapView onSendMessage={(pin) => setContactUser(pin.profile)} />
         </Flex>
       </Box>
+      <ContactDialog
+        open={!!contactUser}
+        onOpenChange={(open) => {
+          if (!open) {
+            setContactUser(null);
+          }
+        }}
+        user={contactUser}
+      />
     </MapContext.Provider>
   );
 };

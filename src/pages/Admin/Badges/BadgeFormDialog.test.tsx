@@ -159,6 +159,7 @@ describe('BadgeFormDialog', () => {
       imageUrl: 'https://example.com/badge.svg',
       actionUrl: null,
       isAudience: true,
+      isDisabled: false,
       grantsBadgeId: null,
       availableTo: null,
       actionLabel: null,

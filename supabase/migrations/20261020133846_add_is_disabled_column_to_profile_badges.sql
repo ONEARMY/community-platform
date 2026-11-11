@@ -1,0 +1,1 @@
+alter table "public"."profile_badges" add column "is_disabled" boolean default false;

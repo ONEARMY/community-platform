@@ -646,6 +646,7 @@ export type Database = {
           id: number;
           image_url: string;
           is_audience: boolean;
+          is_disabled: boolean;
           name: string;
           premium_tier: number | null;
           tenant_id: string;
@@ -659,6 +660,7 @@ export type Database = {
           id?: number;
           image_url: string;
           is_audience?: boolean;
+          is_disabled?: boolean;
           name: string;
           premium_tier?: number | null;
           tenant_id: string;
@@ -672,6 +674,7 @@ export type Database = {
           id?: number;
           image_url?: string;
           is_audience?: boolean;
+          is_disabled?: boolean;
           name?: string;
           premium_tier?: number | null;
           tenant_id?: string;

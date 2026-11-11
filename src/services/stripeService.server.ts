@@ -644,7 +644,9 @@ export class StripeAdminService {
   ): Promise<void> {
     const profileId = await this.getProfileIdByAuthId(authId, tenantId);
     if (!profileId) {
-      console.warn('No profile found for auth_id:', authId);
+      logger.warn(
+        `Account ${authId} has a paid subscription but no profile in tenant ${tenantId}, so it did not get a badge.`,
+      );
       return;
     }
 
@@ -686,7 +688,9 @@ export class StripeAdminService {
   async removeTierBadges(authId: string, tenantId: string): Promise<void> {
     const profileId = await this.getProfileIdByAuthId(authId, tenantId);
     if (!profileId) {
-      console.warn('No profile found for auth_id:', authId);
+      logger.info(
+        `Account ${authId} has no profile in tenant ${tenantId}, so there are no badges to remove. No action needed.`,
+      );
       return;
     }
 

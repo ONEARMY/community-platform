@@ -86,9 +86,9 @@ export const QuestionListing = () => {
         showDrafts={showDrafts}
       />
 
-      {questions?.length === 0 && !isFetching && (
+      {!showDrafts && questions?.length === 0 && !isFetching && (
         <Heading as="h1" sx={{ marginTop: 4 }}>
-          {listing.noQuestions}
+          {q.trim() || category ? listing.noQuestionsMatch : listing.noQuestions}
         </Heading>
       )}
 

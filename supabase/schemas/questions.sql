@@ -60,21 +60,25 @@ CREATE OR REPLACE FUNCTION public.get_questions(search_query text DEFAULT NULL::
 AS $function$
 DECLARE
   ts_query tsquery;
+  simple_ts_query tsquery;
+  tsquery_expr text;
 BEGIN
+  search_query := NULLIF(trim(search_query), '');
+
   IF search_query IS NOT NULL THEN
-    -- Split search query into words and create prefix-matching tsquery with AND logic
-    -- Sanitize each word to prevent tsquery injection
-    ts_query := to_tsquery('english', 
-      array_to_string(
-        ARRAY(
-          SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
-          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
-          WHERE word != '' 
-            AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
-        ),
-        ' & '
-      )
+    tsquery_expr := array_to_string(
+      ARRAY(
+        SELECT quote_literal(word) || ':*'
+        FROM regexp_split_to_table(lower(search_query), '[^a-z0-9_-]+') AS word
+        WHERE word ~ '[a-z0-9]'
+      ),
+      ' & '
     );
+
+    IF tsquery_expr != '' THEN
+      ts_query := to_tsquery('english', tsquery_expr);
+      simple_ts_query := to_tsquery('simple', tsquery_expr);
+    END IF;
   END IF;
 
   RETURN QUERY
@@ -121,14 +125,32 @@ BEGIN
   JOIN profiles prof ON prof.id = q.created_by
   WHERE
     (search_query IS NULL OR
-     q.fts @@ ts_query OR
+     (ts_query IS NOT NULL AND numnode(ts_query) > 0 AND q.fts @@ ts_query) OR
+     (simple_ts_query IS NOT NULL AND numnode(simple_ts_query) > 0 AND
+       (setweight(to_tsvector('simple', q.title), 'A') || setweight(to_tsvector('simple', q.description), 'B')) @@ simple_ts_query) OR
      prof.username ILIKE '%' || search_query || '%'
     ) AND
     (category_id IS NULL OR q.category = category_id) AND
     q.is_draft = FALSE AND
     (q.deleted IS NULL OR q.deleted = FALSE)
   ORDER BY
-    CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(q.fts, ts_query) END DESC NULLS LAST,
+    CASE
+      WHEN search_query IS NOT NULL THEN
+        COALESCE(
+          CASE WHEN ts_query IS NOT NULL AND numnode(ts_query) > 0 THEN ts_rank_cd(q.fts, ts_query) END,
+          0
+        ) +
+        COALESCE(
+          CASE
+            WHEN simple_ts_query IS NOT NULL AND numnode(simple_ts_query) > 0 THEN
+              ts_rank_cd(
+                setweight(to_tsvector('simple', q.title), 'A') || setweight(to_tsvector('simple', q.description), 'B'),
+                simple_ts_query
+              )
+          END,
+          0
+        )
+    END DESC NULLS LAST,
     CASE
       WHEN sort_by = 'Newest' THEN extract(epoch from q.published_at)
       WHEN sort_by = 'Comments' THEN q.comment_count
@@ -150,21 +172,25 @@ CREATE OR REPLACE FUNCTION public.get_questions_count(search_query text DEFAULT 
 AS $function$
 DECLARE
   ts_query tsquery;
+  simple_ts_query tsquery;
+  tsquery_expr text;
 BEGIN
+  search_query := NULLIF(trim(search_query), '');
+
   IF search_query IS NOT NULL THEN
-    -- Split search query into words and create prefix-matching tsquery with AND logic
-    -- Sanitize each word to prevent tsquery injection
-    ts_query := to_tsquery('english', 
-      array_to_string(
-        ARRAY(
-          SELECT quote_literal(regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g')) || ':*'
-          FROM unnest(string_to_array(trim(search_query), ' ')) AS word
-          WHERE word != '' 
-            AND regexp_replace(lower(word), '[^a-z0-9_-]', '', 'g') != ''
-        ),
-        ' & '
-      )
+    tsquery_expr := array_to_string(
+      ARRAY(
+        SELECT quote_literal(word) || ':*'
+        FROM regexp_split_to_table(lower(search_query), '[^a-z0-9_-]+') AS word
+        WHERE word ~ '[a-z0-9]'
+      ),
+      ' & '
     );
+
+    IF tsquery_expr != '' THEN
+      ts_query := to_tsquery('english', tsquery_expr);
+      simple_ts_query := to_tsquery('simple', tsquery_expr);
+    END IF;
   END IF;
 
   RETURN (
@@ -173,7 +199,9 @@ BEGIN
     INNER JOIN profiles prof ON prof.id = q.created_by
     WHERE
       (search_query IS NULL OR
-       q.fts @@ ts_query OR
+       (ts_query IS NOT NULL AND numnode(ts_query) > 0 AND q.fts @@ ts_query) OR
+       (simple_ts_query IS NOT NULL AND numnode(simple_ts_query) > 0 AND
+         (setweight(to_tsvector('simple', q.title), 'A') || setweight(to_tsvector('simple', q.description), 'B')) @@ simple_ts_query) OR
        prof.username ILIKE '%' || search_query || '%'
       ) AND
       (category_id IS NULL OR q.category = category_id) AND

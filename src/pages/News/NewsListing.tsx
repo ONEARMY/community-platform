@@ -9,6 +9,7 @@ import { Spinner } from '@/components/ui/spinner';
 import useDrafts from '../common/Drafts/useDraftsSupabase';
 import { ITEMS_PER_PAGE } from './constants';
 import { listing } from './labels';
+import { NewMemberChecklist } from './NewMemberChecklist';
 import { NewsListHeader } from './NewsListHeader';
 import { NewsListItem } from './NewsListItem';
 import type { NewsSortOption } from './NewsSortOptions';
@@ -78,48 +79,56 @@ export const NewsListing = () => {
         showDrafts={showDrafts}
       />
 
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          gap: [2, 4],
-          width: '100%',
-          maxWidth: '650px',
-        }}
-      >
-        {news?.length === 0 && !isFetching && (
-          <Heading as="h1" sx={{ marginTop: 4 }}>
-            {listing.noNews}
-          </Heading>
-        )}
+      <div className="flex w-full flex-col items-center xl:flex-row xl:items-start">
+        <div className="hidden xl:block xl:flex-1" />
 
-        {newsList && newsList.length > 0 && (
-          <Flex
-            as="ul"
-            sx={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              flexDirection: 'column',
-              gap: [2, 4],
-            }}
-            variant="responsive"
-          >
-            {newsList.map((news, index) => (
-              <NewsListItem key={index} news={news} query={q} />
-            ))}
-          </Flex>
-        )}
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            gap: [2, 4],
+            width: '100%',
+            maxWidth: '650px',
+          }}
+        >
+          {news?.length === 0 && !isFetching && (
+            <Heading as="h1" sx={{ marginTop: 4 }}>
+              {listing.noNews}
+            </Heading>
+          )}
 
-        {showLoadMore && (
-          <Flex sx={{ justifyContent: 'center' }}>
-            <Pagination
-              totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
-              onPageChange={updatePageNumber}
-              page={pageNumber}
-            />
-          </Flex>
-        )}
-      </Flex>
+          {newsList && newsList.length > 0 && (
+            <Flex
+              as="ul"
+              sx={{
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                flexDirection: 'column',
+                gap: [2, 4],
+              }}
+              variant="responsive"
+            >
+              {newsList.map((news, index) => (
+                <NewsListItem key={index} news={news} query={q} />
+              ))}
+            </Flex>
+          )}
+
+          {showLoadMore && (
+            <Flex sx={{ justifyContent: 'center' }}>
+              <Pagination
+                totalPages={Math.ceil(total / ITEMS_PER_PAGE)}
+                onPageChange={updatePageNumber}
+                page={pageNumber}
+              />
+            </Flex>
+          )}
+        </Flex>
+
+        <div className="order-first w-full max-w-130 xl:order-none xl:max-w-none xl:flex-1">
+          <NewMemberChecklist className="mb-2 sm:mb-3 xl:mx-4 xl:mb-0 xl:min-w-60 xl:max-w-66" />
+        </div>
+      </div>
       {(isFetching || isFetchingDrafts) && <Spinner />}
     </Flex>
   );

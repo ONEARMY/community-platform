@@ -99,6 +99,7 @@ CREATE INDEX "idx_profile_types_tenant_id" ON "public"."profile_types" USING "bt
 CREATE INDEX "idx_profiles_profile_type" ON "public"."profiles" USING "btree" ("profile_type");
 
 CREATE INDEX "profile_badges_relations_profile_tenant_idx" ON "public"."profile_badges_relations" USING "btree" ("profile_id", "tenant_id");
+CREATE UNIQUE INDEX "profile_badges_relations_profile_id_badge_id_key" ON "public"."profile_badges_relations" USING "btree" ("profile_id", "profile_badge_id");
 CREATE INDEX "profile_tags_relations_profile_tenant_idx" ON "public"."profile_tags_relations" USING "btree" ("profile_id", "tenant_id");
 CREATE INDEX "profiles_firebase_auth_id_idx" ON "public"."profiles" USING "btree" ("firebase_auth_id");
 CREATE INDEX "profiles_tenant_created_at_idx" ON "public"."profiles" USING "btree" ("tenant_id", "created_at" DESC);

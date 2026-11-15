@@ -675,11 +675,14 @@ export class StripeAdminService {
     }
 
     // Assign the new badge
-    const { error: insertError } = await this.client.from('profile_badges_relations').insert({
-      profile_id: profileId,
-      profile_badge_id: badgeId,
-      tenant_id: tenantId,
-    });
+    const { error: insertError } = await this.client.from('profile_badges_relations').upsert(
+      {
+        profile_id: profileId,
+        profile_badge_id: badgeId,
+        tenant_id: tenantId,
+      },
+      { onConflict: 'profile_id,profile_badge_id', ignoreDuplicates: true },
+    );
     if (insertError) {
       throw insertError;
     }

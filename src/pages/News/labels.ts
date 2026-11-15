@@ -57,6 +57,21 @@ export const fields: ILabels = {
   },
 };
 
+export const checklist = {
+  title: 'Get started on the community',
+  nextStep: 'Next step',
+  hideSteps: 'Hide steps',
+  showSteps: 'Show steps',
+  progress: 'Onboarding progress',
+  done: "I'm all set up",
+  actions: {
+    createAccount: 'Create your account',
+    completeProfile: 'Complete your profile',
+    shareWithFriend: 'Share with a friend',
+    downloadApp: 'Download the app',
+  },
+};
+
 export const listing = {
   create: 'Add news',
   filterCategory: 'Filter by category',

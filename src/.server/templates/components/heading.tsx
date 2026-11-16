@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heading as HeadingComp } from 'react-email';
+import { emailFontFamily } from '../styles';
 
 interface IProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ export const Heading = ({ as, children, customStyle }: IProps) => (
       color: '#2e2e2e',
       lineHeight: 1.2,
       fontWeight: 'normal',
-      fontFamily: "'Inter', Arial, sans-serif",
+      fontFamily: emailFontFamily,
       marginBottom: '12px',
       padding: '0',
       ...customStyle,

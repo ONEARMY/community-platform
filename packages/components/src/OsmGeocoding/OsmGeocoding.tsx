@@ -1,3 +1,4 @@
+import { commonStyles } from 'oa-themes';
 import { useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -107,7 +108,7 @@ export const OsmGeocoding = ({
         }}
         additionalStyle={{
           background: 'white',
-          fontFamily: 'Varela Round',
+          fontFamily: commonStyles.fontFamily.title,
           fontSize: '14px',
           border: '2px solid black',
           height: '44px',

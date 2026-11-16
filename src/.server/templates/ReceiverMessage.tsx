@@ -1,5 +1,6 @@
 import { Body, Container, Head, Html, Img, Preview, Section } from 'react-email';
 import { MessageSettings } from '../models/messageSettings';
+import { emailFontFamily } from './styles';
 
 type ReceiverMessageArgs = {
   messengerEmailAddress: string;
@@ -30,7 +31,7 @@ export default function ReceiverMessage({
       <Body
         style={{
           backgroundColor: '#f4f6f7',
-          fontFamily: "'Inter', Arial, sans-serif",
+          fontFamily: emailFontFamily,
           fontSize: '14px',
           color: '#000000',
         }}

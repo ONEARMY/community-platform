@@ -1,3 +1,4 @@
+import { commonStyles } from 'oa-themes';
 import { useEffect, useState } from 'react';
 import { Box, Flex, Input, Text } from 'theme-ui';
 import { useDebouncedCallback } from 'use-debounce';
@@ -125,7 +126,7 @@ export const Pagination = ({ totalPages, page, onPageChange }: Props) => {
               justifyItems: 'center',
               backgroundColor: 'white',
               fontSize: 3,
-              fontFamily: "'Varela Round',Arial,sans-serif",
+              fontFamily: commonStyles.fontFamily.title,
             }}
           />
 

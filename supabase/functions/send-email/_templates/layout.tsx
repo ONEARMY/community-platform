@@ -1,6 +1,7 @@
 // Similar to src/.server/templates/Layout.tsx
 
 import React from 'react';
+import { emailFontFamily } from './styles.ts';
 import { Body, Container, Head, Html, Img, Link, Preview, Section } from 'react-email';
 
 import { Footer } from './components/footer.tsx';
@@ -9,7 +10,7 @@ import type { TenantSettings } from 'oa-shared';
 
 const body = {
   backgroundColor: '#f4f6f7',
-  fontFamily: '"Varela Round", Arial, sans-serif',
+  fontFamily: emailFontFamily,
   fontSize: '14px',
   color: '#000000',
   maxWidth: '100%',

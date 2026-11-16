@@ -1,3 +1,4 @@
+import { commonStyles } from 'oa-themes';
 import { useId } from 'react';
 import type { OptionsOrGroups, Props as ReactSelectProps, StylesConfig } from 'react-select';
 import ReactSelect from 'react-select';
@@ -33,7 +34,7 @@ export const Select = (props: Props) => {
     container: (provided) => ({
       ...provided,
       fontSize: theme.fontSizes[1] + 'px',
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       height: '100%',
     }),
     control: (provided) => ({
@@ -136,7 +137,7 @@ export const Select = (props: Props) => {
     container: (provided) => ({
       ...provided,
       fontSize: theme.fontSizes[2] + 'px',
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       border: '2px solid ' + theme.colors.black,
       borderRadius: '5px',
       color: theme.colors.black,

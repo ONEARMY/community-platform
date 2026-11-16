@@ -4,6 +4,7 @@ import type { TenantSettings } from 'oa-shared';
 import React from 'react';
 import { Body, Container, Head, Html, Img, Link, Preview, Section } from 'react-email';
 import { Footer } from './components/footer';
+import { emailFontFamily } from './styles';
 
 const link = {
   color: '#27272c',
@@ -45,7 +46,7 @@ export const Layout = (props: LayoutArgs) => {
       <Body
         style={{
           backgroundColor: '#f4f6f7',
-          fontFamily: "'Inter', Arial, sans-serif",
+          fontFamily: emailFontFamily,
           fontSize: '14px',
           color: '#000000',
           maxWidth: '100%',

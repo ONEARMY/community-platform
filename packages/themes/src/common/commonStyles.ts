@@ -47,7 +47,7 @@ export const commonStyles = {
     fontWeight: 'normal',
   },
   fontFamily: {
-    title: `"Varela Round", Arial, sans-serif`,
+    title: 'var(--brand-font-heading, "Varela Round", Arial, sans-serif)',
     body: `'Inter', Arial, sans-serif`,
     nav: `'Klima', 'Inter', Arial, sans-serif`,
   },

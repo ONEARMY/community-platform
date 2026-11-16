@@ -4,7 +4,7 @@ import { commonStyles, GlobalFonts } from 'oa-themes';
 export const GlobalStyles = css`
   ${GlobalFonts}
   body {
-    font-family: 'Varela Round', Arial, sans-serif;
+    font-family: ${commonStyles.fontFamily.title};
     background-color: ${commonStyles.colors.background};
     margin: 0;
     padding: 0;

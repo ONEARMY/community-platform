@@ -1,7 +1,7 @@
 import { commonStyles } from './commonStyles';
 
 const BASE_BUTTON = {
-  fontFamily: '"Varela Round", Arial, sans-serif',
+  fontFamily: commonStyles.fontFamily.title,
   fontSize: 3,
   display: 'inline-flex',
   cursor: 'pointer',

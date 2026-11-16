@@ -5,6 +5,8 @@ import { theme } from 'oa-themes';
 import { useContext, useEffect, useRef } from 'react';
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
+import interRegularWoff2 from './assets/fonts/Inter-Regular.woff2?url';
+import varelaRoundLatinWoff2 from './assets/fonts/VarelaRound-Regular-latin.woff2?url';
 import { isProductionEnvironment } from './config/config';
 import { createSupabaseServerClient } from './repository/supabase.server';
 import { TenantSettingsService } from './services/tenantSettingsService.server';
@@ -78,7 +80,6 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="preconnect" href="https://storage.googleapis.com" crossOrigin="anonymous" />
         <Meta />
         <Links />
         <style dangerouslySetInnerHTML={{ __html: `:root { ${cssVars} }` }} />
@@ -102,6 +103,20 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
 
 export const links: LinksFunction = () => {
   return [
+    {
+      rel: 'preload',
+      href: varelaRoundLatinWoff2,
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous',
+    },
+    {
+      rel: 'preload',
+      href: interRegularWoff2,
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous',
+    },
     {
       rel: 'icon',
       href: '/api/favicon',

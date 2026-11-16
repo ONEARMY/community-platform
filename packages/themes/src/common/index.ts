@@ -23,17 +23,17 @@ export const baseTheme = {
   },
   text: {
     heading: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       fontSize: 6,
       fontWeight: 'normal',
     },
     small: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       fontSize: 4,
       fontWeight: 'normal',
     },
     subHeading: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       fontSize: 3,
       fontWeight: 'bold',
     },
@@ -55,17 +55,17 @@ export const baseTheme = {
       color: commonStyles.colors.grey,
     },
     h1: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       fontSize: 6,
       fontWeight: 'normal',
     },
     h2: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       fontSize: 5,
       fontWeight: 'normal',
     },
     h3: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontFamily: commonStyles.fontFamily.title,
       fontSize: 4,
       fontWeight: 'normal',
     },

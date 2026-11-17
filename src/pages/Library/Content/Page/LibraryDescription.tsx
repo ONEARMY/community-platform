@@ -1,4 +1,4 @@
-import { Category, ContentStatistics, ModerationStatus, TagList } from 'oa-components';
+import { Category, ContentStatistics, ModerationStatus } from 'oa-components';
 import type { Profile, Project } from 'oa-shared';
 import { DifficultyLevelRecord, PremiumTier } from 'oa-shared';
 import { useMemo } from 'react';
@@ -13,6 +13,7 @@ import { Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { TagList } from '@/components/ui/tag-list';
 import { UsefulButton } from '@/components/ui/useful-button';
 import { Username } from '@/components/ui/username';
 
@@ -138,7 +139,7 @@ export const LibraryDescription = ({
           </Flex>
 
           <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
-            <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
+            <TagList tags={item.tags.map((t) => t.name)} />
             <DownloadWrapper
               contentType="projects"
               authorProfileId={item.author?.id}

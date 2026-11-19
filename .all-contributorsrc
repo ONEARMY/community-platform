@@ -1376,6 +1376,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nolt-dev",
+      "name": "nolt-dev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/177902797?v=4",
+      "profile": "https://github.com/nolt-dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

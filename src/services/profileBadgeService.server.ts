@@ -12,6 +12,7 @@ const toDB = (input: ProfileBadgeInput) => ({
   image_url: input.imageUrl,
   action_url: input.actionUrl,
   is_audience: input.isAudience,
+  is_disabled: input.isDisabled,
   grants_badge_id: input.grantsBadgeId,
   available_to: input.availableTo,
   action_label: input.actionLabel,

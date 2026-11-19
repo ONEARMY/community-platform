@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "public"."profile_badges" (
     "tenant_id" "text" NOT NULL,
     "premium_tier" integer DEFAULT NULL,
     "is_audience" boolean DEFAULT true NOT NULL,
+    "is_disabled" boolean DEFAULT false NOT NULL,
     "grants_badge_id" bigint,
     "available_to" "text",
     "action_label" "text",

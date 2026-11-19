@@ -45,6 +45,7 @@ export const listing = {
   loadMore: 'Load More',
   loggedOut: 'Gotta log in please for that sweet sweet question asking...',
   noQuestions: 'No questions have been asked yet',
+  noQuestionsMatch: 'No questions match your search',
   search: 'Search for questions',
   sort: 'Sort by',
   totalComments: 'Total comments',

@@ -2,6 +2,7 @@ import {
   ChevronRightIcon,
   FlaskConicalIcon,
   LibraryIcon,
+  MailIcon,
   MapPinIcon,
   MessageCircleQuestionMarkIcon,
   MessageSquareIcon,
@@ -56,6 +57,7 @@ const ADMIN_NAV_ITEMS = [
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
   { label: 'Map', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Comments', href: '/admin/comments', icon: MessageSquareIcon },
+  { label: 'Messages', href: '/admin/messages', icon: MailIcon },
   {
     label: 'Settings',
     icon: SettingsIcon,

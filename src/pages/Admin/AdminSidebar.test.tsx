@@ -38,6 +38,7 @@ describe('AdminSidebar', () => {
       'Questions',
       'Map',
       'Comments',
+      'Messages',
       'Settings',
     ]);
   });
@@ -55,6 +56,13 @@ describe('AdminSidebar', () => {
 
     expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('href', '/admin/research');
     expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('data-active');
+  });
+
+  it('links Messages to its admin page', () => {
+    renderAt('/admin/messages');
+
+    expect(screen.getByRole('link', { name: 'Messages' })).toHaveAttribute('href', '/admin/messages');
+    expect(screen.getByRole('link', { name: 'Messages' })).toHaveAttribute('data-active');
   });
 
   it('opens the section containing the current page', () => {

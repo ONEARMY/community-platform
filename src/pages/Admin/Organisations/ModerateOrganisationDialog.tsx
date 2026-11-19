@@ -1,6 +1,5 @@
-import { ModerationRecord } from 'oa-components';
 import type { AdminOrganisation, Moderation } from 'oa-shared';
-import { FEEDBACK_REQUIRED, MODERATIONS } from 'oa-shared';
+import { FEEDBACK_REQUIRED, MODERATIONS, ModerationRecord } from 'oa-shared';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useRevalidator } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';

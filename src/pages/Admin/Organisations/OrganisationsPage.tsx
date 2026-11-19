@@ -1,9 +1,9 @@
-import { ModerationRecord } from 'oa-components';
 import type { AdminOrganisation, Moderation } from 'oa-shared';
-import { MODERATIONS } from 'oa-shared';
+import { MODERATIONS, ModerationRecord } from 'oa-shared';
 import { type FormEvent, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
+import { MODERATION_BADGE_VARIANTS } from 'src/utils/moderation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,13 +33,6 @@ const STATUS_FILTER_OPTIONS = STATUS_FILTERS.map((value) => ({
   value,
   label: value === 'all' ? 'All' : ModerationRecord[value],
 }));
-
-const BADGE_VARIANTS = {
-  'awaiting-moderation': 'warning',
-  'improvements-needed': 'info',
-  rejected: 'destructive',
-  accepted: 'success',
-} as const;
 
 const CREATED_AT_FORMAT = new Intl.DateTimeFormat('en-GB', {
   dateStyle: 'medium',
@@ -147,7 +140,7 @@ export function OrganisationsPage({ organisations, status, search, page, totalPa
                 <TableCell>{organisation.typeName ?? '-'}</TableCell>
                 <TableCell>
                   <div className="flex flex-col items-start gap-1">
-                    <Badge variant={BADGE_VARIANTS[organisation.moderation]}>
+                    <Badge variant={MODERATION_BADGE_VARIANTS[organisation.moderation]}>
                       {ModerationRecord[organisation.moderation]}
                     </Badge>
                   </div>

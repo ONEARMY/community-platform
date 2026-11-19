@@ -1,10 +1,12 @@
-import { Category, ModerationStatus } from 'oa-components';
-import { type Project, UserRole } from 'oa-shared';
+import { Category } from 'oa-components';
+import { ModerationRecord, type Project, UserRole } from 'oa-shared';
 import { Link } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter, shortFormatNumber } from 'src/utils/helpers';
+import { MODERATION_BADGE_VARIANTS } from 'src/utils/moderation';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
+import { Badge } from '@/components/ui/badge';
 import EyeIcon from '@/components/ui/icons/eye.svg?react';
 import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -43,15 +45,13 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
             />
           )}
           {!item.isDraft && item.moderation && item.moderation !== 'accepted' && (
-            <ModerationStatus
-              status={item.moderation}
-              sx={{
-                top: 2,
-                position: 'absolute',
-                right: 2,
-                alignSelf: 'self-start',
-              }}
-            />
+            <Badge
+              variant={MODERATION_BADGE_VARIANTS[item.moderation]}
+              className="absolute top-2.5 right-2.5"
+              data-cy={`moderationstatus-${item.moderation}`}
+            >
+              {ModerationRecord[item.moderation]}
+            </Badge>
           )}
         </Flex>
         <Flex

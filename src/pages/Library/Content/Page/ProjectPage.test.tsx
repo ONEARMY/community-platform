@@ -22,8 +22,8 @@ vi.mock('src/stores/UsefulVote/useUsefulVote', () => ({
 
 const comments = vi.hoisted(() => ({ onLoaded: undefined as (() => void) | undefined }));
 
-vi.mock('src/pages/common/CommentsSupabase/CommentSectionSupabase', () => ({
-  CommentSectionSupabase: ({ onLoaded }: { onLoaded?: () => void }) => {
+vi.mock('src/pages/common/Comments/CommentSection', () => ({
+  CommentSection: ({ onLoaded }: { onLoaded?: () => void }) => {
     comments.onLoaded = onLoaded;
 
     return <div data-cy="comments-stub" />;

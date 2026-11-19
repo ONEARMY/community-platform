@@ -8,7 +8,7 @@ import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import PageHeader from 'src/common/PageHeader';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
-import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
+import { CommentSection } from 'src/pages/common/Comments/CommentSection';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
@@ -155,7 +155,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
               )}
             </ArticleCallToAction>
             <Card sx={engagementCardSx}>
-              <CommentSectionSupabase
+              <CommentSection
                 authors={item.author?.id ? [item.author?.id] : []}
                 sourceId={item.id}
                 sourceType="projects"

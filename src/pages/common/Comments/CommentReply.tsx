@@ -1,6 +1,6 @@
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
-import { Icon, UsefulButtonLite } from 'oa-components';
+import { Icon } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'src/components/ui/dropdown-menu';
+import { UsefulButtonLite } from 'src/components/ui/useful-button-lite';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box, Flex } from 'theme-ui';

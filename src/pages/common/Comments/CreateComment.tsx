@@ -11,7 +11,7 @@ import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Text, Textarea } from 'theme-ui';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
-import './CreateCommentSupabase.css';
+import './CreateComment.css';
 
 interface IProps {
   onSubmit: (value: string) => void;
@@ -25,7 +25,7 @@ interface IProps {
   sx?: ThemeUIStyleObject | undefined;
 }
 
-export const CreateCommentSupabase = observer((props: IProps) => {
+export const CreateComment = observer((props: IProps) => {
   const { onSubmit, isLoading, isReply, sx } = props;
   const placeholder = (!isReply && props.placeholder) || 'Leave your questions or feedback...';
   const buttonLabel = isReply ? 'Leave a reply' : props.buttonLabel || 'Leave a comment';

@@ -8,7 +8,7 @@ import { logger } from 'src/logger';
 import { FactoryComment } from 'src/test/factories/Comment';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CommentSectionSupabase } from './CommentSectionSupabase';
+import { CommentSection } from './CommentSection';
 import { CommentSortOption } from './CommentSortOptions';
 
 const mockGetComments = vi.hoisted(() => vi.fn());
@@ -28,8 +28,8 @@ vi.mock('src/stores/Subscription/useSubscription', () => ({
   useSubscription: () => ({ isSubscribed: false, toggle: vi.fn() }),
 }));
 
-vi.mock('./CommentItemSupabase', () => ({
-  CommentItemSupabase: ({ comment }: { comment: Comment }) => (
+vi.mock('./CommentItem', () => ({
+  CommentItem: ({ comment }: { comment: Comment }) => (
     <div data-cy="comment-text">{comment.comment}</div>
   ),
 }));
@@ -50,7 +50,7 @@ const renderSection = (defaultSortBy?: CommentSortOption) =>
   render(
     <ThemeProvider theme={theme}>
       <MemoryRouter>
-        <CommentSectionSupabase
+        <CommentSection
           authors={[]}
           sourceId={1}
           sourceType="questions"
@@ -62,7 +62,7 @@ const renderSection = (defaultSortBy?: CommentSortOption) =>
 
 const renderedComments = () => screen.getAllByText(/^comment \d$/).map((x) => x.textContent);
 
-describe('CommentSectionSupabase', () => {
+describe('CommentSection', () => {
   beforeEach(() => {
     mockGetComments.mockReset();
   });
@@ -115,7 +115,7 @@ const getWrapper = (onLoaded: () => void) =>
   render(
     <ThemeProvider theme={theme}>
       <MemoryRouter>
-        <CommentSectionSupabase
+        <CommentSection
           authors={[]}
           sourceId={1}
           sourceType="projects"
@@ -125,7 +125,7 @@ const getWrapper = (onLoaded: () => void) =>
     </ThemeProvider>,
   );
 
-describe('CommentSectionSupabase onLoaded', () => {
+describe('CommentSection onLoaded', () => {
   beforeEach(() => {
     mockGetComments.mockReset();
   });

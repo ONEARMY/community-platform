@@ -6,8 +6,8 @@ import { theme } from 'oa-themes';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { FactoryComment } from 'src/test/factories/Comment';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CommentItemSupabase } from './CommentItemSupabase';
-import { CommentReply } from './CommentReplySupabase';
+import { CommentItem } from './CommentItem';
+import { CommentReply } from './CommentReply';
 
 const mocks = vi.hoisted(() => ({
   profile: vi.fn(),
@@ -48,7 +48,7 @@ const renderActions = (isReply = false) => {
       element: isReply ? (
         <CommentReply comment={comment} onEdit={vi.fn()} onDelete={vi.fn()} />
       ) : (
-        <CommentItemSupabase
+        <CommentItem
           comment={comment}
           sourceType="questions"
           onEdit={vi.fn()}

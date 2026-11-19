@@ -2,7 +2,7 @@ import type { ResearchUpdate } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Box, Button } from 'theme-ui';
-import { CommentSectionSupabase } from './CommentSectionSupabase';
+import { CommentSection } from './CommentSection';
 
 type Props = {
   authors: number[];
@@ -78,7 +78,7 @@ const CollapsableCommentSection = (props: Props) => {
         {buttonText}
       </Button>
       {isOpen && (
-        <CommentSectionSupabase
+        <CommentSection
           sourceId={researchUpdate.id}
           sourceType="research_updates"
           authors={authors}

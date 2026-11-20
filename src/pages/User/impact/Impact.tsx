@@ -1,5 +1,5 @@
 import type { IUserImpact, Profile } from 'oa-shared';
-import { Flex } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 import { IMPACT_YEARS } from './constants';
 import { ImpactItem } from './ImpactItem';
 
@@ -25,10 +25,13 @@ export const Impact = (props: Props) => {
   });
 
   return (
-    <Flex sx={{ flexFlow: 'row wrap' }} data-cy="ImpactPanel">
-      {renderByYear.map((year) => {
-        return year;
-      })}
-    </Flex>
+    <>
+      <Text variant="h2">Impact</Text>
+      <Flex sx={{ flexFlow: 'row wrap' }} data-cy="ImpactPanel">
+        {renderByYear.map((year) => {
+          return year;
+        })}
+      </Flex>
+    </>
   );
 };

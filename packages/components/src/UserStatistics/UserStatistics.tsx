@@ -26,8 +26,8 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
   return (
     <Card
+      data-cy="UserStatistics"
       sx={{
-        backgroundColor: 'background',
         border: 0,
         padding: 1,
         ...props.sx,

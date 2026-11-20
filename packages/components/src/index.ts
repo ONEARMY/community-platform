@@ -44,7 +44,6 @@ export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList';
 export { ReturnPathLink } from './ReturnPathLink/ReturnPathLink';
 export { SearchField } from './SearchField/SearchField';
 export { Select } from './Select/Select';
-export { Tab, TabPanel, Tabs, TabsList } from './TabbedContent/TabbedContent';
 export { Tag } from './Tag/Tag';
 export { TagList } from './TagList/TagList';
 export { Tooltip } from './Tooltip/Tooltip';

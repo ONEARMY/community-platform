@@ -25,7 +25,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
   return (
     <Flex
       sx={{
-        background: 'white',
+        background: '#f4f6f7',
         borderRadius: 2,
       }}
     >

@@ -3,11 +3,11 @@ import { Button } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { Form } from 'react-final-form';
 import { useToast } from 'src/common/Toast';
-import { UserContactFieldMessage, UserContactFieldName } from 'src/pages/User/contact';
+import { UserContactFieldMessage } from 'src/pages/User/contact';
 import { contact } from 'src/pages/User/labels';
 import { messageService } from 'src/services/messageService';
 import { isUserContactable } from 'src/utils/helpers';
-import { Box, Flex, Heading } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 
 interface Props {
   user: Profile;
@@ -42,9 +42,6 @@ export const UserContactForm = observer(({ user }: Props) => {
 
   return (
     <Flex sx={{ flexDirection: 'column' }} data-cy="UserContactForm">
-      <Heading as="h3" variant="small" mb={2}>
-        {`${contact.title} ${user.displayName}`}
-      </Heading>
       <Form
         onSubmit={onSubmit}
         id={formId}
@@ -53,7 +50,6 @@ export const UserContactForm = observer(({ user }: Props) => {
           return (
             <form>
               <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-                <UserContactFieldName />
                 <UserContactFieldMessage />
 
                 <Box sx={{ flexSelf: 'flex-start' }}>

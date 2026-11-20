@@ -3,7 +3,7 @@ import { Button } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import { UserContactFieldMessage, UserContactFieldName } from 'src/pages/User/contact';
+import { UserContactFieldMessage } from 'src/pages/User/contact';
 import { contact } from 'src/pages/User/labels';
 import { isUserContactable } from 'src/utils/helpers';
 import { Box, Flex, Heading } from 'theme-ui';
@@ -19,7 +19,7 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
     return null;
   }
 
-  const { button, title } = contact;
+  const { button } = contact;
   const buttonName = 'contact-submit';
   const formId = 'contact-form';
 
@@ -72,9 +72,6 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
         sx={{ flexDirection: 'column', margin: 30, pointerEvents: 'none' }}
         data-cy="UserContactNotLoggedIn"
       >
-        <Heading as="h3" variant="small" my={2}>
-          {`${title} ${user.displayName}`}
-        </Heading>
         <Form
           onSubmit={() => {}}
           id={formId}
@@ -83,7 +80,6 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
             return (
               <form>
                 <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                  <UserContactFieldName />
                   <UserContactFieldMessage />
 
                   <Box sx={{ flexSelf: 'flex-start' }}>

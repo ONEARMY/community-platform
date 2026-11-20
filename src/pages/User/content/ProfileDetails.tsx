@@ -7,15 +7,14 @@ import { DonationRequestModalContainer } from 'src/common/DonationRequestModalCo
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { logger } from 'src/logger';
 import { mapPinService } from 'src/pages/Maps/map.service';
-import { Box, Divider, Flex, Paragraph } from 'theme-ui';
+import { Box, Divider, Flex, Paragraph, Text } from 'theme-ui';
 
 interface IProps {
   docs: UserCreatedDocs;
   profile: Profile;
-  selectTab: (target: string) => void;
 }
 
-export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
+export const ProfileDetails = ({ docs, profile }: IProps) => {
   const { about, tags, visitorPolicy } = profile;
   const [showVisitorModal, setShowVisitorModal] = useState(false);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
@@ -39,7 +38,8 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
   const hideVisitorDetails = (target?: string) => {
     setShowVisitorModal(false);
     if (target) {
-      selectTab(target);
+      // TODO: use url #hash
+      // selectTab(target);
     }
   };
 
@@ -77,13 +77,19 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
               large={true}
             />
           )}
-          {about && (
+          <Text variant="h2">About</Text>
+          {about ? (
             <Paragraph
               sx={{
                 whiteSpace: 'pre-wrap',
               }}
             >
               {about}
+            </Paragraph>
+          ) : (
+            <Paragraph sx={{ fontStyle: 'italic' }}>
+              Looks like {profile.type?.isSpace ? 'this space' : 'this user'} hasn't gotten around
+              to filling this in yet...
             </Paragraph>
           )}
 

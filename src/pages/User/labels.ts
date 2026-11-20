@@ -6,7 +6,6 @@ export const contact = {
     title: 'Email (currently fixed to your email on record)',
     placeholder: 'hey@jack.com',
   },
-  title: 'Send a message to',
   message: {
     title: `Message (max ${MESSAGE_MAX_CHARACTERS} characters)`,
     placeholder: 'What do you want to say?',

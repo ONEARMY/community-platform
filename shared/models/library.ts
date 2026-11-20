@@ -20,35 +20,35 @@ export const DifficultyLevelRecord: Record<DifficultyLevel, string> = {
 
 export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
-  readonly published_at: Date | null;
+  readonly published_at: string | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
   readonly useful_votes_last_week?: number;
   readonly subscriber_count?: number;
-  readonly comment_count?: number;
-  readonly total_views?: number;
+  readonly comment_count?: number | null;
+  readonly total_views?: number | null;
   readonly category: DBCategory | null;
-  readonly steps: DBProjectStep[] | null;
+  readonly steps?: DBProjectStep[] | null;
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   slug: string;
   previous_slugs: string[] | null;
   description: string;
-  difficulty_level: DifficultyLevel;
+  difficulty_level: DifficultyLevel | null;
   cover_image: DBMedia | null;
   file_link: string | null;
   files: IMediaFile[] | null;
   category_id?: number;
-  tags: number[];
+  tags: string[] | null;
   is_draft: boolean | null;
-  time?: string;
-  file_download_count?: number;
-  moderation: Moderation;
-  moderation_feedback: string;
+  time?: string | null;
+  file_download_count?: number | null;
+  moderation: Moderation | null;
+  moderation_feedback: string | null;
 
   constructor(obj: Omit<DBProject, 'id'>) {
     Object.assign(this, obj);
@@ -65,7 +65,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
         : null,
-      tags: obj.tags,
+      tags: obj.tags?.map(Number) ?? null,
       difficultyLevel: obj.difficulty_level,
       files: obj.files,
       fileLink: obj.file_link,
@@ -97,7 +97,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   hasFileLink: boolean;
   tags: Tag[];
   tagIds?: number[];
-  difficultyLevel: DifficultyLevel;
+  difficultyLevel: DifficultyLevel | null;
   steps: ProjectStep[];
   isDraft: boolean;
   usefulCount: number;
@@ -141,11 +141,11 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       isDraft: obj.is_draft || false,
       fileDownloadCount: obj.file_download_count || 0,
       files: obj.files,
-      moderation: obj.moderation,
-      moderationFeedback: obj.moderation_feedback,
+      moderation: obj.moderation ?? 'awaiting-moderation',
+      moderationFeedback: obj.moderation_feedback ?? undefined,
       // no fileLink as it must be shown only for authenticated users
       hasFileLink: !!obj.file_link,
-      time: obj.time,
+      time: obj.time ?? undefined,
       steps,
     });
   }
@@ -252,3 +252,65 @@ export type ProjectStepDTO = {
   images: DBMedia[] | null;
   videoUrl: string | null;
 };
+
+export type DBAdminProject = Pick<
+  DBProject,
+  | 'id'
+  | 'created_at'
+  | 'title'
+  | 'slug'
+  | 'difficulty_level'
+  | 'moderation'
+  | 'is_draft'
+  | 'published_at'
+  | 'comment_count'
+  | 'total_views'
+  | 'deleted'
+> & {
+  profile: Pick<DBAuthor, 'username' | 'display_name'> | null;
+  category: Pick<DBCategory, 'name'> | null;
+  steps: { count: number }[];
+  remakes: { count: number }[];
+};
+
+export class AdminProject {
+  id: number;
+  title: string;
+  slug: string;
+  author: { username: string | null; displayName: string } | null;
+  category: string | null;
+  difficultyLevel: DifficultyLevel | null;
+  moderation: Moderation | null;
+  isDraft: boolean;
+  publishedAt: Date | null;
+  commentCount: number;
+  totalViews: number;
+  stepCount: number;
+  remakeCount: number;
+  deleted: boolean;
+
+  constructor(obj: AdminProject) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminProject) {
+    return new AdminProject({
+      id: obj.id,
+      title: obj.title,
+      slug: obj.slug,
+      author: obj.profile
+        ? { username: obj.profile.username, displayName: obj.profile.display_name }
+        : null,
+      category: obj.category?.name ?? null,
+      difficultyLevel: obj.difficulty_level,
+      moderation: obj.moderation,
+      isDraft: obj.is_draft || false,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
+      commentCount: obj.comment_count ?? 0,
+      totalViews: obj.total_views ?? 0,
+      stepCount: obj.steps[0]?.count ?? 0,
+      remakeCount: obj.remakes[0]?.count ?? 0,
+      deleted: obj.deleted || false,
+    });
+  }
+}

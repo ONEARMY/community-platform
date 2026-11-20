@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
+import type { Database, DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, MiddlewareFunction } from 'react-router';
 import { Session, sessionContext } from 'src/context';
@@ -55,6 +55,10 @@ export const action = async ({ request, params, context }: ActionFunctionArgs) =
 
     const oldResearch = await new ResearchServiceServer(client).getById(id);
 
+    if (!oldResearch) {
+      throw validationError('Research not found', 'research');
+    }
+
     await validateRequest(request, session, data, oldResearch, slug, client);
 
     const previousSlugs = ContentServiceServer.updatePreviousSlugs(oldResearch, slug);
@@ -68,16 +72,16 @@ export const action = async ({ request, params, context }: ActionFunctionArgs) =
         description: data.description,
         slug,
         category: data.category,
-        tags: data.tags,
+        tags: data.tags?.map(String),
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
         image: data.coverImage,
-        modified_at: new Date(),
-        ...(isFirstPublish && { published_at: new Date() }),
+        modified_at: new Date().toISOString(),
+        ...(isFirstPublish && { published_at: new Date().toISOString() }),
       })
       .eq('id', id)
-      .select()
+      .select('*, category:categories(*)')
       .single();
 
     if (researchResult.error || !researchResult.data) {
@@ -114,17 +118,19 @@ async function deleteResearch(request: Request, id: number, session: Session) {
       roles: session.roles,
     });
 
-    if (canEdit) {
-      await client
-        .from('research')
-        .update({
-          modified_at: new Date(),
-          deleted: true,
-        })
-        .eq('id', id);
-
-      return Response.json({}, { status: 200, headers });
+    if (!canEdit) {
+      return Response.json({}, { status: 403, headers });
     }
+
+    await client
+      .from('research')
+      .update({
+        modified_at: new Date().toISOString(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
   } catch (error) {
     logger.error('Delete research error:', error);
   }
@@ -136,9 +142,9 @@ async function validateRequest(
   request: Request,
   session: NonNullable<Session>,
   data: ResearchDTO,
-  research: DBResearchItem,
+  research: Pick<DBResearchItem, 'id' | 'slug' | 'created_by' | 'collaborators'>,
   slug: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ): Promise<void> {
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
@@ -153,7 +159,7 @@ async function validateRequest(
   }
 
   if (!data.isDraft && !data.coverImage) {
-    throw validationError('Cover image is required', 'image');
+    throw validationError('Cover image is required', 'coverImage');
   }
 
   if (

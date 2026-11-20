@@ -1,7 +1,7 @@
 import { UserRole } from 'oa-shared';
 import { Link } from 'react-router';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Button, Flex, Heading } from 'theme-ui';
+import { Button, Flex, Heading, Text } from 'theme-ui';
 
 import DraftButton from '../common/Drafts/DraftButton';
 import { headings, listing } from './labels';
@@ -14,7 +14,7 @@ interface IProps {
 
 export const NewsListHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props;
-  const { isUserAuthorized } = useProfileStore();
+  const { profile, isUserAuthorized } = useProfileStore();
 
   return (
     <Flex
@@ -26,18 +26,27 @@ export const NewsListHeader = (props: IProps) => {
         gap: [4, 8],
       }}
     >
-      <Flex>
-        <Heading
-          as="h1"
-          sx={{
-            marginX: 'auto',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 5,
-          }}
-        >
-          {headings.list}
-        </Heading>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          gap: 3,
+          width: '100%',
+          maxWidth: '650px',
+          paddingX: [2, 0],
+        }}
+      >
+        {profile ? (
+          <Heading as="h1" sx={{ fontSize: 6 }}>
+            {`${headings.greeting}, ${profile.displayName}`}
+          </Heading>
+        ) : (
+          <>
+            <Heading as="h1" sx={{ fontSize: ['42px', '64px'], lineHeight: 1.2 }}>
+              {headings.welcome}
+            </Heading>
+            <Text sx={{ fontSize: [3, 5], color: 'grey' }}>{headings.tagline}</Text>
+          </>
+        )}
       </Flex>
       {isUserAuthorized([UserRole.ADMIN, UserRole.EDITOR]) && (
         <Flex

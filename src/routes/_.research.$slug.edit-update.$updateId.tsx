@@ -54,7 +54,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     return redirect(`/forbidden?page=${ForbiddenPage.RESEARCH_UPDATE_EDIT}`, { headers });
   }
 
-  const updateDb = researchDb.updates.find((x) => x.id === Number(params.updateId));
+  const updateDb = researchDb.updates?.find((x) => x.id === Number(params.updateId));
 
   const publicImages = updateDb?.images
     ? new StorageServiceServer(client).getPublicUrls(updateDb?.images)

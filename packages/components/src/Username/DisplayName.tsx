@@ -1,20 +1,19 @@
 import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
-import type { ThemeUIStyleObject } from 'theme-ui';
+import { ReactCountryFlag } from 'react-country-flag';
+import { Link } from 'react-router';
 import { Flex, Text } from 'theme-ui';
-import { FlagIcon } from '../FlagIcon/FlagIcon';
-import { InternalLink } from '../InternalLink/InternalLink';
 import { UserBadge } from './UserBadge';
 
 export interface DisplayNameProps {
   user: Partial<Author>;
-  sx?: ThemeUIStyleObject;
+  className?: string;
   isLink?: boolean;
   target?: HTMLAttributeAnchorTarget;
 }
 
-export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProps) => {
+export const DisplayName = ({ user, className, target, isLink = true }: DisplayNameProps) => {
   const { username, displayName, country, badges } = user;
   const countryCode = country ? countryToAlpha2(country) : null;
 
@@ -31,7 +30,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
       }}
     >
       <Flex sx={{ flexDirection: 'column' }}>
-        <Flex>
+        <Flex sx={{ gap: 1, alignItems: 'center' }}>
           <Text
             sx={{
               color: 'black',
@@ -54,7 +53,18 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
         </Flex>
         {countryCode && (
           <Flex sx={{ alignItems: 'center', gap: 1, pt: 1 }}>
-            <FlagIcon countryCode={countryCode} />
+            <ReactCountryFlag
+              data-cy={`country:${countryCode}`}
+              countryCode={countryCode}
+              title={countryCode}
+              svg={true}
+              style={{
+                borderRadius: '3px',
+                backgroundSize: 'cover',
+                width: '21px',
+                height: '14px',
+              }}
+            />
             <Text
               sx={{
                 color: 'grey',
@@ -76,35 +86,12 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
   }
 
   return (
-    <InternalLink
+    <Link
       to={`/u/${username}`}
       target={target || '_self'}
-      sx={{
-        border: '1px solid transparent',
-        display: 'inline-flex',
-        minWidth: 0,
-        overflow: 'hidden',
-        paddingX: 1,
-        borderRadius: 1,
-        marginLeft: -1,
-        color: 'black',
-        fontSize: 2,
-        transition: '80ms ease-out all',
-        '&:focus': {
-          borderColor: '#20B7EB',
-          background: 'softblue',
-          outline: 'none',
-          color: 'bluetag',
-        },
-        '&:hover': {
-          borderColor: '#20B7EB',
-          background: 'softblue',
-          textcolor: 'bluetag',
-        },
-        ...(sx || {}),
-      }}
+      className={`-ml-1 inline-flex min-w-0 overflow-hidden rounded-card-flat border border-transparent px-1 text-sm text-foreground transition-all duration-80 ease-out hover:border-highlight hover:bg-softblue focus:border-highlight focus:bg-softblue focus:outline-none ${className ?? ''}`}
     >
       {DisplayNameBody}
-    </InternalLink>
+    </Link>
   );
 };

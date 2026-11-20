@@ -8,8 +8,10 @@ import { logger } from 'src/logger';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { AuthServiceServer } from 'src/services/authService.server';
+import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { getSecret } from 'src/services/secretsService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+import { getSiteUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { bool, object, ref, string } from 'yup';
@@ -27,9 +29,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect('/', { headers });
   }
   const tenantSettings = await new TenantSettingsService(client).get();
+  const profileTypes = await new ProfileTypesServiceServer(client).get();
   const turnstileSiteKey = await getSecret('TURNSTILE_SITE_KEY', TURNSTILE_TEST_SITE_KEY);
 
-  return data({ ...tenantSettings, turnstileSiteKey }, { headers });
+  const showOrganisationSignup =
+    !!tenantSettings.organisationSignupDescriptionHtml && profileTypes.some((type) => type.isSpace);
+
+  return data({ ...tenantSettings, showOrganisationSignup, turnstileSiteKey }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -41,9 +47,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const formData = await request.formData();
-  const url = new URL(request.url);
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
+  const emailRedirectTo = await getSiteUrl(client, '/email-confirmation');
 
   const authServiceServer = new AuthServiceServer(client);
 
@@ -91,7 +95,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { turnstileSiteKey } = useLoaderData<typeof loader>();
+  const { showOrganisationSignup, turnstileSiteKey } = useLoaderData<typeof loader>();
   const actionResponse = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== 'idle';
@@ -135,10 +139,26 @@ export default function Index() {
                   <CardHeader>
                     <h1 className="text-2xl font-semibold">Create an account</h1>
                     <p className="text-sm text-muted-foreground">
-                      <Link to="/sign-in" className="hover:underline">
-                        Already have an account? Sign-in here
+                      Already have an account?{' '}
+                      <Link
+                        to="/sign-in"
+                        className="underline underline-offset-3 hover:no-underline"
+                      >
+                        Sign-in here
                       </Link>
                     </p>
+                    {showOrganisationSignup && (
+                      <p className="text-sm text-muted-foreground">
+                        Are you an organisation?{' '}
+                        <Link
+                          to="/sign-up/organisation"
+                          data-cy="sign-up-organisation"
+                          className="underline underline-offset-3 hover:no-underline"
+                        >
+                          Create an organisation account
+                        </Link>
+                      </p>
+                    )}
                   </CardHeader>
                   <CardContent gap="md" className="flex flex-col">
                     {actionResponse?.error && pristine && (
@@ -205,7 +225,7 @@ export default function Index() {
                               href="/terms"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-bold underline-offset-4 hover:underline"
+                              className="font-bold underline underline-offset-3 hover:no-underline"
                             >
                               Terms of Service
                             </a>{' '}
@@ -214,7 +234,7 @@ export default function Index() {
                               href="/privacy"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-bold underline-offset-4 hover:underline"
+                              className="font-bold underline underline-offset-3 hover:no-underline"
                             >
                               Privacy Policy
                             </a>

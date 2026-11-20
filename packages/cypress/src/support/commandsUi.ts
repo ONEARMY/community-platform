@@ -21,6 +21,15 @@ interface IMapPin {
   locationName: string;
 }
 
+interface IOrganisationApplication {
+  profileType: string;
+  username: string;
+  displayName: string;
+  description: string;
+  website?: string;
+  image?: string;
+}
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -31,6 +40,7 @@ declare global {
       deleteDiscussionItem(element: string, item: string): Chainable<void>;
       editDiscussionItem(element: string, oldComment: string, updatedNewComment: string): Chainable<void>;
       signIn(email: string, password: string): Chainable<void>;
+      fillSignInForm(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
       fillSignupForm(email: string, password: string): Chainable<void>;
       fillIntroTitle(intro: string): Chainable<void>;
@@ -48,18 +58,21 @@ declare global {
        * @param tagname This will be typed into the input box and selected from the dropdown list
        * @param selector Specify the selector of the react-select element
        **/
+      openToastLink(label: string): Chainable<void>;
+      visitToastLink(label: string): Chainable<void>;
       selectTag(tagName: string, selector?: string): Chainable<void>;
       selectCard(label: string, selector?: string): Chainable<void>;
       selectByValue(value: string, selector: string): Chainable<void>;
       setSettingVisitorPolicy(policyText: string, details?: string): Chainable<void>;
       clearSettingVisitorPolicy(): Chainable<void>;
       setSettingBasicUserInfo(info: IInfo): Chainable<void>;
-      setSettingFocus(focus: string): Chainable<void>;
       setSettingImage(image: string, selector: string): Chainable<void>;
       setSettingImpactData(year: number, fields: { name: string, value: number, visible?: boolean }[]): Chainable<void>;
       setSettingPublicContact(): Chainable<void>;
 
       signUpNewUser(user?: IUserSignUpDetails): Chainable<void>;
+      signUpNewOrganisation(user: IUserSignUpDetails): Chainable<void>;
+      fillOrganisationApplicationForm(application: IOrganisationApplication): Chainable<void>;
       signUpCompletedUser(user?: IUserSignUpDetails): Chainable<void>;
       completeUserProfile(username: string): Chainable<void>;
       setProfileUsername(username: string): Chainable<void>;
@@ -84,8 +97,10 @@ Cypress.Commands.add('addToRichTextField', (text: string) => {
 });
 
 Cypress.Commands.add('saveSettingsForm', () => {
+  cy.intercept({ method: 'POST', pathname: '/api/profile' }).as('profileUpdate');
   cy.get('[data-cy=save]').click({ force: true });
 
+  cy.wait('@profileUpdate');
   cy.contains('[data-cy=toast-message]', 'Profile updated!').should('be.visible');
 });
 
@@ -113,13 +128,11 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   website && cy.get('[data-cy=website').clear().type(website);
 });
 
-Cypress.Commands.add('setSettingFocus', (focus: string) => {
-  cy.get(`[data-cy=${focus}]`).first().click();
-});
-
 Cypress.Commands.add('setSettingImage', (image: string, selector: string) => {
+  cy.intercept('POST', '/api/images').as('imageUpload');
   cy.get(`[data-cy=${selector}]`).find(':file').selectFile(`src/fixtures/images/${image}.jpg`, { force: true });
-  cy.wait(2000);
+  cy.wait('@imageUpload');
+  cy.get(`[data-cy=${selector}] img[src*="${image}"]`).should('be.visible');
 });
 
 Cypress.Commands.add('setSettingImpactData', (year: number, fields: { name: string, value: number, visible?: boolean }[]) => {
@@ -160,13 +173,17 @@ Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.get('[data-cy=consent]').click({ force: true });
 });
 
-Cypress.Commands.add('signIn', (email: string, password: string) => {
+Cypress.Commands.add('fillSignInForm', (email: string, password: string) => {
   cy.log('Fill in sign in form');
   cy.visit('/sign-in');
   cy.get('input[name="cf-turnstile-token"]').should('not.have.value', '');
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=submit]').should('be.enabled').click();
+});
+
+Cypress.Commands.add('signIn', (email: string, password: string) => {
+  cy.fillSignInForm(email, password);
   cy.location('pathname').should('not.include', '/sign-in');
   cy.get('[data-cy=user-menu]').should('exist');
 });
@@ -206,6 +223,18 @@ Cypress.Commands.add('screenClick', () => {
   cy.get('[data-cy=header]').click({ force: true });
 });
 
+Cypress.Commands.add('openToastLink', (label: string) => {
+  cy.contains('a[data-cy=toast-action-link]', label);
+  cy.get('[data-cy=submit]').should('not.be.disabled');
+  cy.contains('a[data-cy=toast-action-link]', label).click();
+});
+
+Cypress.Commands.add('visitToastLink', (label: string) => {
+  cy.contains('a[data-cy=toast-action-link]', label)
+    .invoke('attr', 'href')
+    .then((href) => cy.visit(href as string));
+});
+
 Cypress.Commands.add('selectTag', (tagName: string, selector = '[data-cy=tag-select]') => {
   cy.log('Select tag', tagName);
   cy.get(`${selector} input`).click({ force: true });
@@ -233,7 +262,7 @@ Cypress.Commands.add('addComment', (newComment: string) => {
 });
 
 Cypress.Commands.add('editDiscussionItem', (element, oldComment, updatedNewComment) => {
-  cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click();
+  cy.get(`[data-cy="${element}: actions button"]`).last().click();
   cy.get(`[data-cy="${element}: edit button"]`).click();
   cy.get('[data-cy=edit-comment]').as('editField');
   cy.get('@editField').clear({ force: true });
@@ -241,14 +270,13 @@ Cypress.Commands.add('editDiscussionItem', (element, oldComment, updatedNewComme
   cy.get('[data-cy=edit-comment-submit]').click();
   cy.get('@editField').should('not.exist');
 
-  cy.wait(1000);
   cy.get(`[data-cy=Own${element}]`).contains(updatedNewComment);
   cy.get(`[data-cy=Own${element}]`).contains('less than a minute ago');
   cy.get(`[data-cy=Own${element}]`).contains(oldComment).should('not.exist');
 });
 
 Cypress.Commands.add('deleteDiscussionItem', (element, item) => {
-  cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click();
+  cy.get(`[data-cy="${element}: actions button"]`).last().click();
   cy.get(`[data-cy="${element}: delete button"]`).click();
   cy.get('[data-cy="Confirm.modal: Confirm"]').last().click();
 
@@ -270,6 +298,30 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(email, password);
   cy.get('[data-cy=submit]').click();
   cy.url().should('include', 'sign-up-message');
+});
+
+Cypress.Commands.add('signUpNewOrganisation', (user: IUserSignUpDetails) => {
+  cy.log('Sign up a new organisation account');
+  cy.visit('/sign-up/organisation');
+  cy.get('[data-cy=email]').clear().type(user.email);
+  cy.get('[data-cy=password]').clear().type(user.password);
+  cy.get('[data-cy=confirm-password]').clear().type(user.password);
+  cy.get('[data-cy=consent]').click({ force: true });
+  cy.get('[data-cy=submit]').click();
+  cy.url().should('include', 'sign-up-message');
+});
+
+Cypress.Commands.add('fillOrganisationApplicationForm', (application: IOrganisationApplication) => {
+  cy.log('Fill in the organisation application form');
+  cy.visit('/organisation-application');
+  cy.get(`[data-cy=${application.profileType}]`).first().click();
+  cy.get('[data-cy=username]').clear().type(application.username);
+  cy.get('[data-cy=displayName]').clear().type(application.displayName);
+  cy.get('[data-cy=about]').clear().type(application.description);
+  if (application.website) {
+    cy.get('[data-cy=website]').clear().type(application.website);
+  }
+  cy.setSettingImage(application.image || 'profile-cover-1', 'coverImages');
 });
 
 Cypress.Commands.add('completeUserProfile', (username) => {

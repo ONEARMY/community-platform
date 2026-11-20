@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import type { DBProfile } from 'oa-shared';
+import { AdminOrganisation } from 'oa-shared';
 
 export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): DBProfile => ({
   id: faker.number.int(),
@@ -16,7 +17,7 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   about: '',
   auth_id: '',
   cover_images: null,
-  created_at: faker.date.past(),
+  created_at: faker.date.past().toISOString(),
   impact: null,
   type: {
     id: faker.number.int(),
@@ -33,10 +34,27 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   visitor_policy: null,
   is_blocked_from_messaging: null,
   is_contactable: false,
-  last_active: faker.date.past(),
+  last_active: faker.date.past().toISOString(),
   website: faker.internet.url(),
   total_views: 0,
   profile_type: faker.number.int(),
   donations_enabled: false,
+  moderation: null,
+  moderation_feedback: null,
   ...dbProfileOverloads,
 });
+
+export const FactoryAdminOrganisation = (
+  overloads: Partial<AdminOrganisation> = {},
+): AdminOrganisation =>
+  new AdminOrganisation({
+    id: faker.number.int(),
+    username: faker.internet.username(),
+    displayName: faker.company.name(),
+    about: faker.lorem.sentence(),
+    typeName: 'Workspace',
+    moderation: 'awaiting-moderation',
+    moderationFeedback: null,
+    createdAt: faker.date.past(),
+    ...overloads,
+  });

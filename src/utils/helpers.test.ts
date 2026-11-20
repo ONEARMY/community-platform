@@ -5,18 +5,24 @@ import { describe, expect, it } from 'vitest';
 import {
   arrayToJson,
   capitalizeFirstLetter,
+  escapeFilterValue,
   formatLowerNoSpecial,
   hasAdminRights,
   isContactable,
   isUserBlockedFromMessaging,
   isUserContactable,
   numberWithCommas,
+  shortFormatNumber,
   stripSpecialCharacters,
 } from './helpers';
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
     expect(stripSpecialCharacters('He%llo w@o$rl^d!')).toBe('Hello-world');
+  });
+
+  it('escapeFilterValue should escape quotes and backslashes', () => {
+    expect(escapeFilterValue('a,"b"\\c')).toBe('a,\\"b\\"\\\\c');
   });
 
   it('formatLowerNoSpecial should return lowercase without special characters', () => {
@@ -106,6 +112,18 @@ describe('src/utils/helpers', () => {
     it('adds a comma between every three digits', () => {
       const expectation = '1,000';
       expect(numberWithCommas(1000)).toEqual(expectation);
+    });
+  });
+
+  describe('shortFormatNumber', () => {
+    it('returns small numbers unchanged', () => {
+      expect(shortFormatNumber(345)).toEqual('345');
+    });
+
+    it('shortens thousands and millions', () => {
+      expect(shortFormatNumber(1000)).toEqual('1K');
+      expect(shortFormatNumber(1500)).toEqual('1.5K');
+      expect(shortFormatNumber(2099999)).toEqual('2.1M');
     });
   });
 });

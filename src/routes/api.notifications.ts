@@ -1,24 +1,14 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification } from 'oa-shared';
+import { type NotificationContentType, NotificationContentTypes } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { NotificationMapperServiceServer } from 'src/services/notificationMapperService.server';
 
-const transformNotificationList = async (
-  dbNotifications: DBNotification[],
-  client: SupabaseClient,
-) => {
-  const notificationMapperService = new NotificationMapperServiceServer(client);
-
-  return Promise.allSettled(
-    dbNotifications.map((dbNotification) =>
-      notificationMapperService.transformNotification(dbNotification),
-    ),
-  ).then((results) => {
-    return results.filter((result) => result.status === 'fulfilled').map((result) => result.value);
-  });
-};
+function hasSupportedContentType<T extends { content_type: string }>(
+  notification: T,
+): notification is T & { content_type: NotificationContentType } {
+  return NotificationContentTypes.includes(notification.content_type as NotificationContentType);
+}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -48,13 +38,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       triggered_by:profiles!notifications_triggered_by_id_fkey(id,username,photo)
     `,
       )
-      .eq('owned_by_id', profileResponse?.data?.id);
+      .eq('owned_by_id', profileResponse.data.id)
+      .order('is_read', { ascending: true, nullsFirst: true })
+      .order('created_at', { ascending: false })
+      .limit(50);
 
     if (error) {
       throw error;
     }
 
-    const notifications = data?.length ? await transformNotificationList(data, client) : [];
+    const notifications = data?.length
+      ? await new NotificationMapperServiceServer(client).transformNotifications(
+          data.filter(hasSupportedContentType),
+        )
+      : [];
 
     return Response.json({ notifications }, { headers, status: 200 });
   } catch (error) {

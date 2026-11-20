@@ -1,5 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
+  AdminProject,
+  type Database,
+  type DBAdminProject,
   type DBProject,
   type DBProjectStep,
   Image,
@@ -9,13 +12,17 @@ import {
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { logger } from 'src/logger';
+import { escapeFilterValue } from 'src/utils/helpers';
 import { ImageServiceServer } from './imageService.server';
 import { StorageServiceServer } from './storageService.server';
 
 export class LibraryServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   getBySlug(slug: string) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     return this.client
       .from('projects')
       .select(
@@ -64,7 +71,7 @@ export class LibraryServiceServer {
         )
      `,
       )
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .or('deleted.eq.false,deleted.is.null')
       .single();
   }
@@ -92,6 +99,48 @@ export class LibraryServiceServer {
         usefulCount: x.total_useful,
       };
     });
+  }
+
+  async getAdminPage(page: number, pageSize: number) {
+    const from = (page - 1) * pageSize;
+    const { data, count, error } = await this.client
+      .from('projects')
+      .select(
+        `
+        id,
+        created_at,
+        title,
+        slug,
+        difficulty_level,
+        moderation,
+        is_draft,
+        published_at,
+        comment_count,
+        total_views,
+        deleted,
+        profile:profiles(username, display_name),
+        category:categories(name),
+        steps:project_steps(count),
+        remakes(count)
+      `,
+        { count: 'exact' },
+      )
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (error?.code === 'PGRST103') {
+      return { projects: [], totalCount: 0 };
+    }
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      projects: (data as unknown as DBAdminProject[]).map(AdminProject.fromDB),
+      totalCount: count ?? 0,
+    };
   }
 
   getProjectPublicMedia(projectDb: DBProject) {
@@ -146,8 +195,12 @@ export class LibraryServiceServer {
   }
 
   async getById(id: number) {
-    const result = await this.client.from('projects').select().eq('id', id).single();
-    return result.data as DBProject;
+    const result = await this.client
+      .from('projects')
+      .select('*, category:categories(*)')
+      .eq('id', id)
+      .single();
+    return result.data;
   }
 
   async getProjectStepIds(id: number): Promise<number[]> {
@@ -174,6 +227,7 @@ export class LibraryServiceServer {
           order,
         })
         .eq('id', stepId)
+        .eq('project_id', projectId)
         .select();
       if (error || !data) {
         throw error;
@@ -188,7 +242,7 @@ export class LibraryServiceServer {
           project_id: projectId,
           video_url: values.videoUrl,
           images: values.images,
-          tenant_id: process.env.TENANT_ID,
+          tenant_id: process.env.TENANT_ID!,
           order,
         })
         .select();

@@ -67,6 +67,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw forbiddenError('Users with protected roles cannot be banned');
     }
 
+    if (!targetProfile.auth_id) {
+      throw notFoundError('User');
+    }
+
     const adminClient = createSupabaseAdminServerClient();
     const { error: banError } = await adminClient.auth.admin.updateUserById(
       targetProfile.auth_id,
@@ -78,7 +82,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw new Error('Failed to ban user');
     }
 
-    const now = new Date();
+    const now = new Date().toISOString();
 
     // Mark all content created by the user as deleted
     await Promise.all([

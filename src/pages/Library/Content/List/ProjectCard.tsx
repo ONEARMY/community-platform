@@ -1,10 +1,16 @@
-import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
-import { type Project, UserRole } from 'oa-shared';
-import { Link as RouterLink } from 'react-router';
+import { Category } from 'oa-components';
+import { ModerationRecord, type Project, UserRole } from 'oa-shared';
+import { Link } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
-import { capitalizeFirstLetter } from 'src/utils/helpers';
+import { capitalizeFirstLetter, shortFormatNumber } from 'src/utils/helpers';
+import { MODERATION_BADGE_VARIANTS } from 'src/utils/moderation';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
+import { Badge } from '@/components/ui/badge';
+import EyeIcon from '@/components/ui/icons/eye.svg?react';
+import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Username } from '@/components/ui/username';
 
 type ProjectCardProps = {
   item: Project;
@@ -16,7 +22,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
 
   return (
     <Card data-cy="card">
-      <RouterLink to={`/library/${encodeURIComponent(item.slug)}`} style={{ display: 'block' }}>
+      <Box sx={{ position: 'relative' }}>
         <Flex
           sx={{
             background: 'background',
@@ -38,16 +44,14 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               alt={`Cover image of ${item.title}`}
             />
           )}
-          {item.moderation && item.moderation !== 'accepted' && (
-            <ModerationStatus
-              status={item.moderation}
-              sx={{
-                top: 2,
-                position: 'absolute',
-                right: 2,
-                alignSelf: 'self-start',
-              }}
-            />
+          {!item.isDraft && item.moderation && item.moderation !== 'accepted' && (
+            <Badge
+              variant={MODERATION_BADGE_VARIANTS[item.moderation]}
+              className="absolute top-2.5 right-2.5"
+              data-cy={`moderationstatus-${item.moderation}`}
+            >
+              {ModerationRecord[item.moderation]}
+            </Badge>
           )}
         </Flex>
         <Flex
@@ -61,15 +65,20 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
         >
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
             <Heading as="h2" variant="small" color="black">
-              <Highlighter
-                searchWords={searchWords}
-                textToHighlight={capitalizeFirstLetter(item.title)}
-              />
+              <Link
+                to={`/library/${encodeURIComponent(item.slug)}`}
+                className="text-inherit no-underline after:absolute after:inset-0"
+              >
+                <Highlighter
+                  searchWords={searchWords}
+                  textToHighlight={capitalizeFirstLetter(item.title)}
+                />
+              </Link>
             </Heading>
 
             {item.author && (
               <Box>
-                <Username user={item.author} />
+                <Username user={item.author} className="relative" />
               </Box>
             )}
           </Flex>
@@ -98,18 +107,35 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               sx={{
                 gap: 2,
                 justifyContent: 'flex-end',
+                position: 'relative',
               }}
             >
-              <IconCountWithTooltip count={item.totalViews || 0} icon="show" text="Views" />
-              <IconCountWithTooltip
-                count={item.usefulCount || 0}
-                icon="star-active"
-                text="How useful is it"
-              />
+              <Tooltip>
+                <TooltipTrigger
+                  render={<span tabIndex={0} />}
+                  aria-label={`Views: ${item.totalViews || 0}`}
+                  className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                >
+                  {shortFormatNumber(item.totalViews || 0)}
+                  <EyeIcon className="ml-1 size-4" />
+                </TooltipTrigger>
+                <TooltipContent>Views</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={<span tabIndex={0} />}
+                  aria-label={`How useful is it: ${item.usefulCount || 0}`}
+                  className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                >
+                  {shortFormatNumber(item.usefulCount || 0)}
+                  <StarActiveIcon className="ml-1 size-4" />
+                </TooltipTrigger>
+                <TooltipContent>How useful is it</TooltipContent>
+              </Tooltip>
             </Flex>
           </Flex>
         </Flex>
-      </RouterLink>
+      </Box>
     </Card>
   );
 };

@@ -3,7 +3,7 @@ export type StripeCustomer = {
   auth_id: string;
   stripe_customer_id: string;
   tenant_id: string;
-  created_at: Date;
+  created_at: string;
 };
 
 export type StripeCustomerInsert = {

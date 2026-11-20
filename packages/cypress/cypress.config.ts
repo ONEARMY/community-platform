@@ -35,9 +35,23 @@ export default defineConfig({
           return null;
         },
 
+        async 'getProfileByUsername'(username: string) {
+          if (!supabaseUrl || !supabaseKey) {
+            throw new Error(
+              'SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required',
+            );
+          }
+
+          const supabaseService = new SupabaseTestsService(supabaseUrl, supabaseKey, tenantId);
+          const profile = await supabaseService.getUserProfileByUsername(username);
+          return profile ?? null;
+        },
+
         async 'seed database'() {
           if (!supabaseUrl || !supabaseKey) {
-            throw new Error('SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required');
+            throw new Error(
+              'SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required',
+            );
           }
 
           const supabaseService = new SupabaseTestsService(supabaseUrl, supabaseKey, tenantId);
@@ -46,7 +60,6 @@ export default defineConfig({
           const profileImages = await supabaseService.seedProfileImages();
           const { profile_types } = await supabaseService.seedProfileTypes();
           const { profile_badges } = await supabaseService.seedBadges();
-          await supabaseService.seedUpgradeBadges(profile_badges.data);
           const { profile_tags } = await supabaseService.seedProfileTags();
           const { profiles } = await supabaseService.seedAccounts(
             profile_badges.data,
@@ -91,8 +104,8 @@ export default defineConfig({
               'profile_tags',
               'profile_tags_relations',
               'profile_types',
-              'upgrade_badge',
               'tenant_settings',
+              'organisation_applications',
               'news_badges_relations',
               'poll_votes',
               'poll_options',

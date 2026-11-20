@@ -1,12 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ContentType, IDBContentDoc } from 'oa-shared';
+import type { ContentType, Database, IDBContentDoc } from 'oa-shared';
 import { TagsServiceServer } from 'src/services/tagsService.server';
+import { escapeFilterValue } from 'src/utils/helpers';
 
 type Slug = string;
 type Id = number;
 
 export class ContentServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getDraftCount(profileId: number, table: ContentType) {
     const { count } = await this.client
@@ -19,7 +20,7 @@ export class ContentServiceServer {
     return count;
   }
 
-  async getMetaFields(id: Id, table: ContentType, tagIds: number[]) {
+  async getMetaFields(id: Id, table: ContentType, tagIds: number[] | null) {
     return await Promise.all([
       this.client
         .from('useful_votes')
@@ -35,7 +36,7 @@ export class ContentServiceServer {
     ]);
   }
 
-  async incrementViewCount(table: ContentType, totalViews: number | undefined, id: Id) {
+  async incrementViewCount(table: ContentType, totalViews: number | null | undefined, id: Id) {
     return await this.client
       .from(table)
       .update({ total_views: (totalViews || 0) + 1 })
@@ -43,20 +44,26 @@ export class ContentServiceServer {
   }
 
   async isDuplicateExistingSlug(slug: Slug, id: Id, table: ContentType) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     const { data } = await this.client
       .from(table)
       .select('id,slug,previous_slugs')
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .single();
 
     return !!data?.id && data.id !== id;
   }
 
   async isDuplicateNewSlug(slug: Slug, table: ContentType) {
+    const escapedSlug = escapeFilterValue(slug);
+    const escapedArraySlug = escapeFilterValue(escapedSlug);
+
     const { data } = await this.client
       .from(table)
       .select('slug,previous_slugs')
-      .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
+      .or(`slug.eq."${escapedSlug}",previous_slugs.cs."{\\"${escapedArraySlug}\\"}"`)
       .single();
 
     return !!data;

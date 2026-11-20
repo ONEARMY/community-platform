@@ -1,0 +1,75 @@
+import '@testing-library/jest-dom/vitest';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AdminSidebar } from './AdminSidebar';
+
+beforeAll(() => {
+  vi.stubGlobal(
+    'matchMedia',
+    vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })),
+  );
+});
+
+const renderAt = (path: string) =>
+  render(
+    <MemoryRouter initialEntries={[path]}>
+      <SidebarProvider>
+        <AdminSidebar />
+      </SidebarProvider>
+    </MemoryRouter>,
+  );
+
+describe('AdminSidebar', () => {
+  it('shows the top-level sections in order', () => {
+    renderAt('/admin');
+
+    const labels = screen
+      .getAllByRole('listitem')
+      .filter((item) => item.dataset.sidebar === 'menu-item')
+      .map((item) => item.querySelector('span')?.textContent);
+
+    expect(labels).toEqual([
+      'Users',
+      'News',
+      'Library',
+      'Research',
+      'Questions',
+      'Map',
+      'Comments',
+      'Messages',
+      'Settings',
+    ]);
+  });
+
+  it('shows pages without an admin view as coming soon', () => {
+    renderAt('/admin/remakes');
+
+    expect(screen.getByRole('link', { name: 'Remakes' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/admin/projects');
+    expect(screen.queryByText('Coming soon')).not.toBeInTheDocument();
+  });
+
+  it('links Research to its admin page', () => {
+    renderAt('/admin/research');
+
+    expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('href', '/admin/research');
+    expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('data-active');
+  });
+
+  it('links Messages to its admin page', () => {
+    renderAt('/admin/messages');
+
+    expect(screen.getByRole('link', { name: 'Messages' })).toHaveAttribute('href', '/admin/messages');
+    expect(screen.getByRole('link', { name: 'Messages' })).toHaveAttribute('data-active');
+  });
+
+  it('opens the section containing the current page', () => {
+    renderAt('/admin/tags');
+
+    expect(screen.getByRole('link', { name: 'Tags' })).toHaveAttribute('data-active');
+    expect(screen.getByRole('link', { name: 'Profile types' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Overview' })).not.toBeInTheDocument();
+  });
+});

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, FollowButton, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import { Button, FollowButton, UserEngagementWrapper } from 'oa-components';
 import type { ResearchItem } from 'oa-shared';
 import { useState } from 'react';
 import { trackEvent } from 'src/common/Analytics';
@@ -9,6 +9,7 @@ import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Box } from 'theme-ui';
 import { ArticleCallToAction } from '@/components/ui/article-call-to-action';
+import { UsefulButton } from '@/components/ui/useful-button';
 
 type ResearchEngagementSectionProps = {
   research: ResearchItem;
@@ -33,7 +34,7 @@ const ResearchEngagementSection = observer(({ research }: ResearchEngagementSect
       >
         {research.author && (
           <ArticleCallToAction author={research.author} contributors={research.collaborators}>
-            <UsefulStatsButton
+            <UsefulButton
               isLoggedIn={!!profile}
               hasUserVotedUseful={hasVoted}
               onUsefulClick={toggleVote}

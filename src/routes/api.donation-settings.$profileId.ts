@@ -22,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         const profileResult = await client
           .from('profiles')
           .select('display_name,cover_images,donations_enabled')
-          .eq('id', params.profileId)
+          .eq('id', Number(params.profileId))
           .single();
 
         if (profileResult.data?.donations_enabled) {

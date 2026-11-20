@@ -10,6 +10,7 @@ export const baseTheme = {
     primaryHover: 'var(--color-primary-hover)',
     accent: 'var(--color-accent)',
     accentHover: 'var(--color-accent-hover)',
+    brandSecondary: 'var(--color-brand-secondary)',
   },
   zIndex: {
     behind: -1,

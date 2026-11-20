@@ -14,6 +14,8 @@ interface IProps {
   profile: Profile | undefined;
 }
 
+const initialValues: { selectedOptionIds: number[] } = { selectedOptionIds: [] };
+
 export const PollDisplay = ({ pollData, profile }: IProps) => {
   const [poll, setPoll] = useState(pollData);
   const toast = useToast();
@@ -64,12 +66,7 @@ export const PollDisplay = ({ pollData, profile }: IProps) => {
 
   return (
     <>
-      <Form
-        onSubmit={onSubmit}
-        initialValues={{
-          selectedOptionIds: [],
-        }}
-      >
+      <Form onSubmit={onSubmit} initialValues={initialValues}>
         {({ handleSubmit, form, values }) => {
           const selectSingle = (option: PollOptionDTO) => {
             if (!option.id) {

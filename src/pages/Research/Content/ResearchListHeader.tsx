@@ -1,12 +1,4 @@
-import debounce from 'debounce';
-import {
-  ButtonIcon,
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-  Tooltip,
-} from 'oa-components';
+import { ButtonIcon, ReturnPathLink, SearchField, Select } from 'oa-components';
 import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord } from 'oa-shared';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -15,6 +7,7 @@ import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { UserAction } from 'src/common/UserAction';
+import { CategoryHorizontalList } from 'src/pages/common/Category/CategoryHorizontalList';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
@@ -22,6 +15,8 @@ import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
+import { useDebouncedCallback } from 'use-debounce';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { listing } from '../labels';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { ResearchSortOptions } from '../ResearchSortOptions';
@@ -144,12 +139,9 @@ export const ResearchFilterHeader = (props: IProps) => {
     [searchParams],
   );
 
-  const onSearchInputChange = useCallback(
-    debounce((value: string) => {
-      searchValue(value);
-    }, 500),
-    [searchParams],
-  );
+  const onSearchInputChange = useDebouncedCallback((value: string) => {
+    searchValue(value);
+  }, 500);
 
   const searchValue = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -179,18 +171,14 @@ export const ResearchFilterHeader = (props: IProps) => {
     <UserAction
       incompleteProfile={
         <AuthWrapper roleRequired={tenantContext?.createResearchRoles}>
-          <Link to="/settings">
-            <Button
-              type="button"
-              variant="disabled"
-              data-cy="complete-profile-research"
-              data-tooltip-id="tooltip"
-              data-tooltip-content={listing.incompleteProfile}
-            >
-              {listing.create}
-            </Button>
-          </Link>
-          <Tooltip id="tooltip" />
+          <Tooltip>
+            <TooltipTrigger render={<Link to="/settings" />}>
+              <Button type="button" variant="disabled" data-cy="complete-profile-research">
+                {listing.create}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{listing.incompleteProfile}</TooltipContent>
+          </Tooltip>
         </AuthWrapper>
       }
       loggedIn={
@@ -223,7 +211,7 @@ export const ResearchFilterHeader = (props: IProps) => {
   );
 
   const categoryComponent = (
-    <CategoryHorizonalList
+    <CategoryHorizontalList
       allCategories={categories}
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>

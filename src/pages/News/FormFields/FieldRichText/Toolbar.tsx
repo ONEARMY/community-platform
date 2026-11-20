@@ -11,7 +11,7 @@ import {
   Undo2,
 } from 'lucide-react';
 import { Button } from 'oa-components';
-import type { MediaWithPublicUrl } from 'oa-shared';
+import type { Image } from 'oa-shared';
 import {
   Select,
   SelectContent,
@@ -31,7 +31,7 @@ import { AddYoutube } from './AddYoutube';
 
 interface IProps {
   editor: Editor;
-  imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
+  imageUploadHandler: (image: File) => Promise<Image | null>;
 }
 
 const HEADING_LEVELS = [2, 3] as const;

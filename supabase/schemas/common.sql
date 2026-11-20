@@ -1,3 +1,6 @@
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON TABLES FROM "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" REVOKE ALL ON SEQUENCES FROM "anon";
+
 CREATE TYPE "public"."content_types" AS ENUM (
     'questions',
     'projects',
@@ -41,7 +44,7 @@ CREATE OR REPLACE FUNCTION "public"."get_user_id_by_email"("email" "text") RETUR
     SET search_path = public, pg_temp
     AS $_$BEGIN
   -- is_sso_user = false matches auth.users' partial index on email, avoiding a full table scan
-  RETURN QUERY SELECT au.id FROM auth.users au WHERE au.email = $1 AND au.is_sso_user = false;
+  RETURN QUERY SELECT au.id FROM auth.users au WHERE au.email = lower($1) AND au.is_sso_user = false;
 END;$_$;
 
 CREATE OR REPLACE FUNCTION public.get_storage_object_path(
@@ -73,3 +76,7 @@ $$;
 
 -- Grant execute permission to authenticated users
 GRANT EXECUTE ON FUNCTION public.get_storage_object_path(uuid, text) TO authenticated;
+
+REVOKE EXECUTE ON FUNCTION "public"."get_user_email_by_id"("uuid") FROM PUBLIC, "anon";
+REVOKE EXECUTE ON FUNCTION "public"."get_user_email_by_profile_id"(bigint) FROM PUBLIC, "anon";
+REVOKE EXECUTE ON FUNCTION "public"."get_user_email_by_username"("text") FROM PUBLIC, "anon";

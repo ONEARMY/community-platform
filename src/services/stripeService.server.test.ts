@@ -79,7 +79,7 @@ const makeClient = (tierRows: unknown[]): SupabaseClient =>
 const activeTierRows = [
   {
     stripe_product_id: 'prod_active',
-    profile_badges: { premium_tier: 1, display_name: 'Starter' },
+    profile_badges: { premium_tier: 1, display_name: 'Start' },
   },
   {
     stripe_product_id: 'prod_archived',
@@ -354,5 +354,43 @@ describe('createSubscriptionWithPaymentIntent', () => {
     await expect(
       StripeServiceServer.createSubscriptionWithPaymentIntent('cus_1', 'price_1', 'eur'),
     ).rejects.toThrow('Failed to get payment intent client secret');
+  });
+});
+
+describe('StripeAdminService.assignBadgeForSubscription', () => {
+  it('ignores a badge the profile already has, so overlapping webhooks add it once', async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const client = {
+      from: vi.fn((table: string) => {
+        if (table === 'profiles') {
+          return {
+            select: () => ({
+              eq: () => ({ eq: () => ({ single: () => Promise.resolve({ data: { id: 7 } }) }) }),
+            }),
+          };
+        }
+        if (table === 'stripe_badge_products') {
+          return {
+            select: () => ({ eq: () => Promise.resolve({ data: [{ badge_id: 3 }], error: null }) }),
+          };
+        }
+        return {
+          delete: () => ({
+            eq: () => ({ eq: () => ({ in: () => Promise.resolve({ error: null }) }) }),
+          }),
+          upsert,
+        };
+      }),
+    };
+    const { createSupabaseAdminServerClient } = await import('src/repository/supabaseAdmin.server');
+    vi.mocked(createSupabaseAdminServerClient).mockReturnValue(client as unknown as SupabaseClient);
+    const { StripeAdminService } = await import('./stripeService.server');
+
+    await new StripeAdminService().assignBadgeForSubscription('auth_1', 'tenant_1', 3);
+
+    expect(upsert).toHaveBeenCalledWith(
+      { profile_id: 7, profile_badge_id: 3, tenant_id: 'tenant_1' },
+      { onConflict: 'profile_id,profile_badge_id', ignoreDuplicates: true },
+    );
   });
 });

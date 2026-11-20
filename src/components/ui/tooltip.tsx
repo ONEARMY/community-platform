@@ -1,18 +1,84 @@
 // oxlint-disable shadcn/no-arbitrary-values
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
+import { createContext, useContext, useId, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+
+type TooltipContextValue = {
+  contentId: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
+
+type TriggerPointerEvent = Parameters<
+  NonNullable<TooltipPrimitive.Trigger.Props['onPointerDown']>
+>[0];
+type TriggerClickEvent = Parameters<NonNullable<TooltipPrimitive.Trigger.Props['onClick']>>[0];
+
+const TooltipContext = createContext<TooltipContextValue | null>(null);
 
 function TooltipProvider({ delay = 0, ...props }: TooltipPrimitive.Provider.Props) {
   return <TooltipPrimitive.Provider data-slot="tooltip-provider" delay={delay} {...props} />;
 }
 
-function Tooltip({ ...props }: TooltipPrimitive.Root.Props) {
-  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
+function Tooltip({
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  ...props
+}: TooltipPrimitive.Root.Props) {
+  const contentId = useId();
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
+  const open = openProp ?? uncontrolledOpen;
+
+  const handleOpenChange: TooltipPrimitive.Root.Props['onOpenChange'] = (nextOpen, details) => {
+    setUncontrolledOpen(nextOpen);
+    onOpenChange?.(nextOpen, details);
+  };
+
+  return (
+    <TooltipContext.Provider value={{ contentId, open, setOpen: setUncontrolledOpen }}>
+      <TooltipPrimitive.Root
+        data-slot="tooltip"
+        open={open}
+        onOpenChange={handleOpenChange}
+        {...props}
+      />
+    </TooltipContext.Provider>
+  );
 }
 
-function TooltipTrigger({ ...props }: TooltipPrimitive.Trigger.Props) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
+function TooltipTrigger({ onPointerDown, onClick, ...props }: TooltipPrimitive.Trigger.Props) {
+  const context = useContext(TooltipContext);
+  const touchRef = useRef<{ wasOpen: boolean } | null>(null);
+
+  const handlePointerDown = (event: TriggerPointerEvent) => {
+    onPointerDown?.(event);
+    touchRef.current = event.pointerType === 'touch' ? { wasOpen: context?.open ?? false } : null;
+    if (touchRef.current) {
+      event.preventBaseUIHandler();
+    }
+  };
+
+  const handleClick = (event: TriggerClickEvent) => {
+    onClick?.(event);
+    const touch = touchRef.current;
+    touchRef.current = null;
+    if (touch) {
+      event.preventBaseUIHandler();
+      context?.setOpen(!touch.wasOpen);
+    }
+  };
+
+  return (
+    <TooltipPrimitive.Trigger
+      data-slot="tooltip-trigger"
+      aria-describedby={context?.open ? context.contentId : undefined}
+      onPointerDown={handlePointerDown}
+      onClick={handleClick}
+      {...props}
+    />
+  );
 }
 
 function TooltipContent({
@@ -25,6 +91,8 @@ function TooltipContent({
   ...props
 }: TooltipPrimitive.Popup.Props &
   Pick<TooltipPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>) {
+  const context = useContext(TooltipContext);
+
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner
@@ -36,6 +104,8 @@ function TooltipContent({
       >
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
+          role="tooltip"
+          id={context?.contentId}
           className={cn(
             'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
             className,

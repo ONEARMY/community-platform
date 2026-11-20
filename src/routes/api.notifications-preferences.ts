@@ -48,7 +48,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const formData = await request.formData();
     const comments = formData.get('comments') === 'true';
-    const content_reach: ContentReach = (formData.get('contentReach') as ContentReach) || null;
+    const contentReachValue = formData.get('contentReach');
+    const content_reach: ContentReach =
+      contentReachValue === 'all' || contentReachValue === 'important' ? contentReachValue : null;
     const is_unsubscribed = formData.get('isUnsubscribed') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('researchUpdates') === 'true';
@@ -72,32 +74,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw unauthorizedError();
     }
 
-    const existingPreferences = await client
-      .from('notifications_preferences')
-      .select('id')
-      .eq('user_id', profile.data.id)
-      .single();
-
-    const result = existingPreferences.data
-      ? await client
-          .from('notifications_preferences')
-          .update({
-            comments,
-            replies,
-            research_updates,
-            is_unsubscribed,
-            content_reach,
-          })
-          .eq('user_id', profile.data.id)
-      : await client.from('notifications_preferences').insert({
-          user_id: profile.data.id,
-          comments,
-          replies,
-          research_updates,
-          is_unsubscribed,
-          content_reach,
-          tenant_id: process.env.TENANT_ID!,
-        });
+    const result = await client.from('notifications_preferences').upsert(
+      {
+        user_id: profile.data.id,
+        comments,
+        replies,
+        research_updates,
+        is_unsubscribed,
+        content_reach,
+        tenant_id: process.env.TENANT_ID!,
+      },
+      { onConflict: 'user_id' },
+    );
 
     if (result.error) {
       throw new Error(result.error?.code + ': ' + result.error?.message + result.error?.details);

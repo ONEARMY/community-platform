@@ -1,8 +1,8 @@
 import type { MapPin } from 'oa-shared';
+import { Link } from 'react-router';
 import { Box } from 'theme-ui';
 import { CardButton } from '../CardButton/CardButton';
 import { CardProfile } from '../CardProfile/CardProfile';
-import { InternalLink } from '../InternalLink/InternalLink';
 
 export interface IProps {
   item: MapPin;
@@ -27,22 +27,18 @@ export const CardListItem = (props: IProps) => {
   const wrapperProps = {
     'data-cy': testProp,
     'data-testid': testProp,
-    sx: {
-      borderRadius: 2,
-      paddingY: 2,
-      paddingX: 0,
-    },
   };
 
   if (viewport === 'mobile') {
     return (
-      <InternalLink
+      <Link
         target="_blank"
         to={item.profile?.username ? `/u/${item.profile.username}` : '/settings/profile'}
         {...wrapperProps}
+        className="rounded-md py-2"
       >
         {Card}
-      </InternalLink>
+      </Link>
     );
   }
 

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { ContentStatistics, FollowButton, UsefulStatsButton } from 'oa-components';
+import { ContentStatistics, FollowButton } from 'oa-components';
 import { PremiumTier, type ResearchItem } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
@@ -9,6 +9,7 @@ import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Flex } from 'theme-ui';
+import { UsefulButton } from '@/components/ui/useful-button';
 
 type ResearchFooterProps = {
   research: ResearchItem;
@@ -37,7 +38,7 @@ const ResearchFooter = observer(({ research }: ResearchFooterProps) => {
         <ClientOnly fallback={<></>}>
           {() => (
             <>
-              <UsefulStatsButton
+              <UsefulButton
                 hasUserVotedUseful={hasVoted}
                 isLoggedIn={!!profile}
                 onUsefulClick={toggleVote}

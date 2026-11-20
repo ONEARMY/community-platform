@@ -1,6 +1,6 @@
-import { Username } from 'oa-components';
 import type { Remake } from 'oa-shared';
 import { Box, Flex, Image } from 'theme-ui';
+import { Username } from '@/components/ui/username';
 import { REMAKE_IMAGE_ASPECT_RATIO } from './constants';
 
 interface IProps {

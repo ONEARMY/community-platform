@@ -1,14 +1,6 @@
-import {
-  AuthorDisplay,
-  Category,
-  ContentStatistics,
-  DisplayDate,
-  ModerationStatus,
-  TagList,
-  UsefulStatsButton,
-} from 'oa-components';
+import { Category, ContentStatistics, TagList } from 'oa-components';
 import type { Profile, Project } from 'oa-shared';
-import { DifficultyLevelRecord, PremiumTier } from 'oa-shared';
+import { DifficultyLevelRecord, ModerationRecord, PremiumTier } from 'oa-shared';
 import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
@@ -16,10 +8,15 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
+import { MODERATION_BADGE_VARIANTS } from 'src/utils/moderation';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { UsefulButton } from '@/components/ui/useful-button';
+import { Username } from '@/components/ui/username';
 
 interface IProps {
   commentsCount: number;
@@ -92,7 +89,7 @@ export const LibraryDescription = ({
               gap: 2,
             }}
           >
-            <AuthorDisplay author={item.author} />
+            {item.author && <Username user={item.author} showAvatar />}
 
             <Text variant="auxiliary">
               <DisplayDate
@@ -201,10 +198,13 @@ export const LibraryDescription = ({
           </Box>
 
           {!item.isDraft && item.moderation !== 'accepted' && (
-            <ModerationStatus
-              status={item.moderation}
-              sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }}
-            />
+            <Badge
+              variant={MODERATION_BADGE_VARIANTS[item.moderation]}
+              className="absolute top-4 right-4"
+              data-cy={`moderationstatus-${item.moderation}`}
+            >
+              {ModerationRecord[item.moderation]}
+            </Badge>
           )}
         </Box>
       </Flex>
@@ -223,7 +223,7 @@ export const LibraryDescription = ({
         <Flex sx={{ gap: 2 }}>
           <ClientOnly fallback={<></>}>
             {() => (
-              <UsefulStatsButton
+              <UsefulButton
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}

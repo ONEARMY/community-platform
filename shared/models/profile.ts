@@ -1,6 +1,6 @@
 import type { JSONContent } from '@tiptap/core';
+import type { Json } from '../database';
 import type { Comment } from './comment';
-import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
 import type { DBMedia, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
@@ -16,30 +16,40 @@ import type { ResearchUpdate } from './research';
 import { Tag } from './tag';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
+function parseJsonColumn<T>(value: Json | null): T | null {
+  if (!value) {
+    return null;
+  }
+
+  return (typeof value === 'string' ? JSON.parse(value) : value) as T;
+}
+
 export class DBProfile {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly tags?: DBProfileTagJoin[];
   readonly badges?: DBProfileBadgeJoin[];
-  readonly pin?: DBMapPin;
-  readonly type?: DBProfileType;
+  readonly pin?: Pick<DBMapPin, 'id' | 'moderation'>[];
+  readonly type?: DBProfileType | null;
   username: string | null;
   display_name: string;
   photo: DBMedia | null;
   cover_images: DBMedia[] | null;
-  country: string;
+  country: string | null;
   roles: string[] | null;
-  visitor_policy: string | null;
+  visitor_policy: Json | null;
   is_blocked_from_messaging: boolean | null;
   about: string | null;
-  impact: string | null;
+  impact: Json | null;
   is_contactable: boolean | null;
-  last_active: Date | null;
+  last_active: string | null;
   website: string | null;
-  total_views: number;
-  auth_id: string;
-  profile_type: number;
+  total_views: number | null;
+  auth_id: string | null;
+  profile_type: number | null;
   donations_enabled: boolean;
+  moderation: Moderation | null;
+  moderation_feedback: string | null;
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj);
@@ -68,6 +78,8 @@ export class Profile {
   coverImages: MediaWithPublicUrl[] | null;
   authorUsefulVotes?: AuthorVotes[];
   donationsEnabled: boolean;
+  moderation: Moderation | null;
+  moderationFeedback: string | null;
 
   constructor(obj: Profile) {
     Object.assign(this, obj);
@@ -79,36 +91,36 @@ export class Profile {
     coverImages: MediaWithPublicUrl[] | null = null,
     authorVotes?: AuthorVotes[],
   ) {
-    let impact = null;
+    let impact: IUserImpact | null = null;
 
     try {
-      impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null;
+      impact = parseJsonColumn<IUserImpact>(dbProfile.impact);
     } catch (_) {
       console.error('error parsing impact');
     }
 
     return new Profile({
       id: dbProfile.id,
-      createdAt: dbProfile.created_at,
-      country: dbProfile.country,
+      createdAt: new Date(dbProfile.created_at),
+      country: dbProfile.country ?? '',
       displayName: dbProfile.display_name,
       username: dbProfile.username,
       photo: photo ?? null,
       roles: dbProfile.roles || null,
       type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
-      visitorPolicy: dbProfile.visitor_policy
-        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
-        : null,
+      visitorPolicy: parseJsonColumn<UserVisitorPreference>(dbProfile.visitor_policy),
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages ?? null,
       impact,
       isContactable: dbProfile.is_contactable || null,
-      lastActive: dbProfile.last_active,
+      lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
-      totalViews: dbProfile.total_views,
+      totalViews: dbProfile.total_views ?? 0,
       authorUsefulVotes: authorVotes,
       donationsEnabled: dbProfile.donations_enabled,
+      moderation: dbProfile.moderation ?? null,
+      moderationFeedback: dbProfile.moderation_feedback ?? null,
       badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
     });
@@ -127,23 +139,22 @@ export type ProfileListItem = Pick<
 >;
 
 type NotificationContent = News | Comment | Question | ResearchUpdate;
-type NotificationSourceContentType = SubscribableContentTypes;
 
 export class DBNotification implements IDBDocSB {
   readonly id: number;
-  readonly title: string;
+  readonly title: string | null;
   readonly action_type: NotificationActionType;
   readonly content_id: number;
   readonly content_type: NotificationContentType;
-  readonly created_at: Date;
-  is_read: boolean;
-  modified_at: Date | null;
-  readonly source_content_type: NotificationSourceContentType;
-  readonly source_content_id: number;
-  readonly owned_by: DBProfile;
+  readonly created_at: string;
+  is_read: boolean | null;
+  modified_at: string | null;
+  readonly source_content_type: string | null;
+  readonly source_content_id: number | null;
+  readonly owned_by?: DBProfile;
   readonly owned_by_id: number;
-  readonly triggered_by: DBProfile;
-  readonly triggered_by_id: number;
+  readonly triggered_by?: Pick<DBProfile, 'id' | 'username' | 'photo'> | null;
+  readonly triggered_by_id: number | null;
   readonly tenant_id: string;
 
   constructor(obj: Partial<DBNotification>) {
@@ -161,8 +172,8 @@ export class Notification implements IDoc {
   modifiedAt: Date | null;
   ownedById: number;
   isRead: boolean;
-  sourceContentType: NotificationSourceContentType;
-  sourceContentId: number;
+  sourceContentType: string | null;
+  sourceContentId: number | null;
 
   content?: NotificationContent;
   ownedBy?: BasicAuthorDetails;
@@ -175,7 +186,7 @@ export class Notification implements IDoc {
   static fromDB(dbNotification: DBNotification) {
     return new Notification({
       id: dbNotification.id,
-      title: dbNotification.title,
+      title: dbNotification.title ?? '',
       actionType: dbNotification.action_type,
       contentType: dbNotification.content_type,
       contentId: dbNotification.content_id,
@@ -184,9 +195,13 @@ export class Notification implements IDoc {
       createdAt: new Date(dbNotification.created_at),
       modifiedAt: dbNotification.modified_at ? new Date(dbNotification.modified_at) : null,
       ownedById: dbNotification.owned_by_id,
-      isRead: dbNotification.is_read,
+      isRead: !!dbNotification.is_read,
       triggeredBy: dbNotification.triggered_by
-        ? Profile.fromDB(dbNotification.triggered_by)
+        ? {
+            id: dbNotification.triggered_by.id,
+            username: dbNotification.triggered_by.username,
+            photo: null,
+          }
         : undefined,
       ownedBy: dbNotification.owned_by ? Profile.fromDB(dbNotification.owned_by) : undefined,
     });
@@ -425,7 +440,6 @@ export type ProfileFormData = {
   country: string;
   website: string;
   isContactable: boolean;
-  type: string;
   photo?: MediaWithPublicUrl;
   coverImages?: MediaWithPublicUrl[];
   showVisitorPolicy: boolean;
@@ -433,11 +447,19 @@ export type ProfileFormData = {
   visitorPreferenceDetails?: UserVisitorPreference['details'];
 };
 
+export type OrganisationApplicationFormData = {
+  type: string;
+  username: string;
+  displayName: string;
+  about: string;
+  website: string;
+  coverImages: MediaWithPublicUrl[];
+};
+
 export type ProfileDTO = {
   displayName: string;
   about: string;
   isContactable: boolean;
-  type: string;
   country: string | null;
   website: string | null;
   photo: DBMedia | null;
@@ -550,11 +572,47 @@ export type UpsertPin = Omit<DBMapPin, 'id' | 'profile' | 'moderation' | 'modera
 export type SubscribedUser = {
   profile_id: number;
   profile_created_at: string;
-  email: string;
+  email: string | null;
   is_unsubscribed: boolean;
-  badge_ids: number[];
-  roles: string[];
+  badge_ids?: number[];
+  roles?: string[];
   replies: boolean;
   comments: boolean;
   research_updates: boolean;
 };
+
+export type DBAdminOrganisation = Pick<
+  DBProfile,
+  'id' | 'username' | 'display_name' | 'about' | 'moderation_feedback' | 'created_at'
+> & {
+  moderation: Moderation;
+  type: Pick<DBProfileType, 'display_name'> | null;
+};
+
+export class AdminOrganisation {
+  id: number;
+  username: string | null;
+  displayName: string;
+  about: string | null;
+  typeName: string | null;
+  moderation: Moderation;
+  moderationFeedback: string | null;
+  createdAt: Date;
+
+  constructor(obj: AdminOrganisation) {
+    Object.assign(this, obj);
+  }
+
+  static fromDB(obj: DBAdminOrganisation) {
+    return new AdminOrganisation({
+      id: obj.id,
+      username: obj.username,
+      displayName: obj.display_name,
+      about: obj.about,
+      typeName: obj.type?.display_name ?? null,
+      moderation: obj.moderation,
+      moderationFeedback: obj.moderation_feedback,
+      createdAt: new Date(obj.created_at),
+    });
+  }
+}

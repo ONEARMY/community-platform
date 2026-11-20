@@ -55,7 +55,10 @@ export class NotificationsPreferences {
   researchUpdates: boolean;
   isUnsubscribed: boolean;
 
-  static fromDB(dBNotificationsPreferences: DBNotificationsPreferences) {
+  static fromDB(
+    dBNotificationsPreferences: Omit<DBNotificationsPreferences, 'id' | 'user_id'> &
+      Partial<DBNotificationsPreferences>,
+  ) {
     return {
       id: dBNotificationsPreferences.id || undefined,
       userId: dBNotificationsPreferences.user_id || undefined,

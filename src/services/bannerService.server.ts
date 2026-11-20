@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import type { DBBanner } from 'oa-shared';
+import type { Database } from 'oa-shared';
 import { Banner } from 'oa-shared';
 
 export const bannerCache = new Keyv<Banner>({ ttl: 86400000 }); // ttl: 24 hours
@@ -11,7 +11,7 @@ export interface BannerInput {
 }
 
 export class BannerServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async create(data: BannerInput) {
     const result = await this.client
@@ -19,7 +19,7 @@ export class BannerServiceServer {
       .insert({
         text: data.text,
         url: data.url,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select()
       .single();
@@ -30,7 +30,7 @@ export class BannerServiceServer {
 
     await bannerCache.delete('banner');
 
-    return Banner.fromDB(result.data as DBBanner);
+    return Banner.fromDB(result.data);
   }
 
   async update(id: number, data: BannerInput) {
@@ -50,7 +50,7 @@ export class BannerServiceServer {
 
     await bannerCache.delete('banner');
 
-    return Banner.fromDB(result.data as DBBanner);
+    return Banner.fromDB(result.data);
   }
 
   async delete(id: number) {

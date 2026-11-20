@@ -81,7 +81,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       return data({}, { headers, status: 500, statusText: 'Error updating accepted answer' });
     }
 
-    new ProfileServiceServer(supabase.client).updateUserActivity(profile.auth_id);
+    new ProfileServiceServer(supabase.client).updateUserActivity(claims.data.claims.sub);
 
     return data({ success: true }, { headers, status: 200 });
   } catch (error) {

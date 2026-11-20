@@ -19,12 +19,19 @@ export class TenantSettings {
   colorPrimaryHover: string;
   colorAccent: string;
   colorAccentHover: string;
+  colorSecondary?: string;
   showImpact: boolean;
   hasMembershipTiers: boolean;
   createResearchRoles: UserRole[];
   gaTrackingId: string;
   pwaIcons?: PWAIcons;
   membershipTerms?: string;
+  organisationSignupDescriptionHtml?: string;
+  organisationActivity?: string;
+  newsCtaTitle?: string;
+  newsCtaBody?: string;
+  newsCtaImageUrl?: string;
+  newsCtaHelpLink?: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);
@@ -38,3 +45,10 @@ export interface PWAIcons {
   256: string;
   512: string;
 }
+
+export type DBDonationSettings = {
+  defaultCampaignId?: string;
+  defaultDescription?: string;
+  defaultImageUrl?: string;
+  spaceDescription?: string;
+};

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { render } from '../test/utils';
 import { Button } from './Button';
@@ -38,5 +38,22 @@ describe('Button', () => {
     );
 
     expect(getByRole('button')).not.toHaveAttribute('iconSize');
+  });
+
+  it('does not pass small through to the underlying button element when false', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { getByRole } = render(<Button small={false}>Follow</Button>);
+
+    expect(getByRole('button')).not.toHaveAttribute('small');
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
+  it('applies the small size without passing small to the button element', () => {
+    const { getByRole } = render(<Button small>Follow</Button>);
+
+    expect(getByRole('button')).not.toHaveAttribute('small');
+    expect(getByRole('button')).toHaveStyle('height: 2rem');
   });
 });

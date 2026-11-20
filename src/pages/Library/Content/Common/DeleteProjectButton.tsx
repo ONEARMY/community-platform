@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react';
-import { Button, ConfirmModal } from 'oa-components';
+import { Button } from 'oa-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { trackEvent } from 'src/common/Analytics';
 import { useToast } from 'src/common/Toast';
 import { logger } from 'src/logger';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { libraryService } from '../../library.service';
 
 type DeleteProjectButtonProps = {

@@ -14,7 +14,7 @@ export default function Index() {
           sure therefore that you read them carefully before using the platform. The platform code
           is licensed as MIT, and full details of the code license can be found on{' '}
           <a
-            href="https://github.com/ONEARMY/community-platform/blob/master/LICENSE"
+            href="https://github.com/ONEARMY/community-platform/blob/main/LICENSE"
             rel="noopener noreferrer"
             target="_blank"
           >

@@ -5,3 +5,4 @@ fixtures/seed/*.rej
 build
 *.js
 cypress.env.json
+test_results

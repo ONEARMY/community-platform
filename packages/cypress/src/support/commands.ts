@@ -17,9 +17,13 @@ declare global {
       interceptAddressSearchFetch(addressResponse): Chainable<void>;
       interceptAddressReverseFetch(addressResponse): Chainable<void>;
       step(message: string): Chainable<void>;
+      waitForUnreadNotification(): Chainable<void>;
     }
   }
 }
+
+const NOTIFICATION_POLL_INTERVAL_MS = 250;
+const NOTIFICATION_POLL_ATTEMPTS = 60;
 
 Cypress.Commands.add('clearServiceWorkers', () => {
   cy.window().then((w) => {
@@ -66,6 +70,28 @@ Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
  */
 Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message));
 
+function waitForHydration(win: Cypress.AUTWindow) {
+  const timeout = Cypress.config('defaultCommandTimeout');
+  const startedAt = Date.now();
+
+  return new Cypress.Promise<Cypress.AUTWindow>((resolve, reject) => {
+    const check = () => {
+      if (win.document.documentElement.dataset.hydrated) {
+        return resolve(win);
+      }
+      if (Date.now() - startedAt > timeout) {
+        return reject(new Error(`Page did not hydrate within ${timeout}ms`));
+      }
+      setTimeout(check, 50);
+    };
+    check();
+  });
+}
+
+Cypress.Commands.overwrite<'visit'>('visit', (originalFn, url, options) =>
+  originalFn(url, options).then(waitForHydration),
+);
+
 const openNotifications = () => {
   cy.get('[data-cy=NotificationsSupabase-desktop]').should('exist');
 
@@ -106,6 +132,25 @@ Cypress.Commands.add('expectNewNotification', (props: ExpectedNewNotification) =
   }
 
   cy.url().should('include', path);
+});
+
+function pollUnreadNotification(attemptsLeft: number) {
+  cy.request({ url: '/api/notifications', log: false }).then(({ body }) => {
+    const hasUnread = body.notifications?.some((notification: { isRead: boolean }) => !notification.isRead);
+
+    if (hasUnread) {
+      return;
+    }
+    if (attemptsLeft === 0) {
+      throw new Error('No unread notification was generated');
+    }
+    cy.wait(NOTIFICATION_POLL_INTERVAL_MS, { log: false });
+    pollUnreadNotification(attemptsLeft - 1);
+  });
+}
+
+Cypress.Commands.add('waitForUnreadNotification', () => {
+  pollUnreadNotification(NOTIFICATION_POLL_ATTEMPTS);
 });
 
 Cypress.Commands.add('expectNoNewNotification', () => {

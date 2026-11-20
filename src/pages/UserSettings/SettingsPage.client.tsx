@@ -1,11 +1,15 @@
 import { observer } from 'mobx-react';
 import type { availableGlyphs } from 'oa-components';
 import { useContext, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Box, Card, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
+import { Tabs } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { TenantContext } from '../common/TenantContext';
+import { OrganisationModerationSection } from './content/sections/OrganisationModeration.section';
+import { SettingsFormTab } from './SettingsFormTab';
 import { SettingsFormTabList } from './SettingsFormTabList';
 import { SettingsPageAccount } from './SettingsPageAccount';
 import { SettingsPageImpact } from './SettingsPageImpact';
@@ -20,8 +24,8 @@ import '../../styles/leaflet.css';
 export const SettingsPage = observer(() => {
   const tenantContext = useContext(TenantContext);
   const { isComplete, missingFields, profile } = useProfileStore();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isMobile = useIsMobile();
 
   const isMember = !profile?.type?.isSpace;
   const showImpactTab = !isMember && tenantContext?.showImpact;
@@ -50,6 +54,7 @@ export const SettingsPage = observer(() => {
             )}
           </Flex>
         ),
+        preBody: OrganisationModerationSection,
         body: SettingsPageUserProfile,
         glyph: 'profile' as availableGlyphs,
       },
@@ -89,8 +94,6 @@ export const SettingsPage = observer(() => {
     return null;
   }
 
-  const currentTab = tabs.find((tab) => tab.route === pathname);
-
   return (
     <Box
       sx={{
@@ -98,58 +101,15 @@ export const SettingsPage = observer(() => {
         width: '100%',
         alignSelf: 'center',
         paddingTop: [3, 5, 10],
+        paddingX: [2, 0, 0],
       }}
     >
-      <Flex
-        sx={{
-          alignContent: 'stretch',
-          alignSelf: 'stretch',
-          justifyContent: 'stretch',
-          flexDirection: ['column', 'row'],
-          gap: 4,
-        }}
-      >
-        <SettingsFormTabList
-          tabs={tabs}
-          currentTab={pathname}
-          onTabChange={(path) => navigate(path)}
-        />
-        <Flex
-          sx={{
-            alignContent: 'stretch',
-            justifyContent: 'stretch',
-            flexDirection: 'column',
-            flex: 1,
-          }}
-        >
-          {currentTab && (
-            <>
-              {currentTab.header && (
-                <Card
-                  sx={{
-                    backgroundColor: 'softblue',
-                    borderRadius: 3,
-                    marginBottom: 4,
-                    padding: [3, 5],
-                  }}
-                >
-                  {currentTab.header}
-                </Card>
-              )}
-              <Card
-                sx={{
-                  borderRadius: 3,
-                  marginBottom: 4,
-                  padding: [2, 4],
-                  overflow: 'visible',
-                }}
-              >
-                <currentTab.body />
-              </Card>
-            </>
-          )}
-        </Flex>
-      </Flex>
+      <Tabs value={pathname} orientation={isMobile ? 'horizontal' : 'vertical'}>
+        <SettingsFormTabList tabs={tabs} />
+        {tabs.map((tab) => (
+          <SettingsFormTab key={tab.title} value={tab.route} tab={tab} />
+        ))}
+      </Tabs>
     </Box>
   );
 });

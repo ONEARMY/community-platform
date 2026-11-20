@@ -36,7 +36,7 @@ export const FactoryDBResearchItemUpdate = (
 ): DBResearchUpdate => ({
   created_by: faker.number.int(100),
   comment_count: 0,
-  created_at: faker.date.past(),
+  created_at: faker.date.past().toISOString(),
   deleted: false,
   description: faker.lorem.sentences(2),
   id: faker.number.int(),
@@ -44,12 +44,12 @@ export const FactoryDBResearchItemUpdate = (
   files: [],
   file_download_count: faker.number.int(),
   file_link: '',
-  modified_at: faker.date.past(),
+  modified_at: faker.date.past().toISOString(),
   research_id: faker.number.int(100),
   title: faker.lorem.words(),
   video_url: null,
   is_draft: false,
-  published_at: faker.date.past(),
+  published_at: faker.date.past().toISOString(),
   ...researchDBItemUpdateOverloads,
 });
 
@@ -96,8 +96,8 @@ export const FactoryDBResearchItem = (
   id: faker.number.int(),
   is_draft: false,
   created_by: faker.number.int(),
-  modified_at: faker.date.past(),
-  created_at: faker.date.past(),
+  modified_at: faker.date.past().toISOString(),
+  created_at: faker.date.past().toISOString(),
   deleted: faker.datatype.boolean(),
   description: faker.lorem.paragraphs(),
   title: faker.lorem.words(),
@@ -114,7 +114,7 @@ export const FactoryDBResearchItem = (
   update_count: 0,
   status: 'in-progress',
   useful_count: 2,
-  published_at: faker.date.past(),
+  published_at: faker.date.past().toISOString(),
   ...researchItemOverloads,
 });
 

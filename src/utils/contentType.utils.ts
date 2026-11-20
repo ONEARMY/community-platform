@@ -6,5 +6,5 @@ export function resolveType(type: string) {
     return 'projects';
   }
 
-  return type;
+  return null;
 }

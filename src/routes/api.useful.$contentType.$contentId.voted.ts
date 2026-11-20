@@ -1,3 +1,4 @@
+import { isUsefulContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
@@ -10,10 +11,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 401 });
   }
 
+  if (!isUsefulContentType(params.contentType)) {
+    return Response.json({}, { headers, status: 400, statusText: 'unsupported content type' });
+  }
+
   const useful = await client
     .from('useful_votes')
     .select('id, profiles!inner(id)', { count: 'exact' })
-    .eq('content_id', params.contentId)
+    .eq('content_id', Number(params.contentId))
     .eq('content_type', params.contentType)
     .eq('profiles.auth_id', claims.data.claims.sub);
 

@@ -33,7 +33,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
     dbProject.id,
     'projects',
-    dbProject.tags,
+    dbProject.tags?.map(Number) ?? null,
   );
 
   const images = new LibraryServiceServer(client).getProjectPublicMedia(dbProject);

@@ -67,11 +67,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         video_url: data.videoUrl,
         images: data.images,
         files: data.files,
+        file_link: data.fileLink,
         is_draft: data.isDraft,
-        published_at: data.isDraft ? null : new Date(),
+        published_at: data.isDraft ? null : new Date().toISOString(),
         research_id: researchId,
         created_by: profile.id,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select('*,research:research(id,title,collaborators,created_by,is_draft,slug)')
       .single();

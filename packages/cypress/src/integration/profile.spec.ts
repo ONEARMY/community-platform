@@ -43,7 +43,6 @@ describe('[Profile]', () => {
 
       cy.step('Go to Profile');
       cy.clickMenuItem(UserMenuItem.Profile);
-      cy.wait(1000);
       cy.url().should('include', `/u/${user.username}`);
       cy.get('[data-cy=SpaceProfile]').should('not.exist');
       cy.get('[data-cy=MemberProfile]').should('be.visible');
@@ -62,7 +61,6 @@ describe('[Profile]', () => {
 
       cy.step("Logged out people can see that they're contactable");
       cy.logout();
-      cy.wait(2000);
       cy.visit(`/u/${contactee.username}`);
       cy.get('[data-cy="UserContactNotLoggedIn"]');
 
@@ -190,7 +188,6 @@ describe('[Profile]', () => {
       cy.visit(`/u/${subscriber.username}`);
 
       cy.get('[data-cy="the-first-test-question-link"]').click();
-      cy.wait(2000);
       cy.url().should('include', `/questions/the-first-test-question?utm_source=user-profile`);
       cy.get('[data-cy="question-title"]').should('be.visible').contains('The first test question?');
     });
@@ -216,63 +213,6 @@ describe('[Profile]', () => {
       cy.get('[data-testid="question-contributions"]').find('[data-testid="questions-link"]').first().click();
       cy.get('[data-cy=question-body]').get('[data-testid="Username: pro badge"]');
       cy.get('[data-cy=comments-section]').get('[data-testid="Username: pro badge"]');
-    });
-  });
-
-  describe('[Upgrade Badge Button]', () => {
-    it('[Should not show Go PRO button when user has pro badge]', () => {
-      cy.step('User with pro badge should not see upgrade button');
-      cy.signIn(subscriber.email, subscriber.password);
-      cy.visit(`/u/${subscriber.username}`);
-
-      cy.step('Verify pro badge is visible');
-      cy.get('[data-testid="badge_pro"]').should('exist');
-
-      cy.step('Verify Go PRO button is not visible');
-      cy.get('[data-cy="UpgradeBadge"]').should('not.exist');
-    });
-
-    it('[Should show Go PRO button when user does not have pro badge]', () => {
-      cy.intercept('GET', '/api/upgrade-badges').as('getUpgradeBadges');
-
-      const newUser = generateNewUserDetails();
-      cy.signUpNewUser(newUser);
-
-      cy.step('Set user as workspace to be eligible for PRO badge');
-      cy.visit('/settings');
-      cy.get('[data-cy=tab-Profile]').click();
-      cy.get('[data-cy=workspace]').click();
-      cy.get('[data-cy=username]').clear().type(newUser.username);
-      cy.setSettingImage('avatar', 'userImage');
-      cy.setSettingImage('profile-cover-1', 'coverImages-0');
-      cy.setSettingBasicUserInfo({
-        displayName: newUser.username,
-        description: 'A workspace profile',
-      });
-      cy.saveSettingsForm();
-
-      cy.step('Navigate to own profile');
-      cy.visit(`/u/${newUser.username}`);
-
-      cy.wait(2000);
-
-      cy.step('Verify Go PRO button is visible for user without badge');
-      cy.get('[data-cy="UpgradeBadge"]', { timeout: 15000 }).should('be.visible');
-      cy.get('[data-cy="UpgradeBadge"]').should('contain', 'Go PRO');
-
-      cy.step('Verify badge is not shown');
-      cy.get('[data-testid="badge_pro"]').should('not.exist');
-    });
-
-    it('[Should not show Go PRO button when viewing another user profile]', () => {
-      const newUser = generateNewUserDetails();
-      cy.signUpNewUser(newUser);
-
-      cy.step('View another user profile');
-      cy.visit(`/u/${subscriber.username}`);
-
-      cy.step('Verify Go PRO button is not visible on other profiles');
-      cy.get('[data-cy="UpgradeBadge"]').should('not.exist');
     });
   });
 });

@@ -1,4 +1,5 @@
 import type { DBProfile, IModeration, Profile } from 'oa-shared';
+import { UserRole } from 'oa-shared';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
@@ -11,6 +12,8 @@ export const stripSpecialCharacters = (text: string) => {
 // get special characters from string using the same pattern as stripSpecialCharacters
 export const getSpecialCharacters = (text: string): string[] =>
   Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
+
+export const escapeFilterValue = (value: string) => value.replace(/[\\"]/g, '\\$&');
 
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {
@@ -33,6 +36,21 @@ export const arrayToJson = (arr: any[], keyField: string) => {
 
 export const numberWithCommas = (number: number) => {
   return new Intl.NumberFormat('en-US').format(number);
+};
+
+export const shortFormatNumber = (num: number): string => {
+  const units = [
+    { value: 1000000, suffix: 'M' },
+    { value: 1000, suffix: 'K' },
+  ];
+
+  for (const { value, suffix } of units) {
+    if (num >= value) {
+      return (num / value).toFixed(1).replace(/\.0$/, '') + suffix;
+    }
+  }
+
+  return num.toString();
 };
 
 // Take a string and capitalises the first letter
@@ -62,6 +80,16 @@ export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
 
   return roles.includes('admin');
+};
+
+// TODO: needs admin page created
+export const canModerate = (user?: DBProfile | Partial<Profile> | null) => {
+  if (!user) {
+    return false;
+  }
+  const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
+
+  return hasAdminRights(user) || roles.includes(UserRole.MODERATOR);
 };
 
 export const needsModeration = (doc: IModeration, user?: Profile) => {

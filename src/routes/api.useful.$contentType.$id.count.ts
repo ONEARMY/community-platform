@@ -1,4 +1,4 @@
-import type { UsefulContentType } from 'oa-shared';
+import { isUsefulContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -8,15 +8,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { contentType, id } = params;
 
-  const allowedContentTypes = [
-    'questions',
-    'projects',
-    'research',
-    'news',
-    'comments',
-  ] as const satisfies readonly UsefulContentType[];
-
-  if (!allowedContentTypes.includes(contentType as UsefulContentType)) {
+  if (!isUsefulContentType(contentType)) {
     return Response.json({ error: 'Unsupported content type' }, { status: 400 });
   }
 

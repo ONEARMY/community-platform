@@ -48,7 +48,6 @@ const unsubscribe = async (userCode: string): Promise<Response> => {
   body.append('comments', 'false');
   body.append('replies', 'false');
   body.append('researchUpdates', 'false');
-  body.append('contentReach', 'null');
   body.append('isUnsubscribed', 'true');
 
   return fetch(`/api/notifications-preferences-via-email/${userCode}`, {

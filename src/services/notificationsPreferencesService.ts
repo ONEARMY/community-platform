@@ -46,7 +46,6 @@ const unsubscribe = async () => {
   body.append('news', 'false');
   body.append('replies', 'false');
   body.append('researchUpdates', 'false');
-  body.append('contentReach', 'null');
   body.append('isUnsubscribed', 'true');
 
   return fetch('/api/notifications-preferences', {

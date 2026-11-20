@@ -1,11 +1,12 @@
 import { createServerClient, parseCookieHeader, serializeCookieHeader } from '@supabase/ssr';
+import type { Database } from 'oa-shared';
 
 // Create a single supabase client for interacting with your database
 export function createSupabaseServerClient(request: Request) {
   const headers = new Headers();
   const supabase = {
     headers,
-    client: createServerClient(process.env.SUPABASE_API_URL!, process.env.SUPABASE_KEY!, {
+    client: createServerClient<Database>(process.env.SUPABASE_API_URL!, process.env.SUPABASE_KEY!, {
       cookies: {
         getAll() {
           return parseCookieHeader(request.headers.get('Cookie') ?? '').map(({ name, value }) => ({

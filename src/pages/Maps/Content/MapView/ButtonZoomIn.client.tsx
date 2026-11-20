@@ -1,8 +1,8 @@
 import { Button } from 'oa-components';
 import type { ILatLng } from 'oa-shared';
 import { useEffect, useState } from 'react';
-import { Tooltip } from 'react-tooltip';
 import { logger } from 'src/logger';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { GetLocation } from '../../utils/geolocation';
 
 interface IProps {
@@ -48,21 +48,26 @@ export const ButtonZoomIn = ({ setCenter, setZoom }: IProps) => {
     },
   };
 
+  const handleClick = () => {
+    if (isDisabled) {
+      return;
+    }
+    promptUserLocation();
+    setZoom(9);
+  };
+
+  const label = isDisabled ? DENIED_TOOLTIP : ZOOM_IN_TOOLTIP;
+
   return (
-    <>
-      <Button
-        data-tooltip-content={isDisabled ? DENIED_TOOLTIP : ZOOM_IN_TOOLTIP}
+    <Tooltip>
+      <TooltipTrigger
+        render={<Button sx={sx} icon="gps-location" />}
         data-cy="LocationViewButton"
-        data-tooltip-id="locationButton-tooltip"
-        sx={sx}
-        onClick={() => {
-          promptUserLocation();
-          setZoom(9);
-        }}
-        disabled={isDisabled}
-        icon="gps-location"
+        aria-label={label}
+        aria-disabled={isDisabled}
+        onClick={handleClick}
       />
-      <Tooltip id="locationButton-tooltip" place="left" />
-    </>
+      <TooltipContent side="left">{label}</TooltipContent>
+    </Tooltip>
   );
 };

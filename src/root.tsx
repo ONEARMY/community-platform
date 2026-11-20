@@ -5,6 +5,7 @@ import { theme } from 'oa-themes';
 import { useContext, useEffect, useRef } from 'react';
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
+import { isProductionEnvironment } from './config/config';
 import { createSupabaseServerClient } from './repository/supabase.server';
 import { TenantSettingsService } from './services/tenantSettingsService.server';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
@@ -24,6 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     colorPrimaryHover: settings.colorPrimaryHover,
     colorAccent: settings.colorAccent,
     colorAccentHover: settings.colorAccentHover,
+    colorSecondary: settings.colorSecondary,
     siteName: settings.siteName,
     siteDescription: settings.siteDescription,
     siteImage: settings.siteImage,
@@ -41,9 +43,8 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     --color-primary-hover: ${loaderData.colorPrimaryHover};
     --color-accent: ${loaderData.colorAccent};
     --color-accent-hover: ${loaderData.colorAccentHover};
+    ${loaderData.colorSecondary ? `--color-brand-secondary: ${loaderData.colorSecondary};` : ''}
   `;
-
-  // const isProd = import.meta.env.VITE_BRANCH === 'production';
 
   // Only executed on client
   // When a top level ErrorBoundary or CatchBoundary are rendered,
@@ -67,6 +68,10 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
     // ensure we only do this once per mount
     reinjectStylesRef.current = false;
   }, [clientStyleData, emotionCache.sheet]);
+
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = 'true';
+  }, []);
 
   return (
     <html lang="en">
@@ -123,6 +128,7 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
   });
 
   // iOS PWA meta tags
+  tags.push({ name: 'mobile-web-app-capable', content: 'yes' });
   tags.push({ name: 'apple-mobile-web-app-capable', content: 'yes' });
   tags.push({
     name: 'apple-mobile-web-app-status-bar-style',
@@ -133,7 +139,7 @@ export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
     content: loaderData?.siteName || '',
   });
 
-  if (import.meta.env.VITE_BRANCH !== 'production') {
+  if (!isProductionEnvironment()) {
     tags.push({
       name: 'robots',
       content: 'noindex',

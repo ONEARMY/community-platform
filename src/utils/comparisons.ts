@@ -1,6 +1,4 @@
-import { isEqual } from 'lodash';
-
-import type { ISelectedTags, Tag } from 'oa-shared';
+import type { Tag } from 'oa-shared';
 
 /** Functions used to give as callback to the isEqual prop of form fields.
  *  The isEqual callback is used to determine if a field is dirty.
@@ -12,8 +10,11 @@ export const COMPARISONS = {
     }
     return a === b;
   },
-  tags: (a: ISelectedTags, b: ISelectedTags): boolean => {
-    return isEqual(a, b);
+  tags: (a: number[] | null, b: number[] | null): boolean => {
+    if (!a || !b) {
+      return a === b;
+    }
+    return a.length === b.length && a.every((id, i) => id === b[i]);
   },
   tagsSupabase: (a: Tag, b: Tag): boolean => {
     if (!a && !b) {

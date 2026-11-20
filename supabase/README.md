@@ -8,6 +8,7 @@ Require a couple of env variables in .env to run locally:
 ```
 RESEND_API_KEY=<from resend>
 SEND_EMAIL_HOOK_SECRET=<anything>
+SIGN_WEBHOOK_LOCALLY=true
 ```
 
 Then run (in the project root):

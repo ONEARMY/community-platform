@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from 'oa-shared';
 import { isTestEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
@@ -18,52 +19,52 @@ export type TierConfigMap = Record<number, { color: string; name: string; descri
 
 const STUB_PRICES: SupporterPrice[] = [
   {
-    id: 'stub_starter_month',
+    id: 'stub_start_month',
     unitAmount: 100,
     currency: 'eur',
     interval: 'month',
     tier: 1,
-    tierName: 'Starter',
+    tierName: 'Start',
   },
   {
-    id: 'stub_starter_year',
+    id: 'stub_start_year',
     unitAmount: 100,
     currency: 'eur',
     interval: 'year',
     tier: 1,
-    tierName: 'Starter',
+    tierName: 'Start',
   },
   {
-    id: 'stub_hero_month',
+    id: 'stub_power_month',
     unitAmount: 200,
     currency: 'eur',
     interval: 'month',
     tier: 2,
-    tierName: 'Hero',
+    tierName: 'Power',
   },
   {
-    id: 'stub_hero_year',
+    id: 'stub_power_year',
     unitAmount: 200,
     currency: 'eur',
     interval: 'year',
     tier: 2,
-    tierName: 'Hero',
+    tierName: 'Power',
   },
   {
-    id: 'stub_legend_month',
+    id: 'stub_boost_month',
     unitAmount: 300,
     currency: 'eur',
     interval: 'month',
     tier: 3,
-    tierName: 'Legend',
+    tierName: 'Boost',
   },
   {
-    id: 'stub_legend_year',
+    id: 'stub_boost_year',
     unitAmount: 300,
     currency: 'eur',
     interval: 'year',
     tier: 3,
-    tierName: 'Legend',
+    tierName: 'Boost',
   },
 ];
 
@@ -71,17 +72,17 @@ const STUB_TIER_CONFIG: { tiers: TierConfigMap; thankYouImageUrl: string | null 
   tiers: {
     1: {
       color: '#BFDEBA',
-      name: 'Starter',
+      name: 'Start',
       description: 'You help us develop new features, get videos in 4K without ads!',
     },
     2: {
       color: '#77BDE3',
-      name: 'Hero',
+      name: 'Power',
       description: 'You help us develop new features, get videos in 4K without ads!',
     },
     3: {
       color: '#FEE77B',
-      name: 'Legend',
+      name: 'Boost',
       description: 'You help us develop new features, get videos in 4K without ads!',
     },
   },
@@ -110,7 +111,7 @@ async function getStripe(): Promise<Stripe | null> {
 }
 
 export class StripeServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   // ── Static Stripe-API-only methods (no DB access) ──
 
@@ -595,7 +596,7 @@ export class StripeServiceServer {
 // privileged DB writes that bypass RLS
 
 export class StripeAdminService {
-  private client: SupabaseClient;
+  private client: SupabaseClient<Database>;
 
   constructor() {
     this.client = createSupabaseAdminServerClient();
@@ -613,7 +614,7 @@ export class StripeAdminService {
     await stripe.customers.update(stripeCustomerId, {
       metadata: { supabase_user_id: authId, tenant_id: tenantId },
     });
-    await this.client.from('stripe_customers').upsert(
+    const { error } = await this.client.from('stripe_customers').upsert(
       {
         auth_id: authId,
         stripe_customer_id: stripeCustomerId,
@@ -621,6 +622,9 @@ export class StripeAdminService {
       },
       { onConflict: 'auth_id,tenant_id' },
     );
+    if (error) {
+      throw error;
+    }
   }
 
   async getBadgeIdForProduct(productId: string): Promise<number | null> {
@@ -640,57 +644,79 @@ export class StripeAdminService {
   ): Promise<void> {
     const profileId = await this.getProfileIdByAuthId(authId, tenantId);
     if (!profileId) {
-      console.warn('No profile found for auth_id:', authId);
+      logger.warn(
+        `Account ${authId} has a paid subscription but no profile in tenant ${tenantId}, so it did not get a badge.`,
+      );
       return;
     }
 
     // Get all badge IDs that are stripe-linked tier badges
-    const { data: tierBadges } = await this.client
+    const { data: tierBadges, error: tierBadgesError } = await this.client
       .from('stripe_badge_products')
       .select('badge_id')
       .eq('tenant_id', tenantId);
+    if (tierBadgesError) {
+      throw tierBadgesError;
+    }
 
     const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
 
     // Remove any existing tier badges for this profile
     if (tierBadgeIds.length > 0) {
-      await this.client
+      const { error: deleteError } = await this.client
         .from('profile_badges_relations')
         .delete()
         .eq('profile_id', profileId)
         .eq('tenant_id', tenantId)
         .in('profile_badge_id', tierBadgeIds);
+      if (deleteError) {
+        throw deleteError;
+      }
     }
 
     // Assign the new badge
-    await this.client.from('profile_badges_relations').insert({
-      profile_id: profileId,
-      profile_badge_id: badgeId,
-      tenant_id: tenantId,
-    });
+    const { error: insertError } = await this.client.from('profile_badges_relations').upsert(
+      {
+        profile_id: profileId,
+        profile_badge_id: badgeId,
+        tenant_id: tenantId,
+      },
+      { onConflict: 'profile_id,profile_badge_id', ignoreDuplicates: true },
+    );
+    if (insertError) {
+      throw insertError;
+    }
   }
 
   async removeTierBadges(authId: string, tenantId: string): Promise<void> {
     const profileId = await this.getProfileIdByAuthId(authId, tenantId);
     if (!profileId) {
-      console.warn('No profile found for auth_id:', authId);
+      logger.info(
+        `Account ${authId} has no profile in tenant ${tenantId}, so there are no badges to remove. No action needed.`,
+      );
       return;
     }
 
-    const { data: tierBadges } = await this.client
+    const { data: tierBadges, error: tierBadgesError } = await this.client
       .from('stripe_badge_products')
       .select('badge_id')
       .eq('tenant_id', tenantId);
+    if (tierBadgesError) {
+      throw tierBadgesError;
+    }
 
     const tierBadgeIds = [...new Set(tierBadges?.map((b) => b.badge_id) ?? [])];
 
     if (tierBadgeIds.length > 0) {
-      await this.client
+      const { error: deleteError } = await this.client
         .from('profile_badges_relations')
         .delete()
         .eq('profile_id', profileId)
         .eq('tenant_id', tenantId)
         .in('profile_badge_id', tierBadgeIds);
+      if (deleteError) {
+        throw deleteError;
+      }
     }
   }
 

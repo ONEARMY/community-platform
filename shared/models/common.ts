@@ -16,9 +16,25 @@ export type Collaborator = {
   isVerified: boolean;
 };
 
-export type ContentType = 'questions' | 'projects' | 'research' | 'news';
+export const ContentTypes = ['questions', 'projects', 'research', 'news'] as const;
+export type ContentType = (typeof ContentTypes)[number];
 
-export type UsefulContentType = 'questions' | 'projects' | 'research' | 'news' | 'comments';
+export function isContentType(value: string | undefined): value is ContentType {
+  return ContentTypes.includes(value as ContentType);
+}
+
+export const UsefulContentTypes = [
+  'questions',
+  'projects',
+  'research',
+  'news',
+  'comments',
+] as const;
+export type UsefulContentType = (typeof UsefulContentTypes)[number];
+
+export function isUsefulContentType(value: string | undefined): value is UsefulContentType {
+  return UsefulContentTypes.includes(value as UsefulContentType);
+}
 
 export type ContentFormType = 'questions' | 'projects' | 'research' | 'researchUpdate' | 'news';
 

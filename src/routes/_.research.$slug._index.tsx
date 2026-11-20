@@ -43,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const [usefulVotes, subscribers, tags] = await contentService.getMetaFields(
     dbResearch.id,
     'research',
-    dbResearch.tags,
+    dbResearch.tags?.map(Number) ?? null,
   );
 
   const images = researchClient.getResearchPublicMedia(dbResearch);
@@ -57,7 +57,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     research.author = await factory.createAuthor(dbResearch.author);
   }
 
-  for (const dbUpdate of dbResearch.updates) {
+  for (const dbUpdate of dbResearch.updates ?? []) {
     if (dbUpdate.update_author?.photo) {
       const imageService = new ImageServiceServer(client);
       const update = research.updates.find(({ id }) => dbUpdate.id === id);

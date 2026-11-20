@@ -14,7 +14,6 @@ describe('[Research - List Articles]', () => {
   it('[Search Functionality - Filters articles]', () => {
     const searchTerm = 'test';
 
-    cy.wait(2000);
     cy.step('Type a keyword into the search bar');
     cy.get('[data-cy=research-search-box]').clear().type(searchTerm);
 
@@ -23,7 +22,6 @@ describe('[Research - List Articles]', () => {
   });
 
   it('[Search Functionality - Partial word search]', () => {
-    cy.wait(2000);
     cy.step('Search with a partial word');
     cy.get('[data-cy=research-search-box]').clear().type('tes');
 

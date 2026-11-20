@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type {
+  Database,
   DBMedia,
   DBProfile,
   DBProject,
@@ -16,8 +17,14 @@ import { ContentServiceServer } from 'src/services/contentService.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
+import { isPathInFolders } from 'src/utils/storage';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -61,24 +68,36 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const libraryService = new LibraryServiceServer(client);
 
     const currentProject = await libraryService.getById(id);
+
+    if (!currentProject) {
+      throw validationError('Project not found', 'project');
+    }
+
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     const slug = convertToSlug(data.title);
-    await validateRequest(request, profile, data, currentProject, slug, client);
+    await validateRequest(
+      request,
+      profile,
+      data,
+      currentProject,
+      slug,
+      client,
+      claims.data.claims.sub,
+    );
+
+    // 2. Update project
+    const projectDb = await updateProject(client, profile!, currentProject, data, slug);
+    const project = Project.fromDB(projectDb, []);
+    const storage = new StorageServiceServer(client);
 
     // Remove old cover image if it exists and no new image is provided or a different image is provided
     if (
       currentProject.cover_image?.path &&
       (!data.coverImage || data.coverImage.id !== currentProject.cover_image.id)
     ) {
-      await new StorageServiceServer(client).removeImages([currentProject.cover_image.path]);
+      await storage.removeImages([currentProject.cover_image.path]);
     }
-
-    // 2. Update project
-
-    const projectDb = await updateProject(client, profile!, currentProject, data, slug);
-    const project = Project.fromDB(projectDb, []);
-    const storage = new StorageServiceServer(client);
 
     project.coverImage = projectDb.cover_image
       ? storage.getPublicUrls([projectDb.cover_image])?.at(0) || null
@@ -144,7 +163,8 @@ async function validateRequest(
   data: ProjectDTO,
   currentProject: DBProject,
   slug: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
+  authId: string,
 ): Promise<void> {
   if (!profile) {
     throw validationError('User not found');
@@ -154,6 +174,12 @@ async function validateRequest(
   }
   if (request.method !== 'PUT') {
     throw methodNotAllowedError();
+  }
+
+  if (
+    !(await new LibraryServiceServer(client).isAllowedToEditProjectById(currentProject.id, profile))
+  ) {
+    throw forbiddenError();
   }
 
   if (!data.title) {
@@ -169,6 +195,14 @@ async function validateRequest(
   }
 
   if (
+    data.coverImage &&
+    data.coverImage.path !== currentProject.cover_image?.path &&
+    !isPathInFolders(data.coverImage.path, [`projects/${currentProject.id}`, `users/${authId}`])
+  ) {
+    throw validationError('Invalid cover image', 'coverImage');
+  }
+
+  if (
     currentProject.slug !== slug &&
     (await new ContentServiceServer(client).isDuplicateExistingSlug(
       slug,
@@ -181,7 +215,7 @@ async function validateRequest(
 }
 
 async function updateProject(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   profile: DBProfile,
   currentProject: DBProject,
   data: ProjectDTO,
@@ -197,7 +231,7 @@ async function updateProject(
     moderation = profile?.roles?.includes(UserRole.ADMIN) ? 'accepted' : 'awaiting-moderation';
   }
 
-  const now = new Date();
+  const now = new Date().toISOString();
 
   const projectResult = await client
     .from('projects')
@@ -207,7 +241,7 @@ async function updateProject(
       slug,
       previous_slugs: previousSlugs,
       category: data.category,
-      tags: data.tags,
+      tags: data.tags?.map(String),
       is_draft: data.isDraft,
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
@@ -215,17 +249,17 @@ async function updateProject(
       files: data.files,
       moderation,
       cover_image: data.coverImage || null,
-      modified_at: new Date(),
+      modified_at: new Date().toISOString(),
       ...(isFirstPublish && { published_at: now }),
     })
     .eq('id', currentProject.id)
-    .select();
+    .select('*, category:categories(*)');
 
   if (projectResult.error || !projectResult.data) {
     throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject;
+  return projectResult.data[0];
 }
 
 async function deleteProject(request: Request, id: number) {
@@ -249,7 +283,7 @@ async function deleteProject(request: Request, id: number) {
     await client
       .from('projects')
       .update({
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         deleted: true,
       })
       .eq('id', id);
@@ -257,5 +291,5 @@ async function deleteProject(request: Request, id: number) {
     return Response.json({}, { status: 200, headers });
   }
 
-  return Response.json({}, { status: 500, headers });
+  return Response.json({}, { status: 403, headers });
 }

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification, NotificationDisplay, SubscribedUser } from 'oa-shared';
+import type { Database, DBNotification, NotificationDisplay, SubscribedUser } from 'oa-shared';
 import { createElement } from 'react';
 import { sendBatchEmails } from 'src/.server/resend';
 import { InstantNotificationEmail } from 'src/.server/templates/instant-notification-email';
@@ -8,6 +8,11 @@ import { logger } from 'src/logger';
 import { tokens } from 'src/utils/tokens.server';
 import { NotificationMapperServiceServer } from './notificationMapperService.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
+
+const unsubscribeHeaders = (siteUrl: string, userCode: string) => ({
+  'List-Unsubscribe': `<${siteUrl}/api/notifications-preferences-via-email/${userCode}>`,
+  'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+});
 
 type Previewer = {
   email: string;
@@ -24,7 +29,7 @@ interface SendInstantNotificationEmailsProps {
 }
 
 export class NotificationEmailServiceServer {
-  constructor(private client: SupabaseClient) {
+  constructor(private client: SupabaseClient<Database>) {
     Object.assign(this);
   }
 
@@ -33,7 +38,7 @@ export class NotificationEmailServiceServer {
     dbNotification: DBNotification,
     excludeTriggerer: boolean,
   ) {
-    return emailSubscribers.filter((result) => {
+    return emailSubscribers.filter((result): result is SubscribedUser & { email: string } => {
       if (excludeTriggerer && result.profile_id === dbNotification.triggered_by_id) {
         return false;
       }
@@ -59,6 +64,7 @@ export class NotificationEmailServiceServer {
       }
 
       if (
+        !result.email ||
         result.email.endsWith('@example.com') ||
         result.email.endsWith('@test.com') ||
         result.email.endsWith('@resend.dev')
@@ -91,6 +97,7 @@ export class NotificationEmailServiceServer {
           settings: tenantSettings,
           isPreview: true,
         }),
+        headers: unsubscribeHeaders(tenantSettings.siteUrl, codes.code),
       };
 
       sendBatchEmails({
@@ -141,6 +148,7 @@ export class NotificationEmailServiceServer {
             userCode: code,
             settings: tenantSettings,
           }),
+          headers: unsubscribeHeaders(tenantSettings.siteUrl, code),
         };
       });
 

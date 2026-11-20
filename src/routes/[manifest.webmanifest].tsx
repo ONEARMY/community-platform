@@ -1,4 +1,3 @@
-import { WebAppManifest } from 'oa-shared';
 import { data, type LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -19,6 +18,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
       display: 'standalone',
       scope: '/',
       start_url: '/',
+      launch_handler: {
+        client_mode: 'navigate-existing',
+      },
       icons: settings.pwaIcons
         ? [
             {
@@ -95,4 +97,47 @@ export async function loader({ request }: LoaderFunctionArgs) {
     logger.error(error);
   }
   return data(null, { status: 500 });
+}
+
+interface WebAppManifest {
+  background_color?: string;
+  categories?: string[];
+  description?: string;
+  dir?: 'auto' | 'ltr' | 'rtl';
+  display?: 'fullscreen' | 'standalone' | 'minimal-ui' | 'browser';
+  display_override?: (
+    | 'fullscreen'
+    | 'standalone'
+    | 'minimal-ui'
+    | 'browser'
+    | 'window-controls-overlay'
+  )[];
+  iarc_rating_id?: string;
+  icons?: ManifestIcon[];
+  id?: string;
+  lang?: string;
+  launch_handler?: {
+    client_mode?: 'focus-existing' | 'navigate-existing' | 'navigate-new' | 'auto';
+  };
+  name?: string;
+  orientation?:
+    | 'any'
+    | 'natural'
+    | 'landscape'
+    | 'landscape-primary'
+    | 'landscape-secondary'
+    | 'portrait'
+    | 'portrait-primary'
+    | 'portrait-secondary';
+  scope?: string;
+  short_name?: string;
+  start_url?: string;
+  theme_color?: string;
+}
+
+interface ManifestIcon {
+  src: string;
+  sizes?: string;
+  type?: string;
+  purpose?: 'any' | 'maskable' | 'monochrome' | 'badge';
 }

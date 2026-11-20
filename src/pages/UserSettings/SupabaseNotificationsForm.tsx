@@ -1,9 +1,13 @@
-import { ConfirmModal, FieldSwitch, InformationTooltip, InternalLink } from 'oa-components';
+import { FieldSwitch } from 'oa-components';
 import type { NotificationsPreferencesFormData } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
+import { Link } from 'react-router';
 import { Button, Flex } from 'theme-ui';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
+import InformationIcon from '@/components/ui/icons/information.svg?react';
 import { Spinner } from '@/components/ui/spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { TenantContext } from '../common/TenantContext';
 import { ContentReachRadioOptions } from './content/fields/ContentReachPreferenceField';
 import { ContentReachSwitch } from './content/fields/ContentReachSwitch';
@@ -114,12 +118,18 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                 name="Service emails"
                 description="Password resets, email verifications and other service emails"
                 control={
-                  <InformationTooltip
-                    glyph="information"
-                    size={22}
-                    tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
-                    sx={{ marginRight: 2 }}
-                  />
+                  <Tooltip>
+                    <TooltipTrigger
+                      render={<span tabIndex={0} />}
+                      aria-label="Afraid we've got to send these to you, so you can't opt-out."
+                      className="mr-2.5 inline-flex text-muted-foreground"
+                    >
+                      <InformationIcon className="size-5" />
+                    </TooltipTrigger>
+                    <TooltipContent className="text-center">
+                      Afraid we've got to send these to you, so you can't opt-out.
+                    </TooltipContent>
+                  </Tooltip>
                 }
               />
 
@@ -130,15 +140,15 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                   name="Receiving messages"
                   description="Through the contact form on your profile page"
                   control={
-                    <InternalLink
+                    <Link
                       data-cy="messages-link"
                       to="/settings/profile#public-contact"
-                      sx={{ textAlign: 'center', ':hover': { textDecoration: 'underline' } }}
+                      className="text-center hover:underline"
                     >
                       {profileIsContactable
                         ? 'Stop receiving messages'
                         : 'Start receiving messages'}
-                    </InternalLink>
+                    </Link>
                   }
                 />
               )}

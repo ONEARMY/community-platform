@@ -1,11 +1,30 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBProfile, ProfileDTO, ProfileType } from 'oa-shared';
+import type {
+  Database,
+  DBAdminOrganisation,
+  DBAuthorVotes,
+  DBMedia,
+  DBProfile,
+  Moderation,
+  ProfileDTO,
+} from 'oa-shared';
+import { AdminOrganisation } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
-import { ProfileTypesServiceServer } from './profileTypesService.server';
+import { escapeFilterValue } from 'src/utils/helpers';
+
+type CreateOrganisationProfileArgs = {
+  authId: string;
+  username: string;
+  displayName: string;
+  about: string;
+  website: string | null;
+  coverImages: DBMedia[] | null;
+  profileTypeId: number;
+};
 
 export class ProfileServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async getByAuthId(id: string): Promise<DBProfile | null> {
     const { data } = await this.client
@@ -177,7 +196,7 @@ export class ProfileServiceServer {
     return data as DBProfile;
   }
 
-  async incrementViewCount(id: number, totalViews: number) {
+  async incrementViewCount(id: number, totalViews: number | null) {
     return await this.client
       .from('profiles')
       .update({ total_views: (totalViews || 0) + 1 })
@@ -230,12 +249,143 @@ export class ProfileServiceServer {
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
   }
 
-  async updateProfile(id: number, values: ProfileDTO) {
-    const types = await new ProfileTypesServiceServer(this.client).get();
-    const typeId = types.find((x) => x.name === values.type)!.id;
-    const existingProfile = await this.getById(id);
-    const pinModeration = this.determinePinModeration(types, existingProfile!, values.type);
+  async updateProfileType(id: number, profileTypeId: number) {
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ profile_type: profileTypeId })
+      .eq('id', id)
+      .select(
+        `*,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url,
+            premium_tier
+          )
+        ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
+        )`,
+      )
+      .single();
 
+    if (error) {
+      throw error;
+    }
+
+    return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
+  }
+
+  async getOrganisationsForModeration({
+    moderation,
+    search,
+    page,
+    pageSize,
+  }: {
+    moderation: Moderation | null;
+    search: string | null;
+    page: number;
+    pageSize: number;
+  }) {
+    let query = this.client
+      .from('profiles')
+      .select(
+        'id,username,display_name,about,moderation,moderation_feedback,created_at,type:profile_types(display_name)',
+        { count: 'exact' },
+      )
+      .not('moderation', 'is', null);
+
+    if (moderation) {
+      query = query.eq('moderation', moderation);
+    }
+
+    if (search) {
+      const term = escapeFilterValue(search);
+      query = query.or(`username.ilike."%${term}%",display_name.ilike."%${term}%"`);
+    }
+
+    const from = (page - 1) * pageSize;
+    const { data, count, error } = await query
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      organisations: (data as unknown as DBAdminOrganisation[]).map(AdminOrganisation.fromDB),
+      totalCount: count ?? 0,
+    };
+  }
+
+  async updateModeration(
+    id: number,
+    moderation: Moderation,
+    feedback: string | null,
+  ): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ moderation, moderation_feedback: feedback })
+      .eq('id', id)
+      .select('id');
+
+    if (error) {
+      throw error;
+    }
+
+    return (data?.length ?? 0) > 0;
+  }
+
+  async createOrganisationProfile(values: CreateOrganisationProfileArgs) {
+    return await this.client
+      .from('profiles')
+      .insert({
+        auth_id: values.authId,
+        tenant_id: process.env.TENANT_ID!,
+        username: values.username,
+        display_name: values.displayName,
+        about: values.about,
+        website: values.website,
+        cover_images: values.coverImages,
+        photo: values.coverImages?.[0] ?? null,
+        profile_type: values.profileTypeId,
+        moderation: 'awaiting-moderation',
+      })
+      .select(
+        `*,
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
+        )`,
+      )
+      .single();
+  }
+
+  async updateProfile(id: number, values: ProfileDTO, resendApplication = false) {
     await this.updateTags(id, values.tagIds || []);
 
     const { data, error } = await this.client
@@ -246,7 +396,6 @@ export class ProfileServiceServer {
         display_name: values.displayName,
         website: values.website,
         is_contactable: values.isContactable,
-        profile_type: typeId,
         photo: values.photo,
         cover_images: values.coverImages,
         visitor_policy: values.visitorPreferencePolicy
@@ -255,6 +404,7 @@ export class ProfileServiceServer {
               details: values.visitorPreferenceDetails,
             })
           : null,
+        ...(resendApplication ? { moderation: 'awaiting-moderation' } : {}),
       })
       .eq('id', id)
       .select(
@@ -274,15 +424,21 @@ export class ProfileServiceServer {
             action_url,
             premium_tier
           )
+        ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
         )`,
       )
       .single();
     if (error) {
       throw error;
-    }
-
-    if (pinModeration) {
-      await this.client.from('map_pins').update({ moderation: pinModeration }).eq('profile_id', id);
     }
 
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
@@ -317,7 +473,7 @@ export class ProfileServiceServer {
       const newRelations = tagsToAdd.map((tagId) => ({
         profile_id: profileId,
         profile_tag_id: tagId,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       }));
 
       const { error } = await this.client.from('profile_tags_relations').insert(newRelations);
@@ -350,7 +506,7 @@ export class ProfileServiceServer {
       display_name: '',
       is_contactable: true,
       profile_type: profileType.data?.at(0)?.id || null,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     });
 
     if (error) {
@@ -363,37 +519,5 @@ export class ProfileServiceServer {
       .from('profiles')
       .update({ last_active: new Date().toISOString() })
       .eq('auth_id', userId);
-  }
-
-  /**
-   * Calculate the moderation status for a profile's map pin based on profile type changes.
-   *    If a profile changes from a space to 'member', the pin is automatically accepted.
-   *    If it changes from 'member' to a space, the pin requires moderation.
-   */
-  private determinePinModeration(types: ProfileType[], profile: DBProfile, type: string) {
-    if (!profile.pin) {
-      return undefined;
-    }
-
-    const selectedType = types.find((x) => x.name === type);
-    const currentType = types.find((x) => x.id === profile.profile_type);
-
-    let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined;
-
-    if (!selectedType || !currentType) {
-      return undefined;
-    }
-    if (currentType.isSpace && !selectedType.isSpace) {
-      newValue = 'accepted';
-    }
-    if (!currentType.isSpace && selectedType.isSpace) {
-      newValue = 'awaiting-moderation';
-    }
-
-    if (newValue === profile.pin.moderation) {
-      return undefined;
-    }
-
-    return newValue;
   }
 }

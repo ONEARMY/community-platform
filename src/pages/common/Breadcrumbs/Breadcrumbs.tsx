@@ -1,36 +1,42 @@
-import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components';
-import { Flex } from 'theme-ui';
+import { Fragment } from 'react';
+import { Link } from 'react-router';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 type BreadcrumbStep = { text: string; link?: string };
 
 interface BreadcrumbsProps {
-  children?: React.ReactNode;
   steps: BreadcrumbStep[];
 }
 
-export const Breadcrumbs = (props: BreadcrumbsProps) => {
-  const { steps } = props;
-
+export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
   return (
-    <Flex
-      sx={{
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-      }}
-    >
-      <Flex
-        sx={{
-          flex: ['none', 'none', 1],
-          overflowX: 'auto',
-          width: '100%',
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': { display: 'none' },
-        }}
-      >
-        <BreadcrumbsComponent steps={steps} />
-      </Flex>
-    </Flex>
+    <Breadcrumb className="w-full">
+      <BreadcrumbList>
+        {steps.map((step, index) => {
+          const isLast = index === steps.length - 1;
+          return (
+            <Fragment key={index}>
+              <BreadcrumbItem data-testid="breadcrumbsItem" data-cy="breadcrumbsItem">
+                {isLast ? (
+                  <BreadcrumbPage>{step.text}</BreadcrumbPage>
+                ) : step.link ? (
+                  <BreadcrumbLink render={<Link to={step.link} />}>{step.text}</BreadcrumbLink>
+                ) : (
+                  <span className="px-3 py-1 whitespace-nowrap">{step.text}</span>
+                )}
+              </BreadcrumbItem>
+              {!isLast && <BreadcrumbSeparator data-testid="breadcrumbsChevron" />}
+            </Fragment>
+          );
+        })}
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };

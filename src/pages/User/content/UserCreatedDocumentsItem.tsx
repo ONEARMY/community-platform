@@ -1,7 +1,10 @@
-import { IconCountWithTooltip } from 'oa-components';
 import type { Image as ImageType } from 'oa-shared';
 import { Link } from 'react-router';
+import { shortFormatNumber } from 'src/utils/helpers';
 import { Box, Flex, Image, Text } from 'theme-ui';
+import CommentIcon from '@/components/ui/icons/comment.svg?react';
+import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface IProps {
   type: 'library' | 'research' | 'questions';
@@ -91,12 +94,28 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                   justifyContent: 'flex-end',
                 }}
               >
-                <IconCountWithTooltip count={usefulCount} icon="star-active" text="Useful count" />
-                <IconCountWithTooltip
-                  count={commentCount || 0}
-                  icon="comment"
-                  text="Comment count"
-                />
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<span tabIndex={0} />}
+                    aria-label={`Useful count: ${usefulCount}`}
+                    className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                  >
+                    {shortFormatNumber(usefulCount)}
+                    <StarActiveIcon className="ml-1 size-4" />
+                  </TooltipTrigger>
+                  <TooltipContent>Useful count</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<span tabIndex={0} />}
+                    aria-label={`Comment count: ${commentCount || 0}`}
+                    className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                  >
+                    {shortFormatNumber(commentCount || 0)}
+                    <CommentIcon className="ml-1 size-4" />
+                  </TooltipTrigger>
+                  <TooltipContent>Comment count</TooltipContent>
+                </Tooltip>
               </Flex>
             </Flex>
           </Flex>

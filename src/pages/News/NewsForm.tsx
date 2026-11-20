@@ -1,8 +1,10 @@
 import arrayMutators from 'final-form-arrays';
-import { Button, ConfirmModal } from 'oa-components';
+import { FormApi } from 'node_modules/final-form/dist';
+import { Button } from 'oa-components';
 import type { NewsFormData } from 'oa-shared';
 import { useCallback, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
@@ -22,6 +24,7 @@ import { storageService } from 'src/services/storageService';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, minValue, required } from 'src/utils/validators';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { NEWS_MIN_TITLE_LENGTH } from './constants';
 import { NewsBodyField, NewsImageField } from './FormFields';
 import { NewsPreviewEmailButton } from './FormFields/NewsPreviewEmailButton';
@@ -35,6 +38,7 @@ interface IProps {
 
 export const NewsForm = (props: IProps) => {
   const toast = useToast();
+  const navigate = useNavigate();
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -70,7 +74,11 @@ export const NewsForm = (props: IProps) => {
     [],
   );
 
-  const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
+  const onSubmit = async (
+    form: FormApi<NewsFormData, Partial<NewsFormData>>,
+    formValues: Partial<NewsFormData>,
+    isDraft = false,
+  ) => {
     const promise = newsService.upsert(props.id, {
       body: formValues.body!,
       category: formValues.category || null,
@@ -86,6 +94,7 @@ export const NewsForm = (props: IProps) => {
     toast.promise(promise, {
       loading: isDraft ? 'Saving draft news...' : 'Publishing news...',
       success: (data) => {
+        form.reset(formValues);
         !isDraft && fireConfetti();
         return {
           message: isDraft ? 'Draft news saved' : 'News published',
@@ -102,7 +111,17 @@ export const NewsForm = (props: IProps) => {
       duration: 10000,
     });
 
+    const news = await promise.catch(() => null);
+
+    if (!news) {
+      return;
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 1000)); // to avoid spam clicking
+
+    if (!props.id && window.location.pathname.endsWith('/create')) {
+      navigate(`/news/${news.slug}/edit`, { replace: true });
+    }
   };
 
   const imageUpload = useCallback(
@@ -148,7 +167,7 @@ export const NewsForm = (props: IProps) => {
       <Form
         key={props.id || 'new'}
         data-testid={props['data-testid']}
-        onSubmit={(values) => onSubmit(values, false)}
+        onSubmit={(values, form) => onSubmit(form, values, false)}
         initialValues={initialValues}
         validate={validateForm}
         mutators={{
@@ -175,8 +194,7 @@ export const NewsForm = (props: IProps) => {
             e.preventDefault();
             setIsSubmittingDraft(true);
             try {
-              await onSubmit(values, true);
-              form.reset(values);
+              await onSubmit(form, values, true);
             } finally {
               setIsSubmittingDraft(false);
             }

@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS "public"."subscribers" (
     "tenant_id" "text" NOT NULL
 );
 
+CREATE INDEX "subscribers_content_idx" ON "public"."subscribers" USING "btree" ("content_id", "content_type", "user_id");
+
 ALTER TABLE ONLY "public"."subscribers"
     ADD CONSTRAINT "subscribers_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 

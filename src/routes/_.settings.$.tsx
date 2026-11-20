@@ -4,6 +4,8 @@ import Main from 'src/pages/common/Layout/Main';
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client';
 import { SETTINGS_TABS } from 'src/pages/UserSettings/settingsTabs';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -22,6 +24,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn('/settings/profile', headers);
+  }
+
+  const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+
+  if (!profile) {
+    const hasApplication = await new OrganisationApplicationsServiceServer(client).existsByAuthId(
+      claims.data.claims.sub,
+    );
+
+    if (hasApplication) {
+      return redirect('/organisation-application', { headers });
+    }
   }
 
   const url = new URL(request.url);

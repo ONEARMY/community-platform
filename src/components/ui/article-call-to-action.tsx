@@ -1,6 +1,6 @@
-import { Username } from 'oa-components';
 import type { Author } from 'oa-shared';
 import { cn } from '@/lib/utils';
+import { Username } from './username';
 
 export interface ArticleCallToActionProps {
   author: Author;
@@ -19,7 +19,7 @@ export function ArticleCallToAction({
     <div data-slot="article-call-to-action" className={cn('flex flex-col items-center', className)}>
       <div className="flex items-center">
         <span className="text-sm">Made by</span>
-        <Username user={author} sx={{ ml: 1 }} />
+        <Username user={author} className="ml-1" />
       </div>
 
       {contributors && contributors.length ? (

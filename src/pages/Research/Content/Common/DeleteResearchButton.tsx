@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, ConfirmModal } from 'oa-components';
+import { Button } from 'oa-components';
 import { ResearchItem } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -8,6 +8,7 @@ import { useToast } from 'src/common/Toast';
 import { logger } from 'src/logger';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { hasAdminRights } from 'src/utils/helpers';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { researchService } from '../../research.service';
 
 type DeleteResearchButtonProps = {

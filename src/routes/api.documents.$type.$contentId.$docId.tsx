@@ -1,6 +1,6 @@
 import type { FileObject } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { IDBDownloadable } from 'oa-shared';
+import type { Database, IDBDownloadable } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { redirect } from 'react-router';
 import { logger } from 'src/logger';
@@ -33,7 +33,7 @@ async function recordUserDownload(
   type: string,
   contentId: number,
   fileId: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   authId: string,
 ) {
   const { data: profile } = await client
@@ -52,7 +52,7 @@ async function recordUserDownload(
       content_type: type,
       content_id: contentId,
       file_id: fileId,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     },
     {
       onConflict: 'profile_id,content_type,content_id,file_id,tenant_id',
@@ -61,7 +61,11 @@ async function recordUserDownload(
   );
 }
 
-async function resolveUrl(params: Params<string>, client: SupabaseClient, headers: Headers) {
+async function resolveUrl(
+  params: Params<string>,
+  client: SupabaseClient<Database>,
+  headers: Headers,
+) {
   const tableName = resolveType(params.type!);
   const contentId = +params.contentId!;
   const docId = params.docId!;
@@ -95,15 +99,15 @@ async function resolveUrl(params: Params<string>, client: SupabaseClient, header
 }
 
 async function resolveFileLink(
-  tableName: string,
+  tableName: NonNullable<ReturnType<typeof resolveType>>,
   id: number,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   headers: Headers,
 ) {
   const { data, error } = await client.from(tableName).select('id,file_link').eq('id', id).single();
 
-  if (!data) {
-    logger.error(error);
+  if (!data?.file_link) {
+    logger.error({ error });
     return Response.json({}, { status: 500, headers });
   }
 
@@ -113,7 +117,7 @@ async function resolveFileLink(
 async function resolveFileFromStorage(
   docId: string,
   bucket: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ): Promise<{ fullPath: string; name: string } | null> {
   // Query storage.objects table to get the actual file path
   // Use RPC function to query storage.objects table (which is in storage schema)
@@ -135,7 +139,11 @@ async function resolveFileFromStorage(
   return { fullPath, name: data.name };
 }
 
-async function incrementDownloadCount(type: string, contentId: number, client: SupabaseClient) {
+async function incrementDownloadCount(
+  type: string,
+  contentId: number,
+  client: SupabaseClient<Database>,
+) {
   const tableName = resolveType(type)!;
 
   const { data } = await client

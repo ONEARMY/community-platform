@@ -32,6 +32,8 @@ Replace `prod_xxx`, `prod_yyy`, `prod_zzz` with the actual product IDs from your
 
 You can find badge IDs by querying: `SELECT id, name FROM profile_badges WHERE name LIKE 'stripe-tier-%';`
 
+Tier badges should not be audience badges, and should grant your Member badge, so news is restricted to Member instead of each tier. See [badges](./badges.md).
+
 ### 3. Set environment variables
 
 Add the following to your `.env.local`:
@@ -68,6 +70,21 @@ Hosted environments use a webhook endpoint per tenant, and each must have all fi
 Successful payments, cancellations, tier changes and failed renewals post to an admin Discord
 channel. Set `DISCORD_MEMBERSHIP_WEBHOOK_URL` in `.env.local` to a Discord webhook URL to see
 them; leave it unset and nothing is posted.
+
+### 6. Geo-blocking (optional)
+
+Checkout is blocked for sanctioned countries/regions (see [technical decisions](./technical-decisions.md#geo-blocking-stripe)). It is disabled unless `geo/GeoLite2-City.mmdb` exists. To test it, download GeoLite2-City from [MaxMind](https://www.maxmind.com/en/geolite2/signup) into `geo/` and fake the client IP:
+
+```bash
+curl -H "Fly-Client-IP: <ip>" http://localhost:3000/support
+```
+
+PR previews don't download the database. To test on one, deploy it from a local checkout that has `geo/`, and block your own country:
+
+```bash
+fly deploy -a community-platform-pr-<number> --config fly-preview.toml
+fly secrets set -a community-platform-pr-<number> GEO_BLOCK_EXTRA_COUNTRIES=<your country code>
+```
 
 ## Database Tables
 

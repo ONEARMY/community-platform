@@ -1,16 +1,15 @@
 import {
+  Button,
   Category,
-  DisplayDate,
-  Icon,
-  IconCountWithTooltip,
-  InternalLink,
   ProfileBadgeContentLabel,
   // ModerationStatus,
 } from 'oa-components';
 import type { News } from 'oa-shared';
+import { Link } from 'react-router';
 import { Highlighter } from 'src/common/Highlighter';
-import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
-import { listing } from './labels';
+import { AspectRatio, Card, Flex, Heading, Image, Text } from 'theme-ui';
+import { DisplayDate } from '@/components/ui/display-date';
+import { NewsLockedImage } from './NewsLockedImage';
 
 interface IProps {
   news: News;
@@ -38,15 +37,21 @@ export const NewsListItem = ({ news, query }: IProps) => {
           justifyContent: 'space-between',
         }}
       >
-        {news.heroImage && (
-          <InternalLink to={url}>
+        {news.heroImage && news.isLocked && (
+          <Link to={url}>
+            <NewsLockedImage news={news} />
+          </Link>
+        )}
+
+        {news.heroImage && !news.isLocked && (
+          <Link to={url}>
             <AspectRatio ratio={2 / 1}>
               <Image
                 src={news.heroImage.publicUrl}
                 sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </AspectRatio>
-          </InternalLink>
+          </Link>
         )}
 
         <Flex
@@ -56,7 +61,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
           }}
         >
           <Flex sx={{ gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-            <InternalLink to={url}>
+            <Link to={url}>
               <Heading
                 as="h2"
                 data-cy="news-list-item-title"
@@ -68,7 +73,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
               >
                 <Highlighter searchWords={searchWords} textToHighlight={news.title} />
               </Heading>
-            </InternalLink>
+            </Link>
 
             {news.category && <Category category={news.category} sx={{ fontSize: 2 }} />}
             {news.profileBadges?.map((badge) => (
@@ -99,18 +104,12 @@ export const NewsListItem = ({ news, query }: IProps) => {
             </Text>
           )}
 
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <InternalLink to={url}>
-              <Button data-cy="news-list-item-button" variant="outline">
-                Read more <Icon glyph="arrow-forward" />
+          <Flex>
+            <Link to={url}>
+              <Button data-cy="news-list-item-button" variant="outline" small>
+                Read more
               </Button>
-            </InternalLink>
-
-            <IconCountWithTooltip
-              count={(news as any).commentCount || 0}
-              icon="comment"
-              text={listing.totalComments}
-            />
+            </Link>
           </Flex>
         </Flex>
       </Flex>

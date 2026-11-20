@@ -1,6 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { JSONContent } from '@tiptap/core';
 import Keyv from 'keyv';
-import { PWAIcons, TenantSettings, UserRole } from 'oa-shared';
+import type { Database, Json } from 'oa-shared';
+import { TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { logger } from 'src/logger';
 
@@ -9,9 +11,30 @@ const MEMBERSHIP_TIERS_ERROR_TTL_MS = 1000 * 30;
 const cache = new Keyv<TenantSettings>({ ttl: CACHE_TTL_MS });
 const membershipTiersCache = new Keyv<boolean>({ ttl: CACHE_TTL_MS });
 
+export interface TenantSettingsInput {
+  colorPrimary?: string;
+  colorPrimaryHover?: string;
+  colorAccent?: string;
+  colorAccentHover?: string;
+  colorSecondary?: string | null;
+  newsCtaTitle?: string | null;
+  newsCtaBody?: string | null;
+  newsCtaImageUrl?: string | null;
+  newsCtaHelpLink?: string | null;
+  welcomeEmailFromName?: string | null;
+  welcomeEmailSubject?: string | null;
+  welcomeEmailContent?: JSONContent | null;
+}
+
+export interface WelcomeEmailSettings {
+  fromName: string | null;
+  subject: string | null;
+  content: JSONContent | null;
+}
+
 export class TenantSettingsService {
   constructor(
-    private client: SupabaseClient,
+    private client: SupabaseClient<Database>,
     private origin?: string,
   ) {}
 
@@ -39,27 +62,74 @@ export class TenantSettingsService {
       siteImage:
         data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
       noMessaging: data?.no_messaging || false,
-      academyResource: data?.academy_resource,
-      libraryHeading: data?.library_heading,
-      profileGuidelines: data?.profile_guidelines,
-      questionsGuidelines: data?.questions_guidelines,
-      supportedModules: data?.supported_modules,
-      hiddenModules: data?.hidden_modules,
-      colorPrimary: data?.color_primary,
-      colorPrimaryHover: data?.color_primary_hover,
-      colorAccent: data?.color_accent,
-      colorAccentHover: data?.color_accent_hover,
-      showImpact: data?.show_impact,
+      academyResource: data?.academy_resource ?? undefined,
+      libraryHeading: data?.library_heading ?? undefined,
+      profileGuidelines: data?.profile_guidelines ?? undefined,
+      questionsGuidelines: data?.questions_guidelines ?? undefined,
+      supportedModules: data?.supported_modules ?? undefined,
+      hiddenModules: data?.hidden_modules ?? undefined,
+      colorPrimary: data?.color_primary ?? undefined,
+      colorPrimaryHover: data?.color_primary_hover ?? undefined,
+      colorAccent: data?.color_accent ?? undefined,
+      colorAccentHover: data?.color_accent_hover ?? undefined,
+      colorSecondary: data?.color_secondary ?? undefined,
+      showImpact: data?.show_impact ?? undefined,
       hasMembershipTiers,
       createResearchRoles: this.validateRoles(data?.create_research_roles),
-      gaTrackingId: data?.ga_tracking_id,
-      membershipTerms: data?.membership_terms,
-      pwaIcons: (data?.pwa_icons as PWAIcons) ?? undefined,
+      gaTrackingId: data?.ga_tracking_id ?? undefined,
+      membershipTerms: data?.membership_terms ?? undefined,
+      pwaIcons: data?.pwa_icons ?? undefined,
+      organisationSignupDescriptionHtml: data?.organisation_signup_description ?? undefined,
+      organisationActivity: data?.organisation_activity ?? undefined,
+      newsCtaTitle: data?.news_cta_title ?? undefined,
+      newsCtaBody: data?.news_cta_body ?? undefined,
+      newsCtaImageUrl: data?.news_cta_image ?? undefined,
+      newsCtaHelpLink: data?.news_cta_help_link ?? undefined,
     });
 
     cache.set('tenant-settings', settings);
 
     return settings;
+  }
+
+  async update(input: TenantSettingsInput) {
+    const { error } = await this.client
+      .from('tenant_settings')
+      .update({
+        color_primary: input.colorPrimary,
+        color_primary_hover: input.colorPrimaryHover,
+        color_accent: input.colorAccent,
+        color_accent_hover: input.colorAccentHover,
+        color_secondary: input.colorSecondary,
+        news_cta_title: input.newsCtaTitle,
+        news_cta_body: input.newsCtaBody,
+        news_cta_image: input.newsCtaImageUrl,
+        news_cta_help_link: input.newsCtaHelpLink,
+        welcome_email_from_name: input.welcomeEmailFromName,
+        welcome_email_subject: input.welcomeEmailSubject,
+        welcome_email_content: input.welcomeEmailContent as Json | null | undefined,
+      })
+      .eq('tenant_id', process.env.TENANT_ID!);
+
+    if (error) {
+      throw error;
+    }
+
+    await cache.delete('tenant-settings');
+  }
+
+  async getWelcomeEmail(): Promise<WelcomeEmailSettings> {
+    const { data } = await this.client
+      .from('tenant_settings')
+      .select('welcome_email_from_name, welcome_email_subject, welcome_email_content')
+      .eq('tenant_id', process.env.TENANT_ID!)
+      .single();
+
+    return {
+      fromName: data?.welcome_email_from_name ?? null,
+      subject: data?.welcome_email_subject ?? null,
+      content: (data?.welcome_email_content as JSONContent | null) ?? null,
+    };
   }
 
   private async fetchSettingsRow() {
@@ -84,12 +154,20 @@ export class TenantSettingsService {
         color_primary_hover,
         color_accent,
         color_accent_hover,
+        color_secondary,
         show_impact,
         create_research_roles,
         ga_tracking_id,
         pwa_icons,
-        membership_terms`,
+        membership_terms,
+        organisation_signup_description,
+        organisation_activity,
+        news_cta_title,
+        news_cta_body,
+        news_cta_image,
+        news_cta_help_link`,
       )
+      .eq('tenant_id', process.env.TENANT_ID!)
       .single();
 
     return data;

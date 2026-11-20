@@ -6,15 +6,9 @@ export const badges: Partial<DBProfileBadge>[] = [
     display_name: 'PRO',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
-    action_url: '',
+    action_url: 'https://www.preciousplastic.com/pro-membership',
     premium_tier: 1,
-  },
-  {
-    name: 'supporter',
-    display_name: 'Supporter',
-    image_url:
-      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
-    action_url: '',
-    premium_tier: null,
+    available_to: 'space',
+    action_label: 'Go PRO',
   },
 ];

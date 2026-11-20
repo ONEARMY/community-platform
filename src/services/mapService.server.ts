@@ -1,19 +1,26 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Moderation, Profile, UpsertPin } from 'oa-shared';
+import type { Database, Moderation, Profile, UpsertPin } from 'oa-shared';
 
 export class MapServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
+
+  private pinModeration(profile: Profile): Moderation {
+    if (!profile.type?.isSpace) {
+      return 'accepted';
+    }
+
+    return profile.moderation ?? 'awaiting-moderation';
+  }
 
   async upsert(pin: UpsertPin, profile: Profile) {
     const existingPin = await this.client
       .from('map_pins')
-      .select('id,moderation')
+      .select('id')
       .eq('profile_id', pin.profile_id);
     const existingPinId = existingPin.data?.at(0)?.id;
 
     if (existingPinId) {
-      const moderation: Moderation =
-        existingPin.data![0].moderation === 'accepted' ? 'accepted' : 'awaiting-moderation';
+      const moderation = this.pinModeration(profile);
 
       return await this.client
         .from('map_pins')
@@ -24,8 +31,8 @@ export class MapServiceServer {
           administrative: pin.administrative,
           post_code: pin.post_code,
           moderation,
-          lat: pin.lat,
-          lng: pin.lng,
+          lat: String(pin.lat),
+          lng: String(pin.lng),
         })
         .eq('id', existingPinId)
         .select(
@@ -46,7 +53,7 @@ export class MapServiceServer {
             display_name,
             photo,
             type,
-            username
+            username,
             badges:profile_badges_relations(
               profile_badges(
                 id,
@@ -76,8 +83,7 @@ export class MapServiceServer {
         )
         .single();
     } else {
-      const moderation: Moderation =
-        profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation';
+      const moderation = this.pinModeration(profile);
 
       return await this.client
         .from('map_pins')
@@ -88,10 +94,10 @@ export class MapServiceServer {
           name: pin.name,
           administrative: pin.administrative,
           post_code: pin.post_code,
-          lat: pin.lat,
-          lng: pin.lng,
+          lat: String(pin.lat),
+          lng: String(pin.lng),
           moderation,
-          tenant_id: process.env.TENANT_ID,
+          tenant_id: process.env.TENANT_ID!,
         })
         .select(
           `
@@ -139,6 +145,21 @@ export class MapServiceServer {
           )`,
         )
         .single();
+    }
+  }
+
+  async updateModerationByProfileId(
+    profileId: number,
+    moderation: Moderation,
+    feedback: string | null,
+  ) {
+    const { error } = await this.client
+      .from('map_pins')
+      .update({ moderation, moderation_feedback: feedback })
+      .eq('profile_id', profileId);
+
+    if (error) {
+      throw error;
     }
   }
 }

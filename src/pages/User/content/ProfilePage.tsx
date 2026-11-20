@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react';
-import { Button, ExternalLink, InternalLink } from 'oa-components';
+import { Button } from 'oa-components';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { useMemo } from 'react';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -54,7 +55,9 @@ export const ProfilePage = observer((props: IProps) => {
                 }}
               >
                 {shouldShowUpgrade && (
-                  <ExternalLink
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
                     href={upgradeBadge.actionUrl}
                     data-cy="UpgradeBadge"
                     onClick={() => {
@@ -64,7 +67,7 @@ export const ProfilePage = observer((props: IProps) => {
                         label: upgradeBadge.actionLabel,
                       });
                     }}
-                    sx={{ textDecoration: 'none' }}
+                    style={{ textDecoration: 'none' }}
                   >
                     <Button
                       type="button"
@@ -73,23 +76,23 @@ export const ProfilePage = observer((props: IProps) => {
                       }}
                     >
                       <Flex sx={{ alignItems: 'center', gap: 1 }}>
-                        {upgradeBadge.badge?.imageUrl && (
+                        {upgradeBadge.imageUrl && (
                           <Image
-                            src={upgradeBadge.badge.imageUrl}
+                            src={upgradeBadge.imageUrl}
                             sx={{ height: 20, width: 20, flexShrink: 0 }}
-                            alt={upgradeBadge.badge.displayName || 'badge'}
+                            alt={upgradeBadge.displayName || 'badge'}
                           />
                         )}
                         {upgradeBadge.actionLabel}
                       </Flex>
                     </Button>
-                  </ExternalLink>
+                  </a>
                 )}
-                <InternalLink to="/settings">
+                <Link to="/settings">
                   <Button type="button" data-cy="EditYourProfile">
                     Edit Your Profile
                   </Button>
-                </InternalLink>
+                </Link>
               </Flex>
             ) : (
               <Flex

@@ -1,6 +1,7 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { data, redirect } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { getReturnUrl } from 'src/utils/redirect.server';
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -11,10 +12,5 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
     return data({ success: false }, { headers });
   }
 
-  const url = new URL(request.url);
-  const returnUrl = url.searchParams.get('returnUrl');
-
-  const location = returnUrl || '/';
-
-  return redirect(location, { headers });
+  return redirect(getReturnUrl(request), { headers });
 };

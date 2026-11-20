@@ -59,7 +59,7 @@ export const CardDetailsMemberProfile = ({ variant, item, isLink }: IProps) => {
         <Flex sx={{ flexDirection: 'column' }}>
           <DisplayName
             user={{ ...profile, country: item.country }}
-            sx={{ alignSelf: 'flex-start' }}
+            className="self-start"
             isLink={isLink}
             target="_blank"
           />

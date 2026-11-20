@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { ContentReach, DBMedia, DBNews, NewsDTO } from 'oa-shared';
+import type { ContentReach, Database, DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
 import { PollDTO } from 'oa-shared/models/poll';
 import type { LoaderFunctionArgs, Params } from 'react-router';
@@ -9,6 +9,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
+import { ProfileBadgeServiceServer } from 'src/services/profileBadgeService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { extractPlainTextFromTiptapJson } from 'src/utils/extractPlainTextFromTiptapJson';
 import { getSummaryFromTiptapJson } from 'src/utils/getSummaryFromTiptapJson';
@@ -77,7 +78,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const isFirstPublish = currentNews.is_draft && !data.isDraft && !currentNews.published_at;
 
-    const now = new Date();
+    const now = new Date().toISOString();
 
     const pollService = new PollServiceServer(client);
     const oldPollId = (await new NewsServiceServer(client).getById(id)).poll;
@@ -107,7 +108,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         content_search_text: bodyPlainText,
         summary: getSummaryFromTiptapJson(data.body),
         is_draft: currentNews.published_at ? false : data.isDraft,
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         slug: slug,
         previous_slugs: previousSlugs,
         tags: data.tags,
@@ -131,7 +132,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       const badgeRelations = data.profileBadges.map((badgeId) => ({
         news_id: id,
         profile_badge_id: badgeId,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       }));
 
       const badgeResult = await client.from('news_badges_relations').insert(badgeRelations);
@@ -144,7 +145,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     // Fetch complete news with badges
     const completeNews = await client
       .from('news')
-      .select('*, profile_badges:news_badges_relations(profile_badges(*))')
+      .select('*, category:categories(*), profile_badges:news_badges_relations(profile_badges(*))')
       .eq('id', id)
       .single();
 
@@ -208,7 +209,7 @@ async function deleteNews(request: Request, id: number) {
     await client
       .from('news')
       .update({
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         deleted: true,
       })
       .eq('id', id);
@@ -232,7 +233,7 @@ async function validateRequest(
   bodyPlainText: string,
   currentNews: DBNews,
   slug: string,
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
 ): Promise<void> {
   const notDraft = data.isDraft === false;
 
@@ -285,5 +286,9 @@ async function validateRequest(
     !profile.roles?.includes(UserRole.EDITOR)
   ) {
     throw forbiddenError();
+  }
+
+  if (!(await new ProfileBadgeServiceServer(client).areAudience(data.profileBadges || []))) {
+    throw validationError('News can only be restricted to audience badges', 'profileBadges');
   }
 }

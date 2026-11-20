@@ -3,7 +3,7 @@ name: Storybook Deploy
 on:
   push:
     branches:
-      - master
+      - main
     # Only run action if changes have been made to the components or themes packages
     paths:
       - 'packages/components/**'

@@ -11,14 +11,14 @@
 
 #### Release changes
 
-- The PR is merged into the `master` branch.
-- `master` branch triggers an automated CircleCI build.
+- The PR is merged into the `main` branch.
+- `main` branch triggers an automated CircleCI build.
 - Production deployment requires approval by a maintainer on CircleCI.
 - After approval, an automated build deploys to production sites.
 
 #### Recognising Contributors
 
-We have adopted [all contributors](https://allcontributors.org/) and their tooling for managing the contributors listing on the [project README.md](https://github.com/ONEARMY/community-platform/blob/master/README.md).
+We have adopted [all contributors](https://allcontributors.org/) and their tooling for managing the contributors listing on the [project README.md](https://github.com/ONEARMY/community-platform/blob/main/README.md).
 
 After merging a new contributors PR:
 

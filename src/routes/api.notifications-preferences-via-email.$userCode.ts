@@ -80,43 +80,33 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     await validateRequest(request, userId);
 
     const formData = await request.formData();
-    const existingPreferences = await client
-      .from('notifications_preferences')
-      .select('id')
-      .eq('user_id', userId)
-      .maybeSingle();
+    const contentReachValue = formData.get('contentReach');
+    const content_reach: ContentReach =
+      contentReachValue === 'all' || contentReachValue === 'important' ? contentReachValue : null;
+    const preferences =
+      formData.get('List-Unsubscribe') === 'One-Click'
+        ? { is_unsubscribed: true }
+        : {
+            comments: formData.get('comments') === 'true',
+            content_reach,
+            replies: formData.get('replies') === 'true',
+            research_updates: formData.get('researchUpdates') === 'true',
+            is_unsubscribed: formData.get('isUnsubscribed') === 'true',
+          };
 
-    const existingPreferencesId = existingPreferences.data?.id || null;
-    const comments = formData.get('comments') === 'true';
-    const contentReach = formData.get('contentReach') as ContentReach;
-    const replies = formData.get('replies') === 'true';
-    const researchUpdates = formData.get('researchUpdates') === 'true';
-    const isUnsubscribed = formData.get('isUnsubscribed') === 'true';
+    const result = await client.from('notifications_preferences').upsert(
+      {
+        ...NotificationsPreferencesDefaults,
+        ...preferences,
+        user_id: userId,
+        tenant_id: process.env.TENANT_ID!,
+      },
+      { onConflict: 'user_id' },
+    );
 
-    if (existingPreferencesId) {
-      await client
-        .from('notifications_preferences')
-        .update({
-          comments,
-          content_reach: contentReach,
-          replies,
-          research_updates: researchUpdates,
-          is_unsubscribed: isUnsubscribed,
-        })
-        .eq('id', existingPreferencesId)
-        .select();
-      return Response.json({}, { headers, status: 200 });
+    if (result.error) {
+      throw new Error(result.error.code + ': ' + result.error.message + result.error.details);
     }
-
-    await client.from('notifications_preferences').insert({
-      user_id: userId,
-      comments,
-      content_reach: contentReach,
-      replies,
-      research_updates: researchUpdates,
-      is_unsubscribed: isUnsubscribed,
-      tenant_id: process.env.TENANT_ID!,
-    });
 
     return Response.json({}, { headers, status: 200 });
   } catch (error) {

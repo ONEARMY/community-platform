@@ -1,10 +1,13 @@
 import {
   ChevronRightIcon,
-  FolderIcon,
+  FlaskConicalIcon,
+  LibraryIcon,
+  MailIcon,
   MapPinIcon,
-  MegaphoneIcon,
   MessageCircleQuestionMarkIcon,
-  TagsIcon,
+  MessageSquareIcon,
+  NewspaperIcon,
+  SettingsIcon,
   UsersIcon,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
@@ -30,13 +33,43 @@ const ADMIN_NAV_ITEMS = [
     items: [
       { label: 'Overview', href: '/admin/users' },
       { label: 'Supporters', href: '/admin/supporters' },
+      { label: 'Organisations', href: '/admin/organisations' },
+      { label: 'Welcome email', href: '/admin/settings/welcome-email' },
     ],
   },
-  { label: 'Categories', href: '/admin/categories', icon: FolderIcon },
-  { label: 'Tags', href: '/admin/tags', icon: TagsIcon },
+  {
+    label: 'News',
+    icon: NewspaperIcon,
+    items: [
+      { label: 'Posts', href: '/admin/news' },
+      { label: 'CTA', href: '/admin/settings/news-cta' },
+    ],
+  },
+  {
+    label: 'Library',
+    icon: LibraryIcon,
+    items: [
+      { label: 'Projects', href: '/admin/projects' },
+      { label: 'Remakes', href: '/admin/remakes' },
+    ],
+  },
+  { label: 'Research', href: '/admin/research', icon: FlaskConicalIcon },
   { label: 'Questions', href: '/admin/questions', icon: MessageCircleQuestionMarkIcon },
-  { label: 'Map Pins', href: '/admin/map-pins', icon: MapPinIcon },
-  { label: 'Banner', href: '/admin/banners', icon: MegaphoneIcon },
+  { label: 'Map', href: '/admin/map-pins', icon: MapPinIcon },
+  { label: 'Comments', href: '/admin/comments', icon: MessageSquareIcon },
+  { label: 'Messages', href: '/admin/messages', icon: MailIcon },
+  {
+    label: 'Settings',
+    icon: SettingsIcon,
+    items: [
+      { label: 'Profile types', href: '/admin/profile-types' },
+      { label: 'Categories', href: '/admin/categories' },
+      { label: 'Tags', href: '/admin/tags' },
+      { label: 'Banner', href: '/admin/banners' },
+      { label: 'Badges', href: '/admin/badges' },
+      { label: 'Colour theme', href: '/admin/settings/theme' },
+    ],
+  },
 ];
 
 export function AdminSidebar() {
@@ -57,8 +90,8 @@ export function AdminSidebar() {
                 'items' in item ? (
                   <SidebarMenuItem key={item.label}>
                     <Collapsible
-                      defaultOpen={item.items?.some((subItem) =>
-                        location.pathname.startsWith(subItem.href),
+                      defaultOpen={item.items?.some(
+                        (subItem) => subItem.href && location.pathname.startsWith(subItem.href),
                       )}
                     >
                       <CollapsibleTrigger
@@ -74,20 +107,27 @@ export function AdminSidebar() {
                       <CollapsibleContent>
                         <SidebarMenuSub>
                           {item.items?.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.href}>
-                              <SidebarMenuSubButton
-                                isActive={location.pathname === subItem.href}
-                                render={<Link to={subItem.href} />}
-                              >
-                                <span>{subItem.label}</span>
-                              </SidebarMenuSubButton>
+                            <SidebarMenuSubItem key={subItem.label}>
+                              {subItem.href ? (
+                                <SidebarMenuSubButton
+                                  isActive={location.pathname === subItem.href}
+                                  render={<Link to={subItem.href} />}
+                                >
+                                  <span>{subItem.label}</span>
+                                </SidebarMenuSubButton>
+                              ) : (
+                                <SidebarMenuSubButton aria-disabled render={<span />}>
+                                  <span>{subItem.label}</span>
+                                  <span className="ml-auto text-xs">Coming soon</span>
+                                </SidebarMenuSubButton>
+                              )}
                             </SidebarMenuSubItem>
                           ))}
                         </SidebarMenuSub>
                       </CollapsibleContent>
                     </Collapsible>
                   </SidebarMenuItem>
-                ) : (
+                ) : item.href ? (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       isActive={location.pathname.startsWith(item.href)}
@@ -96,6 +136,14 @@ export function AdminSidebar() {
                     >
                       <item.icon />
                       <span>{item.label}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton disabled>
+                      <item.icon />
+                      <span>{item.label}</span>
+                      <span className="ml-auto text-xs">Coming soon</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ),

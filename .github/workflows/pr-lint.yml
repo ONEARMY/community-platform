@@ -102,7 +102,7 @@ jobs:
                   '',
                   ...errors.map((e) => `- ${e}`),
                   '',
-                  'See [AGENTS.md](https://github.com/ONEARMY/community-platform/blob/master/AGENTS.md). ' +
+                  'See [AGENTS.md](https://github.com/ONEARMY/community-platform/blob/main/AGENTS.md). ' +
                     'Edit the description and this check re-runs automatically.',
                 ].join('\n');
 

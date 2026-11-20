@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import type { ContentType, DBCategory } from 'oa-shared';
+import type { ContentType, Database } from 'oa-shared';
 import { Category } from 'oa-shared';
 
 export const categoriesCache = new Keyv<Category[]>({ ttl: 3600000 }); // ttl: 60 minutes
@@ -13,7 +13,7 @@ export interface CategoryInput {
 }
 
 export class CategoryServiceServer {
-  constructor(private client: SupabaseClient) {}
+  constructor(private client: SupabaseClient<Database>) {}
 
   async create(data: CategoryInput) {
     const result = await this.client
@@ -23,7 +23,7 @@ export class CategoryServiceServer {
         type: data.type,
         description: data.description,
         image_url: data.imageUrl,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select()
       .single();
@@ -34,7 +34,7 @@ export class CategoryServiceServer {
 
     await categoriesCache.delete('categories');
 
-    return Category.fromDB(result.data as DBCategory);
+    return Category.fromDB(result.data);
   }
 
   async update(id: number, data: CategoryInput) {
@@ -56,7 +56,7 @@ export class CategoryServiceServer {
 
     await categoriesCache.delete('categories');
 
-    return Category.fromDB(result.data as DBCategory);
+    return Category.fromDB(result.data);
   }
 
   async delete(id: number) {

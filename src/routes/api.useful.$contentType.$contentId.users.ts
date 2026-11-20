@@ -1,4 +1,4 @@
-import type { DBProfile, ProfileListItem } from 'oa-shared';
+import { type DBProfile, isUsefulContentType, type ProfileListItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { logger } from 'src/logger';
@@ -9,7 +9,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { contentType, contentId } = params;
   const profileFactory = new ProfileFactory(client);
 
-  if (!contentType || !contentId) {
+  if (!isUsefulContentType(contentType) || !contentId) {
     return Response.json({ error: 'Missing parameters' }, { status: 400 });
   }
 

@@ -1,3 +1,4 @@
+import { isUsefulContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -6,6 +7,12 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 export async function action({ request, params }: LoaderFunctionArgs) {
   if (request.method !== 'POST' && request.method !== 'DELETE') {
     return Response.json({}, { status: 405, statusText: 'method not allowed' });
+  }
+
+  const { contentType } = params;
+
+  if (!isUsefulContentType(contentType)) {
+    return Response.json({}, { status: 400, statusText: 'unsupported content type' });
   }
 
   const { client, headers } = createSupabaseServerClient(request);
@@ -29,17 +36,20 @@ export async function action({ request, params }: LoaderFunctionArgs) {
 
   let result;
   if (request.method === 'POST') {
-    result = await client.from('useful_votes').insert({
-      content_type: params.contentType,
-      content_id: Number(params.contentId),
-      user_id: profileResult.data[0].id,
-      tenant_id: process.env.TENANT_ID!,
-    });
+    result = await client.from('useful_votes').upsert(
+      {
+        content_type: contentType,
+        content_id: Number(params.contentId),
+        user_id: profileResult.data[0].id,
+        tenant_id: process.env.TENANT_ID!,
+      },
+      { onConflict: 'content_type,content_id,user_id', ignoreDuplicates: true },
+    );
   } else {
     result = await client
       .from('useful_votes')
       .delete()
-      .eq('content_type', params.contentType)
+      .eq('content_type', contentType)
       .eq('content_id', Number(params.contentId))
       .eq('user_id', profileResult.data[0].id)
       .eq('tenant_id', process.env.TENANT_ID!);

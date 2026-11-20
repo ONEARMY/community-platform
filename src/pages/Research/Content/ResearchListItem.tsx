@@ -1,17 +1,17 @@
 import { formatDistanceToNow } from 'date-fns';
 import { observer } from 'mobx-react';
-import {
-  Category,
-  FollowIcon,
-  Icon,
-  IconCountWithTooltip,
-  InternalLink,
-  Username,
-} from 'oa-components';
+import { Category, FollowIcon, Icon } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
+import { Link } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
+import { shortFormatNumber } from 'src/utils/helpers';
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
+import CommentIcon from '@/components/ui/icons/comment.svg?react';
+import StarActiveIcon from '@/components/ui/icons/star-active.svg?react';
+import UpdateIcon from '@/components/ui/icons/update.svg?react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Username } from '@/components/ui/username';
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
 import { researchStatusColour } from '../researchHelpers';
 
@@ -122,27 +122,12 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                     wordBreak: 'break-word',
                   }}
                 >
-                  <InternalLink
+                  <Link
                     to={`/research/${encodeURIComponent(item.slug)}`}
-                    sx={{
-                      textDecoration: 'none',
-                      color: 'inherit',
-                      '&:focus': {
-                        outline: 'none',
-                        textDecoration: 'none',
-                      },
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        right: 0,
-                        height: ['120px', '175px', '175px'],
-                      },
-                    }}
+                    className="text-inherit no-underline focus:outline-none after:absolute after:inset-x-0 after:top-0 after:h-24 sm:after:h-35"
                   >
                     {item.title}
-                  </InternalLink>
+                  </Link>
                 </Heading>
               </Flex>
               <Flex
@@ -160,17 +145,7 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                   }}
                 >
                   {item.author && (
-                    <Username
-                      user={item.author}
-                      sx={{
-                        position: 'relative',
-                        paddingX: 0,
-                        paddingY: 0,
-                        marginLeft: 0,
-                        transform: 'translateY(-1px)',
-                        fontSize: 2,
-                      }}
-                    />
+                    <Username user={item.author} variant="inline" className="relative" />
                   )}
                   {Boolean(collaborators.length) && (
                     <Text
@@ -270,23 +245,43 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                       gap: 2,
                     }}
                   >
-                    <IconCountWithTooltip
-                      count={usefulDisplayCount}
-                      icon="star-active"
-                      text="How useful is it"
-                    />
-                    <IconCountWithTooltip
-                      count={item.commentCount || 0}
-                      icon="comment"
-                      text="Total comments"
-                    />
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={<span tabIndex={0} />}
+                        data-cy="ItemUsefulText"
+                        aria-label={`How useful is it: ${usefulDisplayCount}`}
+                        className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                      >
+                        {shortFormatNumber(usefulDisplayCount)}
+                        <StarActiveIcon className="ml-1 size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>How useful is it</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={<span tabIndex={0} />}
+                        data-cy="ItemCommentText"
+                        aria-label={`Total comments: ${item.commentCount || 0}`}
+                        className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                      >
+                        {shortFormatNumber(item.commentCount || 0)}
+                        <CommentIcon className="ml-1 size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>Total comments</TooltipContent>
+                    </Tooltip>
 
-                    <IconCountWithTooltip
-                      count={item.updateCount}
-                      dataCy="ItemUpdateText"
-                      icon="update"
-                      text="Amount of updates"
-                    />
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={<span tabIndex={0} />}
+                        data-cy="ItemUpdateText"
+                        aria-label={`Amount of updates: ${item.updateCount}`}
+                        className="inline-flex items-center text-xs text-foreground sm:text-sm"
+                      >
+                        {shortFormatNumber(item.updateCount)}
+                        <UpdateIcon className="ml-1 size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>Amount of updates</TooltipContent>
+                    </Tooltip>
                   </Box>
                   {/* Show these on mobile, hide on tablet & above. */}
                   <Box

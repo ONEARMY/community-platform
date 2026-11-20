@@ -5,7 +5,6 @@ describe('[Questions]', () => {
 
   describe('[By Everyone]', () => {
     it('Searches', () => {
-      cy.wait(2000);
       cy.step('Can search for items');
       cy.get('[data-cy=questions-search-box]').clear().type(`deal`);
       cy.url().should('include', 'q=deal');
@@ -21,8 +20,8 @@ describe('[Questions]', () => {
 
       cy.step('should remove search filter after back navigation');
       cy.get('[data-cy=questions-search-box]').clear().type(`deal`);
-      cy.wait(2000);
-      cy.get('[data-cy=question-list-item]').click();
+      cy.url().should('include', 'q=deal');
+      cy.get('[data-cy=question-list-item]').should('have.length', 1);
       cy.go('back');
       cy.url().should('not.include', 'q=deal');
     });

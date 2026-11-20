@@ -8,16 +8,16 @@ If you think something is missing, consider sending us a PR.
 
 ## 🍽 Summary
 
-- [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-code-of-conduct)
-- [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-getting-started)
-- [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-project-structure)
-- [Branching](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-branching)
-- [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-style-guide)
-- [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-testing)
-- [Submitting a pull request](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-submitting-a-pull-request)
-- [AI-assisted contributions](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-ai-assisted-contributions)
-- [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-joining-the-team)
-- [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-contributing-with-uxui-design)
+- [Code of conduct](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-code-of-conduct)
+- [Getting started](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-getting-started)
+- [Project structure](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-project-structure)
+- [Branching](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-branching)
+- [Style guide](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-style-guide)
+- [Testing](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-testing)
+- [Submitting a pull request](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-submitting-a-pull-request)
+- [AI-assisted contributions](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-ai-assisted-contributions)
+- [Joining the team](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-joining-the-team)
+- [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/main/CONTRIBUTING.md#-contributing-with-uxui-design)
 
 ## 👐 Code of Conduct
 
@@ -29,7 +29,7 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 ### Prerequisites
 
-- [Bun 1.4.2](https://bun.sh/docs/installation)
+- [Bun 1.4.4](https://bun.sh/docs/installation)
 
 ### One time setup
 
@@ -75,13 +75,13 @@ UI components are being gradually migrated from `packages/components` (theme-ui)
 
 ## 🌳 Branching
 
-We have a single `master` branch which is linked to production.
+We have a single `main` branch which is linked to production.
 
 QA sites will be created from Pull Request branches upon adding the `Review allow-preview ✅` label (Mainteiners only).
 
-To contribute, you should fork our `master` branch and create a branch from your own fork. When your changes are ready, submit a PR from your fork branch, into our `master` branch.
+To contribute, you should fork our `main` branch and create a branch from your own fork. When your changes are ready, submit a PR from your fork branch, into our `main` branch.
 
-It is recommended to update your `master` fork regularly to avoid conflicts.
+It is recommended to update your `main` fork regularly to avoid conflicts.
 
 ## 🤓 Style guide
 

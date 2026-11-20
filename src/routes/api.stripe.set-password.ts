@@ -2,8 +2,10 @@ import type { ActionFunctionArgs } from 'react-router';
 import { logger } from 'src/logger';
 import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server';
 import { StripeServiceServer } from 'src/services/stripeService.server';
-import { issueSignInTicket } from 'src/services/supporterSignInTicket.server';
+import { signInSupporter } from 'src/services/supporterSignIn.server';
 import { methodNotAllowedError } from 'src/utils/httpException';
+
+const PENDING_PASSWORD_WINDOW_MS = 60 * 60 * 1000;
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
@@ -44,8 +46,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
+    const { data: linkedUser } = await adminClient.auth.admin.getUserById(linkedAuthId);
+    if (linkedUser.user?.app_metadata.supporter_password_pending !== true) {
+      return Response.json(
+        { error: 'No linked account found for this customer.' },
+        { status: 404 },
+      );
+    }
+
+    const accountAgeMs = Date.now() - new Date(linkedUser.user.created_at).getTime();
+    if (accountAgeMs > PENDING_PASSWORD_WINDOW_MS) {
+      return Response.json(
+        { error: 'This link has expired. Use "Forgot your password?" on the sign-in page.' },
+        { status: 410 },
+      );
+    }
+
     const { error: updateError } = await adminClient.auth.admin.updateUserById(linkedAuthId, {
       password,
+      app_metadata: { supporter_password_pending: false },
     });
 
     if (updateError) {
@@ -53,9 +72,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ error: 'Failed to update password.' }, { status: 500 });
     }
 
-    const signInTicket = await issueSignInTicket(email);
+    const headers = await signInSupporter(request, email);
 
-    return Response.json({ success: true, signInTicket }, { status: 200 });
+    return Response.json({ success: true }, { status: 200, headers });
   } catch (error: any) {
     logger.error('Error setting password:', error);
     return Response.json(

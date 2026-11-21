@@ -187,6 +187,18 @@
   background: linear-gradient(0deg, #ffe2e1 60%, #fff 40%);
 }
 
+@utility user-engagement-bubble {
+  background-image: url('../components/ui/icons/white-bubble.svg');
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: 150% auto;
+  @media (min-width: 40em) {
+    background-size: 125% auto;
+  }
+  @media (min-width: 52em) {
+    background-size: 80% auto;
+  }
+}
 @utility z-above-header {
   z-index: var(--z-above-header);
 }

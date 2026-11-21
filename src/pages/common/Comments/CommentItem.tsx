@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
-import { Button, ButtonShowReplies, FollowIcon, Icon, UsefulButtonLite } from 'oa-components';
+import { Button, FollowIcon, Icon } from 'oa-components';
 import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -9,12 +9,14 @@ import { useNavigate } from 'react-router';
 import CheckmarkEmptyIcon from 'src/assets/icons/checkmark-empty.svg?react';
 import CheckmarkSuccessIcon from 'src/assets/icons/checkmark-success.svg?react';
 import { Button as UiButton } from 'src/components/ui/button';
+import { ButtonShowReplies } from 'src/components/ui/button-show-replies';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'src/components/ui/dropdown-menu';
+import { UsefulButtonLite } from 'src/components/ui/useful-button-lite';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
@@ -22,8 +24,8 @@ import { Card, Flex } from 'theme-ui';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { CommentDisplay } from './CommentDisplay';
-import { CommentReply } from './CommentReplySupabase';
-import { CreateCommentSupabase } from './CreateCommentSupabase';
+import { CommentReply } from './CommentReply';
+import { CreateComment } from './CreateComment';
 import { EditCommentDialog } from './EditCommentDialog';
 import { useAcceptedAnswer } from './hooks/useAcceptedAnswer';
 import { useCopyCommentLink } from './useCopyCommentLink';
@@ -43,7 +45,7 @@ interface IAcceptedAnswerLabelProps {
   acceptedDate?: Date;
 }
 
-export const CommentItemSupabase = observer((props: ICommentItemProps) => {
+export const CommentItem = observer((props: ICommentItemProps) => {
   const {
     comment,
     onEdit,
@@ -232,7 +234,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                 />
               ))}
 
-              <CreateCommentSupabase
+              <CreateComment
                 onSubmit={(comment) => onReply(comment)}
                 sourceType={sourceType}
                 isReply

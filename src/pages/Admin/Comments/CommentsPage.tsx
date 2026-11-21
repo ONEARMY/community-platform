@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Link, useRevalidator } from 'react-router';
 import { useToast } from 'src/common/Toast/useToast';
 import { AdminPagination } from 'src/pages/Admin/AdminPagination';
-import { EditCommentDialog } from 'src/pages/common/CommentsSupabase/EditCommentDialog';
+import { EditCommentDialog } from 'src/pages/common/Comments/EditCommentDialog';
 import { commentService } from 'src/services/commentService';
 import { Button } from '@/components/ui/button';
 import { ConfirmModal } from '@/components/ui/confirm-modal';

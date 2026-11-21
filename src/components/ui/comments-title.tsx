@@ -1,16 +1,15 @@
 import type { Comment } from 'oa-shared';
 import { useMemo } from 'react';
-import { Heading } from 'theme-ui';
 
 export const NO_COMMENTS = 'Start the discussion';
 export const COMMENTS = 'Comments';
 
-export interface IProps {
+interface IProps {
   comments: Comment[];
   noun?: string;
 }
 
-export const CommentsTitle = ({ comments, noun = COMMENTS }: IProps) => {
+export function CommentsTitle({ comments, noun = COMMENTS }: IProps) {
   const title = useMemo(() => {
     const commentCount =
       comments.filter((x) => !x.deleted).length +
@@ -26,8 +25,11 @@ export const CommentsTitle = ({ comments, noun = COMMENTS }: IProps) => {
   }, [comments, noun]);
 
   return (
-    <Heading as="h3" variant="h3" data-cy="DiscussionTitle" sx={{ whiteSpace: 'nowrap' }}>
+    <h3
+      className="m-0 font-heading text-lg font-normal whitespace-nowrap"
+      data-cy="DiscussionTitle"
+    >
       {title}
-    </Heading>
+    </h3>
   );
-};
+}

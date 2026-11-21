@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router';
 import { FactoryUser } from 'src/test/factories/User';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CreateCommentSupabase } from './CreateCommentSupabase';
+import { CreateComment } from './CreateComment';
 
 const mockUseProfileStore = vi.hoisted(() => vi.fn());
 
@@ -19,12 +19,12 @@ const renderComponent = () =>
   render(
     <ThemeProvider theme={theme}>
       <MemoryRouter>
-        <CreateCommentSupabase onSubmit={vi.fn()} sourceType="questions" />
+        <CreateComment onSubmit={vi.fn()} sourceType="questions" />
       </MemoryRouter>
     </ThemeProvider>,
   ).container;
 
-describe('CreateCommentSupabase', () => {
+describe('CreateComment', () => {
   beforeEach(() => {
     mockUseProfileStore.mockReset();
   });

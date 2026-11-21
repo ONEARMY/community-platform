@@ -199,6 +199,7 @@
     background-size: 80% auto;
   }
 }
+
 @utility z-above-header {
   z-index: var(--z-above-header);
 }

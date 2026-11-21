@@ -10,6 +10,7 @@ import { MasonryLayout } from '../MasonryLayout/MasonryLayout';
 export interface IProps {
   list: MapPin[];
   onPinClick: (arg: MapPin) => void;
+  onSendMessage?: (item: MapPin) => void;
   selectedPin?: MapPin | null;
   viewport: string;
 }
@@ -20,7 +21,7 @@ const ITEMS_PER_RENDER = 20;
 export const MapCardList = (props: IProps) => {
   const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER);
   const [displayItems, setDisplayItems] = useState<JSX.Element[]>([]);
-  const { list, onPinClick, selectedPin, viewport } = props;
+  const { list, onPinClick, onSendMessage, selectedPin, viewport } = props;
 
   useEffect(() => {
     setRenderCount(ITEMS_PER_RENDER);
@@ -36,13 +37,14 @@ export const MapCardList = (props: IProps) => {
           key={item.id}
           isSelectedPin={isSelectedPin}
           onPinClick={onPinClick}
+          onSendMessage={onSendMessage}
           viewport={viewport}
         />
       );
     });
 
     setDisplayItems(toRender);
-  }, [renderCount, list]);
+  }, [renderCount, list, onPinClick, onSendMessage, selectedPin, viewport]);
 
   const addRenderItems = () => setRenderCount((count) => count + ITEMS_PER_RENDER);
 

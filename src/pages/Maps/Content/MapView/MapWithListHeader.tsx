@@ -1,5 +1,6 @@
 import { LatLngBounds } from 'leaflet';
 import { Button, MapCardList, Modal, OsmGeocoding } from 'oa-components';
+import type { MapPin } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
 import { Spinner } from '@/components/ui/spinner';
@@ -8,10 +9,11 @@ import { MapFilterList } from '../../MapFilterList';
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client';
 
 interface IProps {
+  onSendMessage?: (item: MapPin) => void;
   viewport: 'desktop' | 'mobile';
 }
 
-export const MapWithListHeader = ({ viewport }: IProps) => {
+export const MapWithListHeader = ({ onSendMessage, viewport }: IProps) => {
   const mapState = useContext(MapContext);
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
@@ -94,6 +96,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
           onPinClick={(pin) => {
             mapState.selectPinWithClusterCheck?.(pin);
           }}
+          onSendMessage={onSendMessage}
           selectedPin={mapState.selectedPin}
           viewport={viewport}
         />

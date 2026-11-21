@@ -10,7 +10,7 @@ import { isUserContactable } from 'src/utils/helpers';
 import { Box, Flex, Heading } from 'theme-ui';
 
 interface Props {
-  user: Profile;
+  user: Pick<Profile, 'displayName' | 'isContactable' | 'username'>;
 }
 
 export const UserContactForm = observer(({ user }: Props) => {

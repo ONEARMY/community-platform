@@ -5,16 +5,17 @@ import { CardProfile } from '../CardProfile/CardProfile';
 
 export interface IProps {
   item: MapPin;
+  onSendMessage?: (item: MapPin) => void;
 }
 
-export const PinProfile = ({ item }: IProps) => {
+export const PinProfile = ({ item, onSendMessage }: IProps) => {
   return (
     <CardButton
       extrastyles={{ '&:hover': {}, '&:active': {}, width: '325px' }}
       data-cy="PinProfile"
     >
       <Box sx={{ width: '100%', height: '100%', zIndex: 2 }}>
-        <CardProfile item={item} isLink />
+        <CardProfile item={item} isLink onSendMessage={onSendMessage} />
       </Box>
     </CardButton>
   );

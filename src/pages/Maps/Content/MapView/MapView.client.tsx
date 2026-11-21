@@ -1,6 +1,7 @@
 import type { LatLngExpression, Map as LeafletMap } from 'leaflet';
 // biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 import { Button, Map } from 'oa-components';
+import type { MapPin } from 'oa-shared';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { useMapEvents } from 'react-leaflet';
 import { Box, Flex } from 'theme-ui';
@@ -31,9 +32,11 @@ function MapEventsHandler({
 export const MapView = ({
   disableListView,
   disableClusters,
+  onSendMessage,
 }: {
   disableListView?: boolean;
   disableClusters?: boolean;
+  onSendMessage?: (item: MapPin) => void;
 }) => {
   const mapState = useContext(MapContext);
   const mapRef = useRef<LeafletMap>(null);
@@ -147,7 +150,9 @@ export const MapView = ({
             )}
           </>
         )}
-        {mapState.selectedPin && <Popup activePin={mapState.selectedPin} mapRef={mapRef} />}
+        {mapState.selectedPin && (
+          <Popup activePin={mapState.selectedPin} mapRef={mapRef} onSendMessage={onSendMessage} />
+        )}
       </Map>
     </Box>
   );

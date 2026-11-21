@@ -17,4 +17,11 @@ export const MODERATIONS: Moderation[] = [
   'accepted',
 ];
 
+export const ModerationRecord: Record<Moderation, string> = {
+  'awaiting-moderation': 'Awaiting Moderation',
+  'improvements-needed': 'Improvements Needed',
+  accepted: 'Accepted',
+  rejected: 'Rejected',
+};
+
 export const FEEDBACK_REQUIRED: Moderation[] = ['improvements-needed', 'rejected'];

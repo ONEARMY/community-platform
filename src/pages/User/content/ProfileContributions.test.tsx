@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import UserCreatedDocuments from './UserCreatedDocuments';
+import { ProfileContributions } from './ProfileContributions';
 
 import type { Question } from 'oa-shared';
 
@@ -17,11 +17,11 @@ const mockQuestions: Partial<Question>[] = [
   },
 ];
 
-describe('UserCreatedDocuments', () => {
+describe('ProfileContributions', () => {
   it('renders only questions section', () => {
     render(
       <MemoryRouter>
-        <UserCreatedDocuments docs={{ projects: [], research: [], questions: mockQuestions }} columns={2} />
+        <ProfileContributions docs={{ projects: [], research: [], questions: mockQuestions }} username="test-user" />
       </MemoryRouter>,
     );
     expect(screen.queryByText('Library')).not.toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('UserCreatedDocuments', () => {
   it("renders nothing if questions aren't present", () => {
     const { container } = render(
       <MemoryRouter>
-        <UserCreatedDocuments docs={{ projects: [], research: [], questions: [] }} columns={2} />
+        <ProfileContributions docs={{ projects: [], research: [], questions: [] }} username="test-user" />
       </MemoryRouter>,
     );
     expect(container).toBeEmptyDOMElement();

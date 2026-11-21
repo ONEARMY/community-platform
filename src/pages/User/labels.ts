@@ -1,7 +1,7 @@
 import { MESSAGE_MAX_CHARACTERS } from './constants';
 
 export const contact = {
-  button: 'Send Message',
+  button: 'Send message',
   email: {
     title: 'Email (currently fixed to your email on record)',
     placeholder: 'hey@jack.com',

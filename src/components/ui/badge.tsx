@@ -11,6 +11,7 @@ const badgeVariants = cva(
         warning: 'bg-warning/10 text-warning dark:bg-warning/20',
         info: 'bg-info/10 text-info dark:bg-info/20',
         destructive: 'bg-destructive/10 text-destructive dark:bg-destructive/20',
+        outline: 'border border-input py-1 text-sm font-normal normal-case text-muted-foreground',
       },
     },
     defaultVariants: {

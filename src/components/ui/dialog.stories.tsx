@@ -35,6 +35,23 @@ export const Default: Story = {
   ),
 };
 
+export const Soft: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger render={<Button />}>Send message</DialogTrigger>
+      <DialogContent variant="soft">
+        <DialogHeader>
+          <DialogTitle>Send a message to Jane</DialogTitle>
+          <DialogDescription>Your message will be sent to their email</DialogDescription>
+        </DialogHeader>
+        <Button type="button" size="sm" className="self-start">
+          Send message
+        </Button>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
 export const ConfirmDelete: Story = {
   render: () => (
     <Dialog>

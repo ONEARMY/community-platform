@@ -62,6 +62,7 @@ describe('[Profile]', () => {
       cy.step("Logged out people can see that they're contactable");
       cy.logout();
       cy.visit(`/u/${contactee.username}`);
+      cy.get('[data-cy=SendMessageButton]').click();
       cy.get('[data-cy="UserContactNotLoggedIn"]');
 
       cy.step('Other users can contact people');
@@ -69,6 +70,7 @@ describe('[Profile]', () => {
       cy.signUpNewUser(contacter);
       cy.setProfileUsername(contacter.username);
       cy.visit(`/u/${contactee.username}`);
+      cy.get('[data-cy=SendMessageButton]').click();
       cy.get('[data-cy="UserContactForm"]').should('be.visible');
 
       cy.step('Form errors without a message');

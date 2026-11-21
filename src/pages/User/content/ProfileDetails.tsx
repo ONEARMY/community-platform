@@ -1,13 +1,8 @@
-import { Button, ProfileTagsList, UserStatistics, VisitorModal } from 'oa-components';
-import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
+import { MemberBadge, ProfileTagsList, UserStatistics, VisitorModal } from 'oa-components';
+import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
-import { useEffect, useMemo, useState } from 'react';
-import { trackEvent } from 'src/common/Analytics';
-import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
+import { useMemo, useState } from 'react';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
-import { logger } from 'src/logger';
-import { mapPinService } from 'src/pages/Maps/map.service';
-import { Box, Divider, Flex, Paragraph, Text } from 'theme-ui';
 
 interface IProps {
   docs: UserCreatedDocs;
@@ -15,150 +10,56 @@ interface IProps {
 }
 
 export const ProfileDetails = ({ docs, profile }: IProps) => {
-  const { about, tags, visitorPolicy } = profile;
+  const { type, visitorPolicy } = profile;
   const [showVisitorModal, setShowVisitorModal] = useState(false);
-  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
-  const [pin, setPin] = useState<MapPin | undefined>(undefined);
+  const userTotalUseful = useMemo(
+    () => profile.authorUsefulVotes?.reduce((sum, vote) => sum + vote.voteCount, 0) ?? 0,
+    [profile.authorUsefulVotes],
+  );
 
-  useEffect(() => {
-    const getPin = async () => {
-      try {
-        const pin = await mapPinService.getMapPinById(profile.id);
-        if (pin) {
-          setPin(pin);
-        }
-      } catch (error) {
-        logger.error(error);
-      }
-    };
-    getPin();
-  }, [profile.id]);
-
-  const hideVisitorDetails = (target?: string) => {
-    setShowVisitorModal(false);
-    if (target) {
-      // TODO: use url #hash
-      // selectTab(target);
-    }
-  };
-
-  const userTotalUseful = useMemo(() => {
-    if (!profile?.authorUsefulVotes) {
-      return 0;
-    }
-
-    return profile.authorUsefulVotes.reduce((sum, vote) => sum + vote.voteCount, 0);
-  }, [profile.authorUsefulVotes]);
+  const statistics = (showViews: boolean) => (
+    <UserStatistics
+      profile={{ ...profile, badges: [] }}
+      libraryCount={docs?.projects.length || 0}
+      usefulCount={userTotalUseful}
+      researchCount={docs?.research.length || 0}
+      questionCount={docs?.questions.length || 0}
+      showViews={showViews}
+    />
+  );
 
   return (
-    <Box style={{ height: '100%' }}>
-      <Flex
-        sx={{
-          alignItems: 'stretch',
-          flexDirection: ['column', 'row', 'row'],
-          gap: 4,
-          justifyContent: 'space-between',
-        }}
-      >
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            flex: 1,
-            gap: 2,
-          }}
-        >
-          {(tags || visitorPolicy) && (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center gap-4">
+        {type && (
+          <span className="flex items-center gap-2">
+            <MemberBadge profileType={type} size={40} />
+            {type.displayName}
+          </span>
+        )}
+
+        {visitorPolicy && (
+          <>
             <ProfileTagsList
-              tags={tags || null}
+              tags={null}
               visitorPolicy={visitorPolicy}
-              isSpace={profile.type?.isSpace || false}
+              isSpace={type?.isSpace || false}
               showVisitorModal={() => setShowVisitorModal(true)}
               large={true}
             />
-          )}
-          <Text variant="h2">About</Text>
-          {about ? (
-            <Paragraph
-              sx={{
-                whiteSpace: 'pre-wrap',
-              }}
-            >
-              {about}
-            </Paragraph>
-          ) : (
-            <Paragraph sx={{ fontStyle: 'italic' }}>
-              Looks like {profile.type?.isSpace ? 'this space' : 'this user'} hasn't gotten around
-              to filling this in yet...
-            </Paragraph>
-          )}
-
-          {visitorPolicy && (
-            <VisitorModal show={showVisitorModal} hide={hideVisitorDetails} user={profile} />
-          )}
-        </Flex>
-        <Divider
-          sx={{
-            width: ['100%', '1px', '1px'],
-            height: ['1px', 'auto', 'auto'],
-            alignSelf: 'stretch',
-            border: ['none', '2px solid #0000001A', '2px solid #0000001A'],
-            borderTop: '2px solid #0000001A',
-            margin: 0,
-          }}
-        />
-        <Flex sx={{ flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
-          {profile.type?.isSpace && profile?.donationsEnabled && (
-            <>
-              <DonationRequestModalContainer
-                profileId={profile?.id}
-                isOpen={isDonationModalOpen}
-                onDidDismiss={() => setIsDonationModalOpen(false)}
-              />
-              <Button
-                icon="donate"
-                variant="outline"
-                iconColor="primary"
-                sx={{ backgroundColor: 'white', borderBottom: '4px solid' }}
-                onClick={() => {
-                  trackEvent({
-                    action: 'donationModalOpened',
-                    category: 'profiles',
-                    label: profile.username || undefined,
-                  });
-                  setIsDonationModalOpen(true);
-                }}
-              >
-                Support this {profile.type?.displayName || 'space'}
-              </Button>
-            </>
-          )}
-          <PremiumTierWrapper
-            tierRequired={PremiumTier.ONE}
-            fallback={
-              <UserStatistics
-                profile={profile}
-                pin={pin}
-                libraryCount={docs?.projects.length || 0}
-                usefulCount={userTotalUseful}
-                researchCount={docs?.research.length || 0}
-                questionCount={docs?.questions.length || 0}
-                showViews={false}
-              />
-            }
-          >
-            <UserStatistics
-              profile={profile}
-              pin={pin}
-              libraryCount={docs?.projects.length || 0}
-              usefulCount={userTotalUseful}
-              researchCount={docs?.research.length || 0}
-              questionCount={docs?.questions.length || 0}
-              showViews
+            <VisitorModal
+              show={showVisitorModal}
+              hide={() => setShowVisitorModal(false)}
+              user={profile}
             />
-          </PremiumTierWrapper>
-        </Flex>
-      </Flex>
-    </Box>
+          </>
+        )}
+      </div>
+
+      <PremiumTierWrapper tierRequired={PremiumTier.ONE} fallback={statistics(false)}>
+        {statistics(true)}
+      </PremiumTierWrapper>
+    </div>
   );
 };

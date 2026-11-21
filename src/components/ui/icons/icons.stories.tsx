@@ -6,11 +6,14 @@ import ChevronRight from './chevron-right.svg?react';
 import ChevronUp from './chevron-up.svg?react';
 import Close from './close.svg?react';
 import Comment from './comment.svg?react';
+import Donate from './donate.svg?react';
 import Eye from './eye.svg?react';
 import Information from './information.svg?react';
+import MapGlobe from './map.svg?react';
 import Notifications from './notifications.svg?react';
 import NotificationsActive from './notifications-active.svg?react';
 import Search from './search.svg?react';
+import Send from './send.svg?react';
 import StarActive from './star-active.svg?react';
 import Thunderbolt from './thunderbolt.svg?react';
 import Update from './update.svg?react';
@@ -33,6 +36,9 @@ const icons = {
   Eye,
   StarActive,
   Website,
+  MapGlobe,
+  Send,
+  Donate,
 };
 
 const meta: Meta = {

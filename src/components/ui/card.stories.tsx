@@ -32,6 +32,15 @@ export const Flat: Story = {
   ),
 };
 
+export const Elevated: Story = {
+  render: () => (
+    <Card variant="elevated" style={{ width: 320 }}>
+      <h2 className="m-0 font-heading text-card-heading">Contributions</h2>
+      <span className="text-sm text-muted-foreground">Borderless, with a soft drop shadow.</span>
+    </Card>
+  ),
+};
+
 const profileTypeCounts = [
   { name: 'Member', count: 812 },
   { name: 'Space', count: 46 },

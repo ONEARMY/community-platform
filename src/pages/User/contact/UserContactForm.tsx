@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react';
-import { Button } from 'oa-components';
 import type { Profile } from 'oa-shared';
 import { Form } from 'react-final-form';
 import { useToast } from 'src/common/Toast';
@@ -7,7 +6,8 @@ import { UserContactFieldMessage } from 'src/pages/User/contact';
 import { contact } from 'src/pages/User/labels';
 import { messageService } from 'src/services/messageService';
 import { isUserContactable } from 'src/utils/helpers';
-import { Box, Flex } from 'theme-ui';
+import { Button } from '@/components/ui/button';
+import SendIcon from '@/components/ui/icons/send.svg?react';
 
 interface Props {
   user: Profile;
@@ -19,9 +19,6 @@ export const UserContactForm = observer(({ user }: Props) => {
   if (!isUserContactable(user)) {
     return null;
   }
-
-  const buttonName = 'contact-submit';
-  const formId = 'contact-form';
 
   const onSubmit = async (formValues, form) => {
     const promise = messageService.sendMessage({
@@ -41,35 +38,25 @@ export const UserContactForm = observer(({ user }: Props) => {
   };
 
   return (
-    <Flex sx={{ flexDirection: 'column' }} data-cy="UserContactForm">
-      <Form
-        onSubmit={onSubmit}
-        id={formId}
-        validateOnBlur
-        render={({ handleSubmit, submitting }) => {
-          return (
-            <form>
-              <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-                <UserContactFieldMessage />
-
-                <Box sx={{ flexSelf: 'flex-start' }}>
-                  <Button
-                    onClick={handleSubmit}
-                    data-cy={buttonName}
-                    data-testid={buttonName}
-                    variant="primary"
-                    type="submit"
-                    disabled={submitting}
-                    form={formId}
-                  >
-                    {contact.button}
-                  </Button>
-                </Box>
-              </Flex>
-            </form>
-          );
-        }}
-      />
-    </Flex>
+    <Form
+      onSubmit={onSubmit}
+      validateOnBlur
+      render={({ handleSubmit, submitting }) => (
+        <form onSubmit={handleSubmit} data-cy="UserContactForm" className="flex flex-col gap-3">
+          <UserContactFieldMessage />
+          <Button
+            type="submit"
+            size="sm"
+            disabled={submitting}
+            data-cy="contact-submit"
+            data-testid="contact-submit"
+            className="self-start"
+          >
+            <SendIcon data-icon="inline-start" aria-hidden="true" />
+            {contact.button}
+          </Button>
+        </form>
+      )}
+    />
   );
 });

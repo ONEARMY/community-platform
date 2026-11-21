@@ -47,6 +47,7 @@
   --color-background: var(--background);
   --color-green: var(--green);
   --color-softblue: var(--softblue);
+  --color-blue: var(--blue);
   --color-highlight: var(--highlight);
   --color-highlight-hover: var(--highlight-hover);
   --color-outline: var(--outline);
@@ -128,6 +129,7 @@
   --sidebar-ring: oklch(0.708 0 0);
   --green: #00c3a9;
   --softblue: #e2edf7;
+  --blue: #83ceeb;
   --highlight: #20b7eb;
   --highlight-hover: #97cdeb;
   --outline: #1b1b1b;

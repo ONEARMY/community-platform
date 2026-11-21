@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Category, ContentStatistics, ImageGallery, TagList } from 'oa-components';
+import { Category, ContentStatistics, ImageGallery } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { TagList } from '@/components/ui/tag-list';
 import { UsefulButton } from '@/components/ui/useful-button';
 import { Username } from '@/components/ui/username';
 import { DraftTag } from '../common/Drafts/DraftTag';
@@ -121,9 +122,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             />
           )}
 
-          {question.tags && (
-            <TagList data-cy="question-tags" tags={question.tags.map((t) => ({ label: t.name }))} />
-          )}
+          {question.tags && <TagList tags={question.tags.map((t) => t.name)} />}
         </Flex>
 
         <Divider sx={{ border: '1px solid black', margin: 0 }} />

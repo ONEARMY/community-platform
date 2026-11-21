@@ -3,7 +3,6 @@ import {
   Category,
   ContentStatistics,
   ProfileBadgeContentLabel,
-  TagList,
   useImageLightbox,
 } from 'oa-components';
 import { type News, UserRole } from 'oa-shared';
@@ -16,6 +15,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
+import { TagList } from '@/components/ui/tag-list';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { PollDisplay } from '../common/Polls/PollDisplay';
@@ -262,9 +262,7 @@ export const NewsPage = observer(({ news, cta }: IProps) => {
               justifyContent: 'stretch',
             }}
           >
-            {news.tags && news.tags.length > 0 && (
-              <TagList data-cy="news-tags" tags={news.tags.map((t) => ({ label: t.name }))} />
-            )}
+            {news.tags && news.tags.length > 0 && <TagList tags={news.tags.map((t) => t.name)} />}
 
             <ContentStatistics
               statistics={[

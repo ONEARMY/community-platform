@@ -1,4 +1,5 @@
 import {
+  BellIcon,
   ChevronRightIcon,
   FlaskConicalIcon,
   LibraryIcon,
@@ -58,6 +59,7 @@ const ADMIN_NAV_ITEMS = [
   { label: 'Map', href: '/admin/map-pins', icon: MapPinIcon },
   { label: 'Comments', href: '/admin/comments', icon: MessageSquareIcon },
   { label: 'Messages', href: '/admin/messages', icon: MailIcon },
+  { label: 'Notifications', href: '/admin/notifications', icon: BellIcon },
   {
     label: 'Settings',
     icon: SettingsIcon,

@@ -1730,6 +1730,10 @@ export type Database = {
           username: string;
         }[];
       };
+      get_admin_notification_stats: {
+        Args: { p_tenant_id: string; p_weeks?: number };
+        Returns: Json;
+      };
       get_author_vote_counts: {
         Args: { author_id: number };
         Returns: {

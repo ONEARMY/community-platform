@@ -9,12 +9,14 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import MapIcon from '@/components/ui/icons/map.svg?react';
 import { Username } from '@/components/ui/username';
 import { ProfileTags } from './ProfileTags';
+import { ProfileVisitorPolicy } from './ProfileVisitorPolicy';
 
 interface IProps {
   user: Profile;
+  onContact?: () => void;
 }
 
-export const ProfileHeader = ({ user }: IProps) => {
+export const ProfileHeader = ({ user, onContact }: IProps) => {
   const [pin, setPin] = useState<MapPin | undefined>(undefined);
   const { badges, tags } = user;
 
@@ -83,6 +85,8 @@ export const ProfileHeader = ({ user }: IProps) => {
             ))}
           </ul>
         )}
+
+        <ProfileVisitorPolicy user={user} onContact={onContact} />
 
         {tags && tags.length > 0 && <ProfileTags tags={tags} />}
       </div>

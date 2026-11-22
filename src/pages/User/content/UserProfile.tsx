@@ -1,5 +1,5 @@
 import type { Profile, UserCreatedDocs } from 'oa-shared';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable, isUserContactable } from 'src/utils/helpers';
@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import WebsiteIcon from '@/components/ui/icons/website.svg?react';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { Impact } from '../impact/Impact';
 import { ProfileContact } from './ProfileContact';
 import { ProfileContributions } from './ProfileContributions';
 import { ProfileHeader } from './ProfileHeader';
@@ -21,9 +22,10 @@ interface IProps {
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, coverImages, type, website } = user;
+  const { about, coverImages, impact, type, website } = user;
   const { isComplete } = useProfileStore();
   const tenantContext = useContext(TenantContext);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   const isMember = !type?.isSpace;
   const hasCoverImages = !isMember && !!coverImages?.length;
@@ -34,6 +36,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
     (isViewingOwnProfile ? hasContactOption : isUserContactable(user));
 
   const showSupport = !isMember && !!user.donationsEnabled;
+  const showImpact = !!impact && !!tenantContext?.showImpact;
   const showEmptyProfileAlert = isViewingOwnProfile && isComplete === false;
 
   return (
@@ -46,7 +49,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
         )}
       >
         <Card variant="elevated" className="items-center">
-          <ProfileHeader user={user} />
+          <ProfileHeader
+            user={user}
+            onContact={
+              showContact && !isViewingOwnProfile ? () => setIsContactOpen(true) : undefined
+            }
+          />
 
           {showEmptyProfileAlert && (
             <Alert variant="info" data-cy="emptyProfileMessage" className="w-full">
@@ -92,7 +100,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                   <div className="flex flex-wrap justify-center gap-2">
                     {showSupport && <ProfileSupportButton profile={user} />}
                     {showContact && (
-                      <ProfileContact user={user} isViewingOwnProfile={isViewingOwnProfile} />
+                      <ProfileContact
+                        user={user}
+                        isViewingOwnProfile={isViewingOwnProfile}
+                        open={isContactOpen}
+                        onOpenChange={setIsContactOpen}
+                      />
                     )}
                   </div>
                 </div>
@@ -102,6 +115,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
         </Card>
 
         <ProfileContributions docs={docs} username={user.username ?? ''} />
+
+        {showImpact && (
+          <Card variant="elevated">
+            <Impact impact={impact} user={user} />
+          </Card>
+        )}
       </div>
     </div>
   );

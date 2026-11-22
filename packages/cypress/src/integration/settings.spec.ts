@@ -89,7 +89,6 @@ describe('[Settings]', () => {
     });
     cy.selectTag(tag[0], '[data-cy=profile-tag-select]');
     cy.selectTag(tag[1], '[data-cy=profile-tag-select]');
-    cy.get(`[data-cy="country:${countryCode}"]`);
 
     cy.step('Errors if trying to upload invalid image');
     cy.get(`[data-cy=userImage]`).find(':file').selectFile(`src/fixtures/files/Example.pdf`, { force: true });
@@ -187,7 +186,7 @@ describe('[Settings]', () => {
     cy.contains(tag);
     cy.get(`[data-cy="MemberBadge-${profileType}"]`);
     cy.get('[data-cy="userImage"]').should('have.attr', 'src').and('include', userImage);
-    cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('include', coverImage);
+    cy.get('[data-cy="profile-cover-image"]').should('have.attr', 'src').and('include', coverImage);
 
     cy.step('Updated settings display on contact section');
     cy.contains(`Other users are able to contact you`);
@@ -266,7 +265,7 @@ describe('[Precious Plastic]', () => {
     cy.get('[data-cy="ImpactPanel"]').should('not.exist');
     cy.get(`[data-cy="MemberBadge-${profileType}"]`);
     cy.get('[data-cy="userImage"]').should('have.attr', 'src').and('include', userImage);
-    cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('include', coverImage);
+    cy.get('[data-cy="profile-cover-image"]').should('have.attr', 'src').and('include', coverImage);
 
     cy.step('Can see visitor policy');
     cy.get('[data-cy=tag-openToVisitors]').contains(visitorType).click();

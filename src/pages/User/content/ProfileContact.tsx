@@ -17,14 +17,16 @@ import { UserContactForm } from '../contact/UserContactForm';
 interface IProps {
   user: Profile;
   isViewingOwnProfile: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => (
+export const ProfileContact = ({ user, isViewingOwnProfile, open, onOpenChange }: IProps) => (
   <div data-cy="UserContactWrapper" className="flex justify-center">
     {isViewingOwnProfile ? (
       <UserContactFormAvailable isUserProfileContactable={isUserContactable(user)} />
     ) : (
-      <Dialog>
+      <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogTrigger render={<Button size="sm" data-cy="SendMessageButton" />}>
           <SendIcon data-icon="inline-start" aria-hidden="true" />
           Send message

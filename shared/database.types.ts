@@ -2022,6 +2022,18 @@ export type Database = {
           count: number;
         }[];
       };
+      get_user_accepted_answers: {
+        Args: { username_param: string };
+        Returns: {
+          accepted_answer_id: number;
+          comment_count: number;
+          id: number;
+          images: Json[];
+          slug: string;
+          title: string;
+          total_useful: number;
+        }[];
+      };
       get_user_email_by_id: {
         Args: { id: string };
         Returns: {
@@ -2044,18 +2056,6 @@ export type Database = {
         Args: { email: string };
         Returns: {
           id: string;
-        }[];
-      };
-      get_user_accepted_answers: {
-        Args: { username_param: string };
-        Returns: {
-          accepted_answer_id: number;
-          comment_count: number;
-          id: number;
-          images: Json[];
-          slug: string;
-          title: string;
-          total_useful: number;
         }[];
       };
       get_user_projects: {

@@ -24,9 +24,13 @@ export const SettingsFormTab = (props: IProps) => {
         <Card sx={{ ...sx, backgroundColor: 'softblue', padding: [3, 5] }}>{tab.header}</Card>
       )}
       {tab.preBody && <tab.preBody />}
-      <Card sx={sx}>
+      {tab.bare ? (
         <tab.body />
-      </Card>
+      ) : (
+        <Card sx={sx}>
+          <tab.body />
+        </Card>
+      )}
     </TabsContent>
   );
 };

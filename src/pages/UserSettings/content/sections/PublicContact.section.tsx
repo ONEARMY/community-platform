@@ -1,6 +1,8 @@
 import { Field } from 'react-final-form';
 import { fields } from 'src/pages/UserSettings/labels';
-import { Flex, Heading, Switch, Text } from 'theme-ui';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { SettingsSubheading } from '../elements';
 
 type PublicContactSectionProps = {
   isContactable: boolean;
@@ -11,37 +13,27 @@ export const PublicContactSection = ({ isContactable }: PublicContactSectionProp
   const name = 'isContactable';
 
   return (
-    <Flex
+    <div
+      id="public-contact"
       data-testid="PublicContactSection"
       data-cy="PublicContactSection"
-      sx={{
-        flexDirection: 'column',
-        gap: 2,
-      }}
+      className="flex flex-col gap-2"
     >
-      <a id="public-contact"></a>
-      <Heading as="h2">{title}</Heading>
-      <Text variant="quiet" sx={{ fontSize: 2 }}>
-        {description}
-      </Text>
+      <SettingsSubheading>{title}</SettingsSubheading>
+      <p className="text-sm text-muted-foreground">{description}</p>
       <Field name={name}>
-        {({ input }) => {
-          return (
+        {({ input }) => (
+          <Label size="base" weight="normal">
             <Switch
               checked={isContactable}
               data-cy={`${name}-${isContactable}`}
               data-testid={name}
-              label={placeholder}
-              onChange={() => input.onChange(!isContactable)}
-              sx={{
-                'input:checked ~ &': {
-                  backgroundColor: 'green',
-                },
-              }}
+              onCheckedChange={(checked) => input.onChange(checked)}
             />
-          );
-        }}
+            {placeholder}
+          </Label>
+        )}
       </Field>
-    </Flex>
+    </div>
   );
 };

@@ -6,6 +6,7 @@ export interface ISettingsTab {
   header?: React.ReactNode;
   preBody?: ComponentType;
   body: ComponentType;
+  bare?: boolean;
   glyph: availableGlyphs;
   title: string;
   route: SettingsRoute;

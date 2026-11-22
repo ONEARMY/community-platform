@@ -75,7 +75,7 @@ export function ConfirmModal({
               data-slot="confirm-modal-body"
               className="flex min-h-0 flex-col gap-4 overflow-y-auto"
             >
-              <AlertDialogPrimitive.Title className="self-stretch font-heading text-base leading-none font-medium font-bold">
+              <AlertDialogPrimitive.Title className="self-stretch font-heading text-base leading-snug font-medium font-bold">
                 {message}
               </AlertDialogPrimitive.Title>
 

@@ -11,6 +11,8 @@ const cardVariants = cva(
         outline: 'border-2 border-outline',
         flat: 'gap-2.5 rounded-card-flat border-2 border-outline p-2.5 shadow-none sm:p-4 md:p-5',
         elevated: 'gap-6 border-0 p-4 shadow-elevated sm:p-6',
+        panel:
+          'gap-6 rounded-none border-0 px-4 py-6 shadow-elevated sm:rounded-card sm:border-2 sm:border-outline sm:p-8 sm:shadow-none',
       },
     },
     defaultVariants: {

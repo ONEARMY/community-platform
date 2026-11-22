@@ -41,6 +41,17 @@ export const Elevated: Story = {
   ),
 };
 
+export const Panel: Story = {
+  render: () => (
+    <Card variant="panel" style={{ width: 320 }}>
+      <h2 className="m-0 font-heading text-3xl">Main profile</h2>
+      <span className="text-sm text-muted-foreground">
+        Outlined from sm up, edge-to-edge with a shadow below.
+      </span>
+    </Card>
+  ),
+};
+
 const profileTypeCounts = [
   { name: 'Member', count: 812 },
   { name: 'Space', count: 46 },

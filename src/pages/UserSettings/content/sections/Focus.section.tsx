@@ -6,9 +6,10 @@ import { useToast } from 'src/common/Toast';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui';
+import { Box, Flex, Grid, Paragraph, Text } from 'theme-ui';
+import { Card } from '@/components/ui/card';
 import { buttons, fields, focusSection, form as formLabels, headings } from '../../labels';
-import { ProfileSection } from '../elements';
+import { SettingsCardHeading } from '../elements';
 import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field';
 
 export const FocusSection = observer(() => {
@@ -56,9 +57,9 @@ export const FocusSection = observer(() => {
   };
 
   return (
-    <ProfileSection data-cy="FocusSection">
+    <Card variant="panel" data-cy="FocusSection" className="-mx-2 sm:mx-0">
       <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-        <Heading as="h2">{headings.focus}</Heading>
+        <SettingsCardHeading>{headings.focus}</SettingsCardHeading>
         <Paragraph sx={{ color: 'grey', fontSize: 3 }}>
           {fields.activities.description}{' '}
           <a
@@ -143,6 +144,6 @@ export const FocusSection = observer(() => {
           )}
         />
       )}
-    </ProfileSection>
+    </Card>
   );
 });

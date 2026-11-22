@@ -21,3 +21,7 @@ export const WithValue: Story = {
 export const Disabled: Story = {
   args: { disabled: true, defaultValue: 'Cannot edit this' },
 };
+
+export const Filled: Story = {
+  args: { variant: 'filled', defaultValue: 'A short description of this category.' },
+};

@@ -3,9 +3,7 @@ import { Field } from 'react-final-form';
 import { ProfileTagsSelect } from 'src/common/Tags/ProfileTagsSelect';
 import { fields } from 'src/pages/UserSettings/labels';
 import { COMPARISONS } from 'src/utils/comparisons';
-import { Flex, Text } from 'theme-ui';
-
-import { ProfileSection } from '../elements';
+import { SettingsField } from '../elements';
 
 interface IProps {
   typeName: string | undefined;
@@ -28,21 +26,8 @@ export const ProfileTags = ({ typeName }: IProps) => {
   );
 
   return (
-    <ProfileSection>
-      <Flex
-        data-testid="ProfileTags"
-        sx={{
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: 1,
-        }}
-      >
-        <Text>{title}</Text>
-        <Text variant="quiet" sx={{ fontSize: 2 }}>
-          {description}
-        </Text>
-        <Field name="tagIds" component={renderTagsSelect} isEqual={COMPARISONS.tags} />
-      </Flex>
-    </ProfileSection>
+    <SettingsField label={title} description={description} data-testid="ProfileTags">
+      <Field name="tagIds" component={renderTagsSelect} isEqual={COMPARISONS.tags} />
+    </SettingsField>
   );
 };

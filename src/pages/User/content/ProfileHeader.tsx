@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { MemberBadge } from 'oa-components';
 import type { MapPin, Profile } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -29,13 +30,20 @@ export const ProfileHeader = ({ user, onContact }: IProps) => {
 
   return (
     <>
-      <Avatar className="size-20 sm:-mt-21 sm:size-30">
-        <AvatarImage
-          data-cy={user.type?.isSpace ? 'userImage' : 'profile-avatar'}
-          src={user.photo?.publicUrl ?? DefaultMemberImage}
-          alt={user.displayName}
-        />
-      </Avatar>
+      <div className="relative sm:-mt-21">
+        <Avatar className="size-20 sm:size-30">
+          <AvatarImage
+            data-cy={user.type?.isSpace ? 'userImage' : 'profile-avatar'}
+            src={user.photo?.publicUrl ?? DefaultMemberImage}
+            alt={user.displayName}
+          />
+        </Avatar>
+        {user.type && (
+          <span className="absolute -right-1 bottom-0 flex">
+            <MemberBadge profileType={user.type} size={32} useLowDetailVersion />
+          </span>
+        )}
+      </div>
 
       <div className="flex w-full flex-wrap justify-center gap-x-4 gap-y-3 text-center">
         <div className="flex w-full flex-col items-center gap-1">

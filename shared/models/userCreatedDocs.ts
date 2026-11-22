@@ -5,5 +5,5 @@ import type { ResearchItem } from './research';
 export interface UserCreatedDocs {
   projects: Partial<Project>[];
   research: Partial<ResearchItem>[];
-  questions: Partial<Question>[];
+  answers: Partial<Question>[];
 }

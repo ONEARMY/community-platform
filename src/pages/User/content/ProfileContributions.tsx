@@ -14,6 +14,7 @@ type Doc = {
   title?: string;
   usefulCount?: number;
   commentCount?: number;
+  acceptedAnswerId?: number | null;
 };
 
 const toItem = (doc: Doc, coverImage?: Image | null) => ({
@@ -23,6 +24,7 @@ const toItem = (doc: Doc, coverImage?: Image | null) => ({
   usefulCount: doc.usefulCount || 0,
   commentCount: doc.commentCount,
   coverImage: coverImage || undefined,
+  hash: doc.acceptedAnswerId ? `comment:${doc.acceptedAnswerId}` : undefined,
 });
 
 interface IProps {
@@ -48,10 +50,10 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
     },
     {
       type: 'questions',
-      title: 'Questions',
+      title: 'Answers',
       icon: questionsIcon,
-      testId: 'question-contributions',
-      items: docs.questions.map((doc) => toItem(doc, doc.images?.[0])),
+      testId: 'answer-contributions',
+      items: docs.answers.map((doc) => toItem(doc, doc.images?.[0])),
     },
   ] as const;
 
@@ -65,8 +67,11 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
     <Card variant="elevated">
       <h2 className="m-0 font-heading text-3xl font-normal">Contributions</h2>
       {visibleSections.map(({ type, title, icon, testId, items }) => {
-        const layout = type === 'questions' ? 'horizontal' : 'vertical';
-        const newest = [...items].sort((a, b) => b.id - a.id).slice(0, MAX_ITEMS);
+        const isAnswers = type === 'questions';
+        const hasMore = !isAnswers && items.length > MAX_ITEMS;
+        const layout = isAnswers ? 'horizontal' : 'vertical';
+        const sorted = [...items].sort((a, b) => b.id - a.id);
+        const visible = hasMore ? sorted.slice(0, MAX_ITEMS) : sorted;
 
         return (
           <section key={type} data-testid={testId} className="flex flex-col gap-3 font-sans">
@@ -79,11 +84,11 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
                 layout === 'horizontal' ? 'flex flex-col gap-2.5' : 'grid gap-2.5 sm:grid-cols-3'
               }
             >
-              {newest.map((item) => (
+              {visible.map((item) => (
                 <ProfileContributionItem key={item.id} type={type} layout={layout} item={item} />
               ))}
             </div>
-            {items.length > MAX_ITEMS && (
+            {hasMore && (
               <Link
                 to={`/${type}?q=${encodeURIComponent(username)}`}
                 className="self-center text-sm hover:underline"

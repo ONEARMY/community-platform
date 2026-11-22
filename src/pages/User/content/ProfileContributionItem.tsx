@@ -16,12 +16,13 @@ interface IProps {
     title: string;
     slug: string;
     usefulCount: number;
+    hash?: string;
   };
 }
 
 export const ProfileContributionItem = ({ type, layout = 'vertical', item }: IProps) => {
-  const { commentCount, coverImage, slug, title, usefulCount } = item;
-  const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`;
+  const { commentCount, coverImage, slug, title, usefulCount, hash } = item;
+  const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile${hash ? `#${hash}` : ''}`;
   const isHorizontal = layout === 'horizontal';
 
   return (

@@ -3,11 +3,8 @@ import type { Question } from 'oa-shared';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { hasAdminRights } from 'src/utils/helpers';
 import { Card } from 'theme-ui';
-import {
-  type CommentSectionLabels,
-  CommentSectionSupabase,
-} from '../common/CommentsSupabase/CommentSectionSupabase';
-import { CommentSortOption } from '../common/CommentsSupabase/CommentSortOptions';
+import { CommentSection, type CommentSectionLabels } from '../common/Comments/CommentSection';
+import { CommentSortOption } from '../common/Comments/CommentSortOptions';
 import { QuestionCommentContext } from './QuestionCommentContext';
 
 const ANSWER_LABELS: CommentSectionLabels = {
@@ -71,7 +68,7 @@ export const QuestionCommentSection = observer(
             overflow: 'unset',
           }}
         >
-          <CommentSectionSupabase
+          <CommentSection
             authors={question.author?.id ? [question.author.id] : []}
             setSubscribersCount={setSubscribersCount}
             sourceId={question.id}

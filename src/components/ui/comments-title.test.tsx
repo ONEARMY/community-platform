@@ -1,11 +1,8 @@
 import '@testing-library/jest-dom/vitest';
-
-import { describe, expect, it } from 'vitest';
-
-import { render } from '../test/utils';
-import { COMMENTS, CommentsTitle, NO_COMMENTS } from './CommentsTitle';
-
+import { render } from '@testing-library/react';
 import type { Comment } from 'oa-shared';
+import { describe, expect, it } from 'vitest';
+import { COMMENTS, CommentsTitle, NO_COMMENTS } from '@/components/ui/comments-title';
 
 describe('CommentsTitle', () => {
   it('renders correctly when there are zero comments', () => {

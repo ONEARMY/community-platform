@@ -16,7 +16,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
-import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
+import { CommentSection } from '../common/Comments/CommentSection';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { PollDisplay } from '../common/Polls/PollDisplay';
 import { NewsLockedImage } from './NewsLockedImage';
@@ -315,7 +315,7 @@ export const NewsPage = observer(({ news, cta }: IProps) => {
                 padding: [3, 4],
               }}
             >
-              <CommentSectionSupabase
+              <CommentSection
                 authors={news.author?.id ? [news.author?.id] : []}
                 sourceId={news.id}
                 sourceType="news"

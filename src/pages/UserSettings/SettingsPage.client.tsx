@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
 import type { availableGlyphs } from 'oa-components';
+import { UserRole } from 'oa-shared';
 import { useContext, useMemo } from 'react';
 import { useLocation } from 'react-router';
 import { isModuleSupported, MODULE } from 'src/modules';
@@ -12,6 +13,7 @@ import { OrganisationModerationSection } from './content/sections/OrganisationMo
 import { SettingsFormTab } from './SettingsFormTab';
 import { SettingsFormTabList } from './SettingsFormTabList';
 import { SettingsPageAccount } from './SettingsPageAccount';
+import { SettingsPageAmbassador } from './SettingsPageAmbassador';
 import { SettingsPageImpact } from './SettingsPageImpact';
 import { SettingsPageMapPin } from './SettingsPageMapPin';
 import { SettingsPageNotifications } from './SettingsPageNotifications';
@@ -23,13 +25,14 @@ import '../../styles/leaflet.css';
 
 export const SettingsPage = observer(() => {
   const tenantContext = useContext(TenantContext);
-  const { isComplete, missingFields, profile } = useProfileStore();
+  const { isComplete, missingFields, profile, isUserAuthorized } = useProfileStore();
   const { pathname } = useLocation();
   const isMobile = useIsMobile();
 
   const isMember = !profile?.type?.isSpace;
   const showImpactTab = !isMember && tenantContext?.showImpact;
   const showMapTab = isModuleSupported(tenantContext?.supportedModules || '', MODULE.MAP);
+  const showAmbassadorTab = isUserAuthorized(UserRole.BETA_TESTER);
 
   const tabs: ISettingsTab[] = useMemo(
     () => [
@@ -81,13 +84,22 @@ export const SettingsPage = observer(() => {
         body: SettingsPageNotifications,
         glyph: 'megaphone' as availableGlyphs,
       },
+      ...(showAmbassadorTab
+        ? [
+            {
+              ...SETTINGS_TABS.find((t) => t.route === '/settings/ambassador')!,
+              body: SettingsPageAmbassador,
+              glyph: 'supporter' as availableGlyphs,
+            },
+          ]
+        : []),
       {
         ...SETTINGS_TABS.find((t) => t.route === '/settings/account')!,
         body: SettingsPageAccount,
         glyph: 'account' as availableGlyphs,
       },
     ],
-    [showMapTab, showImpactTab, isComplete, missingFields],
+    [showMapTab, showImpactTab, showAmbassadorTab, isComplete, missingFields],
   );
 
   if (!profile) {

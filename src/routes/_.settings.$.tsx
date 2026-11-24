@@ -1,3 +1,4 @@
+import { UserRole } from 'oa-shared';
 import { data, type LoaderFunctionArgs, redirect } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
@@ -40,6 +41,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   if (incompletePathname(url.pathname)) {
+    return redirect('/settings/profile', { headers });
+  }
+
+  if (
+    url.pathname.startsWith('/settings/ambassador') &&
+    !profile?.roles?.includes(UserRole.BETA_TESTER)
+  ) {
     return redirect('/settings/profile', { headers });
   }
 

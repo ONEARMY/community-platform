@@ -3,6 +3,7 @@
   { title: 'Map', route: '/settings/map' },
   { title: 'Impact', route: '/settings/impact' },
   { title: 'Notifications', route: '/settings/notifications' },
+  { title: 'Ambassador', route: '/settings/ambassador' },
   { title: 'Account', route: '/settings/account' },
 ] as const;
 

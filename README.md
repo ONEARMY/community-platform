@@ -254,6 +254,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/nolt-dev"><img src="https://avatars.githubusercontent.com/u/177902797?v=4&size=60" width="60px" height="60px" alt="nolt-dev"/><br /><sub><b>nolt-dev</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=nolt-dev" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rishiraj38"><img src="https://avatars.githubusercontent.com/u/180109771?v=4&size=60" width="60px" height="60px" alt="Rishi Raj"/><br /><sub><b>Rishi Raj</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rishiraj38" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/andredevay"><img src="https://avatars.githubusercontent.com/u/43342188?v=4&size=60" width="60px" height="60px" alt="Andre Devay"/><br /><sub><b>Andre Devay</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=andretorresdg" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://omaraldulimay.github.io"><img src="https://avatars.githubusercontent.com/u/120497558?v=4&size=60" width="60px" height="60px" alt="Omar Abdullah"/><br /><sub><b>Omar Abdullah</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=omaraldulimay" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

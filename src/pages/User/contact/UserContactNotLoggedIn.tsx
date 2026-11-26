@@ -7,27 +7,29 @@ interface Props {
 
 export const UserContactNotLoggedIn = ({ displayName }: Props) => {
   return (
-    <Alert variant="info" data-cy="UserContactNotLoggedIn">
-      <AlertDescription className="text-left">
-        <p>{`${displayName} would love to hear from you...but you're not logged in!`}</p>
-        <p>If you were you'd able to send them a message...</p>
-        <div className="flex items-center gap-2">
-          <ReturnPathLink
-            to="/sign-in"
-            style={{
-              textDecoration: 'underline',
-              color: 'inherit',
-            }}
-          >
+    <>
+      <Alert variant="info" data-cy="UserContactNotLoggedIn">
+        <AlertDescription className="text-left">
+          <p>{`${displayName} would love to hear from you...but you're not logged in!`}</p>
+          <p>If you were you'd able to send them a message...</p>
+        </AlertDescription>
+      </Alert>
+      <div className="flex items-center gap-2">
+        <ReturnPathLink
+          to="/sign-in"
+          style={{
+            textDecoration: 'underline',
+            color: 'inherit',
+          }}
+        >
+          <Button variant="secondary" type="button">
             Login
-          </ReturnPathLink>
-          <ReturnPathLink to="/sign-up">
-            <Button type="button" icon="star">
-              Sign-up now
-            </Button>
-          </ReturnPathLink>
-        </div>
-      </AlertDescription>
-    </Alert>
+          </Button>
+        </ReturnPathLink>
+        <ReturnPathLink to="/sign-up">
+          <Button type="button">Sign-up now</Button>
+        </ReturnPathLink>
+      </div>
+    </>
   );
 };

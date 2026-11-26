@@ -49,7 +49,6 @@ describe('[Settings]', () => {
     const description = "I'm a very active member";
     const profileType = 'member';
     const tag = ['Product Design', 'Accounting'];
-    const website = 'https://social.network';
 
     cy.step('Incomplete profile banner visible when logged out');
     cy.get('[data-cy=notificationBanner]').should('not.exist');
@@ -85,7 +84,6 @@ describe('[Settings]', () => {
       displayName,
       country,
       description,
-      website,
     });
     cy.selectTag(tag[0], '[data-cy=profile-tag-select]');
     cy.selectTag(tag[1], '[data-cy=profile-tag-select]');

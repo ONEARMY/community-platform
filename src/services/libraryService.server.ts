@@ -97,6 +97,8 @@ export class LibraryServiceServer {
         title: x.title,
         slug: x.slug,
         usefulCount: x.total_useful,
+        totalViews: x.total_views,
+        fileDownloadCount: x.total_downloads,
       };
     });
   }

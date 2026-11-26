@@ -24,6 +24,7 @@ describe('getAcceptedAnswersByUser', () => {
       title: title,
       slug: slug,
       total_useful: usefulCount,
+      total_views: 12,
     };
 
     const mockResponse = {
@@ -43,6 +44,7 @@ describe('getAcceptedAnswersByUser', () => {
         title: title,
         slug: slug,
         usefulCount: usefulCount,
+        totalViews: 12,
       },
     ];
 

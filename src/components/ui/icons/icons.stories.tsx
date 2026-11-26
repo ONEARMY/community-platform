@@ -7,6 +7,7 @@ import ChevronUp from './chevron-up.svg?react';
 import Close from './close.svg?react';
 import Comment from './comment.svg?react';
 import Donate from './donate.svg?react';
+import Download from './download.svg?react';
 import Edit from './edit.svg?react';
 import Eye from './eye.svg?react';
 import Information from './information.svg?react';
@@ -40,6 +41,7 @@ const icons = {
   MapGlobe,
   Send,
   Donate,
+  Download,
   Edit,
 };
 

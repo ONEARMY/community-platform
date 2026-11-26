@@ -1,12 +1,14 @@
-import type { Profile, UserCreatedDocs } from 'oa-shared';
-import { useContext, useState } from 'react';
+import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
+import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { logger } from 'src/logger';
 import { TenantContext } from 'src/pages/common/TenantContext';
+import { mapPinService } from 'src/pages/Maps/map.service';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable, isUserContactable } from 'src/utils/helpers';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Card } from '@/components/ui/card';
-import WebsiteIcon from '@/components/ui/icons/website.svg?react';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import MapIcon from '@/components/ui/icons/map.svg?react';
 import { cn } from '@/lib/utils';
 import { Impact } from '../impact/Impact';
 import { ProfileContact } from './ProfileContact';
@@ -22,15 +24,24 @@ interface IProps {
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, coverImages, impact, type, website } = user;
+  const { coverImages, impact, type } = user;
   const { isComplete } = useProfileStore();
   const tenantContext = useContext(TenantContext);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [pin, setPin] = useState<MapPin | undefined>(undefined);
+
+  useEffect(() => {
+    mapPinService
+      .getMapPinById(user.id)
+      .then((pin) => pin && setPin(pin))
+      .catch((error) => logger.error(error));
+  }, [user.id]);
 
   const isMember = !type?.isSpace;
   const hasCoverImages = !isMember && !!coverImages?.length;
   const hasContactOption =
-    (!tenantContext?.noMessaging && isContactable(user.isContactable)) || !!user.website;
+    (!tenantContext?.noMessaging && isContactable(user.isContactable)) ||
+    (!isMember && !!user.website);
   const showContact =
     !tenantContext?.noMessaging &&
     (isViewingOwnProfile ? hasContactOption : isUserContactable(user));
@@ -38,88 +49,68 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const showSupport = !isMember && !!user.donationsEnabled;
   const showImpact = !!impact && !!tenantContext?.showImpact;
   const showEmptyProfileAlert = isViewingOwnProfile && isComplete === false;
+  const showMessage = showContact && !isViewingOwnProfile;
+
+  const contact = showContact && (
+    <ProfileContact
+      user={user}
+      isViewingOwnProfile={isViewingOwnProfile}
+      open={isContactOpen}
+      onOpenChange={setIsContactOpen}
+    />
+  );
 
   return (
-    <div data-cy={isMember ? 'MemberProfile' : 'SpaceProfile'} className="flex w-full flex-col">
-      {hasCoverImages && <ProfileImage images={coverImages} alt={`${user.displayName} cover`} />}
-      <div
-        className={cn(
-          'relative mx-auto flex w-full max-w-128 flex-col gap-6',
-          hasCoverImages ? '-mt-10 sm:-mt-25' : 'mt-6 sm:mt-21',
-        )}
-      >
-        <Card variant="elevated" className="items-center">
+    <div
+      data-cy={isMember ? 'MemberProfile' : 'SpaceProfile'}
+      className={cn(
+        'mx-auto flex w-full max-w-192 flex-col gap-10',
+        !hasCoverImages && 'mt-12 sm:mt-14',
+      )}
+    >
+      <section className="flex flex-col rounded-card bg-card shadow-elevated">
+        {hasCoverImages && <ProfileImage images={coverImages} alt={`${user.displayName} cover`} />}
+        <div className="flex flex-col gap-6 p-4 sm:p-10">
           <ProfileHeader
             user={user}
-            onContact={
-              showContact && !isViewingOwnProfile ? () => setIsContactOpen(true) : undefined
-            }
-          />
-
-          {showEmptyProfileAlert && (
-            <Alert variant="info" data-cy="emptyProfileMessage" className="w-full">
-              <AlertDescription>
-                Oh hey! Your profile is looking SO empty. Fancy filling it in...?
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <div className="flex w-full flex-col gap-3">
-            {about ? (
-              <p className="m-0 whitespace-pre-wrap text-muted-foreground">{about}</p>
-            ) : (
-              <p className="m-0 text-muted-foreground italic">
-                Looks like {isMember ? 'this user' : 'this space'} hasn't gotten around to filling
-                this in yet...
-              </p>
+            onContact={showMessage ? () => setIsContactOpen(true) : undefined}
+          >
+            {showEmptyProfileAlert && (
+              <Alert variant="info" data-cy="emptyProfileMessage">
+                <AlertDescription>
+                  Oh hey! Your profile is looking SO empty. Fancy filling it in...?
+                </AlertDescription>
+              </Alert>
             )}
-            {(website || showSupport || showContact) && (
-              <>
-                <Separator />
-                <div
-                  className={cn(
-                    'flex flex-wrap items-center gap-3',
-                    website ? 'justify-between' : 'justify-center',
-                  )}
+            {isViewingOwnProfile && contact}
+          </ProfileHeader>
+
+          {(showMessage || showSupport || pin) && (
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              {showMessage && contact}
+              {showSupport && <ProfileSupportButton profile={user} />}
+              {pin && (
+                <Button
+                  variant="outline"
+                  nativeButton={false}
+                  render={<Link to={`/map#${user.username}`} />}
+                  data-testid="location-link"
                 >
-                  {website && (
-                    <a
-                      href={website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-cy="profile-website"
-                      className="flex min-w-0 items-center gap-2 text-sm break-all text-link hover:underline"
-                    >
-                      <WebsiteIcon
-                        aria-hidden="true"
-                        className="size-4 shrink-0 text-muted-foreground"
-                      />
-                      {website}
-                    </a>
-                  )}
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {showSupport && <ProfileSupportButton profile={user} />}
-                    {showContact && (
-                      <ProfileContact
-                        user={user}
-                        isViewingOwnProfile={isViewingOwnProfile}
-                        open={isContactOpen}
-                        onOpenChange={setIsContactOpen}
-                      />
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </Card>
+                  <MapIcon data-icon="inline-start" aria-hidden="true" />
+                  Find on map
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
 
+      <div className="flex flex-col gap-10 px-4 sm:px-10">
         <ProfileContributions docs={docs} username={user.username ?? ''} />
-
         {showImpact && (
-          <Card variant="elevated">
+          <section className="flex flex-col gap-4">
             <Impact impact={impact} user={user} />
-          </Card>
+          </section>
         )}
       </div>
     </div>

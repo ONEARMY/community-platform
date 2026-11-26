@@ -27,7 +27,7 @@ describe('ProfileContributions', () => {
     );
     expect(screen.queryByText('Library')).not.toBeInTheDocument();
     expect(screen.queryByText('Research')).not.toBeInTheDocument();
-    expect(screen.getByText('Answers')).toBeInTheDocument();
+    expect(screen.getByText('Accepted answers')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Question Doc 1/ })).toHaveAttribute(
       'href',
       '/questions/question-doc-1?utm_source=user-profile#comment:5',

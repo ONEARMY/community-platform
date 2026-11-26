@@ -1,6 +1,5 @@
 import type { Image, UserCreatedDocs } from 'oa-shared';
 import { Link } from 'react-router';
-import { Card } from '@/components/ui/card';
 import libraryIcon from '@/components/ui/icons/library.svg';
 import questionsIcon from '@/components/ui/icons/questions.svg';
 import researchIcon from '@/components/ui/icons/research.svg';
@@ -13,7 +12,8 @@ type Doc = {
   slug?: string;
   title?: string;
   usefulCount?: number;
-  commentCount?: number;
+  totalViews?: number;
+  fileDownloadCount?: number;
   acceptedAnswerId?: number | null;
 };
 
@@ -22,7 +22,8 @@ const toItem = (doc: Doc, coverImage?: Image | null) => ({
   slug: doc.slug!,
   title: doc.title!,
   usefulCount: doc.usefulCount || 0,
-  commentCount: doc.commentCount,
+  totalViews: doc.totalViews || 0,
+  downloadCount: doc.fileDownloadCount,
   coverImage: coverImage || undefined,
   hash: doc.acceptedAnswerId ? `comment:${doc.acceptedAnswerId}` : undefined,
 });
@@ -50,7 +51,7 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
     },
     {
       type: 'questions',
-      title: 'Answers',
+      title: 'Accepted answers',
       icon: questionsIcon,
       testId: 'answer-contributions',
       items: docs.answers.map((doc) => toItem(doc, doc.images?.[0])),
@@ -64,8 +65,7 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
   }
 
   return (
-    <Card variant="elevated">
-      <h2 className="m-0 font-heading text-3xl font-normal">Contributions</h2>
+    <>
       {visibleSections.map(({ type, title, icon, testId, items }) => {
         const isAnswers = type === 'questions';
         const hasMore = !isAnswers && items.length > MAX_ITEMS;
@@ -74,14 +74,16 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
         const visible = hasMore ? sorted.slice(0, MAX_ITEMS) : sorted;
 
         return (
-          <section key={type} data-testid={testId} className="flex flex-col gap-3 font-sans">
-            <h3 className="m-0 flex items-center gap-2 font-heading text-xl font-normal">
+          <section key={type} data-testid={testId} className="flex flex-col gap-3">
+            <h2 className="m-0 flex items-center gap-2 font-heading text-xl font-normal">
               <img src={icon} alt="" className="size-6 shrink-0" />
               {title}
-            </h3>
+            </h2>
             <div
               className={
-                layout === 'horizontal' ? 'flex flex-col gap-2.5' : 'grid gap-2.5 sm:grid-cols-3'
+                isAnswers
+                  ? 'flex flex-col gap-2.5'
+                  : '-mx-4 flex snap-x scroll-px-4 gap-2.5 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0'
               }
             >
               {visible.map((item) => (
@@ -91,14 +93,14 @@ export const ProfileContributions = ({ docs, username }: IProps) => {
             {hasMore && (
               <Link
                 to={`/${type}?q=${encodeURIComponent(username)}`}
-                className="self-center text-sm hover:underline"
+                className="self-start rounded-md border-2 border-dashed border-border px-4 py-2 text-sm text-muted-foreground uppercase hover:bg-muted sm:self-center"
               >
-                View more {title.toLowerCase()} <span aria-hidden="true">→</span>
+                + See more {title.toLowerCase()}
               </Link>
             )}
           </section>
         );
       })}
-    </Card>
+    </>
   );
 };

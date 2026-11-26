@@ -26,7 +26,7 @@ export const Impact = (props: Props) => {
 
   return (
     <>
-      <h2 className="m-0 font-heading text-3xl font-normal">Impact</h2>
+      <h2 className="m-0 font-heading text-xl font-normal">Impact</h2>
       <Flex sx={{ flexFlow: 'row wrap' }} data-cy="ImpactPanel">
         {renderByYear.map((year) => {
           return year;

@@ -104,7 +104,6 @@ export class QuestionServiceServer {
       username_param: username,
     });
 
-    console.log(functionResult);
     if (functionResult.error || functionResult.count === 0) {
       logger.error('Error fetching user accepted answers:', functionResult.error);
       return [];
@@ -120,6 +119,7 @@ export class QuestionServiceServer {
         title: x.title,
         slug: x.slug,
         usefulCount: x.total_useful,
+        totalViews: x.total_views,
       };
     });
 

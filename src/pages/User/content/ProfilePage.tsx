@@ -35,7 +35,7 @@ export const ProfilePage = observer((props: IProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <>
-            <div className="mx-auto my-6 flex w-full max-w-128 justify-center gap-2 empty:hidden sm:justify-end">
+            <div className="mx-auto my-6 flex w-full max-w-192 justify-center gap-2 empty:hidden sm:justify-end">
               {isViewingOwnProfile ? (
                 <>
                   {shouldShowUpgrade && (

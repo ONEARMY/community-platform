@@ -103,21 +103,7 @@ describe('[Profile]', () => {
       cy.visit(`/u/${contactee.username}`);
       cy.get('[data-cy=UserContactWrapper]').should('not.exist');
 
-      cy.step('Contact section shows when website link is present');
-      cy.logout();
-      cy.signIn(contactee.email, contactee.password);
-      cy.visit('/settings');
-      cy.get('[data-cy=website').clear().type('https://bbc.co.uk');
-      cy.saveSettingsForm();
-
-      cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=UserContactWrapper]');
-      cy.get('[data-cy="UserContactForm-NotAvailable"]');
-      cy.get('[data-cy="UserContactForm"]').should('not.exist');
-      cy.get('[data-cy="profile-website"]').should('have.attr', 'href', `https://bbc.co.uk`);
-
       cy.step('Contact section shows for everyone else');
-      cy.logout();
       cy.visit(`/u/${contactee.username}`);
       cy.get('[data-cy="UserContactForm-NotAvailable"]').should('not.exist');
     });
@@ -127,7 +113,7 @@ describe('[Profile]', () => {
 
       cy.step('Can go to contribution data');
       cy.visit(`/u/${workspacePopulated.username}`);
-      cy.contains('Contributions').should('be.visible');
+      cy.get('[data-testid=library-contributions]').should('be.visible');
     });
 
     it('[Contribution and Impact sections hidden without contributions]', () => {
@@ -138,7 +124,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=MemberProfile]').should('not.exist');
       cy.get('[data-cy=SpaceProfile]').should('be.visible');
 
-      cy.contains('Contributions').should('not.exist');
+      cy.get('[data-testid$=-contributions]').should('not.exist');
       cy.get('[data-cy=ImpactPanel]').should('not.exist');
     });
   });

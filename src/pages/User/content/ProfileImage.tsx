@@ -14,7 +14,7 @@ export const ProfileImage = ({ images, alt }: IProps) => {
   const step = (delta: number) => setIndex((index + delta + images.length) % images.length);
 
   return (
-    <div className="relative sm:-mx-2 desktop-nav:-mx-4">
+    <div className="relative overflow-hidden rounded-t-card">
       <img
         data-cy="profile-cover-image"
         src={images[index].publicUrl}

@@ -22,12 +22,12 @@ interface IProps {
 }
 
 export const ProfileContact = ({ user, isViewingOwnProfile, open, onOpenChange }: IProps) => (
-  <div data-cy="UserContactWrapper" className="flex justify-center">
+  <div data-cy="UserContactWrapper" className="flex flex-col">
     {isViewingOwnProfile ? (
       <UserContactFormAvailable isUserProfileContactable={isUserContactable(user)} />
     ) : (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogTrigger render={<Button size="sm" data-cy="SendMessageButton" />}>
+        <DialogTrigger render={<Button data-cy="SendMessageButton" />}>
           <SendIcon data-icon="inline-start" aria-hidden="true" />
           Send message
         </DialogTrigger>

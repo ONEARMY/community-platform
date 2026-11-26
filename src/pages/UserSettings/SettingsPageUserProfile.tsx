@@ -115,29 +115,31 @@ export const SettingsPageUserProfile = observer(() => {
                 {headings.community(tenantContext?.siteName || 'the platform')}
               </SettingsCardHeading>
               <ProfileTags typeName={profile.type?.name || ''} />
-              <SettingsField label={fields.website.title} htmlFor="website">
-                <Field
-                  id="website"
-                  data-cy="website"
-                  name="website"
-                  component={TextInputField}
-                  variant="filled"
-                  placeholder="https://"
-                  validate={validateUrl}
-                  validateFields={[]}
-                />
-              </SettingsField>
               {!isMember && (
-                <VisitorSection
-                  visitorPolicy={
-                    values.showVisitorPolicy
-                      ? {
-                          policy: values.visitorPreferencePolicy,
-                          details: values.visitorPreferenceDetails,
-                        }
-                      : undefined
-                  }
-                />
+                <>
+                  <SettingsField label={fields.website.title} htmlFor="website">
+                    <Field
+                      id="website"
+                      data-cy="website"
+                      name="website"
+                      component={TextInputField}
+                      variant="filled"
+                      placeholder="https://"
+                      validate={validateUrl}
+                      validateFields={[]}
+                    />
+                  </SettingsField>
+                  <VisitorSection
+                    visitorPolicy={
+                      values.showVisitorPolicy
+                        ? {
+                            policy: values.visitorPreferencePolicy,
+                            details: values.visitorPreferenceDetails,
+                          }
+                        : undefined
+                    }
+                  />
+                </>
               )}
             </Card>
           </form>

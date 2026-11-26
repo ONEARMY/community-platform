@@ -21,7 +21,6 @@ export const ProfileSupportButton = ({ profile }: IProps) => {
       />
       <Button
         variant="outline"
-        size="sm"
         onClick={() => {
           trackEvent({
             action: 'donationModalOpened',

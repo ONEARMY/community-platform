@@ -1,11 +1,12 @@
 import { max } from 'date-fns';
-import { Category, TagList } from 'oa-components';
+import { Category } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 import { useMemo } from 'react';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { DisplayDate } from '@/components/ui/display-date';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { TagList } from '@/components/ui/tag-list';
 import { Username } from '@/components/ui/username';
 import { researchStatusColour } from '../researchHelpers';
 import { ResearchContributors } from './ResearchContributors';
@@ -107,7 +108,7 @@ const ResearchDescription = (props: IProps) => {
           <LinkifyText>{research.description}</LinkifyText>
         </Text>
 
-        <TagList tags={research.tags.map((t) => ({ label: t.name }))} />
+        <TagList tags={research.tags.map((t) => t.name)} />
       </Flex>
 
       <Divider sx={{ border: '1px solid black', margin: 0 }} />

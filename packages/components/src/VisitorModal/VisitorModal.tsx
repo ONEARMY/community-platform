@@ -37,10 +37,11 @@ export const visitorDisplayData = new Map<UserVisitorPreferencePolicy, DisplayDa
 export type VisitorModalProps = HideProp & {
   show: boolean;
   user: Profile;
+  canContact?: boolean;
 };
 
-export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
-  const { displayName, visitorPolicy, isContactable } = user;
+export const VisitorModal = ({ show, hide, user, canContact }: VisitorModalProps) => {
+  const { displayName, visitorPolicy } = user;
 
   const displayData = visitorPolicy && visitorDisplayData.get(visitorPolicy.policy);
 
@@ -55,7 +56,7 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
         {visitorPolicy.details && <>Details from {displayName}:</>}
         <Text variant="quiet">{visitorPolicy.details || displayData.default}</Text>
       </Flex>
-      {visitorPolicy.policy !== 'closed' && isContactable && <VisitorModalFooter hide={hide} />}
+      {visitorPolicy.policy !== 'closed' && canContact && <VisitorModalFooter hide={hide} />}
     </Modal>
   );
 };

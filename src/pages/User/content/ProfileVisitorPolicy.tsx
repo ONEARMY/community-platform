@@ -39,6 +39,7 @@ export const ProfileVisitorPolicy = ({ user, onContact }: IProps) => {
       <VisitorModal
         show={isOpen}
         user={user}
+        canContact={!!onContact}
         hide={(target) => {
           setIsOpen(false);
           if (target === 'contact') {

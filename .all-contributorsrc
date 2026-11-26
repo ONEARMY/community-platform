@@ -1394,6 +1394,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "andretorresdg",
+      "name": "Andre Devay",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43342188?v=4",
+      "profile": "https://www.linkedin.com/in/andredevay",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

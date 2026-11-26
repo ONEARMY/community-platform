@@ -58,7 +58,7 @@ const setup = (opts: {
     return { getUserResearch: vi.fn().mockResolvedValue([]) };
   });
   (QuestionServiceServer as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
-    return { getQuestionsByUser: vi.fn().mockResolvedValue([]) };
+    return { getAcceptedAnswersByUser: vi.fn().mockResolvedValue([]) };
   });
 
   (ProfileFactory as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {

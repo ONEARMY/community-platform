@@ -79,6 +79,9 @@ type ReturnOverrides = {
   get_user_questions: {
     images: DBMedia[] | null;
   };
+  get_user_accepted_answers: {
+    images: DBMedia[] | null;
+  };
   get_research: {
     author: DBAuthor | null;
     category: DBCategory | null;

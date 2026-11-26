@@ -1,30 +1,32 @@
-import { FieldTextarea } from 'oa-components';
 import { Field } from 'react-final-form';
+import { TextareaField } from 'src/common/Form/Textarea.field';
+import type { FieldProps } from 'src/common/Form/types';
 import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { contact } from 'src/pages/User/labels';
 import { minValue, required } from 'src/utils/validators';
-import { Flex, Label } from 'theme-ui';
 
-export const UserContactFieldMessage = () => {
-  const name = 'message';
+const MessageField = ({ meta, ...props }: FieldProps) => (
+  <TextareaField
+    {...props}
+    meta={{ ...meta, touched: meta.touched && (meta.dirty || meta.submitFailed) }}
+  />
+);
 
-  return (
-    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-      <Label htmlFor={name}>{`${contact.message.title} *`}</Label>
-      <Field
-        name={name}
-        placeholder={contact.message.placeholder}
-        minLength={MESSAGE_MIN_CHARACTERS}
-        maxLength={MESSAGE_MAX_CHARACTERS}
-        data-cy={name}
-        data-testid={name}
-        modifiers={{ capitalize: true, trim: true }}
-        component={FieldTextarea}
-        sx={{ backgroundColor: 'white' }}
-        validate={(value) => required(value) || minValue(MESSAGE_MIN_CHARACTERS)(value)}
-        validateFields={[]}
-        showCharacterCount
-      />
-    </Flex>
-  );
-};
+export const UserContactFieldMessage = () => (
+  <Field
+    name="message"
+    aria-label={contact.message.title}
+    placeholder={contact.message.placeholder}
+    minLength={MESSAGE_MIN_CHARACTERS}
+    maxLength={MESSAGE_MAX_CHARACTERS}
+    data-cy="message"
+    data-testid="message"
+    rows={5}
+    format={(value: string) => value && value.trim()}
+    formatOnBlur
+    component={MessageField}
+    validate={(value) => required(value) || minValue(MESSAGE_MIN_CHARACTERS)(value)}
+    validateFields={[]}
+    showCharacterCount
+  />
+);

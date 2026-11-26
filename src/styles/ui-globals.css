@@ -55,7 +55,7 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
-  --color-link: LinkText;
+  --color-link: var(--link);
   --color-supporter-cta: var(--supporter-cta-color, #bfdeba);
   --spacing: 0.3125rem;
   --radius-s: var(--spacing);
@@ -86,6 +86,7 @@
   --breakpoint-desktop-nav: 52em;
   --shadow-sidebar-ring: 0 0 0 1px var(--sidebar-border);
   --shadow-sidebar-ring-hover: 0 0 0 1px var(--sidebar-accent);
+  --shadow-elevated: 0 4px 4px -4px rgb(12 12 13 / 0.05), 0 16px 32px -4px rgb(12 12 13 / 0.1);
 }
 
 :root {
@@ -133,6 +134,7 @@
   --outline: #1b1b1b;
   --footer: #27272c;
   --caption: #6b7280;
+  --link: #2a61ba;
   --success: oklch(0.596 0.145 163.225);
   --warning: oklch(0.666 0.179 58.318);
   --info: oklch(0.546 0.245 262.881);

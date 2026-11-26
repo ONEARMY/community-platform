@@ -43,6 +43,7 @@ const dialogContentVariants = cva(
       variant: {
         default: 'gap-4 p-4',
         strong: 'gap-0 p-0',
+        soft: 'gap-4 rounded-card border-0 p-6',
       },
     },
     defaultVariants: {

@@ -53,11 +53,11 @@ export const fields: ILabels = {
   coverImages: {
     description:
       "They're shown at the top your profile and helps us evaluate your account. Make sure the first image shows your space. Best size is 1920x1080.",
-    title: 'Add profile cover image(s)',
+    title: 'Cover images',
   },
   userImage: {
     description: 'Visible on your profile and comments, best to upload as a square image.',
-    title: 'Add an avatar',
+    title: 'Avatar',
   },
   deleteAccount: {
     description: 'Once deleted, your account cannot be recovered.',
@@ -135,6 +135,13 @@ export const fields: ILabels = {
   },
 };
 
+export const avatarField = {
+  change: 'Change avatar',
+  invalid: 'Invalid image file. Please upload a valid image (jpeg, jpg, png, gif, svg, or webp).',
+  tooLarge: 'Image is too large. Maximum size is 10MB.',
+  uploadFailed: 'Could not upload the image. Please try again.',
+};
+
 export const form = {
   defaultError: 'This field is required',
   saveSuccess: 'Yay! Impact data saved.',
@@ -187,7 +194,8 @@ export const headings = {
   editProfile: 'Edit profile',
   focus: 'Focus',
   images: 'Images',
-  infos: 'Infos',
+  infos: 'Main profile',
+  community: (siteName: string) => `On ${siteName}`,
   map: {
     description:
       'Add yourself to the map as an individual who wants to get started. Find local community members and meetup to join forces and collaborate.',

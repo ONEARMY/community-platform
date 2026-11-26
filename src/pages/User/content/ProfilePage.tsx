@@ -24,88 +24,64 @@ export const ProfilePage = observer((props: IProps) => {
   const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
 
   const isViewingOwnProfile = useMemo(
-    () => !!activeUser && activeUser.id === profile.id,
-    [activeUser?.id, profile.id],
+    () => !!activeUser && activeUser.id === profile?.id,
+    [activeUser?.id, profile?.id],
   );
-  const showMemberProfile = !profile?.type?.isSpace;
   const upgradeBadge = upgradeBadgeForCurrentUser;
   const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 
   return (
-    <Flex
-      sx={{
-        alignSelf: 'center',
-        maxWidth: showMemberProfile ? '42em' : '60em',
-        flexDirection: 'column',
-        width: '100%',
-        marginTop: isViewingOwnProfile ? 4 : [6, 8],
-      }}
-    >
+    <div className="flex w-full flex-col">
       <ClientOnly fallback={<></>}>
         {() => (
           <>
-            {isViewingOwnProfile && (
-              <Flex
-                sx={{
-                  alignSelf: ['center', 'flex-end'],
-                  marginBottom: 6,
-                  zIndex: 2,
-                  gap: 2,
-                  flexDirection: 'row',
-                }}
-              >
-                {shouldShowUpgrade && (
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={upgradeBadge.actionUrl}
-                    data-cy="UpgradeBadge"
-                    onClick={() => {
-                      trackEvent({
-                        category: 'profiles',
-                        action: 'upgradeBadgeClicked',
-                        label: upgradeBadge.actionLabel,
-                      });
-                    }}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button
-                      type="button"
-                      sx={{
-                        backgroundColor: 'white',
+            <div className="mx-auto my-6 flex w-full max-w-192 justify-center gap-2 empty:hidden sm:justify-end">
+              {isViewingOwnProfile ? (
+                <>
+                  {shouldShowUpgrade && (
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={upgradeBadge.actionUrl}
+                      data-cy="UpgradeBadge"
+                      onClick={() => {
+                        trackEvent({
+                          category: 'profiles',
+                          action: 'upgradeBadgeClicked',
+                          label: upgradeBadge.actionLabel,
+                        });
                       }}
+                      style={{ textDecoration: 'none' }}
                     >
-                      <Flex sx={{ alignItems: 'center', gap: 1 }}>
-                        {upgradeBadge.imageUrl && (
-                          <Image
-                            src={upgradeBadge.imageUrl}
-                            sx={{ height: 20, width: 20, flexShrink: 0 }}
-                            alt={upgradeBadge.displayName || 'badge'}
-                          />
-                        )}
-                        {upgradeBadge.actionLabel}
-                      </Flex>
+                      <Button
+                        type="button"
+                        sx={{
+                          backgroundColor: 'white',
+                        }}
+                      >
+                        <Flex sx={{ alignItems: 'center', gap: 1 }}>
+                          {upgradeBadge.imageUrl && (
+                            <Image
+                              src={upgradeBadge.imageUrl}
+                              sx={{ height: 20, width: 20, flexShrink: 0 }}
+                              alt={upgradeBadge.displayName || 'badge'}
+                            />
+                          )}
+                          {upgradeBadge.actionLabel}
+                        </Flex>
+                      </Button>
+                    </a>
+                  )}
+                  <Link to="/settings">
+                    <Button type="button" data-cy="EditYourProfile">
+                      Edit Your Profile
                     </Button>
-                  </a>
-                )}
-                <Link to="/settings">
-                  <Button type="button" data-cy="EditYourProfile">
-                    Edit Your Profile
-                  </Button>
-                </Link>
-              </Flex>
-            )}
-            <Flex
-              sx={{
-                alignSelf: ['center', 'flex-end'],
-                marginBottom: isViewingOwnProfile ? 0 : 6,
-                zIndex: 2,
-                gap: 2,
-                flexDirection: 'row',
-              }}
-            >
-              <BanUserButton profile={profile} />
-            </Flex>
+                  </Link>
+                </>
+              ) : (
+                <BanUserButton profile={profile} />
+              )}
+            </div>
           </>
         )}
       </ClientOnly>
@@ -119,6 +95,6 @@ export const ProfilePage = observer((props: IProps) => {
           />
         )}
       </ClientOnly>
-    </Flex>
+    </div>
   );
 });

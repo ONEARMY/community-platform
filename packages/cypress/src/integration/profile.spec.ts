@@ -6,7 +6,6 @@ import { MOCK_DATA } from '../data';
 import { UserMenuItem } from '../support/commandsUi';
 import { generateNewUserDetails, getTenantUser } from '../utils/TestUtils';
 
-const profile_views = getTenantUser(MOCK_DATA.users.profile_views);
 const subscriber = getTenantUser(MOCK_DATA.users.subscriber);
 const eventReader = getTenantUser(MOCK_DATA.users.event_reader);
 const workspacePopulated = getTenantUser(MOCK_DATA.users.settings_workplace_new);
@@ -24,11 +23,8 @@ describe('[Profile]', () => {
       cy.title().should('eq', `${eventReader.displayName} - Profile - Test Site`);
 
       cy.get('[data-cy=userDisplayName]').contains(eventReader.username);
-      cy.get('[data-testid=library-stat]').contains('1');
-      cy.get('[data-testid=research-stat]').should('exist');
-
-      cy.step('Cannot see profile views');
-      cy.get('[data-testid=profile-views-stat]').should('not.exist');
+      cy.get('[data-testid=library-contributions]').find('[data-testid=library-link]').should('have.length', 1);
+      cy.get('[data-testid=research-contributions]').should('exist');
 
       cy.get('[data-cy=emptyProfileMessage]').should('not.exist');
     });
@@ -57,13 +53,12 @@ describe('[Profile]', () => {
       cy.signUpNewUser(contactee);
       cy.setProfileUsername(contactee.username);
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').click();
       cy.get('[data-cy="UserContactForm-Available"]');
 
       cy.step("Logged out people can see that they're contactable");
       cy.logout();
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').click();
+      cy.get('[data-cy=SendMessageButton]').click();
       cy.get('[data-cy="UserContactNotLoggedIn"]');
 
       cy.step('Other users can contact people');
@@ -71,9 +66,8 @@ describe('[Profile]', () => {
       cy.signUpNewUser(contacter);
       cy.setProfileUsername(contacter.username);
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').click();
+      cy.get('[data-cy=SendMessageButton]').click();
       cy.get('[data-cy="UserContactForm"]').should('be.visible');
-      cy.contains(`${contact.title} ${contactee.username}`).should('be.visible');
 
       cy.step('Form errors without a message');
       cy.get('[data-cy=contact-submit]').click();
@@ -82,8 +76,7 @@ describe('[Profile]', () => {
       cy.step('Contact form will send');
       const message = faker.lorem.sentences(50).slice(0, MESSAGE_MAX_CHARACTERS).trim();
 
-      cy.get('[data-cy=name]').type('Bob');
-      cy.get('[data-cy=message]').invoke('val', message).blur({ force: true });
+      cy.get('[data-cy=message]').type(message, { delay: 0 });
       cy.get('[data-cy=contact-submit]').click();
       cy.contains(contact.successMessage);
 
@@ -96,36 +89,21 @@ describe('[Profile]', () => {
       cy.saveSettingsForm();
       cy.get('[data-cy=isContactable-false]');
 
-      cy.step('No contact tab visible for contactee');
+      cy.step('No contact section visible for contactee');
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').should('not.exist');
+      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
 
-      cy.step('No contact tab visible for logged out users');
+      cy.step('No contact section visible for logged out users');
       cy.logout();
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').should('not.exist');
+      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
 
-      cy.step('No contact tab visible for other users');
+      cy.step('No contact section visible for other users');
       cy.signIn(contacter.email, contacter.password);
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').should('not.exist');
+      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
 
-      cy.step('Contact tab shows when website link is present');
-      cy.logout();
-      cy.signIn(contactee.email, contactee.password);
-      cy.visit('/settings');
-      cy.get('[data-cy=website').clear().type('https://bbc.co.uk');
-      cy.saveSettingsForm();
-
-      cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=contact-tab]').click();
-      cy.get('[data-cy=UserContactWrapper]');
-      cy.get('[data-cy="UserContactForm-NotAvailable"]');
-      cy.get('[data-cy="UserContactForm"]').should('not.exist');
-      cy.get('[data-cy="profile-website"]').should('have.attr', 'href', `https://bbc.co.uk`);
-
-      cy.step('Contact tab links shows for everyone else');
-      cy.logout();
+      cy.step('Contact section shows for everyone else');
       cy.visit(`/u/${contactee.username}`);
       cy.get('[data-cy="UserContactForm-NotAvailable"]').should('not.exist');
     });
@@ -135,10 +113,10 @@ describe('[Profile]', () => {
 
       cy.step('Can go to contribution data');
       cy.visit(`/u/${workspacePopulated.username}`);
-      cy.get('[data-cy=ContribTab]').click();
+      cy.get('[data-testid=library-contributions]').should('be.visible');
     });
 
-    it('[Tabs hidden without contributions]', () => {
+    it('[Contribution and Impact sections hidden without contributions]', () => {
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.step('Ensure hidden with no contributions');
@@ -146,95 +124,30 @@ describe('[Profile]', () => {
       cy.get('[data-cy=MemberProfile]').should('not.exist');
       cy.get('[data-cy=SpaceProfile]').should('be.visible');
 
-      cy.get('[data-cy=ContribTab]').should('not.exist');
-      cy.get('[data-cy=ImpactTab]').should('not.exist');
-    });
-
-    it('[Cannot see profile views or member history without premium tier]', () => {
-      const user = generateNewUserDetails();
-      cy.signUpNewUser(user);
-      cy.visit(`/u/${profile_views.username}`);
-      cy.get('[data-testid=profile-views-stat]').should('not.exist');
-      cy.get('[data-cy=MemberHistory]').should('not.exist');
-    });
-
-    it('should display questions count on profile tab', () => {
-      cy.signIn(subscriber.email, subscriber.password);
-
-      cy.visit(`/u/${subscriber.username}`);
-
-      cy.get('[data-testid=questions-link]').should('be.visible');
-      cy.get('[data-testid=questions-stat]')
-        .should('be.visible')
-        .invoke('text')
-        .and('match', /^Questions: \d+$/);
-    });
-
-    it('should navigate to questions page when clicking questions count on profile tab', () => {
-      cy.signIn(subscriber.email, subscriber.password);
-
-      cy.visit(`/u/${subscriber.username}`);
-
-      cy.get('[data-testid=questions-link]').click();
-      cy.url().should('include', `questions`);
-    });
-
-    it('should show questions in contributions tab', () => {
-      cy.signIn(subscriber.email, subscriber.password);
-
-      cy.visit(`/u/${subscriber.username}`);
-
-      cy.get('[data-cy=ContribTab]').click();
-      cy.get('[data-testid="question-contributions"]').should('be.visible');
-      cy.get('[data-testid="question-contributions"]').contains('The first test question?').should('be.visible');
-    });
-
-    it('should link to question page when question in clicked in contributions tab', () => {
-      cy.signIn(subscriber.email, subscriber.password);
-
-      cy.visit(`/u/${subscriber.username}`);
-      cy.get('[data-cy=ContribTab]').click();
-
-      cy.get('[data-cy="the-first-test-question-link"]').click();
-      cy.url().should('include', `/questions/the-first-test-question?utm_source=user-profile`);
-      cy.get('[data-cy="question-title"]').should('be.visible').contains('The first test question?');
+      cy.get('[data-testid$=-contributions]').should('not.exist');
+      cy.get('[data-cy=ImpactPanel]').should('not.exist');
     });
   });
+
   describe('badges', () => {
     it('should be shown across the platform', () => {
       cy.step('On profile');
       cy.visit(`/u/${subscriber.username}`);
       cy.get('[data-testid="badge_pro"]').contains('PRO');
-      cy.get('[data-testid="Username: pro badge"]');
 
       cy.step('On project pages');
-      cy.get('[data-cy="ContribTab"]').click();
-      cy.get('[data-testid="library-link"]').first().click();
+      cy.get('[data-testid="library-contributions"]').find('[data-testid="library-link"]').first().click();
       cy.get('[data-cy=library-basis]').get('[data-testid="Username: pro badge"]');
 
       cy.step('On research pages');
       cy.visit(`/u/${subscriber.username}`);
-      cy.get('[data-cy="ContribTab"]').click();
-      cy.get('[data-testid="research-link"]').first().click();
+      cy.get('[data-testid="research-contributions"]').find('[data-testid="research-link"]').first().click();
       cy.get('[data-testid="Username: pro badge"]');
 
       cy.step('On question pages');
-      cy.visit(`/u/${subscriber.username}`);
-      cy.get('[data-cy="ContribTab"]').click();
-      cy.get('[data-testid="questions-link"]').first().click();
+      cy.visit('/questions/the-first-test-question');
       cy.get('[data-cy=question-body]').get('[data-testid="Username: pro badge"]');
       cy.get('[data-cy=comments-section]').get('[data-testid="Username: pro badge"]');
     });
-  });
-});
-
-describe('[By Premium Tier User]', () => {
-  it('[Displays other information]', () => {
-    cy.signIn(subscriber.email, subscriber.password);
-    cy.visit(`/u/${profile_views.username}`);
-    cy.step('Displays view count for profile with views');
-    cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/);
-    cy.step('Displays member history info');
-    cy.get('[data-cy=MemberHistory]').contains('Member since');
   });
 });

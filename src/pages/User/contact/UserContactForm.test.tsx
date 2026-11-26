@@ -31,9 +31,6 @@ describe('UserContactForm', () => {
       </ProfileStoreProvider>,
     );
 
-    await screen.findByText(`Send a message to ${profileUser.displayName}`);
-
-    await user.type(screen.getByTestId('name'), 'Bob');
     await user.type(screen.getByTestId('message'), 'I need to learn about plastics');
 
     const submitButton = screen.getByTestId('contact-submit');

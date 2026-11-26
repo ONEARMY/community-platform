@@ -29,3 +29,7 @@ export const Invalid: Story = {
 export const Email: Story = {
   args: { type: 'email', placeholder: 'you@example.com' },
 };
+
+export const Filled: Story = {
+  args: { variant: 'filled', defaultValue: 'Precious Plastic' },
+};

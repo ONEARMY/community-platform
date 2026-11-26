@@ -5,7 +5,7 @@ import {
   DBAuthor,
   DBResearchItem,
   DBResearchUpdate,
-  ResearchItem,
+  type UserResearch,
   UserRole,
 } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -164,7 +164,7 @@ export class ResearchServiceServer {
     return true;
   }
 
-  async getUserResearch(username: string): Promise<Partial<ResearchItem>[]> {
+  async getUserResearch(username: string): Promise<UserResearch[]> {
     const imageService = new ImageServiceServer(this.client);
     const { data, error } = await this.client.rpc('get_user_research', {
       username_param: username,
@@ -184,6 +184,8 @@ export class ResearchServiceServer {
         title: x.title,
         slug: x.slug,
         usefulCount: x.total_useful,
+        totalViews: x.total_views,
+        fileDownloadCount: x.total_downloads,
       };
     });
   }

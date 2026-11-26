@@ -5,7 +5,7 @@ const mockClient: any = {
   rpc: vi.fn(),
 };
 
-describe('getQuestionsByUser', () => {
+describe('getAcceptedAnswersByUser', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -18,11 +18,13 @@ describe('getQuestionsByUser', () => {
 
     const mockDBQuestion = {
       id: id,
+      accepted_answer_id: 7,
       comment_count: 1,
       images: null,
       title: title,
       slug: slug,
       total_useful: usefulCount,
+      total_views: 12,
     };
 
     const mockResponse = {
@@ -36,19 +38,21 @@ describe('getQuestionsByUser', () => {
     const expected = [
       {
         id: id,
+        acceptedAnswerId: 7,
         commentCount: 1,
         images: null,
         title: title,
         slug: slug,
         usefulCount: usefulCount,
+        totalViews: 12,
       },
     ];
 
     mockClient.rpc.mockResolvedValueOnce(mockResponse);
 
-    const result = await new QuestionServiceServer(mockClient).getQuestionsByUser('testuser');
+    const result = await new QuestionServiceServer(mockClient).getAcceptedAnswersByUser('testuser');
 
-    expect(mockClient.rpc).toHaveBeenCalledWith('get_user_questions', {
+    expect(mockClient.rpc).toHaveBeenCalledWith('get_user_accepted_answers', {
       username_param: 'testuser',
     });
     expect(result).toEqual(expected);
@@ -62,7 +66,7 @@ describe('getQuestionsByUser', () => {
 
     mockClient.rpc.mockResolvedValueOnce(mockResponse);
 
-    const result = await new QuestionServiceServer(mockClient).getQuestionsByUser('testuser');
+    const result = await new QuestionServiceServer(mockClient).getAcceptedAnswersByUser('testuser');
 
     expect(result).toEqual([]);
   });
@@ -78,7 +82,7 @@ describe('getQuestionsByUser', () => {
 
     mockClient.rpc.mockResolvedValueOnce(mockResponse);
 
-    const result = await new QuestionServiceServer(mockClient).getQuestionsByUser('testuser');
+    const result = await new QuestionServiceServer(mockClient).getAcceptedAnswersByUser('testuser');
 
     expect(result).toEqual([]);
   });

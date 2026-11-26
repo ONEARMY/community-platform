@@ -1,21 +1,21 @@
-import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-components';
-import type { Profile, UserCreatedDocs } from 'oa-shared';
-import { PremiumTier } from 'oa-shared';
-import { useContext, useState } from 'react';
-import { useLocation } from 'react-router';
-import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
+import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
+import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { logger } from 'src/logger';
 import { TenantContext } from 'src/pages/common/TenantContext';
+import { mapPinService } from 'src/pages/Maps/map.service';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isContactable } from 'src/utils/helpers';
-import { Box, Card, Flex } from 'theme-ui';
+import { isContactable, isUserContactable } from 'src/utils/helpers';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import MapIcon from '@/components/ui/icons/map.svg?react';
+import { cn } from '@/lib/utils';
 import { Impact } from '../impact/Impact';
-import { heading } from '../impact/labels';
 import { ProfileContact } from './ProfileContact';
-import { ProfileDetails } from './ProfileDetails';
+import { ProfileContributions } from './ProfileContributions';
 import { ProfileHeader } from './ProfileHeader';
 import { ProfileImage } from './ProfileImage';
-import UserCreatedDocuments from './UserCreatedDocuments';
+import { ProfileSupportButton } from './ProfileSupportButton';
 
 interface IProps {
   docs: UserCreatedDocs;
@@ -24,115 +24,95 @@ interface IProps {
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, impact, type, tags } = user;
-  const location = useLocation();
+  const { coverImages, impact, type } = user;
   const { isComplete } = useProfileStore();
   const tenantContext = useContext(TenantContext);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [pin, setPin] = useState<MapPin | undefined>(undefined);
+
+  useEffect(() => {
+    mapPinService
+      .getMapPinById(user.id)
+      .then((pin) => pin && setPin(pin))
+      .catch((error) => logger.error(error));
+  }, [user.id]);
 
   const isMember = !type?.isSpace;
+  const hasCoverImages = !isMember && !!coverImages?.length;
   const hasContactOption =
-    (!tenantContext?.noMessaging && isContactable(user.isContactable)) || !!user.website;
-  const hasContributed = docs?.projects.length + docs?.research.length + docs?.questions.length > 0;
-  const hasImpacted = !!impact;
-  const hasProfile = about || (tags && Object.keys(tags).length !== 0) || hasContributed;
+    (!tenantContext?.noMessaging && isContactable(user.isContactable)) ||
+    (!isMember && !!user.website);
+  const showContact =
+    !tenantContext?.noMessaging &&
+    (isViewingOwnProfile ? hasContactOption : isUserContactable(user));
 
+  const showSupport = !isMember && !!user.donationsEnabled;
+  const showImpact = !!impact && !!tenantContext?.showImpact;
   const showEmptyProfileAlert = isViewingOwnProfile && isComplete === false;
+  const showMessage = showContact && !isViewingOwnProfile;
 
-  const defaultValue = location?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact');
-
-  const [selectedTab, setSelectedTab] = useState(defaultValue);
+  const contact = showContact && (
+    <ProfileContact
+      user={user}
+      isViewingOwnProfile={isViewingOwnProfile}
+      open={isContactOpen}
+      onOpenChange={setIsContactOpen}
+    />
+  );
 
   return (
-    <Flex
+    <div
       data-cy={isMember ? 'MemberProfile' : 'SpaceProfile'}
-      sx={{
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
-      }}
-    >
-      {isMember && (
-        <MemberBadge
-          profileType={type || undefined}
-          size={50}
-          sx={{
-            alignSelf: 'center',
-            position: 'absolute',
-            transform: 'translateY(-25px)',
-          }}
-          useLowDetailVersion
-        />
+      className={cn(
+        'mx-auto flex w-full max-w-192 flex-col gap-10',
+        !hasCoverImages && 'mt-12 sm:mt-14',
       )}
-      <Card variant="responsive" sx={{ borderRadius: [3, 3, 3] }}>
-        <ProfileImage user={user} />
-        <Flex
-          sx={{
-            borderTop: isMember ? '' : '2px solid',
-            flexDirection: 'column',
-            gap: 4,
-            padding: [2, 4],
-          }}
-        >
-          {showEmptyProfileAlert && (
-            <Alert variant="info" data-cy="emptyProfileMessage">
-              <AlertDescription>
-                Oh hey! Your profile is looking SO empty. Fancy filling it in...?
-              </AlertDescription>
-            </Alert>
+    >
+      <section className="flex flex-col rounded-card bg-card shadow-elevated">
+        {hasCoverImages && <ProfileImage images={coverImages} alt={`${user.displayName} cover`} />}
+        <div className="flex flex-col gap-6 p-4 sm:p-10">
+          <ProfileHeader
+            user={user}
+            onContact={showMessage ? () => setIsContactOpen(true) : undefined}
+          >
+            {showEmptyProfileAlert && (
+              <Alert variant="info" data-cy="emptyProfileMessage">
+                <AlertDescription>
+                  Oh hey! Your profile is looking SO empty. Fancy filling it in...?
+                </AlertDescription>
+              </Alert>
+            )}
+            {isViewingOwnProfile && contact}
+          </ProfileHeader>
+
+          {(showMessage || showSupport || pin) && (
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              {showMessage && contact}
+              {showSupport && <ProfileSupportButton profile={user} />}
+              {pin && (
+                <Button
+                  variant="outline"
+                  nativeButton={false}
+                  render={<Link to={`/map#${user.username}`} />}
+                  data-testid="location-link"
+                >
+                  <MapIcon data-icon="inline-start" aria-hidden="true" />
+                  Find on map
+                </Button>
+              )}
+            </div>
           )}
+        </div>
+      </section>
 
-          <Box sx={{ width: '100%' }}>
-            <ProfileHeader user={user} />
-
-            <Tabs
-              value={selectedTab}
-              onChange={(_: any, value: string | number | null) => {
-                typeof value === 'string' && setSelectedTab(value);
-              }}
-            >
-              <TabsList>
-                {hasProfile && <Tab value="profile">Profile</Tab>}
-                {hasContributed && (
-                  <Tab data-cy="ContribTab" value="contributions">
-                    Contributions
-                  </Tab>
-                )}
-                {hasImpacted && tenantContext?.showImpact && (
-                  <Tab data-cy="ImpactTab" value="impact">
-                    {heading}
-                  </Tab>
-                )}
-                {hasContactOption && (
-                  <Tab data-cy="contact-tab" value="contact">
-                    Contact
-                  </Tab>
-                )}
-              </TabsList>
-              <TabPanel value="profile">
-                <ProfileDetails docs={docs} profile={user} selectTab={setSelectedTab} />
-              </TabPanel>
-              {hasContributed && (
-                <TabPanel value="contributions">
-                  <UserCreatedDocuments columns={isMember ? 1 : 2} docs={docs} />
-                </TabPanel>
-              )}
-              {hasImpacted && tenantContext?.showImpact && (
-                <TabPanel value="impact">
-                  <Impact impact={impact} user={user} />
-                </TabPanel>
-              )}
-              {hasContactOption && (
-                <TabPanel value="contact">
-                  <ProfileContact user={user} isViewingOwnProfile={isViewingOwnProfile} />
-                </TabPanel>
-              )}
-            </Tabs>
-          </Box>
-          <PremiumTierWrapper tierRequired={PremiumTier.ONE}>
-            <MemberHistory memberSince={user.createdAt} lastActive={user.lastActive} />
-          </PremiumTierWrapper>
-        </Flex>
-      </Card>
-    </Flex>
+      <div className="flex flex-col gap-10 px-4 sm:px-10">
+        <ProfileContributions docs={docs} username={user.username ?? ''} />
+        {showImpact && (
+          <section className="flex flex-col gap-4">
+            <Impact impact={impact} user={user} />
+          </section>
+        )}
+      </div>
+    </div>
   );
 };

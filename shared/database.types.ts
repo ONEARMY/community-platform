@@ -2025,6 +2025,19 @@ export type Database = {
           count: number;
         }[];
       };
+      get_user_accepted_answers: {
+        Args: { username_param: string };
+        Returns: {
+          accepted_answer_id: number;
+          comment_count: number;
+          id: number;
+          images: Json[];
+          slug: string;
+          title: string;
+          total_useful: number;
+          total_views: number;
+        }[];
+      };
       get_user_email_by_id: {
         Args: { id: string };
         Returns: {
@@ -2058,6 +2071,8 @@ export type Database = {
           slug: string;
           title: string;
           total_useful: number;
+          total_downloads: number;
+          total_views: number;
         }[];
       };
       get_user_questions: {
@@ -2079,6 +2094,8 @@ export type Database = {
           slug: string;
           title: string;
           total_useful: number;
+          total_downloads: number;
+          total_views: number;
         }[];
       };
       is_poll_admin: { Args: never; Returns: boolean };

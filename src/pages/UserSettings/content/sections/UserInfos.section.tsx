@@ -1,144 +1,109 @@
 import { getCountryDataList, getEmojiFlag } from 'countries-list';
 import { observer } from 'mobx-react';
-import { FieldInput, FieldTextarea } from 'oa-components';
-import type { ProfileFormData } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { SelectField } from 'src/common/Form/Select.field';
-import { fields, headings } from 'src/pages/UserSettings/labels';
+import { TextareaField } from 'src/common/Form/Textarea.field';
+import { TextInputField } from 'src/common/Form/TextInput.field';
+import { fields } from 'src/pages/UserSettings/labels';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import {
-  composeValidators,
-  noSpecialCharacters,
-  required,
-  validateUrl,
-} from 'src/utils/validators';
-import { Flex, Heading, Text } from 'theme-ui';
-import { Username } from '@/components/ui/username';
+import { composeValidators, noSpecialCharacters, required } from 'src/utils/validators';
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
 } from '../../constants';
-import { ProfileSection } from '../elements';
-import { ProfileTags } from './ProfileTags.section';
+import { SettingsField } from '../elements';
+import { CoverImagesField } from '../fields/CoverImages.field';
+import { ProfileAvatarField } from '../fields/ProfileAvatar.field';
 
 const countryOptions = getCountryDataList().map((country) => ({
   label: `${getEmojiFlag(country.iso2)} ${country.native}`,
   value: country.iso2,
 }));
 
-interface IProps {
-  formValues: Partial<ProfileFormData>;
-}
-
-export const UserInfosSection = observer(({ formValues }: IProps) => {
+export const UserInfosSection = observer(() => {
   const { profile, isUserAuthorized } = useProfileStore();
 
-  const isMemberProfile = !profile?.type?.isSpace;
-  const isAdmin = isUserAuthorized(UserRole.ADMIN);
-  const isUsernameLocked = !!profile?.username && !isAdmin;
-  const { about, country, displayName, userName, website } = fields;
+  if (!profile) {
+    return null;
+  }
+
+  const isMemberProfile = !profile.type?.isSpace;
+  const isUsernameLocked = !!profile.username && !isUserAuthorized(UserRole.ADMIN);
+  const { about, country, displayName, userName } = fields;
 
   return (
-    <ProfileSection>
-      <Flex data-testid="UserInfosSection" sx={{ flexDirection: 'column', gap: [3, 5] }}>
-        <Heading as="h2">{headings.infos}</Heading>
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>
-            {userName.title} <Text color="red">*</Text>
-          </Text>
-          <Text variant="quiet" sx={{ fontSize: 2 }}>
-            {userName.description}
-          </Text>
-          <Field
-            data-cy="username"
-            name="username"
-            component={FieldInput}
-            placeholder="your username"
-            disabled={isUsernameLocked}
-            validate={composeValidators(required, noSpecialCharacters)}
-            validateFields={[]}
-          />
-        </Flex>
+    <>
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-6">
+        <ProfileAvatarField profileId={profile.id} displayName={profile.displayName || ''} />
+        <div className="flex flex-1 flex-col gap-5">
+          <SettingsField
+            label={displayName.title}
+            description={displayName.description}
+            htmlFor="displayName"
+            required
+          >
+            <Field
+              id="displayName"
+              data-cy="displayName"
+              name="displayName"
+              component={TextInputField}
+              variant="filled"
+              placeholder="Pick a name to display on your profile"
+              validate={required}
+              validateFields={[]}
+            />
+          </SettingsField>
+          <SettingsField
+            label={userName.title}
+            description={userName.description}
+            htmlFor="username"
+            required
+          >
+            <Field
+              id="username"
+              data-cy="username"
+              name="username"
+              component={TextInputField}
+              variant="filled"
+              placeholder="your username"
+              disabled={isUsernameLocked}
+              validate={composeValidators(required, noSpecialCharacters)}
+              validateFields={[]}
+            />
+          </SettingsField>
+        </div>
+      </div>
 
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>
-            {displayName.title} <Text color="red">*</Text>
-          </Text>
-          <Text variant="quiet" sx={{ fontSize: 2 }}>
-            {displayName.description}
-          </Text>
-          <Field
-            data-cy="displayName"
-            name="displayName"
-            component={FieldInput}
-            placeholder="Pick a name to display on your profile"
-            validate={required}
-            validateFields={[]}
-          />
-        </Flex>
+      {!isMemberProfile && <CoverImagesField profileId={profile.id} />}
 
-        <ProfileTags typeName={profile?.type?.name || ''} />
+      <SettingsField label={country.title}>
+        <Field data-cy="country-dropdown" name="country">
+          {(field) => (
+            <SelectField options={countryOptions} placeholder="Select your country..." {...field} />
+          )}
+        </Field>
+      </SettingsField>
 
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>
-            {about.title} <Text color="red">*</Text>
-          </Text>
-          <Field
-            data-cy="info-about"
-            name="about"
-            component={FieldTextarea}
-            showCharacterCount
-            maxLength={
-              isMemberProfile
-                ? MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH
-                : GROUP_PROFILE_DESCRIPTION_MAX_LENGTH
-            }
-            placeholder={about.placeholder}
-            validate={required}
-            validateFields={[]}
-          />
-        </Flex>
-
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{country.title}</Text>
-          <Field data-cy="country-dropdown" name="country">
-            {(field) => (
-              <SelectField
-                options={countryOptions}
-                placeholder="Select your country..."
-                {...field}
-              />
-            )}
-          </Field>
-          <Flex sx={{ gap: 1, alignItems: 'center' }}>
-            <Text sx={{ fontSize: 1 }} variant="quiet">
-              Preview:
-            </Text>
-            {formValues.username && (
-              <Username
-                user={{
-                  ...profile,
-                  username: formValues.username,
-                  country: formValues.country,
-                }}
-              />
-            )}
-          </Flex>
-        </Flex>
-
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{website.title}</Text>
-          <Field
-            data-cy="website"
-            name="website"
-            component={FieldInput}
-            placeholder="https://"
-            validate={validateUrl}
-            validateFields={[]}
-          />
-        </Flex>
-      </Flex>
-    </ProfileSection>
+      <SettingsField label={about.title} htmlFor="about" required>
+        <Field
+          id="about"
+          data-cy="info-about"
+          name="about"
+          component={TextareaField}
+          variant="filled"
+          rows={5}
+          showCharacterCount
+          maxLength={
+            isMemberProfile
+              ? MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH
+              : GROUP_PROFILE_DESCRIPTION_MAX_LENGTH
+          }
+          placeholder={about.placeholder}
+          validate={required}
+          validateFields={[]}
+        />
+      </SettingsField>
+    </>
   );
 });

@@ -1,24 +1,27 @@
 import arrayMutators from 'final-form-arrays';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { Button } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
 import { useContext, useMemo } from 'react';
-import { Form } from 'react-final-form';
+import { Field, Form } from 'react-final-form';
+import { TextInputField } from 'src/common/Form/TextInput.field';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { useToast } from 'src/common/Toast';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
-import { Flex } from 'theme-ui';
+import { validateUrl } from 'src/utils/validators';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { TenantContext } from '../common/TenantContext';
+import { SettingsCardHeading, SettingsField } from './content/elements';
 import { FocusSection } from './content/sections/Focus.section';
+import { ProfileTags } from './content/sections/ProfileTags.section';
 import { PublicContactSection } from './content/sections/PublicContact.section';
-import { UserImagesSection } from './content/sections/UserImages.section';
 import { UserInfosSection } from './content/sections/UserInfos.section';
 import { VisitorSection } from './content/sections/VisitorSection';
-import { buttons } from './labels';
+import { buttons, fields, headings } from './labels';
 
 export const SettingsPageUserProfile = observer(() => {
   const toast = useToast();
@@ -93,27 +96,39 @@ export const SettingsPageUserProfile = observer(() => {
       initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       validateOnBlur
-      render={({
-        dirty,
-        submitting,
-        submitSucceeded,
-        values,
-        handleSubmit,
-        invalid,
-        errors,
-        form,
-      }) => {
-        return (
-          <Flex sx={{ flexDirection: 'column', gap: 4 }}>
-            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-            {submitting && <Spinner />}
-            <FocusSection />
-            <form id={formId} onSubmit={handleSubmit}>
-              <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                <UserInfosSection formValues={values} />
-                <UserImagesSection isMemberProfile={isMember} values={values} form={form} />
+      render={({ dirty, submitting, submitSucceeded, values, handleSubmit, invalid, errors }) => (
+        <div className="flex flex-col gap-4 sm:gap-6">
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+          {submitting && <Spinner />}
+          <FocusSection />
+          <form id={formId} onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6">
+            <Card variant="panel" data-testid="UserInfosSection" className="-mx-2 sm:mx-0">
+              <SettingsCardHeading>{headings.infos}</SettingsCardHeading>
+              <UserInfosSection />
+              {!tenantContext?.noMessaging && (
+                <PublicContactSection isContactable={values.isContactable} />
+              )}
+            </Card>
 
-                {!isMember && (
+            <Card variant="panel" className="-mx-2 sm:mx-0">
+              <SettingsCardHeading>
+                {headings.community(tenantContext?.siteName || 'the platform')}
+              </SettingsCardHeading>
+              <ProfileTags typeName={profile.type?.name || ''} />
+              {!isMember && (
+                <>
+                  <SettingsField label={fields.website.title} htmlFor="website">
+                    <Field
+                      id="website"
+                      data-cy="website"
+                      name="website"
+                      component={TextInputField}
+                      variant="filled"
+                      placeholder="https://"
+                      validate={validateUrl}
+                      validateFields={[]}
+                    />
+                  </SettingsField>
                   <VisitorSection
                     visitorPolicy={
                       values.showVisitorPolicy
@@ -124,30 +139,25 @@ export const SettingsPageUserProfile = observer(() => {
                         : undefined
                     }
                   />
-                )}
+                </>
+              )}
+            </Card>
+          </form>
 
-                {!tenantContext?.noMessaging && (
-                  <PublicContactSection isContactable={values.isContactable} />
-                )}
-              </Flex>
-            </form>
-
-            <Button
-              large
-              form={formId}
-              data-cy="save"
-              title={invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'}
-              onClick={() => window.scrollTo(0, 0)}
-              variant="primary"
-              type="submit"
-              disabled={submitting}
-              sx={{ alignSelf: 'flex-start' }}
-            >
-              {needsResend ? buttons.saveAndResend : buttons.save}
-            </Button>
-          </Flex>
-        );
-      }}
+          <Button
+            size="lg"
+            form={formId}
+            data-cy="save"
+            title={invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'}
+            onClick={() => window.scrollTo(0, 0)}
+            type="submit"
+            disabled={submitting}
+            className="self-start"
+          >
+            {needsResend ? buttons.saveAndResend : buttons.save}
+          </Button>
+        </div>
+      )}
     />
   );
 });

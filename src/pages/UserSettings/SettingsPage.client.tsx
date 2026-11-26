@@ -56,6 +56,7 @@ export const SettingsPage = observer(() => {
         ),
         preBody: OrganisationModerationSection,
         body: SettingsPageUserProfile,
+        bare: true,
         glyph: 'profile' as availableGlyphs,
       },
       ...(showMapTab

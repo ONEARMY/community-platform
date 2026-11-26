@@ -25,6 +25,10 @@ export const Outline: Story = {
   args: { variant: 'outline' },
 };
 
+export const Soft: Story = {
+  args: { variant: 'soft' },
+};
+
 export const Ghost: Story = {
   args: { variant: 'ghost' },
 };
@@ -48,6 +52,9 @@ export const AllVariants: Story = {
       </Button>
       <Button {...args} variant="outline">
         Outline
+      </Button>
+      <Button {...args} variant="soft">
+        Soft
       </Button>
       <Button {...args} variant="ghost">
         Ghost

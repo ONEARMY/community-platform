@@ -30,6 +30,10 @@ export const Destructive: Story = {
   args: { variant: 'destructive', children: 'rejected' },
 };
 
+export const Outline: Story = {
+  args: { variant: 'outline', children: 'Mould Making' },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -38,6 +42,7 @@ export const AllVariants: Story = {
       <Badge variant="warning">awaiting-moderation</Badge>
       <Badge variant="info">improvements-needed</Badge>
       <Badge variant="destructive">rejected</Badge>
+      <Badge variant="outline">Mould Making</Badge>
     </div>
   ),
 };

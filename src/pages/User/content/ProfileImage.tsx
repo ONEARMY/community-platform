@@ -1,50 +1,41 @@
-import { ImageGallery } from 'oa-components';
 import type { Profile } from 'oa-shared';
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
-import { AspectRatio, Box, Flex } from 'theme-ui';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import ChevronLeft from '@/components/ui/icons/chevron-left.svg?react';
+import ChevronRight from '@/components/ui/icons/chevron-right.svg?react';
 
 interface IProps {
-  user: Profile;
+  images: NonNullable<Profile['coverImages']>;
+  alt: string;
 }
 
-export const ProfileImage = ({ user }: IProps) => {
-  if (!user.type?.isSpace) {
-    return null;
-  }
-
-  const getCoverImages = (user: Profile) => {
-    if (user.coverImages && user.coverImages.length) {
-      return user.coverImages;
-    }
-
-    return [];
-  };
-
-  const coverImage = getCoverImages(user);
+export const ProfileImage = ({ images, alt }: IProps) => {
+  const [index, setIndex] = useState(0);
+  const step = (delta: number) => setIndex((index + delta + images.length) % images.length);
 
   return (
-    <Box>
-      {coverImage.length ? (
-        <ImageGallery
-          images={formatImagesForGallery(coverImage) as any}
-          hideThumbnails={true}
-          showNextPrevButton={true}
-        />
-      ) : (
-        <AspectRatio ratio={24 / 3}>
-          <Flex
-            sx={{
-              width: '100%',
-              height: '100%',
-              background: '#ddd',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+    <div className="relative overflow-hidden rounded-t-card">
+      <img
+        data-cy="profile-cover-image"
+        src={images[index].publicUrl}
+        alt={alt}
+        className="aspect-hero w-full object-cover"
+      />
+      {images.length > 1 && (
+        <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-4">
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label="Previous image"
+            onClick={() => step(-1)}
           >
-            No images available.
-          </Flex>
-        </AspectRatio>
+            <ChevronLeft />
+          </Button>
+          <Button variant="outline" size="icon" aria-label="Next image" onClick={() => step(1)}>
+            <ChevronRight />
+          </Button>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };

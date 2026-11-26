@@ -98,14 +98,14 @@ export class QuestionServiceServer {
       .single();
   }
 
-  async getQuestionsByUser(username: string): Promise<Partial<Question>[]> {
+  async getAcceptedAnswersByUser(username: string): Promise<Partial<Question>[]> {
     const imageService = new ImageServiceServer(this.client);
-    const functionResult = await this.client.rpc('get_user_questions', {
+    const functionResult = await this.client.rpc('get_user_accepted_answers', {
       username_param: username,
     });
 
     if (functionResult.error || functionResult.count === 0) {
-      logger.error('Error fetching user questions:', functionResult.error);
+      logger.error('Error fetching user accepted answers:', functionResult.error);
       return [];
     }
 
@@ -113,11 +113,13 @@ export class QuestionServiceServer {
       const images = x.images ? imageService.getPublicUrls(x.images) : null;
       return {
         id: x.id,
+        acceptedAnswerId: x.accepted_answer_id,
         commentCount: x.comment_count,
         images,
         title: x.title,
         slug: x.slug,
         usefulCount: x.total_useful,
+        totalViews: x.total_views,
       };
     });
 

@@ -36,7 +36,7 @@ const upgradeBadge = ProfileBadge.fromDB({
   action_label: 'Go PRO',
 });
 
-const docs = { projects: [], research: [], questions: [] };
+const docs = { projects: [], research: [], answers: [] };
 
 const renderPage = (profile: any) =>
   render(

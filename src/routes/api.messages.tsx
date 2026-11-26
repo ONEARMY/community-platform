@@ -25,7 +25,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       to: formData.get('to') as string,
       message: formData.get('message') as string,
-      name: formData.has('name') ? (formData.get('name') as string) : undefined,
     };
 
     const claims = await client.auth.getClaims();
@@ -124,7 +123,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         text={data.message}
         receiverName={data.to}
         messengerEmailAddress={claims.data.claims.email as string}
-        messengerName={data.name}
+        messengerName={messenger.display_name || messenger.username}
         messengerUsername={messenger.username}
       />
     );

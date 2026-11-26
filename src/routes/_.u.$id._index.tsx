@@ -20,16 +20,16 @@ async function getUserCreatedDocs(
   username: string | null,
 ): Promise<UserCreatedDocs> {
   if (!username) {
-    return { projects: [], research: [], questions: [] };
+    return { projects: [], research: [], answers: [] };
   }
 
-  const [projects, research, questions] = await Promise.all([
+  const [projects, research, answers] = await Promise.all([
     new LibraryServiceServer(client).getUserProjects(username),
     new ResearchServiceServer(client).getUserResearch(username),
-    new QuestionServiceServer(client).getQuestionsByUser(username),
+    new QuestionServiceServer(client).getAcceptedAnswersByUser(username),
   ]);
 
-  return { projects, research, questions };
+  return { projects, research, answers };
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

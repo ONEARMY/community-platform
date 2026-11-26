@@ -49,7 +49,6 @@ describe('[Settings]', () => {
     const description = "I'm a very active member";
     const profileType = 'member';
     const tag = ['Product Design', 'Accounting'];
-    const website = 'https://social.network';
 
     cy.step('Incomplete profile banner visible when logged out');
     cy.get('[data-cy=notificationBanner]').should('not.exist');
@@ -85,11 +84,9 @@ describe('[Settings]', () => {
       displayName,
       country,
       description,
-      website,
     });
     cy.selectTag(tag[0], '[data-cy=profile-tag-select]');
     cy.selectTag(tag[1], '[data-cy=profile-tag-select]');
-    cy.get(`[data-cy="country:${countryCode}"]`);
 
     cy.step('Errors if trying to upload invalid image');
     cy.get(`[data-cy=userImage]`).find(':file').selectFile(`src/fixtures/files/Example.pdf`, { force: true });
@@ -187,11 +184,9 @@ describe('[Settings]', () => {
     cy.contains(tag);
     cy.get(`[data-cy="MemberBadge-${profileType}"]`);
     cy.get('[data-cy="userImage"]').should('have.attr', 'src').and('include', userImage);
-    cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('include', coverImage);
+    cy.get('[data-cy="profile-cover-image"]').should('have.attr', 'src').and('include', coverImage);
 
-    cy.step('Updated settings display on contact tab');
-    cy.get('[data-cy="contact-tab"]').click({ force: true });
-    cy.get('[data-cy="contact-tab"]').click({ force: true });
+    cy.step('Updated settings display on contact section');
     cy.contains(`Other users are able to contact you`);
     cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website);
   });
@@ -265,10 +260,10 @@ describe('[Precious Plastic]', () => {
     cy.contains(displayName);
     cy.contains(description);
     cy.contains(tag);
-    cy.get('[data-cy="ImpactTab"]').should('not.exist');
+    cy.get('[data-cy="ImpactPanel"]').should('not.exist');
     cy.get(`[data-cy="MemberBadge-${profileType}"]`);
     cy.get('[data-cy="userImage"]').should('have.attr', 'src').and('include', userImage);
-    cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('include', coverImage);
+    cy.get('[data-cy="profile-cover-image"]').should('have.attr', 'src').and('include', coverImage);
 
     cy.step('Can see visitor policy');
     cy.get('[data-cy=tag-openToVisitors]').contains(visitorType).click();
@@ -279,7 +274,6 @@ describe('[Precious Plastic]', () => {
     cy.visit('/settings');
     cy.setSettingImpactData(2022, impactFields);
     cy.visit(`u/${user.username}`);
-    cy.get('[data-cy="ImpactTab"]').click();
 
     // From visibleImpactFields above
     cy.contains('5 Kg of plastic recycled');

@@ -36,7 +36,7 @@ export function UsefulButtonLite({
   return (
     <div className="relative flex items-center self-end">
       {votedUsefulCount > 0 && (
-        <span className="-mr-3.5 z-10 flex h-6 min-w-11 items-center rounded-l-sm bg-background py-1 pr-1 pl-2 text-sm">
+        <span className="-mr-3.5 z-10 flex font-heading h-6 min-w-11 items-center rounded-l-sm bg-background py-1 pr-1 pl-2 text-sm">
           {votedUsefulCount}
         </span>
       )}
@@ -44,7 +44,7 @@ export function UsefulButtonLite({
         type="button"
         variant="ghost"
         size="icon"
-        className="relative z-20"
+        className="relative z-20 font-heading"
         data-cy={isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         title={isLoggedIn ? 'Mark as useful' : 'Login to add your vote'}
         disabled={disabled}

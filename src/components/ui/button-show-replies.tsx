@@ -24,7 +24,7 @@ export function ButtonShowReplies({ isShowReplies, replies, setIsShowReplies }: 
       type="button"
       variant="ghost"
       size="sm"
-      className="self-start"
+      className="self-start font-heading"
       data-cy="show-replies"
       data-testid="show-replies"
       onClick={setIsShowReplies}

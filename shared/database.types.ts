@@ -3,6 +3,41 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      ambassador_codes: {
+        Row: {
+          active: boolean;
+          code: string;
+          created_at: string;
+          id: number;
+          profile_id: number;
+          tenant_id: string;
+        };
+        Insert: {
+          active?: boolean;
+          code: string;
+          created_at?: string;
+          id?: number;
+          profile_id: number;
+          tenant_id: string;
+        };
+        Update: {
+          active?: boolean;
+          code?: string;
+          created_at?: string;
+          id?: number;
+          profile_id?: number;
+          tenant_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ambassador_codes_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       banners: {
         Row: {
           created_at: string;

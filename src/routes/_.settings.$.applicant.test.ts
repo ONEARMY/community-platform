@@ -1,3 +1,4 @@
+import { UserRole } from 'oa-shared';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { OrganisationApplicationsServiceServer } from 'src/services/organisationApplicationsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -83,6 +84,39 @@ describe('settings gate for organisation applicants', () => {
     setup({ profile: { id: 7 } });
 
     const res = (await loader(args('/settings'))) as Response;
+
+    expect(res.headers.get('location')).toBe('/settings/profile');
+  });
+});
+
+describe('settings gate for the ambassador tab', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it('lets a beta tester open the ambassador tab', async () => {
+    setup({ profile: { id: 7, roles: [UserRole.BETA_TESTER] } });
+
+    const res = await loader(args('/settings/ambassador'));
+
+    expect((res as Response).headers?.get?.('location')).toBeFalsy();
+  });
+
+  it.each([
+    ['no roles', { id: 7, roles: [] }],
+    ['other roles', { id: 7, roles: [UserRole.ADMIN] }],
+    ['no profile', null],
+  ])('sends a member with %s back to the profile tab', async (_, profile) => {
+    setup({ profile });
+
+    const res = (await loader(args('/settings/ambassador'))) as Response;
+
+    expect(res.status).toBe(302);
+    expect(res.headers.get('location')).toBe('/settings/profile');
+  });
+
+  it('gates the client navigation data request too', async () => {
+    setup({ profile: { id: 7, roles: [] } });
+
+    const res = (await loader(args('/settings/ambassador.data'))) as Response;
 
     expect(res.headers.get('location')).toBe('/settings/profile');
   });

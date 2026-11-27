@@ -1,3 +1,5 @@
+CREATE INDEX notifications_tenant_created_at_idx ON public.notifications (tenant_id, created_at DESC);
+
 -- Aggregates for the admin Notifications dashboard. One round trip, computed in SQL so the
 -- page never loads notification rows. Weeks start on Monday (UTC); the newest week is partial.
 CREATE OR REPLACE FUNCTION "public"."get_admin_notification_stats"(
@@ -25,6 +27,7 @@ CREATE OR REPLACE FUNCTION "public"."get_admin_notification_stats"(
         SELECT date_trunc('week', created_at AT TIME ZONE 'utc')::date AS week_start, COUNT(*) AS total
         FROM notifications
         WHERE tenant_id = p_tenant_id
+          AND created_at >= date_trunc('week', now() AT TIME ZONE 'utc') - make_interval(weeks => GREATEST(p_weeks, 1) - 1)
         GROUP BY 1
       ) c ON c.week_start = w.week_start
     ), '[]'::jsonb),

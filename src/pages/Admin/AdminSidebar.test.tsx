@@ -39,6 +39,7 @@ describe('AdminSidebar', () => {
       'Map',
       'Comments',
       'Messages',
+      'Notifications',
       'Settings',
     ]);
   });
@@ -49,6 +50,16 @@ describe('AdminSidebar', () => {
     expect(screen.getByRole('link', { name: 'Remakes' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/admin/projects');
     expect(screen.queryByText('Coming soon')).not.toBeInTheDocument();
+  });
+
+  it('links Notifications to its admin page', () => {
+    renderAt('/admin/notifications');
+
+    expect(screen.getByRole('link', { name: 'Notifications' })).toHaveAttribute(
+      'href',
+      '/admin/notifications',
+    );
+    expect(screen.getByRole('link', { name: 'Notifications' })).toHaveAttribute('data-active');
   });
 
   it('links Research to its admin page', () => {

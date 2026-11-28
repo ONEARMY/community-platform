@@ -25,7 +25,7 @@ bun run format     # biome, required
 bun run test:unit  # required
 ```
 
-E2E (Cypress) runs in CI. Do not run it locally unless asked.
+E2E (Cypress) runs in CI. Do not run it locally unless asked. Before writing or changing e2e tests, read [Writing tests](./packages/cypress/README.md#writing-tests).
 
 ## UI changes: screenshots are mandatory
 

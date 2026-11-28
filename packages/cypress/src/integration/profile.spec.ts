@@ -53,6 +53,7 @@ describe('[Profile]', () => {
       cy.signUpNewUser(contactee);
       cy.setProfileUsername(contactee.username);
       cy.visit(`/u/${contactee.username}`);
+      cy.get('[data-cy=SendMessageButton]').click();
       cy.get('[data-cy="UserContactForm-Available"]');
 
       cy.step("Logged out people can see that they're contactable");
@@ -89,9 +90,10 @@ describe('[Profile]', () => {
       cy.saveSettingsForm();
       cy.get('[data-cy=isContactable-false]');
 
-      cy.step('No contact section visible for contactee');
+      cy.step('Contactee sees they are not contactable');
       cy.visit(`/u/${contactee.username}`);
-      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
+      cy.get('[data-cy=SendMessageButton]').click();
+      cy.get('[data-cy="UserContactForm-NotAvailable"]');
 
       cy.step('No contact section visible for logged out users');
       cy.logout();

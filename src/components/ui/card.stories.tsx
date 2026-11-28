@@ -32,11 +32,16 @@ export const Flat: Story = {
   ),
 };
 
-export const Elevated: Story = {
+export const Flush: Story = {
   render: () => (
-    <Card variant="elevated" style={{ width: 320 }}>
-      <h2 className="m-0 font-heading text-card-heading">Contributions</h2>
-      <span className="text-sm text-muted-foreground">Borderless, with a soft drop shadow.</span>
+    <Card variant="flush" style={{ width: 320 }}>
+      <div className="aspect-hero rounded-t-card bg-muted" />
+      <div className="flex flex-col gap-2 p-4">
+        <h2 className="m-0 font-heading text-card-heading">Profile</h2>
+        <span className="text-sm text-muted-foreground">
+          Outlined, no padding, so media sits edge to edge.
+        </span>
+      </div>
     </Card>
   ),
 };

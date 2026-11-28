@@ -5,9 +5,10 @@ import { logger } from 'src/logger';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isContactable, isUserContactable } from 'src/utils/helpers';
+import { isUserContactable } from 'src/utils/helpers';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import MapIcon from '@/components/ui/icons/map.svg?react';
 import { cn } from '@/lib/utils';
 import { Impact } from '../impact/Impact';
@@ -39,41 +40,29 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
 
   const isMember = !type?.isSpace;
   const hasCoverImages = !isMember && !!coverImages?.length;
-  const hasContactOption =
-    (!tenantContext?.noMessaging && isContactable(user.isContactable)) ||
-    (!isMember && !!user.website);
   const showContact =
-    !tenantContext?.noMessaging &&
-    (isViewingOwnProfile ? hasContactOption : isUserContactable(user));
+    !tenantContext?.noMessaging && (isViewingOwnProfile || isUserContactable(user));
 
   const showSupport = !isMember && !!user.donationsEnabled;
   const showImpact = !!impact && !!tenantContext?.showImpact;
   const showEmptyProfileAlert = isViewingOwnProfile && isComplete === false;
-  const showMessage = showContact && !isViewingOwnProfile;
-
-  const contact = showContact && (
-    <ProfileContact
-      user={user}
-      isViewingOwnProfile={isViewingOwnProfile}
-      open={isContactOpen}
-      onOpenChange={setIsContactOpen}
-    />
-  );
 
   return (
     <div
       data-cy={isMember ? 'MemberProfile' : 'SpaceProfile'}
       className={cn(
-        'mx-auto flex w-full max-w-192 flex-col gap-10',
-        !hasCoverImages && 'mt-12 sm:mt-14',
+        'mx-auto flex w-full max-w-192 flex-col gap-3',
+        !hasCoverImages && 'mt-10 sm:mt-12',
       )}
     >
-      <section className="flex flex-col rounded-card bg-card shadow-elevated">
+      <Card variant="flush">
         {hasCoverImages && <ProfileImage images={coverImages} alt={`${user.displayName} cover`} />}
         <div className="flex flex-col gap-6 p-4 sm:p-10">
           <ProfileHeader
             user={user}
-            onContact={showMessage ? () => setIsContactOpen(true) : undefined}
+            onContact={
+              showContact && !isViewingOwnProfile ? () => setIsContactOpen(true) : undefined
+            }
           >
             {showEmptyProfileAlert && (
               <Alert variant="info" data-cy="emptyProfileMessage">
@@ -82,12 +71,18 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                 </AlertDescription>
               </Alert>
             )}
-            {isViewingOwnProfile && contact}
           </ProfileHeader>
 
-          {(showMessage || showSupport || pin) && (
+          {(showContact || showSupport || pin) && (
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-              {showMessage && contact}
+              {showContact && (
+                <ProfileContact
+                  user={user}
+                  isViewingOwnProfile={isViewingOwnProfile}
+                  open={isContactOpen}
+                  onOpenChange={setIsContactOpen}
+                />
+              )}
               {showSupport && <ProfileSupportButton profile={user} />}
               {pin && (
                 <Button
@@ -103,16 +98,18 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
             </div>
           )}
         </div>
-      </section>
+      </Card>
 
-      <div className="flex flex-col gap-10 px-4 sm:px-10">
-        <ProfileContributions docs={docs} username={user.username ?? ''} />
-        {showImpact && (
-          <section className="flex flex-col gap-4">
-            <Impact impact={impact} user={user} />
-          </section>
-        )}
-      </div>
+      <Card variant="outline">
+        <div className="flex flex-col gap-10 px-4 sm:px-10">
+          <ProfileContributions docs={docs} username={user.username ?? ''} />
+          {showImpact && (
+            <section className="flex flex-col gap-4">
+              <Impact impact={impact} user={user} />
+            </section>
+          )}
+        </div>
+      </Card>
     </div>
   );
 };

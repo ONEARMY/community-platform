@@ -12,11 +12,6 @@ interface Props {
 }
 
 export const ImpactItem = ({ fields, user, year }: Props) => {
-  const outterBox = {
-    flexBasis: ['100%', '100%', '50%'],
-    padding: 2,
-  };
-
   const innerBox = {
     backgroundColor: 'white',
     borderRadius: 1,
@@ -35,7 +30,7 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
   }
 
   return (
-    <Box sx={outterBox} cy-data={`ImpactItem-${year}`}>
+    <Box sx={{ flexBasis: ['100%', '100%', '50%'] }} cy-data={`ImpactItem-${year}`}>
       <Box sx={innerBox}>
         <Heading as="h3" variant="small">
           {year}

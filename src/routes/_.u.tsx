@@ -5,7 +5,7 @@ export default function Index() {
   return (
     <Main
       style={{ flex: 1, marginBottom: 'calc(var(--spacing) * -9)' }}
-      className="bg-background pb-9"
+      className="bg-secondary pb-9"
     >
       <Outlet />
     </Main>

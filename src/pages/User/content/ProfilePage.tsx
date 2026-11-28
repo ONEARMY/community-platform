@@ -31,11 +31,11 @@ export const ProfilePage = observer((props: IProps) => {
   const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col gap-6 pt-6">
       <ClientOnly fallback={<></>}>
         {() => (
           <>
-            <div className="mx-auto my-6 flex w-full max-w-192 justify-center gap-2 empty:hidden sm:justify-end">
+            <div className="mx-auto flex w-full max-w-192 justify-center gap-2 empty:hidden sm:justify-end">
               {isViewingOwnProfile ? (
                 <>
                   {shouldShowUpgrade && (

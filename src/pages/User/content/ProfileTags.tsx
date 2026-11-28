@@ -15,7 +15,7 @@ export const ProfileTags = ({ tags }: IProps) => {
   const hiddenCount = tags.length - visibleTags.length;
 
   return (
-    <ul data-cy="ProfileTagsList" className="flex w-full flex-wrap justify-center gap-2">
+    <ul data-cy="ProfileTagsList" className="flex w-full flex-wrap gap-2">
       {visibleTags.map((tag) => (
         <li key={tag.id}>
           <Badge variant="outline">{tag.name}</Badge>

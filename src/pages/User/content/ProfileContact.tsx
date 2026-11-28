@@ -21,27 +21,45 @@ interface IProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const ProfileContact = ({ user, isViewingOwnProfile, open, onOpenChange }: IProps) => (
-  <div data-cy="UserContactWrapper" className="flex flex-col">
-    {isViewingOwnProfile ? (
-      <UserContactFormAvailable isUserProfileContactable={isUserContactable(user)} />
-    ) : (
+export const ProfileContact = ({ user, isViewingOwnProfile, open, onOpenChange }: IProps) => {
+  const isContactable = isUserContactable(user);
+
+  return (
+    <div data-cy="UserContactWrapper" className="flex flex-col">
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogTrigger render={<Button data-cy="SendMessageButton" />}>
+        <DialogTrigger
+          render={
+            <Button
+              data-cy="SendMessageButton"
+              aria-disabled={isViewingOwnProfile && !isContactable}
+            />
+          }
+        >
           <SendIcon data-icon="inline-start" aria-hidden="true" />
           Send message
         </DialogTrigger>
         <DialogContent variant="soft" className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Send a message to {user.displayName}</DialogTitle>
-            <DialogDescription>Your message will be sent to their email</DialogDescription>
-          </DialogHeader>
-          <UserAction
-            loggedIn={<UserContactForm user={user} />}
-            loggedOut={<UserContactNotLoggedIn displayName={user.displayName} />}
-          />
+          {isViewingOwnProfile ? (
+            <>
+              <DialogHeader>
+                <DialogTitle>Messages</DialogTitle>
+              </DialogHeader>
+              <UserContactFormAvailable isUserProfileContactable={isContactable} />
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle>Send a message to {user.displayName}</DialogTitle>
+                <DialogDescription>Your message will be sent to their email</DialogDescription>
+              </DialogHeader>
+              <UserAction
+                loggedIn={<UserContactForm user={user} />}
+                loggedOut={<UserContactNotLoggedIn displayName={user.displayName} />}
+              />
+            </>
+          )}
         </DialogContent>
       </Dialog>
-    )}
-  </div>
-);
+    </div>
+  );
+};

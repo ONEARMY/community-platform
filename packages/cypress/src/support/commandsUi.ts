@@ -101,7 +101,7 @@ Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click({ force: true });
 
   cy.wait('@profileUpdate');
-  cy.contains('[data-cy=toast-message]', 'Profile updated!').should('be.visible');
+  cy.expectToast('Profile updated!');
 });
 
 Cypress.Commands.add('setSettingVisitorPolicy', (policyText: string, details?: string) => {
@@ -348,7 +348,7 @@ Cypress.Commands.add('setProfileUsername', (username: string) => {
   cy.get('[data-cy=info-about').clear().type(`${username} profile`);
   cy.get('[data-cy=save]').click({ force: true });
   cy.get('[data-cy=errors-container]').should('not.exist');
-  cy.contains('[data-cy=toast-message]', 'Username updated!').should('be.visible');
+  cy.expectToast('Username updated!');
 });
 
 Cypress.Commands.add('signUpCompletedUser', (user?) => {

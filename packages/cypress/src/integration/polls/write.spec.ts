@@ -51,7 +51,7 @@ describe('[Polls.Write]', () => {
     cy.step('Publish news');
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=submit]').click();
-    cy.get('[data-cy=toast]').contains('News published');
+    cy.expectToast('News published');
 
     cy.step('Poll is shown in news');
     cy.visit('/news');
@@ -81,7 +81,7 @@ describe('[Polls.Write]', () => {
     cy.step('Publish updated news');
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=submit]').click();
-    cy.get('[data-cy=toast]').contains('News published');
+    cy.expectToast('News published');
 
     cy.step('Updated poll is shown in news');
     cy.visit('/news');
@@ -122,7 +122,7 @@ describe('[Polls.Write]', () => {
 
     cy.step('Publish and view news with poll')
     cy.get('[data-cy=submit]').click();
-    cy.get('[data-cy=toast]').contains('News published');
+    cy.expectToast('News published');
     cy.visit('/news');
     cy.get('[data-cy=news-list-item]').contains(newsTitle).click();
     cy.contains(pollTitle)
@@ -134,7 +134,7 @@ describe('[Polls.Write]', () => {
 
     cy.step('Save and view news without poll')
     cy.get('[data-cy=submit]').click();
-    cy.get('[data-cy=toast]').contains('News published');
+    cy.expectToast('News published');
     cy.visit('/news');
     cy.get('[data-cy=news-list-item]').contains(newsTitle).click();
 

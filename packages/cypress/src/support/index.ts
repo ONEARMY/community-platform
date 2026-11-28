@@ -15,4 +15,5 @@
 import './hooks';
 import './commands';
 import './commandsUi';
+import './commandsAdmin';
 import './rules';

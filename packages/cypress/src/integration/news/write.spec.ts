@@ -30,7 +30,7 @@ describe('[News.Write]', () => {
 
     cy.step('Can add draft news');
     cy.get('[data-cy=draft]').click();
-    cy.contains('[data-cy=toast]', 'Draft news saved');
+    cy.expectToast('Draft news saved');
     cy.visitToastLink('View draft news');
     cy.url().should('include', initialExpectedSlug);
 
@@ -64,7 +64,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-    cy.contains('[data-cy=toast]', 'News published');
+    cy.expectToast('News published');
     cy.openToastLink('View news');
     cy.url().should('include', initialExpectedSlug);
 
@@ -119,7 +119,7 @@ describe('[News.Write]', () => {
     cy.step('Updated news details shown');
     cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-    cy.contains('[data-cy=toast]', 'News published');
+    cy.expectToast('News published');
     cy.openToastLink('View news');
     cy.url().should('include', updatedExpectedSlug);
     cy.contains(updatedNewsBody);
@@ -168,7 +168,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-    cy.contains('[data-cy=toast]', 'News published');
+    cy.expectToast('News published');
     cy.openToastLink('View news');
     cy.url().should('include', path);
 
@@ -242,7 +242,7 @@ describe('[News.Write]', () => {
     cy.get('[data-cy=submit]').click();
 
     cy.step('Admin edit is saved and visible');
-    cy.contains('[data-cy=toast]', 'News published');
+    cy.expectToast('News published');
     cy.openToastLink('View news');
     cy.url().should('include', `/news/${newsItem.slug}`);
     cy.contains(adminEdit);
@@ -266,7 +266,7 @@ describe('[Delete a news item]', () => {
     cy.addToRichTextField('This news will be deleted.');
     cy.get('[data-cy=existingHeroImage]').should('exist');
     cy.get('[data-cy=submit]').click();
-    cy.contains('[data-cy=toast]', 'News published');
+    cy.expectToast('News published');
     cy.openToastLink('View news');
     cy.url().should('include', '/news/');
 

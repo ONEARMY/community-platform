@@ -32,7 +32,7 @@ describe('[Polls.Vote]', () => {
     cy.step('Publish news');
     cy.get('[data-cy=errors-container]').should('not.exist');
     cy.get('[data-cy=submit]').click();
-    cy.get('[data-cy=toast]').contains('News published');
+    cy.expectToast('News published');
 
     cy.step('Log in as first user and vote on poll');
     cy.logout();

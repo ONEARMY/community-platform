@@ -37,7 +37,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="newEmail"]').clear().type(newEmail);
       cy.get('[data-cy="password"]').clear().type(password);
       cy.get('[data-cy="changeEmailSubmit"]').click();
-      cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['auth/email-changed']).should('be.visible');
+      cy.expectToast(FRIENDLY_MESSAGES['auth/email-changed']);
 
       cy.step('Update Password');
       cy.contains('[data-cy="accordionTrigger"]', 'Change Password').click();
@@ -46,7 +46,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="newPassword"]').clear().type(newPassword);
       cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword);
       cy.get('[data-cy="changePasswordSubmit"]').click();
-      cy.contains('[data-cy=toast-message]', FRIENDLY_MESSAGES['auth/password-changed']).should('be.visible');
+      cy.expectToast(FRIENDLY_MESSAGES['auth/password-changed']);
 
       cy.step('Open delete account section');
       cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionTrigger"]').click();
@@ -60,7 +60,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Shows error message');
-      cy.contains('[data-cy=toast-message]', 'Invalid password').should('be.visible');
+      cy.expectToast('Invalid password');
 
       cy.step('Clear and submit with correct password');
       cy.get('[data-cy="deleteAccountPassword"]').clear().type(newPassword);
@@ -71,7 +71,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="Confirm.modal: Confirm"]').click({ force: true });
 
       cy.step('Account deletion successful');
-      cy.contains('[data-cy=toast-message]', 'Your account has been deleted').should('be.visible');
+      cy.expectToast('Your account has been deleted');
     });
   });
 

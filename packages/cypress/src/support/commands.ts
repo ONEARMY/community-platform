@@ -14,6 +14,7 @@ declare global {
       clearNotifications(): Chainable<void>;
       expectNewNotification(notification: ExpectedNewNotification): Chainable<void>;
       expectNoNewNotification(): Chainable<void>;
+      expectToast(text: string): Chainable<void>;
       interceptAddressSearchFetch(addressResponse): Chainable<void>;
       interceptAddressReverseFetch(addressResponse): Chainable<void>;
       step(message: string): Chainable<void>;
@@ -52,6 +53,12 @@ Cypress.Commands.add('step', (message: string) => {
   });
 });
 
+Cypress.Commands.add('expectToast', (text: string) => {
+  Cypress.log({ displayName: 'expectToast', message: `Expect toast: ${text}` });
+
+  cy.contains('[data-cy=toast-message]', text, { log: false }).should('be.visible');
+});
+
 Cypress.Commands.add('interceptAddressSearchFetch', (addressResponse) => {
   cy.intercept('GET', 'https://nominatim.openstreetmap.org/search*', {
     body: addressResponse,
@@ -82,7 +89,7 @@ function waitForHydration(win: Cypress.AUTWindow) {
       if (Date.now() - startedAt > timeout) {
         return reject(new Error(`Page did not hydrate within ${timeout}ms`));
       }
-      setTimeout(check, 50);
+      setTimeout(check, 150);
     };
     check();
   });
